@@ -4,7 +4,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import {
   Alert,
   AlertProps,
-  ApiKeyModalWarning,
+  ApiKeyDialogWarning,
   Card,
   CardBody,
   CardHeader,
@@ -132,7 +132,7 @@ export const RequestToSignForm = () => {
           <Stack spacing={2}>
             {renderAlert()}
 
-            <ApiKeyModalWarning />
+            <ApiKeyDialogWarning />
 
             <TextField
               select

@@ -6,7 +6,7 @@ import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import {
   Alert,
   AlertProps,
-  ApiKeyModalWarning,
+  ApiKeyDialogWarning,
   Link,
   Stack,
   SubmitButton,
@@ -259,7 +259,7 @@ const LockForm = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <Stack spacing={2}>
           {renderAlert()}
-          <ApiKeyModalWarning />
+          <ApiKeyDialogWarning />
           {renderTokenAmountTextField()}
           {renderCollateralAlert()}
           {renderReportsCountAlert()}

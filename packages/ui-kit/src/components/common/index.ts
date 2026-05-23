@@ -2,7 +2,6 @@ export * from './smartSearch';
 export * from './display';
 export * from './navigationBar';
 export * from './ApiKeyModal';
-export * from './ApiKeyModalWarning';
 export * from './AppLogo';
 export * from './DisclosureButton';
 export * from './EnhancedDialog';

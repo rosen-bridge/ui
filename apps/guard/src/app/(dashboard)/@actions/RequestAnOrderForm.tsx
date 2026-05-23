@@ -4,7 +4,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import {
   Alert,
   AlertProps,
-  ApiKeyModalWarning,
+  ApiKeyDialogWarning,
   Card,
   MenuItem,
   SubmitButton,
@@ -118,7 +118,7 @@ export const RequestAnOrderForm = () => {
           <Stack spacing={2}>
             {renderAlert()}
 
-            <ApiKeyModalWarning />
+            <ApiKeyDialogWarning />
 
             <TextField label="Id" {...register('id')} />
 

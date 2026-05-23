@@ -18,7 +18,7 @@ import {
   SubmitButton,
   TextField,
   useApiKey,
-  ApiKeyModalWarning,
+  ApiKeyDialogWarning,
   Link,
   Stack,
   useResponsive,
@@ -268,7 +268,7 @@ const WithdrawForm = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <Stack spacing={2}>
           {renderAlert()}
-          <ApiKeyModalWarning />
+          <ApiKeyDialogWarning />
           {renderAddressTextField()}
           <Stack direction={stackDirection} spacing={2}>
             {renderTokensListSelect()}
