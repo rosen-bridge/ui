@@ -57,7 +57,8 @@ export const getUiKitConfig: () => ConfigContextType = () => ({
     },
     Link: {
       defaultProps: {
-        as: NextLink,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        as: NextLink as any,
       },
     },
     Network: {
