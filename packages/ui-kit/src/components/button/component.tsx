@@ -57,8 +57,6 @@ export const Button = (props: ButtonProps) => {
       variant={variant}
       {...rest}
     />
-    // TODO
-    // <Action data-block={!!block} data-size={size} data-variant={variant} {...rest} />
   );
 };
 

@@ -80,7 +80,6 @@ export const ApiKeyDialog = (props: ApiKeyDialogProps) => {
           <DialogTitle>Authorization</DialogTitle>
         </DialogHeader>
         <DialogDescription>Set API key to access actions</DialogDescription>
-        {/* TODO dividers */}
         <DialogContent>
           <form id="api-key-form" onSubmit={onSubmit}>
             <Controller

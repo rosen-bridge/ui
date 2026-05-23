@@ -8,7 +8,6 @@ import './styles.css';
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface DialogOverrides {}
 
-// TODO
 export type DialogOwnProps = {
   open?: boolean;
   maxWidth?: string;
