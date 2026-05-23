@@ -33,7 +33,7 @@ export const Alert = (props: AlertProps) => {
     children,
     dismissible,
     open = true,
-    severity = 'info',
+    severity = 'success',
     timeout,
     variant = 'standard',
     onClose,

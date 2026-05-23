@@ -1,9 +1,9 @@
-import { Button } from '@mui/material';
 import { Network, TokenInfoWithColdAmount } from '@rosen-ui/types';
 
 import { useConfig } from '@/hooks';
 import { ElementBaseProps, OverridableType } from '@/types';
 
+import { Button } from '../button';
 import { Card } from '../card';
 import { CardAction } from '../cardAction';
 import { CardBody } from '../cardBody';
