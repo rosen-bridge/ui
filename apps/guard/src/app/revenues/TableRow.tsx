@@ -5,7 +5,7 @@ import {
   Amount,
   Button,
   EnhancedTableCell,
-  Id,
+  Identifier,
   TableRow,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
@@ -146,13 +146,17 @@ export const MobileRow: FC<RowProps> = (props) => {
       <TableRow style={rowStyles}>
         <EnhancedTableCell>Event Id</EnhancedTableCell>
         <EnhancedTableCell>
-          <Id id={row.eventId} />
+          <Identifier value={row.eventId} variant="legacy" />
         </EnhancedTableCell>
       </TableRow>
       <TableRow style={rowStyles}>
         <EnhancedTableCell>Lock TX Id</EnhancedTableCell>
         <EnhancedTableCell>
-          <Id id={row.lockTxId} href={getTxURL(row.fromChain, row.lockTxId)} />
+          <Identifier
+            value={row.lockTxId}
+            href={getTxURL(row.fromChain, row.lockTxId)}
+            variant="legacy"
+          />
         </EnhancedTableCell>
       </TableRow>
       {expand && (
@@ -160,22 +164,23 @@ export const MobileRow: FC<RowProps> = (props) => {
           <TableRow style={rowStyles}>
             <EnhancedTableCell>Reward TX Id</EnhancedTableCell>
             <EnhancedTableCell>
-              <Id
-                id={row.rewardTxId}
+              <Identifier
+                value={row.rewardTxId}
                 href={getTxURL(NETWORKS.ergo.key, row.rewardTxId)}
+                variant="legacy"
               />
             </EnhancedTableCell>
           </TableRow>
           <TableRow style={rowStyles}>
             <EnhancedTableCell>From Address</EnhancedTableCell>
             <EnhancedTableCell>
-              <Id id={row.fromAddress} />
+              <Identifier value={row.fromAddress} variant="legacy" />
             </EnhancedTableCell>
           </TableRow>
           <TableRow style={rowStyles}>
             <EnhancedTableCell>To Address</EnhancedTableCell>
             <EnhancedTableCell>
-              <Id id={row.toAddress} />
+              <Identifier value={row.toAddress} variant="legacy" />
             </EnhancedTableCell>
           </TableRow>
           <TableRow style={rowStyles}>
@@ -265,22 +270,27 @@ export const TabletRow: FC<RowProps> = (props) => {
   return (
     <TableRow className="divider" style={rowStyles}>
       <EnhancedTableCell>
-        <Id id={row.eventId} />
+        <Identifier value={row.eventId} variant="legacy" />
       </EnhancedTableCell>
       <EnhancedTableCell>
-        <Id id={row.lockTxId} href={getTxURL(row.fromChain, row.lockTxId)} />
+        <Identifier
+          value={row.lockTxId}
+          href={getTxURL(row.fromChain, row.lockTxId)}
+          variant="legacy"
+        />
       </EnhancedTableCell>
       <EnhancedTableCell>
-        <Id
-          id={row.rewardTxId}
+        <Identifier
+          value={row.rewardTxId}
           href={getTxURL(NETWORKS.ergo.key, row.rewardTxId)}
+          variant="legacy"
         />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
-        <Id id={row.fromAddress} />
+        <Identifier value={row.fromAddress} variant="legacy" />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
-        <Id id={row.toAddress} />
+        <Identifier value={row.toAddress} variant="legacy" />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">{row.lockToken.name}</EnhancedTableCell>
       <EnhancedTableCell align="center">

@@ -9,11 +9,10 @@ import {
 } from 'react-hook-form';
 
 import {
-  AlertCard,
+  Alert,
   AlertProps,
   CircularProgress,
-  Grid,
-  Id,
+  Identifier,
   InputAdornment,
   MenuItem,
   SubmitButton,
@@ -22,6 +21,7 @@ import {
   ApiKeyModalWarning,
   Link,
   Stack,
+  useResponsive,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS, TOKEN_NAME_PLACEHOLDER } from '@rosen-ui/constants';
 import { fetcher, mutatorWithHeaders } from '@rosen-ui/swr-helpers';
@@ -29,6 +29,7 @@ import { getNonDecimalString, getTxURL } from '@rosen-ui/utils';
 import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
 
+import { CopyDetails } from '@/components';
 import { useInfo, useToken } from '@/hooks';
 import {
   ApiAddressAssetsResponse,
@@ -147,7 +148,7 @@ const WithdrawForm = () => {
               Withdrawal is successful. Wait for tx [
               <Link
                 target="_blank"
-                href={getTxURL(NETWORKS.ergo.key, response.txId) ?? ''}
+                href={getTxURL(NETWORKS.ergo.key, response.txId) ?? '/'}
               >
                 {response.txId}
               </Link>
@@ -182,13 +183,10 @@ const WithdrawForm = () => {
   };
 
   const renderAlert = () => (
-    <AlertCard
-      more={alertData?.more}
-      severity={alertData?.severity}
-      onClose={() => setAlertData(null)}
-    >
+    <Alert severity={alertData?.severity} onClose={() => setAlertData(null)}>
       {alertData?.message}
-    </AlertCard>
+      <CopyDetails more={alertData?.more} />
+    </Alert>
   );
 
   const disabled =
@@ -240,7 +238,7 @@ const WithdrawForm = () => {
           &nbsp;
           {!token.isNativeToken && (
             <>
-              (<Id id={token.tokenId} indicator="middle" />)
+              (<Identifier value={token.tokenId} variant="legacy-middle" />)
             </>
           )}
         </MenuItem>
@@ -256,6 +254,11 @@ const WithdrawForm = () => {
     />
   );
 
+  const stackDirection = useResponsive({
+    mobile: 'column',
+    laptop: 'row',
+  } as const);
+
   return (
     <FormProvider {...formMethods}>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -263,14 +266,10 @@ const WithdrawForm = () => {
           {renderAlert()}
           <ApiKeyModalWarning />
           {renderAddressTextField()}
-          <Grid container spacing={2}>
-            <Grid size={{ mobile: 12, tablet: 12, laptop: 6 }}>
-              {renderTokensListSelect()}
-            </Grid>
-            <Grid size={{ mobile: 12, tablet: 12, laptop: 6 }}>
-              {renderTokenAmountTextField()}
-            </Grid>
-          </Grid>
+          <Stack direction={stackDirection} spacing={2}>
+            {renderTokensListSelect()}
+            {renderTokenAmountTextField()}
+          </Stack>
           <SubmitButton
             disabled={!formState.isValid || !apiKey || disabled}
             loading={isWithdrawPending}

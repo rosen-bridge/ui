@@ -1,12 +1,4 @@
-import {
-  AnchorHTMLAttributes,
-  ComponentType,
-  createContext,
-  ImgHTMLAttributes,
-  ReactNode,
-  useContext,
-  useMemo,
-} from 'react';
+import { createContext, ReactNode, useContext, useMemo } from 'react';
 
 export const useFramework = () => {
   const context = useContext(FrameworkContext);
@@ -18,26 +10,7 @@ export const useFramework = () => {
   return context;
 };
 
-export type ImageProps = ImgHTMLAttributes<HTMLImageElement> & {
-  src: string;
-  alt: string;
-  width: number;
-  height: number;
-};
-
-export type ImageComponent = ComponentType<ImageProps>;
-
-export type AnchorProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
-  href: string;
-};
-
-export type AnchorComponent = ComponentType<AnchorProps>;
-
 export type FrameworkContextType = {
-  components: {
-    Anchor: AnchorComponent;
-    Image: ImageComponent;
-  };
   router: {
     pathname: string;
     search: string;
@@ -51,10 +24,6 @@ export const FrameworkContext = createContext<FrameworkContextType | undefined>(
 
 export type FrameworkProviderProps = {
   children?: ReactNode;
-  components: {
-    Anchor: AnchorComponent;
-    Image: ImageComponent;
-  };
   router: {
     pathname: string;
     search: string;
@@ -64,28 +33,17 @@ export type FrameworkProviderProps = {
 
 export const FrameworkProvider = ({
   children,
-  components,
   router,
 }: FrameworkProviderProps) => {
   const value = useMemo<FrameworkContextType>(
     () => ({
-      components: {
-        Anchor: components.Anchor,
-        Image: components.Image,
-      },
       router: {
         pathname: router.pathname,
         search: router.search,
         push: router.push,
       },
     }),
-    [
-      components.Anchor,
-      components.Image,
-      router.pathname,
-      router.search,
-      router.push,
-    ],
+    [router.pathname, router.search, router.push],
   );
 
   return (

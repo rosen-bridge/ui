@@ -1,8 +1,7 @@
-import { Times } from '@rosen-bridge/icons';
+import { styled } from '@mui/material';
 
-import { styled } from '../../../styling';
-import { IconButton, Typography } from '../../base';
-import { SvgIcon } from '../SvgIcon';
+import { CloseButton } from '../../closeButton';
+import { Typography } from '../../typography';
 import { Filter, Selected } from './types';
 import { parseFilter } from './utils';
 
@@ -103,14 +102,12 @@ export const Chips = ({ disabled, filters, value, onRemove }: ChipsProps) => {
                     </div>
                   );
                 })}
-                <IconButton
+                <CloseButton
                   disabled={disabled}
+                  size="small"
+                  slots={{ icon: { size: 'small' } }}
                   onClick={() => onRemove?.(item)}
-                >
-                  <SvgIcon>
-                    <Times />
-                  </SvgIcon>
-                </IconButton>
+                />
               </div>
             )}
           </div>

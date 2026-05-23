@@ -8,8 +8,8 @@ import {
   CardHeader,
   CardTitle,
   CardBody,
-  Typography,
   Skeleton,
+  CardAction,
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import { ChartPeriod } from '@rosen-ui/types';
@@ -19,13 +19,15 @@ import { ApiRevenueChartResponse } from '@/types/api';
 
 import { PeriodSelect } from './PeriodSelect';
 
+const Loading = () => <Skeleton height={255} width="100%" variant="rounded" />;
+
 /**
  * This is required because revenue chart cannot be pre-rendered in next and
  * throws an error
  */
 const RevenueChart = dynamic(
   () => import('./RevenueChart').then((mod) => mod.RevenueChart),
-  { ssr: false },
+  { ssr: false, loading: () => <Loading /> },
 );
 
 const Revenue = () => {
@@ -36,25 +38,17 @@ const Revenue = () => {
   );
 
   return (
-    <Card backgroundColor="background.paper">
-      <CardHeader
-        action={<PeriodSelect period={period} setPeriod={setPeriod} />}
-      >
-        <CardTitle>
-          <Typography variant="h5" fontWeight="bold">
-            Revenue
-          </Typography>
+    <Card>
+      <CardHeader>
+        <CardTitle variant="h5" fontWeight="bold">
+          Revenue
         </CardTitle>
+        <CardAction>
+          <PeriodSelect period={period} setPeriod={setPeriod} />
+        </CardAction>
       </CardHeader>
       <CardBody>
-        {isLoading && (
-          <Skeleton
-            animation="wave"
-            height={255}
-            width="100%"
-            variant="rounded"
-          />
-        )}
+        {isLoading && <Loading />}
         {!isLoading && data && <RevenueChart period={period} data={data} />}
       </CardBody>
     </Card>

@@ -1,14 +1,11 @@
 import { ReactNode } from 'react';
 
-import { Breakpoint } from '@mui/material';
-
-import type { ResponsiveValueOptionsBase } from '../../@types';
-import { useResponsiveValue } from '../../hooks';
 import {
   Table as MuiTable,
   TableContainer,
   TableHead,
   TableRow,
+  TableRowProps,
   TableBody,
   TableCell,
   TablePagination,
@@ -16,7 +13,18 @@ import {
   Box,
   TableFooter,
   TableCellProps,
-} from '../base';
+} from '@mui/material';
+
+import { useResponsive } from '../../hooks';
+import type { Breakpoint, ResponsiveValueOptionsBase } from '../../types';
+
+export {
+  TableCell,
+  type TableCellProps,
+  TableRow,
+  type TableRowProps,
+  type MuiTablePaginationProps as TablePaginationProps,
+};
 
 export interface TableHeadItem {
   cellProps?: TableCellProps;
@@ -86,14 +94,14 @@ const DEFAULT_ROWS_PER_PAGE_OPTIONS = [10, 25, 100];
 export const EnhancedTable = <Row,>(props: EnhancedTableProps<Row>) => {
   const { data, responsiveRenderRow, responsiveHead, paginated } = props;
 
-  const tableHead = useResponsiveValue(responsiveHead);
+  const tableHead = useResponsive(responsiveHead);
 
-  const renderRow = useResponsiveValue(responsiveRenderRow);
+  const renderRow = useResponsive(responsiveRenderRow);
 
   const renderHead = () => (
     <TableHead>
       <TableRow>
-        {tableHead.map((headItem) => (
+        {tableHead?.map((headItem) => (
           <TableCell
             key={headItem.title}
             variant="head"
@@ -109,11 +117,11 @@ export const EnhancedTable = <Row,>(props: EnhancedTableProps<Row>) => {
   const renderBody = () => (
     <TableBody>
       {data.length ? (
-        data.map(renderRow)
+        data.map((item) => renderRow?.(item))
       ) : (
         <TableRow>
           <TableCell
-            colSpan={tableHead.length}
+            colSpan={tableHead?.length}
             sx={{
               textAlign: 'center',
               fontSize: (theme) => theme.typography.h4,
@@ -131,7 +139,11 @@ export const EnhancedTable = <Row,>(props: EnhancedTableProps<Row>) => {
     paginated ? (
       <TableFooter>
         <TableRow>
-          <TableCell variant="footer" colSpan={tableHead.length} padding="none">
+          <TableCell
+            variant="footer"
+            colSpan={tableHead?.length}
+            padding="none"
+          >
             <Box py={1}>
               <TablePagination
                 rowsPerPageOptions={DEFAULT_ROWS_PER_PAGE_OPTIONS}

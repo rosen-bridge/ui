@@ -2,10 +2,9 @@ import { ReactNode } from 'react';
 
 import { CssBaseline } from '@/components';
 import { useBreakpoint, useConfig } from '@/hooks';
-import { ThemeProvider, ThemeProviderProps } from '@/Providers';
+import { ThemeProvider, ThemeProviderProps, ToastProvider } from '@/Providers';
 import { ElementBaseProps, OverridableType } from '@/types';
 
-import { SnackbarProvider } from '../../contexts';
 import './styles.css';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
@@ -40,9 +39,9 @@ export const App = (props: AppProps) => {
     <ThemeProvider theme={rest.theme}>
       <>
         <CssBaseline />
-        <SnackbarProvider>
+        <ToastProvider>
           <Content {...rest} />
-        </SnackbarProvider>
+        </ToastProvider>
       </>
     </ThemeProvider>
   );

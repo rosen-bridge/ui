@@ -5,7 +5,7 @@ import { useMemo, useState, useEffect, ReactNode } from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 
 import {
-  AlertCard,
+  Alert,
   AlertProps,
   SubmitButton,
   useApiKey,
@@ -19,6 +19,7 @@ import { getNonDecimalString, getTxURL } from '@rosen-ui/utils';
 import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
 
+import { CopyDetails } from '@/components';
 import { useRsnToken } from '@/hooks';
 import {
   ApiInfoResponse,
@@ -170,13 +171,10 @@ const UnlockForm = () => {
   };
 
   const renderAlert = () => (
-    <AlertCard
-      more={alertData?.more}
-      severity={alertData?.severity}
-      onClose={() => setAlertData(null)}
-    >
+    <Alert severity={alertData?.severity} onClose={() => setAlertData(null)}>
       {alertData?.message}
-    </AlertCard>
+      <CopyDetails more={alertData?.more} />
+    </Alert>
   );
 
   const disabled =

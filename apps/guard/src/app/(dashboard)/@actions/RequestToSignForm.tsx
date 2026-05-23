@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 import {
-  AlertCard,
+  Alert,
   AlertProps,
   ApiKeyModalWarning,
   Card,
@@ -109,21 +109,21 @@ export const RequestToSignForm = () => {
   };
 
   const renderAlert = () => (
-    <AlertCard
+    <Alert
+      dismissible
       severity={alertData?.severity}
+      variant="filled"
       onClose={() => setAlertData(null)}
     >
       {alertData?.message}
-    </AlertCard>
+    </Alert>
   );
 
   return (
-    <Card backgroundColor="background.paper">
+    <Card backgroundColor="transparent">
       <CardHeader>
-        <CardTitle>
-          <Typography variant="h5" fontWeight="bold">
-            Request To Sign
-          </Typography>
+        <CardTitle variant="h5" fontWeight="bold">
+          Request To Sign
         </CardTitle>
       </CardHeader>
       <CardBody>

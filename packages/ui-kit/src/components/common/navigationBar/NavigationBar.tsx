@@ -1,4 +1,4 @@
-import { styled } from '../../../styling';
+import { styled } from '@mui/material';
 
 export const NavigationBar = styled('div', {
   name: 'RosenNavigationBar',

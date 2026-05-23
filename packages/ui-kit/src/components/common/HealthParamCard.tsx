@@ -1,53 +1,41 @@
 import { useMemo } from 'react';
 
-import {
-  ExclamationTriangle,
-  ShieldCheck,
-  ShieldExclamation,
-  ShieldQuestion,
-} from '@rosen-bridge/icons';
+import { Alert } from '@mui/material';
 import { HealthParamInfo } from '@rosen-ui/types';
-import moment from 'moment';
 
-import { Card, CardBody, CardHeader, CardTitle, Stack, SvgIcon } from '.';
-import { Colors } from '../../core';
-import { useTheme } from '../../hooks';
-import { Alert, Tooltip, Typography } from '../base';
-import { Button } from './Button';
+import {
+  Button,
+  Card,
+  CardAction,
+  CardBody,
+  CardHeader,
+  CardTitle,
+  Icon,
+  IconProps,
+  Skeleton,
+  Stack,
+  Tooltip,
+  Typography,
+} from '@/components';
+import { Color } from '@/types';
 
-export type HealthParamCardProps = HealthParamInfo & {
+export type HealthParamCardProps = {
   checking?: boolean;
-  handleCheckNow: () => void;
+  handleCheckNow?: () => void;
+  loading?: boolean;
+  value?: HealthParamInfo;
 };
 /**
- * render a healt param card to be used in health page
- *
- * @param id
- * @param title
- * @param details
- * @param status
- * @param description
- * @param lastCheck
- * @param lastTrialErrorMessage
- * @param lastTrialErrorTime
- * @param checking
- * @param handleCheckNow
+ * render a health param card to be used in health page
  */
 export const HealthParamCard = ({
-  title,
-  details,
-  status,
-  description,
-  lastCheck,
-  lastTrialErrorMessage,
-  lastTrialErrorTime,
   checking,
   handleCheckNow,
+  loading,
+  value,
 }: HealthParamCardProps) => {
-  const theme = useTheme();
-
   const color = useMemo(() => {
-    switch (status) {
+    switch (value?.status) {
       case 'Healthy':
         return 'success';
       case 'Unstable':
@@ -55,33 +43,50 @@ export const HealthParamCard = ({
       default:
         return 'error';
     }
-  }, [status]);
+  }, [value?.status]);
 
   const colors = useMemo(() => {
-    if (lastCheck) {
+    if (value?.lastCheck) {
       return {
-        cardBackground: `${color}.light`,
-        cardColor: `${color}.dark`,
+        cardBackground: `${color}-light`,
+        cardColor: `${color}-dark`,
         button: color,
         alertBackground: `${color}.main`,
         alert: `${color}.light`,
       };
     } else {
       return {
-        cardBackground: theme.palette.neutral.light,
+        cardBackground: 'neutral-light',
         cardColor: 'inherit',
         button: 'inherit',
         alertBackground: 'inherit',
         alert: 'inherit',
       };
     }
-  }, [color, lastCheck, theme]);
+  }, [color, value?.lastCheck]);
 
-  const Icon = useMemo(() => {
-    if (!lastCheck) return ShieldQuestion;
-    if (status === 'Healthy') return ShieldCheck;
-    return ShieldExclamation;
-  }, [lastCheck, status]);
+  const icon = useMemo<IconProps['name']>(() => {
+    if (!value?.lastCheck) return 'ShieldQuestion';
+    if (value?.status === 'Healthy') return 'ShieldCheck';
+    return 'ShieldExclamation';
+  }, [value?.lastCheck, value?.status]);
+
+  const formattedLastCheck = useMemo(() => {
+    if (!value?.lastCheck) return;
+    return new Intl.DateTimeFormat('en-US', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false,
+    }).format(new Date(value.lastCheck));
+  }, [value?.lastCheck]);
+
+  if (loading) {
+    return <Skeleton height={180} variant="rounded" />;
+  }
 
   return (
     <Card
@@ -91,65 +96,66 @@ export const HealthParamCard = ({
         flexDirection: 'column',
         minWidth: 0,
       }}
-      backgroundColor={colors.cardBackground}
+      backgroundColor={colors.cardBackground as Color}
     >
-      <CardHeader
-        action={
-          lastTrialErrorTime && (
-            <Tooltip title={lastTrialErrorMessage}>
-              <SvgIcon color="warning">
-                <ExclamationTriangle />
-              </SvgIcon>
+      <CardHeader>
+        <Icon color={colors.cardColor as Color} name={icon} />
+        <CardTitle color={colors.cardColor as Color} fontWeight="700">
+          {value?.lastCheck ? value?.status : 'Unknown'}
+        </CardTitle>
+        {value?.lastTrialErrorTime && (
+          <CardAction>
+            <Tooltip title={value.lastTrialErrorMessage}>
+              <Icon color="warning" name="ExclamationTriangle" />
             </Tooltip>
-          )
-        }
-      >
-        <Stack spacing={2} direction="row">
-          <SvgIcon color={colors.cardColor as Colors}>
-            <Icon />
-          </SvgIcon>
-          <CardTitle>
-            <Typography color={colors.cardColor} fontWeight="700">
-              {lastCheck ? status : 'Unknown'}
-            </Typography>
-          </CardTitle>
-        </Stack>
+          </CardAction>
+        )}
       </CardHeader>
-      <CardBody style={{ height: '100%' }}>
-        <Stack style={{ flex: 1, height: '100%' }}>
-          <Typography gutterBottom>{title}</Typography>
-          <Typography variant="body2">{description}</Typography>
-          {details && (
-            <Alert
-              variant="filled"
-              sx={{
-                bgcolor: colors.alertBackground,
-                color: colors.alert,
-                mt: 2,
-                wordBreak: 'normal',
-                overflowWrap: 'break-word',
-              }}
-            >
-              {details}
-            </Alert>
-          )}
-          <Typography variant="body2" style={{ marginTop: 'auto' }}>
-            {/* Note that "Check now" feature only works with a real watcher
-          instance and its functionality cannot be mocked now */}
-            <Button
-              loading={checking}
-              size="small"
-              variant="text"
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              color={colors.button as any}
-              style={{ fontSize: 'inherit' }}
-              onClick={handleCheckNow}
-            >
-              {checking ? 'Checking' : 'Check now'}
-            </Button>
-            {lastCheck &&
-              `(Last check: ${moment(lastCheck).format('DD/MM/YYYY HH:mm:ss')})`}
+      <CardBody
+        style={{
+          height: '100%',
+          display: 'flex',
+          flexFlow: 'column',
+          flex: '1 1 0%',
+        }}
+      >
+        <Typography gutterBottom>{value?.title}</Typography>
+        <Typography variant="body2">{value?.description}</Typography>
+        {value?.details && (
+          <Alert
+            variant="filled"
+            sx={{
+              bgcolor: colors.alertBackground,
+              color: colors.alert,
+              mt: 2,
+              wordBreak: 'normal',
+              overflowWrap: 'break-word',
+            }}
+          >
+            {value.details}
+          </Alert>
+        )}
+        <Stack
+          align="center"
+          direction="row"
+          justify="between"
+          style={{ marginTop: 'auto' }}
+        >
+          <Typography variant="body2">
+            Last check: {formattedLastCheck}
           </Typography>
+          {/* Note that "Check now" feature only works with a real watcher instance and its functionality cannot be mocked now */}
+          <Button
+            loading={checking}
+            size="small"
+            variant="text"
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            color={colors.button as any}
+            style={{ fontSize: 'inherit' }}
+            onClick={handleCheckNow}
+          >
+            {checking ? 'Checking' : 'Check now'}
+          </Button>
         </Stack>
       </CardBody>
     </Card>

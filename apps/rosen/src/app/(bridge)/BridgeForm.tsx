@@ -2,21 +2,20 @@
 
 import { useCallback, ChangeEvent, SyntheticEvent } from 'react';
 
-import { ClipboardNotes } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import {
-  Grid,
   TextField,
-  Typography,
-  ListItemIcon,
   MenuItem,
   CircularProgress,
-  SvgIcon,
   Alert,
   Autocomplete,
   InputAdornment,
   IconButton,
+  Icon,
+  Network,
   Stack,
+  useResponsive,
+  StackProps,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 
@@ -61,16 +60,15 @@ export const BridgeForm = () => {
 
   const { selected: selectedWallet } = useWallet();
 
+  const stackDirection = useResponsive<StackProps['direction']>({
+    mobile: 'column',
+    tablet: 'row',
+  });
+
   const renderSelectedNetwork = (value: unknown) => {
     const network = sources.find((network) => network.name === value)!;
-    const Logo = network.logo;
     return (
-      <Stack direction="row" align="center" spacing={1}>
-        <SvgIcon>
-          <Logo />
-        </SvgIcon>
-        <Typography color="text.secondary">{network.label}</Typography>
-      </Stack>
+      <Network value={network.name} slots={{ logo: { size: 'medium' } }} />
     );
   };
 
@@ -135,65 +133,55 @@ export const BridgeForm = () => {
 
   return (
     <>
-      <Grid container spacing={2}>
-        <Grid size={{ mobile: 12, tablet: 6 }}>
-          <TextField
-            id="source"
-            select
-            label="Source"
-            inputProps={{ 'aria-label': 'source input' }}
-            InputProps={{ disableUnderline: true }}
-            variant="filled"
-            {...sourceField}
-            SelectProps={{
-              renderValue: renderSelectedNetwork,
-            }}
-            onChange={handleSourceChange}
-          >
-            {availableSources.map(({ logo: Logo, ...network }) => (
-              <MenuItem key={network.name} value={network.name}>
-                <ListItemIcon>
-                  <SvgIcon>
-                    <Logo />
-                  </SvgIcon>
-                </ListItemIcon>
-                <Typography color="text.secondary">{network.label}</Typography>
-              </MenuItem>
-            ))}
-          </TextField>
-        </Grid>
-        <Grid size={{ mobile: 12, tablet: 6 }}>
-          <TextField
-            id="target"
-            select
-            label="Target"
-            disabled={!sourceField.value}
-            inputProps={{ 'aria-label': 'target input' }}
-            InputProps={{ disableUnderline: true }}
-            variant="filled"
-            {...targetField}
-            // CAUTION: THIS LOGICAL OR PREVENTS TO MAKE AN ERROR DURING RUNTIME.
-            value={targetField.value ?? ''}
-            SelectProps={{
-              renderValue: renderSelectedNetwork,
-            }}
-            onChange={handleTargetChange}
-          >
-            {availableTargets.map(({ logo: Logo, ...network }) => (
-              <MenuItem key={network.name} value={network.name}>
-                <ListItemIcon>
-                  <ListItemIcon>
-                    <SvgIcon>
-                      <Logo />
-                    </SvgIcon>
-                  </ListItemIcon>
-                </ListItemIcon>
-                <Typography color="text.secondary">{network.label}</Typography>
-              </MenuItem>
-            ))}
-          </TextField>
-        </Grid>
-      </Grid>
+      <Stack direction={stackDirection} spacing={2}>
+        <TextField
+          id="source"
+          select
+          label="Source"
+          inputProps={{ 'aria-label': 'source input' }}
+          InputProps={{ disableUnderline: true }}
+          variant="filled"
+          {...sourceField}
+          SelectProps={{
+            renderValue: renderSelectedNetwork,
+          }}
+          onChange={handleSourceChange}
+        >
+          {availableSources.map((network) => (
+            <MenuItem key={network.name} value={network.name}>
+              <Network
+                value={network.name}
+                slots={{ logo: { size: 'medium' } }}
+              />
+            </MenuItem>
+          ))}
+        </TextField>
+        <TextField
+          id="target"
+          select
+          label="Target"
+          disabled={!sourceField.value}
+          inputProps={{ 'aria-label': 'target input' }}
+          InputProps={{ disableUnderline: true }}
+          variant="filled"
+          {...targetField}
+          // CAUTION: THIS LOGICAL OR PREVENTS TO MAKE AN ERROR DURING RUNTIME.
+          value={targetField.value ?? ''}
+          SelectProps={{
+            renderValue: renderSelectedNetwork,
+          }}
+          onChange={handleTargetChange}
+        >
+          {availableTargets.map((network) => (
+            <MenuItem key={network.name} value={network.name}>
+              <Network
+                value={network.name}
+                slots={{ logo: { size: 'medium' } }}
+              />
+            </MenuItem>
+          ))}
+        </TextField>
+      </Stack>
       <TextField
         label="Target Address"
         InputProps={{
@@ -214,9 +202,7 @@ export const BridgeForm = () => {
                   }
                 }}
               >
-                <SvgIcon opacity="0.6">
-                  <ClipboardNotes />
-                </SvgIcon>
+                <Icon color="text-disabled" name="ClipboardNotes" />
               </IconButton>
             </InputAdornment>
           ),

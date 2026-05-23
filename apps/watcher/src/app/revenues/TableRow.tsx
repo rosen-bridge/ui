@@ -6,7 +6,7 @@ import {
   Box,
   Button,
   EnhancedTableCell,
-  Id,
+  Identifier,
   styled,
   TableRow,
 } from '@rosen-bridge/ui-kit';
@@ -114,7 +114,7 @@ export const MobileRow: FC<RowProps> = (props) => {
       <TableRow style={rowStyles}>
         <EnhancedTableCell>Event Id</EnhancedTableCell>
         <EnhancedTableCell>
-          <Id id={row.eventId} />
+          <Identifier value={row.eventId} variant="legacy" />
         </EnhancedTableCell>
       </TableRow>
       <TableRow style={rowStyles}>
@@ -211,7 +211,7 @@ export const TabletRow: FC<RowProps> = (props) => {
   return (
     <TableRow className="divider" style={rowStyles}>
       <EnhancedTableCell align="center">
-        <Id id={row.eventId} />
+        <Identifier value={row.eventId} variant="legacy" />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">{row.lockToken.name}</EnhancedTableCell>
       <EnhancedTableCell align="center">

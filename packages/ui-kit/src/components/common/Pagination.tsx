@@ -5,11 +5,12 @@ import {
   SvgIcon,
   Divider,
   Button,
+  Typography,
 } from '@mui/material';
 import { CaretDown, AlignCenter } from '@rosen-bridge/icons';
 
-import { Box, Typography, MenuItem, Menu, ListSubheader } from '../base';
-import { Stack } from './Stack';
+import { Box, MenuItem, Menu, ListSubheader } from '../base';
+import { Stack } from '../stack';
 
 export interface PaginationProps {
   defaultPageIndex?: number;

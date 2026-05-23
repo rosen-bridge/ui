@@ -9,7 +9,6 @@ import {
 } from 'react';
 
 import { ClickAwayListener } from '@mui/material';
-import { Favorite, History as HistoryIcon, Times } from '@rosen-bridge/icons';
 
 import { useBreakpoint } from '../../../hooks';
 import {
@@ -19,10 +18,11 @@ import {
   ListItemText,
   ListSubheader,
 } from '../../base';
-import { IconButton } from '../../base';
+import { CloseButton } from '../../closeButton';
+import { Icon } from '../../icon';
+import { IconButton } from '../../iconButton';
+import { Truncate } from '../../truncate';
 import { Divider } from '../Divider';
-import { SvgIcon } from '../SvgIcon';
-import { Truncate } from '../Truncate';
 import { Popup } from './Popup';
 import { Filter, Selected } from './types';
 import { parseFilter } from './utils';
@@ -187,9 +187,7 @@ export const History = forwardRef<HistoryRef, HistoryProps>(
             ref={$anchor}
             onClick={() => setOpen(!open)}
           >
-            <SvgIcon>
-              <HistoryIcon />
-            </SvgIcon>
+            <Icon name="History" />
           </IconButton>
           <Popup anchorEl={$anchor.current} open={open}>
             <div
@@ -206,17 +204,13 @@ export const History = forwardRef<HistoryRef, HistoryProps>(
                         disablePadding
                         key={getKey(item.selected)}
                         secondaryAction={
-                          <IconButton
+                          <CloseButton
                             edge="end"
                             onClick={(event) => {
                               event.stopPropagation();
                               remove(item);
                             }}
-                          >
-                            <SvgIcon>
-                              <Times />
-                            </SvgIcon>
-                          </IconButton>
+                          />
                         }
                         onClick={() => handleClick(item)}
                       >
@@ -251,9 +245,7 @@ export const History = forwardRef<HistoryRef, HistoryProps>(
                           book(item);
                         }}
                       >
-                        <SvgIcon>
-                          <Favorite />
-                        </SvgIcon>
+                        <Icon name="Favorite" />
                       </IconButton>
                     }
                     onClick={() => handleClick(item)}

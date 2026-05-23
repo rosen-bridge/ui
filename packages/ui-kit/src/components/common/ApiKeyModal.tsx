@@ -1,22 +1,19 @@
 import React, { FormEvent, useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 
-import { Button } from '@mui/material';
-import { KeySkeleton, Eye, EyeSlash, Times } from '@rosen-bridge/icons';
+import { Button, Tooltip, IconButton, Typography } from '@mui/material';
 
-import { useApiKey, useSnackbar } from '../../hooks';
+import { useApiKey, useToast } from '../../hooks';
 import {
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
-  Tooltip,
-  IconButton,
   InputAdornment,
   TextField,
-  Typography,
 } from '../base';
-import { SvgIcon } from './SvgIcon';
+import { CloseButton } from '../closeButton';
+import { Icon } from '../icon';
 
 interface FormValues {
   apiKey: string;
@@ -28,7 +25,7 @@ export interface ApiKeyModalProps {
 
 export const ApiKeyModal = ({ children }: ApiKeyModalProps) => {
   const { apiKey, setApiKey } = useApiKey();
-  const { openSnackbar } = useSnackbar();
+  const toast = useToast();
 
   const [isOpen, setIsOpen] = useState(false);
   const handleOpenModal = () => setIsOpen(true);
@@ -46,7 +43,10 @@ export const ApiKeyModal = ({ children }: ApiKeyModalProps) => {
   const handleSetKey = (values: FormValues) => {
     setApiKey(values.apiKey);
     handleCloseModal();
-    openSnackbar('API key is set!', 'success');
+    toast.add({
+      type: 'success',
+      description: 'API key is set!',
+    });
   };
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -62,9 +62,7 @@ export const ApiKeyModal = ({ children }: ApiKeyModalProps) => {
     <>
       {children?.(handleOpenModal) || (
         <IconButton onClick={handleOpenModal} color="inherit">
-          <SvgIcon size="medium">
-            <KeySkeleton />
-          </SvgIcon>
+          <Icon name="KeySkeleton" />
         </IconButton>
       )}
       <Dialog
@@ -91,17 +89,11 @@ export const ApiKeyModal = ({ children }: ApiKeyModalProps) => {
                     endAdornment: (
                       <InputAdornment position="end">
                         <Tooltip title="Clear">
-                          <IconButton onClick={() => reset()}>
-                            <SvgIcon size="medium">
-                              <Times />
-                            </SvgIcon>
-                          </IconButton>
+                          <CloseButton onClick={() => reset()} />
                         </Tooltip>
                         <Tooltip title={showKey ? 'Hide key' : 'Show key'}>
                           <IconButton onClick={handleToggleShowKey}>
-                            <SvgIcon size="medium">
-                              {showKey ? <EyeSlash /> : <Eye />}
-                            </SvgIcon>
+                            <Icon name={showKey ? 'EyeSlash' : 'Eye'} />
                           </IconButton>
                         </Tooltip>
                       </InputAdornment>

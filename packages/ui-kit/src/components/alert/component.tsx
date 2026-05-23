@@ -1,5 +1,7 @@
 import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 
+import { Alert as AlertMUI } from '@mui/material';
+
 import { useConfig } from '@/hooks';
 import { OverridableType, ElementBaseProps } from '@/types';
 
@@ -73,6 +75,9 @@ export const Alert = (props: AlertProps) => {
     return () => clearTimeout(timer);
   }, [timeout, onClose]);
 
+  void action;
+  void icon;
+
   return (
     <Collapsible
       data-severity={severity}
@@ -80,20 +85,19 @@ export const Alert = (props: AlertProps) => {
       open={open}
       {...rest}
     >
-      <div className="RosenAlert-inner">
-        <div className="RosenAlert-icon">
-          <Icon name={icon} size="medium" />
-        </div>
-        <div className="RosenAlert-content">{children}</div>
-        <div className="RosenAlert-actions">
-          {action}
-          {dismissible && (
+      <AlertMUI
+        severity={severity}
+        action={
+          dismissible && (
             <IconButton size="small" onClick={close}>
               <Icon name="Times" size="small" />
             </IconButton>
-          )}
-        </div>
-      </div>
+          )
+        }
+        variant="filled"
+      >
+        {children}
+      </AlertMUI>
     </Collapsible>
   );
 };

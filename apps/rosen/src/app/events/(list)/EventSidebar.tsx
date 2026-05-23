@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
 
-import { AngleRight, Exchange } from '@rosen-bridge/icons';
 import {
   Button,
   Card,
+  CardAction,
   CardBody,
   CardHeader,
   CardTitle,
@@ -13,7 +13,7 @@ import {
   EnhancedDialogTitle,
   EventDetails,
   EventDetailsProps,
-  SvgIcon,
+  Icon,
   Typography,
   useBreakpoint,
   useStickyBox,
@@ -26,8 +26,6 @@ import useSWR from 'swr';
 import { EventItem } from '@/types';
 
 const Content = ({ value }: EventSidebarProps) => {
-  const isTablet = useBreakpoint('laptop-down');
-
   const shouldLoad = useMemo(() => {
     return !!value && !!value.eventId && value.status !== 'multipleFlows';
   }, [value]);
@@ -40,16 +38,15 @@ const Content = ({ value }: EventSidebarProps) => {
   const eventData = useMemo(() => {
     const result: EventDetailsProps['value'] = {
       amount: data?.amount,
-      decimal: data?.lockToken?.significantDecimal,
-      price: data?.price,
       bridgeFee: data?.bridgeFee,
+      decimal: data?.lockToken?.significantDecimal,
       fromAddress: data?.fromAddress,
       fromAddressUrl: getAddressUrl(data?.fromChain, data?.fromAddress),
       fromChain: data?.fromChain,
       height: data?.height,
-      href: `/events/${data?.eventId}`,
       id: data?.eventId,
       networkFee: data?.networkFee,
+      price: data?.price,
       reports: data?.WIDsCount,
       sourceTxId: data?.sourceTxId,
       sourceTxIdUrl: getTxURL(data?.fromChain, data?.sourceTxId),
@@ -57,9 +54,8 @@ const Content = ({ value }: EventSidebarProps) => {
       toAddress: data?.toAddress,
       toAddressUrl: getAddressUrl(data?.toChain, data?.toAddress),
       toChain: data?.toChain,
-      token: data?.lockToken?.name,
-      ergoSideTokenId: data?.lockToken?.ergoSideTokenId,
       timestamp: data?.timestamp,
+      token: data?.lockToken?.id,
     };
 
     if (result.status !== 'fraud') {
@@ -72,40 +68,30 @@ const Content = ({ value }: EventSidebarProps) => {
     return result;
   }, [data]);
 
-  if (!value) {
+  if (!value || value.status === 'multipleFlows') {
     return (
       <Center style={{ minHeight: 'calc(100vh - 304px)' }}>
-        <Typography variant="body1" color="text.secondary">
-          Select an event to see its details.
+        <Typography variant="body1" color="text-secondary">
+          {value ? (
+            <>
+              This event has multiple flows. Click <b>See Details</b> for more
+              information.
+            </>
+          ) : (
+            <>Select an event to see its details.</>
+          )}
         </Typography>
       </Center>
     );
   }
 
-  if (value.status === 'multipleFlows') {
-    return (
-      <Center style={{ minHeight: 'calc(100vh - 304px)' }}>
-        <Typography variant="body1" color="text.secondary" textAlign="center">
-          This event has multiple flows. Click <b>See Details</b> for more
-          information.
-        </Typography>
-      </Center>
-    );
-  }
-
-  return (
-    <EventDetails
-      loading={isLoading}
-      value={eventData}
-      showSeeDetailsButton={isTablet}
-    />
-  );
+  return <EventDetails loading={isLoading} value={eventData} />;
 };
 
 const Drawer = ({ value, onClose }: EventSidebarProps) => {
   return (
     <EnhancedDialog open={!!value} stickOn="laptop" onClose={onClose}>
-      <EnhancedDialogTitle icon={<Exchange />} onClose={onClose}>
+      <EnhancedDialogTitle icon="Exchange" onClose={onClose}>
         Event Details
       </EnhancedDialogTitle>
       <EnhancedDialogContent>
@@ -123,42 +109,34 @@ const DetailsSidebar = ({ value }: EventSidebarProps) => {
   return (
     <Card
       ref={stickyRef}
-      separated
-      backgroundColor="background.paper"
+      variant="separated"
       style={{
         width: '330px',
         marginLeft: '16px',
       }}
     >
-      <CardHeader
-        action={
-          value && (
-            <div
-              style={{
-                height: 0,
-                display: 'flex',
-                alignItems: 'center',
-                marginRight: '-1rem',
-              }}
-            >
-              <Button
-                variant="text"
-                size="small"
-                target="_blank"
-                href={`/events/${value.eventId}`}
-                endIcon={
-                  <SvgIcon>
-                    <AngleRight />
-                  </SvgIcon>
-                }
-              >
-                SEE DETAILS
-              </Button>
-            </div>
-          )
-        }
-      >
+      <CardHeader>
         <CardTitle>Event</CardTitle>
+        {value && (
+          <CardAction
+            style={{
+              height: 0,
+              display: 'flex',
+              alignItems: 'center',
+              marginRight: '-1rem',
+            }}
+          >
+            <Button
+              variant="text"
+              size="small"
+              target="_blank"
+              href={`/events/${value.eventId}`}
+              endIcon={<Icon name="AngleRight" />}
+            >
+              SEE DETAILS
+            </Button>
+          </CardAction>
+        )}
       </CardHeader>
       <CardBody>
         <Content value={value} />

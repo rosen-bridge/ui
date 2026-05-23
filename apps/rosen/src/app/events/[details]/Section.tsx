@@ -2,18 +2,18 @@
 
 import { ReactNode } from 'react';
 
-import { SyncExclamation } from '@rosen-bridge/icons';
 import {
   Button,
   Card,
+  CardAction,
   CardBody,
   CardHeader,
   CardTitle,
   Center,
-  Collapse,
+  Collapsible,
   DisclosureButton,
+  Icon,
   Stack,
-  SvgIcon,
   Typography,
   useDisclosure,
 } from '@rosen-bridge/ui-kit';
@@ -41,33 +41,32 @@ export const Section = ({
   });
 
   return (
-    <Card variant="section" backgroundColor="background.paper">
-      <CardHeader
-        action={collapsible && <DisclosureButton disclosure={disclosure} />}
-      >
-        <CardTitle>
-          <Typography variant="h2" color="text.secondary">
-            {title}
-          </Typography>
+    <Card variant="section">
+      <CardHeader>
+        <CardTitle variant="h2" color="text-secondary">
+          {title}
         </CardTitle>
+        {collapsible && (
+          <CardAction>
+            <DisclosureButton disclosure={disclosure} />
+          </CardAction>
+        )}
       </CardHeader>
-      <Collapse in={!collapsible || disclosure.state == 'open' || !!error}>
+      <Collapsible open={!collapsible || disclosure.state == 'open' || !!error}>
         <CardBody>
           {!error && children}
           {!!error && (
             <Center style={{ height: '20rem' }}>
               <Button variant="text" onClick={() => load?.()}>
                 <Stack direction="column" align="center">
-                  <SvgIcon color="error">
-                    <SyncExclamation />
-                  </SvgIcon>
-                  <Typography color="error.main">TRY AGAIN!</Typography>
+                  <Icon color="error" name="SyncExclamation" />
+                  <Typography color="error">TRY AGAIN!</Typography>
                 </Stack>
               </Button>
             </Center>
           )}
         </CardBody>
-      </Collapse>
+      </Collapsible>
     </Card>
   );
 };

@@ -1,17 +1,12 @@
 import { HTMLAttributes, useMemo } from 'react';
 
-import {
-  ExclamationTriangle,
-  ExternalLinkAlt,
-  Fire,
-  SnowFlake,
-} from '@rosen-bridge/icons';
 import { getDecimalString } from '@rosen-ui/utils';
 
-import { IconButton, Skeleton, Tooltip, Typography } from '../../base';
-import { InjectOverrides } from '../InjectOverrides';
-import { Stack } from '../Stack';
-import { SvgIcon } from '../SvgIcon';
+import { Icon } from '../../icon';
+import { IconButton } from '../../iconButton';
+import { Stack } from '../../stack';
+import { Tooltip } from '../../tooltip';
+import { Typography } from '../../typography';
 
 export type AmountProps = HTMLAttributes<HTMLDivElement> & {
   /** Number of decimal places to shift the value before formatting */
@@ -239,14 +234,18 @@ const AmountBase = ({
       {...props}
     >
       {variant === 'cold' && (
-        <SvgIcon style={{ fontSize: 'inherit' }} color="tertiary.dark">
-          <SnowFlake />
-        </SvgIcon>
+        <Icon
+          color="tertiary-dark"
+          name="SnowFlake"
+          style={{ fontSize: 'inherit' }}
+        />
       )}
       {variant === 'hot' && (
-        <SvgIcon style={{ fontSize: 'inherit' }} color="secondary.dark">
-          <Fire />
-        </SvgIcon>
+        <Icon
+          color="secondary-dark"
+          name="Fire"
+          style={{ fontSize: 'inherit' }}
+        />
       )}
       <Stack align="center" direction="row">
         <Stack
@@ -255,49 +254,53 @@ const AmountBase = ({
           spacing="4px"
         >
           <>
-            {loading && <Skeleton width={80} />}
-            {!loading && !!error && (
-              <SvgIcon
-                style={{
-                  fontSize: 'inherit',
-                }}
-              >
-                <ExclamationTriangle />
-              </SvgIcon>
+            {!!error && (
+              <Icon
+                name="ExclamationTriangle"
+                style={{ fontSize: 'inherit' }}
+              />
             )}
-            {!loading && !error && !!parts && (
-              <Tooltip title={tooltip}>
+            {!error && (
+              <Tooltip disabled={loading} title={tooltip}>
                 <Typography
-                  fontSize="inherit"
-                  component="span"
-                  whiteSpace="nowrap"
+                  component="div"
+                  loading={loading}
+                  style={{ fontSize: 'inherit', whiteSpace: 'nowrap' }}
                 >
-                  {parts.number}
-                  {parts.fraction && (
-                    <Typography
-                      component="span"
-                      fontSize="75%"
-                      style={{ opacity: 0.7 }}
-                    >
-                      .{!!parts.zeros && '0'}
-                      {!!parts.zeros && (
-                        <sub style={{ fontSize: '0.75em' }}>{parts.zeros}</sub>
+                  {!!parts && (
+                    <>
+                      {parts.number}
+                      {parts.fraction && (
+                        <Typography
+                          component="span"
+                          fontSize="75%"
+                          style={{ opacity: 0.7 }}
+                        >
+                          .{!!parts.zeros && '0'}
+                          {!!parts.zeros && (
+                            <sub style={{ fontSize: '0.75em' }}>
+                              {parts.zeros}
+                            </sub>
+                          )}
+                          {parts.fraction}
+                        </Typography>
                       )}
-                      {parts.fraction}
-                    </Typography>
+                      {!!parts.unit && ` ${parts.unit}`}
+                    </>
                   )}
-                  {!!parts.unit && ` ${parts.unit}`}
                 </Typography>
               </Tooltip>
             )}
-            {!loading &&
-              !error &&
-              !parts &&
-              !!fallback &&
-              value === undefined && <>{fallback}</>}
+            {!error && !parts && !!fallback && value === undefined && (
+              <>{fallback}</>
+            )}
           </>
           {unit && (
-            <Typography fontSize="75%" component="div" style={{ opacity: 0.7 }}>
+            <Typography
+              component="div"
+              loading={loading}
+              style={{ fontSize: '75%', opacity: 0.7 }}
+            >
               {unit}
             </Typography>
           )}
@@ -314,9 +317,7 @@ const AmountBase = ({
             size="small"
             href={href}
           >
-            <SvgIcon size="small">
-              <ExternalLinkAlt />
-            </SvgIcon>
+            <Icon name="ExternalLinkAlt" size="small" />
           </IconButton>
         )}
       </Stack>
@@ -324,4 +325,4 @@ const AmountBase = ({
   );
 };
 
-export const Amount = InjectOverrides(AmountBase);
+export const Amount = AmountBase;
