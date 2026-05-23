@@ -23,7 +23,7 @@ export {
   type TableCellProps,
   TableRow,
   type TableRowProps,
-  type TablePaginationProps,
+  type MuiTablePaginationProps as TablePaginationProps,
 };
 
 export interface TableHeadItem {
