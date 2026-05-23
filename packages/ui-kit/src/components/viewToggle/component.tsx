@@ -1,4 +1,3 @@
-// TODO: use ToggleButton button and add slots
 import { useConfig } from '@/hooks';
 import { ElementBaseProps, OverridableType } from '@/types';
 
@@ -11,7 +10,6 @@ export interface ViewToggleOverrides {}
 
 export type ViewToggleType = 'grid' | 'row';
 
-// TODO: add slots, size, ...
 export type ViewToggleOwnProps = {
   disabled?: boolean;
   value?: ViewToggleType;

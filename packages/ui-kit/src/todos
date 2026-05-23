@@ -1,0 +1,120 @@
+packages/ui-kit/src/components/alert/styles.css
+
+
+packages/ui-kit/src/components/apiKeyDialog/component.tsx
+{/* TODO dividers */}
+<DialogContent>
+
+
+packages/ui-kit/src/components/badge/styles.css
+/* TODO */
+.RosenBadge-content {
+
+
+packages/ui-kit/src/components/button/component.tsx
+// TODO
+// <Action data-block={!!block} data-size={size} data-variant={variant} {...rest} />
+
+
+packages/ui-kit/src/components/common/HealthParamCard.tsx
+<Alert
+  variant="filled"
+  sx={{
+    bgcolor: colors.alertBackground,
+    color: colors.alert,
+    mt: 2,
+    wordBreak: 'normal',
+    overflowWrap: 'break-word',
+  }}
+>
+
+
+packages/ui-kit/src/components/dialog/component.tsx
+// TODO
+export type DialogOwnProps = {
+
+
+packages/ui-kit/src/components/dialog/styles.css
+z-index
+
+
+packages/ui-kit/src/components/dialogHeader/component.tsx
+// TODO
+export type DialogHeaderOwnProps = {
+
+
+packages/ui-kit/src/components/disclosureButton/styles.css
+
+
+packages/ui-kit/src/components/iconButton/component.tsx
+// TODO
+export type IconButtonOwnProps = {
+// TODO: extend from Button instead of MUI
+return <IconButtonMUI {...rest} />;
+
+
+
+
+packages/ui-kit/src/components/tokensCard/component.tsx
+<Button
+  variant="text"
+  size="medium"
+  // TODO
+  // target="_blank"
+  // href={href}
+  endIcon={<Icon name="AngleRight" />}
+>
+
+
+
+packages/ui-kit/src/components/viewToggle/component.tsx
+// TODO: use ToggleButton button and add slots
+// TODO: add slots, size, ...
+/* TODO: make it better */
+.RosenViewToggle button.active {
+  background: var(--rosen-palette-primary-main);
+  svg {
+    fill: var(--rosen-palette-primary-light);
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+apps/guard/src/app/(dashboard)/@actions/page.tsx
+check prev styles and new one
+
+apps/{guard,rosen, watcher}/src/uiKitProvider.tsx
+DialogTitle: {
+  defaultProps: {
+    color: 'secondary-dark',
+    variant: 'h2',
+    // TODO: this old ThemeOptions
+    // fontSize: theme.spacing(3),
+  },
+},
+
+
+apps/watcher/src/app/actions/ConfirmationModal.tsx
+{/* TODO */}
+<DialogContent>{content}</DialogContent>

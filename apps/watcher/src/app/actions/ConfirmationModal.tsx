@@ -49,7 +49,6 @@ export const ConfirmationModal = ({
       <DialogHeader>
         <DialogTitle>{title}</DialogTitle>
       </DialogHeader>
-      {/* TODO */}
       <DialogContent>{content}</DialogContent>
       <DialogFooter>
         <Button

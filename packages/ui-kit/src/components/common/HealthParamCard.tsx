@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
 
+import { Alert } from '@mui/material';
 import { HealthParamInfo } from '@rosen-ui/types';
 
 import {
-  Alert,
   Button,
   Card,
   CardAction,
@@ -124,14 +124,13 @@ export const HealthParamCard = ({
         {value?.details && (
           <Alert
             variant="filled"
-            // TODO
-            // sx={{
-            //   bgcolor: colors.alertBackground,
-            //   color: colors.alert,
-            //   mt: 2,
-            //   wordBreak: 'normal',
-            //   overflowWrap: 'break-word',
-            // }}
+            sx={{
+              bgcolor: colors.alertBackground,
+              color: colors.alert,
+              mt: 2,
+              wordBreak: 'normal',
+              overflowWrap: 'break-word',
+            }}
           >
             {value.details}
           </Alert>

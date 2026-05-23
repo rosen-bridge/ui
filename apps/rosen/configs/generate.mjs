@@ -29,7 +29,6 @@ const content = [
   ),
   `} as any;`,
   '',
-  '',
 ];
 
 fs.writeFileSync(path.join(__dirname, './index.ts'), content.join('\n'));

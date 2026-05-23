@@ -46,8 +46,6 @@ export const getUiKitConfig: () => ConfigContextType = () => ({
       defaultProps: {
         color: 'secondary-dark',
         variant: 'h2',
-        // TODO: this old ThemeOptions
-        // fontSize: theme.spacing(3),
       },
     },
     Icon: {

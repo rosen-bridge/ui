@@ -96,7 +96,6 @@ export const TransactionInfo = () => {
           />
         </Label>
 
-        {/* TODO: check for alert changes */}
         {!!error && (
           <Alert severity="error">
             <Truncate lines={1} style={{ whiteSpace: 'nowrap' }}>

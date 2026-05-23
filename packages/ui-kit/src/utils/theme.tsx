@@ -2,8 +2,6 @@ import { alpha, ComponentsOverrides, Theme, ThemeOptions } from '@mui/material';
 
 export { alpha, createTheme, styled, type Theme } from '@mui/material';
 
-export { createTheme, styled } from '@mui/material';
-
 declare module '@mui/material/styles' {
   interface BreakpointOverrides {
     laptop: true;
