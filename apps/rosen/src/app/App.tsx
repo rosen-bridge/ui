@@ -15,7 +15,6 @@ import { theme } from '@/theme/theme';
 import { UIKitProvider } from '@/uiKitProvider';
 
 import { TokenMapProvider } from '../hooks';
-import { UIKitProvider } from '../uiKitProvider';
 import { Sidebar } from './Sidebar';
 
 export const App = ({ children }: PropsWithChildren) => {

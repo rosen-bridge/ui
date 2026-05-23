@@ -18,7 +18,7 @@ interface ActionText {
  * @param children
  */
 export const ActionText = ({ title, children }: ActionText) => (
-  <Card style={{ minWidth: 0 }} backgroundColor="divider">
+  <Card style={{ minWidth: 0 }} backgroundColor="neutral-light">
     <CardHeader>
       <CardTitle fontWeight="700">{title}</CardTitle>
     </CardHeader>

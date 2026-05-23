@@ -1,4 +1,5 @@
 import { Route } from 'next';
+import NextLink from 'next/link';
 import { PropsWithChildren, useMemo } from 'react';
 
 import * as AllIcons from '@rosen-bridge/icons';
@@ -52,6 +53,13 @@ export const getUiKitConfig: () => ConfigContextType = () => ({
         icons: Object.fromEntries(
           Object.entries(AllIcons).filter(([key]) => key !== 'TOKENS'),
         ),
+      },
+    },
+    Link: {
+      defaultProps: {
+        // TODO
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        as: NextLink as any,
       },
     },
     Network: {

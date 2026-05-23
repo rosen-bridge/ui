@@ -22,7 +22,7 @@ import { mockedData } from '@/mock/mockedData';
 import { theme } from '@/theme/theme';
 import { UIKitProvider } from '@/uiKitProvider';
 
-import { Sidebar } from './SideBar';
+import { Sidebar } from './Sidebar';
 
 export const App = ({ children }: PropsWithChildren) => {
   const pathname = usePathname();

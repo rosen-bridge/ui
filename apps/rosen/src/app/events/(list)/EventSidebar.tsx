@@ -97,8 +97,9 @@ const Drawer = ({ value, onClose }: EventSidebarProps) => {
           value?.eventId && (
             <Button
               variant="text"
-              target="_blank"
-              href={`/events/${value?.eventId}`}
+              // TODO
+              // target="_blank"
+              // href={`/events/${value?.eventId}`}
               endIcon={<Icon name="AngleRight" />}
             >
               SEE DETAILS
@@ -144,8 +145,9 @@ const DetailsSidebar = ({ value }: EventSidebarProps) => {
             <Button
               variant="text"
               size="small"
-              target="_blank"
-              href={`/events/${value.eventId}`}
+              // TODO
+              // target="_blank"
+              // href={`/events/${value.eventId}`}
               endIcon={<Icon name="AngleRight" />}
             >
               SEE DETAILS
