@@ -97,6 +97,7 @@ export const RequestAnOrderForm = () => {
   const renderAlert = () => (
     <Alert
       dismissible
+      open={!!alertData?.severity}
       severity={alertData?.severity}
       variant="filled"
       onClose={() => setAlertData(null)}

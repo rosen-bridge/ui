@@ -1,4 +1,4 @@
-import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import { ReactNode, useCallback, useEffect, useMemo } from 'react';
 
 import { Alert as AlertMUI } from '@mui/material';
 
@@ -16,6 +16,7 @@ export interface AlertOverrides {}
 export type AlertOwnProps = {
   action?: ReactNode;
   dismissible?: boolean;
+  open?: boolean;
   severity?: 'success' | 'info' | 'warning' | 'error';
   timeout?: number;
   variant?: 'filled' | 'outlined' | 'standard';
@@ -31,14 +32,13 @@ export const Alert = (props: AlertProps) => {
     action,
     children,
     dismissible,
+    open = true,
     severity = 'info',
     timeout,
     variant = 'standard',
     onClose,
     ...rest
   } = useConfig('Alert', props);
-
-  const [open, setOpen] = useState(true);
 
   const icon = useMemo<IconProps['name']>(() => {
     switch (severity) {
@@ -54,7 +54,6 @@ export const Alert = (props: AlertProps) => {
   }, [severity]);
 
   const close = useCallback(() => {
-    setOpen(false);
     onClose?.();
   }, [onClose]);
 
@@ -68,7 +67,6 @@ export const Alert = (props: AlertProps) => {
     }
 
     const timer = setTimeout(() => {
-      setOpen(false);
       onClose?.();
     }, timeout);
 
