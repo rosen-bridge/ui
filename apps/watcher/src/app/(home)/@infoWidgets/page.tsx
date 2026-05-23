@@ -122,6 +122,10 @@ const InfoWidgets = () => {
       <InfoWidgetCard
         value={titleRSN || titleERSN || '0 RSN'}
         title={rsnToken?.amount === 0 ? '' : titleERSN}
+        /**
+         * FIXME: Use an appropriate icon
+         * local:ergo/rosen-bridge/ui#64
+         */
         icon="Wallet"
         color="warning"
         isLoading={isRsnTokenLoading || isERsnTokenLoading}

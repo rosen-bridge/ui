@@ -145,9 +145,8 @@ const DetailsSidebar = ({ value }: EventSidebarProps) => {
             <Button
               variant="text"
               size="small"
-              // TODO
-              // target="_blank"
-              // href={`/events/${value.eventId}`}
+              target="_blank"
+              href={`/events/${value.eventId}`}
               endIcon={<Icon name="AngleRight" />}
             >
               SEE DETAILS

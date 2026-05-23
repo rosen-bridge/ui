@@ -30,7 +30,7 @@ export const App = ({ children }: PropsWithChildren) => {
         router={{
           pathname,
           search: searchParams.toString(),
-          push: (href) =>
+          push: (href: string) =>
             router.push(href as unknown as Route, { scroll: false }),
         }}
       >

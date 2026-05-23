@@ -67,7 +67,6 @@ export const getUiKitConfig: (tokenMap: TokenMap) => ConfigContextType = (
     },
     Link: {
       defaultProps: {
-        // TODO
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         as: NextLink as any,
       },
