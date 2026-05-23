@@ -1,13 +1,10 @@
 import { Network, TokenInfoWithColdAmount } from '@rosen-ui/types';
 import { getTokenUrl } from '@rosen-ui/utils';
 
-import { Amount } from '@/components';
+import { Amount, Identifier, NetworkProps, Token } from '@/components';
 import { useConfig } from '@/hooks';
 import { ElementBaseProps, OverridableType } from '@/types';
 
-import { Identifier } from '../identifier';
-import { NetworkProps } from '../network';
-import { Token } from '../token';
 import './styles.css';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type

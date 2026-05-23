@@ -1,15 +1,23 @@
-import { Amount, AmountProps } from '@/components';
+import {
+  Amount,
+  AmountProps,
+  Card,
+  CardBody,
+  Connector,
+  EventStatus,
+  EventStatusProps,
+  Identifier,
+  IdentifierProps,
+  Network,
+  NetworkProps,
+  RelativeTime,
+  RelativeTimeProps,
+  Token,
+  TokenProps,
+} from '@/components';
 import { useConfig } from '@/hooks';
 import { ElementBaseProps, OverridableType } from '@/types';
 
-import { Card } from '../card';
-import { CardBody } from '../cardBody';
-import { Connector } from '../connector';
-import { EventStatus, EventStatusProps } from '../eventStatus';
-import { Identifier, IdentifierProps } from '../identifier';
-import { Network, NetworkProps } from '../network';
-import { RelativeTime, RelativeTimeProps } from '../relativeTime';
-import { Token, TokenProps } from '../token';
 import './styles.css';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
