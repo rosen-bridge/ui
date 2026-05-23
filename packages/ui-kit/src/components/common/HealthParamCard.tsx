@@ -34,7 +34,7 @@ export const HealthParamCard = ({
   loading,
   value,
 }: HealthParamCardProps) => {
-  const color = useMemo(() => {
+  const color = useMemo<Color>(() => {
     switch (value?.status) {
       case 'Healthy':
         return 'success';
@@ -48,17 +48,17 @@ export const HealthParamCard = ({
   const colors = useMemo(() => {
     if (value?.lastCheck) {
       return {
-        cardBackground: `${color}-light`,
-        cardColor: `${color}-dark`,
-        button: color,
+        cardBackground: `${color}-light` as Color,
+        cardColor: `${color}-dark` as Color,
+        button: color as Color,
         alertBackground: `${color}.main`,
         alert: `${color}.light`,
       };
     } else {
       return {
-        cardBackground: 'neutral-light',
-        cardColor: 'inherit',
-        button: 'inherit',
+        cardBackground: 'neutral-light' as Color,
+        cardColor: 'inherit' as Color,
+        button: 'inherit' as Color,
         alertBackground: 'inherit',
         alert: 'inherit',
       };
@@ -149,9 +149,8 @@ export const HealthParamCard = ({
             loading={checking}
             size="small"
             variant="text"
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            color={colors.button as any}
-            style={{ fontSize: 'inherit' }}
+            color={colors.button}
+            style={{ flexShrink: 0 }}
             onClick={handleCheckNow}
           >
             {checking ? 'Checking' : 'Check now'}
