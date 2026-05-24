@@ -33,6 +33,11 @@ declare module '@rosen-bridge/ui-kit' {
 
 export const getUiKitConfig: () => ConfigContextType = () => ({
   components: {
+    CardTitle: {
+      defaultProps: {
+        fontWeight: '700',
+      },
+    },
     Connector: {
       defaultProps: {
         slots: {
