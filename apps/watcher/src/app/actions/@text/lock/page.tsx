@@ -63,7 +63,7 @@ const LockText = () => {
       <Typography fontWeight="bold" sx={{ mt: 2 }}>
         RSN
       </Typography>
-      <Typography sx={{ mb: 2 }}>
+      <Typography>
         Currently, you should lock{' '}
         {isInfoLoading || isRsnTokenLoading ? (
           <CircularProgress size={12} />

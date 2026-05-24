@@ -185,6 +185,10 @@ const WithdrawForm = () => {
 
   const renderAddressTextField = () => (
     <TextField
+      variant="filled"
+      InputProps={{
+        disableUnderline: true,
+      }}
       label="Address"
       disabled={disabled}
       {...register('address', {
@@ -211,9 +215,11 @@ const WithdrawForm = () => {
 
   const renderTokensListSelect = () => (
     <TextField
+      variant="filled"
       label="Token"
       select={!isTokensListLoading}
       InputProps={{
+        disableUnderline: true,
         startAdornment: isTokensListLoading && (
           <InputAdornment position="start">
             <CircularProgress size={18} color="inherit" />

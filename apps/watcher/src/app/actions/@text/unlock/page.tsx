@@ -21,7 +21,7 @@ const LockText = () => {
       <Typography fontWeight="bold" sx={{ mt: 2 }}>
         Caution
       </Typography>
-      <Typography sx={{ mb: 2 }}>
+      <Typography>
         You can only return your in-wallet permits. To redeem your collateral,
         wait for reported events to be settled.
         {!isInfoLoading &&

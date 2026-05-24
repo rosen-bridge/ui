@@ -27,11 +27,10 @@ const Actions = ({ form, text, title }: ActionsProps) => {
     mobile: {
       display: 'grid',
       gridTemplateColumns: '1fr',
-      gap: 0,
+      gap: '24px',
     },
     laptop: {
       gridTemplateColumns: '1fr auto 1fr',
-      gap: '24px',
     },
     desktop: {
       gridTemplateColumns: '3fr auto 2fr',
