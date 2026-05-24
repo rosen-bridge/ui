@@ -1,7 +1,7 @@
 import { PeriodicTaskService } from '@rosen-bridge/service-manager';
 
-export abstract class AbstractAssetAggregator extends PeriodicTaskService {
-  static Name = 'AssetAggregatorService';
+export abstract class AbstractAssetAggregatorServicce extends PeriodicTaskService {
+  static Name = 'AssetAggregator';
   protected static instance: AbstractAssetAggregator;
 
   /**

@@ -18,7 +18,7 @@ export class LockedAssetsMetricService extends AbstractLockedAssetsMetricService
   protected dependencies: Dependency[] = [
     {
       serviceName: AbstractDBService.Name,
-      allowedStatuses: [ServiceStatus.running],
+      allowedStatuses: [ServiceStatus.running, ServiceStatus.started, ServiceStatus.dormant],
       action: ServiceAction.assemble,
     },
     {

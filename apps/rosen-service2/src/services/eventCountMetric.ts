@@ -18,12 +18,12 @@ export class EventCountMetricService extends AbstractEventCountMetricService {
   private dataSource: DataSource;
   protected dependencies: Dependency[] = [
     {
-      serviceName: AbstractDBService.getInstance().getName(),
-      allowedStatuses: [ServiceStatus.running, ServiceStatus.dormant],
+      serviceName: AbstractDBService.Name(),
+      allowedStatuses: [ServiceStatus.running, ServiceStatus.started, ServiceStatus.dormant],
       action: ServiceAction.assemble,
     },
     {
-      serviceName: AbstractScannerService.getInstance().getName(),
+      serviceName: AbstractScannerService.Name(),
       allowedStatuses: [ServiceStatus.running],
       action: ServiceAction.start,
     },

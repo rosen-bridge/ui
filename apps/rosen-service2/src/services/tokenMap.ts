@@ -55,6 +55,7 @@ export class TokenMapService extends AbstractTokenMapService {
     this.setStatus(ServiceStatus.dormant);
     return true;
   };
+
   /**
    * constructor for tokenMap service
    * @param {ErgoScanner} ergoScanner Scanner instance to register extractors.

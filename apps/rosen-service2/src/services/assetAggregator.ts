@@ -34,12 +34,12 @@ export class AssetAggregatorService extends AbstractAssetAggregator {
     },
     {
       serviceName: AbstractTokenMapService.Name,
-      allowedStatuses: [ServiceStatus.running, ServiceStatus.dormant],
+      allowedStatuses: [ServiceStatus.running, ServiceStatus.started, ServiceStatus.dormant],
       action: ServiceAction.assemble,
     },
     {
       serviceName: AbstractDBService.Name,
-      allowedStatuses: [ServiceStatus.running, ServiceStatus.dormant],
+      allowedStatuses: [ServiceStatus.running, ServiceStatus.started, ServiceStatus.dormant],
       action: ServiceAction.assemble,
     },
   ];

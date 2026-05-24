@@ -68,15 +68,11 @@ export class ErgoScannerService extends AbstractErgoScannerService {
   };
 
   assemble = async (): Promise<boolean> => {
-    try {
-      this.ergoScanner = this.createErgoScanner(
-        AbstractDBService.getInstance().getDataSource(),
-      );
-      this.setStatus(ServiceStatus.dormant);
-      return true;
-    } catch {
-      return false;
-    }
+    this.ergoScanner = this.createErgoScanner(
+      AbstractDBService.getInstance().getDataSource(),
+    );
+    this.setStatus(ServiceStatus.dormant);
+    return true;
   };
 
   /**
@@ -125,7 +121,7 @@ export class ErgoScannerService extends AbstractErgoScannerService {
     if (configs.chains.ergo.method == ERGO_METHOD_EXPLORER) {
       configs.chains.ergo.explorer.connections.forEach((explorer) => {
         networkConnectorManager.addConnector(
-          new ErgoExplorerNetwork(explorer.url!),
+          new ErgoExplorerNetwork(explorer.url),
         );
       });
     } else {

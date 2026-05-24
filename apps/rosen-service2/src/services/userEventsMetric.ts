@@ -19,7 +19,7 @@ export class UserEventsMetricService extends AbstractUserEventsMetricService {
   protected dependencies: Dependency[] = [
     {
       serviceName: AbstractDBService.Name,
-      allowedStatuses: [ServiceStatus.running, ServiceStatus.dormant],
+      allowedStatuses: [ServiceStatus.running, ServiceStatus.started, ServiceStatus.dormant],
       action: ServiceAction.assemble,
     },
     {

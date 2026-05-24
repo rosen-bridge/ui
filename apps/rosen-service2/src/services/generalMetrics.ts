@@ -18,7 +18,7 @@ export class GeneralMetricsService extends AbstractGeneralMetricsService {
   protected dependencies: Dependency[] = [
     {
       serviceName: AbstractDBService.Name,
-      allowedStatuses: [ServiceStatus.running],
+      allowedStatuses: [ServiceStatus.running, ServiceStatus.started, ServiceStatus.dormant],
       action: ServiceAction.assemble,
     },
   ];

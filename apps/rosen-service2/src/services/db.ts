@@ -16,10 +16,10 @@ export class DBService extends AbstractDBService {
     try {
       this.logger.debug('Initializing data source');
       await this.dataSource.initialize();
-      this.logger.debug('data source initialized');
+      this.logger.info('data source initialized');
     } catch (e) {
       this.logger.error(
-        `Something went wrong while starting the DBService: ${e}`,
+        `Something went wrong while assembling the DBService: ${e}`,
       );
       return false;
     }
@@ -80,7 +80,7 @@ export class DBService extends AbstractDBService {
     try {
       this.logger.debug('running data source migrations');
       await this.dataSource.runMigrations();
-      this.logger.debug('data source migrations completed');
+      this.logger.info('data source migrations completed');
       this.setStatus(ServiceStatus.running);
     } catch (e) {
       this.logger.error(
