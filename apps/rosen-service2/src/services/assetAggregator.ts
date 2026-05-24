@@ -16,35 +16,45 @@ import { createClient } from '@vercel/kv';
 import { configs } from '../configs';
 import { TOTAL_SUPPLY_REDIS_KEY } from '../constants';
 import { ChainChoices } from '../types';
-import { AbstractAssetAggregator } from './types/abstractAssetAggregator';
-import { AbstractAssetDataAdapterService } from './types/abstractAssetDataAdapterService';
-import { AbstractTokenMapService } from './types/abstractTokenMapService';
-import { AbstractDBService } from './types/abstrctDb';
+import {
+  AbstractAssetAggregatorServicce,
+  AbstractAssetDataAdapterService,
+  AbstractTokenMapService,
+  AbstractDBService,
+} from './abstracts';
 
-export class AssetAggregatorService extends AbstractAssetAggregator {
-  name = AbstractAssetAggregator.Name;
-  private assetAggregator: AssetAggregator;
-  readonly redis;
+export class AssetAggregatorService extends AbstractAssetAggregatorServicce {
+  name = AbstractAssetAggregatorServicce.name;
+  protected assetAggregator: AssetAggregator;
+  protected redis;
 
   protected dependencies: Dependency[] = [
     {
-      serviceName: AbstractAssetDataAdapterService.Name,
+      serviceName: AbstractAssetDataAdapterService.name,
       allowedStatuses: [ServiceStatus.running],
       action: ServiceAction.start,
     },
     {
-      serviceName: AbstractTokenMapService.Name,
-      allowedStatuses: [ServiceStatus.running, ServiceStatus.started, ServiceStatus.dormant],
+      serviceName: AbstractTokenMapService.name,
+      allowedStatuses: [
+        ServiceStatus.running,
+        ServiceStatus.started,
+        ServiceStatus.dormant,
+      ],
       action: ServiceAction.assemble,
     },
     {
-      serviceName: AbstractDBService.Name,
-      allowedStatuses: [ServiceStatus.running, ServiceStatus.started, ServiceStatus.dormant],
+      serviceName: AbstractDBService.name,
+      allowedStatuses: [
+        ServiceStatus.running,
+        ServiceStatus.started,
+        ServiceStatus.dormant,
+      ],
       action: ServiceAction.assemble,
     },
   ];
 
-  assemble = async (): Promise<boolean> => {
+  protected assemble = async (): Promise<boolean> => {
     this.assetAggregator = new AssetAggregator(
       AbstractTokenMapService.getInstance().getTokenMap(),
       AbstractDBService.getInstance().getDataSource(),
@@ -54,7 +64,7 @@ export class AssetAggregatorService extends AbstractAssetAggregator {
     return true;
   };
 
-  private constructor(logger?: AbstractLogger) {
+  protected constructor(logger?: AbstractLogger) {
     super(logger);
     this.redis = createClient({
       url: configs.redis.address,
@@ -70,10 +80,12 @@ export class AssetAggregatorService extends AbstractAssetAggregator {
    * @memberof AssetAggregatorService
    */
   static readonly init = async (logger?: AbstractLogger) => {
-    if (AbstractAssetAggregator.instance != undefined) {
+    if (AbstractAssetAggregatorServicce.instance != undefined) {
       return;
     }
-    AbstractAssetAggregator.instance = new AssetAggregatorService(logger);
+    AbstractAssetAggregatorServicce.instance = new AssetAggregatorService(
+      logger,
+    );
   };
 
   /**

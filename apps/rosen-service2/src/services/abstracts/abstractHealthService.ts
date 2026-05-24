@@ -1,7 +1,7 @@
 import { PeriodicTaskService } from '@rosen-bridge/service-manager';
 
 export abstract class AbstractHealthService extends PeriodicTaskService {
-  static Name = 'HealthService';
+  static name = 'HealthService';
   protected static instance: AbstractHealthService;
 
   /**

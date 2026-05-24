@@ -2,7 +2,7 @@ import { AbstractService } from '@rosen-bridge/service-manager';
 
 export abstract class AbstractErgoExtractorsService extends AbstractService {
   protected static instance: AbstractErgoExtractorsService;
-  static Name = 'ErgoExtractorService';
+  static name = 'ErgoExtractorService';
 
   /**
    * return the singleton instance of AbstractErgoExtractorsService

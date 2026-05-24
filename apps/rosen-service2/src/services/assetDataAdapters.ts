@@ -23,32 +23,28 @@ import { configs } from '../configs';
 import { TOTAL_SUPPLY_REDIS_KEY } from '../constants';
 import { ChainChoices } from '../types';
 import { stringSerializer } from '../utils';
-import { AbstractAssetDataAdapterService } from './types/abstractAssetDataAdapterService';
-import { AbstractTokenMapService } from './types/abstractTokenMapService';
-import { AbstractDBService } from './types/abstrctDb';
+import {
+  AbstractAssetDataAdapterService,
+  AbstractTokenMapService,
+} from './abstracts';
 
 export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
-  name = AbstractAssetDataAdapterService.Name;
-  readonly redis;
+  name = AbstractAssetDataAdapterService.name;
+  protected redis;
   protected explorerApi;
   protected dependencies: Dependency[] = [
     {
-      serviceName: AbstractDBService.Name,
-      allowedStatuses: [ServiceStatus.running],
-      action: ServiceAction.start,
-    },
-    {
-      serviceName: AbstractTokenMapService.Name,
+      serviceName: AbstractTokenMapService.name,
       allowedStatuses: [ServiceStatus.running],
       action: ServiceAction.start,
     },
   ];
 
-  assemble = async (): Promise<boolean> => {
+  protected assemble = async (): Promise<boolean> => {
     this.setStatus(ServiceStatus.dormant);
     return true;
   };
-  private constructor(logger?: AbstractLogger) {
+  protected constructor(logger?: AbstractLogger) {
     super(logger);
     this.redis = createClient({
       url: configs.redis.address,

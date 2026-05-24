@@ -20,17 +20,19 @@ import 'constants';
 
 import { configs } from '../configs';
 import { ERGO_METHOD_EXPLORER } from '../constants';
-import { AbstractErgoExtractorsService } from './types/abstractErgoExtractor';
-import { AbstractErgoScannerService } from './types/abstractErgoScanner';
-import { AbstractTokenMapService } from './types/abstractTokenMapService';
-import { AbstractDBService } from './types/abstrctDb';
+import {
+  AbstractErgoExtractorsService,
+  AbstractErgoScannerService,
+  AbstractTokenMapService,
+  AbstractDBService,
+} from './abstracts';
 
 export class ErgoScannerService extends AbstractErgoScannerService {
-  name = AbstractErgoScannerService.Name;
+  name = AbstractErgoScannerService.name;
   ergoScanner: ErgoScanner;
   protected dependencies: Dependency[] = [
     {
-      serviceName: AbstractDBService.Name,
+      serviceName: AbstractDBService.name,
       allowedStatuses: [
         ServiceStatus.running,
         ServiceStatus.started,
@@ -39,12 +41,12 @@ export class ErgoScannerService extends AbstractErgoScannerService {
       action: ServiceAction.assemble,
     },
     {
-      serviceName: AbstractErgoExtractorsService.Name,
+      serviceName: AbstractErgoExtractorsService.name,
       allowedStatuses: [ServiceStatus.running],
       action: ServiceAction.start,
     },
     {
-      serviceName: AbstractTokenMapService.Name,
+      serviceName: AbstractTokenMapService.name,
       allowedStatuses: [ServiceStatus.running],
       action: ServiceAction.start,
     },
@@ -67,7 +69,7 @@ export class ErgoScannerService extends AbstractErgoScannerService {
     ];
   };
 
-  assemble = async (): Promise<boolean> => {
+  protected assemble = async (): Promise<boolean> => {
     this.ergoScanner = this.createErgoScanner(
       AbstractDBService.getInstance().getDataSource(),
     );
@@ -81,7 +83,7 @@ export class ErgoScannerService extends AbstractErgoScannerService {
    * @param {DataSource} dataSource Database data source used by the scanner.
    * @param {AbstractLogger} [logger=new DummyLogger()] Optional logger instance.
    */
-  constructor(logger: AbstractLogger = new DummyLogger()) {
+  protected constructor(logger: AbstractLogger = new DummyLogger()) {
     super(logger);
   }
 

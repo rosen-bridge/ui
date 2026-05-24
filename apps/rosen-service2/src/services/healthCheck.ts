@@ -26,19 +26,21 @@ import {
   ETHEREUM_BLOCK_TIME,
 } from '../constants';
 import { ChainsKeys } from '../types';
-import { AbstractHealthService } from './types/abstractHealthService';
-import { AbstractScannerService } from './types/abstractScannerService';
-import { AbstractDBService } from './types/abstrctDb';
+import {
+  AbstractHealthService,
+  AbstractScannerService,
+  AbstractDBService,
+} from './abstracts';
 
 export class HealthService extends AbstractHealthService {
-  name = AbstractHealthService.Name;
+  name = AbstractHealthService.name;
   private dbService: AbstractDBService;
   private scannerService: AbstractScannerService;
   protected healthCheck: HealthCheck;
   protected params: AbstractHealthCheckParam[] = [];
   protected dependencies: Dependency[] = [
     {
-      serviceName: AbstractDBService.Name,
+      serviceName: AbstractDBService.name,
       allowedStatuses: [
         ServiceStatus.running,
         ServiceStatus.running,
@@ -47,7 +49,7 @@ export class HealthService extends AbstractHealthService {
       action: ServiceAction.assemble,
     },
     {
-      serviceName: AbstractScannerService.Name,
+      serviceName: AbstractScannerService.name,
       allowedStatuses: [
         ServiceStatus.started,
         ServiceStatus.running,
@@ -57,14 +59,14 @@ export class HealthService extends AbstractHealthService {
     },
   ];
 
-  assemble = async (): Promise<boolean> => {
+  protected assemble = async (): Promise<boolean> => {
     this.dbService = AbstractDBService.getInstance();
     this.scannerService = AbstractScannerService.getInstance();
     this.setStatus(ServiceStatus.dormant);
     return true;
   };
 
-  private constructor(logger?: AbstractLogger) {
+  protected constructor(logger?: AbstractLogger) {
     super(logger);
 
     let notify;

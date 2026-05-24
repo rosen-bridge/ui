@@ -8,31 +8,37 @@ import {
 import { lockedAssetsMetric } from '@rosen-ui/rosen-statistics';
 
 import { configs } from '../configs';
-import { AbstractAssetAggregator } from './types/abstractAssetAggregator';
-import { AbstractLockedAssetsMetricService } from './types/abstractLockedAssetsMetricService';
-import { AbstractDBService } from './types/abstrctDb';
+import {
+  AbstractAssetAggregatorServicce,
+  AbstractDBService,
+  AbstractLockedAssetsMetricService,
+} from './abstracts';
 
 export class LockedAssetsMetricService extends AbstractLockedAssetsMetricService {
-  name = AbstractLockedAssetsMetricService.Name;
+  name = AbstractLockedAssetsMetricService.name;
   private dataSource: DataSource;
   protected dependencies: Dependency[] = [
     {
-      serviceName: AbstractDBService.Name,
-      allowedStatuses: [ServiceStatus.running, ServiceStatus.started, ServiceStatus.dormant],
+      serviceName: AbstractDBService.name,
+      allowedStatuses: [
+        ServiceStatus.running,
+        ServiceStatus.started,
+        ServiceStatus.dormant,
+      ],
       action: ServiceAction.assemble,
     },
     {
-      serviceName: AbstractAssetAggregator.Name,
+      serviceName: AbstractAssetAggregatorServicce.name,
       allowedStatuses: [ServiceStatus.running],
       action: ServiceAction.start,
     },
   ];
 
-  private constructor(logger?: AbstractLogger) {
+  protected constructor(logger?: AbstractLogger) {
     super(logger);
   }
 
-  assemble = async (): Promise<boolean> => {
+  protected assemble = async (): Promise<boolean> => {
     this.dataSource = AbstractDBService.getInstance().getDataSource();
     this.setStatus(ServiceStatus.dormant);
     return true;

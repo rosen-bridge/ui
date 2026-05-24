@@ -8,34 +8,39 @@ import {
 import { eventCountMetric } from '@rosen-ui/rosen-statistics';
 
 import { configs } from '../configs';
-import { DBService } from './db';
-import { AbstractEventCountMetricService } from './types/abstractEventCountMetricService';
-import { AbstractScannerService } from './types/abstractScannerService';
-import { AbstractDBService } from './types/abstrctDb';
+import {
+  AbstractEventCountMetricService,
+  AbstractDBService,
+  AbstractScannerService,
+} from './abstracts';
 
 export class EventCountMetricService extends AbstractEventCountMetricService {
-  name = AbstractEventCountMetricService.Name;
+  name = AbstractEventCountMetricService.name;
   private dataSource: DataSource;
   protected dependencies: Dependency[] = [
     {
-      serviceName: AbstractDBService.Name(),
-      allowedStatuses: [ServiceStatus.running, ServiceStatus.started, ServiceStatus.dormant],
+      serviceName: AbstractDBService.name,
+      allowedStatuses: [
+        ServiceStatus.running,
+        ServiceStatus.started,
+        ServiceStatus.dormant,
+      ],
       action: ServiceAction.assemble,
     },
     {
-      serviceName: AbstractScannerService.Name(),
+      serviceName: AbstractScannerService.name,
       allowedStatuses: [ServiceStatus.running],
       action: ServiceAction.start,
     },
   ];
 
   protected assemble = async (): Promise<boolean> => {
-    this.dataSource = DBService.getInstance().getDataSource();
+    this.dataSource = AbstractDBService.getInstance().getDataSource();
     this.setStatus(ServiceStatus.dormant);
     return true;
   };
 
-  private constructor(logger?: AbstractLogger) {
+  protected constructor(logger?: AbstractLogger) {
     super(logger);
   }
 

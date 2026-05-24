@@ -30,7 +30,7 @@ export const buildEthereumEvmScannerWithExtractors = async (
   const networkConnectorManager =
     new NetworkConnectorManager<TransactionResponse>(
       new FailoverStrategy(),
-      logger.child('ethereumScannerLogger'),
+      logger.child('EthereumScannerLogger'),
     );
   configs.chains.ethereum.rpc.connections.forEach((rpc) => {
     networkConnectorManager.addConnector(
@@ -42,7 +42,7 @@ export const buildEthereumEvmScannerWithExtractors = async (
     initialHeight: configs.chains.ethereum.initialHeight,
     network: networkConnectorManager,
     blockRetrieveGap: configs.chains.ethereum.blockRetrieveGap,
-    logger: logger.child('ethereumScannerLogger'),
+    logger: logger.child('EthereumScannerLogger'),
   });
 
   try {
@@ -51,7 +51,7 @@ export const buildEthereumEvmScannerWithExtractors = async (
       configs.contracts.ethereum.addresses.lock,
       dataSource,
       tokenMap,
-      logger.child('ethereumObservationExtractor'),
+      logger.child('EthereumObservationExtractor'),
     );
 
     logger.debug('Registering observation extractor with scanner...');

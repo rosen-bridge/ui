@@ -1,10 +1,10 @@
 import { DummyLogger } from '@rosen-bridge/abstract-logger';
 import { BlockEntity } from '@rosen-bridge/abstract-scanner';
 import { DataSource } from '@rosen-bridge/extended-typeorm';
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeAll } from 'vitest';
 
+import { AbstractDBService } from '../../src/services/abstracts/abstrctDb';
 import { DBService } from '../../src/services/db';
-import { AbstractDBService } from '../../src/services/types/abstrctDb';
 import { MockedBlockEntityData } from './mocked/db.mock';
 
 describe('DBService', () => {
@@ -12,7 +12,7 @@ describe('DBService', () => {
     let dataSource: DataSource;
     let service: AbstractDBService;
 
-    beforeEach(async () => {
+    beforeAll(async () => {
       dataSource = new DataSource({
         type: 'sqlite',
         database: ':memory:',
@@ -23,7 +23,6 @@ describe('DBService', () => {
 
       DBService.init(dataSource, new DummyLogger());
       service = AbstractDBService.getInstance();
-
       await service['assemble']();
     });
 

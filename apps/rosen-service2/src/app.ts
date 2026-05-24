@@ -1,8 +1,8 @@
 import { DefaultLogger } from '@rosen-bridge/abstract-logger';
 import { ServiceManager } from '@rosen-bridge/service-manager';
-import { AbstractErgoExtractorsService } from 'services/types/abstractErgoExtractor';
+import { AbstractErgoExtractorsService } from 'services/abstracts/abstractErgoExtractor';
 
-import dataSource from './data-source';
+import dataSource from './dataSource';
 import { AssetAggregatorService } from './services/assetAggregator';
 import { AssetDataAdapterService } from './services/assetDataAdapters';
 import { DBService } from './services/db';
@@ -25,95 +25,86 @@ const logger = DefaultLogger.getInstance().child(import.meta.url);
  */
 const startApp = async () => {
   const serviceManager = ServiceManager.setup(
-    DefaultLogger.getInstance().child('serviceManager'),
+    DefaultLogger.getInstance().child('ServiceManager'),
   );
-  logger.debug('Initializing database service');
-  DBService.init(dataSource, DefaultLogger.getInstance().child('dbService'));
+  logger.debug('Initializing DBService');
+  DBService.init(dataSource, DefaultLogger.getInstance().child('DBService'));
   serviceManager.register(DBService.getInstance());
-  logger.debug('Database service registered to the service manager');
-  logger.debug('Initializing ergo scanner service');
+  logger.debug('DBService registered to the service manager');
+  logger.debug('Initializing ErgoScannerService');
   await ErgoScannerService.init(
     DefaultLogger.getInstance().child('ErgoScannerService'),
   );
   serviceManager.register(ErgoScannerService.getInstance());
-  logger.debug('ergoScanner service registered to the service manager');
-  logger.debug('Initializing tokenMap scanner service');
+  logger.debug('ErgoScannerService registered to the service manager');
+  logger.debug('Initializing TokenMapService');
   await TokenMapService.init(
     DefaultLogger.getInstance().child('TokenMapService'),
   );
   serviceManager.register(TokenMapService.getInstance());
-  logger.debug('tokenMap service registered to the service manager');
-  logger.debug('Initializing ergo extractor scanner service');
+  logger.debug('TokenMapService registered to the service manager');
+  logger.debug('Initializing ErgoExtractorService');
   await ErgoExtractorService.init(
     DefaultLogger.getInstance().child('ErgoExtractorService'),
   );
   serviceManager.register(AbstractErgoExtractorsService.getInstance());
-  logger.debug('ergoExtractor service registered to the service manager');
-  logger.debug('Initializing scanner service');
-  ScannerService.init(DefaultLogger.getInstance().child('ergoScannerService'));
+  logger.debug('ErgoExtractorService registered to the service manager');
+  logger.debug('Initializing ScannerService');
+  ScannerService.init(DefaultLogger.getInstance().child('ScannerService'));
   serviceManager.register(ScannerService.getInstance());
-  logger.debug('Scanner service registered to the service manager');
-  logger.debug('Initializing general metrics service');
+  logger.debug('ScannerService registered to the service manager');
+  logger.debug('Initializing GeneralMetricsService');
   GeneralMetricsService.init(
-    DefaultLogger.getInstance().child('generalMetricsService'),
+    DefaultLogger.getInstance().child('GeneralMetricsService'),
   );
   serviceManager.register(GeneralMetricsService.getInstance());
-  logger.debug('General metrics service registered to the service manager');
+  logger.debug('GeneralMetricsService registered to the service manager');
 
-  logger.debug('Initializing general metrics service');
-  GeneralMetricsService.init(
-    DefaultLogger.getInstance().child('generalMetricsService'),
-  );
-  serviceManager.register(GeneralMetricsService.getInstance());
-  logger.debug('General metrics service registered to the service manager');
-
-  logger.debug('Initializing asset-data-adapter service');
+  logger.debug('Initializing AssetDataAdapterService');
   AssetDataAdapterService.init(
-    DefaultLogger.getInstance().child('assetDataAdapterService'),
+    DefaultLogger.getInstance().child('AssetDataAdapterService'),
   );
   serviceManager.register(AssetDataAdapterService.getInstance());
-  logger.debug('asset-data-adapter Service registered to the service manager');
+  logger.debug('AssetDataAdapterService registered to the service manager');
 
-  logger.debug('Initializing asset-aggregator service');
+  logger.debug('Initializing AssetAggregatorService');
   AssetAggregatorService.init(
-    DefaultLogger.getInstance().child('assetAggregatorService'),
+    DefaultLogger.getInstance().child('AssetAggregatorService'),
   );
   serviceManager.register(AssetAggregatorService.getInstance());
-  logger.debug('asset-aggregator Service registered to the service manager');
+  logger.debug('AssetAggregatorService registered to the service manager');
 
-  logger.debug('Initializing locked assets metrics service');
+  logger.debug('Initializing LockedAssetsMetricsService');
   LockedAssetsMetricService.init(
-    DefaultLogger.getInstance().child('lockedAssetsMetricsService'),
+    DefaultLogger.getInstance().child('LockedAssetsMetricsService'),
   );
   serviceManager.register(LockedAssetsMetricService.getInstance());
-  logger.debug(
-    'Locked assets metrics service registered to the service manager',
-  );
+  logger.debug('LockedAssetsMetricsService registered to the service manager');
 
-  logger.debug('Initializing event count metrics service');
+  logger.debug('Initializing EventCountMetricsService');
   EventCountMetricService.init(
-    DefaultLogger.getInstance().child('eventCountMetricsService'),
+    DefaultLogger.getInstance().child('EventCountMetricsService'),
   );
   serviceManager.register(EventCountMetricService.getInstance());
-  logger.debug('Event count metrics service registered to the service manager');
+  logger.debug('EventCountMetricsService registered to the service manager');
 
-  logger.debug('Initializing user events metrics service');
+  logger.debug('Initializing UserEventsMetricService');
   UserEventsMetricService.init(
-    DefaultLogger.getInstance().child('userEventsMetricService'),
+    DefaultLogger.getInstance().child('UserEventsMetricService'),
   );
   serviceManager.register(UserEventsMetricService.getInstance());
-  logger.debug('User events metrics service registered to the service manager');
+  logger.debug('UserEventsMetricService registered to the service manager');
 
-  logger.debug('Initializing health-check service');
-  HealthService.init(DefaultLogger.getInstance().child('healthCheckService'));
+  logger.debug('Initializing HealthCheckService');
+  HealthService.init(DefaultLogger.getInstance().child('HealthCheckService'));
   serviceManager.register(HealthService.getInstance());
-  logger.debug('Health Service registered to the service manager');
+  logger.debug('HealthCheckService to the service manager');
 
   logger.info('Starting service manager...');
 
   await serviceManager.start(ErgoScannerService.getInstance().getName());
-  serviceManager.start(HealthService.getInstance().getName());
-  serviceManager.start(AssetAggregatorService.getInstance().getName());
+  await serviceManager.start(HealthService.getInstance().getName());
+  await serviceManager.start(AssetAggregatorService.getInstance().getName());
 
   await Promise.resolve(() => {});
 };

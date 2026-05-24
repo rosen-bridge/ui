@@ -1,8 +1,8 @@
 import { PeriodicTaskService } from '@rosen-bridge/service-manager';
 
 export abstract class AbstractAssetAggregatorServicce extends PeriodicTaskService {
-  static Name = 'AssetAggregator';
-  protected static instance: AbstractAssetAggregator;
+  static name = 'AssetAggregator';
+  protected static instance: AbstractAssetAggregatorServicce;
 
   /**
    * return the singleton instance of AbstractAssetAggregator
@@ -11,7 +11,7 @@ export abstract class AbstractAssetAggregatorServicce extends PeriodicTaskServic
    * @return {AbstractAssetAggregator}
    * @memberof AbstractAssetAggregator
    */
-  static getInstance = (): AbstractAssetAggregator => {
-    return AbstractAssetAggregator.instance;
+  static getInstance = (): AbstractAssetAggregatorServicce => {
+    return AbstractAssetAggregatorServicce.instance;
   };
 }

@@ -8,28 +8,39 @@ import {
 import { generalMetrics } from '@rosen-ui/rosen-statistics';
 
 import { configs } from '../configs';
-import { AbstractGeneralMetricsService } from './types/abstractGeneralMetricsService';
-import { AbstractTokenMapService } from './types/abstractTokenMapService';
-import { AbstractDBService } from './types/abstrctDb';
+import {
+  AbstractGeneralMetricsService,
+  AbstractTokenMapService,
+  AbstractDBService,
+} from './abstracts';
 
 export class GeneralMetricsService extends AbstractGeneralMetricsService {
-  name = AbstractGeneralMetricsService.Name;
+  name = AbstractGeneralMetricsService.name;
   private dataSource: DataSource;
   protected dependencies: Dependency[] = [
     {
-      serviceName: AbstractDBService.Name,
-      allowedStatuses: [ServiceStatus.running, ServiceStatus.started, ServiceStatus.dormant],
+      serviceName: AbstractDBService.name,
+      allowedStatuses: [
+        ServiceStatus.running,
+        ServiceStatus.started,
+        ServiceStatus.dormant,
+      ],
       action: ServiceAction.assemble,
+    },
+    {
+      serviceName: AbstractTokenMapService.name,
+      allowedStatuses: [ServiceStatus.running, ServiceStatus.started],
+      action: ServiceAction.start,
     },
   ];
 
-  assemble = async (): Promise<boolean> => {
+  protected assemble = async (): Promise<boolean> => {
     this.dataSource = AbstractDBService.getInstance().getDataSource();
     this.setStatus(ServiceStatus.dormant);
     return true;
   };
 
-  private constructor(logger?: AbstractLogger) {
+  protected constructor(logger?: AbstractLogger) {
     super(logger);
   }
 

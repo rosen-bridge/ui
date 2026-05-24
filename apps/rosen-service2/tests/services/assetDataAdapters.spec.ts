@@ -6,11 +6,11 @@ import { TokenEntity } from '@rosen-ui/asset-aggregator';
 import { NETWORKS } from '@rosen-ui/constants';
 import { describe, it, beforeEach, expect, vi, Mock } from 'vitest';
 
+import { AbstractAssetDataAdapterService } from '../../src/services/abstracts/abstractAssetDataAdapterService';
+import { AbstractTokenMapService } from '../../src/services/abstracts/abstractTokenMapService';
 import { AssetDataAdapterService } from '../../src/services/assetDataAdapters';
 import { DBService } from '../../src/services/db';
 import { TokenMapService } from '../../src/services/tokenMap';
-import { AbstractAssetDataAdapterService } from '../../src/services/types/abstractAssetDataAdapterService';
-import { AbstractTokenMapService } from '../../src/services/types/abstractTokenMapService';
 import {
   expectedErgoGetAssetsTotalSupplyResult,
   sampleTokenMapConfig,

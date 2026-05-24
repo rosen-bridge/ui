@@ -40,7 +40,7 @@ export const buildCardanoKoiosScannerWithExtractors = async (
   // Create Cardano scanner with Koios network settings
   const networkConnectorManager = new NetworkConnectorManager<KoiosTransaction>(
     new FailoverStrategy(),
-    logger.child('cardanoKoiosScannerLogger'),
+    logger.child('CardanoKoiosScannerLogger'),
   );
   configs.chains.cardano.koios.connections.forEach((koios) => {
     networkConnectorManager.addConnector(
@@ -52,7 +52,7 @@ export const buildCardanoKoiosScannerWithExtractors = async (
     initialHeight: configs.chains.cardano.initialHeight!,
     network: networkConnectorManager,
     blockRetrieveGap: configs.chains.cardano.blockRetrieveGap,
-    logger: logger.child('cardanoKoiosScannerLogger'),
+    logger: logger.child('CardanoKoiosScannerLogger'),
   });
 
   try {
@@ -61,7 +61,7 @@ export const buildCardanoKoiosScannerWithExtractors = async (
       configs.contracts.cardano.addresses.lock,
       dataSource,
       tokenMap,
-      logger.child('cardanoKoiosObservationExtractor'),
+      logger.child('CardanoKoiosObservationExtractor'),
     );
 
     logger.debug('Registering observation extractor with scanner...');
@@ -97,7 +97,7 @@ export const buildCardanoBlockFrostScannerWithExtractors = async (
   const networkConnectorManager =
     new NetworkConnectorManager<BlockFrostTransaction>(
       new FailoverStrategy(),
-      logger.child('cardanoBlockFrostScannerLogger'),
+      logger.child('CardanoBlockFrostScannerLogger'),
     );
   configs.chains.cardano.blockfrost.connections.forEach((blockfrost) => {
     networkConnectorManager.addConnector(
@@ -109,7 +109,7 @@ export const buildCardanoBlockFrostScannerWithExtractors = async (
     initialHeight: configs.chains.cardano.initialHeight!,
     network: networkConnectorManager,
     blockRetrieveGap: configs.chains.cardano.blockRetrieveGap,
-    logger: logger.child('cardanoBlockFrostScannerLogger'),
+    logger: logger.child('CardanoBlockFrostScannerLogger'),
   });
 
   try {
@@ -119,7 +119,7 @@ export const buildCardanoBlockFrostScannerWithExtractors = async (
 
       dataSource,
       tokenMap,
-      logger.child('cardanoBlockFrostObservationExtractor'),
+      logger.child('CardanoBlockFrostObservationExtractor'),
     );
 
     logger.debug('Registering observation extractor with scanner...');
@@ -160,7 +160,7 @@ export const buildCardanoOgmiosScannerWithExtractors = async (
       initialSlot: configs.chains.cardano.ogmios.connection.initialSlot!,
       initialHash: configs.chains.cardano.ogmios.connection.initialHash!,
     },
-    logger.child('cardanoOgmiosScannerLogger'),
+    logger.child('CardanoOgmiosScannerLogger'),
   );
 
   try {
@@ -170,7 +170,7 @@ export const buildCardanoOgmiosScannerWithExtractors = async (
 
       dataSource,
       tokenMap,
-      logger.child('cardanoOgmiosObservationExtractor'),
+      logger.child('CardanoOgmiosObservationExtractor'),
     );
 
     logger.debug('Registering observation extractor with scanner...');

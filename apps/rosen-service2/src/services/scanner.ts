@@ -32,42 +32,52 @@ import {
   buildCardanoOgmiosScannerWithExtractors,
 } from '../scanners';
 import { ChainScannersType, ChainsKeys, ChainsWithScanner } from '../types';
-import { AbstractErgoScannerService } from './types/abstractErgoScanner';
-import { AbstractScannerService } from './types/abstractScannerService';
-import { AbstractTokenMapService } from './types/abstractTokenMapService';
-import { AbstractDBService } from './types/abstrctDb';
+import {
+  AbstractErgoScannerService,
+  AbstractScannerService,
+  AbstractTokenMapService,
+  AbstractDBService,
+} from './abstracts';
 
 export class ScannerService extends AbstractScannerService {
-  name = AbstractScannerService.Name;
+  name = AbstractScannerService.name;
   protected scanners: { [k1 in ChainsKeys]?: ChainScannersType } = {};
   private dataSource: DataSource;
   private tokenMap: TokenMap;
   protected dependencies: Dependency[] = [
     {
-      serviceName: AbstractDBService.Name,
-      allowedStatuses: [ServiceStatus.running, ServiceStatus.started, ServiceStatus.dormant],
+      serviceName: AbstractDBService.name,
+      allowedStatuses: [
+        ServiceStatus.running,
+        ServiceStatus.started,
+        ServiceStatus.dormant,
+      ],
       action: ServiceAction.assemble,
     },
     {
-      serviceName: AbstractTokenMapService.Name,
-      allowedStatuses: [ServiceStatus.running, ServiceStatus.started, ServiceStatus.dormant],
+      serviceName: AbstractTokenMapService.name,
+      allowedStatuses: [
+        ServiceStatus.running,
+        ServiceStatus.started,
+        ServiceStatus.dormant,
+      ],
       action: ServiceAction.assemble,
     },
     {
-      serviceName: AbstractErgoScannerService.Name,
+      serviceName: AbstractErgoScannerService.name,
       allowedStatuses: [ServiceStatus.running],
       action: ServiceAction.start,
     },
   ];
 
-  assemble = async (): Promise<boolean> => {
+  protected assemble = async (): Promise<boolean> => {
     this.dataSource = AbstractDBService.getInstance().getDataSource();
     this.tokenMap = AbstractTokenMapService.getInstance().getTokenMap();
     this.setStatus(ServiceStatus.dormant);
     return true;
   };
 
-  private constructor(logger?: AbstractLogger) {
+  protected constructor(logger?: AbstractLogger) {
     super(logger);
   }
 

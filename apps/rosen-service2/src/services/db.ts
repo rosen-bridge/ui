@@ -6,28 +6,21 @@ import { LastSavedBlock } from '@rosen-bridge/scanner-sync-check';
 import { Dependency, ServiceStatus } from '@rosen-bridge/service-manager';
 
 import { TOKEN_MAP_EXTRACTOR_ID } from '../constants';
-import { AbstractDBService } from './types/abstrctDb';
+import { AbstractDBService } from './abstracts';
 
 export class DBService extends AbstractDBService {
-  name = AbstractDBService.Name;
-  readonly dataSource: DataSource;
+  name = AbstractDBService.name;
+  protected dataSource: DataSource;
 
-  assemble = async (): Promise<boolean> => {
-    try {
-      this.logger.debug('Initializing data source');
-      await this.dataSource.initialize();
-      this.logger.info('data source initialized');
-    } catch (e) {
-      this.logger.error(
-        `Something went wrong while assembling the DBService: ${e}`,
-      );
-      return false;
-    }
+  protected assemble = async (): Promise<boolean> => {
+    this.logger.debug('Initializing data source');
+    await this.dataSource.initialize();
+    this.logger.info('data source initialized');
     this.setStatus(ServiceStatus.dormant);
     return true;
   };
 
-  private constructor(dataSource: DataSource, logger?: AbstractLogger) {
+  protected constructor(dataSource: DataSource, logger?: AbstractLogger) {
     super(logger);
     this.dataSource = dataSource;
   }

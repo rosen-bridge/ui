@@ -14,19 +14,22 @@ import 'constants';
 import { configs } from '../configs';
 import { createEventTrigger } from '../scanners/ergo';
 import { resolveErgoNetworkConfig } from '../utils';
-import { AbstractErgoExtractorsService } from './types/abstractErgoExtractor';
-import { AbstractErgoScannerService } from './types/abstractErgoScanner';
-import { AbstractTokenMapService } from './types/abstractTokenMapService';
-import { AbstractDBService } from './types/abstrctDb';
+import { ChainChoices, ChainConfigs } from './../types';
+import {
+  AbstractErgoExtractorsService,
+  AbstractErgoScannerService,
+  AbstractTokenMapService,
+  AbstractDBService,
+} from './abstracts';
 
 export class ErgoExtractorService extends AbstractErgoExtractorsService {
   private ergoScanner: ErgoScanner;
-  name = AbstractErgoExtractorsService.Name;
+  name = AbstractErgoExtractorsService.name;
   private tokenMap: TokenMap;
   private dataSource: DataSource;
   protected dependencies: Dependency[] = [
     {
-      serviceName: AbstractTokenMapService.Name,
+      serviceName: AbstractErgoScannerService.name,
       allowedStatuses: [
         ServiceStatus.started,
         ServiceStatus.running,
@@ -35,7 +38,16 @@ export class ErgoExtractorService extends AbstractErgoExtractorsService {
       action: ServiceAction.assemble,
     },
     {
-      serviceName: AbstractDBService.Name,
+      serviceName: AbstractTokenMapService.name,
+      allowedStatuses: [
+        ServiceStatus.started,
+        ServiceStatus.running,
+        ServiceStatus.dormant,
+      ],
+      action: ServiceAction.assemble,
+    },
+    {
+      serviceName: AbstractDBService.name,
       allowedStatuses: [
         ServiceStatus.started,
         ServiceStatus.running,
@@ -45,7 +57,7 @@ export class ErgoExtractorService extends AbstractErgoExtractorsService {
     },
   ];
 
-  assemble = async (): Promise<boolean> => {
+  protected assemble = async (): Promise<boolean> => {
     this.ergoScanner =
       AbstractErgoScannerService.getInstance().getErgoScanner();
     this.dataSource = AbstractDBService.getInstance().getDataSource();
@@ -90,66 +102,26 @@ export class ErgoExtractorService extends AbstractErgoExtractorsService {
         configs.contracts.ergo,
       );
       await this.ergoScanner.registerExtractor(ergoEventTriggerExtractor);
-      if (configs.chains.cardano.active)
-        await this.ergoScanner.registerExtractor(
-          createEventTrigger(
-            NETWORKS.cardano.key,
-            networkType,
-            url,
-            this.dataSource,
-            configs.contracts.cardano,
-          ),
-        );
-      if (configs.chains.bitcoin.active)
-        await this.ergoScanner.registerExtractor(
-          createEventTrigger(
-            NETWORKS.binance.key,
-            networkType,
-            url,
-            this.dataSource,
-            configs.contracts.bitcoin,
-          ),
-        );
-      if (configs.chains.doge.active)
-        await this.ergoScanner.registerExtractor(
-          createEventTrigger(
-            NETWORKS.doge.key,
-            networkType,
-            url,
-            this.dataSource,
-            configs.contracts.doge,
-          ),
-        );
-      if (configs.chains.ethereum.active)
-        await this.ergoScanner.registerExtractor(
-          createEventTrigger(
-            NETWORKS.ethereum.key,
-            networkType,
-            url,
-            this.dataSource,
-            configs.contracts.ethereum,
-          ),
-        );
-      if (configs.chains['bitcoin-runes'].active)
-        await this.ergoScanner.registerExtractor(
-          createEventTrigger(
-            NETWORKS['bitcoin-runes'].key,
-            networkType,
-            url,
-            this.dataSource,
-            configs.contracts['bitcoin-runes'],
-          ),
-        );
-      if (configs.chains.binance.active)
-        await this.ergoScanner.registerExtractor(
-          createEventTrigger(
-            NETWORKS.binance.key,
-            networkType,
-            url,
-            this.dataSource,
-            configs.contracts.binance,
-          ),
-        );
+
+      Object.keys(configs.chains).map(async (chain) => {
+        const chainConfig = configs.chains[chain as ChainChoices];
+        if ('active' in chainConfig && chainConfig.active) {
+          const network = NETWORKS[chain as keyof typeof NETWORKS];
+          const contract = configs.contracts[
+            chain as keyof typeof configs.contracts
+          ] as ChainConfigs;
+          await this.ergoScanner.registerExtractor(
+            createEventTrigger(
+              network.key,
+              networkType,
+              url,
+              this.dataSource,
+              contract,
+            ),
+          );
+        }
+      });
+
       this.setStatus(ServiceStatus.running);
       return true;
     } catch (e) {
@@ -165,7 +137,7 @@ export class ErgoExtractorService extends AbstractErgoExtractorsService {
    * @param {ErgoScanner} ergoScanner Instance of ErgoScanner to use.
    * @param {AbstractLogger} logger instance.
    */
-  constructor(logger: AbstractLogger = new DummyLogger()) {
+  protected constructor(logger: AbstractLogger = new DummyLogger()) {
     super(logger);
   }
 

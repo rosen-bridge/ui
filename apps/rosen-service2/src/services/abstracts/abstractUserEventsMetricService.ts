@@ -1,7 +1,7 @@
 import { PeriodicTaskService } from '@rosen-bridge/service-manager';
 
 export abstract class AbstractUserEventsMetricService extends PeriodicTaskService {
-  static Name = 'UserEventsMetricService';
+  static name = 'UserEventsMetricService';
   protected static instance: AbstractUserEventsMetricService;
 
   /**

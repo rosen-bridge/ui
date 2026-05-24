@@ -45,7 +45,7 @@ export const buildBitcoinRpcScannerWithExtractors = async (
   const networkConnectorManager =
     new NetworkConnectorManager<BitcoinRpcTransaction>(
       new FailoverStrategy(),
-      logger.child('bitcoinRpcScannerLogger'),
+      logger.child('BitcoinRpcScannerLogger'),
     );
   configs.chains.bitcoin.rpc.connections.forEach((rpc) => {
     networkConnectorManager.addConnector(
@@ -66,7 +66,7 @@ export const buildBitcoinRpcScannerWithExtractors = async (
     initialHeight: configs.chains.bitcoin.initialHeight,
     network: networkConnectorManager,
     blockRetrieveGap: configs.chains.bitcoin.blockRetrieveGap,
-    logger: logger.child('bitcoinRpcScannerLogger'),
+    logger: logger.child('BitcoinRpcScannerLogger'),
   });
 
   try {
@@ -76,7 +76,7 @@ export const buildBitcoinRpcScannerWithExtractors = async (
         configs.contracts.bitcoin.addresses.lock,
         dataSource,
         tokenMap,
-        logger.child('bitcoinRpcObservationExtractor'),
+        logger.child('BitcoinRpcObservationExtractor'),
       );
 
       logger.debug('Registering observation extractor with scanner...');
@@ -88,7 +88,7 @@ export const buildBitcoinRpcScannerWithExtractors = async (
         new UnisatRunesProtocolNetwork(
           configs.chains['bitcoin-runes'].unisatUrl!,
           configs.chains['bitcoin-runes'].unisatApiKey!,
-          logger.child('runesClient'),
+          logger.child('RunesClient'),
         );
       logger.debug('Creating Bitcoin Runes RPC observation extractor...');
       const runesObservationExtractor = new BitcoinRunesRpcObservationExtractor(
@@ -96,7 +96,7 @@ export const buildBitcoinRpcScannerWithExtractors = async (
         runesClient,
         dataSource,
         tokenMap,
-        logger.child('bitcoinRunesRpcObservationExtractor'),
+        logger.child('BitcoinRunesRpcObservationExtractor'),
       );
       await bitcoinScanner.registerExtractor(runesObservationExtractor);
       logger.info(
@@ -133,7 +133,7 @@ export const buildBitcoinEsploraScannerWithExtractors = async (
   const networkConnectorManager =
     new NetworkConnectorManager<BitcoinEsploraTransaction>(
       new FailoverStrategy(),
-      logger.child('bitcoinEsploraScannerLogger'),
+      logger.child('BitcoinEsploraScannerLogger'),
     );
   configs.chains.bitcoin.esplora.connections.forEach((esplora) => {
     networkConnectorManager.addConnector(
@@ -149,7 +149,7 @@ export const buildBitcoinEsploraScannerWithExtractors = async (
     initialHeight: configs.chains.bitcoin.initialHeight,
     network: networkConnectorManager,
     blockRetrieveGap: configs.chains.bitcoin.blockRetrieveGap,
-    logger: logger.child('bitcoinEsploraScannerLogger'),
+    logger: logger.child('BitcoinEsploraScannerLogger'),
   });
 
   try {
@@ -159,7 +159,7 @@ export const buildBitcoinEsploraScannerWithExtractors = async (
         configs.contracts.bitcoin.addresses.lock,
         dataSource,
         tokenMap,
-        logger.child('bitcoinEsploraObservationExtractor'),
+        logger.child('BitcoinEsploraObservationExtractor'),
       );
 
       logger.debug('Registering observation extractor with scanner...');
@@ -171,7 +171,7 @@ export const buildBitcoinEsploraScannerWithExtractors = async (
         new UnisatRunesProtocolNetwork(
           configs.chains['bitcoin-runes'].unisatUrl!,
           configs.chains['bitcoin-runes'].unisatApiKey!,
-          logger.child('runesClient'),
+          logger.child('RunesClient'),
         );
       logger.debug('Creating Bitcoin Runes Esplora observation extractor...');
 
@@ -181,7 +181,7 @@ export const buildBitcoinEsploraScannerWithExtractors = async (
           runesClient,
           dataSource,
           tokenMap,
-          logger.child('bitcoinRunesEsploraObservationExtractor'),
+          logger.child('BitcoinRunesEsploraObservationExtractor'),
         );
 
       logger.info(
