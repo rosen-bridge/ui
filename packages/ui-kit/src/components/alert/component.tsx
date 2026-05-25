@@ -92,7 +92,7 @@ export const Alert = (props: AlertProps) => {
             </IconButton>
           )
         }
-        variant="filled"
+        variant={variant}
       >
         {children}
       </AlertMUI>
