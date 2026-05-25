@@ -49,7 +49,9 @@ export const Skeleton = (props: SkeletonProps) => {
         data-variant={variant}
         style={styles}
         {...rest}
-      />
+      >
+        &nbsp;
+      </span>
       {attached && <>&nbsp;</>}
     </>
   );
