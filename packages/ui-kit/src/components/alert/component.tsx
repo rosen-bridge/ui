@@ -94,7 +94,7 @@ export const Alert = (props: AlertProps) => {
             )}
           </>
         }
-        variant="filled"
+        variant={variant}
       >
         {children}
       </AlertMUI>
