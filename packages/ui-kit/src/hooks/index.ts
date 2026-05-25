@@ -1,10 +1,12 @@
 export * from './useApiKey';
 export * from './useBreakpoint';
 export * from './useCollection';
+export * from './useConfig';
 export * from './useMediaQuery';
 export * from './useTheme';
 export * from './useIsMobile';
 export * from './useIsDarkMode';
+export * from './useResponsive';
 export * from './useResponsiveValue';
 export * from './useTablePagination';
 export * from './useSnackbar';
@@ -12,3 +14,4 @@ export * from './useThemeToggler';
 export * from './useCurrentBreakpoint';
 export * from './useDisclosure';
 export * from './useFramework';
+export * from './useToast';

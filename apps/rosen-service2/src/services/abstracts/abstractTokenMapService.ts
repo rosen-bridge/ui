@@ -3,7 +3,7 @@ import { AbstractService } from '@rosen-bridge/service-manager';
 
 export abstract class AbstractTokenMapService extends AbstractService {
   protected static instance: AbstractTokenMapService;
-  static name = 'TokenMapService';
+  static name = 'TokenMap';
 
   /**
    * return the singleton instance of AbstractTokenMapService

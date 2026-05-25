@@ -1,5 +1,6 @@
 'use client';
 
+import { Route } from 'next';
 import NextImage from 'next/image';
 import NextLink from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -21,9 +22,9 @@ import { SWRConfig } from 'swr';
 import { Favicon } from '@/components';
 import { mockedData } from '@/mock/mockedData';
 import { theme } from '@/theme/theme';
+import { UIKitProvider } from '@/uiKitProvider';
 
-import { SideBar } from './SideBar';
-import { Toolbar } from './Toolbar';
+import { Sidebar } from './Sidebar';
 
 export const App = ({ children }: PropsWithChildren) => {
   const pathname = usePathname();
@@ -36,30 +37,35 @@ export const App = ({ children }: PropsWithChildren) => {
     <NoSsr>
       <FrameworkProvider
         components={{
-          Anchor: (props) => <NextLink {...props} />,
+          Anchor: ({ href, ...props }) => (
+            <NextLink href={href as unknown as Route} {...props} />
+          ),
           Image: (props) => <NextImage {...props} />,
         }}
         router={{
           pathname,
           search: searchParams.toString(),
-          push: (href: string) => router.push(href, { scroll: false }),
+          push: (href: string) =>
+            router.push(href as unknown as Route, { scroll: false }),
         }}
       >
-        <ApiKeyProvider>
-          <AppBase sideBar={<SideBar />} theme={theme} toolbar={<Toolbar />}>
-            <Favicon />
-            <SWRConfig
-              value={{
-                use:
-                  process.env.NEXT_PUBLIC_USE_MOCKED_APIS === 'true'
-                    ? [mockMiddlewareFactory(mockedData)]
-                    : [],
-              }}
-            >
-              {children}
-            </SWRConfig>
-          </AppBase>
-        </ApiKeyProvider>
+        <UIKitProvider>
+          <ApiKeyProvider>
+            <AppBase sidebar={<Sidebar />} theme={theme}>
+              <Favicon />
+              <SWRConfig
+                value={{
+                  use:
+                    process.env.NEXT_PUBLIC_USE_MOCKED_APIS === 'true'
+                      ? [mockMiddlewareFactory(mockedData)]
+                      : [],
+                }}
+              >
+                {children}
+              </SWRConfig>
+            </AppBase>
+          </ApiKeyProvider>
+        </UIKitProvider>
       </FrameworkProvider>
     </NoSsr>
   );

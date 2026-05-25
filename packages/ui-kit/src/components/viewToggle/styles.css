@@ -1,0 +1,17 @@
+.RosenViewToggle {
+  display: inline-flex;
+  background-color: var(--rosen-palette-background-paper);
+  border-radius: var(--rosen-shape-borderRadius);
+  padding: var(--rosen-spacing);
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: var(--rosen-spacing);
+}
+
+.RosenViewToggle button.active {
+  background: var(--rosen-palette-primary-main);
+  svg {
+    fill: var(--rosen-palette-primary-light);
+  }
+}

@@ -8,9 +8,9 @@ import { describe, it, beforeEach, expect, vi, Mock } from 'vitest';
 
 import { AbstractAssetDataAdapterService } from '../../src/services/abstracts/abstractAssetDataAdapterService';
 import { AbstractTokenMapService } from '../../src/services/abstracts/abstractTokenMapService';
-import { AssetDataAdapterService } from '../../src/services/assetDataAdapters';
-import { DBService } from '../../src/services/db';
-import { TokenMapService } from '../../src/services/tokenMap';
+import { AssetDataAdapterService } from '../../src/services/assetDataAdaptersService';
+import { DBService } from '../../src/services/dbService';
+import { TokenMapService } from '../../src/services/tokenMapService';
 import {
   expectedErgoGetAssetsTotalSupplyResult,
   sampleTokenMapConfig,

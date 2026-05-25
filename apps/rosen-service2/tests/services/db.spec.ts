@@ -3,8 +3,8 @@ import { BlockEntity } from '@rosen-bridge/abstract-scanner';
 import { DataSource } from '@rosen-bridge/extended-typeorm';
 import { describe, it, expect, beforeAll } from 'vitest';
 
-import { AbstractDBService } from '../../src/services/abstracts/abstrctDb';
-import { DBService } from '../../src/services/db';
+import { AbstractDBService } from '../../src/services/abstracts/abstrctDBService';
+import { DBService } from '../../src/services/dbService';
 import { MockedBlockEntityData } from './mocked/db.mock';
 
 describe('DBService', () => {

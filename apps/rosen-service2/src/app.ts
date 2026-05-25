@@ -1,20 +1,20 @@
 import { DefaultLogger } from '@rosen-bridge/abstract-logger';
 import { ServiceManager } from '@rosen-bridge/service-manager';
-import { AbstractErgoExtractorsService } from 'services/abstracts/abstractErgoExtractor';
+import { AbstractErgoExtractorsService } from 'services/abstracts/abstractErgoExtractorService';
 
 import dataSource from './dataSource';
-import { AssetAggregatorService } from './services/assetAggregator';
-import { AssetDataAdapterService } from './services/assetDataAdapters';
-import { DBService } from './services/db';
-import { ErgoExtractorService } from './services/ergoExtractor';
-import { ErgoScannerService } from './services/ergoScanner';
-import { EventCountMetricService } from './services/eventCountMetric';
-import { GeneralMetricsService } from './services/generalMetrics';
-import { HealthService } from './services/healthCheck';
-import { LockedAssetsMetricService } from './services/lockedAssetsMetric';
-import { ScannerService } from './services/scanner';
-import { TokenMapService } from './services/tokenMap';
-import { UserEventsMetricService } from './services/userEventsMetric';
+import { AssetAggregatorService } from './services/assetAggregatorService';
+import { AssetDataAdapterService } from './services/assetDataAdaptersService';
+import { DBService } from './services/dbService';
+import { ErgoExtractorService } from './services/ergoExtractorService';
+import { ErgoScannerService } from './services/ergoScannerService';
+import { EventCountMetricService } from './services/eventCountMetricService';
+import { GeneralMetricsService } from './services/generalMetricsService';
+import { HealthService } from './services/healthCheckService';
+import { LockedAssetsMetricService } from './services/lockedAssetsMetricService';
+import { ScannerService } from './services/scannerService';
+import { TokenMapService } from './services/tokenMapService';
+import { UserEventsMetricService } from './services/userEventsMetricService';
 
 const logger = DefaultLogger.getInstance().child(import.meta.url);
 
@@ -103,6 +103,7 @@ const startApp = async () => {
   logger.info('Starting service manager...');
 
   await serviceManager.start(ErgoScannerService.getInstance().getName());
+  await serviceManager.start(ScannerService.getInstance().getName());
   await serviceManager.start(HealthService.getInstance().getName());
   await serviceManager.start(AssetAggregatorService.getInstance().getName());
 
