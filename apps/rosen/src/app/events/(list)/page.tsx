@@ -154,7 +154,7 @@ const Page = () => {
       pagination={renderPagination()}
     >
       {!isLoading && !data?.items.length ? (
-        <EmptyState style={{ height: '100%' }} />
+        <EmptyState style={{ height: 'calc(100vh - 288px)' }} />
       ) : (
         <GridContainer gap={1} minWidth="242px">
           {items.map((item, index) => (

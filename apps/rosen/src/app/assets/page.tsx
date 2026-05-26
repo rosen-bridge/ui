@@ -170,7 +170,9 @@ const Assets = () => {
       pagination={renderPagination()}
       view={renderView()}
     >
-      {!isLoading && !items.length && <EmptyState style={{ height: '100%' }} />}
+      {!isLoading && !items.length && (
+        <EmptyState style={{ height: 'calc(100vh - 288px)' }} />
+      )}
       {collection.view === 'grid' && !!items.length && (
         <ViewGrid
           current={current}
