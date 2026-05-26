@@ -192,15 +192,22 @@ export class PublicStatusAction {
 
       // if eventId is new or aggregated status has changed, update the aggregated status
       if (
-        guardsStatus.items.length === 0 ||
-        Utils.aggregatedStatusesMatch(
-          Utils.calcAggregatedStatus(
-            guardsStatus.items,
-            eventStatusThresholds,
-            txStatusThresholds,
-          ),
-          aggregatedStatusNew,
-        ) === false
+        (guardsStatus.items.length === 0 ||
+          Utils.aggregatedStatusesMatch(
+            Utils.calcAggregatedStatus(
+              guardsStatus.items,
+              eventStatusThresholds,
+              txStatusThresholds,
+            ),
+            aggregatedStatusNew,
+          ) === false) &&
+        !(
+          !aggregatedStatusNew.tx &&
+          [
+            AggregateEventStatus.inPayment,
+            AggregateEventStatus.inReward,
+          ].includes(aggregatedStatusNew.status)
+        )
       ) {
         const aggregatedStatusTx = aggregatedStatusNew.tx
           ? {
