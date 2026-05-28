@@ -25,8 +25,8 @@ export const getTokenMap = async () => {
     }
   } else {
     if (tokenMap) return tokenMap;
-    tokenMap = new TokenMap();
     const tokens = await getRosenTokens();
+    tokenMap = new TokenMap();
     await tokenMap.updateConfigByJson(tokens);
   }
 

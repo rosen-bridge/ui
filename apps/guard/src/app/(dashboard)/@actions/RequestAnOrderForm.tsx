@@ -2,14 +2,13 @@ import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 import {
-  AlertCard,
+  Alert,
   AlertProps,
-  ApiKeyModalWarning,
+  ApiKeyDialogWarning,
   Card,
   MenuItem,
   SubmitButton,
   TextField,
-  Typography,
   useApiKey,
   CardHeader,
   CardTitle,
@@ -96,21 +95,22 @@ export const RequestAnOrderForm = () => {
   };
 
   const renderAlert = () => (
-    <AlertCard
+    <Alert
+      dismissible
+      open={!!alertData?.severity}
       severity={alertData?.severity}
+      variant="filled"
       onClose={() => setAlertData(null)}
     >
       {alertData?.message}
-    </AlertCard>
+    </Alert>
   );
 
   return (
     <Card backgroundColor="transparent">
       <CardHeader>
-        <CardTitle>
-          <Typography variant="h5" fontWeight="bold">
-            Request An Order
-          </Typography>
+        <CardTitle variant="h5" fontWeight="bold">
+          Request An Order
         </CardTitle>
       </CardHeader>
       <CardBody>
@@ -118,7 +118,7 @@ export const RequestAnOrderForm = () => {
           <Stack spacing={2}>
             {renderAlert()}
 
-            <ApiKeyModalWarning />
+            <ApiKeyDialogWarning />
 
             <TextField label="Id" {...register('id')} />
 

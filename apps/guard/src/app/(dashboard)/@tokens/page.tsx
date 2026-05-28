@@ -8,7 +8,6 @@ import {
   CarouselIndicators,
   CarouselItem,
   CarouselProvider,
-  Grid,
   Stack,
   TokensCard,
   Typography,
@@ -53,44 +52,42 @@ const Token = ({ chain }: { chain: Network }) => {
   return (
     <TokensCard
       chain={chain}
-      tokens={tokens}
-      isLoading={isLoading}
+      loading={isLoading}
       title={NETWORKS[chain].label}
+      tokens={tokens}
     />
   );
 };
 
 const Tokens = () => {
   return (
-    <Grid size={{ mobile: 12 }}>
-      <CarouselProvider>
-        <Stack spacing="0.5rem">
-          <Stack direction="row" align="center" justify="between">
-            <Typography variant="h5" fontWeight="bold">
-              Tokens
-            </Typography>
-            <Stack direction="row" align="center" spacing="0.5rem">
-              <CarouselButton type="prev" />
-              <CarouselIndicators />
-              <CarouselButton type="next" />
-            </Stack>
+    <CarouselProvider>
+      <Stack spacing="0.5rem">
+        <Stack direction="row" align="center" justify="between">
+          <Typography variant="h5" fontWeight="bold">
+            Tokens
+          </Typography>
+          <Stack direction="row" align="center" spacing="0.5rem">
+            <CarouselButton type="prev" />
+            <CarouselIndicators />
+            <CarouselButton type="next" />
           </Stack>
-          <Carousel>
-            {Object.values(NETWORKS)
-              .filter((network) => network.hasTokenSupport)
-              .sort((a, b) => a.index - b.index)
-              .map((network) => (
-                <CarouselItem
-                  key={network.key}
-                  size="clamp(400px, calc(50% - 0.75rem), 600px)"
-                >
-                  <Token chain={network.key} />
-                </CarouselItem>
-              ))}
-          </Carousel>
         </Stack>
-      </CarouselProvider>
-    </Grid>
+        <Carousel>
+          {Object.values(NETWORKS)
+            .filter((network) => network.hasTokenSupport)
+            .sort((a, b) => a.index - b.index)
+            .map((network) => (
+              <CarouselItem
+                key={network.key}
+                size="clamp(400px, calc(50% - 0.75rem), 600px)"
+              >
+                <Token chain={network.key} />
+              </CarouselItem>
+            ))}
+        </Carousel>
+      </Stack>
+    </CarouselProvider>
   );
 };
 

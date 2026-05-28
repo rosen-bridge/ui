@@ -18,6 +18,8 @@ export type ButtonOwnProps = {
   startIcon?: ReactNode;
   endIcon?: ReactNode;
   variant?: 'outlined' | 'contained' | 'text';
+  target?: string;
+  href?: string;
 };
 
 export type ButtonBaseProps = ElementBaseProps<'button', ButtonOwnProps>;

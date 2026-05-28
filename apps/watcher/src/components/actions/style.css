@@ -1,0 +1,43 @@
+.RosenTabs.actions {
+  min-height: 100%;
+}
+
+.RosenTabs.actions .RosenTabsList {
+  flex-grow: 1;
+
+  & > .RosenTabsTab + .RosenTabsTab {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+
+  & > .RosenTabsTab:has(+ .RosenTabsTab) {
+    border-right: solid 1px var(--rosen-palette-divider);
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+}
+
+.RosenTabs.actions .RosenTabsTab {
+  background-color: var(--rosen-palette-primary-light);
+  border-radius: var(--rosen-shape-borderRadius);
+  gap: calc(var(--rosen-spacing) * 0.5);
+  flex-basis: 20%;
+  min-height: 80px;
+
+  &[data-disabled] {
+    color: var(--rosen-palette-action-disabled);
+  }
+
+  &:not([data-disabled]) {
+    color: var(--rosen-palette-primary-main);
+    &:hover {
+      background-color: var(--rosen-palette-primary-dark);
+      color: var(--rosen-palette-primary-contrastText);
+    }
+  }
+
+  &[data-active] {
+    background-color: var(--rosen-palette-primary-dark);
+    color: var(--rosen-palette-primary-contrastText);
+  }
+}
