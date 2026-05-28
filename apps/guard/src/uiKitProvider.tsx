@@ -57,7 +57,6 @@ export const getUiKitConfig: () => ConfigContextType = () => ({
     },
     Link: {
       defaultProps: {
-         
         as: NextLink,
       },
     },
