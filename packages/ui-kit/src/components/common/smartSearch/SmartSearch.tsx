@@ -13,13 +13,13 @@ import { Card, styled } from '@mui/material';
 import { CloseButton } from '../../closeButton';
 import { Icon } from '../../icon';
 import { IconButton } from '../../iconButton';
+import { VirtualScroll } from '../../virtualScroll';
 import { Divider } from '../Divider';
 import { Chips } from './Chips';
 import { History, HistoryRef } from './History';
 import { Picker } from './Picker';
 import { Filter, Input, Selected } from './types';
 import { parseFilter } from './utils';
-import { VirtualScroll } from './VirtualScroll';
 
 const Root = styled(Card)(({ theme }) => ({
   flexGrow: 1,
