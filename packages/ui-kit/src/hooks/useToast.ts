@@ -16,7 +16,7 @@ export const useToast = () => {
       return toastManager.add({
         type,
         description,
-        timeout: 500000,
+        timeout: 8000,
         data: more,
       });
     },

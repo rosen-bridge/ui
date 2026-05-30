@@ -5,7 +5,6 @@ export * from './useConfig';
 export * from './useDisclosure';
 export * from './useFramework';
 export * from './useIsDarkMode';
-export * from './useMediaQuery';
 export * from './useResponsive';
 export * from './usePagination';
 export * from './useTablePagination';

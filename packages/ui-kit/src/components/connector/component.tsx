@@ -1,9 +1,9 @@
 import { ReactNode } from 'react';
 
+import { Icon, IconProps } from '@/components';
 import { useConfig } from '@/hooks';
 import { ElementBaseProps, OverridableType } from '@/types';
 
-import { Icon, IconProps } from '../icon';
 import './styles.css';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type

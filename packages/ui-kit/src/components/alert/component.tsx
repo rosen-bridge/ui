@@ -1,13 +1,11 @@
-import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import { ReactNode, useCallback, useEffect, useMemo } from 'react';
 
 import { Alert as AlertMUI } from '@mui/material';
 
+import { Collapsible, Icon, IconProps, IconButton } from '@/components';
 import { useConfig } from '@/hooks';
 import { OverridableType, ElementBaseProps } from '@/types';
 
-import { Collapsible } from '../collapsible';
-import { Icon, IconProps } from '../icon';
-import { IconButton } from '../iconButton';
 import './styles.css';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
@@ -16,6 +14,7 @@ export interface AlertOverrides {}
 export type AlertOwnProps = {
   action?: ReactNode;
   dismissible?: boolean;
+  open?: boolean;
   severity?: 'success' | 'info' | 'warning' | 'error';
   timeout?: number;
   variant?: 'filled' | 'outlined' | 'standard';
@@ -31,14 +30,13 @@ export const Alert = (props: AlertProps) => {
     action,
     children,
     dismissible,
-    severity = 'info',
+    open = true,
+    severity = 'success',
     timeout,
     variant = 'standard',
     onClose,
     ...rest
   } = useConfig('Alert', props);
-
-  const [open, setOpen] = useState(true);
 
   const icon = useMemo<IconProps['name']>(() => {
     switch (severity) {
@@ -54,7 +52,6 @@ export const Alert = (props: AlertProps) => {
   }, [severity]);
 
   const close = useCallback(() => {
-    setOpen(false);
     onClose?.();
   }, [onClose]);
 
@@ -68,7 +65,6 @@ export const Alert = (props: AlertProps) => {
     }
 
     const timer = setTimeout(() => {
-      setOpen(false);
       onClose?.();
     }, timeout);
 

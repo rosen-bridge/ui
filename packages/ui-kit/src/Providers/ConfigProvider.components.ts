@@ -31,6 +31,7 @@ import {
   DialogFooterProps,
   DialogHeaderProps,
   DialogTitleProps,
+  DividerProps,
   DurationProps,
   EventCardProps,
   EventDetailsProps,
@@ -47,11 +48,12 @@ import {
   LinkProps,
   NetworkProps,
   PageHeadingProps,
+  PaginationProps,
   QrCodeDialogProps,
   RelativeTimeProps,
   SkeletonProps,
-  SubmitButtonProps,
   StackProps,
+  SubmitButtonProps,
   TableGridProps,
   TableGridBodyProps,
   TableGridBodyDetailsProps,
@@ -71,9 +73,7 @@ import {
   TruncateProps,
   TypographyProps,
   ViewToggleProps,
-  PaginationProps,
   VirtualScrollProps,
-  DividerProps,
 } from '@/components';
 
 export type Components = {
@@ -104,12 +104,12 @@ export type Components = {
   CopyButton: CopyButtonProps;
   DateTime: DateTimeProps;
   Dialog: DialogProps;
-  Divider: DividerProps;
   DialogContent: DialogContentProps;
   DialogDescription: DialogDescriptionProps;
   DialogFooter: DialogFooterProps;
   DialogHeader: DialogHeaderProps;
   DialogTitle: DialogTitleProps;
+  Divider: DividerProps;
   Duration: DurationProps;
   EventCard: EventCardProps;
   EventDetails: EventDetailsProps;
@@ -132,7 +132,6 @@ export type Components = {
   Skeleton: SkeletonProps;
   Stack: StackProps;
   SubmitButton: SubmitButtonProps;
-  virtualScroll: VirtualScrollProps;
   TableGrid: TableGridProps;
   TableGridBody: TableGridBodyProps;
   TableGridBodyDetails: TableGridBodyDetailsProps;
@@ -152,4 +151,5 @@ export type Components = {
   Truncate: TruncateProps;
   Typography: TypographyProps;
   ViewToggle: ViewToggleProps;
+  VirtualScroll: VirtualScrollProps;
 };

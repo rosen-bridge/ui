@@ -171,7 +171,11 @@ const UnlockForm = () => {
   };
 
   const renderAlert = () => (
-    <Alert severity={alertData?.severity} onClose={() => setAlertData(null)}>
+    <Alert
+      open={!!alertData?.severity}
+      severity={alertData?.severity}
+      onClose={() => setAlertData(null)}
+    >
       {alertData?.message}
       <CopyDetails more={alertData?.more} />
     </Alert>

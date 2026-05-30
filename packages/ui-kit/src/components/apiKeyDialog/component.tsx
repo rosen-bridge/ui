@@ -1,21 +1,23 @@
 import { FormEvent, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
-import { InputAdornment, TextField } from '@/components';
+import {
+  InputAdornment,
+  TextField,
+  Button,
+  CloseButton,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  Icon,
+  IconButton,
+  Tooltip,
+} from '@/components';
 import { useApiKey, useConfig, useToast } from '@/hooks';
 import { ElementBaseProps, OverridableType } from '@/types';
-
-import { Button } from '../button';
-import { CloseButton } from '../closeButton';
-import { Dialog } from '../dialog';
-import { DialogContent } from '../dialogContent';
-import { DialogDescription } from '../dialogDescription';
-import { DialogFooter } from '../dialogFooter';
-import { DialogHeader } from '../dialogHeader';
-import { DialogTitle } from '../dialogTitle';
-import { Icon } from '../icon';
-import { IconButton } from '../iconButton';
-import { Tooltip } from '../tooltip';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface ApiKeyDialogOverrides {}

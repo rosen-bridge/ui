@@ -15,7 +15,6 @@ import { theme } from '@/theme/theme';
 import { UIKitProvider } from '@/uiKitProvider';
 
 import { TokenMapProvider } from '../hooks';
-import { UIKitProvider } from '../uiKitProvider';
 import { Sidebar } from './Sidebar';
 
 export const App = ({ children }: PropsWithChildren) => {
@@ -31,7 +30,7 @@ export const App = ({ children }: PropsWithChildren) => {
         router={{
           pathname,
           search: searchParams.toString(),
-          push: (href) =>
+          push: (href: string) =>
             router.push(href as unknown as Route, { scroll: false }),
         }}
       >

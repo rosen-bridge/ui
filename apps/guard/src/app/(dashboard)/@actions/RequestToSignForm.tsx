@@ -110,6 +110,8 @@ export const RequestToSignForm = () => {
 
   const renderAlert = () => (
     <Alert
+      dismissible
+      open={!!alertData?.severity}
       severity={alertData?.severity}
       variant="filled"
       onClose={() => setAlertData(null)}
