@@ -45,7 +45,6 @@ import {
   RelativeTimeProps,
   SkeletonProps,
   SubmitButtonProps,
-  StackProps,
   TableGridProps,
   TableGridBodyProps,
   TableGridBodyDetailsProps,
@@ -65,6 +64,7 @@ import {
   TruncateProps,
   TypographyProps,
   ViewToggleProps,
+  VirtualScrollProps,
 } from '@/components';
 
 export type Components = {
@@ -113,7 +113,6 @@ export type Components = {
   QrCodeDialog: QrCodeDialogProps;
   RelativeTime: RelativeTimeProps;
   Skeleton: SkeletonProps;
-  Stack: StackProps;
   SubmitButton: SubmitButtonProps;
   TableGrid: TableGridProps;
   TableGridBody: TableGridBodyProps;
@@ -134,4 +133,5 @@ export type Components = {
   Truncate: TruncateProps;
   Typography: TypographyProps;
   ViewToggle: ViewToggleProps;
+  VirtualScroll: VirtualScrollProps;
 };

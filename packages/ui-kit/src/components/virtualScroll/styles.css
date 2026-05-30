@@ -1,0 +1,7 @@
+.RosenVirtualScroll {
+  cursor: grab;
+}
+
+.RosenCarouselItem {
+  flex: 0 0 auto;
+}
