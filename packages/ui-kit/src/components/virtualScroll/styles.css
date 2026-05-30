@@ -1,5 +1,6 @@
 .RosenVirtualScroll {
   cursor: grab;
+  width: 100%;
 }
 
 .RosenCarouselItem {
