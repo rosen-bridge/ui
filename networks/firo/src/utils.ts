@@ -1,6 +1,3 @@
-import { createHash } from 'crypto';
-import * as net from 'net';
-
 import { encodeAddress } from '@rosen-bridge/address-codec';
 import {
   CalculateFee,
@@ -10,6 +7,8 @@ import {
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
 import { Psbt, address } from 'bitcoinjs-lib';
+import { createHash } from 'crypto';
+import * as net from 'net';
 
 import {
   CONFIRMATION_TARGET,
@@ -350,10 +349,10 @@ export const getTxHex = async (txId: string): Promise<string> => {
  */
 export const getAddressBalance = async (address: string): Promise<bigint> => {
   const scripthash = addressToScripthash(address);
-  const balance = await callElectrumX<{ confirmed: number; unconfirmed: number }>(
-    'blockchain.scripthash.get_balance',
-    [scripthash],
-  );
+  const balance = await callElectrumX<{
+    confirmed: number;
+    unconfirmed: number;
+  }>('blockchain.scripthash.get_balance', [scripthash]);
   return BigInt(balance.confirmed);
 };
 
@@ -398,10 +397,20 @@ export const estimateTxSize = (
   outputSize: number,
   opReturnLength: number,
 ): number => {
+  const opReturnDataSize = opReturnLength / 2;
+  const opReturnPushSize = opReturnDataSize > 75 ? 2 : 1;
+  const opReturnScriptSize =
+    1 + // OP_RETURN
+    opReturnPushSize +
+    opReturnDataSize;
+  const opReturnOutputSize =
+    8 + // output value
+    1 + // compactSize script length for Rosen's <=80-byte OP_RETURN
+    opReturnScriptSize;
+
   const x =
     FIRO_TX_BASE_SIZE +
-    11 + // OP_RETURN output base size
-    opReturnLength / 2 + // OP_RETURN size in bytes
+    opReturnOutputSize +
     inputSize * FIRO_INPUT_SIZE + // inputs size
     outputSize * FIRO_OUTPUT_SIZE; // outputs size
   return x;
