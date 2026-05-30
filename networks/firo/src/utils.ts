@@ -23,6 +23,14 @@ import type { FiroUtxo } from './types';
 // Base58 alphabet (Bitcoin/Firo style)
 const BASE58_ALPHABET =
   '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
+// Current Firo prefixes plus legacy D-address P2PKH used by Rosen configs.
+const FIRO_P2PKH_PREFIXES = new Set([
+  0x1e,
+  0x41,
+  0x42,
+  FIRO_NETWORK.pubKeyHash,
+]);
+const FIRO_P2SH_PREFIXES = new Set([FIRO_NETWORK.scriptHash, 0xb2, 0xb3]);
 
 // ─── Configuration ───────────────────────────────────────────────────────
 
@@ -41,36 +49,73 @@ const getElectrumxPort = () => {
 // ─── Base58 / scripthash ────────────────────────────────────────────────
 
 function base58Decode(encoded: string): Buffer {
-  // Count leading '1' characters (each encodes a zero byte)
-  let leadingZeros = 0;
-  for (const char of encoded) {
-    if (char === '1') leadingZeros++;
+  const bytes: number[] = [];
+  for (let i = 0; i < encoded.length; i++) {
+    const c = encoded[i];
+    if (c === undefined) continue;
+    let carry = BASE58_ALPHABET.indexOf(c);
+    if (carry < 0) throw new Error(`Invalid base58 character: ${c}`);
+    for (let j = 0; j < bytes.length; j++) {
+      const b = bytes[j];
+      if (b === undefined) continue;
+      carry += b * 58;
+      bytes[j] = carry & 0xff;
+      carry >>= 8;
+    }
+    while (carry > 0) {
+      bytes.push(carry & 0xff);
+      carry >>= 8;
+    }
+  }
+  for (const ch of encoded) {
+    if (ch === '1') bytes.push(0);
     else break;
   }
-
-  let big = 0n;
-  for (const c of encoded) {
-    const digit = BASE58_ALPHABET.indexOf(c);
-    if (digit < 0) throw new Error(`Invalid base58 character: ${c}`);
-    big = big * 58n + BigInt(digit);
-  }
-
-  const hex = big.toString(16);
-  const paddedHex = (hex.length % 2 === 0 ? '' : '0') + hex;
-  const fullHex = '00'.repeat(leadingZeros) + paddedHex;
-  return Buffer.from(fullHex, 'hex');
+  return Buffer.from(bytes.reverse());
 }
 
-function addressToScripthash(address: string): string {
-  const decoded = base58Decode(address);
-  // Skip version byte, extract 20-byte pubkey hash, skip 4-byte checksum
-  const pubkeyHash = decoded.subarray(1, 21);
-  // Build P2PKH script: OP_DUP OP_HASH160 <20 bytes> OP_EQUALVERIFY OP_CHECKSIG
-  const script = Buffer.concat([
-    Buffer.from([0x76, 0xa9, 0x14]),
-    pubkeyHash,
-    Buffer.from([0x88, 0xac]),
-  ]);
+function doubleSha256(data: Buffer): Buffer {
+  return createHash('sha256')
+    .update(createHash('sha256').update(data).digest())
+    .digest();
+}
+
+function addressToScripthash(addr: string): string {
+  const decoded = base58Decode(addr);
+  if (decoded.length !== 25) {
+    throw new Error(`Invalid Firo address length: ${decoded.length}`);
+  }
+
+  const payload = decoded.subarray(0, 21);
+  const checksum = decoded.subarray(21);
+  const expectedChecksum = doubleSha256(payload).subarray(0, 4);
+  if (!checksum.equals(expectedChecksum)) {
+    throw new Error('Invalid Firo address checksum');
+  }
+
+  const version = payload[0];
+  if (version === undefined) {
+    throw new Error('Invalid Firo address version');
+  }
+
+  const payloadHash = payload.subarray(1);
+  let script: Buffer;
+  if (FIRO_P2PKH_PREFIXES.has(version)) {
+    script = Buffer.concat([
+      Buffer.from([0x76, 0xa9, 0x14]),
+      payloadHash,
+      Buffer.from([0x88, 0xac]),
+    ]);
+  } else if (FIRO_P2SH_PREFIXES.has(version)) {
+    script = Buffer.concat([
+      Buffer.from([0xa9, 0x14]),
+      payloadHash,
+      Buffer.from([0x87]),
+    ]);
+  } else {
+    throw new Error(`Unsupported Firo address version: ${version}`);
+  }
+
   const scripthash = createHash('sha256').update(script).digest().reverse();
   return scripthash.toString('hex');
 }
