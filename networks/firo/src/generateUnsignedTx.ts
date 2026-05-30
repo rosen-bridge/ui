@@ -56,6 +56,10 @@ export const generateUnsignedTx =
       script: opReturnPayment.output!,
       value: 0,
     });
+    const opReturnOutputSize =
+      8 + // output value
+      1 + // compactSize script length for Rosen's <=80-byte OP_RETURN
+      opReturnPayment.output!.length;
 
     // generate lock box
     const lockScript = address.toOutputScript(lockAddress, FIRO_NETWORK);
@@ -72,7 +76,7 @@ export const generateUnsignedTx =
     // generate fee estimator
     const estimateFee = generateFeeEstimator(
       1,
-      FIRO_TX_BASE_SIZE,
+      FIRO_TX_BASE_SIZE + opReturnOutputSize,
       FIRO_INPUT_SIZE,
       FIRO_OUTPUT_SIZE,
       feeRatio,
