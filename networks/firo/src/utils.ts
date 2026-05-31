@@ -8,7 +8,7 @@ import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
 import { Psbt, address } from 'bitcoinjs-lib';
 import { createHash } from 'crypto';
-import * as net from 'net';
+import * as tls from 'tls';
 
 import {
   CONFIRMATION_TARGET,
@@ -120,7 +120,7 @@ function addressToScripthash(addr: string): string {
   return scripthash.toString('hex');
 }
 
-// ─── ElectrumX TCP ───────────────────────────────────────────────────────
+// ─── ElectrumX TLS ───────────────────────────────────────────────────────
 
 const callElectrumX = async <T>(
   method: string,
@@ -130,7 +130,11 @@ const callElectrumX = async <T>(
   const port = getElectrumxPort();
 
   return new Promise((resolve, reject) => {
-    const socket = net.createConnection(port, host);
+    const socket = tls.connect({
+      host,
+      port,
+      servername: host,
+    });
     let buffer = '';
 
     const timer = setTimeout(() => {
@@ -170,7 +174,7 @@ const callElectrumX = async <T>(
       reject(err);
     });
 
-    socket.once('connect', () => {
+    socket.once('secureConnect', () => {
       // Send server.version handshake
       socket.write(
         JSON.stringify({
