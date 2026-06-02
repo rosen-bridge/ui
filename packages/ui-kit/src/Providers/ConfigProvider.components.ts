@@ -65,6 +65,7 @@ import {
   TruncateProps,
   TypographyProps,
   ViewToggleProps,
+  VirtualScrollProps,
 } from '@/components';
 
 export type Components = {
@@ -134,4 +135,5 @@ export type Components = {
   Truncate: TruncateProps;
   Typography: TypographyProps;
   ViewToggle: ViewToggleProps;
+  VirtualScroll: VirtualScrollProps;
 };

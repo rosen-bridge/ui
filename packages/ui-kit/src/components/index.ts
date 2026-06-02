@@ -71,3 +71,4 @@ export * from './tooltip';
 export * from './truncate';
 export * from './typography';
 export * from './viewToggle';
+export * from './virtualScroll';
