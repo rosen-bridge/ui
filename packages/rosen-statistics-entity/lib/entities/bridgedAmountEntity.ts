@@ -29,6 +29,12 @@ export class BridgedAmountEntity {
   @Column({ type: 'float' })
   amount: number;
 
+  @Column({ type: 'float' })
+  test: number;
+
   @Column({ type: 'int' })
   lastProcessedHeight: number;
+
+  @Column({ type: 'int' })
+  lastProcessedHeight1: number = 4;
 }
