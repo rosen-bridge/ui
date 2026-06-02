@@ -8,7 +8,8 @@
   },
   "license": "MIT",
   "scripts": {
-    "build": "next build",
+    "migration": "tsx ./scripts/migration.js",
+    "build": "npm run migration && next build",
     "build:vercel": "cd ../../ && ./build.sh rosen && cd apps/rosen && node ./configs/generate.mjs && npm run build",
     "coverage": "npm run test -- --run --coverage",
     "dev": "next dev",

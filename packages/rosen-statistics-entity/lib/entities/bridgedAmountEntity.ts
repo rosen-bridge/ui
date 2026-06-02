@@ -37,4 +37,7 @@ export class BridgedAmountEntity {
 
   @Column({ type: 'int' })
   lastProcessedHeight1: number = 4;
+
+  @Column({ type: 'int' })
+  lastProcessedHeight2: number = 5;
 }
