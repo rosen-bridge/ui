@@ -1,7 +1,9 @@
 import * as Sentry from '@sentry/nextjs';
 
 export async function register() {
+  console.log('REgiiiisterrrrrrrrrr');
   if (process.env.NEXT_RUNTIME === 'nodejs') {
+    console.log('runMigrationssssssss');
     const { dataSource } = await import('@/backend/dataSource');
     if (!dataSource.isInitialized) await dataSource.initialize();
     await dataSource.runMigrations();
