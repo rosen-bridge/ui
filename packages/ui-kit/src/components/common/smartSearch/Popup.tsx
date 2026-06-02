@@ -1,8 +1,6 @@
 import { ReactNode, useEffect, useRef } from 'react';
 
-import { Popper } from '@mui/material';
-
-import { styled } from '../../../styling';
+import { Popper, styled } from '@mui/material';
 
 const Root = styled('div')(({ theme }) => ({
   borderRadius: theme.shape.borderRadius,

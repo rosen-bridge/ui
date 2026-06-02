@@ -15,7 +15,7 @@ import {
 
 import { AppProps } from '../components';
 
-export { createTheme, styled } from '@mui/material';
+export { alpha, createTheme, styled, type Theme } from '@mui/material';
 
 declare module '@mui/material/styles' {
   interface BreakpointOverrides {

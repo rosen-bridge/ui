@@ -51,14 +51,14 @@ export const TransactionInfo = () => {
 
   return (
     <Card
-      backgroundColor="primary.light"
+      backgroundColor="primary-light"
       style={{
         alignContent: 'end',
         flexGrow: 1,
       }}
     >
       <CardBody>
-        <Label label="You Will Receive" color="textPrimary" dense>
+        <Label label="You Will Receive" color="text-primary" dense>
           <Amount
             value={
               !tokenValue || receivingAmountRaw === '0'

@@ -5,7 +5,7 @@ import {
   Button,
   EnhancedTableCell,
   TableRow,
-  Id,
+  Identifier,
   Connector,
   Amount,
 } from '@rosen-bridge/ui-kit';
@@ -124,15 +124,16 @@ export const MobileRow: FC<RowProps> = (props) => {
       <TableRow style={rowStyles}>
         <EnhancedTableCell>Event Id</EnhancedTableCell>
         <EnhancedTableCell>
-          <Id id={row.eventId} />
+          <Identifier value={row.eventId} variant="legacy" />
         </EnhancedTableCell>
       </TableRow>
       <TableRow style={rowStyles}>
         <EnhancedTableCell>Lock TX Id</EnhancedTableCell>
         <EnhancedTableCell>
-          <Id
+          <Identifier
             href={getTxURL(row.fromChain, row.sourceTxId)}
-            id={row.sourceTxId}
+            value={row.sourceTxId}
+            variant="legacy"
           />
         </EnhancedTableCell>
       </TableRow>
@@ -141,7 +142,11 @@ export const MobileRow: FC<RowProps> = (props) => {
           <TableRow style={rowStyles}>
             <EnhancedTableCell>Trigger TX Id</EnhancedTableCell>
             <EnhancedTableCell>
-              <Id id={row.txId} href={getTxURL(NETWORKS.ergo.key, row.txId)} />
+              <Identifier
+                value={row.txId}
+                href={getTxURL(NETWORKS.ergo.key, row.txId)}
+                variant="legacy"
+              />
             </EnhancedTableCell>
           </TableRow>
           <TableRow style={rowStyles}>
@@ -157,8 +162,8 @@ export const MobileRow: FC<RowProps> = (props) => {
             <EnhancedTableCell>Addresses</EnhancedTableCell>
             <EnhancedTableCell>
               <Connector
-                start={<Id id={row.fromAddress} />}
-                end={<Id id={row.toAddress} />}
+                start={<Identifier value={row.fromAddress} variant="legacy" />}
+                end={<Identifier value={row.toAddress} variant="legacy" />}
               />
             </EnhancedTableCell>
           </TableRow>
@@ -227,16 +232,21 @@ export const TabletRow: FC<RowProps> = (props) => {
   return (
     <TableRow className="divider" style={rowStyles}>
       <EnhancedTableCell align="center">
-        <Id id={row.eventId} />
+        <Identifier value={row.eventId} variant="legacy" />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
-        <Id
+        <Identifier
           href={getTxURL(row.fromChain, row.sourceTxId)}
-          id={row.sourceTxId}
+          value={row.sourceTxId}
+          variant="legacy"
         />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
-        <Id id={row.txId} href={getTxURL(NETWORKS.ergo.key, row.txId)} />
+        <Identifier
+          value={row.txId}
+          href={getTxURL(NETWORKS.ergo.key, row.txId)}
+          variant="legacy"
+        />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
         <Connector
@@ -246,8 +256,8 @@ export const TabletRow: FC<RowProps> = (props) => {
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
         <Connector
-          start={<Id id={row.fromAddress} />}
-          end={<Id id={row.toAddress} />}
+          start={<Identifier value={row.fromAddress} variant="legacy" />}
+          end={<Identifier value={row.toAddress} variant="legacy" />}
         />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">

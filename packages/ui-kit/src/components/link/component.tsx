@@ -1,4 +1,4 @@
-import { ComponentPropsWithRef, ElementType, useMemo } from 'react';
+import { useMemo } from 'react';
 
 import { useConfig } from '@/hooks';
 import { Color, ElementBaseProps, OverridableType } from '@/types';
@@ -10,7 +10,8 @@ import './styles.css';
 export interface LinkOverrides {}
 
 export type LinkOwnProps = {
-  as?: ElementType<ComponentPropsWithRef<'a'>>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  as?: any;
   color?: Color;
   underline?: 'always' | 'hover' | 'none';
 };

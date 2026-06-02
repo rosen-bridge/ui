@@ -122,7 +122,7 @@ export const TokenAmountTextField = ({
         fieldState.error?.message ||
         (token && (
           <>
-            <Link component="button" onClick={setAmountToMaxAvailable}>
+            <Link href="#" onClick={setAmountToMaxAvailable}>
               {getMaxAvailableTokenAmount()}
             </Link>{' '}
             {token.name} available

@@ -2,8 +2,6 @@ import { ComponentProps, forwardRef, HTMLAttributes, useMemo } from 'react';
 
 import { Divider as MuiDivider } from '@mui/material';
 
-import { InjectOverrides } from './InjectOverrides';
-
 /**
  * Props for the `Divider` component.
  */
@@ -97,6 +95,6 @@ const DividerBase = forwardRef<HTMLHRElement, DividerPropsBase>(
 
 DividerBase.displayName = 'Divider';
 
-export const Divider = InjectOverrides(DividerBase);
+export const Divider = DividerBase;
 
 export type DividerProps = ComponentProps<typeof Divider>;

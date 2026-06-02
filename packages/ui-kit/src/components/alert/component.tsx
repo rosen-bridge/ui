@@ -1,4 +1,6 @@
-import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import { ReactNode, useCallback, useEffect, useMemo } from 'react';
+
+import { Alert as AlertMUI } from '@mui/material';
 
 import { useConfig } from '@/hooks';
 import { OverridableType, ElementBaseProps } from '@/types';
@@ -14,6 +16,7 @@ export interface AlertOverrides {}
 export type AlertOwnProps = {
   action?: ReactNode;
   dismissible?: boolean;
+  open?: boolean;
   severity?: 'success' | 'info' | 'warning' | 'error';
   timeout?: number;
   variant?: 'filled' | 'outlined' | 'standard';
@@ -29,14 +32,13 @@ export const Alert = (props: AlertProps) => {
     action,
     children,
     dismissible,
-    severity = 'info',
+    open = true,
+    severity = 'success',
     timeout,
     variant = 'standard',
     onClose,
     ...rest
   } = useConfig('Alert', props);
-
-  const [open, setOpen] = useState(true);
 
   const icon = useMemo<IconProps['name']>(() => {
     switch (severity) {
@@ -52,7 +54,6 @@ export const Alert = (props: AlertProps) => {
   }, [severity]);
 
   const close = useCallback(() => {
-    setOpen(false);
     onClose?.();
   }, [onClose]);
 
@@ -66,12 +67,14 @@ export const Alert = (props: AlertProps) => {
     }
 
     const timer = setTimeout(() => {
-      setOpen(false);
       onClose?.();
     }, timeout);
 
     return () => clearTimeout(timer);
   }, [timeout, onClose]);
+
+  void action;
+  void icon;
 
   return (
     <Collapsible
@@ -80,20 +83,19 @@ export const Alert = (props: AlertProps) => {
       open={open}
       {...rest}
     >
-      <div className="RosenAlert-inner">
-        <div className="RosenAlert-icon">
-          <Icon name={icon} size="medium" />
-        </div>
-        <div className="RosenAlert-content">{children}</div>
-        <div className="RosenAlert-actions">
-          {action}
-          {dismissible && (
+      <AlertMUI
+        severity={severity}
+        action={
+          dismissible && (
             <IconButton size="small" onClick={close}>
               <Icon name="Times" size="small" />
             </IconButton>
-          )}
-        </div>
-      </div>
+          )
+        }
+        variant={variant}
+      >
+        {children}
+      </AlertMUI>
     </Collapsible>
   );
 };

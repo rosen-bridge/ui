@@ -1,6 +1,5 @@
 import { useState } from 'react';
 
-import { CommentAltExclamation, QrcodeScan } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import {
   Amount,
@@ -142,7 +141,7 @@ export const SubmitButton = () => {
       >
         {qrCode ? (
           <>
-            <EnhancedDialogTitle icon={<QrcodeScan />} onClose={() => close()}>
+            <EnhancedDialogTitle icon="QrcodeScan" onClose={() => close()}>
               Scan QR Code
             </EnhancedDialogTitle>
             <EnhancedDialogContent>
@@ -189,7 +188,7 @@ export const SubmitButton = () => {
         ) : (
           <>
             <EnhancedDialogTitle
-              icon={<CommentAltExclamation />}
+              icon="CommentAltExclamation"
               onClose={() => close()}
             >
               Confirm Transaction
@@ -200,7 +199,7 @@ export const SubmitButton = () => {
                 paddingBottom: 0,
               }}
             >
-              <Card backgroundColor="primary.light">
+              <Card backgroundColor="primary-light">
                 <CardBody>
                   <Stack spacing={2}>
                     <Stack align="center" spacing={2}>
@@ -212,8 +211,8 @@ export const SubmitButton = () => {
                       </Typography>
                       {source && target && (
                         <Connector
-                          start={<Network name={source.name} />}
-                          end={<Network name={target.name} />}
+                          start={<Network value={source.name} />}
+                          end={<Network value={target.name} />}
                         />
                       )}
                     </Stack>

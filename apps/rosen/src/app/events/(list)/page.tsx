@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import {
-  DataLayout,
+  LayoutList,
   EmptyState,
   EventCard,
   GridContainer,
@@ -12,7 +12,7 @@ import {
   SortField,
   useBreakpoint,
   useCollection,
-  useSnackbar,
+  useToast,
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import { serializeError } from 'serialize-error';
@@ -27,7 +27,7 @@ import { EventSidebar } from './EventSidebar';
 const Page = () => {
   const dense = useBreakpoint('laptop-down');
 
-  const { openSnackbar } = useSnackbar();
+  const toast = useToast();
 
   const collection = useCollection({
     defaultPageIndex: 0,
@@ -138,14 +138,16 @@ const Page = () => {
 
   useEffect(() => {
     if (error) {
-      openSnackbar(error.message, 'error', undefined, () =>
-        JSON.stringify(serializeError(error), null, 2),
-      );
+      toast.add({
+        type: 'error',
+        description: error.message,
+        more: () => JSON.stringify(serializeError(error), null, 2),
+      });
     }
   }, [error]);
 
   return (
-    <DataLayout
+    <LayoutList
       search={renderSearch()}
       sort={renderSort()}
       sidebar={renderSidebar()}
@@ -154,13 +156,13 @@ const Page = () => {
       {!isLoading && !data?.items.length ? (
         <EmptyState style={{ height: 'calc(100vh - 288px)' }} />
       ) : (
-        <GridContainer gap="8px" minWidth="242px">
+        <GridContainer gap={1} minWidth="242px">
           {items.map((item, index) => (
             <EventCard
               id={item.id}
               key={item.id ? `${item.id}:${item.eventTriggerId}` : index}
               active={!isLoading && current === item}
-              isLoading={isLoading}
+              loading={isLoading}
               value={
                 !item
                   ? undefined
@@ -172,8 +174,8 @@ const Page = () => {
                       id: item.eventId,
                       status: item.status,
                       toChain: item.toChain,
-                      token: item.lockToken?.name,
-                      ergoSideTokenId: item.lockToken?.ergoSideTokenId,
+                      token: item.lockToken?.id,
+                      unit: item?.lockToken?.name,
                       timestamp: item.timestamp,
                     }
               }
@@ -182,7 +184,7 @@ const Page = () => {
           ))}
         </GridContainer>
       )}
-    </DataLayout>
+    </LayoutList>
   );
 };
 

@@ -1,8 +1,6 @@
 'use client';
 
 import { Route } from 'next';
-import NextImage from 'next/image';
-import NextLink from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { PropsWithChildren } from 'react';
 
@@ -31,16 +29,10 @@ export const App = ({ children }: PropsWithChildren) => {
   return (
     <NoSsr>
       <FrameworkProvider
-        components={{
-          Anchor: ({ href, ...props }) => (
-            <NextLink href={href as unknown as Route} {...props} />
-          ),
-          Image: (props) => <NextImage {...props} />,
-        }}
         router={{
           pathname,
           search: searchParams.toString(),
-          push: (href: string) =>
+          push: (href) =>
             router.push(href as unknown as Route, { scroll: false }),
         }}
       >

@@ -27,13 +27,12 @@ export const ViewGrid = ({
   setCurrent,
 }: ViewGridProps) => {
   return (
-    <GridContainer minWidth="260px" gap="8px">
+    <GridContainer minWidth="260px" gap={1}>
       {items.map((item, index) => (
         <Card
           id={item.id}
           key={item.id || index}
           active={!isLoading && !!item?.id && item?.id === current?.id}
-          backgroundColor="background.paper"
           clickable
           onClick={() => {
             setCurrent(item);
@@ -46,18 +45,13 @@ export const ViewGrid = ({
               spacing={1}
               style={{ maxWidth: 600 }}
             >
-              <Token
-                loading={isLoading}
-                name={item.name}
-                ergoSideTokenId={item.ergoSideTokenId}
-                style={{ flex: 1 }}
-              />
+              <Token loading={isLoading} value={item.id} style={{ flex: 1 }} />
               <Chip
                 color="neutral"
                 loading={isLoading}
                 style={{ fontSize: '13px' }}
               >
-                <Network name={item.chain} />
+                <Network value={item.chain} />
               </Chip>
             </Stack>
             <Box mt={1} mb={-1}>

@@ -8,7 +8,7 @@ import {
   useState,
 } from 'react';
 
-import { useSnackbar } from '@rosen-bridge/ui-kit';
+import { useToast } from '@rosen-bridge/ui-kit';
 import { Wallet } from '@rosen-ui/wallet-api';
 
 import * as wallets from '@/wallets';
@@ -49,7 +49,7 @@ export const WalletContext = createContext<WalletContextType | null>(null);
 export const WalletProvider = ({ children }: PropsWithChildren) => {
   const { selectedSource } = useNetwork();
 
-  const { openSnackbar } = useSnackbar();
+  const toast = useToast();
 
   const [selected, setSelected] = useState<Wallet>();
 
@@ -79,7 +79,10 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (error: any) {
         setState('DISCONNECTED');
-        return openSnackbar(error.message, 'error');
+        toast.add({
+          type: 'error',
+          description: error.message,
+        });
       }
 
       setSelected(wallet);
@@ -87,7 +90,7 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
 
       localStorage.setItem('rosen:wallet:' + selectedSource.name, wallet.name);
     },
-    [selectedSource, openSnackbar, setSelected, setState],
+    [selectedSource, toast.add, setSelected, setState],
   );
 
   const disconnect = useCallback(async () => {

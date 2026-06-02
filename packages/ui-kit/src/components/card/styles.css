@@ -29,7 +29,10 @@
   }
 }
 
-.RosenCard > .RosenCardHeader + .RosenCardBody,
-.RosenCard > .RosenCardHeader + * .RosenCardBody {
-  padding-top: 0px;
+.RosenCard:not([data-variant='separated']) > .RosenCardHeader + .RosenCardBody,
+.RosenCard:not([data-variant='separated'])
+  > .RosenCardHeader
+  + *
+  .RosenCardBody {
+  padding-top: 0;
 }
