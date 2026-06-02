@@ -39,7 +39,7 @@ export const buildDogeRpcScannerWithExtractors = async (
   const networkConnectorManager =
     new NetworkConnectorManager<DogeRpcTransaction>(
       new RoundRobinStrategy(),
-      logger.child('DogeRpcObservationExtractor'),
+      logger.child('dogeRpcObservationExtractor'),
     );
   configs.chains.doge.rpc.connections.forEach((rpc) => {
     networkConnectorManager.addConnector(
@@ -60,7 +60,7 @@ export const buildDogeRpcScannerWithExtractors = async (
     initialHeight: configs.chains.doge.initialHeight,
     network: networkConnectorManager,
     blockRetrieveGap: configs.chains.doge.blockRetrieveGap,
-    logger: logger.child('DogeRpcScannerLogger'),
+    logger: logger.child('dogeRpcScannerLogger'),
   });
 
   try {
@@ -69,7 +69,7 @@ export const buildDogeRpcScannerWithExtractors = async (
       configs.contracts.doge.addresses.lock,
       dataSource,
       tokenMap,
-      logger.child('DogeRpcObservationExtractor'),
+      logger.child('dogeRpcObservationExtractor'),
     );
 
     logger.debug('Registering observation extractor with scanner...');
@@ -105,7 +105,7 @@ export const buildDogeEsploraScannerWithExtractors = async (
   const networkConnectorManager =
     new NetworkConnectorManager<BitcoinEsploraTransaction>(
       new RoundRobinStrategy(),
-      logger.child('DogeEsploraScannerLogger'),
+      logger.child('dogeEsploraScannerLogger'),
     );
   configs.chains.doge.esplora.connections.forEach((esplora) => {
     networkConnectorManager.addConnector(
@@ -121,7 +121,7 @@ export const buildDogeEsploraScannerWithExtractors = async (
     initialHeight: configs.chains.doge.initialHeight,
     network: networkConnectorManager,
     blockRetrieveGap: configs.chains.doge.blockRetrieveGap,
-    logger: logger.child('DogeEsploraScannerLogger'),
+    logger: logger.child('dogeEsploraScannerLogger'),
   });
 
   try {
@@ -130,7 +130,7 @@ export const buildDogeEsploraScannerWithExtractors = async (
       configs.contracts.doge.addresses.lock,
       dataSource,
       tokenMap,
-      logger.child('DogeEsploraObservationExtractor'),
+      logger.child('dogeEsploraObservationExtractor'),
     );
 
     logger.debug('Registering observation extractor with scanner...');

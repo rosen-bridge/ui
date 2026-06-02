@@ -33,6 +33,6 @@ export const createEventTrigger = (
     chianConfigs.tokens.RWTId,
     chianConfigs.addresses.WatcherPermit,
     chianConfigs.addresses.Fraud,
-    logger.child(`${formatChainName(chain, 'pascal')}EventTriggerExtractor`),
+    logger.child(`${formatChainName(chain, 'camel')}EventTriggerExtractor`),
   );
 };

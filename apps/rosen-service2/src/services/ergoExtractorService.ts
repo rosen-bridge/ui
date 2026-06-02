@@ -86,50 +86,43 @@ export class ErgoExtractorService extends AbstractErgoExtractorsService {
   protected start = async (): Promise<boolean> => {
     this.setStatus(ServiceStatus.started);
     const { networkType, url } = resolveErgoNetworkConfig();
-    try {
-      const ergoObservationExtractor = new ErgoObservationExtractor(
-        configs.contracts.ergo.addresses.lock,
-        this.dataSource,
-        this.tokenMap,
-        this.logger.child('ergoObservationExtractor'),
-      );
-      await this.ergoScanner.registerExtractor(ergoObservationExtractor);
-      const ergoEventTriggerExtractor = createEventTrigger(
-        NETWORKS.ergo.key,
-        networkType,
-        url,
-        this.dataSource,
-        configs.contracts.ergo,
-      );
-      await this.ergoScanner.registerExtractor(ergoEventTriggerExtractor);
+    const ergoObservationExtractor = new ErgoObservationExtractor(
+      configs.contracts.ergo.addresses.lock,
+      this.dataSource,
+      this.tokenMap,
+      this.logger.child('ergoObservationExtractor'),
+    );
+    await this.ergoScanner.registerExtractor(ergoObservationExtractor);
+    const ergoEventTriggerExtractor = createEventTrigger(
+      NETWORKS.ergo.key,
+      networkType,
+      url,
+      this.dataSource,
+      configs.contracts.ergo,
+    );
+    await this.ergoScanner.registerExtractor(ergoEventTriggerExtractor);
 
-      Object.keys(configs.chains).map(async (chain) => {
-        const chainConfig = configs.chains[chain as ChainChoices];
-        if ('active' in chainConfig && chainConfig.active) {
-          const network = NETWORKS[chain as keyof typeof NETWORKS];
-          const contract = configs.contracts[
-            chain as keyof typeof configs.contracts
-          ] as ChainConfigs;
-          await this.ergoScanner.registerExtractor(
-            createEventTrigger(
-              network.key,
-              networkType,
-              url,
-              this.dataSource,
-              contract,
-            ),
-          );
-        }
-      });
+    Object.keys(configs.chains).map(async (chain) => {
+      const chainConfig = configs.chains[chain as ChainChoices];
+      if ('active' in chainConfig && chainConfig.active) {
+        const network = NETWORKS[chain as keyof typeof NETWORKS];
+        const contract = configs.contracts[
+          chain as keyof typeof configs.contracts
+        ] as ChainConfigs;
+        await this.ergoScanner.registerExtractor(
+          createEventTrigger(
+            network.key,
+            networkType,
+            url,
+            this.dataSource,
+            contract,
+          ),
+        );
+      }
+    });
 
-      this.setStatus(ServiceStatus.running);
-      return true;
-    } catch (e) {
-      this.logger.error(
-        `Something went wrong while starting the ErgoExtractorService: ${e}`,
-      );
-      return false;
-    }
+    this.setStatus(ServiceStatus.running);
+    return true;
   };
 
   /**

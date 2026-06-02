@@ -17,14 +17,14 @@ import { configs } from '../configs';
 import { TOTAL_SUPPLY_REDIS_KEY } from '../constants';
 import { ChainChoices } from '../types';
 import {
-  AbstractAssetAggregatorServicce,
+  AbstractAssetAggregatorService,
   AbstractAssetDataAdapterService,
   AbstractTokenMapService,
   AbstractDBService,
 } from './abstracts';
 
-export class AssetAggregatorService extends AbstractAssetAggregatorServicce {
-  name = AbstractAssetAggregatorServicce.name;
+export class AssetAggregatorService extends AbstractAssetAggregatorService {
+  name = AbstractAssetAggregatorService.name;
   protected assetAggregator: AssetAggregator;
   protected redis;
 
@@ -80,10 +80,10 @@ export class AssetAggregatorService extends AbstractAssetAggregatorServicce {
    * @memberof AssetAggregatorService
    */
   static readonly init = async (logger?: AbstractLogger) => {
-    if (AbstractAssetAggregatorServicce.instance != undefined) {
+    if (AbstractAssetAggregatorService.instance != undefined) {
       return;
     }
-    AbstractAssetAggregatorServicce.instance = new AssetAggregatorService(
+    AbstractAssetAggregatorService.instance = new AssetAggregatorService(
       logger,
     );
   };

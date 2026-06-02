@@ -14,5 +14,5 @@ DefaultLogger.init(
 AddressManager.init(
   chainValidators,
   chainDecoders,
-  DefaultLogger.getInstance().child('AddressManager'),
+  DefaultLogger.getInstance().child('addressManager'),
 );

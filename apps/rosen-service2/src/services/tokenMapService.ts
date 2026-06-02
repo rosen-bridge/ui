@@ -87,7 +87,6 @@ export class TokenMapService extends AbstractTokenMapService {
    * @returns {Promise<boolean>} True if the service started successfully, false otherwise.
    */
   protected start = async (): Promise<boolean> => {
-    this.setStatus(ServiceStatus.started);
     if (!configs.tokenMap.onChainTokenMapEnabled) {
       await this.loadFromFile();
     } else {
@@ -102,7 +101,7 @@ export class TokenMapService extends AbstractTokenMapService {
    * @returns {Promise<boolean>} True if the service stopped successfully.
    */
   protected stop = async (): Promise<boolean> => {
-    this.tokenMap.updateConfigByJson([]);
+    await this.tokenMap.updateConfigByJson([]);
     this.setStatus(ServiceStatus.dormant);
     return true;
   };
@@ -145,8 +144,6 @@ export class TokenMapService extends AbstractTokenMapService {
     );
 
     await this.ergoScanner.registerExtractor(tokenMapBoxExtractor);
-
-    // this.tokenMap = new ExtendedTokenMap();
 
     this.redis = createClient({
       url: configs.redis.address,

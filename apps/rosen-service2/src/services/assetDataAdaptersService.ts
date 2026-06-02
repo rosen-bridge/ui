@@ -64,12 +64,20 @@ export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
     [chain: string]: TotalSupply[];
   }> => {
     const assets: { [chain: string]: TotalSupply[] } = {};
-    await Promise.all(
-      NETWORKS_KEYS.map(async (chain) => {
-        const adapter = this.adapters[chain];
-        if (adapter) assets[chain] = await adapter.getAllTokensTotalSupply();
-      }),
-    );
+    for (const chain of NETWORKS_KEYS) {
+      const adapter = this.adapters[chain];
+      if (adapter) {
+        try {
+          assets[chain] = await adapter.getAllTokensTotalSupply();
+        } catch (error) {
+          this.logger.error(
+            `Failed to get total supply for ${chain}: ${error}`,
+          );
+          assets[chain] = [];
+        }
+      }
+    }
+
     return assets;
   };
 

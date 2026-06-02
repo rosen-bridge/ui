@@ -9,7 +9,7 @@ import { lockedAssetsMetric } from '@rosen-ui/rosen-statistics';
 
 import { configs } from '../configs';
 import {
-  AbstractAssetAggregatorServicce,
+  AbstractAssetAggregatorService,
   AbstractDBService,
   AbstractLockedAssetsMetricService,
 } from './abstracts';
@@ -28,7 +28,7 @@ export class LockedAssetsMetricService extends AbstractLockedAssetsMetricService
       action: ServiceAction.assemble,
     },
     {
-      serviceName: AbstractAssetAggregatorServicce.name,
+      serviceName: AbstractAssetAggregatorService.name,
       allowedStatuses: [ServiceStatus.running],
       action: ServiceAction.start,
     },

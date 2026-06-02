@@ -70,18 +70,10 @@ export class DBService extends AbstractDBService {
 
   protected start = async (): Promise<boolean> => {
     this.setStatus(ServiceStatus.started);
-    try {
-      this.logger.debug('running data source migrations');
-      await this.dataSource.runMigrations();
-      this.logger.info('data source migrations completed');
-      this.setStatus(ServiceStatus.running);
-    } catch (e) {
-      this.logger.error(
-        `Something went wrong while starting the DBService: ${e}`,
-      );
-      return false;
-    }
-
+    this.logger.debug('running data source migrations');
+    await this.dataSource.runMigrations();
+    this.logger.info('data source migrations completed');
+    this.setStatus(ServiceStatus.running);
     return true;
   };
 

@@ -30,7 +30,7 @@ export const buildBinanceRpcScannerWithExtractors = async (
   const networkConnectorManager =
     new NetworkConnectorManager<TransactionResponse>(
       new FailoverStrategy(),
-      logger.child('BinanceScannerLogger'),
+      logger.child('binanceScannerLogger'),
     );
   configs.chains.binance.rpc.connections.forEach((rpc) => {
     networkConnectorManager.addConnector(
@@ -42,7 +42,7 @@ export const buildBinanceRpcScannerWithExtractors = async (
     initialHeight: configs.chains.binance.initialHeight,
     network: networkConnectorManager,
     blockRetrieveGap: configs.chains.binance.blockRetrieveGap,
-    logger: logger.child('BinanceScannerLogger'),
+    logger: logger.child('binanceScannerLogger'),
   });
 
   try {
@@ -51,7 +51,7 @@ export const buildBinanceRpcScannerWithExtractors = async (
       configs.contracts.binance.addresses.lock,
       dataSource,
       tokenMap,
-      logger.child('BinanceObservationExtractor'),
+      logger.child('binanceObservationExtractor'),
     );
 
     logger.debug('Registering observation extractor with scanner...');

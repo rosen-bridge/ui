@@ -6,7 +6,10 @@ import {
   HealthStatusLevel,
 } from '@rosen-bridge/health-check';
 import { LogLevelHealthCheck } from '@rosen-bridge/log-level-check';
-import { ScannerSyncHealthCheckParam } from '@rosen-bridge/scanner-sync-check';
+import {
+  LastSavedBlock,
+  ScannerSyncHealthCheckParam,
+} from '@rosen-bridge/scanner-sync-check';
 import {
   Dependency,
   ServiceAction,
@@ -34,7 +37,7 @@ import {
 
 export class HealthService extends AbstractHealthService {
   name = AbstractHealthService.name;
-  private dbService: AbstractDBService;
+  private dbService: (scanner: string) => Promise<LastSavedBlock>;
   private scannerService: AbstractScannerService;
   protected healthCheck: HealthCheck;
   protected params: AbstractHealthCheckParam[] = [];
@@ -60,7 +63,7 @@ export class HealthService extends AbstractHealthService {
   ];
 
   protected assemble = async (): Promise<boolean> => {
-    this.dbService = AbstractDBService.getInstance();
+    this.dbService = AbstractDBService.getInstance().getLastSavedBlock;
     this.scannerService = AbstractScannerService.getInstance();
     this.setStatus(ServiceStatus.dormant);
     return true;
@@ -112,9 +115,7 @@ export class HealthService extends AbstractHealthService {
       new ScannerSyncHealthCheckParam(
         chain,
         async () =>
-          this.dbService.getLastSavedBlock(
-            this.scannerService.getScanner(chain)!.name(),
-          ),
+          this.dbService(this.scannerService.getScanner(chain)!.name()),
         configs.healthCheck.scanner.warnDiff,
         configs.healthCheck.scanner.criticalDiff,
         blockTimeAsMilliSecond * 1000,
@@ -144,13 +145,6 @@ export class HealthService extends AbstractHealthService {
    */
   protected preStart = async () => {
     this.params = [
-      new ScannerSyncHealthCheckParam(
-        NETWORKS.ergo.key,
-        async () => this.dbService.getLastSavedBlock(NETWORKS.ergo.key),
-        configs.healthCheck.scanner.warnDiff,
-        configs.healthCheck.scanner.criticalDiff,
-        ERGO_BLOCK_TIME * 1000,
-      ),
       new LogLevelHealthCheck(
         HealthStatusLevel.UNSTABLE,
         configs.healthCheck.logging.maxWarns,
@@ -166,6 +160,7 @@ export class HealthService extends AbstractHealthService {
     ];
 
     // Add chains Scanner params
+    this.addScannerSyncParam(NETWORKS.ergo.key, ERGO_BLOCK_TIME);
     if (configs.chains.cardano.active)
       this.addScannerSyncParam(NETWORKS.cardano.key, CARDANO_BLOCK_TIME);
     if (configs.chains.bitcoin.active)
@@ -177,16 +172,10 @@ export class HealthService extends AbstractHealthService {
     if (configs.chains.binance.active)
       this.addScannerSyncParam(NETWORKS.binance.key, BINANCE_BLOCK_TIME);
 
-    for (const param of this.params)
-      try {
-        this.healthCheck.register(param);
-        this.logger.debug(`${param.getId()} health param registered`);
-      } catch (err) {
-        this.logger.error(
-          `Registering healthCheck ${param.getId()} parameter failed: ${err}`,
-        );
-        if (err instanceof Error && err.stack) this.logger.debug(err.stack);
-      }
+    for (const param of this.params) {
+      this.healthCheck.register(param);
+      this.logger.debug(`${param.getId()} health param registered`);
+    }
   };
 
   /**
