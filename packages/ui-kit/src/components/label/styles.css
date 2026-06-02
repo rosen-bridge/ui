@@ -42,14 +42,14 @@
   left: 0;
   top: 0;
   bottom: 0;
-  height: 100%;
+  height: calc(100% + 8px);
   width: 12px;
   border-style: dashed;
   border-image: initial;
   border-width: 0px 0px 1px 1px;
   border-bottom-left-radius: 6px;
-  border-color: rgba(0, 0, 0, 0.12);
-  transform: translateY(-50%);
+  border-color: var(--rosen-palette-divider);
+  transform: translateY(-58%);
   margin-left: var(--rosen-spacing);
 }
 

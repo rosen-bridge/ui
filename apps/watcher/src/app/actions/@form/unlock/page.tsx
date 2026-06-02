@@ -5,11 +5,11 @@ import { useMemo, useState, useEffect, ReactNode } from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 
 import {
-  AlertCard,
+  Alert,
   AlertProps,
   SubmitButton,
   useApiKey,
-  ApiKeyModalWarning,
+  ApiKeyDialogWarning,
   Stack,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
@@ -19,6 +19,7 @@ import { getNonDecimalString, getTxURL } from '@rosen-ui/utils';
 import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
 
+import { CopyDetails } from '@/components';
 import { useRsnToken } from '@/hooks';
 import {
   ApiInfoResponse,
@@ -170,13 +171,14 @@ const UnlockForm = () => {
   };
 
   const renderAlert = () => (
-    <AlertCard
-      more={alertData?.more}
+    <Alert
+      open={!!alertData?.severity}
       severity={alertData?.severity}
       onClose={() => setAlertData(null)}
     >
       {alertData?.message}
-    </AlertCard>
+      <CopyDetails more={alertData?.more} />
+    </Alert>
   );
 
   const disabled =
@@ -196,7 +198,7 @@ const UnlockForm = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <Stack spacing={2}>
           {renderAlert()}
-          <ApiKeyModalWarning />
+          <ApiKeyDialogWarning />
           {renderTokenAmountTextField()}
           <SubmitButton
             loading={isUnlockPending}

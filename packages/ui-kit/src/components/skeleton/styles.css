@@ -25,6 +25,7 @@
 
 .RosenSkeleton[data-variant='circular'] {
   border-radius: 10000px;
+  flex-shrink: 0;
 }
 
 .RosenSkeleton[data-variant='rounded'] {

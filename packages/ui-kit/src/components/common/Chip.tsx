@@ -1,17 +1,11 @@
-import React, {
-  ComponentProps,
-  forwardRef,
-  HtmlHTMLAttributes,
-  ReactNode,
-  useMemo,
-} from 'react';
+import { ComponentProps, forwardRef, HtmlHTMLAttributes, useMemo } from 'react';
 
-import * as Icons from '@rosen-bridge/icons';
+import { styled } from '@mui/material';
 
-import { styled } from '../../styling';
-import { Typography, Skeleton } from '../base';
-import { InjectOverrides } from './InjectOverrides';
-import { SvgIcon } from './SvgIcon';
+import { Skeleton } from '@/components';
+
+import { Icon, IconProps } from '../icon';
+import { Typography } from '../typography';
 
 /**
  * Props for the Chip component.
@@ -22,7 +16,6 @@ import { SvgIcon } from './SvgIcon';
  * @property icon - Optional icon shown before the label.
  * Can be:
  * - A string key from `@rosen-bridge/icons`.
- * - A custom `ReactNode` (e.g., a custom `<svg />`).
  *
  * @property color - Optional theme color for the chip.
  * Defaults to `"primary"`. Supports:
@@ -33,7 +26,7 @@ import { SvgIcon } from './SvgIcon';
  */
 type ChipBaseProps = HtmlHTMLAttributes<HTMLDivElement> & {
   label?: string;
-  icon?: keyof typeof Icons | ReactNode;
+  icon?: IconProps['name'];
   color?:
     | 'primary'
     | 'secondary'
@@ -44,10 +37,6 @@ type ChipBaseProps = HtmlHTMLAttributes<HTMLDivElement> & {
     | 'info';
   loading?: boolean;
 };
-
-/** Type guard for safer icon check */
-const isIconKey = (icon: unknown): icon is keyof typeof Icons =>
-  typeof icon === 'string' && icon in Icons;
 
 const ChipWrapper = styled('div')<ChipBaseProps>(({
   theme,
@@ -90,30 +79,12 @@ const ChipWrapper = styled('div')<ChipBaseProps>(({
  * ```
  */
 const ChipBase = forwardRef<HTMLDivElement, ChipBaseProps>((props, ref) => {
-  const { label, icon, children, color = 'primary', loading } = props;
+  const { label, icon, children, color = 'primary', loading, ...rest } = props;
 
   const RenderedIcon = useMemo(() => {
     if (!icon) return null;
-
-    if (isIconKey(icon)) {
-      const IconComponent = Icons[icon];
-      return (
-        <SvgIcon style={{ marginRight: '4px' }}>
-          <IconComponent />
-        </SvgIcon>
-      );
-    }
-
-    if (React.isValidElement(icon)) {
-      return <SvgIcon style={{ marginRight: '4px' }}>{icon}</SvgIcon>;
-    }
-
-    return null;
+    return <Icon name={icon} style={{ marginRight: '4px' }} />;
   }, [icon]);
-
-  if (loading) {
-    return <Skeleton width={80} height={32} variant="rounded" />;
-  }
 
   const hasContent = !!children || !!label;
 
@@ -122,15 +93,16 @@ const ChipBase = forwardRef<HTMLDivElement, ChipBaseProps>((props, ref) => {
     : 'Invalid';
 
   return (
-    <ChipWrapper color={color} ref={ref} {...props}>
+    <ChipWrapper color={color} ref={ref} {...rest}>
       {RenderedIcon}
       {content}
+      {loading && <Skeleton attached variant="circular" />}
     </ChipWrapper>
   );
 });
 
 ChipBase.displayName = 'Chip';
 
-export const Chip = InjectOverrides(ChipBase);
+export const Chip = ChipBase;
 
 export type ChipProps = ComponentProps<typeof Chip>;

@@ -7,30 +7,20 @@ import {
   useState,
 } from 'react';
 
-import { Button, Card } from '@mui/material';
-import {
-  CaretDown,
-  Check,
-  ListUiAlt,
-  SortAmountDown,
-  SortAmountUp,
-} from '@rosen-bridge/icons';
+import { Button, Card, styled } from '@mui/material';
 
-import { styled } from '../../styling';
-import {
-  Grid,
-  IconButton,
-  ListItemText,
-  ListSubheader,
-  Menu,
-  MenuItem,
-  Typography,
-} from '../base';
+import { ListItemText, ListSubheader, Menu, MenuItem } from '../base';
+import { Icon } from '../icon';
+import { IconButton } from '../iconButton';
+import { Stack } from '../stack';
+import { Typography } from '../typography';
 import { Divider } from './Divider';
-import { Stack } from './Stack';
-import { SvgIcon } from './SvgIcon';
 
 const Root = styled(Card)(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  flexWrap: 'nowrap',
+  gap: theme.spacing(1),
   padding: theme.spacing(1, 0.5),
 }));
 
@@ -114,104 +104,92 @@ export const SortField = ({
 
   return (
     <Root {...rest}>
-      <Grid container alignItems="center" wrap="nowrap" width="auto" gap={1}>
-        <Grid flexGrow={1}>
-          {dense ? (
-            <IconButton disabled={disabled} onClick={handleMenuOpen}>
-              <SvgIcon>
-                <ListUiAlt />
-              </SvgIcon>
-            </IconButton>
-          ) : (
-            <Button
-              disabled={disabled}
-              style={{
-                whiteSpace: 'nowrap',
-                textTransform: 'none',
-                color: 'inherit',
-                width: '100%',
-                justifyContent: 'space-between',
-                padding: '2px 8px',
-              }}
-              endIcon={
-                <SvgIcon
-                  style={{
-                    rotate: open ? '180deg' : '0deg',
-                  }}
-                >
-                  <CaretDown />
-                </SvgIcon>
-              }
-              onClick={handleMenuOpen}
+      {dense ? (
+        <IconButton disabled={disabled} onClick={handleMenuOpen}>
+          <Icon name="ListUiAlt" />
+        </IconButton>
+      ) : (
+        <Button
+          disabled={disabled}
+          style={{
+            whiteSpace: 'nowrap',
+            textTransform: 'none',
+            color: 'inherit',
+            width: '100%',
+            justifyContent: 'space-between',
+            padding: '2px 8px',
+          }}
+          endIcon={
+            <Icon
+              name="CaretDown"
+              style={{ rotate: open ? '180deg' : '0deg' }}
+            />
+          }
+          onClick={handleMenuOpen}
+        >
+          <Stack align="start">
+            <Typography
+              hidden={dense}
+              variant="caption"
+              color="text-secondary"
+              lineHeight="12px"
             >
-              <Stack align="start">
-                <Typography
-                  hidden={dense}
-                  variant="caption"
-                  color="text.secondary"
-                  lineHeight="12px"
-                >
-                  Sort by
-                </Typography>
-                <Typography variant="body1" lineHeight="24px">
-                  {current?.label}
-                </Typography>
-              </Stack>
-            </Button>
-          )}
-          <Menu
-            anchorEl={anchorEl}
-            open={open}
-            PaperProps={{
-              style: {
-                marginTop: 12,
-                marginLeft: -4,
-              },
-            }}
-            onClose={handleMenuClose}
+              Sort by
+            </Typography>
+            <Typography variant="body1" lineHeight="24px">
+              {current?.label}
+            </Typography>
+          </Stack>
+        </Button>
+      )}
+      <Menu
+        anchorEl={anchorEl}
+        open={open}
+        PaperProps={{
+          style: {
+            marginTop: 12,
+            marginLeft: -4,
+          },
+        }}
+        onClose={handleMenuClose}
+      >
+        <ListSubheader
+          style={{
+            display: dense ? 'flex' : 'none',
+            backgroundColor: 'transparent',
+          }}
+        >
+          <Typography variant="caption" color="text-secondary">
+            Sort by
+          </Typography>
+        </ListSubheader>
+        {options.map((item) => (
+          <MenuItem
+            key={item.value}
+            value={item.value}
+            onClick={() => handleSortChange(item)}
           >
-            <ListSubheader
+            <ListItemText> {item.label}</ListItemText>
+            <Icon
+              name="Check"
               style={{
-                display: dense ? 'flex' : 'none',
-                backgroundColor: 'transparent',
+                display:
+                  dense && current && item.value === current.value
+                    ? 'flex'
+                    : 'none',
               }}
-            >
-              <Typography variant="caption" color="text.secondary">
-                Sort by
-              </Typography>
-            </ListSubheader>
-            {options.map((item) => (
-              <MenuItem
-                key={item.value}
-                value={item.value}
-                onClick={() => handleSortChange(item)}
-              >
-                <ListItemText> {item.label}</ListItemText>
-                <SvgIcon
-                  style={{
-                    display:
-                      dense && current && item.value === current.value
-                        ? 'flex'
-                        : 'none',
-                  }}
-                >
-                  <Check />
-                </SvgIcon>
-              </MenuItem>
-            ))}
-          </Menu>
-        </Grid>
-        <Grid alignSelf="stretch">
-          <Divider orientation="vertical" />
-        </Grid>
-        <Grid>
-          <IconButton disabled={disabled} onClick={handleSortOrderChange}>
-            <SvgIcon>
-              {value?.order == 'ASC' ? <SortAmountDown /> : <SortAmountUp />}
-            </SvgIcon>
-          </IconButton>
-        </Grid>
-      </Grid>
+            />
+          </MenuItem>
+        ))}
+      </Menu>
+      <div style={{ alignSelf: 'stretch' }}>
+        <Divider orientation="vertical" />
+      </div>
+      <IconButton disabled={disabled} onClick={handleSortOrderChange}>
+        <Icon
+          name={value?.order == 'ASC' ? 'SortAmountDown' : 'SortAmountUp'}
+        />
+      </IconButton>
     </Root>
   );
 };

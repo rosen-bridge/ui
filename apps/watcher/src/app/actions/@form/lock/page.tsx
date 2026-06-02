@@ -4,9 +4,9 @@ import { useState, useEffect, useMemo, ReactNode } from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 
 import {
-  AlertCard,
+  Alert,
   AlertProps,
-  ApiKeyModalWarning,
+  ApiKeyDialogWarning,
   Link,
   Stack,
   SubmitButton,
@@ -23,6 +23,7 @@ import {
 import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
 
+import { CopyDetails } from '@/components';
 import { useRsnToken, useToken } from '@/hooks';
 import {
   ApiPermitRequestBody,
@@ -149,13 +150,14 @@ const LockForm = () => {
   };
 
   const renderAlert = () => (
-    <AlertCard
-      more={alertData?.more}
+    <Alert
+      open={!!alertData?.severity}
       severity={alertData?.severity}
       onClose={() => setAlertData(null)}
     >
       {alertData?.message}
-    </AlertCard>
+      <CopyDetails more={alertData?.more} />
+    </Alert>
   );
 
   const disabled =
@@ -176,7 +178,7 @@ const LockForm = () => {
   const renderCollateralAlert = () =>
     !info?.permitCount.total &&
     !isRsnTokenLoading && (
-      <AlertCard severity="info">
+      <Alert severity="info" variant="filled">
         <Typography>
           An additional{' '}
           {getDecimalString(
@@ -191,7 +193,7 @@ const LockForm = () => {
           ERG is required to put your collateral. (You need more ERG to pay for
           transaction fees.)
         </Typography>
-      </AlertCard>
+      </Alert>
     );
 
   const renderReportsCountAlert = () => {
@@ -219,26 +221,26 @@ const LockForm = () => {
     if (reportsCount) {
       if (remainder) {
         return (
-          <AlertCard severity="info">
+          <Alert severity="info" variant="filled">
             <Typography>
               Currently, by locking {formData.amount} RSN, you can report{' '}
               {reportsCount} events using {+formData.amount - remainder} RSN and{' '}
               {remainder} RSN will be reserved until you lock more.
             </Typography>
-          </AlertCard>
+          </Alert>
         );
       }
       return (
-        <AlertCard severity="info">
+        <Alert severity="info" variant="filled">
           <Typography>
             Currently, by locking {formData.amount} RSN, you can report{' '}
             {reportsCount} events.
           </Typography>
-        </AlertCard>
+        </Alert>
       );
     }
     return (
-      <AlertCard severity="info">
+      <Alert severity="info" variant="filled">
         <Typography>
           Currently, by locking {remainder} RSN, you cannot report any
           additional event unless you already have at least{' '}
@@ -248,7 +250,7 @@ const LockForm = () => {
           )}{' '}
           locked RSN. You can top it up later.
         </Typography>
-      </AlertCard>
+      </Alert>
     );
   };
 
@@ -257,7 +259,7 @@ const LockForm = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <Stack spacing={2}>
           {renderAlert()}
-          <ApiKeyModalWarning />
+          <ApiKeyDialogWarning />
           {renderTokenAmountTextField()}
           {renderCollateralAlert()}
           {renderReportsCountAlert()}

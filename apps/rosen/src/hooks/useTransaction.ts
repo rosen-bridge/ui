@@ -2,7 +2,7 @@ import { useState } from 'react';
 import React from 'react';
 
 import { RosenChainToken } from '@rosen-bridge/tokens';
-import { useSnackbar } from '@rosen-bridge/ui-kit';
+import { useToast } from '@rosen-bridge/ui-kit';
 import { InsufficientAssetsError } from '@rosen-network/base/dist/handleUncoveredAssets';
 import { getNonDecimalString, getTxURL } from '@rosen-ui/utils';
 import {
@@ -24,7 +24,7 @@ import { useWallet } from './useWallet';
 export const useTransaction = () => {
   const { selectedSource, selectedTarget } = useNetwork();
 
-  const { openSnackbar } = useSnackbar();
+  const toast = useToast();
 
   const tokenMap = useTokenMap();
 
@@ -88,8 +88,9 @@ export const useTransaction = () => {
         return result;
       }
 
-      openSnackbar(
-        React.createElement('div', undefined, [
+      toast.add({
+        type: 'success',
+        description: React.createElement('div', undefined, [
           'Transaction submitted successfully, click ',
           React.createElement(
             'a',
@@ -105,17 +106,15 @@ export const useTransaction = () => {
           ),
           ' to see more details.',
         ]),
-        'success',
-      );
+      });
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      openSnackbar(
-        error?.info ?? error?.message ?? JSON.stringify(error),
-        'error',
-        undefined,
-        () => JSON.stringify(serializeError(error), null, 2),
-      );
+      toast.add({
+        type: 'error',
+        description: error?.info ?? error?.message ?? JSON.stringify(error),
+        more: () => JSON.stringify(serializeError(error), null, 2),
+      });
 
       if (error instanceof InsufficientAssetsError) return;
 

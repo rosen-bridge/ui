@@ -2,7 +2,7 @@
 
 import { useCallback, useMemo } from 'react';
 
-import { EnhancedTable, Grid } from '@rosen-bridge/ui-kit';
+import { EnhancedTable } from '@rosen-bridge/ui-kit';
 import { Network } from '@rosen-ui/types';
 
 import { useBalance } from '@/hooks';
@@ -75,19 +75,15 @@ const Assets = () => {
   );
 
   return isLoading ? (
-    <Grid>
-      <TableSkeleton numberOfItems={25} />
-    </Grid>
+    <TableSkeleton numberOfItems={25} />
   ) : (
     data && (
-      <Grid container>
-        <EnhancedTable
-          data={items}
-          responsiveHead={tableHeaderProps}
-          responsiveRenderRow={tableRenderRowProps}
-          paginated={false}
-        />
-      </Grid>
+      <EnhancedTable
+        data={items}
+        responsiveHead={tableHeaderProps}
+        responsiveRenderRow={tableRenderRowProps}
+        paginated={false}
+      />
     )
   );
 };

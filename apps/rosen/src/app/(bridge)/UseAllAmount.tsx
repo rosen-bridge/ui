@@ -1,12 +1,4 @@
-import { SyncExclamation } from '@rosen-bridge/icons';
-import {
-  Button,
-  CircularProgress,
-  Divider,
-  IconButton,
-  Stack,
-  SvgIcon,
-} from '@rosen-bridge/ui-kit';
+import { Button, Divider, Icon, IconButton, Stack } from '@rosen-bridge/ui-kit';
 
 export interface UseAllAmountProps {
   disabled: boolean;
@@ -33,13 +25,8 @@ export const UseAllAmount = ({
         orientation="vertical"
         style={{ alignSelf: 'stretch', height: 'auto' }}
       />
-      {loading && (
-        <IconButton disabled>
-          <CircularProgress size={24} />
-        </IconButton>
-      )}
-      {!error && !loading && (
-        <Button disabled={disabled} onClick={onClick}>
+      {!error && (
+        <Button disabled={disabled} loading={loading} onClick={onClick}>
           <span style={{ whiteSpace: 'nowrap' }}>
             Use all
             <br />
@@ -49,9 +36,7 @@ export const UseAllAmount = ({
       )}
       {error && !loading && (
         <IconButton onClick={onRetry}>
-          <SvgIcon color="error">
-            <SyncExclamation />
-          </SvgIcon>
+          <Icon color="error" name="SyncExclamation" />
         </IconButton>
       )}
     </Stack>
