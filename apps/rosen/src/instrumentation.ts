@@ -10,6 +10,7 @@ export async function register() {
       await dataSource.runMigrations();
     } catch (error) {
       console.log('databaseeeeee migration error', error);
+      throw new Error('runMigrations fails', { cause: error });
     }
   }
 
