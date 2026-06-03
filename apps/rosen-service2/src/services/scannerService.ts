@@ -202,7 +202,6 @@ export class ScannerService extends AbstractScannerService {
    * initializes the singleton instance of ScannerService
    *
    * @static
-   * @param {DBService} [dbService]
    * @param {AbstractLogger} [logger]
    * @memberof ScannerService
    */

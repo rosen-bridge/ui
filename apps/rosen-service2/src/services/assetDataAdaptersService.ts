@@ -310,8 +310,8 @@ export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
                   } else {
                     newData[tokenId].forEach((item, index) => {
                       const finalItemIndex = finalData[tokenId]
-                        .map((addressBalance) => addressBalance.address)
-                        .indexOf(item.address);
+                        .map((addressBalance) => addressBalance?.address)
+                        .indexOf(item?.address);
                       if (finalItemIndex >= 0) {
                         finalData[tokenId][index] =
                           newData[tokenId][finalItemIndex];

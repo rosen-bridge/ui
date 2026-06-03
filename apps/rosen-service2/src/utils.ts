@@ -1,9 +1,12 @@
+import { AbstractLogger } from '@rosen-bridge/abstract-logger';
+import { DataSource } from '@rosen-bridge/extended-typeorm';
 import JsonBigInt from '@rosen-bridge/json-bigint';
 import { ErgoNetworkType } from '@rosen-bridge/scanner-interfaces';
+import { EventTriggerExtractor } from '@rosen-bridge/watcher-data-extractor';
 
 import { configs } from './configs/index';
 import { ERGO_METHOD_EXPLORER } from './constants';
-import { ErgoNetworkConfig } from './types/index';
+import { ChainConfigs, ErgoNetworkConfig } from './types/index';
 
 /**
  * map bigint value in data to string before inserting in redis
@@ -48,4 +51,34 @@ export const formatChainName = (
       return part.charAt(0).toUpperCase() + part.slice(1);
     })
     .join('');
+};
+
+/**
+ * create an event trigger extractor
+ * @param chain
+ * @param networkType
+ * @param url
+ * @param dataSource
+ * @param chianConfigs
+ * @returns EventTriggerExtractor
+ */
+export const createEventTrigger = (
+  chain: string,
+  networkType: ErgoNetworkType,
+  url: string,
+  dataSource: DataSource,
+  chianConfigs: ChainConfigs,
+  logger: AbstractLogger,
+) => {
+  return new EventTriggerExtractor(
+    `${chain}-extractor`,
+    dataSource,
+    networkType,
+    url,
+    chianConfigs.addresses.WatcherTriggerEvent,
+    chianConfigs.tokens.RWTId,
+    chianConfigs.addresses.WatcherPermit,
+    chianConfigs.addresses.Fraud,
+    logger.child(`${formatChainName(chain, 'camel')}EventTriggerExtractor`),
+  );
 };

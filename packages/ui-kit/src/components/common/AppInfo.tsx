@@ -1,19 +1,18 @@
 import React, { useState } from 'react';
 
-import { CircularProgress, Typography, IconButton } from '@mui/material';
-import { ExclamationCircle, InfoCircle } from '@rosen-bridge/icons';
+import { Typography } from '@mui/material';
 import { Network as NetworkType } from '@rosen-ui/types';
 
-import { useSnackbar } from '../../hooks';
+import { useToast } from '../../hooks';
+import { Avatar } from '../avatar';
 import { Icon, IconProps } from '../icon';
-import { Avatar } from './Avatar';
-import { Network } from './display';
+import { IconButton } from '../iconButton';
+import { Network } from '../network';
+import { Stack } from '../stack';
 import { Divider } from './Divider';
 import { EnhancedDialog } from './EnhancedDialog';
 import { EnhancedDialogContent } from './EnhancedDialogContent';
 import { EnhancedDialogTitle } from './EnhancedDialogTitle';
-import { Stack } from './Stack';
-import { SvgIcon } from './SvgIcon';
 
 type NetworkHeight = {
   network: NetworkType;
@@ -44,7 +43,7 @@ export const AppInfo = ({ children, resolver }: AppInfoProps) => {
 
   const [networks, setNetworks] = useState<NetworkHeight[]>();
 
-  const { openSnackbar } = useSnackbar();
+  const toast = useToast();
 
   const handleClick = async () => {
     if (!resolver) {
@@ -62,7 +61,10 @@ export const AppInfo = ({ children, resolver }: AppInfoProps) => {
 
       setOpen(true);
     } catch {
-      openSnackbar('Failed to load app information', 'error');
+      toast.add({
+        type: 'error',
+        description: 'Failed to load app information',
+      });
     } finally {
       setLoading(false);
     }
@@ -77,7 +79,7 @@ export const AppInfo = ({ children, resolver }: AppInfoProps) => {
         onClose={() => setOpen(false)}
       >
         <EnhancedDialogTitle
-          icon={<ExclamationCircle />}
+          icon="ExclamationCircle"
           onClose={() => setOpen(false)}
         >
           <Typography variant="h2" fontWeight="bold">
@@ -87,7 +89,7 @@ export const AppInfo = ({ children, resolver }: AppInfoProps) => {
         <EnhancedDialogContent>
           <Stack spacing={1}>
             <Divider borderStyle="dashed">
-              <Typography noWrap color="text.secondary" variant="body2">
+              <Typography noWrap color="text-secondary" variant="body2">
                 App Version
               </Typography>
             </Divider>
@@ -96,8 +98,8 @@ export const AppInfo = ({ children, resolver }: AppInfoProps) => {
                 {versions.map(({ label, icon, value }) => (
                   <Stack key={label} direction="row" justify="between">
                     <Stack direction="row" spacing={1} align="center">
-                      <Avatar size="32px" background="neutral.contrastText">
-                        <Icon name={icon} size="medium" />
+                      <Avatar size="32px" background="neutral-contrastText">
+                        <Icon name={icon} />
                       </Avatar>
                       <Typography noWrap variant="body1">
                         {label}
@@ -112,13 +114,13 @@ export const AppInfo = ({ children, resolver }: AppInfoProps) => {
             {networks && (
               <>
                 <Divider borderStyle="dashed">
-                  <Typography noWrap color="text.secondary" variant="body2">
+                  <Typography noWrap color="text-secondary" variant="body2">
                     Network Height
                   </Typography>
                 </Divider>
                 {networks.map(({ network, height }) => (
                   <Stack key={network} direction="row" justify="between">
-                    <Network name={network} />
+                    <Network value={network} />
                     <Typography>{height}</Typography>
                   </Stack>
                 ))}
@@ -130,17 +132,12 @@ export const AppInfo = ({ children, resolver }: AppInfoProps) => {
       </EnhancedDialog>
 
       <IconButton
+        color="inherit"
         disabled={loading}
-        sx={{ padding: '12px', color: 'inherit' }}
+        loading={loading}
         onClick={handleClick}
       >
-        {loading ? (
-          <CircularProgress size={24} color="inherit" />
-        ) : (
-          <SvgIcon size="medium">
-            <InfoCircle fill="currentColor" />
-          </SvgIcon>
-        )}
+        <Icon name="InfoCircle" />
       </IconButton>
     </div>
   );

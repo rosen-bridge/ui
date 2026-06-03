@@ -12,9 +12,8 @@ import { NETWORKS } from '@rosen-ui/constants';
 import 'constants';
 
 import { configs } from '../configs';
-import { createEventTrigger } from '../scanners/ergo';
 import { ChainChoices, ChainConfigs } from '../types';
-import { resolveErgoNetworkConfig } from '../utils';
+import { createEventTrigger, resolveErgoNetworkConfig } from '../utils';
 import {
   AbstractErgoExtractorsService,
   AbstractErgoScannerService,
@@ -84,7 +83,6 @@ export class ErgoExtractorService extends AbstractErgoExtractorsService {
    * @returns {Promise<boolean>} True if the service started successfully, false otherwise.
    */
   protected start = async (): Promise<boolean> => {
-    this.setStatus(ServiceStatus.started);
     const { networkType, url } = resolveErgoNetworkConfig();
     const ergoObservationExtractor = new ErgoObservationExtractor(
       configs.contracts.ergo.addresses.lock,
@@ -99,6 +97,7 @@ export class ErgoExtractorService extends AbstractErgoExtractorsService {
       url,
       this.dataSource,
       configs.contracts.ergo,
+      this.logger,
     );
     await this.ergoScanner.registerExtractor(ergoEventTriggerExtractor);
 
@@ -116,6 +115,7 @@ export class ErgoExtractorService extends AbstractErgoExtractorsService {
             url,
             this.dataSource,
             contract,
+            this.logger,
           ),
         );
       }
@@ -138,7 +138,6 @@ export class ErgoExtractorService extends AbstractErgoExtractorsService {
    * initializes the singleton instance of ErgoExtractorService
    *
    * @static
-   * @param {ErgoScanner} ergoScanner
    * @param {AbstractLogger} [logger]
    * @memberof ErgoExtractorService
    */

@@ -80,7 +80,6 @@ export class ErgoScannerService extends AbstractErgoScannerService {
   /**
    * Creates a new ErgoScannerService instance.
    *
-   * @param {DataSource} dataSource Database data source used by the scanner.
    * @param {AbstractLogger} [logger=new DummyLogger()] Optional logger instance.
    */
   protected constructor(logger: AbstractLogger = new DummyLogger()) {
@@ -90,7 +89,6 @@ export class ErgoScannerService extends AbstractErgoScannerService {
   /**
    * Initializes the singleton instance of the service.
    *
-   * @param {DataSource} dataSource Database data source.
    * @param {AbstractLogger} [logger] Optional logger instance.
    */
   static init = async (logger?: AbstractLogger): Promise<void> => {

@@ -3,10 +3,10 @@
 import { useCallback, useState } from 'react';
 
 import {
-  Grid,
+  GridContainer,
   HealthParamCard,
-  HealthParamCardSkeleton,
-  useSnackbar,
+  useResponsive,
+  useToast,
 } from '@rosen-bridge/ui-kit';
 import { HEALTH_DATA_REFRESH_INTERVAL } from '@rosen-ui/constants';
 import { fetcher } from '@rosen-ui/swr-helpers';
@@ -26,7 +26,7 @@ const Health = () => {
     },
   );
 
-  const { openSnackbar } = useSnackbar();
+  const toast = useToast();
 
   /**
    * revalidate info of health param with id `paramId`
@@ -61,7 +61,11 @@ const Health = () => {
         const healthParamIndex = data!.findIndex(
           (healthParam) => healthParam.id === paramId,
         );
-        openSnackbar(currentHealthParamInfo.title + ' status updated', 'info');
+
+        toast.add({
+          type: 'info',
+          description: currentHealthParamInfo.title + ' status updated',
+        });
 
         mutate([
           ...data!.slice(0, healthParamIndex),
@@ -72,37 +76,35 @@ const Health = () => {
 
       await trying();
     },
-    [data, mutate, openSnackbar],
+    [data, mutate, toast.add],
   );
 
-  return isLoading ? (
-    <Grid container spacing={3}>
-      <Grid size={{ mobile: 12, tablet: 6, laptop: 4 }} key={0}>
-        <HealthParamCardSkeleton />
-      </Grid>
-      <Grid size={{ mobile: 12, tablet: 6, laptop: 4 }} key={1}>
-        <HealthParamCardSkeleton />
-      </Grid>
-      <Grid size={{ mobile: 12, tablet: 6, laptop: 4 }} key={2}>
-        <HealthParamCardSkeleton />
-      </Grid>
-    </Grid>
-  ) : (
-    data && (
-      <Grid container spacing={3}>
-        {data
-          .sort((a, b) => (a.id.toLowerCase() > b.id.toLowerCase() ? 1 : -1))
-          .map((item) => (
-            <Grid size={{ mobile: 12, tablet: 6, laptop: 4 }} key={item.id}>
-              <HealthParamCard
-                {...item}
-                checking={checking.includes(item.id)}
-                handleCheckNow={() => handleCheckNow(item.id)}
-              />
-            </Grid>
-          ))}
-      </Grid>
-    )
+  const gridContainerMinWidth = useResponsive({
+    mobile: '100%',
+    tablet: '35%',
+    laptop: '25%',
+  });
+
+  return (
+    <GridContainer gap={3} minWidth={gridContainerMinWidth}>
+      {isLoading && (
+        <>
+          <HealthParamCard loading />
+          <HealthParamCard loading />
+          <HealthParamCard loading />
+        </>
+      )}
+      {data
+        ?.sort((a, b) => (a.id.toLowerCase() > b.id.toLowerCase() ? 1 : -1))
+        ?.map((item) => (
+          <HealthParamCard
+            key={item.id}
+            value={item}
+            checking={checking.includes(item.id)}
+            handleCheckNow={() => handleCheckNow(item.id)}
+          />
+        ))}
+    </GridContainer>
   );
 };
 

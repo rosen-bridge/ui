@@ -29,6 +29,7 @@ import {
   ETHEREUM_BLOCK_TIME,
 } from '../constants';
 import { ChainsKeys } from '../types';
+import { ChainScannersType, Chains } from '../types/index';
 import {
   AbstractHealthService,
   AbstractScannerService,
@@ -37,8 +38,8 @@ import {
 
 export class HealthService extends AbstractHealthService {
   name = AbstractHealthService.name;
-  private dbService: (scanner: string) => Promise<LastSavedBlock>;
-  private scannerService: AbstractScannerService;
+  private getLastSavedBlock: (scanner: string) => Promise<LastSavedBlock>;
+  private getScanner: (chain: keyof Chains) => ChainScannersType | undefined;
   protected healthCheck: HealthCheck;
   protected params: AbstractHealthCheckParam[] = [];
   protected dependencies: Dependency[] = [
@@ -63,8 +64,8 @@ export class HealthService extends AbstractHealthService {
   ];
 
   protected assemble = async (): Promise<boolean> => {
-    this.dbService = AbstractDBService.getInstance().getLastSavedBlock;
-    this.scannerService = AbstractScannerService.getInstance();
+    this.getLastSavedBlock = AbstractDBService.getInstance().getLastSavedBlock;
+    this.getScanner = AbstractScannerService.getInstance().getScanner;
     this.setStatus(ServiceStatus.dormant);
     return true;
   };
@@ -111,24 +112,27 @@ export class HealthService extends AbstractHealthService {
     chain: ChainsKeys,
     blockTimeAsMilliSecond: number,
   ) => {
-    this.params.push(
-      new ScannerSyncHealthCheckParam(
-        chain,
-        async () =>
-          this.dbService(this.scannerService.getScanner(chain)!.name()),
-        configs.healthCheck.scanner.warnDiff,
-        configs.healthCheck.scanner.criticalDiff,
-        blockTimeAsMilliSecond * 1000,
-      ),
-    );
+    const scanner = this.getScanner(chain);
+
+    if (!scanner) {
+      this.logger.warn(`Scanner not found for chain: ${chain}.`);
+    } else {
+      this.params.push(
+        new ScannerSyncHealthCheckParam(
+          chain,
+          async () => this.getLastSavedBlock(scanner.name()),
+          configs.healthCheck.scanner.warnDiff,
+          configs.healthCheck.scanner.criticalDiff,
+          blockTimeAsMilliSecond * 1000,
+        ),
+      );
+    }
   };
 
   /**
    * initializes the singleton instance of HealthService
    *
    * @static
-   * @param {DBService} [dbService]
-   * @param {ScannerService} [ergoScannerService]
    * @memberof HealthService
    */
   static readonly init = (logger?: AbstractLogger) => {

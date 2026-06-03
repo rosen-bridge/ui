@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import { useIsDarkMode, useIsMobile } from '../../hooks';
+import { useBreakpoint, useIsDarkMode } from '../../hooks';
 
 type Palette = {
   main: string;
@@ -11,7 +11,7 @@ type Palette = {
 };
 
 export const AppLogo = () => {
-  const isMobile = useIsMobile();
+  const isTabletDown = useBreakpoint('tablet-down');
 
   const isDarkMode = useIsDarkMode();
 
@@ -33,7 +33,7 @@ export const AppLogo = () => {
         };
   }, [isDarkMode]);
 
-  return isMobile ? (
+  return isTabletDown ? (
     <AppLogoHorizontal palette={palette} />
   ) : (
     <AppLogoVertical palette={palette} />

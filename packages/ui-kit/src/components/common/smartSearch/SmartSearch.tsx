@@ -8,19 +8,18 @@ import {
   useState,
 } from 'react';
 
-import { Card } from '@mui/material';
-import { Search, Times } from '@rosen-bridge/icons';
+import { Card, styled } from '@mui/material';
 
-import { styled } from '../../../styling';
-import { IconButton } from '../../base';
+import { CloseButton } from '../../closeButton';
+import { Icon } from '../../icon';
+import { IconButton } from '../../iconButton';
+import { VirtualScroll } from '../../virtualScroll';
 import { Divider } from '../Divider';
-import { SvgIcon } from '../SvgIcon';
 import { Chips } from './Chips';
 import { History, HistoryRef } from './History';
 import { Picker } from './Picker';
 import { Filter, Input, Selected } from './types';
 import { parseFilter } from './utils';
-import { VirtualScroll } from './VirtualScroll';
 
 const Root = styled(Card)(({ theme }) => ({
   flexGrow: 1,
@@ -351,20 +350,14 @@ export const SmartSearch = ({
         </Container>
       </VirtualScroll>
       {hasFilters && (
-        <IconButton disabled={disabled} onClick={handleClearAll}>
-          <SvgIcon>
-            <Times />
-          </SvgIcon>
-        </IconButton>
+        <CloseButton disabled={disabled} onClick={handleClearAll} />
       )}
       <IconButton
         disabled={disabled}
         ref={$search}
         onClick={() => onChange(selected)}
       >
-        <SvgIcon>
-          <Search />
-        </SvgIcon>
+        <Icon name="Search" />
       </IconButton>
     </Root>
   );

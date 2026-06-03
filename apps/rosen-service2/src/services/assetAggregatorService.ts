@@ -58,7 +58,7 @@ export class AssetAggregatorService extends AbstractAssetAggregatorService {
     this.assetAggregator = new AssetAggregator(
       AbstractTokenMapService.getInstance().getTokenMap(),
       AbstractDBService.getInstance().getDataSource(),
-      this.logger,
+      this.logger.child('assetAggregator'),
     );
     this.setStatus(ServiceStatus.dormant);
     return true;

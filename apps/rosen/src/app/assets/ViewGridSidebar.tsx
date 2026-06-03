@@ -1,4 +1,3 @@
-import { BitcoinCircle } from '@rosen-bridge/icons';
 import {
   Amount,
   Card,
@@ -25,7 +24,7 @@ const Content = ({ value }: ViewGridSidebarProps) => {
   if (!value) {
     return (
       <Center style={{ minHeight: 'calc(100vh - 304px)' }}>
-        <Typography variant="body1" color="text.secondary">
+        <Typography variant="body1" color="text-secondary">
           Select an event to see its details.
         </Typography>
       </Center>
@@ -33,17 +32,12 @@ const Content = ({ value }: ViewGridSidebarProps) => {
   }
 
   return (
-    <Columns width="250px" count={2} rule gap="32px">
+    <Columns width="250px" count={2} rule gap={4}>
       <Label label="Token" orientation="horizontal">
-        <Token
-          name={value.name}
-          ergoSideTokenId={value.ergoSideTokenId}
-          href={value.tokenUrl}
-          reverse
-        />
+        <Token value={value.id} href={value.tokenUrl} variant="reverse" />
       </Label>
       <Label label="Network">
-        <Network name={value.chain} reverse />
+        <Network value={value.chain} variant="reverse" />
       </Label>
       <Label label="Locked" orientation="horizontal">
         <Amount value={value.lockedAmount} />
@@ -68,7 +62,7 @@ const Content = ({ value }: ViewGridSidebarProps) => {
 const DetailsDrawer = ({ value, onClose }: ViewGridSidebarProps) => {
   return (
     <EnhancedDialog open={!!value} stickOn="laptop" onClose={onClose}>
-      <EnhancedDialogTitle icon={<BitcoinCircle />} onClose={onClose}>
+      <EnhancedDialogTitle icon="BitcoinCircle" onClose={onClose}>
         Asset Details
       </EnhancedDialogTitle>
       <EnhancedDialogContent>
@@ -86,8 +80,7 @@ const DetailsSidebar = ({ value }: ViewGridSidebarProps) => {
   return (
     <Card
       ref={stickyRef}
-      separated
-      backgroundColor="background.paper"
+      variant="separated"
       style={{
         width: '330px',
         marginLeft: '16px',

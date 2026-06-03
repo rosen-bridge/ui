@@ -1,0 +1,29 @@
+.RosenTabs.actions {
+  background-color: var(--rosen-palette-background-paper);
+  margin: 40px -32px 16px;
+  padding: 0 32px;
+
+  .RosenTabsList {
+    background-color: var(--rosen-palette-primary-main);
+    border-radius: 16px;
+    margin: -16px 0;
+    min-width: 32.3%;
+  }
+
+  .RosenTabsTab {
+    letter-spacing: 0.02857em;
+    text-transform: uppercase;
+    gap: 8px;
+    min-height: 48px;
+    justify-content: start;
+    text-align: left;
+    color: var(--rosen-palette-background-paper);
+    font-size: 0.875rem;
+    padding: 9px 16px;
+
+    &[data-active] {
+      background-color: var(--rosen-palette-background-paper);
+      color: var(--rosen-palette-primary-dark);
+    }
+  }
+}

@@ -1,16 +1,16 @@
 'use client';
 
-import { useMemo } from 'react';
+import { CSSProperties, useMemo } from 'react';
 
 import {
   Amount,
-  Box as BoxMui,
+  Box,
   Columns,
   Duration,
   Identifier,
-  InjectOverrides,
   Label,
   LabelGroup,
+  useResponsive,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 import { fetcher } from '@rosen-ui/swr-helpers';
@@ -18,8 +18,6 @@ import { getTxURL } from '@rosen-ui/utils';
 import useSWR from 'swr';
 
 import { Section } from './Section';
-
-const Box = InjectOverrides(BoxMui);
 
 export const TransactionsAndFees = ({ id }: { id: string }) => {
   const { error, data, isLoading, mutate } = useSWR(
@@ -64,25 +62,28 @@ export const TransactionsAndFees = ({ id }: { id: string }) => {
     return allTxs;
   }, [data]);
 
+  const boxStyle = useResponsive<CSSProperties>({
+    mobile: { columnSpan: 'all' },
+    desktop: { columnSpan: 'unset' },
+  });
+
+  const columnsCount = useResponsive({
+    mobile: 1,
+    tablet: 1,
+    laptop: 2,
+    desktop: 3,
+  });
+
   return (
     <Section error={error} load={mutate} title="Transactions and Fees">
-      <Columns
-        gap="24px"
-        overrides={{
-          mobile: { count: 1 },
-          tablet: { count: 1 },
-          laptop: { count: 2 },
-          desktop: { count: 3 },
-        }}
-        rule
-      >
+      <Columns gap="24px" count={columnsCount} rule>
         <div>
           <Label
             orientation="horizontal"
             label="Duration"
             info="How long it takes from when the lock transaction is recorded on the blockchain until the reward transaction is confirmed. (Note: the actual payment may arrive before this full interval.)"
           >
-            <Duration loading={isLoading} fallBack="-" />
+            <Duration fallback="-" loading={isLoading} />
           </Label>
           <Label label="Total Emission">
             <Amount
@@ -153,12 +154,7 @@ export const TransactionsAndFees = ({ id }: { id: string }) => {
             />
           </Label>
         </div>
-        <Box
-          style={{ columnSpan: 'all' }}
-          overrides={{
-            desktop: { style: { columnSpan: 'unset' } },
-          }}
-        >
+        <Box style={boxStyle}>
           <Label label="Tx IDs" />
           <LabelGroup>
             {txIds.map(({ type, label, chain, txId }) => (

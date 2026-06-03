@@ -69,7 +69,6 @@ export class DBService extends AbstractDBService {
   protected dependencies: Dependency[] = [];
 
   protected start = async (): Promise<boolean> => {
-    this.setStatus(ServiceStatus.started);
     this.logger.debug('running data source migrations');
     await this.dataSource.runMigrations();
     this.logger.info('data source migrations completed');

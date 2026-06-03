@@ -16,11 +16,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 import { configs } from '../configs';
-import {
-  TOKEN_MAP_EXTRACTOR_LOGGER_NAME,
-  TOKEN_MAP_EXTRACTOR_ID,
-  TOKEN_MAP_REDIS_KEY,
-} from '../constants';
+import { TOKEN_MAP_EXTRACTOR_ID, TOKEN_MAP_REDIS_KEY } from '../constants';
 import { resolveErgoNetworkConfig } from '../utils';
 import {
   AbstractErgoScannerService,
@@ -71,7 +67,6 @@ export class TokenMapService extends AbstractTokenMapService {
    * initializes the singleton instance of TokenMapService
    *
    * @static
-   * @param {ErgoScanner} ergoScanner
    * @param {AbstractLogger} [logger]
    * @memberof TokenMapService
    */
@@ -140,7 +135,7 @@ export class TokenMapService extends AbstractTokenMapService {
       networkType,
       configs.contracts.ergo.addresses.tokenMap,
       [configs.contracts.ergo.tokens.tokenMap],
-      this.logger.child(TOKEN_MAP_EXTRACTOR_LOGGER_NAME),
+      this.logger.child('tokenMapBoxExtractor'),
     );
 
     await this.ergoScanner.registerExtractor(tokenMapBoxExtractor);
