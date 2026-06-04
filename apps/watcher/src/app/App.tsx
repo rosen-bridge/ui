@@ -13,6 +13,8 @@ import {
   App as AppBase,
   ApiKeyProvider,
   FrameworkProvider,
+  ThemeProvider,
+  ToastProvider,
 } from '@rosen-bridge/ui-kit';
 import { mockMiddlewareFactory } from '@rosen-ui/swr-helpers';
 import { SWRConfig } from 'swr';
@@ -43,19 +45,23 @@ export const App = ({ children }: PropsWithChildren) => {
       >
         <UIKitProvider>
           <ApiKeyProvider>
-            <AppBase sidebar={<Sidebar />} theme={theme}>
-              <Favicon />
-              <SWRConfig
-                value={{
-                  use:
-                    process.env.NEXT_PUBLIC_USE_MOCKED_APIS === 'true'
-                      ? [mockMiddlewareFactory(mockedData)]
-                      : [],
-                }}
-              >
-                {children}
-              </SWRConfig>
-            </AppBase>
+            <ThemeProvider theme={theme}>
+              <ToastProvider>
+                <AppBase sidebar={<Sidebar />}>
+                  <Favicon />
+                  <SWRConfig
+                    value={{
+                      use:
+                        process.env.NEXT_PUBLIC_USE_MOCKED_APIS === 'true'
+                          ? [mockMiddlewareFactory(mockedData)]
+                          : [],
+                    }}
+                  >
+                    {children}
+                  </SWRConfig>
+                </AppBase>
+              </ToastProvider>
+            </ThemeProvider>
           </ApiKeyProvider>
         </UIKitProvider>
       </FrameworkProvider>
