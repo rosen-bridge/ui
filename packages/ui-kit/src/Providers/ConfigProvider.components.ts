@@ -45,6 +45,7 @@ import {
   RelativeTimeProps,
   SkeletonProps,
   SubmitButtonProps,
+  StackProps,
   TableGridProps,
   TableGridBodyProps,
   TableGridBodyDetailsProps,
@@ -113,6 +114,7 @@ export type Components = {
   QrCodeDialog: QrCodeDialogProps;
   RelativeTime: RelativeTimeProps;
   Skeleton: SkeletonProps;
+  Stack: StackProps;
   SubmitButton: SubmitButtonProps;
   TableGrid: TableGridProps;
   TableGridBody: TableGridBodyProps;

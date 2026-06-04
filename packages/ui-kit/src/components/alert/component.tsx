@@ -73,7 +73,6 @@ export const Alert = (props: AlertProps) => {
     return () => clearTimeout(timer);
   }, [timeout, onClose]);
 
-  void action;
   void icon;
 
   return (
@@ -86,11 +85,14 @@ export const Alert = (props: AlertProps) => {
       <AlertMUI
         severity={severity}
         action={
-          dismissible && (
-            <IconButton size="small" onClick={close}>
-              <Icon name="Times" size="small" />
-            </IconButton>
-          )
+          <>
+            {action}
+            {dismissible && (
+              <IconButton size="small" onClick={close}>
+                <Icon name="Times" size="small" />
+              </IconButton>
+            )}
+          </>
         }
         variant={variant}
       >
