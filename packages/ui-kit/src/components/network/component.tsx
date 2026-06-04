@@ -1,10 +1,9 @@
 import { FC, SVGAttributes, useMemo } from 'react';
 
+import { Icon, IconProps, Typography, TypographyProps } from '@/components';
 import { useConfig } from '@/hooks';
 import { ElementBaseProps, OverridableType } from '@/types';
 
-import { Icon, IconProps } from '../icon';
-import { Typography, TypographyProps } from '../typography';
 import { Logo } from './logo';
 import './styles.css';
 

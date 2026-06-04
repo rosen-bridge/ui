@@ -1,13 +1,12 @@
 import { QRCodeCanvas } from 'qrcode.react';
 
+import { Button, Stack } from '@/components';
 import { useConfig } from '@/hooks';
 import { ElementBaseProps, OverridableType } from '@/types';
 
-import { Button } from '../button';
 import { Dialog } from '../dialog';
 import { DialogContent } from '../dialogContent';
 import { DialogFooter } from '../dialogFooter';
-import { Stack } from '../stack';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface QrCodeDialogOverrides {}
