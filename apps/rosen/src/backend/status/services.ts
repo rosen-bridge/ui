@@ -118,30 +118,76 @@ const getNumber = (key: string): number | undefined => {
   return process.env[key] ? parseFloat(process.env[key]!) : undefined;
 };
 
+const thresholdsMapping = {
+  requiredParticipants: getNumber('REQUIRED_PARTICIPANTS') ?? 6,
+  minimumParticipants: getNumber('MINIMUM_PARTICIPANTS') ?? 1,
+  vetoNumber: getNumber('VETO_NUMBER') ?? 5,
+};
+
+const customEventThresholds = getThresholdFromEnv<AggregateEventStatus>(
+  'EVENT_STATUS_THRESHOLDS',
+);
+const customTxThresholds = getThresholdFromEnv<AggregateTxStatus>(
+  'TX_STATUS_THRESHOLDS',
+);
+
+const customEventThresholdMap = new Map(
+  customEventThresholds?.map((t) => [t.key, t.count]) ?? [],
+);
+const customTxThresholdMap = new Map(
+  customTxThresholds?.map((t) => [t.key, t.count]) ?? [],
+);
+
+const defaultEventStatusMapping: Partial<Record<AggregateEventStatus, number>> =
+  {
+    [AggregateEventStatus.finished]: thresholdsMapping.minimumParticipants,
+    [AggregateEventStatus.inReward]: thresholdsMapping.requiredParticipants,
+    [AggregateEventStatus.pendingReward]: thresholdsMapping.minimumParticipants,
+    [AggregateEventStatus.inPayment]: thresholdsMapping.requiredParticipants,
+    [AggregateEventStatus.rejected]: thresholdsMapping.vetoNumber,
+    [AggregateEventStatus.timeout]: thresholdsMapping.vetoNumber,
+    [AggregateEventStatus.reachedLimit]: thresholdsMapping.vetoNumber,
+    [AggregateEventStatus.paymentWaiting]: thresholdsMapping.vetoNumber,
+    [AggregateEventStatus.rewardWaiting]: thresholdsMapping.vetoNumber,
+    [AggregateEventStatus.pendingPayment]:
+      thresholdsMapping.minimumParticipants,
+  };
+
+const defaultTxStatusMapping: Record<AggregateTxStatus, number> = {
+  [AggregateTxStatus.completed]: thresholdsMapping.minimumParticipants,
+  [AggregateTxStatus.invalid]: thresholdsMapping.vetoNumber,
+  [AggregateTxStatus.sent]: thresholdsMapping.requiredParticipants,
+  [AggregateTxStatus.signed]: thresholdsMapping.minimumParticipants,
+  [AggregateTxStatus.inSign]: thresholdsMapping.requiredParticipants,
+};
+
+const eventStatusThresholds = Object.values(AggregateEventStatus)
+  .filter((status) => status !== AggregateEventStatus.waitingForConfirmation)
+  .map((status) => {
+    const customCount = customEventThresholdMap.get(status);
+    if (customCount !== undefined) {
+      return { key: status, count: customCount };
+    }
+    const count = defaultEventStatusMapping[status];
+    if (count === undefined)
+      throw new Error(
+        `Missing default threshold mapping for event status: ${status}`,
+      );
+    return { key: status, count };
+  });
+
+const txStatusThresholds = Object.values(AggregateTxStatus).map((status) => {
+  const customCount = customTxThresholdMap.get(status);
+  if (customCount !== undefined) {
+    return { key: status, count: customCount };
+  }
+  const count = defaultTxStatusMapping[status];
+  return { key: status, count };
+});
+
 export const publicStatusConfigs = {
   timeoutThresholdSeconds: getNumber('TIMEOUT_THRESHOLD_SECONDS') ?? 30,
   allowedPks: (process.env['ALLOWED_PKS'] ?? '').split(','),
-  eventStatusThresholds: getThresholdFromEnv<AggregateEventStatus>(
-    'EVENT_STATUS_THRESHOLDS',
-  ) ?? [
-    { key: AggregateEventStatus.finished, count: 6 },
-    { key: AggregateEventStatus.inReward, count: 3 },
-    { key: AggregateEventStatus.pendingReward, count: 3 },
-    { key: AggregateEventStatus.inPayment, count: 6 },
-    { key: AggregateEventStatus.rejected, count: 5 },
-    { key: AggregateEventStatus.timeout, count: 5 },
-    { key: AggregateEventStatus.reachedLimit, count: 5 },
-    { key: AggregateEventStatus.paymentWaiting, count: 5 },
-    { key: AggregateEventStatus.rewardWaiting, count: 5 },
-    { key: AggregateEventStatus.pendingPayment, count: 3 },
-  ],
-  txStatusThresholds: getThresholdFromEnv<AggregateTxStatus>(
-    'TX_STATUS_THRESHOLDS',
-  ) ?? [
-    { key: AggregateTxStatus.completed, count: 6 },
-    { key: AggregateTxStatus.invalid, count: 6 },
-    { key: AggregateTxStatus.sent, count: 6 },
-    { key: AggregateTxStatus.signed, count: 3 },
-    { key: AggregateTxStatus.inSign, count: 6 },
-  ],
+  eventStatusThresholds,
+  txStatusThresholds,
 };
