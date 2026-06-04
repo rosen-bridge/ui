@@ -9,8 +9,9 @@
   "license": "MIT",
   "scripts": {
     "build": "next build",
-    "build:vercel": "cd ../../ && ./build.sh rosen && cd apps/rosen && node ./configs/generate.mjs && npm run build",
+    "build:vercel": "cd ../../ && ./build.sh rosen && cd apps/rosen && node ./configs/generate.mjs && npm run db:migration && npm run build",
     "coverage": "npm run test -- --run --coverage",
+    "db:migration": "node --import tsx ./scripts/migration.js",
     "dev": "next dev",
     "get-config": "npx @rosen-bridge/cli download-assets --chain-type public-launch --out configs --include-prereleases && node ./configs/generate.mjs",
     "lint": "eslint --fix . && npm run prettify",
