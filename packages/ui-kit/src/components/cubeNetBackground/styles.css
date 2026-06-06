@@ -1,0 +1,27 @@
+.RosenCubeNetBackground {
+  position: relative;
+  border-radius: inherit;
+  & > svg {
+    position: absolute;
+    width: 100%;
+    /* zIndex: -1; */
+    left: 0;
+    &.top {
+      top: 0;
+    }
+    &.bottom {
+      bottom: 0;
+      transform: rotate(180deg);
+    }
+  }
+}
+
+[data-theme='light'] .RosenCubeNetBackground {
+  background-image: linear-gradient(
+    180deg,
+    var(--rosen-palette-primary-light),
+    var(--rosen-palette-background),
+    var(--rosen-palette-background),
+    var(--rosen-palette-secondary-light)
+  );
+}

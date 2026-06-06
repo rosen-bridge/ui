@@ -1,11 +1,9 @@
-import React from 'react';
+import { useTheme } from '@/hooks';
 
-import { useTheme } from '@rosen-bridge/ui-kit';
-
-interface CubeNetSvgProps {
+type CubeNetSvgProps = {
   className?: string;
   color: 'primary' | 'secondary';
-}
+};
 
 export const CubeNetSvg = ({ className, color }: CubeNetSvgProps) => {
   const theme = useTheme();
