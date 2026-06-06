@@ -1,0 +1,28 @@
+diff --git a/node_modules/@rosen-bridge/winston-logger/dist/types.d.ts b/node_modules/@rosen-bridge/winston-logger/dist/types.d.ts
+index 5ce2dbb..2f9b028 100644
+--- a/node_modules/@rosen-bridge/winston-logger/dist/types.d.ts
++++ b/node_modules/@rosen-bridge/winston-logger/dist/types.d.ts
+@@ -22,6 +22,10 @@ export interface FileTransportOptions extends BaseTransportOptions<'file'> {
+     maxFiles: string;
+     /** The minimum log level for this transport */
+     level: string;
++    /** Whether to create a symlink to the current log file (e.g., true) */
++    createSymlink?: boolean;
++    /** Optional name for the symlink file */
++    symlinkName?: string;
+ }
+ /**
+  * Configuration options for Grafana Loki logging transport.
+diff --git a/node_modules/@rosen-bridge/winston-logger/dist/winstonLogger.js b/node_modules/@rosen-bridge/winston-logger/dist/winstonLogger.js
+index d4e34fa..18a9235 100644
+--- a/node_modules/@rosen-bridge/winston-logger/dist/winstonLogger.js
++++ b/node_modules/@rosen-bridge/winston-logger/dist/winstonLogger.js
+@@ -39,6 +39,8 @@ const logTransports = {
+         maxSize: transportOptions.maxSize,
+         maxFiles: transportOptions.maxFiles,
+         level: transportOptions.level,
++        createSymlink: transportOptions.createSymlink,
++        symlinkName: transportOptions.symlinkName,
+     }),
+     /**
+      * Creates a Loki transport for sending logs to Grafana Loki.
