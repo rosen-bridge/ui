@@ -1,8 +1,8 @@
 import { AppInfo, IconProps } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 
-import { CONTRACT_VERSION } from '../../configs';
-import packageJson from '../../package.json';
+import { CONTRACT_VERSION } from '../../../configs';
+import packageJson from '../../../package.json';
 
 export const VersionConfig = () => {
   const onFetch = async () => {

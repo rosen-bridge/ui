@@ -9,13 +9,15 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { PropsWithChildren } from 'react';
 
 import { NoSsr } from '@mui/material';
-import { App as AppBase, FrameworkProvider } from '@rosen-bridge/ui-kit';
+import {
+  FrameworkProvider,
+  ThemeProvider,
+  ToastProvider,
+} from '@rosen-bridge/ui-kit';
 
+import { TokenMapProvider } from '@/hooks';
 import { theme } from '@/theme/theme';
 import { UIKitProvider } from '@/uiKitProvider';
-
-import { TokenMapProvider } from '../hooks';
-import { Sidebar } from './Sidebar';
 
 export const App = ({ children }: PropsWithChildren) => {
   const pathname = usePathname();
@@ -36,9 +38,9 @@ export const App = ({ children }: PropsWithChildren) => {
       >
         <TokenMapProvider>
           <UIKitProvider>
-            <AppBase sidebar={<Sidebar />} theme={theme}>
-              {children}
-            </AppBase>
+            <ThemeProvider theme={theme}>
+              <ToastProvider>{children}</ToastProvider>
+            </ThemeProvider>
           </UIKitProvider>
         </TokenMapProvider>
       </FrameworkProvider>
