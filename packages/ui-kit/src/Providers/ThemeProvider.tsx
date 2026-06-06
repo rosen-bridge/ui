@@ -1,6 +1,6 @@
 import { ReactNode, createContext, useMemo, useState } from 'react';
 
-import { Theme, useMediaQuery } from '@mui/material';
+import { CssBaseline, Theme, useMediaQuery } from '@mui/material';
 import {
   ThemeProvider as MuiThemeProvider,
   createTheme,
@@ -56,7 +56,10 @@ export const ThemeProvider = ({
 
   return (
     <ThemeTogglerContext.Provider value={{ mode, toggle }}>
-      <MuiThemeProvider theme={final}>{children}</MuiThemeProvider>
+      <MuiThemeProvider theme={final}>
+        <CssBaseline />
+        {children}
+      </MuiThemeProvider>
     </ThemeTogglerContext.Provider>
   );
 };
