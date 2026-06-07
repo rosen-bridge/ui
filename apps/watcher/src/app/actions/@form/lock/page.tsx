@@ -1,17 +1,17 @@
 'use client';
 
-import { useState, useEffect, useMemo, ReactNode } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 
 import {
   Alert,
-  AlertProps,
   ApiKeyDialogWarning,
   Link,
   Stack,
   SubmitButton,
   Typography,
   useApiKey,
+  useToast,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 import { mutatorWithHeaders, fetcher } from '@rosen-ui/swr-helpers';
@@ -38,6 +38,8 @@ import {
 } from '../../TokenAmountTextField';
 
 const LockForm = () => {
+  const toast = useToast();
+
   const { rsnToken, isLoading: isRsnTokenLoading } = useRsnToken();
   const { token: ergToken, isLoading: isErgTokenLoading } = useToken('erg');
   const { data: info, isLoading: isInfoLoading } = useSWR<ApiInfoResponse>(
@@ -60,12 +62,6 @@ const LockForm = () => {
 
   const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
 
-  const [alertData, setAlertData] = useState<{
-    severity: AlertProps['severity'];
-    message: ReactNode;
-    more?: () => string;
-  } | null>(null);
-
   const {
     trigger,
     isMutating: isLockPending,
@@ -77,9 +73,11 @@ const LockForm = () => {
 
   useEffect(() => {
     if (!isRsnTokenLoading && !rsnToken?.amount) {
-      setAlertData({
-        severity: 'error',
-        message: "You don't have any RSN.",
+      toast.add({
+        type: 'error',
+        dismissible: true,
+        description: "You don't have any RSN.",
+        timeout: 0,
       });
     }
   }, [isRsnTokenLoading, rsnToken]);
@@ -107,9 +105,9 @@ const LockForm = () => {
       });
 
       if (response?.txId) {
-        setAlertData({
-          severity: 'success',
-          message: (
+        toast.add({
+          type: 'success',
+          description: (
             <>
               Lock operation is in progress. Wait for tx [
               <Link
@@ -131,14 +129,16 @@ const LockForm = () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       if (error?.response?.status === 403) {
-        setAlertData({
-          severity: 'error',
-          message: 'The Api key is not correct',
+        toast.add({
+          type: 'error',
+          description: 'The Api key is not correct',
         });
       } else {
-        setAlertData({
-          severity: 'error',
-          message: error.message,
+        toast.add({
+          type: 'error',
+          description: error.message,
+          dismissible: true,
+          timeout: 0,
           more: () => JSON.stringify(error.response?.data, null, 2),
         });
       }
@@ -148,17 +148,6 @@ const LockForm = () => {
   const onSubmit: SubmitHandler<TokenAmountCompatibleFormSchema> = async () => {
     setConfirmationModalOpen(true);
   };
-
-  const renderAlert = () => (
-    <Alert
-      open={!!alertData?.severity}
-      severity={alertData?.severity}
-      onClose={() => setAlertData(null)}
-    >
-      {alertData?.message}
-      <CopyDetails more={alertData?.more} />
-    </Alert>
-  );
 
   const disabled =
     isRsnTokenLoading ||
@@ -258,7 +247,6 @@ const LockForm = () => {
     <FormProvider {...formMethods}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Stack spacing={2}>
-          {renderAlert()}
           <ApiKeyDialogWarning />
           {renderTokenAmountTextField()}
           {renderCollateralAlert()}

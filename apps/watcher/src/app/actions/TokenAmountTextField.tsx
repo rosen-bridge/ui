@@ -4,8 +4,9 @@ import { useController, useFormContext } from 'react-hook-form';
 import {
   Button,
   CircularProgress,
+  Divider,
   InputAdornment,
-  Link,
+  Stack,
   TextField,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
@@ -114,32 +115,34 @@ export const TokenAmountTextField = ({
 
   return (
     <TextField
+      variant="filled"
       label="Amount"
       {...amountField}
       disabled={disabled}
       error={!!fieldState.error}
-      helperText={
-        fieldState.error?.message ||
-        (token && (
-          <>
-            <Link href="#" onClick={setAmountToMaxAvailable}>
-              {getMaxAvailableTokenAmount()}
-            </Link>{' '}
-            {token.name} available
-          </>
-        ))
-      }
+      helperText={fieldState.error?.message}
       InputProps={{
+        disableUnderline: true,
         endAdornment: token && (
-          <InputAdornment position="end">
+          <Stack direction="row" align="center" justify="between" spacing={1.5}>
+            <Divider
+              orientation="vertical"
+              style={{ alignSelf: 'stretch', height: 'auto' }}
+            />
             <Button
+              disabled={disabled}
+              loading={loading}
               size="small"
               onClick={setAmountToMaxAvailable}
-              disabled={disabled}
             >
-              Max
+              <span style={{ whiteSpace: 'nowrap' }}>
+                Use all
+                <br />
+                {getMaxAvailableTokenAmount()}{' '}
+                <small style={{ textTransform: 'none' }}>{token.name}</small>
+              </span>
             </Button>
-          </InputAdornment>
+          </Stack>
         ),
         startAdornment: loading && (
           <InputAdornment position="start">

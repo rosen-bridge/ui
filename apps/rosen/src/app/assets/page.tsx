@@ -16,6 +16,7 @@ import {
   ViewToggle,
   EmptyState,
   useToast,
+  ViewToggleType,
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import { serializeError } from 'serialize-error';
@@ -121,7 +122,7 @@ const Assets = () => {
       <ViewToggle
         disabled={isLoading}
         value={collection.view}
-        onChange={(value) => collection.setView(value)}
+        onChange={(value: ViewToggleType) => collection.setView(value)}
       />
     ),
     [collection.view, isLoading],

@@ -291,14 +291,15 @@ const AmountBase = ({
                 </Typography>
               </Tooltip>
             )}
-            {!error && !parts && !!fallback && value === undefined && (
-              <>{fallback}</>
-            )}
+            {!error &&
+              !parts &&
+              !!fallback &&
+              value === undefined &&
+              !loading && <>{fallback}</>}
           </>
           {unit && (
             <Typography
               component="div"
-              loading={loading}
               style={{ fontSize: '75%', opacity: 0.7 }}
             >
               {unit}

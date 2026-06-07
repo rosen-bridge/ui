@@ -118,16 +118,17 @@ export const HealthParamCard = ({
           display: 'flex',
           flexFlow: 'column',
           flex: '1 1 0%',
-          gap: '8px',
         }}
       >
-        <Typography>{value?.title}</Typography>
+        <Typography gutterBottom>{value?.title}</Typography>
         <Typography variant="body2">{value?.description}</Typography>
         {value?.details && (
           <Alert
             variant="filled"
             severity={color as AlertProps['severity']}
             style={{
+              marginTop: '16px',
+              marginBottom: '16px',
               wordBreak: 'normal',
               overflowWrap: 'break-word',
             }}

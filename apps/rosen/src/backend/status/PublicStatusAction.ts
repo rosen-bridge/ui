@@ -13,6 +13,7 @@ import {
   GuardStatusEntity,
   TxEntity,
 } from '@rosen-ui/public-status';
+import * as Sentry from '@sentry/nextjs';
 import crypto from 'crypto';
 
 import AggregatedStatusAction from './AggregatedStatusAction';
@@ -190,17 +191,39 @@ export class PublicStatusAction {
         ),
       ];
 
+      const missingTx =
+        !aggregatedStatusNew.tx &&
+        [
+          AggregateEventStatus.inPayment,
+          AggregateEventStatus.inReward,
+        ].includes(aggregatedStatusNew.status);
+
+      if (missingTx) {
+        Sentry.withScope((scope) => {
+          scope.setTag('layer', 'public-event-status');
+          Sentry.logger.debug(
+            "Aggregated status did not update since the tx is expected based on the event status but it's missing",
+            {
+              newStatuses,
+              eventStatusThresholds,
+              txStatusThresholds,
+            },
+          );
+        });
+      }
+
       // if eventId is new or aggregated status has changed, update the aggregated status
       if (
-        guardsStatus.items.length === 0 ||
-        Utils.aggregatedStatusesMatch(
-          Utils.calcAggregatedStatus(
-            guardsStatus.items,
-            eventStatusThresholds,
-            txStatusThresholds,
-          ),
-          aggregatedStatusNew,
-        ) === false
+        (guardsStatus.items.length === 0 ||
+          Utils.aggregatedStatusesMatch(
+            Utils.calcAggregatedStatus(
+              guardsStatus.items,
+              eventStatusThresholds,
+              txStatusThresholds,
+            ),
+            aggregatedStatusNew,
+          ) === false) &&
+        !missingTx
       ) {
         const aggregatedStatusTx = aggregatedStatusNew.tx
           ? {

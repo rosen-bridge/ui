@@ -1,16 +1,15 @@
 'use client';
 
 import Link from 'next/link';
-import { useMemo, useState, useEffect, ReactNode } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 
 import {
-  Alert,
-  AlertProps,
   SubmitButton,
   useApiKey,
   ApiKeyDialogWarning,
   Stack,
+  useToast,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 import { fetcher, mutatorWithHeaders } from '@rosen-ui/swr-helpers';
@@ -34,6 +33,8 @@ import {
 } from '../../TokenAmountTextField';
 
 const UnlockForm = () => {
+  const toast = useToast();
+
   const { data: info, isLoading: isInfoLoading } = useSWR<ApiInfoResponse>(
     '/info',
     fetcher,
@@ -57,12 +58,6 @@ const UnlockForm = () => {
   );
 
   const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
-
-  const [alertData, setAlertData] = useState<{
-    severity: AlertProps['severity'];
-    message: ReactNode;
-    more?: () => string;
-  } | null>(null);
 
   const { trigger, isMutating: isUnlockPending } = useSWRMutation<
     ApiPermitReturnResponse,
@@ -89,13 +84,13 @@ const UnlockForm = () => {
       getNonDecimalString(formData.amount, rwtPartialToken?.decimals) ===
         info?.permitCount.active.toString()
     ) {
-      setAlertData({
-        severity: 'warning',
-        message:
+      toast.add({
+        type: 'warning',
+        dismissible: true,
+        description:
           'Currently you have inactive permits, we recommend not unlocking all your permits to prevent future malfunctioning.',
+        timeout: 0,
       });
-    } else {
-      setAlertData(null);
     }
   }, [
     formData.amount,
@@ -106,12 +101,12 @@ const UnlockForm = () => {
 
   useEffect(() => {
     if (!isInfoLoading && !rwtPartialToken?.amount) {
-      setAlertData({
-        severity: 'error',
-        message: "You don't have any locked RSN.",
+      toast.add({
+        type: 'error',
+        dismissible: true,
+        description: "You don't have any locked RSN.",
+        timeout: 0,
       });
-    } else {
-      setAlertData(null);
     }
   }, [isInfoLoading, rwtPartialToken?.amount]);
 
@@ -129,9 +124,9 @@ const UnlockForm = () => {
       });
 
       if (response?.txId) {
-        setAlertData({
-          severity: 'success',
-          message: (
+        toast.add({
+          type: 'success',
+          description: (
             <>
               Unlock operation is in progress. Wait for tx [
               <Link
@@ -152,14 +147,16 @@ const UnlockForm = () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       if (error?.response?.status === 403) {
-        setAlertData({
-          severity: 'error',
-          message: 'The Api key is not correct',
+        toast.add({
+          type: 'error',
+          description: 'The Api key is not correct',
         });
       } else {
-        setAlertData({
-          severity: 'error',
-          message: error.message,
+        toast.add({
+          type: 'error',
+          description: error.message,
+          dismissible: true,
+          timeout: 0,
           more: () => JSON.stringify(error.response?.data, null, 2),
         });
       }
@@ -169,17 +166,6 @@ const UnlockForm = () => {
   const onSubmit: SubmitHandler<TokenAmountCompatibleFormSchema> = async () => {
     setConfirmationModalOpen(true);
   };
-
-  const renderAlert = () => (
-    <Alert
-      open={!!alertData?.severity}
-      severity={alertData?.severity}
-      onClose={() => setAlertData(null)}
-    >
-      {alertData?.message}
-      <CopyDetails more={alertData?.more} />
-    </Alert>
-  );
 
   const disabled =
     isInfoLoading || isRsnTokenLoading || !rwtPartialToken?.amount;
@@ -197,7 +183,6 @@ const UnlockForm = () => {
     <FormProvider {...formMethods}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Stack spacing={2}>
-          {renderAlert()}
           <ApiKeyDialogWarning />
           {renderTokenAmountTextField()}
           <SubmitButton

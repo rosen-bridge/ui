@@ -1,6 +1,6 @@
 'use client';
 
-import { ReactNode, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   FormProvider,
   SubmitHandler,
@@ -9,8 +9,6 @@ import {
 } from 'react-hook-form';
 
 import {
-  Alert,
-  AlertProps,
   CircularProgress,
   Identifier,
   InputAdornment,
@@ -22,6 +20,7 @@ import {
   Link,
   Stack,
   useResponsive,
+  useToast,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS, TOKEN_NAME_PLACEHOLDER } from '@rosen-ui/constants';
 import { fetcher, mutatorWithHeaders } from '@rosen-ui/swr-helpers';
@@ -49,6 +48,8 @@ interface Form extends TokenAmountCompatibleFormSchema {
 }
 
 const WithdrawForm = () => {
+  const toast = useToast();
+
   const { data, isLoading: isTokensListLoading } =
     useSWR<ApiAddressAssetsResponse>('/address/assets', fetcher, {});
 
@@ -64,12 +65,6 @@ const WithdrawForm = () => {
 
   const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
 
-  const [alertData, setAlertData] = useState<{
-    severity: AlertProps['severity'];
-    message: ReactNode;
-    more?: () => string;
-  } | null>(null);
-
   const { trigger, isMutating: isWithdrawPending } = useSWRMutation<
     ApiWithdrawResponse,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -80,9 +75,11 @@ const WithdrawForm = () => {
 
   useEffect(() => {
     if (!isErgTokenLoading && !ergToken?.amount) {
-      setAlertData({
-        severity: 'error',
-        message: 'Your wallet is empty. There is nothing to withdraw.',
+      toast.add({
+        type: 'error',
+        dismissible: true,
+        description: 'Your wallet is empty. There is nothing to withdraw.',
+        timeout: 0,
       });
     }
   }, [isErgTokenLoading, ergToken]);
@@ -141,9 +138,9 @@ const WithdrawForm = () => {
         },
       });
       if (response.status === 'OK') {
-        setAlertData({
-          severity: 'success',
-          message: (
+        toast.add({
+          type: 'success',
+          description: (
             <>
               Withdrawal is successful. Wait for tx [
               <Link
@@ -164,14 +161,16 @@ const WithdrawForm = () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       if (error?.response?.status === 403) {
-        setAlertData({
-          severity: 'error',
-          message: 'The Api key is not correct',
+        toast.add({
+          type: 'error',
+          description: 'The Api key is not correct',
         });
       } else {
-        setAlertData({
-          severity: 'error',
-          message: error.message,
+        toast.add({
+          type: 'error',
+          description: error.message,
+          dismissible: true,
+          timeout: 0,
           more: () => JSON.stringify(error.response?.data, null, 2),
         });
       }
@@ -182,22 +181,15 @@ const WithdrawForm = () => {
     setConfirmationModalOpen(true);
   };
 
-  const renderAlert = () => (
-    <Alert
-      open={!!alertData?.severity}
-      severity={alertData?.severity}
-      onClose={() => setAlertData(null)}
-    >
-      {alertData?.message}
-      <CopyDetails more={alertData?.more} />
-    </Alert>
-  );
-
   const disabled =
     isTokensListLoading || isErgTokenLoading || !ergToken?.amount;
 
   const renderAddressTextField = () => (
     <TextField
+      variant="filled"
+      InputProps={{
+        disableUnderline: true,
+      }}
       label="Address"
       disabled={disabled}
       {...register('address', {
@@ -224,9 +216,11 @@ const WithdrawForm = () => {
 
   const renderTokensListSelect = () => (
     <TextField
+      variant="filled"
       label="Token"
       select={!isTokensListLoading}
       InputProps={{
+        disableUnderline: true,
         startAdornment: isTokensListLoading && (
           <InputAdornment position="start">
             <CircularProgress size={18} color="inherit" />
@@ -267,7 +261,6 @@ const WithdrawForm = () => {
     <FormProvider {...formMethods}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Stack spacing={2}>
-          {renderAlert()}
           <ApiKeyDialogWarning />
           {renderAddressTextField()}
           <Stack direction={stackDirection} spacing={2}>
