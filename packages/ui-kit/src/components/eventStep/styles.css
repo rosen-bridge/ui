@@ -1,0 +1,141 @@
+.RosenTransactionFlow[data-orientation="horizontal"] {
+    .RosenTransactionFlow-step-dot {
+        margin: 0 var(--rosen-spacing);
+    }
+
+    .RosenTransactionFlowStep {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+    }
+
+    .RosenTransactionFlow-step-header {
+        display: flex;
+        align-items: center;
+        width: 100%;
+    }
+
+    .RosenTransactionFlow-line {
+        flex: 1;
+        height: 1px;
+        background: var(--rosen-palette-neutral);
+
+    }
+
+    .RosenTransactionFlow-step-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: var(--rosen-spacing);
+        text-align: center;
+        width: 100%;
+
+    }
+}
+
+.RosenTransactionFlow[data-orientation="vertical"] {
+    .RosenTransactionFlow-step-dot {
+        margin: var(--rosen-spacing) 0;
+    }
+
+    .RosenTransactionFlowStep {
+        display: flex;
+        gap: 14px;
+        position: relative;
+    }
+
+    .RosenTransactionFlow-step-header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .RosenTransactionFlow-line {
+        width: 1px;
+        flex: 1;
+        min-height: 32px;
+        background: var(--rosen-palette-neutral);
+    }
+
+    .RosenTransactionFlow-step-content {
+        position: relative;
+        text-align: center;
+        margin: auto;
+    }
+}
+
+
+.RosenTransactionFlowStep:first-child
+.RosenTransactionFlow-line:first-child {
+    visibility: hidden;
+}
+
+.RosenTransactionFlowStep:last-child
+.RosenTransactionFlow-line:last-child {
+    visibility: hidden;
+}
+
+.RosenTransactionFlow-step-dot {
+    width: calc(var(--rosen-spacing) * 4);
+    height: calc(var(--rosen-spacing) * 4);
+
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    cursor: pointer;
+    z-index: 1;
+    color: #fff;
+
+    &[data-state="done"] {
+        background-color: var(--rosen-palette-success);
+
+    }
+
+    &[data-state="active"] {
+        background-color: var(--rosen-palette-info);
+    }
+
+    &[data-state="pending"] {
+        background-color: var(--rosen-palette-neutral);
+    }
+}
+
+.RosenTransactionFlow-step-label {
+    font-size: 13px;
+    font-weight: 500;
+    text-align: center;
+
+    &[data-state="done"] {
+        color: var(--rosen-palette-success);
+    }
+
+    &[data-state="active"] {
+        color: var(--rosen-palette-info);
+    }
+
+    &[data-state="inComing"] {
+        color: var(--rosen-palette-neutral);
+    }
+}
+
+.RosenTransactionFlow-step {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    width: 270px;
+    align-items: center;
+    gap: var(--rosen-spacing);
+    margin-top: 26px;
+
+    .child {
+
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+}
