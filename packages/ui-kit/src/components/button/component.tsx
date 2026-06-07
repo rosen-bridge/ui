@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 
 import { Button as ButtonMUI } from '@mui/material';
 
+import { Link } from '@/components';
 import { useConfig } from '@/hooks';
 import { Color, ElementBaseProps, OverridableType } from '@/types';
 
@@ -49,6 +50,7 @@ export const Button = (props: ButtonProps) => {
 
   return (
     <ButtonMUI
+      LinkComponent={(props) => <Link underline="none" {...props} />}
       data-block={!!block}
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       color={color as any}
