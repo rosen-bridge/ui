@@ -8,21 +8,17 @@ import {
 } from '@rosen-bridge/ui-kit';
 
 import { Section } from './Section';
+import useSWR from 'swr';
+import { fetcher } from '@rosen-ui/swr-helpers';
 
-export const Process = () => {
+export const Process = ({ id }: { id: string }) => {
+  const { error, data, isLoading, mutate } = useSWR(
+    `/v1/events/${id}`,
+    fetcher,
+  );
   return (
-    <Section collapsible title="Progress">
-      <Center>
-        <Stack align="center" spacing={1}>
-          <UnderDevelopSection />
-          <Typography align="center" variant="body1">
-            This section is under development!
-          </Typography>
-          <Typography variant="body2" color="text-secondary">
-            We’re working on it.
-          </Typography>
-        </Stack>
-      </Center>
+    <Section title="Progress">
+      <pre>{JSON.stringify(data?.timestamps || {}, null, 2)}</pre>
     </Section>
   );
 };
