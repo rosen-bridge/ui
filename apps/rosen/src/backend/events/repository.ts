@@ -12,6 +12,7 @@ import { Network } from '@rosen-ui/types';
 
 import { dataSource } from '../dataSource';
 import '../initialize-datasource-if-needed';
+import { AggregatedStatusEntity, AggregateEventStatus, AggregateTxStatus } from '@rosen-ui/public-status';
 
 const tokenPriceAction = new TokenPriceAction(dataSource);
 
@@ -19,6 +20,7 @@ const blockRepository = dataSource.getRepository(BlockEntity);
 const eventTriggerRepository = dataSource.getRepository(EventTriggerEntity);
 const observationRepository = dataSource.getRepository(ObservationEntity);
 const tokenRepository = dataSource.getRepository(TokenEntity);
+const aggregatedStatusRepository = dataSource.getRepository(AggregatedStatusEntity);
 
 interface EventWithTotal
   extends Omit<ObservationEntity, 'requestId'>,
@@ -28,7 +30,33 @@ interface EventWithTotal
   timestamp: number;
   total: number;
   flows: number;
-  status: 'fraud' | 'processing' | 'successful' | 'multipleFlows';
+  status: 
+    | 'COMPLETED'
+    | 'CREATED'
+    | 'FRAUD'
+    | 'MULTIPLE_FLOWS'
+    | 'PAID'
+    | 'PAYMENT_APPROVED'
+    | 'PAYMENT_SENT'
+    | 'PAYMENT_SIGNED'
+    | 'PAYMENT_SIGNING'
+    | 'PAYMENT_WAITING'
+    | 'REACHED_LIMIT'
+    | 'REJECTED'
+    | 'REWARD_APPROVED'
+    | 'REWARD_SENT'
+    | 'REWARD_SIGNED'
+    | 'REWARD_SIGNING'
+    | 'REWARD_WAITING'
+    | 'TIMEOUT'
+    | 'TRIGGERED'
+    | 'UNKNOWN'
+    
+    // TODO: should remove
+    | 'fraud'
+    | 'processing'
+    | 'successful'
+    | 'multipleFlows';
   fromChain: Network;
   toChain: Network;
   lockToken?: TokenEntity;
@@ -223,19 +251,6 @@ export const getEvent = async (id: string) => {
       'ete.spendTxId AS "spendTxId"',
       'ete.txId AS "txId"',
       'to_jsonb(te) AS "lockToken"',
-      /**
-       * There may be multiple event triggers for the same events, but we should
-       * only select one based on the results. The order is:
-       *
-       * 1. "successful": If there is at least one successful one, no matter the
-       *  other event trigger results, the event can be counted as successful
-       * 2. NULL (coalesced to "processing" for sql sorting purposes): If no
-       *  successful event triggers exists and at least one processing one, the
-       *  event may still become successful
-       * 3. "fraud": If only fraud event triggers exists, it's clear that the
-       *  event is a fraud
-       */
-      "COALESCE(FIRST_VALUE(ete.result) OVER(PARTITION BY ete.eventId ORDER BY COALESCE(ete.result, 'processing') DESC), 'processing') AS status",
     ])
     .where('oe.requestId = :id', { id })
     .getRawOne<EventDetailsType>();
@@ -256,8 +271,104 @@ export const getEvent = async (id: string) => {
     event.timestamp,
   );
 
+  event.status = await getEventStatus(id);
+
   return {
     ...event,
     price,
   };
 };
+
+const getEventStatus = async (eventId: string): Promise<EventDetailsType['status']> => {
+  const observationEntity = await dataSource.getRepository(ObservationEntity).findOneBy({ requestId: eventId });  
+
+  if (!observationEntity) {
+    throw new Error('TODO');
+  }
+
+  const eventTriggers = await dataSource.getRepository(EventTriggerEntity).findBy({ eventId: eventId });  
+
+  if (!eventTriggers.length) return 'CREATED';
+
+  if (eventTriggers.length > 1) {
+    throw new Error('TODO');
+  }
+
+  const eventTrigger = eventTriggers[0];
+
+  switch (eventTrigger.result) {
+    case 'fraud':
+      return 'FRAUD';
+
+    case 'successful':
+      return 'COMPLETED';
+
+    case null: {
+      const aggregatedStatus = await aggregatedStatusRepository.findOneBy({ eventId: eventId });
+   
+      switch (aggregatedStatus?.status) {
+        case null:
+        case AggregateEventStatus.pendingPayment:
+        case AggregateEventStatus.waitingForConfirmation:
+          return 'TRIGGERED';
+
+        case AggregateEventStatus.finished:
+          return 'COMPLETED';
+
+        case AggregateEventStatus.paymentWaiting:
+          return 'PAYMENT_WAITING';
+
+        case AggregateEventStatus.pendingReward:
+          return 'PAID';
+
+        case AggregateEventStatus.reachedLimit:
+          return 'REACHED_LIMIT';
+
+        case AggregateEventStatus.rejected:
+          return 'REJECTED';
+
+        case AggregateEventStatus.rewardWaiting:
+          return 'REWARD_WAITING';
+
+        case AggregateEventStatus.timeout:
+          return 'TIMEOUT';
+
+        case AggregateEventStatus.inPayment:
+          switch (aggregatedStatus.txStatus) {
+            case AggregateTxStatus.completed:
+              return 'PAID';
+
+            case AggregateTxStatus.inSign:
+              return 'PAYMENT_SIGNING';
+
+            case AggregateTxStatus.sent:
+              return 'PAYMENT_SENT';
+
+            case AggregateTxStatus.signed:
+              return 'PAYMENT_SIGNED';
+          
+            default:
+              return 'PAYMENT_APPROVED';
+          }
+      
+        case AggregateEventStatus.inReward:
+          switch (aggregatedStatus.txStatus) {
+            case AggregateTxStatus.inSign:
+              return 'REWARD_SIGNING';
+
+            case AggregateTxStatus.sent:
+              return 'REWARD_SENT';
+
+            case AggregateTxStatus.signed:
+              return 'REWARD_SIGNED';
+          
+            default:
+              return 'REWARD_APPROVED';
+          }
+      }
+    }
+  
+    default:
+      return 'UNKNOWN';
+  }
+}

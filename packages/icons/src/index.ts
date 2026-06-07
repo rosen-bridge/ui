@@ -40,6 +40,8 @@ export { default as Copy } from './icons/copy.svg?react';
 
 export { default as Dashboard } from './icons/dashboard.svg?react';
 
+export { default as Edit } from './icons/edit.svg?react';
+
 export { default as Estate } from './icons/estate.svg?react';
 
 export { default as Exchange } from './icons/exchange.svg?react';
