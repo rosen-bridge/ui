@@ -3,7 +3,7 @@ import { getAddressUrl, getDecimalString, getTokenUrl } from '@rosen-ui/utils';
 
 import { Assets } from '@/types/api';
 
-import { LOCK_ADDRESSES } from '../../../configs';
+import { LOCK_ADDRESSES } from '../../../../configs';
 
 export type AssetsFullData = ReturnType<typeof getFullAssetData>;
 
