@@ -27,7 +27,7 @@ import { EventItem } from '@/types';
 
 const Content = ({ value }: EventSidebarProps) => {
   const shouldLoad = useMemo(() => {
-    return !!value && !!value.eventId && value.status !== 'multipleFlows';
+    return !!value && !!value.eventId && value.status !== 'MULTIPLE_FLOWS';
   }, [value]);
 
   const { data, isLoading } = useSWR<EventItem>(
@@ -68,7 +68,7 @@ const Content = ({ value }: EventSidebarProps) => {
     return result;
   }, [data]);
 
-  if (!value || value.status === 'multipleFlows') {
+  if (!value || value.status === 'MULTIPLE_FLOWS') {
     return (
       <Center style={{ minHeight: 'calc(100vh - 304px)' }}>
         <Typography variant="body1" color="text-secondary">

@@ -387,6 +387,7 @@ const getEventStatus = async (eventId: string): Promise<{status: EventDetailsTyp
             result.status = 'PAYMENT_APPROVED';
             break;
         }
+        break;
 
       case AggregateEventStatus.inReward:
         switch (aggregatedStatus.txStatus) {
@@ -406,6 +407,7 @@ const getEventStatus = async (eventId: string): Promise<{status: EventDetailsTyp
             result.status = 'REWARD_APPROVED';
             break;
         }
+        break;
     }
   }
 
