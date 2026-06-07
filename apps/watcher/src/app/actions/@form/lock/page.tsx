@@ -23,7 +23,6 @@ import {
 import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
 
-import { CopyDetails } from '@/components';
 import { useRsnToken, useToken } from '@/hooks';
 import {
   ApiPermitRequestBody,

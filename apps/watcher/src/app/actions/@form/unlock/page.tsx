@@ -18,7 +18,6 @@ import { getNonDecimalString, getTxURL } from '@rosen-ui/utils';
 import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
 
-import { CopyDetails } from '@/components';
 import { useRsnToken } from '@/hooks';
 import {
   ApiInfoResponse,
