@@ -1,8 +1,6 @@
 import { ReactNode } from 'react';
 
-import { CssBaseline } from '@/components';
 import { useBreakpoint, useConfig } from '@/hooks';
-import { ThemeProvider, ThemeProviderProps, ToastProvider } from '@/Providers';
 import { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.css';
@@ -13,15 +11,17 @@ export interface AppOverrides {}
 export type AppOwnProps = {
   children: ReactNode;
   sidebar: ReactNode;
-  theme: ThemeProviderProps['theme'];
 };
 
 export type AppBaseProps = ElementBaseProps<'div', AppOwnProps>;
 
 export type AppProps = OverridableType<AppBaseProps, AppOverrides, never>;
 
-const Content = ({ children, sidebar, ...rest }: AppProps) => {
+export const App = (props: AppProps) => {
+  const { children, sidebar, ...rest } = useConfig('App', props);
+
   const isTabletDown = useBreakpoint('tablet-down');
+
   return (
     <div data-orientation={isTabletDown ? 'vertical' : 'horizontal'} {...rest}>
       {sidebar}
@@ -29,21 +29,6 @@ const Content = ({ children, sidebar, ...rest }: AppProps) => {
         <div className="RosenApp-paper">{children}</div>
       </div>
     </div>
-  );
-};
-
-export const App = (props: AppProps) => {
-  const { ...rest } = useConfig('App', props);
-
-  return (
-    <ThemeProvider theme={rest.theme}>
-      <>
-        <CssBaseline />
-        <ToastProvider>
-          <Content {...rest} />
-        </ToastProvider>
-      </>
-    </ThemeProvider>
   );
 };
 
