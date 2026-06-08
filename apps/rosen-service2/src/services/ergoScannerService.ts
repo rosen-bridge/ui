@@ -116,7 +116,7 @@ export class ErgoScannerService extends AbstractErgoScannerService {
   private createErgoScanner = (dataSource: DataSource): ErgoScanner => {
     const networkConnectorManager = new NetworkConnectorManager<Transaction>(
       new FailoverStrategy(),
-      this.logger.child('ergoScannerLogger'),
+      this.logger.child('networkConnectorManager'),
     );
     if (configs.chains.ergo.method == ERGO_METHOD_EXPLORER) {
       configs.chains.ergo.explorer.connections.forEach((explorer) => {
