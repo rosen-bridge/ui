@@ -83,6 +83,7 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
           type: 'error',
           description: error.message,
         });
+        return;
       }
 
       setSelected(wallet);
