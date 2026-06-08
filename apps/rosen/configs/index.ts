@@ -2,6 +2,7 @@
  * THIS FILE IS AUTO-GENERATED. PLEASE DO NOT EDIT IT
  * MANUALLY OR COMMIT IT TO THE REPOSITORY HOSTING SERVICE
  **************************************************/
+import { RosenTokens } from '@rosen-bridge/tokens';
 import { NETWORKS } from '@rosen-ui/constants';
 
 export const CONTRACT_VERSION = '';
@@ -11,3 +12,5 @@ export const FEE_CONFIG_TOKEN_ID = '';
 export const LOCK_ADDRESSES: { [key in keyof typeof NETWORKS]: string } = {
   //
 } as any;
+
+export const TOKENS: RosenTokens = [];
