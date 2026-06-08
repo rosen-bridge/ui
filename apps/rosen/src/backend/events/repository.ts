@@ -46,7 +46,7 @@ interface EventWithTotal
   lockToken?: TokenEntity;
 }
 
-type EventDetailsType = Omit<EventWithTotal, 'status' | 'total'> & {
+export type EventDetailsType = Omit<EventWithTotal, 'status' | 'total'> & {
   status:
     | 'COMPLETED'
     | 'CREATED'
