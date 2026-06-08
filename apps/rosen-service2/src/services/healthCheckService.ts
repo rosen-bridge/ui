@@ -28,8 +28,7 @@ import {
   ERGO_BLOCK_TIME,
   ETHEREUM_BLOCK_TIME,
 } from '../constants';
-import { ChainsKeys } from '../types';
-import { ChainScannersType, Chains } from '../types/index';
+import { ChainsKeys, ChainScannersType, Chains } from '../types';
 import {
   AbstractHealthService,
   AbstractScannerService,

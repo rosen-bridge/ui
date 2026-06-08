@@ -107,17 +107,7 @@ export class EventCountMetricService extends AbstractEventCountMetricService {
     const tasks = [];
 
     tasks.push({
-      fn: async () => {
-        try {
-          this.logger.info(`Running ${this.name} job`);
-          await this.eventCountCalculation();
-        } catch (err) {
-          this.logger.error(`${this.name} job failed: ${err}`);
-          if (err instanceof Error && err.stack) {
-            this.logger.debug(err.stack);
-          }
-        }
-      },
+      fn: async () => await this.eventCountCalculation(),
       interval: configs.statistics.eventCountMetrics.interval * 1000,
     });
     return tasks;
