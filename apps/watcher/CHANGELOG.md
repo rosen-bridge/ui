@@ -1,5 +1,20 @@
 # @rosen-bridge/watcher-app
 
+## 4.3.0
+
+### Minor Changes
+
+- Move App-related provider configuration to the application layer to enable more flexible setup and composition
+- Update application layouts across the app based on the new UI Kit layout structure
+- Align applications with updated UI Kit components and related fixes
+- Add new UI kit foundation layer
+
+### Patch Changes
+
+- Update the Revenue, Lock, Unlock, and Withdraw pages to align with the latest design, improving visual consistency and user experience
+- Update dependencies
+  - @rosen-bridge/ui-kit@5.6.0
+
 ## 4.2.1
 
 ### Patch Changes

@@ -1,5 +1,21 @@
 # @rosen-bridge/ui-kit
 
+## 5.6.0
+
+### Minor Changes
+
+- Replace relative component imports with aliases
+- Update application layout-related components and their dependent components based on the new structure
+- Export the `QRCodeCanvas` component from the package
+- Migrate selected components to the new UI Kit architecture
+- Remove application-level providers from the App component and keep it focused on layout responsibilities
+- Implement new UI kit foundation layer
+- Add CubeNet Background component
+
+### Patch Changes
+
+- Refactor existing components while preserving legacy components to maintain backward compatibility and prevent breaking changes
+
 ## 5.5.0
 
 ### Minor Changes
