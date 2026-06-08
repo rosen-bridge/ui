@@ -1,5 +1,23 @@
 # @rosen-bridge/rosen-app
 
+## 5.3.0
+
+### Minor Changes
+
+- Move App-related provider configuration to the application layer to enable more flexible setup and composition
+- Update application layouts across the app based on the new UI Kit layout structure
+- Add support for scanning QR codes that contain exported transaction payloads
+- Initialize `Sentry` for error monitoring
+- Align applications with updated UI Kit components and related fixes
+- Add new UI kit foundation layer
+- Refactor CubeNet Background and migrate to new structure in bridge page layout
+
+### Patch Changes
+
+- Refactor public events status thresholds to use env vars with optional per-status overrides
+- Update dependencies
+  - @rosen-bridge/ui-kit@5.6.0
+
 ## 5.2.0
 
 ### Minor Changes
