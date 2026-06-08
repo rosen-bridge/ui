@@ -1,6 +1,7 @@
-import { Breakpoint } from '@mui/material';
+import { useMediaQuery } from '@mui/material';
 
-import { useMediaQuery } from './useMediaQuery';
+import { Breakpoint } from '@/types';
+
 import { useTheme } from './useTheme';
 
 export type BreakpointQuery =

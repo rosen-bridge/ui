@@ -1,38 +1,35 @@
-import { createElement, ReactNode } from 'react';
+import { createElement, FC, SVGAttributes } from 'react';
 
 import { Wallet } from '@rosen-ui/wallet-api';
 
 declare module '@rosen-ui/wallet-api' {
   interface Wallet {
-    iconReact: () => ReactNode;
+    iconReact: FC<SVGAttributes<SVGElement>>;
   }
 }
 
 Object.defineProperty(Wallet.prototype, 'iconReact', {
   get() {
-    return () => {
-      if (!this.iconReactElement) {
-        const viewBoxMatch = this.icon.match(/viewBox\s*=\s*["']([^"']+)["']/i);
+    if (!this.iconReactElement) {
+      const viewBoxMatch = this.icon.match(/viewBox\s*=\s*["']([^"']+)["']/i);
 
-        const viewBox = viewBoxMatch ? viewBoxMatch[1] : undefined;
+      const viewBox = viewBoxMatch ? viewBoxMatch[1] : undefined;
 
-        const innerMatch = this.icon.match(/<svg[^>]*>([\s\S]*?)<\/svg>/i);
+      const innerMatch = this.icon.match(/<svg[^>]*>([\s\S]*?)<\/svg>/i);
 
-        const innerHTML = innerMatch ? innerMatch[1].trim() : '';
+      const innerHTML = innerMatch ? innerMatch[1].trim() : '';
 
-        const attrs: Record<string, string> = {};
+      this._iconReactCache = {
+        innerHTML,
+        viewBox,
+      };
+    }
 
-        if (viewBox) attrs.viewBox = viewBox;
-
-        this.iconReactElement = createElement('svg', {
-          ...attrs,
-          dangerouslySetInnerHTML: {
-            __html: innerHTML,
-          },
-        });
-      }
-
-      return this.iconReactElement;
-    };
+    return (props: SVGAttributes<SVGElement>) =>
+      createElement('svg', {
+        ...props,
+        viewBox: this._iconReactCache.viewBox,
+        dangerouslySetInnerHTML: { __html: this._iconReactCache.innerHTML },
+      });
   },
 });

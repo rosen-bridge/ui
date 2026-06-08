@@ -50,6 +50,21 @@ const baseChartOptions = {
     x: {
       show: false,
     },
+    y: {
+      formatter: (value: number) => {
+        /**
+         * TODO: Replace it with a reusable utility function
+         * local:ergo/rosen-bridge/ui#1193
+         */
+        return value
+          .toLocaleString('en', {
+            useGrouping: false,
+            minimumFractionDigits: 1,
+            maximumFractionDigits: 20,
+          })
+          .replace(/\.0$/, '');
+      },
+    },
   },
 };
 

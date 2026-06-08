@@ -1,5 +1,5 @@
-import { Typography } from '../../base';
-import { Stack } from '../Stack';
+import { Stack } from '../../stack';
+import { Typography } from '../../typography';
 
 export const NotFound = () => {
   return (
@@ -71,7 +71,7 @@ export const NotFound = () => {
           </clipPath>
         </defs>
       </svg>
-      <Typography variant="h2" color="primary.main" sx={{ opacity: 0.5 }}>
+      <Typography variant="h2" color="primary" sx={{ opacity: 0.5 }}>
         Page not Found
       </Typography>
     </Stack>

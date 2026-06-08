@@ -2,9 +2,47 @@ import {
   createTheme,
   darkThemeOptions,
   lightThemeOptions,
+  Theme,
 } from '@rosen-bridge/ui-kit';
 
+export const base = {
+  components: {
+    MuiFilledInput: {
+      styleOverrides: {
+        root: ({ theme }: { theme: Theme }) => ({
+          'overflow': 'hidden',
+          'borderRadius': theme.shape.borderRadius,
+          'backgroundColor': theme.palette.background.default,
+          'minHeight': theme.spacing(7),
+          'transition': theme.transitions.create([
+            'background-color',
+            'box-shadow',
+          ]),
+          '&:hover': {
+            backgroundColor: theme.palette.background.default,
+          },
+          '&.Mui-disabled': {
+            backgroundColor: theme.palette.neutral.light,
+          },
+          '&.Mui-focused': {
+            backgroundColor: theme.palette.background.default,
+          },
+          '&::-webkit-outer-spin-button,input::-webkit-inner-spin-button': {
+            WebkitAppearance: 'none',
+          },
+        }),
+        input: {
+          '&:focus': {
+            backgroundColor: 'inherit',
+          },
+        },
+      },
+    },
+  },
+};
+
 const customLightThemeOptions = {
+  ...base,
   palette: {
     mode: 'light',
     primary: {
@@ -21,6 +59,7 @@ const customLightThemeOptions = {
 };
 
 const customDarkThemeOptions = {
+  ...base,
   palette: {
     mode: 'dark',
     primary: {

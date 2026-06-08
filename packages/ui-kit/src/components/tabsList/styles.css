@@ -1,0 +1,29 @@
+.RosenTabsList {
+  display: flex;
+  position: relative;
+  z-index: 0;
+
+  &[data-align='start'] {
+    justify-content: flex-start;
+  }
+
+  &[data-align='center'] {
+    justify-content: center;
+  }
+
+  &[data-align='end'] {
+    justify-content: flex-end;
+  }
+
+  &[data-grow='true'] > * {
+    flex-grow: 1;
+  }
+
+  &[data-orientation='horizontal'] {
+    flex-direction: row;
+  }
+
+  &[data-orientation='vertical'] {
+    flex-direction: column;
+  }
+}

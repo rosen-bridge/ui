@@ -2,37 +2,7 @@
 
 import { Fragment, PropsWithChildren } from 'react';
 
-import { PageHeading, styled } from '@rosen-bridge/ui-kit';
-
-import { CubeNetSvg } from './CubeNet';
-
-const Background = styled('div')(({ theme }) => ({
-  'position': 'absolute',
-  'inset': 0,
-  'backgroundImage':
-    theme.palette.mode === 'light'
-      ? `linear-gradient(180deg,${theme.palette.primary.light},${theme.palette.background.default},${theme.palette.background.default},${theme.palette.secondary.light})`
-      : 'none',
-  'zIndex': '0',
-  'borderTopLeftRadius': theme.shape.borderRadius * 2,
-  'borderBottomLeftRadius': theme.shape.borderRadius * 2,
-  '& > svg': {
-    'position': 'absolute',
-    'width': '100%',
-    'zIndex': '-1',
-    'left': 0,
-    '&.top': {
-      top: 0,
-    },
-    '&.bottom': {
-      bottom: 0,
-      transform: 'rotate(180deg)',
-    },
-  },
-  [theme.breakpoints.down('tablet')]: {
-    display: 'none',
-  },
-}));
+import { CubeNetBackground, PageHeading, styled } from '@rosen-bridge/ui-kit';
 
 const Main = styled('main')(({ theme }) => ({
   'position': 'relative',
@@ -75,12 +45,14 @@ const Main = styled('main')(({ theme }) => ({
 const PageLayout = ({ children }: PropsWithChildren) => {
   return (
     <Fragment>
-      <PageHeading title="Rosen Bridge" />
+      <CubeNetBackground
+        style={{ position: 'absolute', inset: 0, zIndex: 0 }}
+      />
+      <PageHeading
+        title="Rosen Bridge"
+        style={{ position: 'relative', zIndex: 1 }}
+      />
       <Main>{children}</Main>
-      <Background>
-        <CubeNetSvg color="primary" className="top" />
-        <CubeNetSvg color="secondary" className="bottom" />
-      </Background>
     </Fragment>
   );
 };

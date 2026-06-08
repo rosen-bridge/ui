@@ -2,11 +2,9 @@
 
 import { Typography } from '@rosen-bridge/ui-kit';
 
-import { ActionText } from '../../ActionText';
-
 const WithdrawalText = () => {
   return (
-    <ActionText title="Withdrawal">
+    <>
       <Typography gutterBottom>
         All your watcher rewards are being deposited to the watcher wallet. You
         can withdraw your reward tokens to any address. Remember to maintain a
@@ -33,7 +31,7 @@ const WithdrawalText = () => {
         To unlock permits, move one WID back here, unlock, and then immediately
         send it back to your secure wallet. This keeps your assets protected.
       </Typography>
-    </ActionText>
+    </>
   );
 };
 

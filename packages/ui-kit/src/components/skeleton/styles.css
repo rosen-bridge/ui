@@ -1,0 +1,52 @@
+.RosenSkeleton {
+  display: block;
+  background-color: var(--rosen-palette-Skeleton-bg);
+  transform-origin: 0 55%;
+  animation: shimmer 2s ease-in-out 0.5s infinite;
+  border-radius: 4px;
+}
+
+.RosenSkeleton[data-attached='true'] {
+  position: absolute;
+  inset: 0;
+}
+
+*:has(> .RosenSkeleton[data-attached='true']) {
+  position: relative !important;
+  overflow: hidden !important;
+  color: transparent !important;
+  background-color: transparent !important;
+  min-width: 80px !important;
+
+  *:not(.RosenSkeleton) {
+    opacity: 0 !important;
+  }
+}
+
+.RosenSkeleton[data-variant='circular'] {
+  border-radius: 10000px;
+  flex-shrink: 0;
+}
+
+.RosenSkeleton[data-variant='rounded'] {
+  border-radius: var(--rosen-shape-borderRadius);
+}
+
+.RosenSkeleton[data-variant='text'] {
+  border-radius: 4px;
+  transform: scale(1, 0.6);
+}
+
+@keyframes shimmer {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.4;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}

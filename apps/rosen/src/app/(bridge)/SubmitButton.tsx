@@ -1,6 +1,5 @@
 import { useState } from 'react';
 
-import { CommentAltExclamation } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import {
   Amount,
@@ -18,6 +17,11 @@ import {
   Network,
   Stack,
   Typography,
+  QRCodeCanvas,
+  DialogContentText,
+  Center,
+  Alert,
+  useIsDarkMode,
 } from '@rosen-bridge/ui-kit';
 
 import {
@@ -32,7 +36,11 @@ import {
 export const SubmitButton = () => {
   const [open, setOpen] = useState(false);
 
+  const [qrCode, setQrCode] = useState('');
+
   const tokenMap = useTokenMap();
+
+  const isDarkMode = useIsDarkMode();
 
   const {
     sourceValue,
@@ -58,8 +66,24 @@ export const SubmitButton = () => {
   const { startTransaction, isSubmitting: isTransactionSubmitting } =
     useTransaction();
 
+  const close = () => {
+    setOpen(false);
+    setTimeout(() => setQrCode(''), 500);
+  };
+
   const handleFormSubmit = handleSubmit(() => {
-    startTransaction().then(() => setOpen(false));
+    startTransaction().then((result) => {
+      /**
+       * TODO: Improve transfer Output Types for QR Code mode
+       * local:ergo/rosen-bridge/ui#1191
+       */
+      const isQrCode = !!result?.startsWith('qrcode:');
+      if (isQrCode) {
+        setQrCode(result!.replace('qrcode:', ''));
+      } else {
+        close();
+      }
+    });
   });
 
   const { availableSources } = useNetwork();
@@ -96,6 +120,7 @@ export const SubmitButton = () => {
     !!errors.amount ||
     !!errors.walletAddress ||
     isValidating;
+
   return (
     <>
       <Button
@@ -104,9 +129,7 @@ export const SubmitButton = () => {
         loading={isFormSubmitting || isTransactionSubmitting || isLoadingFees}
         type="submit"
         disabled={disabled}
-        onClick={() => {
-          setOpen(true);
-        }}
+        onClick={() => setOpen(true)}
       >
         SUBMIT
       </Button>
@@ -114,77 +137,130 @@ export const SubmitButton = () => {
         open={open}
         maxWidth="tablet"
         stickOn="mobile"
-        onClose={() => setOpen(false)}
+        onClose={() => close()}
       >
-        <EnhancedDialogTitle
-          icon={<CommentAltExclamation />}
-          onClose={() => setOpen(false)}
-        >
-          Confirm Transaction
-        </EnhancedDialogTitle>
-        <EnhancedDialogContent
-          style={{
-            paddingTop: 0,
-            paddingBottom: 0,
-          }}
-        >
-          <Card backgroundColor="primary.light">
-            <CardBody>
+        {qrCode ? (
+          <>
+            <EnhancedDialogTitle icon="QrcodeScan" onClose={() => close()}>
+              Scan QR Code
+            </EnhancedDialogTitle>
+            <EnhancedDialogContent>
               <Stack spacing={2}>
-                <Stack align="center" spacing={2}>
-                  <Typography variant="subtitle1">
-                    <Amount value={amountValue || 0} unit={tokenInfo?.name} />
-                  </Typography>
-                  {source && target && (
-                    <Connector
-                      start={<Network name={source.name} />}
-                      end={<Network name={target.name} />}
-                    />
-                  )}
-                </Stack>
-                <Divider />
-                <div>
-                  <Label label="Transaction Fee">
-                    <Amount value={networkFeeRaw} unit={tokenInfo?.name} />
-                  </Label>
-                  <Label label="Bridge Fee">
-                    <Amount value={bridgeFeeRaw} unit={tokenInfo?.name} />
-                  </Label>
-                  <Label label="Receiving Amount">
-                    <Amount
-                      value={receivingAmountRaw}
-                      unit={targetTokenInfo?.name}
-                    />
-                  </Label>
-                </div>
-                <Divider />
-                <Label label="Destination Address" orientation="vertical">
-                  <Identifier value={walletAddressValue} copyable />
-                </Label>
+                <DialogContentText>
+                  Scan this QR code or copy the transaction data below and
+                  submit it using a compatible wallet or application.
+                </DialogContentText>
+                <Center>
+                  <QRCodeCanvas
+                    bgColor="transparent"
+                    fgColor={isDarkMode ? '#fff' : '#000'}
+                    value={qrCode}
+                    style={{ margin: '16px 0' }}
+                  />
+                </Center>
+                <Alert severity="warning">
+                  This transaction data is time-sensitive. If too much time
+                  passes before submission, network or bridge fees may change
+                  and the transaction may fail.
+                </Alert>
               </Stack>
-            </CardBody>
-          </Card>
-        </EnhancedDialogContent>
-        <EnhancedDialogActions>
-          <Button
-            color="secondary"
-            variant="contained"
-            style={{ flexGrow: 2 }}
-            onClick={() => setOpen(false)}
-          >
-            Cancel
-          </Button>
-          <Button
-            variant="contained"
-            style={{ flexGrow: 5 }}
-            loading={
-              isFormSubmitting || isTransactionSubmitting || isLoadingFees
-            }
-            onClick={handleFormSubmit}
-          >
-            Confirm
-          </Button>
-        </EnhancedDialogActions>
+            </EnhancedDialogContent>
+            <EnhancedDialogActions>
+              <Button
+                color="secondary"
+                variant="contained"
+                style={{ flexGrow: 2 }}
+                onClick={() => close()}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="contained"
+                style={{ flexGrow: 5 }}
+                onClick={() => {
+                  navigator.clipboard.writeText(qrCode);
+                }}
+              >
+                Copy
+              </Button>
+            </EnhancedDialogActions>
+          </>
+        ) : (
+          <>
+            <EnhancedDialogTitle
+              icon="CommentAltExclamation"
+              onClose={() => close()}
+            >
+              Confirm Transaction
+            </EnhancedDialogTitle>
+            <EnhancedDialogContent
+              style={{
+                paddingTop: 0,
+                paddingBottom: 0,
+              }}
+            >
+              <Card backgroundColor="primary-light">
+                <CardBody>
+                  <Stack spacing={2}>
+                    <Stack align="center" spacing={2}>
+                      <Typography variant="subtitle1">
+                        <Amount
+                          value={amountValue || 0}
+                          unit={tokenInfo?.name}
+                        />
+                      </Typography>
+                      {source && target && (
+                        <Connector
+                          start={<Network value={source.name} />}
+                          end={<Network value={target.name} />}
+                        />
+                      )}
+                    </Stack>
+                    <Divider />
+                    <div>
+                      <Label label="Transaction Fee">
+                        <Amount value={networkFeeRaw} unit={tokenInfo?.name} />
+                      </Label>
+                      <Label label="Bridge Fee">
+                        <Amount value={bridgeFeeRaw} unit={tokenInfo?.name} />
+                      </Label>
+                      <Label label="Receiving Amount">
+                        <Amount
+                          value={receivingAmountRaw}
+                          unit={targetTokenInfo?.name}
+                        />
+                      </Label>
+                    </div>
+                    <Divider />
+                    <Label label="Destination Address" orientation="vertical">
+                      <Identifier value={walletAddressValue} copyable />
+                    </Label>
+                  </Stack>
+                </CardBody>
+              </Card>
+            </EnhancedDialogContent>
+            <EnhancedDialogActions>
+              <Button
+                color="secondary"
+                variant="contained"
+                style={{ flexGrow: 2 }}
+                onClick={() => close()}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="contained"
+                style={{ flexGrow: 5 }}
+                loading={
+                  isFormSubmitting || isTransactionSubmitting || isLoadingFees
+                }
+                onClick={handleFormSubmit}
+              >
+                Confirm
+              </Button>
+            </EnhancedDialogActions>
+          </>
+        )}
       </EnhancedDialog>
     </>
   );

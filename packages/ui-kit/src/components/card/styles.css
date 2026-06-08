@@ -1,0 +1,38 @@
+.RosenCard {
+  --padding: calc(var(--rosen-spacing) * 2);
+
+  border-radius: calc(var(--rosen-spacing) * 2);
+  position: relative;
+
+  &[data-active='true'] {
+    outline: 3px solid var(--rosen-palette-primary-main);
+  }
+
+  &[data-clickable='true'] {
+    cursor: pointer;
+  }
+}
+
+.RosenCard[data-variant='section'] {
+  --padding: calc(var(--rosen-spacing) * 3);
+}
+
+.RosenCard[data-variant='separated'] .RosenCardHeader {
+  position: relative;
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: calc(var(--rosen-spacing) * 2);
+    right: calc(var(--rosen-spacing) * 2);
+    border-bottom: 1px dashed var(--rosen-palette-neutral-light);
+  }
+}
+
+.RosenCard:not([data-variant='separated']) > .RosenCardHeader + .RosenCardBody,
+.RosenCard:not([data-variant='separated'])
+  > .RosenCardHeader
+  + *
+  .RosenCardBody {
+  padding-top: 0;
+}

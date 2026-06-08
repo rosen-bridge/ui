@@ -1,0 +1,8 @@
+.RosenButton {
+  &[data-block='false'] {
+    display: inline-flex;
+  }
+  &[data-block='true'] {
+    display: flex;
+  }
+}

@@ -1,5 +1,20 @@
 # @rosen-bridge/guard-app
 
+## 4.3.0
+
+### Minor Changes
+
+- Move App-related provider configuration to the application layer to enable more flexible setup and composition
+- Update application layouts across the app based on the new UI Kit layout structure
+- Align applications with updated UI Kit components and related fixes
+- Add new UI kit foundation layer
+
+### Patch Changes
+
+- Fix incorrect decimal precision display in the Revenues page and Dashboard Revenue Chart
+- Update dependencies
+  - @rosen-bridge/ui-kit@5.6.0
+
 ## 4.2.1
 
 ### Patch Changes
