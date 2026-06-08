@@ -8,11 +8,16 @@ import {
 } from '@rosen-bridge/ui-kit/dist/components/common/smartSearch/server';
 import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
 import { TokenEntity } from '@rosen-ui/asset-calculator';
+import {
+  AggregatedStatusChangedEntity,
+  AggregatedStatusEntity,
+  AggregateEventStatus,
+  AggregateTxStatus,
+} from '@rosen-ui/public-status';
 import { Network } from '@rosen-ui/types';
 
 import { dataSource } from '../dataSource';
 import '../initialize-datasource-if-needed';
-import { AggregatedStatusChangedEntity, AggregatedStatusEntity, AggregateEventStatus, AggregateTxStatus } from '@rosen-ui/public-status';
 
 const tokenPriceAction = new TokenPriceAction(dataSource);
 
@@ -20,12 +25,16 @@ const blockRepository = dataSource.getRepository(BlockEntity);
 const eventTriggerRepository = dataSource.getRepository(EventTriggerEntity);
 const observationRepository = dataSource.getRepository(ObservationEntity);
 const tokenRepository = dataSource.getRepository(TokenEntity);
-const aggregatedStatusRepository = dataSource.getRepository(AggregatedStatusEntity);
-const aggregatedStatusChangedRepository = dataSource.getRepository(AggregatedStatusChangedEntity);
+const aggregatedStatusRepository = dataSource.getRepository(
+  AggregatedStatusEntity,
+);
+const aggregatedStatusChangedRepository = dataSource.getRepository(
+  AggregatedStatusChangedEntity,
+);
 
 interface EventWithTotal
   extends Omit<ObservationEntity, 'requestId'>,
-  Pick<EventTriggerEntity, 'WIDsCount' | 'paymentTxId' | 'spendTxId'> {
+    Pick<EventTriggerEntity, 'WIDsCount' | 'paymentTxId' | 'spendTxId'> {
   eventId: string;
   eventTriggerId: string;
   timestamp: number;
@@ -48,14 +57,14 @@ type EventDetailsType = Omit<EventWithTotal, 'status' | 'total'> & {
     | 'PAYMENT_SENT'
     | 'PAYMENT_SIGNED'
     | 'PAYMENT_SIGNING'
-    | 'PAYMENT_WAITING'
+    | 'PAYMENT_STALLED'
     | 'REACHED_LIMIT'
     | 'REJECTED'
     | 'REWARD_APPROVED'
     | 'REWARD_SENT'
     | 'REWARD_SIGNED'
     | 'REWARD_SIGNING'
-    | 'REWARD_WAITING'
+    | 'REWARD_STALLED'
     | 'TIMEOUT'
     | 'TRIGGERED'
     | 'UNKNOWN';
@@ -279,56 +288,74 @@ export const getEvent = async (id: string) => {
   };
 };
 
-const getEventStatus = async (eventId: string): Promise<{status: EventDetailsType['status']; timestamps: Partial<Record<EventDetailsType['status'], number>>}> => {
+const getEventStatus = async (
+  eventId: string,
+): Promise<{
+  status: EventDetailsType['status'];
+  timestamps: Partial<Record<EventDetailsType['status'], number>>;
+}> => {
   const result = {
     status: 'CREATED' as EventDetailsType['status'],
-    timestamps: {} as Partial<
-      Record<EventDetailsType['status'], number>
-    >,
+    timestamps: {} as Partial<Record<EventDetailsType['status'], number>>,
   };
 
-  const observation = await observationRepository.findOneBy({ requestId: eventId });
+  const observation = await observationRepository.findOneBy({
+    requestId: eventId,
+  });
 
   if (!observation) {
     throw new Error('TODO');
   }
 
   // timestamp: be.timestamp which is fetched from query: observation_entity as oe join block_entity as be on oe.sourceBlockid == be.hash (exactly one record)
-  const block = await blockRepository.findOneByOrFail({ hash: observation.sourceBlockId });
+  const block = await blockRepository.findOneByOrFail({
+    hash: observation.sourceBlockId,
+  });
   result.status = 'CREATED';
   result.timestamps['CREATED'] = block.timestamp;
 
-  const eventTrigger = await eventTriggerRepository.findOneBy({ eventId: eventId });
+  const eventTrigger = await eventTriggerRepository.findOneBy({
+    eventId: eventId,
+  });
 
-  if (!eventTrigger) return result
+  if (!eventTrigger) return result;
 
   if (eventTrigger.result === 'fraud') {
-    result.status = 'FRAUD'
+    result.status = 'FRAUD';
     if (eventTrigger.spendBlock) {
-      result.timestamps['FRAUD'] = (await blockRepository.findOneBy({ hash: eventTrigger.spendBlock }))?.timestamp;
+      result.timestamps['FRAUD'] = (
+        await blockRepository.findOneBy({ hash: eventTrigger.spendBlock })
+      )?.timestamp;
     }
   }
 
   if (eventTrigger.result === 'successful') {
-    result.status = 'COMPLETED'
+    result.status = 'COMPLETED';
     if (eventTrigger.spendBlock) {
-      result.timestamps['COMPLETED'] = (await blockRepository.findOneBy({ hash: eventTrigger.spendBlock }))?.timestamp;
+      result.timestamps['COMPLETED'] = (
+        await blockRepository.findOneBy({ hash: eventTrigger.spendBlock })
+      )?.timestamp;
     }
   }
 
   // timestamp: be.timestamp which is fetched from query: event_trigger_entity as ete join block_entity as be on ete.block == be.hash (exactly one record)
   if (eventTrigger) {
-    result.timestamps['TRIGGERED'] = (await blockRepository.findOneBy({ hash: eventTrigger.block }))?.timestamp;
+    result.timestamps['TRIGGERED'] = (
+      await blockRepository.findOneBy({ hash: eventTrigger.block })
+    )?.timestamp;
   }
 
-  const aggregatedStatusChangedItems = await aggregatedStatusChangedRepository.find({
-    where: { eventId: eventId },
-    order: { insertedAt: 'DESC' },
-  });  
+  const aggregatedStatusChangedItems =
+    await aggregatedStatusChangedRepository.find({
+      where: { eventId: eventId },
+      order: { insertedAt: 'DESC' },
+    });
 
   // TODO
   if (eventTrigger.result === null) {
-    const aggregatedStatus = await aggregatedStatusRepository.findOneBy({ eventId: eventId });
+    const aggregatedStatus = await aggregatedStatusRepository.findOneBy({
+      eventId: eventId,
+    });
 
     switch (aggregatedStatus?.status) {
       case null:
@@ -342,7 +369,7 @@ const getEventStatus = async (eventId: string): Promise<{status: EventDetailsTyp
         break;
 
       case AggregateEventStatus.paymentWaiting:
-        result.status = 'PAYMENT_WAITING';
+        result.status = 'PAYMENT_STALLED';
         break;
 
       case AggregateEventStatus.pendingReward:
@@ -358,7 +385,7 @@ const getEventStatus = async (eventId: string): Promise<{status: EventDetailsTyp
         break;
 
       case AggregateEventStatus.rewardWaiting:
-        result.status = 'REWARD_WAITING';
+        result.status = 'REWARD_STALLED';
         break;
 
       case AggregateEventStatus.timeout:
@@ -412,33 +439,59 @@ const getEventStatus = async (eventId: string): Promise<{status: EventDetailsTyp
   }
 
   const aaa = (status: AggregateEventStatus, txStatus?: AggregateTxStatus) => {
-    return aggregatedStatusChangedItems.find((item) => item.status === status && (txStatus ? item.txStatus === txStatus : true))?.insertedAt;
-  }
+    return aggregatedStatusChangedItems.find(
+      (item) =>
+        item.status === status &&
+        (txStatus ? item.txStatus === txStatus : true),
+    )?.insertedAt;
+  };
 
   // timestamp: `asce.insertedAt` which is fetched from query: `aggregated_status_changed_entity` as `asce` where `asce.status` == `in-payment` and `asce.txStatus` == `approved` (last record based on `insertedAt`)
-  result.timestamps['PAYMENT_APPROVED'] = aaa(AggregateEventStatus.inPayment, AggregateTxStatus.inSign);
+  result.timestamps['PAYMENT_APPROVED'] = aaa(
+    AggregateEventStatus.inPayment,
+    AggregateTxStatus.inSign,
+  );
 
   // timestamp: `asce.insertedAt` which is fetched from query: `aggregated_status_changed_entity` as `asce` where `asce.status` == `in-payment` and `asce.txStatus` == `signed` (last record based on `insertedAt`)
-  result.timestamps['PAYMENT_SIGNED'] = aaa(AggregateEventStatus.inPayment, AggregateTxStatus.signed);
+  result.timestamps['PAYMENT_SIGNED'] = aaa(
+    AggregateEventStatus.inPayment,
+    AggregateTxStatus.signed,
+  );
 
   // timestamp: `asce.insertedAt` which is fetched from query: `aggregated_status_changed_entity` as `asce` where `asce.status` == `in-payment` and `asce.txStatus` == `sent` (last record based on `insertedAt`)
-  result.timestamps['PAYMENT_SENT'] = aaa(AggregateEventStatus.inPayment, AggregateTxStatus.sent);
+  result.timestamps['PAYMENT_SENT'] = aaa(
+    AggregateEventStatus.inPayment,
+    AggregateTxStatus.sent,
+  );
+
+  // timestamp: `asce.insertedAt` which is fetched from query: `aggregated_status_changed_entity` as `asce` where `asce.status` == `in-payment` and `asce.txStatus` == `sent` (last record based on `insertedAt`)
+  result.timestamps['PAID'] = aaa(
+    AggregateEventStatus.inPayment,
+    AggregateTxStatus.sent,
+  );
 
   // - ✅ Paid
-  //     - timestamp: `asce.insertedAt` which is fetched from query: `aggregated_status_changed_entity` as `asce` where `asce.status` == `in-payment` and `asce.txStatus` == `sent` (last record based on `insertedAt`)
-  //     - info: The transaction reached enough confirmation on blockchain at "confirmedAt".
   //     - confirmedAt: one of the following:
   //         - if target chain is NOT Ergo: `asce.insertedAt` which is fetched from query: `aggregated_status_changed_entity` as `asce` where `asce.status` == `pending-reward` (first record based on `insertedAt`)
   //         - else: `asce.insertedAt` which is fetched from query: `aggregated_status_changed_entity` as `asce` where `asce.status` == `finished` (exactly one record)
 
   // timestamp: `asce.insertedAt` which is fetched from query: `aggregated_status_changed_entity` as `asce` where `asce.status` == `in-reward` and `asce.txStatus` == `approved` (last record based on `insertedAt`)
-  result.timestamps['REWARD_APPROVED'] = aaa(AggregateEventStatus.inReward, AggregateTxStatus.inSign);
+  result.timestamps['REWARD_APPROVED'] = aaa(
+    AggregateEventStatus.inReward,
+    AggregateTxStatus.inSign,
+  );
 
   // timestamp: `asce.insertedAt` which is fetched from query: `aggregated_status_changed_entity` as `asce` where `asce.status` == `in-reward` and `asce.txStatus` == `signed` (last record based on `insertedAt`)
-  result.timestamps['REWARD_SIGNED'] = aaa(AggregateEventStatus.inReward, AggregateTxStatus.signed);
+  result.timestamps['REWARD_SIGNED'] = aaa(
+    AggregateEventStatus.inReward,
+    AggregateTxStatus.signed,
+  );
 
   // timestamp: `asce.insertedAt` which is fetched from query: `aggregated_status_changed_entity` as `asce` where `asce.status` == `in-reward` and `asce.txStatus` == `sent` (last record based on `insertedAt`)
-  result.timestamps['REWARD_SENT'] = aaa(AggregateEventStatus.inReward, AggregateTxStatus.sent);
+  result.timestamps['REWARD_SENT'] = aaa(
+    AggregateEventStatus.inReward,
+    AggregateTxStatus.sent,
+  );
 
   // ✅ Rewarded
   // timestamp: `be.timestamp` which is fetched from query: `event_trigger_entity` as `ete` join `block_entity` as `be` on `ete.spendBlock` == `be.hash` (exactly one record)
@@ -456,4 +509,4 @@ const getEventStatus = async (eventId: string): Promise<{status: EventDetailsTyp
   result.timestamps['TIMEOUT'] = aaa(AggregateEventStatus.timeout);
 
   return result;
-}
+};
