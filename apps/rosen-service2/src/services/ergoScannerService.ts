@@ -16,7 +16,6 @@ import {
   ServiceStatus,
   Task,
 } from '@rosen-bridge/service-manager';
-import 'constants';
 
 import { configs } from '../configs';
 import { ERGO_METHOD_EXPLORER } from '../constants';
@@ -52,8 +51,18 @@ export class ErgoScannerService extends AbstractErgoScannerService {
     },
   ];
 
+  /**
+   * stop Ergo scanner
+   *
+   * @returns void
+   */
   protected postStop = async () => {};
 
+  /**
+   * start Ergo scanner
+   *
+   * @returns void
+   */
   protected preStart = async () => {};
 
   /**
@@ -69,6 +78,11 @@ export class ErgoScannerService extends AbstractErgoScannerService {
     ];
   };
 
+  /**
+   * Assembles the service by initializing dependencies
+   * @async
+   * @returns {Promise<boolean>} Resolves to `true` when the assembly is successfully completed.
+   */
   protected assemble = async (): Promise<boolean> => {
     this.ergoScanner = this.createErgoScanner(
       AbstractDBService.getInstance().getDataSource(),

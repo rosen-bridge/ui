@@ -31,7 +31,7 @@
   "dependencies": {
     "@rosen-bridge/abstract-logger": "^4.0.0",
     "@rosen-bridge/abstract-scanner": "^1.0.2",
-    "@rosen-bridge/extended-typeorm": "^1.0.1",
+    "@rosen-bridge/extended-typeorm": "^1.1.0",
     "@rosen-bridge/watcher-data-extractor": "^13.0.4",
     "@rosen-ui/asset-calculator": "^2.3.2"
   },

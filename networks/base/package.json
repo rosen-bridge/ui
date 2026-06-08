@@ -22,7 +22,7 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@rosen-bridge/address-codec": "^1.2.0",
+    "@rosen-bridge/address-codec": "^2.0.0",
     "@rosen-bridge/minimum-fee": "^3.1.2",
     "@rosen-bridge/selection-types": "^1.0.1",
     "@rosen-bridge/tokens": "^6.0.0",

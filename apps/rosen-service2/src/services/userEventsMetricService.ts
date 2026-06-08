@@ -34,10 +34,19 @@ export class UserEventsMetricService extends AbstractUserEventsMetricService {
     },
   ];
 
+  /**
+   * Protected constructor
+   * @param {AbstractLogger} [logger] - Optional logger instance for recording service operations.
+   */
   protected constructor(logger?: AbstractLogger) {
     super(logger);
   }
 
+  /**
+   * Assembles the service by initializing dependencies
+   * @async
+   * @returns {Promise<boolean>} Resolves to `true` when the assembly is successfully completed.
+   */
   protected assemble = async (): Promise<boolean> => {
     this.dataSource = AbstractDBService.getInstance().getDataSource();
     this.setStatus(ServiceStatus.dormant);

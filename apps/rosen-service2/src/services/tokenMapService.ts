@@ -9,7 +9,6 @@ import {
   ServiceStatus,
 } from '@rosen-bridge/service-manager';
 import { createClient, VercelKV } from '@vercel/kv';
-import 'constants';
 import crypto from 'crypto';
 import * as ergoLib from 'ergo-lib-wasm-nodejs';
 import fs from 'node:fs';
@@ -29,6 +28,7 @@ export class TokenMapService extends AbstractTokenMapService {
   tokenMap: ExtendedTokenMap;
   private ergoScanner: ErgoScanner;
   protected redis: VercelKV | undefined;
+  protected tokenMapBoxExtractor: ErgoUTXOExtractor;
   protected dependencies: Dependency[] = [
     {
       serviceName: AbstractDBService.name,
@@ -46,17 +46,40 @@ export class TokenMapService extends AbstractTokenMapService {
     },
   ];
 
+  /**
+   * Assembles the service by initializing dependencies
+   * @async
+   * @returns {Promise<boolean>} Resolves to `true` when the assembly is successfully completed.
+   */
   protected assemble = async (): Promise<boolean> => {
     this.ergoScanner =
       AbstractErgoScannerService.getInstance().getErgoScanner();
     this.tokenMap = new ExtendedTokenMap();
+    const { networkType, url } = resolveErgoNetworkConfig();
+    const tokenMapAddress = configs.contracts.ergo.addresses.tokenMap;
+    const tokenMapToken = configs.contracts.ergo.tokens.tokenMap;
+    if (!tokenMapAddress || !tokenMapToken) {
+      throw new Error(
+        'On-chain token map address or token not defined in config',
+      );
+    }
+    this.tokenMapBoxExtractor = new ErgoUTXOExtractor(
+      AbstractDBService.getInstance().getDataSource(),
+      TOKEN_MAP_EXTRACTOR_ID,
+      ergoLib.NetworkPrefix.Mainnet,
+      url,
+      networkType,
+      tokenMapAddress,
+      [tokenMapToken],
+      this.logger.child('tokenMapBoxExtractor'),
+    );
+    await this.ergoScanner.registerExtractor(this.tokenMapBoxExtractor);
     this.setStatus(ServiceStatus.dormant);
     return true;
   };
 
   /**
    * constructor for tokenMap service
-   * @param {ErgoScanner} ergoScanner Scanner instance to register extractors.
    * @param {AbstractLogger} logger.
    */
   protected constructor(logger: AbstractLogger = new DummyLogger()) {
@@ -97,6 +120,7 @@ export class TokenMapService extends AbstractTokenMapService {
    */
   protected stop = async (): Promise<boolean> => {
     await this.tokenMap.updateConfigByJson([]);
+    await this.ergoScanner.removeExtractor(this.tokenMapBoxExtractor);
     this.setStatus(ServiceStatus.dormant);
     return true;
   };
@@ -126,19 +150,6 @@ export class TokenMapService extends AbstractTokenMapService {
     ) {
       throw new Error('On-chain token map address or token not defined');
     }
-    const { networkType, url } = resolveErgoNetworkConfig();
-    const tokenMapBoxExtractor = new ErgoUTXOExtractor(
-      AbstractDBService.getInstance().getDataSource(),
-      TOKEN_MAP_EXTRACTOR_ID,
-      ergoLib.NetworkPrefix.Mainnet,
-      url,
-      networkType,
-      configs.contracts.ergo.addresses.tokenMap,
-      [configs.contracts.ergo.tokens.tokenMap],
-      this.logger.child('tokenMapBoxExtractor'),
-    );
-
-    await this.ergoScanner.registerExtractor(tokenMapBoxExtractor);
 
     this.redis = createClient({
       url: configs.redis.address,
@@ -153,7 +164,9 @@ export class TokenMapService extends AbstractTokenMapService {
       CallbackType.Update,
       CallbackType.Spend,
       CallbackType.Delete,
-    ].forEach((type) => tokenMapBoxExtractor.hook(type, updateTokenMapWrapper));
+    ].forEach((type) =>
+      this.tokenMapBoxExtractor.hook(type, updateTokenMapWrapper),
+    );
   }
 
   /**

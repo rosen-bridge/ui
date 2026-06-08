@@ -25,7 +25,7 @@
     "@rosen-bridge/abstract-observation-extractor": "^1.0.3",
     "@rosen-bridge/abstract-scanner": "^1.0.2",
     "@rosen-bridge/encryption": "^1.0.1",
-    "@rosen-bridge/extended-typeorm": "^1.0.1",
+    "@rosen-bridge/extended-typeorm": "^1.1.0",
     "@rosen-bridge/icons": "^3.6.0",
     "@rosen-bridge/token-price-entity": "^0.2.1",
     "@rosen-bridge/tokens": "^6.0.0",

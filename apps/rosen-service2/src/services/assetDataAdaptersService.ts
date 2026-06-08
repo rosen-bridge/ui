@@ -17,7 +17,7 @@ import {
 } from '@rosen-ui/asset-data-adapter';
 import { AssetBalance } from '@rosen-ui/asset-data-adapter/dist/types';
 import { NETWORKS, NETWORKS_KEYS } from '@rosen-ui/constants';
-import { createClient } from '@vercel/kv';
+import { createClient, VercelKV } from '@vercel/kv';
 
 import { configs } from '../configs';
 import { TOTAL_SUPPLY_REDIS_KEY } from '../constants';
@@ -30,8 +30,8 @@ import {
 
 export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
   name = AbstractAssetDataAdapterService.name;
-  protected redis;
-  protected explorerApi;
+  protected redis: VercelKV;
+  protected explorerApi: ReturnType<typeof ergoExplorerClientFactory>;
   protected dependencies: Dependency[] = [
     {
       serviceName: AbstractTokenMapService.name,
@@ -40,12 +40,12 @@ export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
     },
   ];
 
+  /**
+   * Assembles the service by initializing dependencies
+   * @async
+   * @returns {Promise<boolean>} Resolves to `true` when the assembly is successfully completed.
+   */
   protected assemble = async (): Promise<boolean> => {
-    this.setStatus(ServiceStatus.dormant);
-    return true;
-  };
-  protected constructor(logger?: AbstractLogger) {
-    super(logger);
     this.redis = createClient({
       url: configs.redis.address,
       token: configs.redis.token,
@@ -53,6 +53,16 @@ export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
     this.explorerApi = ergoExplorerClientFactory(
       configs.chains.ergo.explorer.connections.at(0)!.url,
     );
+    this.setStatus(ServiceStatus.dormant);
+    return true;
+  };
+
+  /**
+   * Protected constructor
+   * @param {AbstractLogger} [logger] - Optional logger instance for recording service operations.
+   */
+  protected constructor(logger?: AbstractLogger) {
+    super(logger);
   }
 
   /**

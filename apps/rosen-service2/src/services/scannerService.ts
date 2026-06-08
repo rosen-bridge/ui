@@ -70,13 +70,23 @@ export class ScannerService extends AbstractScannerService {
     },
   ];
 
+  /**
+   * Assembles the service by initializing dependencies
+   * @async
+   * @returns {Promise<boolean>} Resolves to `true` when the assembly is successfully completed.
+   */
   protected assemble = async (): Promise<boolean> => {
     this.dataSource = AbstractDBService.getInstance().getDataSource();
     this.tokenMap = AbstractTokenMapService.getInstance().getTokenMap();
+    await this.generateAndRegisterScannersWithExtractors();
     this.setStatus(ServiceStatus.dormant);
     return true;
   };
 
+  /**
+   * Protected constructor
+   * @param {AbstractLogger} [logger] - Optional logger instance for recording service operations.
+   */
   protected constructor(logger?: AbstractLogger) {
     super(logger);
   }
@@ -88,9 +98,11 @@ export class ScannerService extends AbstractScannerService {
    * @returns {ExtraChainScannersType | undefined} Scanner instance for the chain
    */
   public getScanner = (chain: ChainsKeys) => {
-    this.scanners.ergo =
-      AbstractErgoScannerService.getInstance().getErgoScanner();
-    return this.scanners[chain];
+    if (chain === NETWORKS.ergo.key) {
+      return AbstractErgoScannerService.getInstance().getErgoScanner();
+    } else {
+      return this.scanners[chain];
+    }
   };
 
   /**
@@ -218,7 +230,6 @@ export class ScannerService extends AbstractScannerService {
    * @returns void
    */
   protected preStart = async () => {
-    await this.generateAndRegisterScannersWithExtractors();
     for (const [, scanner] of Object.entries(this.scanners)) {
       if (scanner instanceof WebSocketScanner) {
         if (!scanner.getConnectionStatus()) {

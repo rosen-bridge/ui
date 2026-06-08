@@ -11,7 +11,13 @@ import { AbstractDBService } from './abstracts';
 export class DBService extends AbstractDBService {
   name = AbstractDBService.name;
   protected dataSource: DataSource;
+  protected dependencies: Dependency[] = [];
 
+  /**
+   * Assembles the service by initializing dependencies
+   * @async
+   * @returns {Promise<boolean>} Resolves to `true` when the assembly is successfully completed.
+   */
   protected assemble = async (): Promise<boolean> => {
     this.logger.debug('Initializing data source');
     await this.dataSource.initialize();
@@ -20,6 +26,11 @@ export class DBService extends AbstractDBService {
     return true;
   };
 
+  /**
+   * Protected constructor
+   * @param {DataSource} dataSource
+   * @param {AbstractLogger} [logger] - Optional logger instance for recording service operations.
+   */
   protected constructor(dataSource: DataSource, logger?: AbstractLogger) {
     super(logger);
     this.dataSource = dataSource;
@@ -66,8 +77,11 @@ export class DBService extends AbstractDBService {
     AbstractDBService.instance = new DBService(dataSource, logger);
   };
 
-  protected dependencies: Dependency[] = [];
-
+  /**
+   * start DB service
+   *
+   * @returns void
+   */
   protected start = async (): Promise<boolean> => {
     this.logger.debug('running data source migrations');
     await this.dataSource.runMigrations();
@@ -76,6 +90,11 @@ export class DBService extends AbstractDBService {
     return true;
   };
 
+  /**
+   * stop DB service
+   *
+   * @returns void
+   */
   protected stop = async (): Promise<boolean> => {
     this.setStatus(ServiceStatus.dormant);
     return true;

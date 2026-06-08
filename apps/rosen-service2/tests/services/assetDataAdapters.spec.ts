@@ -6,8 +6,10 @@ import { TokenEntity } from '@rosen-ui/asset-aggregator';
 import { NETWORKS } from '@rosen-ui/constants';
 import { describe, it, beforeEach, expect, vi, Mock } from 'vitest';
 
-import { AbstractAssetDataAdapterService } from '../../src/services/abstracts/abstractAssetDataAdapterService';
-import { AbstractTokenMapService } from '../../src/services/abstracts/abstractTokenMapService';
+import {
+  AbstractAssetDataAdapterService,
+  AbstractTokenMapService,
+} from '../../src/services/abstracts';
 import { AssetDataAdapterService } from '../../src/services/assetDataAdaptersService';
 import { DBService } from '../../src/services/dbService';
 import { TokenMapService } from '../../src/services/tokenMapService';

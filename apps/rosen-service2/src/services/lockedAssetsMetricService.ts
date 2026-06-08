@@ -34,10 +34,19 @@ export class LockedAssetsMetricService extends AbstractLockedAssetsMetricService
     },
   ];
 
+  /**
+   * Protected constructor
+   * @param {AbstractLogger} [logger] - Optional logger instance for recording service operations.
+   */
   protected constructor(logger?: AbstractLogger) {
     super(logger);
   }
 
+  /**
+   * Assembles the service by initializing dependencies
+   * @async
+   * @returns {Promise<boolean>} Resolves to `true` when the assembly is successfully completed.
+   */
   protected assemble = async (): Promise<boolean> => {
     this.dataSource = AbstractDBService.getInstance().getDataSource();
     this.setStatus(ServiceStatus.dormant);
@@ -101,17 +110,7 @@ export class LockedAssetsMetricService extends AbstractLockedAssetsMetricService
     const tasks = [];
 
     tasks.push({
-      fn: async () => {
-        try {
-          this.logger.info(`Running ${this.name} job`);
-          await this.lockedAssetsCalculation();
-        } catch (err) {
-          this.logger.error(`${this.name} job failed: ${err}`);
-          if (err instanceof Error && err.stack) {
-            this.logger.debug(err.stack);
-          }
-        }
-      },
+      fn: async () => await this.lockedAssetsCalculation(),
       interval: configs.statistics.lockedAssetsMetrics.interval * 1000,
     });
     return tasks;

@@ -62,15 +62,15 @@ export class HealthService extends AbstractHealthService {
     },
   ];
 
+  /**
+   * Assembles the service by initializing dependencies
+   * @async
+   * @returns {Promise<boolean>} Resolves to `true` when the assembly is successfully completed.
+   */
   protected assemble = async (): Promise<boolean> => {
     this.getLastSavedBlock = AbstractDBService.getInstance().getLastSavedBlock;
     this.getScanner = AbstractScannerService.getInstance().getScanner;
     this.setStatus(ServiceStatus.dormant);
-    return true;
-  };
-
-  protected constructor(logger?: AbstractLogger) {
-    super(logger);
 
     let notify;
     let notificationConfig;
@@ -99,6 +99,15 @@ export class HealthService extends AbstractHealthService {
       };
     }
     this.healthCheck = new HealthCheck(notify, notificationConfig);
+    return true;
+  };
+
+  /**
+   * Protected constructor
+   * @param {AbstractLogger} [logger] - Optional logger instance for recording service operations.
+   */
+  protected constructor(logger?: AbstractLogger) {
+    super(logger);
   }
 
   /**

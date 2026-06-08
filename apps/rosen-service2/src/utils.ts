@@ -4,9 +4,9 @@ import JsonBigInt from '@rosen-bridge/json-bigint';
 import { ErgoNetworkType } from '@rosen-bridge/scanner-interfaces';
 import { EventTriggerExtractor } from '@rosen-bridge/watcher-data-extractor';
 
-import { configs } from './configs/index';
+import { configs } from './configs';
 import { ERGO_METHOD_EXPLORER } from './constants';
-import { ChainConfigs, ErgoNetworkConfig } from './types/index';
+import { ChainConfigs, ErgoNetworkConfig } from './types';
 
 /**
  * map bigint value in data to string before inserting in redis

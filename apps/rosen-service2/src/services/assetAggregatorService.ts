@@ -11,7 +11,7 @@ import {
 } from '@rosen-ui/asset-aggregator';
 import { AssetBalance } from '@rosen-ui/asset-data-adapter';
 import { NETWORKS } from '@rosen-ui/constants';
-import { createClient } from '@vercel/kv';
+import { createClient, VercelKV } from '@vercel/kv';
 
 import { configs } from '../configs';
 import { TOTAL_SUPPLY_REDIS_KEY } from '../constants';
@@ -26,7 +26,7 @@ import {
 export class AssetAggregatorService extends AbstractAssetAggregatorService {
   name = AbstractAssetAggregatorService.name;
   protected assetAggregator: AssetAggregator;
-  protected redis;
+  protected redis: VercelKV;
 
   protected dependencies: Dependency[] = [
     {
@@ -54,22 +54,31 @@ export class AssetAggregatorService extends AbstractAssetAggregatorService {
     },
   ];
 
+  /**
+   * Assembles the service by initializing dependencies
+   * @async
+   * @returns {Promise<boolean>} Resolves to `true` when the assembly is successfully completed.
+   */
   protected assemble = async (): Promise<boolean> => {
     this.assetAggregator = new AssetAggregator(
       AbstractTokenMapService.getInstance().getTokenMap(),
       AbstractDBService.getInstance().getDataSource(),
       this.logger.child('assetAggregator'),
     );
-    this.setStatus(ServiceStatus.dormant);
-    return true;
-  };
-
-  protected constructor(logger?: AbstractLogger) {
-    super(logger);
     this.redis = createClient({
       url: configs.redis.address,
       token: configs.redis.token,
     });
+    this.setStatus(ServiceStatus.dormant);
+    return true;
+  };
+
+  /**
+   * Protected constructor
+   * @param {AbstractLogger} [logger] - Optional logger instance for recording service operations.
+   */
+  protected constructor(logger?: AbstractLogger) {
+    super(logger);
   }
 
   /**

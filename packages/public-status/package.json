@@ -22,7 +22,7 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@rosen-bridge/extended-typeorm": "^1.0.1"
+    "@rosen-bridge/extended-typeorm": "^1.1.0"
   },
   "engines": {
     "node": ">=22.18.0",

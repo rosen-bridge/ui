@@ -32,7 +32,7 @@
   },
   "dependencies": {
     "@rosen-bridge/abstract-logger": "^4.0.0",
-    "@rosen-bridge/extended-typeorm": "^1.0.1",
+    "@rosen-bridge/extended-typeorm": "^1.1.0",
     "@rosen-bridge/json-bigint": "^1.1.0",
     "@rosen-bridge/tokens": "^6.0.0",
     "@rosen-ui/constants": "^1.0.0",
