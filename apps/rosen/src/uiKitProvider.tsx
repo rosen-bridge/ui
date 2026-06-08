@@ -13,7 +13,7 @@ import {
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
 
-import { Actions } from './app/Actions';
+import { Actions } from './app/(main)/Actions';
 import { useTokenMap } from './hooks';
 
 declare module '@rosen-bridge/ui-kit' {

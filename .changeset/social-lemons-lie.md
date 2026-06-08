@@ -2,4 +2,4 @@
 '@rosen-bridge/rosen-app': minor
 ---
 
-Initialize `Sentry` for error monitoring
+Implement not-found page
