@@ -49,7 +49,7 @@ export const STATUS_MAP: Record<string, EventStatusMeta> = {
   PAYMENT_STALLED: {
     label: 'Payment Stalled',
     color: 'warning',
-    icon: 'Hourglass'
+    icon: 'ExclamationCircle'
   },
   REACHED_LIMIT: {
     label: 'Reached Limit',
@@ -84,7 +84,7 @@ export const STATUS_MAP: Record<string, EventStatusMeta> = {
   REWARD_STALLED: {
     label: 'Reward Stalled',
     color: 'warning',
-    icon: 'Hourglass'
+    icon: 'ExclamationCircle'
   },
   TIMEOUT: {
     label: 'Timeout',

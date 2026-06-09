@@ -44,7 +44,7 @@ export const withValidation =
 
         value = data;
       } else {
-        value = result;
+        value = result as any;
       }
     } catch (error) {
       return Response.json((error as any).message, { status: 400 });

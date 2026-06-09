@@ -1,14 +1,17 @@
 'use client';
 
-import { Section } from './Section';
-import useSWR from 'swr';
-import { fetcher } from '@rosen-ui/swr-helpers';
 import { useMemo } from 'react';
+
+import { Color, Icon, IconProps } from '@rosen-bridge/ui-kit';
+import { fetcher } from '@rosen-ui/swr-helpers';
+import useSWR from 'swr';
+
 import { EventDetailsType } from '@/backend/events/repository';
-import { Color, IconProps } from '@rosen-bridge/ui-kit';
+
+import { Section } from './Section';
 
 type Step = {
-  label: 
+  label:
     | 'Rewarded'
     | 'Completed'
     | 'Created'
@@ -31,30 +34,41 @@ type Step = {
     | 'Rejected'
     | 'Reward Stalled'
     | 'Timeout'
-    |'In Reward';
+    | 'In Reward';
   status: 'DONE' | 'ERROR' | 'PENDING' | 'PROGRESS';
-  sub?: Omit<Step, 'sub'>[]; 
-  infooookey?: EventDetailsType['status'];
+  sub?: Omit<Step, 'sub'>[];
+  detailsKey?: EventDetailsType['status'];
 };
 
-const INFO: Partial<Record<EventDetailsType['status'], string> > = {
+type TimelineItem = {
+  color: Color;
+  description?: string;
+  icon: IconProps['name'];
+  label: string;
+  sub?: TimelineItem[];
+  timestamp?: number;
+};
+
+const INFO: Partial<Record<EventDetailsType['status'], string>> = {
   PAID: 'The transaction reached enough confirmation on blockchain at "confirmedAt"',
-  PAYMENT_STALLED: 'Insufficient assets are available in the lock address for guards to generate the payment transaction',
-  REWARD_STALLED: 'Insufficient assets are available in the lock address for guards to generate the reward distribution transaction',
+  PAYMENT_STALLED:
+    'Insufficient assets are available in the lock address for guards to generate the payment transaction',
+  REWARD_STALLED:
+    'Insufficient assets are available in the lock address for guards to generate the reward distribution transaction',
   TRIGGERED: 'The event has been reported by a sufficient number of watchers',
-}
+};
 
 const FLOWS: Record<EventDetailsType['status'], Step[]> = {
   COMPLETED: [
     {
       label: 'Created',
       status: 'DONE',
-      infooookey: 'CREATED'
+      detailsKey: 'CREATED',
     },
     {
       label: 'Triggered',
       status: 'DONE',
-      infooookey: 'TRIGGERED'
+      detailsKey: 'TRIGGERED',
     },
     {
       label: 'Paid',
@@ -63,19 +77,19 @@ const FLOWS: Record<EventDetailsType['status'], Step[]> = {
         {
           label: 'Approved',
           status: 'DONE',
-          infooookey: 'PAYMENT_APPROVED'
+          detailsKey: 'PAYMENT_APPROVED',
         },
         {
           label: 'Signed',
           status: 'DONE',
-          infooookey: 'PAYMENT_SIGNED'
+          detailsKey: 'PAYMENT_SIGNED',
         },
         {
           label: 'Sent',
           status: 'DONE',
-          infooookey: 'PAYMENT_SENT'
+          detailsKey: 'PAYMENT_SENT',
         },
-      ]
+      ],
     },
     {
       label: 'Rewarded',
@@ -84,31 +98,31 @@ const FLOWS: Record<EventDetailsType['status'], Step[]> = {
         {
           label: 'Approved',
           status: 'DONE',
-          infooookey: 'REWARD_APPROVED'
+          detailsKey: 'REWARD_APPROVED',
         },
         {
           label: 'Signed',
           status: 'DONE',
-          infooookey: 'REWARD_SIGNED'
+          detailsKey: 'REWARD_SIGNED',
         },
         {
           label: 'Sent',
           status: 'DONE',
-          infooookey: 'REWARD_SENT'
+          detailsKey: 'REWARD_SENT',
         },
-      ]
+      ],
     },
     {
       label: 'Completed',
       status: 'DONE',
-      infooookey: 'COMPLETED'
+      detailsKey: 'COMPLETED',
     },
   ],
   CREATED: [
     {
       label: 'Created',
       status: 'DONE',
-      infooookey: 'CREATED'
+      detailsKey: 'CREATED',
     },
     {
       label: 'Trigger',
@@ -131,17 +145,17 @@ const FLOWS: Record<EventDetailsType['status'], Step[]> = {
     {
       label: 'Created',
       status: 'DONE',
-      infooookey: 'CREATED'
+      detailsKey: 'CREATED',
     },
     {
       label: 'Triggered',
       status: 'DONE',
-      infooookey: 'TRIGGERED'
+      detailsKey: 'TRIGGERED',
     },
     {
       label: 'Fraud',
       status: 'ERROR',
-      infooookey: 'FRAUD'
+      detailsKey: 'FRAUD',
     },
   ],
   MULTIPLE_FLOWS: [],
@@ -149,12 +163,12 @@ const FLOWS: Record<EventDetailsType['status'], Step[]> = {
     {
       label: 'Created',
       status: 'DONE',
-      infooookey: 'CREATED'
+      detailsKey: 'CREATED',
     },
     {
       label: 'Triggered',
       status: 'DONE',
-      infooookey: 'TRIGGERED'
+      detailsKey: 'TRIGGERED',
     },
     {
       label: 'Paid',
@@ -163,19 +177,19 @@ const FLOWS: Record<EventDetailsType['status'], Step[]> = {
         {
           label: 'Approved',
           status: 'DONE',
-          infooookey: 'PAYMENT_APPROVED'
+          detailsKey: 'PAYMENT_APPROVED',
         },
         {
           label: 'Signed',
           status: 'DONE',
-          infooookey: 'PAYMENT_SIGNED'
+          detailsKey: 'PAYMENT_SIGNED',
         },
         {
           label: 'Sent',
           status: 'DONE',
-          infooookey: 'PAYMENT_SENT'
+          detailsKey: 'PAYMENT_SENT',
         },
-      ]
+      ],
     },
     {
       label: 'Reward',
@@ -190,12 +204,12 @@ const FLOWS: Record<EventDetailsType['status'], Step[]> = {
     {
       label: 'Created',
       status: 'DONE',
-      infooookey: 'CREATED'
+      detailsKey: 'CREATED',
     },
     {
       label: 'Triggered',
       status: 'DONE',
-      infooookey: 'TRIGGERED'
+      detailsKey: 'TRIGGERED',
     },
     {
       label: 'In Payment',
@@ -204,7 +218,7 @@ const FLOWS: Record<EventDetailsType['status'], Step[]> = {
         {
           label: 'Approved',
           status: 'DONE',
-          infooookey: 'PAYMENT_APPROVED'
+          detailsKey: 'PAYMENT_APPROVED',
         },
         {
           label: 'Sign',
@@ -214,7 +228,7 @@ const FLOWS: Record<EventDetailsType['status'], Step[]> = {
           label: 'Send',
           status: 'PENDING',
         },
-      ]
+      ],
     },
     {
       label: 'Reward',
@@ -229,12 +243,12 @@ const FLOWS: Record<EventDetailsType['status'], Step[]> = {
     {
       label: 'Created',
       status: 'DONE',
-      infooookey: 'CREATED'
+      detailsKey: 'CREATED',
     },
     {
       label: 'Triggered',
       status: 'DONE',
-      infooookey: 'TRIGGERED'
+      detailsKey: 'TRIGGERED',
     },
     {
       label: 'In Payment',
@@ -243,19 +257,19 @@ const FLOWS: Record<EventDetailsType['status'], Step[]> = {
         {
           label: 'Approved',
           status: 'DONE',
-          infooookey: 'PAYMENT_APPROVED'
+          detailsKey: 'PAYMENT_APPROVED',
         },
         {
           label: 'Signed',
           status: 'DONE',
-          infooookey: 'PAYMENT_SIGNED'
+          detailsKey: 'PAYMENT_SIGNED',
         },
         {
           label: 'Sent',
           status: 'DONE',
-          infooookey: 'PAYMENT_SENT'
+          detailsKey: 'PAYMENT_SENT',
         },
-      ]
+      ],
     },
     {
       label: 'Reward',
@@ -270,12 +284,12 @@ const FLOWS: Record<EventDetailsType['status'], Step[]> = {
     {
       label: 'Created',
       status: 'DONE',
-      infooookey: 'CREATED'
+      detailsKey: 'CREATED',
     },
     {
       label: 'Triggered',
       status: 'DONE',
-      infooookey: 'TRIGGERED'
+      detailsKey: 'TRIGGERED',
     },
     {
       label: 'In Payment',
@@ -284,18 +298,18 @@ const FLOWS: Record<EventDetailsType['status'], Step[]> = {
         {
           label: 'Approved',
           status: 'DONE',
-          infooookey: 'PAYMENT_APPROVED'
+          detailsKey: 'PAYMENT_APPROVED',
         },
         {
           label: 'Signed',
           status: 'DONE',
-          infooookey: 'PAYMENT_SIGNED'
+          detailsKey: 'PAYMENT_SIGNED',
         },
         {
           label: 'Send',
           status: 'PENDING',
         },
-      ]
+      ],
     },
     {
       label: 'Reward',
@@ -310,12 +324,12 @@ const FLOWS: Record<EventDetailsType['status'], Step[]> = {
     {
       label: 'Created',
       status: 'DONE',
-      infooookey: 'CREATED'
+      detailsKey: 'CREATED',
     },
     {
       label: 'Triggered',
       status: 'DONE',
-      infooookey: 'TRIGGERED'
+      detailsKey: 'TRIGGERED',
     },
     {
       label: 'In Payment',
@@ -324,18 +338,18 @@ const FLOWS: Record<EventDetailsType['status'], Step[]> = {
         {
           label: 'Approved',
           status: 'DONE',
-          infooookey: 'PAYMENT_APPROVED'
+          detailsKey: 'PAYMENT_APPROVED',
         },
         {
           label: 'In Sign',
           status: 'PROGRESS',
-          infooookey: 'PAYMENT_SIGNING'
+          detailsKey: 'PAYMENT_SIGNING',
         },
         {
           label: 'Send',
           status: 'PENDING',
         },
-      ]
+      ],
     },
     {
       label: 'Reward',
@@ -350,17 +364,17 @@ const FLOWS: Record<EventDetailsType['status'], Step[]> = {
     {
       label: 'Created',
       status: 'DONE',
-      infooookey: 'CREATED'
+      detailsKey: 'CREATED',
     },
     {
       label: 'Triggered',
       status: 'DONE',
-      infooookey: 'TRIGGERED'
+      detailsKey: 'TRIGGERED',
     },
     {
       label: 'Payment Stalled',
       status: 'PROGRESS',
-      infooookey: 'PAYMENT_STALLED'
+      detailsKey: 'PAYMENT_STALLED',
     },
     {
       label: 'Reward',
@@ -372,49 +386,49 @@ const FLOWS: Record<EventDetailsType['status'], Step[]> = {
     },
   ],
   REACHED_LIMIT: [
-    {      
+    {
       label: 'Created',
       status: 'DONE',
-      infooookey: 'CREATED'
+      detailsKey: 'CREATED',
     },
     {
       label: 'Triggered',
       status: 'DONE',
-      infooookey: 'TRIGGERED'
+      detailsKey: 'TRIGGERED',
     },
     {
       label: 'Reached Limit',
       status: 'ERROR',
-      infooookey: 'REACHED_LIMIT'
+      detailsKey: 'REACHED_LIMIT',
     },
   ],
   REJECTED: [
-    {      
+    {
       label: 'Created',
       status: 'DONE',
-      infooookey: 'CREATED'
+      detailsKey: 'CREATED',
     },
     {
       label: 'Triggered',
       status: 'DONE',
-      infooookey: 'TRIGGERED'
+      detailsKey: 'TRIGGERED',
     },
     {
       label: 'Rejected',
       status: 'ERROR',
-      infooookey: 'REJECTED'
+      detailsKey: 'REJECTED',
     },
   ],
   REWARD_APPROVED: [
     {
       label: 'Created',
       status: 'DONE',
-      infooookey: 'CREATED'
+      detailsKey: 'CREATED',
     },
     {
       label: 'Triggered',
       status: 'DONE',
-      infooookey: 'TRIGGERED'
+      detailsKey: 'TRIGGERED',
     },
     {
       label: 'Paid',
@@ -423,19 +437,19 @@ const FLOWS: Record<EventDetailsType['status'], Step[]> = {
         {
           label: 'Approved',
           status: 'DONE',
-          infooookey: 'PAYMENT_APPROVED'
+          detailsKey: 'PAYMENT_APPROVED',
         },
         {
           label: 'Signed',
           status: 'DONE',
-          infooookey: 'PAYMENT_SIGNED'
+          detailsKey: 'PAYMENT_SIGNED',
         },
         {
           label: 'Sent',
           status: 'DONE',
-          infooookey: 'PAYMENT_SENT'
+          detailsKey: 'PAYMENT_SENT',
         },
-      ]
+      ],
     },
     {
       label: 'In Reward',
@@ -444,7 +458,7 @@ const FLOWS: Record<EventDetailsType['status'], Step[]> = {
         {
           label: 'Approved',
           status: 'DONE',
-          infooookey: 'REWARD_APPROVED'
+          detailsKey: 'REWARD_APPROVED',
         },
         {
           label: 'Sign',
@@ -454,7 +468,7 @@ const FLOWS: Record<EventDetailsType['status'], Step[]> = {
           label: 'Send',
           status: 'PENDING',
         },
-      ]
+      ],
     },
     {
       label: 'Completion',
@@ -465,12 +479,12 @@ const FLOWS: Record<EventDetailsType['status'], Step[]> = {
     {
       label: 'Created',
       status: 'DONE',
-      infooookey: 'CREATED'
+      detailsKey: 'CREATED',
     },
     {
       label: 'Triggered',
       status: 'DONE',
-      infooookey: 'TRIGGERED'
+      detailsKey: 'TRIGGERED',
     },
     {
       label: 'Paid',
@@ -479,19 +493,19 @@ const FLOWS: Record<EventDetailsType['status'], Step[]> = {
         {
           label: 'Approved',
           status: 'DONE',
-          infooookey: 'PAYMENT_APPROVED'
+          detailsKey: 'PAYMENT_APPROVED',
         },
         {
           label: 'Signed',
           status: 'DONE',
-          infooookey: 'PAYMENT_SIGNED'
+          detailsKey: 'PAYMENT_SIGNED',
         },
         {
           label: 'Sent',
           status: 'DONE',
-          infooookey: 'PAYMENT_SENT'
+          detailsKey: 'PAYMENT_SENT',
         },
-      ]
+      ],
     },
     {
       label: 'In Reward',
@@ -500,19 +514,19 @@ const FLOWS: Record<EventDetailsType['status'], Step[]> = {
         {
           label: 'Approved',
           status: 'DONE',
-          infooookey: 'REWARD_APPROVED'
+          detailsKey: 'REWARD_APPROVED',
         },
         {
           label: 'Signed',
           status: 'DONE',
-          infooookey: 'REWARD_SIGNED'
+          detailsKey: 'REWARD_SIGNED',
         },
         {
           label: 'Sent',
           status: 'DONE',
-          infooookey: 'REWARD_SENT'
+          detailsKey: 'REWARD_SENT',
         },
-      ]
+      ],
     },
     {
       label: 'Completion',
@@ -523,12 +537,12 @@ const FLOWS: Record<EventDetailsType['status'], Step[]> = {
     {
       label: 'Created',
       status: 'DONE',
-      infooookey: 'CREATED'
+      detailsKey: 'CREATED',
     },
     {
       label: 'Triggered',
       status: 'DONE',
-      infooookey: 'TRIGGERED'
+      detailsKey: 'TRIGGERED',
     },
     {
       label: 'Paid',
@@ -537,19 +551,19 @@ const FLOWS: Record<EventDetailsType['status'], Step[]> = {
         {
           label: 'Approved',
           status: 'DONE',
-          infooookey: 'PAYMENT_APPROVED'
+          detailsKey: 'PAYMENT_APPROVED',
         },
         {
           label: 'Signed',
           status: 'DONE',
-          infooookey: 'PAYMENT_SIGNED'
+          detailsKey: 'PAYMENT_SIGNED',
         },
         {
           label: 'Sent',
           status: 'DONE',
-          infooookey: 'PAYMENT_SENT'
+          detailsKey: 'PAYMENT_SENT',
         },
-      ]
+      ],
     },
     {
       label: 'In Reward',
@@ -558,18 +572,18 @@ const FLOWS: Record<EventDetailsType['status'], Step[]> = {
         {
           label: 'Approved',
           status: 'DONE',
-          infooookey: 'REWARD_APPROVED'
+          detailsKey: 'REWARD_APPROVED',
         },
         {
           label: 'Signed',
           status: 'DONE',
-          infooookey: 'REWARD_SIGNED'
+          detailsKey: 'REWARD_SIGNED',
         },
         {
           label: 'Send',
           status: 'PENDING',
         },
-      ]
+      ],
     },
     {
       label: 'Completion',
@@ -580,12 +594,12 @@ const FLOWS: Record<EventDetailsType['status'], Step[]> = {
     {
       label: 'Created',
       status: 'DONE',
-      infooookey: 'CREATED'
+      detailsKey: 'CREATED',
     },
     {
       label: 'Triggered',
       status: 'DONE',
-      infooookey: 'TRIGGERED'
+      detailsKey: 'TRIGGERED',
     },
     {
       label: 'Paid',
@@ -594,19 +608,19 @@ const FLOWS: Record<EventDetailsType['status'], Step[]> = {
         {
           label: 'Approved',
           status: 'DONE',
-          infooookey: 'PAYMENT_APPROVED'
+          detailsKey: 'PAYMENT_APPROVED',
         },
         {
           label: 'Signed',
           status: 'DONE',
-          infooookey: 'PAYMENT_SIGNED'
+          detailsKey: 'PAYMENT_SIGNED',
         },
         {
           label: 'Sent',
           status: 'DONE',
-          infooookey: 'PAYMENT_SENT'
+          detailsKey: 'PAYMENT_SENT',
         },
-      ]
+      ],
     },
     {
       label: 'In Reward',
@@ -615,18 +629,18 @@ const FLOWS: Record<EventDetailsType['status'], Step[]> = {
         {
           label: 'Approved',
           status: 'DONE',
-          infooookey: 'REWARD_APPROVED'
+          detailsKey: 'REWARD_APPROVED',
         },
         {
           label: 'In Sign',
           status: 'PROGRESS',
-          infooookey: 'REWARD_SIGNING'
+          detailsKey: 'REWARD_SIGNING',
         },
         {
           label: 'Send',
           status: 'PENDING',
         },
-      ]
+      ],
     },
     {
       label: 'Completion',
@@ -637,12 +651,12 @@ const FLOWS: Record<EventDetailsType['status'], Step[]> = {
     {
       label: 'Created',
       status: 'DONE',
-      infooookey: 'CREATED'
+      detailsKey: 'CREATED',
     },
     {
       label: 'Triggered',
       status: 'DONE',
-      infooookey: 'TRIGGERED'
+      detailsKey: 'TRIGGERED',
     },
     {
       label: 'Paid',
@@ -651,24 +665,24 @@ const FLOWS: Record<EventDetailsType['status'], Step[]> = {
         {
           label: 'Approved',
           status: 'DONE',
-          infooookey: 'PAYMENT_APPROVED'
+          detailsKey: 'PAYMENT_APPROVED',
         },
         {
           label: 'Signed',
           status: 'DONE',
-          infooookey: 'PAYMENT_SIGNED'
+          detailsKey: 'PAYMENT_SIGNED',
         },
         {
           label: 'Sent',
           status: 'DONE',
-          infooookey: 'PAYMENT_SENT'
+          detailsKey: 'PAYMENT_SENT',
         },
-      ]
+      ],
     },
     {
       label: 'Reward Stalled',
       status: 'PROGRESS',
-      infooookey: 'REWARD_STALLED'
+      detailsKey: 'REWARD_STALLED',
     },
     {
       label: 'Completion',
@@ -676,32 +690,32 @@ const FLOWS: Record<EventDetailsType['status'], Step[]> = {
     },
   ],
   TIMEOUT: [
-    {      
+    {
       label: 'Created',
       status: 'DONE',
-      infooookey: 'CREATED'
+      detailsKey: 'CREATED',
     },
     {
       label: 'Triggered',
       status: 'DONE',
-      infooookey: 'TRIGGERED'
+      detailsKey: 'TRIGGERED',
     },
     {
       label: 'Timeout',
       status: 'ERROR',
-      infooookey: 'TIMEOUT'
+      detailsKey: 'TIMEOUT',
     },
   ],
   TRIGGERED: [
     {
       label: 'Created',
       status: 'DONE',
-      infooookey: 'CREATED'
+      detailsKey: 'CREATED',
     },
     {
       label: 'Triggered',
       status: 'DONE',
-      infooookey: 'TRIGGERED'
+      detailsKey: 'TRIGGERED',
     },
     {
       label: 'Payment',
@@ -716,62 +730,83 @@ const FLOWS: Record<EventDetailsType['status'], Step[]> = {
       status: 'PENDING',
     },
   ],
-  UNKNOWN: []
-}
+  UNKNOWN: [],
+};
 
-const aaaaa = (steps: Step[], timestamps) => {
+const toItems = (steps: Step[], timestamps: EventDetailsType['timestamps']): TimelineItem[] => {
   return steps.map((step) => {
-      const color: Color = (() => {
-        switch (step.status) {
-          case 'DONE':
-            return 'success';
-          case 'ERROR':
-            return 'error';
-          case 'PENDING':
-            return 'neutral';
-          case 'PROGRESS':
-            return 'info';
-        }
-      })();
+    const color: Color = (() => {
+      switch (step.status) {
+        case 'DONE':
+          return 'success';
+        case 'ERROR':
+          return 'error';
+        case 'PENDING':
+          return 'neutral';
+        case 'PROGRESS':
+          return 'info';
+      }
+    })();
 
-      const description = INFO[step.infooookey];
+    const description = step.detailsKey ? INFO[step.detailsKey] : undefined;
 
-      const icon: IconProps['name'] = (() => {
-        switch (step.status) {
-          case 'DONE':
-            return 'Check';
-          case 'ERROR':
-            return 'Times';
-          case 'PENDING':
-            return 'ExclamationCircle';
-          case 'PROGRESS':
-            return 'Hourglass';
-        }
-      })();
+    const icon: IconProps['name'] = (() => {
+      switch (step.status) {
+        case 'DONE':
+          return 'Check';
+        case 'ERROR':
+          return 'Times';
+        case 'PENDING':
+          return 'ExclamationCircle';
+        case 'PROGRESS':
+          return 'Hourglass';
+      }
+    })();
 
-      const label = step.label;
+    const label = step.label;
 
-      const sub = step.sub ? aaaaa(step.sub, timestamps) : undefined;
+    const sub = step.sub ? toItems(step.sub, timestamps) : undefined;
 
-      const timestamp = timestamps[step.infooookey];
+    const timestamp = step.detailsKey ? timestamps[step.detailsKey] : undefined;
 
-    return {color,description,icon,label,sub,timestamp}
-  })
-}
+    return { color, description, icon, label, sub, timestamp };
+  });
+};
 
 export const Process = ({ id }: { id: string }) => {
-  const { data } = useSWR(
-    `/v1/events/${id}`,
-    fetcher,
-  );
+  const { data } = useSWR<EventDetailsType>(`/v1/events/${id}`, fetcher);
 
   const items = useMemo(() => {
-    return aaaaa(FLOWS[data?.status] || [], data?.timestamps)
+    if (!data) return [];
+    return toItems(FLOWS[data.status], data.timestamps);
   }, [data]);
 
   return (
     <Section title="Progress">
-      <pre>{JSON.stringify(items, null, 2)}</pre>
+      <ul>
+        {items.map((item, index) => (
+          <li key={index}>
+            <Icon color={item.color} name={item.icon} />
+            {item.label}{' '}
+            {item.timestamp && (
+              <small style={{ opacity: 0.5 }}>({item.timestamp})</small>
+            )}
+            {item.sub && (
+              <ul>
+                {item.sub.map((item, index) => (
+                  <li key={index}>
+                    <Icon color={item.color} name={item.icon} />
+                    {item.label}{' '}
+                    {item.timestamp && (
+                      <small style={{ opacity: 0.5 }}>({item.timestamp})</small>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </li>
+        ))}
+      </ul>
     </Section>
   );
 };
