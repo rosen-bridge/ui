@@ -1,12 +1,12 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
 import { Color, Icon, IconProps } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import useSWR from 'swr';
 
-import { EventDetailsType } from '@/backend/events/repository';
+import { EventDetailsType, EventStatusType } from '@/backend/events/repository';
 
 import { Section } from './Section';
 
@@ -733,7 +733,10 @@ const FLOWS: Record<EventDetailsType['status'], Step[]> = {
   UNKNOWN: [],
 };
 
-const toItems = (steps: Step[], timestamps: EventDetailsType['timestamps']): TimelineItem[] => {
+const toItems = (
+  steps: Step[],
+  timestamps: EventDetailsType['timestamps'],
+): TimelineItem[] => {
   return steps.map((step) => {
     const color: Color = (() => {
       switch (step.status) {
@@ -774,7 +777,12 @@ const toItems = (steps: Step[], timestamps: EventDetailsType['timestamps']): Tim
 };
 
 export const Process = ({ id }: { id: string }) => {
-  const { data } = useSWR<EventDetailsType>(`/v1/events/${id}`, fetcher);
+  const [guardPublicKey, setGuardPublicKey] = useState<string>();
+
+  const { data } = useSWR<EventStatusType>(
+    `/v1/events/${id}/status${guardPublicKey ? `?guardPublicKey=${guardPublicKey}` : ''}`,
+    fetcher,
+  );
 
   const items = useMemo(() => {
     if (!data) return [];
@@ -783,6 +791,11 @@ export const Process = ({ id }: { id: string }) => {
 
   return (
     <Section title="Progress">
+      <select onChange={(event) => setGuardPublicKey(event.target.value)}>
+        <option value="" defaultChecked>
+          Overal
+        </option>
+      </select>
       <ul>
         {items.map((item, index) => (
           <li key={index}>

@@ -13,6 +13,8 @@ import {
   AggregatedStatusEntity,
   AggregateEventStatus,
   AggregateTxStatus,
+  GuardStatusChangedEntity,
+  GuardStatusEntity,
 } from '@rosen-ui/public-status';
 import { Network } from '@rosen-ui/types';
 
@@ -30,6 +32,10 @@ const aggregatedStatusRepository = dataSource.getRepository(
 );
 const aggregatedStatusChangedRepository = dataSource.getRepository(
   AggregatedStatusChangedEntity,
+);
+const guardStatusRepository = dataSource.getRepository(GuardStatusEntity);
+const guardStatusChangedRepository = dataSource.getRepository(
+  GuardStatusChangedEntity,
 );
 
 interface EventWithTotal
@@ -68,6 +74,11 @@ export type EventDetailsType = Omit<EventWithTotal, 'status' | 'total'> & {
     | 'TIMEOUT'
     | 'TRIGGERED'
     | 'UNKNOWN';
+  timestamps: Partial<Record<EventDetailsType['status'], number>>;
+};
+
+export type EventStatusType = {
+  status: EventDetailsType['status'];
   timestamps: Partial<Record<EventDetailsType['status'], number>>;
 };
 
@@ -288,15 +299,13 @@ export const getEvent = async (id: string) => {
   };
 };
 
-const getEventStatus = async (
+export const getEventStatus = async (
   eventId: string,
-): Promise<{
-  status: EventDetailsType['status'];
-  timestamps: Partial<Record<EventDetailsType['status'], number>>;
-}> => {
-  const result = {
-    status: 'CREATED' as EventDetailsType['status'],
-    timestamps: {} as Partial<Record<EventDetailsType['status'], number>>,
+  guardPublicKey?: string,
+): Promise<EventStatusType> => {
+  const result: EventStatusType = {
+    status: 'CREATED',
+    timestamps: {},
   };
 
   const observation = await observationRepository.findOneBy({
@@ -345,17 +354,38 @@ const getEventStatus = async (
     )?.timestamp;
   }
 
-  const aggregatedStatusChangedItems =
-    await aggregatedStatusChangedRepository.find({
-      where: { eventId: eventId },
+  let aggregatedStatusChangedItems:
+    | AggregatedStatusChangedEntity[]
+    | GuardStatusChangedEntity[];
+
+  if (guardPublicKey) {
+    aggregatedStatusChangedItems = await guardStatusChangedRepository.find({
+      where: { eventId: eventId, guardPk: guardPublicKey },
       order: { insertedAt: 'DESC' },
     });
+  } else {
+    aggregatedStatusChangedItems = await aggregatedStatusChangedRepository.find(
+      {
+        where: { eventId: eventId },
+        order: { insertedAt: 'DESC' },
+      },
+    );
+  }
 
   // TODO
   if (eventTrigger.result === null) {
-    const aggregatedStatus = await aggregatedStatusRepository.findOneBy({
-      eventId: eventId,
-    });
+    let aggregatedStatus: AggregatedStatusEntity | GuardStatusEntity | null;
+
+    if (guardPublicKey) {
+      aggregatedStatus = await guardStatusRepository.findOneBy({
+        eventId: eventId,
+        guardPk: guardPublicKey,
+      });
+    } else {
+      aggregatedStatus = await aggregatedStatusRepository.findOneBy({
+        eventId: eventId,
+      });
+    }
 
     switch (aggregatedStatus?.status) {
       case null:
