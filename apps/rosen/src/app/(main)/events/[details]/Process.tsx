@@ -1,8 +1,8 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
-import { Color, Icon, IconProps } from '@rosen-bridge/ui-kit';
+import { Color, EventProcesses, IconProps } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import useSWR from 'swr';
 
@@ -38,6 +38,7 @@ type Step = {
   status: 'DONE' | 'ERROR' | 'PENDING' | 'PROGRESS';
   sub?: Omit<Step, 'sub'>[];
   detailsKey?: EventDetailsType['status'];
+  value?: string;
 };
 
 type TimelineItem = {
@@ -774,7 +775,9 @@ const toItems = (
 
     const timestamp = step.detailsKey ? timestamps[step.detailsKey] : undefined;
 
-    return { color, description, icon, label, sub, timestamp };
+    const value: string = crypto.randomUUID();
+
+    return { color, description, icon, label, sub, timestamp, value };
   });
 };
 
@@ -788,10 +791,23 @@ export const Process = ({ id }: { id: string }) => {
     fetcher,
   );
 
+  const [active, setActive] = useState<string | undefined>();
+
   const items = useMemo(() => {
     if (!data) return [];
     return toItems(FLOWS[data.status], data.timestamps);
   }, [data]);
+
+  useEffect(() => {
+    if (!items) return;
+
+    const firstItemWithSub = items.find(
+      (item) => item.sub && item.sub.length > 0,
+    );
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    setActive(firstItemWithSub?.value);
+  }, [items]);
 
   return (
     <Section title="Progress">
@@ -805,30 +821,15 @@ export const Process = ({ id }: { id: string }) => {
           </option>
         ))}
       </select>
-      <ul>
-        {items.map((item, index) => (
-          <li key={index}>
-            <Icon color={item.color} name={item.icon} />
-            {item.label}{' '}
-            {item.timestamp && (
-              <small style={{ opacity: 0.5 }}>({item.timestamp})</small>
-            )}
-            {item.sub && (
-              <ul>
-                {item.sub.map((item, index) => (
-                  <li key={index}>
-                    <Icon color={item.color} name={item.icon} />
-                    {item.label}{' '}
-                    {item.timestamp && (
-                      <small style={{ opacity: 0.5 }}>({item.timestamp})</small>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </li>
-        ))}
-      </ul>
+      <div style={{ width: '100%', height: '230px' }}>
+        <EventProcesses
+          items={items}
+          value={active}
+          setActive={(value?: string) => {
+            setActive(value);
+          }}
+        />
+      </div>
     </Section>
   );
 };

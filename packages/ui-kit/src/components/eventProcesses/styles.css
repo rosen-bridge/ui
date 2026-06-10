@@ -1,0 +1,142 @@
+.RosenEventProcesses {
+    &[data-orientation="horizontal"] {
+        display: flex;
+        align-items: flex-start;
+        width: calc(100% - 75px);
+        margin: 0 auto ;
+
+        .RosenStep {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        .RosenStep-header {
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+
+        .RosenStep-line {
+            flex: 1;
+            height: 1px;
+            background: var(--rosen-palette-neutral);
+
+        }
+
+        .RosenStep-dot {
+            margin: 0 var(--rosen-spacing);
+        }
+
+        .RosenStep-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: var(--rosen-spacing);
+            text-align: center;
+            width: 100%;
+
+        }
+    }
+
+    &[data-orientation="vertical"] {
+        display: flex;
+        flex-direction: column;
+        width: fit-content;
+
+        .RosenStep {
+            display: flex;
+            gap: 14px;
+            position: relative;
+        }
+
+        .RosenStep-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .RosenStep-line {
+            width: 1px;
+            flex: 1;
+            min-height: 32px;
+            background: var(--rosen-palette-neutral);
+        }
+
+        .RosenStep-dot {
+            margin: var(--rosen-spacing) 0;
+        }
+
+        .RosenStep-content {
+            position: relative;
+            text-align: center;
+            margin: auto;
+        }
+    }
+}
+
+.RosenEventProcesses[data-orientation="horizontal"] > .RosenStep:first-child
+> .RosenStep-header
+> .RosenStep-line:first-child {
+    visibility: hidden;
+}
+
+.RosenEventProcesses[data-orientation="horizontal"] > .RosenStep:last-child
+> .RosenStep-header
+> .RosenStep-line:last-child {
+    visibility: hidden;
+}
+
+.sub > .RosenStep:first-child
+> .RosenStep-header
+> .RosenStep-line:first-child {
+    visibility: hidden;
+}
+
+.sub > .RosenStep:last-child
+> .RosenStep-header
+> .RosenStep-line:last-child {
+    visibility: hidden;
+}
+
+.RosenStep-dot {
+    width: calc(var(--rosen-spacing) * 4);
+    height: calc(var(--rosen-spacing) * 4);
+
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    cursor: pointer;
+    z-index: 1;
+    color: #fff;
+    background-color: var(--rosen-step-color);
+
+}
+
+.RosenStep-label {
+    font-size: 13px;
+    font-weight: 500;
+    text-align: center;
+    color: var(--rosen-step-color);
+}
+
+.RosenStep-sub {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    width: 270px;
+    align-items: center;
+    gap: var(--rosen-spacing);
+    margin-top: 26px;
+
+    .sub {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+}

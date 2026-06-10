@@ -65,7 +65,7 @@ import {
   TruncateProps,
   TypographyProps,
   ViewToggleProps,
-  VirtualScrollProps,
+  VirtualScrollProps, EventProcessesProps
 } from '@/components';
 
 export type Components = {
@@ -99,6 +99,7 @@ export type Components = {
   EventCard: EventCardProps;
   EventDetails: EventDetailsProps;
   EventStatus: EventStatusProps;
+  EventProcesses: EventProcessesProps;
   GridContainer: GridContainerProps;
   Icon: IconProps;
   IconButton: IconButtonProps;

@@ -35,6 +35,7 @@ export * from './dateTime';
 export * from './duration';
 export * from './eventCard';
 export * from './eventDetails';
+export * from './eventProcesses';
 export * from './eventStatus';
 export * from './gridContainer';
 export * from './icon';
