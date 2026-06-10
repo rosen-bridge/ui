@@ -49,6 +49,8 @@ type TimelineItem = {
   timestamp?: number;
 };
 
+const GUARDS = JSON.parse(process.env['ALLOWED_PKS'] ?? '{}');
+
 const INFO: Partial<Record<EventDetailsType['status'], string>> = {
   PAID: 'The transaction reached enough confirmation on blockchain at "confirmedAt"',
   PAYMENT_STALLED:
@@ -780,7 +782,9 @@ export const Process = ({ id }: { id: string }) => {
   const [guardPublicKey, setGuardPublicKey] = useState<string>();
 
   const { data } = useSWR<EventStatusType>(
-    `/v1/events/${id}/status${guardPublicKey ? `?guardPublicKey=${guardPublicKey}` : ''}`,
+    guardPublicKey
+      ? `/v1/events/${id}/status`
+      : `/v1/events/${id}/status?guardPublicKey=${guardPublicKey}`,
     fetcher,
   );
 
@@ -793,8 +797,13 @@ export const Process = ({ id }: { id: string }) => {
     <Section title="Progress">
       <select onChange={(event) => setGuardPublicKey(event.target.value)}>
         <option value="" defaultChecked>
-          Overal
+          Overall
         </option>
+        {Object.keys(GUARDS).map((key) => (
+          <option key={key} value={key}>
+            {GUARDS[key]}
+          </option>
+        ))}
       </select>
       <ul>
         {items.map((item, index) => (

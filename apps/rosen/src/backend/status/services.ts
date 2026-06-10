@@ -187,7 +187,7 @@ const txStatusThresholds = Object.values(AggregateTxStatus).map((status) => {
 
 export const publicStatusConfigs = {
   timeoutThresholdSeconds: getNumber('TIMEOUT_THRESHOLD_SECONDS') ?? 30,
-  allowedPks: (process.env['ALLOWED_PKS'] ?? '').split(','),
+  allowedPks: Object.keys(JSON.parse(process.env['ALLOWED_PKS'] ?? '{}')),
   eventStatusThresholds,
   txStatusThresholds,
 };
