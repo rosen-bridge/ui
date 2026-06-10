@@ -21,14 +21,12 @@ import path from 'node:path';
 
 import { configs } from '../configs';
 import {
-  BINANCE_BLOCK_TIME,
-  BITCOIN_BLOCK_TIME,
-  CARDANO_BLOCK_TIME,
-  DOGE_BLOCK_TIME,
-  ERGO_BLOCK_TIME,
-  ETHEREUM_BLOCK_TIME,
-} from '../constants';
-import { ChainsKeys, ChainScannersType, Chains } from '../types';
+  ChainsKeys,
+  ChainScannersType,
+  Chains,
+  BLOCK_TIMES,
+  ChainsWithScanner,
+} from '../types';
 import {
   AbstractHealthService,
   AbstractScannerService,
@@ -36,7 +34,7 @@ import {
 } from './abstracts';
 
 export class HealthService extends AbstractHealthService {
-  name = AbstractHealthService.name;
+  static serviceName = AbstractHealthService.name;
   private getLastSavedBlock: (scanner: string) => Promise<LastSavedBlock>;
   private getScanner: (chain: keyof Chains) => ChainScannersType | undefined;
   protected healthCheck: HealthCheck;
@@ -172,18 +170,13 @@ export class HealthService extends AbstractHealthService {
     ];
 
     // Add chains Scanner params
-    this.addScannerSyncParam(NETWORKS.ergo.key, ERGO_BLOCK_TIME);
-    if (configs.chains.cardano.active)
-      this.addScannerSyncParam(NETWORKS.cardano.key, CARDANO_BLOCK_TIME);
-    if (configs.chains.bitcoin.active)
-      this.addScannerSyncParam(NETWORKS.bitcoin.key, BITCOIN_BLOCK_TIME);
-    if (configs.chains.doge.active)
-      this.addScannerSyncParam(NETWORKS.doge.key, DOGE_BLOCK_TIME);
-    if (configs.chains.ethereum.active)
-      this.addScannerSyncParam(NETWORKS.ethereum.key, ETHEREUM_BLOCK_TIME);
-    if (configs.chains.binance.active)
-      this.addScannerSyncParam(NETWORKS.binance.key, BINANCE_BLOCK_TIME);
-
+    this.addScannerSyncParam(NETWORKS.ergo.key, BLOCK_TIMES.ergo);
+    (Object.keys(configs.chains) as ChainsWithScanner[]).forEach((chain) => {
+      if (chain !== NETWORKS.ergo.key && configs.chains[chain].active) {
+        const blockTime = BLOCK_TIMES[chain];
+        this.addScannerSyncParam(chain, blockTime);
+      }
+    });
     for (const param of this.params) {
       this.healthCheck.register(param);
       this.logger.debug(`${param.getId()} health param registered`);

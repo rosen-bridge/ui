@@ -2,12 +2,10 @@ import { ReactNode, useCallback, useEffect, useMemo } from 'react';
 
 import { Alert as AlertMUI } from '@mui/material';
 
+import { Collapsible, Icon, IconProps, IconButton } from '@/components';
 import { useConfig } from '@/hooks';
 import { OverridableType, ElementBaseProps } from '@/types';
 
-import { Collapsible } from '../collapsible';
-import { Icon, IconProps } from '../icon';
-import { IconButton } from '../iconButton';
 import './styles.css';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
@@ -73,7 +71,6 @@ export const Alert = (props: AlertProps) => {
     return () => clearTimeout(timer);
   }, [timeout, onClose]);
 
-  void action;
   void icon;
 
   return (
@@ -86,11 +83,14 @@ export const Alert = (props: AlertProps) => {
       <AlertMUI
         severity={severity}
         action={
-          dismissible && (
-            <IconButton size="small" onClick={close}>
-              <Icon name="Times" size="small" />
-            </IconButton>
-          )
+          <>
+            {action}
+            {dismissible && (
+              <IconButton size="small" onClick={close}>
+                <Icon name="Times" size="small" />
+              </IconButton>
+            )}
+          </>
         }
         variant={variant}
       >

@@ -3,6 +3,6 @@
 '@rosen-ui/asset-calculator': patch
 ---
 
-Update depenedencies:
+Update dependencies
 
-- @rosen-clients/rate-limited-axios@2.0.0
+- @rosen-clients/rate-limited-axios@2.0.1

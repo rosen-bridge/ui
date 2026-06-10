@@ -1,6 +1,6 @@
 {
   "name": "@rosen-bridge/rosen-app",
-  "version": "5.2.0",
+  "version": "5.3.0",
   "private": true,
   "repository": {
     "type": "git",
@@ -9,8 +9,9 @@
   "license": "MIT",
   "scripts": {
     "build": "next build",
-    "build:vercel": "cd ../../ && ./build.sh rosen && cd apps/rosen && node ./configs/generate.mjs && npm run build",
+    "build:vercel": "cd ../../ && ./build.sh rosen && cd apps/rosen && node ./configs/generate.mjs && npm run db:migration && npm run build",
     "coverage": "npm run test -- --run --coverage",
+    "db:migration": "node --import tsx ./scripts/migration.js",
     "dev": "next dev",
     "get-config": "npx @rosen-bridge/cli download-assets --chain-type public-launch --out configs --include-prereleases && node ./configs/generate.mjs",
     "lint": "eslint --fix . && npm run prettify",
@@ -22,15 +23,15 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@rosen-bridge/abstract-observation-extractor": "^1.0.3",
-    "@rosen-bridge/abstract-scanner": "^1.0.2",
+    "@rosen-bridge/abstract-observation-extractor": "^1.0.6",
+    "@rosen-bridge/abstract-scanner": "^1.0.4",
     "@rosen-bridge/encryption": "^1.0.1",
     "@rosen-bridge/extended-typeorm": "^1.1.0",
     "@rosen-bridge/icons": "^3.6.0",
     "@rosen-bridge/token-price-entity": "^0.2.1",
-    "@rosen-bridge/tokens": "^6.0.0",
-    "@rosen-bridge/ui-kit": "^5.5.0",
-    "@rosen-bridge/watcher-data-extractor": "^13.0.4",
+    "@rosen-bridge/tokens": "^6.0.2",
+    "@rosen-bridge/ui-kit": "^5.6.0",
+    "@rosen-bridge/watcher-data-extractor": "^13.0.6",
     "@rosen-network/base": "^0.5.3",
     "@rosen-network/binance": "^0.4.6",
     "@rosen-network/bitcoin": "^2.4.5",

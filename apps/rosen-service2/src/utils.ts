@@ -60,6 +60,7 @@ export const formatChainName = (
  * @param url
  * @param dataSource
  * @param chianConfigs
+ * @param logger
  * @returns EventTriggerExtractor
  */
 export const createEventTrigger = (

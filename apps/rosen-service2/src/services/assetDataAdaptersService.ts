@@ -29,7 +29,7 @@ import {
 } from './abstracts';
 
 export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
-  name = AbstractAssetDataAdapterService.name;
+  static serviceName = AbstractAssetDataAdapterService.name;
   protected redis: VercelKV;
   protected explorerApi: ReturnType<typeof ergoExplorerClientFactory>;
   protected dependencies: Dependency[] = [
@@ -53,6 +53,7 @@ export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
     this.explorerApi = ergoExplorerClientFactory(
       configs.chains.ergo.explorer.connections.at(0)!.url,
     );
+    await this.createDataAdapters();
     this.setStatus(ServiceStatus.dormant);
     return true;
   };
@@ -290,7 +291,6 @@ export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
    * @returns void
    */
   protected preStart = async () => {
-    await this.createDataAdapters();
     const assets = await this.getAssetsTotalSupply();
     this.redis.set(TOTAL_SUPPLY_REDIS_KEY, stringSerializer(assets));
   };

@@ -1,14 +1,15 @@
+import { AbstractExtractor } from '@rosen-bridge/abstract-extractor';
 import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
 import { ErgoObservationExtractor } from '@rosen-bridge/ergo-observation-extractor';
 import { ErgoScanner } from '@rosen-bridge/ergo-scanner';
 import { TokenMap } from '@rosen-bridge/extended-tokens';
-import { DataSource } from '@rosen-bridge/extended-typeorm';
+import { DataSource, ObjectLiteral } from '@rosen-bridge/extended-typeorm';
+import { Transaction } from '@rosen-bridge/scanner-interfaces';
 import {
   Dependency,
   ServiceAction,
   ServiceStatus,
 } from '@rosen-bridge/service-manager';
-import { EventTriggerExtractor } from '@rosen-bridge/watcher-data-extractor';
 import { NETWORKS } from '@rosen-ui/constants';
 
 import { configs } from '../configs';
@@ -23,9 +24,9 @@ import {
 
 export class ErgoExtractorService extends AbstractErgoExtractorsService {
   private ergoScanner: ErgoScanner;
-  name = AbstractErgoExtractorsService.name;
+  static serviceName = AbstractErgoExtractorsService.name;
   private tokenMap: TokenMap;
-  private extractors: (EventTriggerExtractor | ErgoObservationExtractor)[] = [];
+  private extractors: Array<AbstractExtractor<Transaction, ObjectLiteral>> = [];
   private dataSource: DataSource;
   protected dependencies: Dependency[] = [
     {
@@ -139,7 +140,6 @@ export class ErgoExtractorService extends AbstractErgoExtractorsService {
 
   /**
    * Constructs a new ErgoExtractorService.
-   * @param {ErgoScanner} ergoScanner Instance of ErgoScanner to use.
    * @param {AbstractLogger} logger instance.
    */
   protected constructor(logger: AbstractLogger = new DummyLogger()) {

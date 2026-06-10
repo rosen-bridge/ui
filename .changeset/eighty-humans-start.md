@@ -5,6 +5,6 @@
 '@rosen-network/evm': patch
 ---
 
-Update depenedencies:
+Update dependencies
 
-- @rosen-bridge/address-codec@2.0.0
+- @rosen-bridge/address-codec@2.1.0

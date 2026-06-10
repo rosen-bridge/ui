@@ -9,7 +9,7 @@ import { TOKEN_MAP_EXTRACTOR_ID } from '../constants';
 import { AbstractDBService } from './abstracts';
 
 export class DBService extends AbstractDBService {
-  name = AbstractDBService.name;
+  static serviceName = AbstractDBService.name;
   protected dataSource: DataSource;
   protected dependencies: Dependency[] = [];
 

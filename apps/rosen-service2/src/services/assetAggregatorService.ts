@@ -24,7 +24,7 @@ import {
 } from './abstracts';
 
 export class AssetAggregatorService extends AbstractAssetAggregatorService {
-  name = AbstractAssetAggregatorService.name;
+  static serviceName = AbstractAssetAggregatorService.name;
   protected assetAggregator: AssetAggregator;
   protected redis: VercelKV;
 

@@ -24,23 +24,25 @@ export const ToastProvider = ({ children }: ToastProviderProps) => {
 };
 
 const ToastList = () => {
-  const { toasts } = Toast.useToastManager();
+  const { toasts, close } = Toast.useToastManager();
   return toasts.map((toast) => (
     <Toast.Root key={toast.id} toast={toast} className="RosenToast">
       <Toast.Content className="RosenToast-content">
         <Alert
+          dismissible={toast.data?.dismissible}
           variant="standard"
           severity={toast.type as AlertProps['severity']}
           action={
-            toast.data && (
+            toast.data?.more && (
               <CopyButton
-                value={() => toast.data?.()}
+                value={() => toast.data?.more?.()}
                 color="inherit"
                 size="small"
                 style={{ paddingTop: '5px', paddingBottom: '5px' }}
               />
             )
           }
+          onClose={() => close(toast.id)}
         >
           {toast.description}
         </Alert>

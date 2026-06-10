@@ -15,7 +15,7 @@ import {
 } from './abstracts';
 
 export class EventCountMetricService extends AbstractEventCountMetricService {
-  name = AbstractEventCountMetricService.name;
+  static serviceName = AbstractEventCountMetricService.name;
   private dataSource: DataSource;
   protected dependencies: Dependency[] = [
     {

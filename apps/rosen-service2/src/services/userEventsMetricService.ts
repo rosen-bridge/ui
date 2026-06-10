@@ -15,7 +15,7 @@ import {
 } from './abstracts';
 
 export class UserEventsMetricService extends AbstractUserEventsMetricService {
-  name = AbstractUserEventsMetricService.name;
+  static serviceName = AbstractUserEventsMetricService.name;
   private dataSource: DataSource;
   protected dependencies: Dependency[] = [
     {
@@ -117,7 +117,7 @@ export class UserEventsMetricService extends AbstractUserEventsMetricService {
 
     tasks.push({
       fn: async () => {
-        this.logger.info(`Running ${this.name} job`);
+        this.logger.info(`Running ${this.getName()} job`);
         await this.userEventsCalculation();
       },
       interval: configs.statistics.userEventsMetric.interval * 1000,

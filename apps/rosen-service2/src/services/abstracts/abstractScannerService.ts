@@ -21,7 +21,7 @@ export abstract class AbstractScannerService extends PeriodicTaskService {
    * Returns scanner instance for the given chain.
    *
    * @param {ChainsKeys} chain - Target chain key
-   * @returns {ExtraChainScannersType | undefined} Scanner instance for the chain
+   * @returns {ChainScannersType | undefined} Scanner instance for the chain
    */
   abstract getScanner: (chain: keyof Chains) => ChainScannersType | undefined;
 }

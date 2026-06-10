@@ -4,7 +4,6 @@ import crypto from 'crypto';
 import { unwrap } from '@/safeServerAction';
 
 import { getOnChainRosenTokensWithCache } from './getOnChainRosenTokens';
-import { getRosenTokensWithCache } from './getRosenTokens';
 
 let tokenMap: TokenMap;
 
@@ -27,9 +26,9 @@ export const getTokenMap = async () => {
     }
   } else {
     if (tokenMap) return tokenMap;
-    const tokens = await unwrap(getRosenTokensWithCache)();
+    const { TOKENS } = await import('../../configs');
     tokenMap = new TokenMap();
-    await tokenMap.updateConfigByJson(tokens);
+    await tokenMap.updateConfigByJson(TOKENS);
   }
 
   return tokenMap;

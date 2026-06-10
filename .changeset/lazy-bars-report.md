@@ -2,7 +2,7 @@
 '@rosen-bridge/rosen-service': patch
 ---
 
-Update depenedencies
+Update dependencies
 
 - @rosen-bridge/abstract-scanner@1.0.4
 - @rosen-bridge/bitcoin-scanner@1.0.4
@@ -14,7 +14,9 @@ Update depenedencies
 - @rosen-bridge/cardano-observation-extractor@3.0.1
 - @rosen-bridge/ergo-observation-extractor@2.0.1
 - @rosen-bridge/evm-observation-extractor@7.0.1
-- @rosen-bridge/tokens@6.0.1
+- @rosen-bridge/tokens@6.0.2
 - @rosen-bridge/watcher-data-extractor@13.0.6
 - @rosen-bridge/winston-logger@3.0.1
-- @rosen-clients/rate-limited-axios@2.0.0
+- @rosen-bridge/address-manager@0.1.0
+- @rosen-bridge/address-codec@2.1.0
+- @rosen-clients/rate-limited-axios@2.0.1

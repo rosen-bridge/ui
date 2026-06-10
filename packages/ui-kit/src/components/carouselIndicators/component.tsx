@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
 
+import { useCarousel } from '@/components';
 import { useConfig } from '@/hooks';
 import { ElementBaseProps, OverridableType } from '@/types';
 
-import { useCarousel } from '../carousel';
 import './styles.css';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type

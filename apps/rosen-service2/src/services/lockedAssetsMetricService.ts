@@ -15,7 +15,7 @@ import {
 } from './abstracts';
 
 export class LockedAssetsMetricService extends AbstractLockedAssetsMetricService {
-  name = AbstractLockedAssetsMetricService.name;
+  static serviceName = AbstractLockedAssetsMetricService.name;
   private dataSource: DataSource;
   protected dependencies: Dependency[] = [
     {

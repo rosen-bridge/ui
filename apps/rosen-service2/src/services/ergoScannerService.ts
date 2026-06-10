@@ -27,7 +27,7 @@ import {
 } from './abstracts';
 
 export class ErgoScannerService extends AbstractErgoScannerService {
-  name = AbstractErgoScannerService.name;
+  static serviceName = AbstractErgoScannerService.name;
   ergoScanner: ErgoScanner;
   protected dependencies: Dependency[] = [
     {

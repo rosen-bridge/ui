@@ -64,6 +64,7 @@ describe('AssetDataAdapterService', () => {
       await AssetDataAdapterService.init();
       ctx.service = AbstractAssetDataAdapterService.getInstance();
       // Start the service to trigger preStart to register tokenMap and createDataAdapters
+      await ctx.service['assemble']();
       await ctx.service['start']();
       ctx.mockExplorer = mockExplorer;
     });

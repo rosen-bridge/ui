@@ -15,7 +15,7 @@ import {
 } from './abstracts';
 
 export class GeneralMetricsService extends AbstractGeneralMetricsService {
-  name = AbstractGeneralMetricsService.name;
+  static serviceName = AbstractGeneralMetricsService.name;
   private dataSource: DataSource;
   protected dependencies: Dependency[] = [
     {
@@ -128,10 +128,10 @@ export class GeneralMetricsService extends AbstractGeneralMetricsService {
     tasks.push({
       fn: async () => {
         try {
-          this.logger.info(`Running ${this.name} job`);
+          this.logger.info(`Running ${this.getName()} job`);
           await this.generalMetricsCalculation();
         } catch (err) {
-          this.logger.error(`${this.name} job failed: ${err}`);
+          this.logger.error(`${this.getName()} job failed: ${err}`);
           if (err instanceof Error && err.stack) {
             this.logger.debug(err.stack);
           }

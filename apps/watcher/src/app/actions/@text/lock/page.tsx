@@ -8,8 +8,6 @@ import useSWR from 'swr';
 import { useRsnToken, useToken } from '@/hooks';
 import { ApiInfoResponse } from '@/types/api';
 
-import { ActionText } from '../../ActionText';
-
 const LockText = () => {
   const { data: info, isLoading: isInfoLoading } = useSWR<ApiInfoResponse>(
     '/info',
@@ -22,7 +20,7 @@ const LockText = () => {
   const requiredRSN = (info?.permitsPerEvent ?? 0) / rwtPerRsn;
 
   return (
-    <ActionText title="Lock & Get Permit">
+    <>
       <Typography gutterBottom>
         To activate a watcher, there is a need for some collateral that is fully
         refundable and safe. On top of that, you&apos;ll need reporting permits
@@ -65,7 +63,7 @@ const LockText = () => {
       <Typography fontWeight="bold" sx={{ mt: 2 }}>
         RSN
       </Typography>
-      <Typography sx={{ mb: 2 }}>
+      <Typography>
         Currently, you should lock{' '}
         {isInfoLoading || isRsnTokenLoading ? (
           <CircularProgress size={12} />
@@ -74,7 +72,7 @@ const LockText = () => {
         )}{' '}
         RSN to report an event.
       </Typography>
-    </ActionText>
+    </>
   );
 };
 

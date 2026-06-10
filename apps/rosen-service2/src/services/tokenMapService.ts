@@ -24,7 +24,7 @@ import {
 } from './abstracts';
 
 export class TokenMapService extends AbstractTokenMapService {
-  name = AbstractTokenMapService.name;
+  static serviceName = AbstractTokenMapService.name;
   tokenMap: ExtendedTokenMap;
   private ergoScanner: ErgoScanner;
   protected redis: VercelKV | undefined;
@@ -56,24 +56,51 @@ export class TokenMapService extends AbstractTokenMapService {
       AbstractErgoScannerService.getInstance().getErgoScanner();
     this.tokenMap = new ExtendedTokenMap();
     const { networkType, url } = resolveErgoNetworkConfig();
-    const tokenMapAddress = configs.contracts.ergo.addresses.tokenMap;
-    const tokenMapToken = configs.contracts.ergo.tokens.tokenMap;
-    if (!tokenMapAddress || !tokenMapToken) {
-      throw new Error(
-        'On-chain token map address or token not defined in config',
+
+    if (configs.tokenMap.onChainTokenMapEnabled) {
+      if (
+        !configs.contracts.ergo.addresses.tokenMap ||
+        !configs.contracts.ergo.tokens.tokenMap
+      ) {
+        throw new Error('On-chain token map address or token not defined');
+      }
+      this.tokenMapBoxExtractor = new ErgoUTXOExtractor(
+        AbstractDBService.getInstance().getDataSource(),
+        TOKEN_MAP_EXTRACTOR_ID,
+        ergoLib.NetworkPrefix.Mainnet,
+        url,
+        networkType,
+        configs.contracts.ergo.addresses.tokenMap,
+        [configs.contracts.ergo.tokens.tokenMap],
+        this.logger.child('tokenMapBoxExtractor'),
+      );
+      this.redis = createClient({
+        url: configs.redis.address,
+        token: configs.redis.token,
+      });
+      const updateTokenMapWrapper = async () => {
+        try {
+          await this.updateTokenMap(this.tokenMap, this.redis!);
+        } catch (error) {
+          this.logger.error(
+            `Failed to update token map on extractor trigger: ${error}`,
+          );
+        }
+      };
+
+      [
+        CallbackType.Insert,
+        CallbackType.Update,
+        CallbackType.Spend,
+        CallbackType.Delete,
+      ].forEach((type) =>
+        this.tokenMapBoxExtractor.hook(type, updateTokenMapWrapper),
+      );
+
+      this.logger.debug(
+        'On-chain TokenMap hooks registered in tokenMapBoxExtractor',
       );
     }
-    this.tokenMapBoxExtractor = new ErgoUTXOExtractor(
-      AbstractDBService.getInstance().getDataSource(),
-      TOKEN_MAP_EXTRACTOR_ID,
-      ergoLib.NetworkPrefix.Mainnet,
-      url,
-      networkType,
-      tokenMapAddress,
-      [tokenMapToken],
-      this.logger.child('tokenMapBoxExtractor'),
-    );
-    await this.ergoScanner.registerExtractor(this.tokenMapBoxExtractor);
     this.setStatus(ServiceStatus.dormant);
     return true;
   };
@@ -120,7 +147,9 @@ export class TokenMapService extends AbstractTokenMapService {
    */
   protected stop = async (): Promise<boolean> => {
     await this.tokenMap.updateConfigByJson([]);
-    await this.ergoScanner.removeExtractor(this.tokenMapBoxExtractor);
+    if (configs.tokenMap.onChainTokenMapEnabled) {
+      await this.ergoScanner.removeExtractor(this.tokenMapBoxExtractor);
+    }
     this.setStatus(ServiceStatus.dormant);
     return true;
   };
@@ -144,29 +173,8 @@ export class TokenMapService extends AbstractTokenMapService {
    * Initializes the token map from on-chain data.
    */
   private async initOnChain() {
-    if (
-      !configs.contracts.ergo.addresses.tokenMap ||
-      !configs.contracts.ergo.tokens.tokenMap
-    ) {
-      throw new Error('On-chain token map address or token not defined');
-    }
-
-    this.redis = createClient({
-      url: configs.redis.address,
-      token: configs.redis.token,
-    });
-    await this.updateTokenMap(this.tokenMap, this.redis);
-    const updateTokenMapWrapper = async () =>
-      await this.updateTokenMap(this.tokenMap, this.redis!);
-    this.logger.info('On-chain TokenMap initialized and extractor registered');
-    [
-      CallbackType.Insert,
-      CallbackType.Update,
-      CallbackType.Spend,
-      CallbackType.Delete,
-    ].forEach((type) =>
-      this.tokenMapBoxExtractor.hook(type, updateTokenMapWrapper),
-    );
+    await this.ergoScanner.registerExtractor(this.tokenMapBoxExtractor);
+    await this.updateTokenMap(this.tokenMap, this.redis!);
   }
 
   /**

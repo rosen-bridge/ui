@@ -40,7 +40,7 @@ import {
 } from './abstracts';
 
 export class ScannerService extends AbstractScannerService {
-  name = AbstractScannerService.name;
+  static serviceName = AbstractScannerService.name;
   protected scanners: { [k1 in ChainsKeys]?: ChainScannersType } = {};
   private dataSource: DataSource;
   private tokenMap: TokenMap;
@@ -95,7 +95,7 @@ export class ScannerService extends AbstractScannerService {
    * Returns scanner instance for the given chain.
    *
    * @param {ChainsKeys} chain - Target chain key
-   * @returns {ExtraChainScannersType | undefined} Scanner instance for the chain
+   * @returns {ChainScannersType | undefined} Scanner instance for the chain
    */
   public getScanner = (chain: ChainsKeys) => {
     if (chain === NETWORKS.ergo.key) {
