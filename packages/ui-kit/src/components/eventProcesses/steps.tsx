@@ -1,19 +1,17 @@
 import { CSSProperties, useMemo } from 'react';
 
-import * as Icons from '@rosen-bridge/icons';
-
-import { DateTime, Icon, Tooltip, Typography } from '@/components';
-import { Line } from '@/components/eventProcesses/line';
+import { DateTime, Icon, IconProps, Tooltip, Typography } from '@/components';
 import { Color } from '@/types';
 import { toCSSColor } from '@/utils';
+
+import { Line } from './line';
 
 export type StepProps = {
   active?: string;
   color?: Color;
   description?: string;
-  icon?: Exclude<keyof typeof Icons, 'TOKENS'>;
+  icon?: IconProps['name'];
   label?: string;
-  preview?: number;
   setActive?: (value?: string) => void;
   sub?: Omit<StepProps, 'sub'>[];
   timestamp?: number;
@@ -27,20 +25,11 @@ export const Step = (props: StepProps) => {
     description,
     icon,
     label,
-    preview,
     setActive,
     sub,
     timestamp,
     value,
   } = props;
-
-  const stepHead = useMemo(() => {
-    if (preview !== undefined) {
-      return <Typography variant="body1">{preview}</Typography>;
-    } else {
-      return <Icon name={icon} size="medium" color="inherit" />;
-    }
-  }, [preview, icon]);
 
   const styles = useMemo(
     () =>
@@ -64,8 +53,11 @@ export const Step = (props: StepProps) => {
             </div>
           }
         >
-          <div onClick={() => sub &&  setActive?.(value)} className="RosenStep-dot">
-            {stepHead}
+          <div
+            onClick={() => sub && setActive?.(value)}
+            className="RosenStep-dot"
+          >
+            <Icon name={icon} size="medium" color="inherit" />
           </div>
         </Tooltip>
         <div className="RosenStep-line" />
@@ -78,7 +70,7 @@ export const Step = (props: StepProps) => {
           <div className="RosenStep-sub">
             <Line />
             <div data-level="sub" className="sub">
-              {sub?.map((item,index) => (
+              {sub?.map((item, index) => (
                 <Step key={index} {...item} />
               ))}
             </div>

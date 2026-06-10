@@ -28,6 +28,7 @@ import {
   DurationProps,
   EventCardProps,
   EventDetailsProps,
+  EventProcessesProps,
   EventStatusProps,
   GridContainerProps,
   IconProps,
@@ -65,7 +66,7 @@ import {
   TruncateProps,
   TypographyProps,
   ViewToggleProps,
-  VirtualScrollProps, EventProcessesProps
+  VirtualScrollProps,
 } from '@/components';
 
 export type Components = {
@@ -98,8 +99,8 @@ export type Components = {
   Duration: DurationProps;
   EventCard: EventCardProps;
   EventDetails: EventDetailsProps;
-  EventStatus: EventStatusProps;
   EventProcesses: EventProcessesProps;
+  EventStatus: EventStatusProps;
   GridContainer: GridContainerProps;
   Icon: IconProps;
   IconButton: IconButtonProps;

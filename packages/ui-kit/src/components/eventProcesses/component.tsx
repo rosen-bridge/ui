@@ -1,3 +1,4 @@
+import { Skeleton } from '@/components';
 import { useConfig } from '@/hooks';
 import { ElementBaseProps, OverridableType } from '@/types';
 
@@ -9,9 +10,10 @@ export interface EventProcessesOverrides {}
 
 export type EventProcessesOwnProps = {
   items?: StepProps[];
-  value?: string;
-  setActive?: (value?:string) => void;
+  loading?: boolean;
   orientation?: 'horizontal' | 'vertical';
+  value?: string;
+  onChange?: (value?: string) => void;
 };
 
 export type EventProcessesBaseProps = ElementBaseProps<
@@ -25,24 +27,22 @@ export type EventProcessesProps = OverridableType<
   never
 >;
 
-/**
- * EventProcesses
- */
 export const EventProcesses = (props: EventProcessesProps) => {
   const {
-    orientation = 'horizontal',
-    setActive,
-    value,
     items,
+    loading,
+    orientation = 'horizontal',
+    value,
+    onChange,
     ...rest
   } = useConfig('EventProcesses', props);
 
   return (
     <div data-orientation={orientation} {...rest}>
-      {items &&
-        items.map((item,index) => (
-          <Step key={index} active={value} setActive={setActive} {...item} />
-        ))}
+      {items?.map((item, index) => (
+        <Step key={index} active={value} setActive={onChange} {...item} />
+      ))}
+      {loading && <Skeleton attached variant="rounded" />}
     </div>
   );
 };

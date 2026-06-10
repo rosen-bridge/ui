@@ -49,17 +49,17 @@ export const STATUS_MAP: Record<string, EventStatusMeta> = {
   PAYMENT_STALLED: {
     label: 'Payment Stalled',
     color: 'warning',
-    icon: 'ExclamationCircle'
+    icon: 'ExclamationCircle',
   },
   REACHED_LIMIT: {
     label: 'Reached Limit',
     color: 'error',
-    icon: 'ExclamationOctagon'
+    icon: 'ExclamationOctagon',
   },
   REJECTED: {
     label: 'Rejected',
     color: 'error',
-    icon: 'CloseCircle'
+    icon: 'CloseCircle',
   },
   REWARD_APPROVED: {
     label: 'Reward Approved',
@@ -74,7 +74,7 @@ export const STATUS_MAP: Record<string, EventStatusMeta> = {
   REWARD_SIGNED: {
     label: 'Reward Signed',
     color: 'info',
-    icon: 'Gift'
+    icon: 'Gift',
   },
   REWARD_SIGNING: {
     label: 'Reward Signing',
@@ -84,22 +84,22 @@ export const STATUS_MAP: Record<string, EventStatusMeta> = {
   REWARD_STALLED: {
     label: 'Reward Stalled',
     color: 'warning',
-    icon: 'ExclamationCircle'
+    icon: 'ExclamationCircle',
   },
   TIMEOUT: {
     label: 'Timeout',
     color: 'neutral',
-    icon: 'ClockThree'
+    icon: 'ClockThree',
   },
   TRIGGERED: {
     label: 'Triggered',
     color: 'info',
-    icon: 'SignOutAlt'
+    icon: 'SignOutAlt',
   },
   UNKNOWN: {
     label: 'Unknown',
     color: 'neutral',
-    icon: 'ExclamationCircle'
+    icon: 'ExclamationCircle',
   },
 
   // TODO: should remove
