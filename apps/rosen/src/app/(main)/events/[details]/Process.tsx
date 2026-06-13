@@ -2,7 +2,12 @@
 
 import { useEffect, useMemo, useState } from 'react';
 
-import { Color, EventProcesses, IconProps } from '@rosen-bridge/ui-kit';
+import {
+  Color,
+  EventProcesses,
+  EventProcessesProps,
+  IconProps,
+} from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import useSWR from 'swr';
 
@@ -39,15 +44,6 @@ type Step = {
   sub?: Omit<Step, 'sub'>[];
   detailsKey?: EventDetailsType['status'];
   value?: string;
-};
-
-type TimelineItem = {
-  color: Color;
-  description?: string;
-  icon: IconProps['name'];
-  label: string;
-  sub?: TimelineItem[];
-  timestamp?: number;
 };
 
 const GUARDS = JSON.parse(process.env['ALLOWED_PKS'] ?? '{}');
@@ -739,7 +735,7 @@ const FLOWS: Record<EventDetailsType['status'], Step[]> = {
 const toItems = (
   steps: Step[],
   timestamps: EventDetailsType['timestamps'],
-): TimelineItem[] => {
+): EventProcessesProps['items'] => {
   return steps.map((step) => {
     const color: Color = (() => {
       switch (step.status) {
@@ -782,16 +778,16 @@ const toItems = (
 };
 
 export const Process = ({ id }: { id: string }) => {
-  const [guardPublicKey, setGuardPublicKey] = useState<string>();
+  const [active, setActive] = useState<string | undefined>();
 
-  const { data } = useSWR<EventStatusType>(
+  const [guardPublicKey, setGuardPublicKey] = useState<string | undefined>();
+
+  const { data, isLoading } = useSWR<EventStatusType>(
     guardPublicKey
       ? `/v1/events/${id}/status`
       : `/v1/events/${id}/status?guardPublicKey=${guardPublicKey}`,
     fetcher,
   );
-
-  const [active, setActive] = useState<string | undefined>();
 
   const items = useMemo(() => {
     if (!data) return [];
@@ -799,15 +795,8 @@ export const Process = ({ id }: { id: string }) => {
   }, [data]);
 
   useEffect(() => {
-    if (!items) return;
-
-    const firstItemWithSub = items.find(
-      (item) => item.sub && item.sub.length > 0,
-    );
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
-    setActive(firstItemWithSub?.value);
-  }, [items]);
+    setActive(data?.status);
+  }, [data?.status]);
 
   return (
     <Section title="Progress">
@@ -821,15 +810,13 @@ export const Process = ({ id }: { id: string }) => {
           </option>
         ))}
       </select>
-      <div style={{ width: '100%', height: '230px' }}>
-        <EventProcesses
-          items={items}
-          value={active}
-          setActive={(value?: string) => {
-            setActive(value);
-          }}
-        />
-      </div>
+      <EventProcesses
+        items={items}
+        loading={isLoading}
+        style={{ width: '100%', height: '230px' }}
+        value={active}
+        onChange={setActive}
+      />
     </Section>
   );
 };
