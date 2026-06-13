@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 
 import {
   LayoutList,
@@ -19,10 +19,10 @@ import { serializeError } from 'serialize-error';
 import useSWR from 'swr';
 
 import { useTokenMap } from '@/hooks';
-import { ApiEventResponse, EventItem } from '@/types';
+import { ApiEventResponse } from '@/types';
 
 import { getFilters, sorts } from './config';
-import { EventSidebar } from './EventSidebar';
+import { Sidebar } from './Sidebar';
 
 const Page = () => {
   const dense = useBreakpoint('laptop-down');
@@ -38,10 +38,6 @@ const Page = () => {
 
   const tokenMap = useTokenMap();
 
-  const [current, setCurrent] = useState<EventItem>();
-
-  const filters = useMemo(() => getFilters(tokenMap), [tokenMap]);
-
   const { data, error, isLoading } = useSWR<ApiEventResponse>(
     collection.query && `/v1/events?${collection.query}`,
     fetcher,
@@ -50,10 +46,13 @@ const Page = () => {
     },
   );
 
-  const items = useMemo(() => {
-    if (!isLoading) return data?.items || [];
-    return Array(collection.pageSize).fill({});
-  }, [collection.pageSize, data?.items, isLoading]);
+  const items = useMemo(() => data?.items || [], [data?.items]);
+
+  const filters = useMemo(() => getFilters(tokenMap), [tokenMap]);
+
+  const current = useMemo(() => {
+    return items.find((item) => item.id.toString() === collection.fragment);
+  }, [collection.fragment, items]);
 
   const renderPagination = useCallback(
     () => (
@@ -92,7 +91,10 @@ const Page = () => {
 
   const renderSidebar = useCallback(
     () => (
-      <EventSidebar value={current} onClose={() => setCurrent(undefined)} />
+      <Sidebar
+        value={current}
+        onClose={() => collection.setFragment(undefined)}
+      />
     ),
     [current],
   );
@@ -115,28 +117,6 @@ const Page = () => {
   }, [collection.scrollIntoView, items]);
 
   useEffect(() => {
-    if (!collection.fragment) return;
-
-    const item = items.find(
-      (item) => item.id?.toString() === collection.fragment,
-    );
-
-    if (!item) return;
-
-    setCurrent(item);
-  }, [collection.fragment, items]);
-
-  useEffect(() => {
-    if (current?.id) {
-      collection.setFragment(current.id.toString());
-    }
-  }, [collection.setFragment, current?.id]);
-
-  useEffect(() => {
-    setCurrent(undefined);
-  }, [collection.sort, collection.fields, collection.pageIndex]);
-
-  useEffect(() => {
     if (error) {
       toast.add({
         type: 'error',
@@ -153,35 +133,34 @@ const Page = () => {
       sidebar={renderSidebar()}
       pagination={renderPagination()}
     >
-      {!isLoading && !data?.items.length ? (
+      {!isLoading && !items.length ? (
         <EmptyState style={{ height: 'calc(100vh - 288px)' }} />
       ) : (
         <GridContainer gap={1} minWidth="242px">
-          {items.map((item, index) => (
-            <EventCard
-              id={item.id}
-              key={item.id ? `${item.id}:${item.eventTriggerId}` : index}
-              active={!isLoading && current === item}
-              loading={isLoading}
-              value={
-                !item
-                  ? undefined
-                  : {
-                      amount: item.amount,
-                      decimal: item.lockToken?.significantDecimal,
-                      fromChain: item.fromChain,
-                      href: `/events/${item.eventId}`,
-                      id: item.eventId,
-                      status: item.status,
-                      toChain: item.toChain,
-                      token: item.lockToken?.id,
-                      unit: item?.lockToken?.name,
-                      timestamp: item.timestamp,
-                    }
-              }
-              onClick={() => !isLoading && setCurrent(item)}
-            />
-          ))}
+          {isLoading
+            ? Array(collection.pageSize)
+                .fill(null)
+                .map((_, index) => <EventCard key={index} loading />)
+            : items.map((item) => (
+                <EventCard
+                  id={item.id.toString()}
+                  key={`${item.id}:${item.eventTriggerId}`}
+                  active={current === item}
+                  value={{
+                    amount: item.amount,
+                    decimal: item.lockToken?.significantDecimal,
+                    fromChain: item.fromChain,
+                    href: `/events/${item.eventId}`,
+                    id: item.eventId,
+                    status: item.status,
+                    toChain: item.toChain,
+                    token: item.lockToken?.id,
+                    unit: item?.lockToken?.name,
+                    timestamp: item.timestamp,
+                  }}
+                  onClick={() => collection.setFragment(item.id.toString())}
+                />
+              ))}
         </GridContainer>
       )}
     </LayoutList>
