@@ -212,26 +212,26 @@ export class PublicStatusAction {
         });
       }
 
-      // if eventId is new or aggregated status has changed, update the aggregated status
+      // get the last aggregated status for comparison with the new aggregated status
+      const lastAggregatedStatus =
+        await AggregatedStatusAction.getInstance().getOne(
+          aggregatedStatusRepository,
+          eventId,
+        );
+
+      // if no aggregated status exist for this eventId or it has changed, update the aggregated status
       if (
-        (guardsStatus.items.length === 0 ||
+        (!lastAggregatedStatus ||
           Utils.aggregatedStatusesMatch(
-            Utils.calcAggregatedStatus(
-              guardsStatus.items,
-              eventStatusThresholds,
-              txStatusThresholds,
-            ),
+            {
+              status: lastAggregatedStatus.status,
+              txStatus: lastAggregatedStatus.txStatus ?? undefined,
+              tx: lastAggregatedStatus.tx ?? undefined,
+            },
             aggregatedStatusNew,
           ) === false) &&
         !missingTx
       ) {
-        const aggregatedStatusTx = aggregatedStatusNew.tx
-          ? {
-              txId: aggregatedStatusNew.tx.txId,
-              chain: aggregatedStatusNew.tx.chain,
-            }
-          : undefined;
-
         promises.push(
           AggregatedStatusAction.getInstance().upsertOne(
             aggregatedStatusRepository,
@@ -239,7 +239,7 @@ export class PublicStatusAction {
             timestampSeconds,
             aggregatedStatusNew.status,
             aggregatedStatusNew.txStatus,
-            aggregatedStatusTx,
+            aggregatedStatusNew.tx,
           ),
           AggregatedStatusChangedAction.getInstance().insertOne(
             aggregatedStatusChangedRepository,
@@ -247,7 +247,7 @@ export class PublicStatusAction {
             timestampSeconds,
             aggregatedStatusNew.status,
             aggregatedStatusNew.txStatus,
-            aggregatedStatusTx,
+            aggregatedStatusNew.tx,
           ),
         );
       }
