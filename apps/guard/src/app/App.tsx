@@ -4,13 +4,13 @@ import { Route } from 'next';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { PropsWithChildren } from 'react';
 
-import { NoSsr } from '@mui/material';
 import {
   App as AppBase,
   ApiKeyProvider,
   FrameworkProvider,
   ThemeProvider,
   ToastProvider,
+  NoSsr,
 } from '@rosen-bridge/ui-kit';
 import { mockMiddlewareFactory } from '@rosen-ui/swr-helpers';
 import { SWRConfig } from 'swr';
