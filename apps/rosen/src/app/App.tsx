@@ -1,16 +1,12 @@
 'use client';
 
-/**
- * FIXME: import NoSsr from ui-kit
- * local:ergo/rosen-bridge/ui#193
- */
 import { Route } from 'next';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { PropsWithChildren } from 'react';
 
-import { NoSsr } from '@mui/material';
 import {
   FrameworkProvider,
+  NoSsr,
   ThemeProvider,
   ToastProvider,
 } from '@rosen-bridge/ui-kit';
