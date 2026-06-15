@@ -210,4 +210,5 @@ export const publicStatusConfigs = {
   allowedPks: (process.env['ALLOWED_PKS'] ?? '').split(','),
   eventStatusThresholds,
   txStatusThresholds,
+  useOriginalStatusTime: process.env['USE_ORIGINAL_STATUS_TIME'] === 'true',
 };

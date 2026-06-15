@@ -1,0 +1,37 @@
+{
+  "name": "@rosen-ui/e2e-tests",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Package to perform E2E tests for the rosen app",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rosen-bridge/ui.git",
+    "directory": "tests"
+  },
+  "license": "MIT",
+  "author": "Rosen Team",
+  "type": "module",
+  "scripts": {
+    "lint": "eslint --fix . && npm run prettify",
+    "lint:check": "eslint . && npm run prettify:check",
+    "prettify": "prettier --write . --ignore-path ./.gitignore",
+    "prettify:check": "prettier --check . --ignore-path ./.gitignore",
+    "start": "tsx ./src/index.ts",
+    "start:dev": "tsx watch ./src/index.ts",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@rosen-bridge/encryption": "^1.0.1",
+    "@rosen-ui/public-status": "^0.1.1",
+    "axios": "^1.17.0",
+    "papaparse": "^5.5.3",
+    "tsx": "^4.19.2"
+  },
+  "devDependencies": {
+    "@types/papaparse": "^5.5.2"
+  },
+  "engines": {
+    "node": ">=22.18.0",
+    "npm": "11.6.2"
+  }
+}

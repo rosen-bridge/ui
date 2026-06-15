@@ -42,7 +42,7 @@ const handler = async (params: Params) => {
   await PublicStatusAction.getInstance().insertStatus(
     params.eventId,
     params.pk,
-    nowSeconds,
+    publicStatusConfigs.useOriginalStatusTime ? timestampSeconds : nowSeconds,
     params.status,
     publicStatusConfigs.eventStatusThresholds,
     publicStatusConfigs.txStatusThresholds,

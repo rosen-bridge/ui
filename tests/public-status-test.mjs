@@ -1,4 +1,5 @@
 #!/usr/bin/env zx
+// TODO: this test file should be migrated
 // c && zx --install public-status-test.mjs
 import { blake2b } from '@noble/hashes/blake2b';
 import assert from 'assert';
@@ -1175,7 +1176,6 @@ const resetDB = async () => {
   console.log('done resetting db');
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const resetSchema = async () => {
   await $`psql -p 5432 -U postgres -d public_status_test <<EOF
   DROP SCHEMA public CASCADE;
@@ -1185,7 +1185,6 @@ const resetSchema = async () => {
   EOF`;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const setupDB = async () => {
   await $`psql -p 5432 -U postgres -d postgres <<EOF
   DROP DATABASE public_status_test;

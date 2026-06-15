@@ -6,7 +6,8 @@
     "networks/*",
     "packages/*",
     "services/*",
-    "wallets/*"
+    "wallets/*",
+    "tests"
   ],
   "scripts": {
     "build:mono-packages": "./build.sh",

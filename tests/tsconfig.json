@@ -1,0 +1,12 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "types": ["node"]
+  },
+  "references": [
+    {
+      "path": "../packages/public-status"
+    }
+  ]
+}
