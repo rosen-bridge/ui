@@ -1,0 +1,47 @@
+.rosen-bridge-page-wrapper {
+  container-type: inline-size;
+  max-width: 1048px;
+  width: 100%;
+  margin-inline: auto;
+  box-sizing: border-box;
+}
+.rosen-bridge-page-main {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto;
+  grid-template-columns: minmax(0, 1fr);
+  gap: calc(var(--rosen-spacing) * 2);
+  align-content: center;
+  justify-content: center;
+  min-height: calc(100vh - 224px);
+  z-index: 0;
+
+  @container (min-width: 842px) {
+    grid-template-columns: 2fr minmax(320px, 1fr);
+    gap: calc(var(--rosen-spacing) * 3);
+    z-index: 1;
+  }
+
+  :is(.rosen-bridge-page-form, .rosen-bridge-page-info) {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--rosen-spacing) * 2);
+    z-index: 0;
+  }
+
+  .rosen-bridge-page-alert {
+    grid-column: 1 / -1;
+  }
+
+  .rosen-bridge-page-action {
+    justify-self: center;
+    width: 100%;
+  }
+}
+.RosenApp[data-orientation='horizontal'] {
+  .rosen-bridge-page-action {
+    grid-column: 1 / -1;
+    width: 33%;
+    padding-right: calc(var(--rosen-spacing) * 2);
+  }
+}
