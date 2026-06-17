@@ -41,9 +41,10 @@ type Step = {
     | 'Timeout'
     | 'In Reward';
   status: 'DONE' | 'ERROR' | 'PENDING' | 'PROGRESS';
-  sub?: Omit<Step, 'sub'>[];
+  sub?: Omit<Step, 'line' | 'sub'>[];
   detailsKey?: EventDetailsType['status'];
   value?: string;
+  line?: boolean;
 };
 
 const GUARDS = JSON.parse(process.env['ALLOWED_PKS'] ?? '{}');
@@ -150,6 +151,14 @@ const FLOWS: Record<EventDetailsType['status'], Step[]> = {
       label: 'Triggered',
       status: 'DONE',
       detailsKey: 'TRIGGERED',
+    },
+    {
+      label: 'Payment',
+      status: 'PENDING',
+    },
+    {
+      label: 'Reward',
+      status: 'PENDING',
     },
     {
       label: 'Fraud',
@@ -399,6 +408,19 @@ const FLOWS: Record<EventDetailsType['status'], Step[]> = {
       label: 'Reached Limit',
       status: 'ERROR',
       detailsKey: 'REACHED_LIMIT',
+      line: true,
+    },
+    {
+      label: 'Payment',
+      status: 'PENDING',
+    },
+    {
+      label: 'Reward',
+      status: 'PENDING',
+    },
+    {
+      label: 'Completion',
+      status: 'PENDING',
     },
   ],
   REJECTED: [
@@ -416,6 +438,19 @@ const FLOWS: Record<EventDetailsType['status'], Step[]> = {
       label: 'Rejected',
       status: 'ERROR',
       detailsKey: 'REJECTED',
+      line: true,
+    },
+    {
+      label: 'Payment',
+      status: 'PENDING',
+    },
+    {
+      label: 'Reward',
+      status: 'PENDING',
+    },
+    {
+      label: 'Completion',
+      status: 'PENDING',
     },
   ],
   REWARD_APPROVED: [
@@ -703,6 +738,19 @@ const FLOWS: Record<EventDetailsType['status'], Step[]> = {
       label: 'Timeout',
       status: 'ERROR',
       detailsKey: 'TIMEOUT',
+      line: true,
+    },
+    {
+      label: 'Payment',
+      status: 'PENDING',
+    },
+    {
+      label: 'Reward',
+      status: 'PENDING',
+    },
+    {
+      label: 'Completion',
+      status: 'PENDING',
     },
   ],
   TRIGGERED: [
@@ -759,7 +807,7 @@ const toItems = (
         case 'ERROR':
           return 'Times';
         case 'PENDING':
-          return 'ExclamationCircle';
+          return 'Okta';
         case 'PROGRESS':
           return 'Hourglass';
       }
@@ -767,13 +815,15 @@ const toItems = (
 
     const label = step.label;
 
+    const line = step.line;
+
     const sub = step.sub ? toItems(step.sub, timestamps) : undefined;
 
     const timestamp = step.detailsKey ? timestamps[step.detailsKey] : undefined;
 
     const value: string = crypto.randomUUID();
 
-    return { color, description, icon, label, sub, timestamp, value };
+    return { color, description, icon, label, line, sub, timestamp, value };
   });
 };
 
