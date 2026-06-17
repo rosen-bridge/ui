@@ -23,11 +23,11 @@ import { fetcher } from '@rosen-ui/swr-helpers';
 import { getAddressUrl, getTxURL } from '@rosen-ui/utils';
 import useSWR from 'swr';
 
-import { EventItem } from '@/types';
+import { ApiEventResponse, EventItem } from '@/types';
 
-const Content = ({ value }: EventSidebarProps) => {
+const Content = ({ value }: SidebarProps) => {
   const shouldLoad = useMemo(() => {
-    return !!value && !!value.eventId && value.status !== 'MULTIPLE_FLOWS';
+    return !!value && !!value.eventId && value.status !== 'multipleFlows';
   }, [value]);
 
   const { data, isLoading } = useSWR<EventItem>(
@@ -68,7 +68,7 @@ const Content = ({ value }: EventSidebarProps) => {
     return result;
   }, [data]);
 
-  if (!value || value.status === 'MULTIPLE_FLOWS') {
+  if (!value || value.status === 'multipleFlows') {
     return (
       <Center style={{ minHeight: 'calc(100vh - 304px)' }}>
         <Typography variant="body1" color="text-secondary">
@@ -88,7 +88,7 @@ const Content = ({ value }: EventSidebarProps) => {
   return <EventDetails loading={isLoading} value={eventData} />;
 };
 
-const Drawer = ({ value, onClose }: EventSidebarProps) => {
+const Drawer = ({ value, onClose }: SidebarProps) => {
   return (
     <EnhancedDialog open={!!value} stickOn="laptop" onClose={onClose}>
       <EnhancedDialogTitle icon="Exchange" onClose={onClose}>
@@ -101,7 +101,7 @@ const Drawer = ({ value, onClose }: EventSidebarProps) => {
   );
 };
 
-const DetailsSidebar = ({ value }: EventSidebarProps) => {
+const Panel = ({ value }: SidebarProps) => {
   const stickyRef = useStickyBox({
     offsetTop: 16,
     offsetBottom: 16,
@@ -145,16 +145,16 @@ const DetailsSidebar = ({ value }: EventSidebarProps) => {
   );
 };
 
-export type EventSidebarProps = {
-  value?: EventItem;
+export type SidebarProps = {
+  value?: ApiEventResponse['items'][number];
   onClose?: () => void;
 };
 
-export const EventSidebar = (props: EventSidebarProps) => {
+export const Sidebar = (props: SidebarProps) => {
   const drawer = useBreakpoint('laptop-down');
   if (drawer) {
     return <Drawer {...props} />;
   } else {
-    return <DetailsSidebar {...props} />;
+    return <Panel {...props} />;
   }
 };

@@ -138,51 +138,71 @@ const customTxThresholdMap = new Map(
   customTxThresholds?.map((t) => [t.key, t.count]) ?? [],
 );
 
-const defaultEventStatusMapping: Partial<Record<AggregateEventStatus, number>> =
+const defaultEventStatusMapping: Threshold<AggregateEventStatus>[] = [
   {
-    [AggregateEventStatus.finished]: thresholdsMapping.minimumParticipants,
-    [AggregateEventStatus.inReward]: thresholdsMapping.requiredParticipants,
-    [AggregateEventStatus.pendingReward]: thresholdsMapping.minimumParticipants,
-    [AggregateEventStatus.inPayment]: thresholdsMapping.requiredParticipants,
-    [AggregateEventStatus.rejected]: thresholdsMapping.vetoNumber,
-    [AggregateEventStatus.timeout]: thresholdsMapping.vetoNumber,
-    [AggregateEventStatus.reachedLimit]: thresholdsMapping.vetoNumber,
-    [AggregateEventStatus.paymentWaiting]: thresholdsMapping.vetoNumber,
-    [AggregateEventStatus.rewardWaiting]: thresholdsMapping.vetoNumber,
-    [AggregateEventStatus.pendingPayment]:
-      thresholdsMapping.minimumParticipants,
-  };
+    key: AggregateEventStatus.finished,
+    count: thresholdsMapping.minimumParticipants,
+  },
+  {
+    key: AggregateEventStatus.inReward,
+    count: thresholdsMapping.requiredParticipants,
+  },
+  {
+    key: AggregateEventStatus.pendingReward,
+    count: thresholdsMapping.minimumParticipants,
+  },
+  {
+    key: AggregateEventStatus.inPayment,
+    count: thresholdsMapping.requiredParticipants,
+  },
+  { key: AggregateEventStatus.rejected, count: thresholdsMapping.vetoNumber },
+  { key: AggregateEventStatus.timeout, count: thresholdsMapping.vetoNumber },
+  {
+    key: AggregateEventStatus.reachedLimit,
+    count: thresholdsMapping.vetoNumber,
+  },
+  {
+    key: AggregateEventStatus.paymentWaiting,
+    count: thresholdsMapping.vetoNumber,
+  },
+  {
+    key: AggregateEventStatus.rewardWaiting,
+    count: thresholdsMapping.vetoNumber,
+  },
+  {
+    key: AggregateEventStatus.pendingPayment,
+    count: thresholdsMapping.minimumParticipants,
+  },
+];
 
-const defaultTxStatusMapping: Record<AggregateTxStatus, number> = {
-  [AggregateTxStatus.completed]: thresholdsMapping.minimumParticipants,
-  [AggregateTxStatus.invalid]: thresholdsMapping.vetoNumber,
-  [AggregateTxStatus.sent]: thresholdsMapping.requiredParticipants,
-  [AggregateTxStatus.signed]: thresholdsMapping.minimumParticipants,
-  [AggregateTxStatus.inSign]: thresholdsMapping.requiredParticipants,
-};
+const defaultTxStatusMapping: Threshold<AggregateTxStatus>[] = [
+  {
+    key: AggregateTxStatus.completed,
+    count: thresholdsMapping.minimumParticipants,
+  },
+  { key: AggregateTxStatus.invalid, count: thresholdsMapping.vetoNumber },
+  {
+    key: AggregateTxStatus.sent,
+    count: thresholdsMapping.requiredParticipants,
+  },
+  {
+    key: AggregateTxStatus.signed,
+    count: thresholdsMapping.minimumParticipants,
+  },
+  {
+    key: AggregateTxStatus.inSign,
+    count: thresholdsMapping.requiredParticipants,
+  },
+];
 
-const eventStatusThresholds = Object.values(AggregateEventStatus)
-  .filter((status) => status !== AggregateEventStatus.waitingForConfirmation)
-  .map((status) => {
-    const customCount = customEventThresholdMap.get(status);
-    if (customCount !== undefined) {
-      return { key: status, count: customCount };
-    }
-    const count = defaultEventStatusMapping[status];
-    if (count === undefined)
-      throw new Error(
-        `Missing default threshold mapping for event status: ${status}`,
-      );
-    return { key: status, count };
-  });
+const eventStatusThresholds = defaultEventStatusMapping.map((status) => {
+  const customCount = customEventThresholdMap.get(status.key);
+  return { key: status.key, count: customCount ?? status.count };
+});
 
-const txStatusThresholds = Object.values(AggregateTxStatus).map((status) => {
-  const customCount = customTxThresholdMap.get(status);
-  if (customCount !== undefined) {
-    return { key: status, count: customCount };
-  }
-  const count = defaultTxStatusMapping[status];
-  return { key: status, count };
+const txStatusThresholds = defaultTxStatusMapping.map((status) => {
+  const customCount = customTxThresholdMap.get(status.key);
+  return { key: status.key, count: customCount ?? status.count };
 });
 
 export const publicStatusConfigs = {
