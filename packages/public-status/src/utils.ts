@@ -109,20 +109,21 @@ export class Utils {
   static getAggregatedTxStatus = (
     guardStatuses: GuardStatusEntity[],
     txStatusThresholds: Threshold<AggregateTxStatus>[],
-  ): string | undefined => {
+  ) => {
     const statuses = guardStatuses
       .map(this.encodeTxStatus)
       .filter((v) => !!v) as string[];
     const counts = this.countSimilar(statuses);
-
-    for (const encodedStatus of Object.keys(counts)) {
-      const parts = encodedStatus.split('::');
-      const txStatus = parts[1];
-      const trigger = this.checkThresholds(
-        { [txStatus]: counts[encodedStatus] },
-        txStatusThresholds,
-      );
-      if (trigger) return encodedStatus;
+    for (const threshold of txStatusThresholds) {
+      for (const encodedStatus of Object.keys(counts)) {
+        const [txKey, txStatus] = encodedStatus.split('::');
+        if (txStatus !== threshold.key) continue;
+        if (counts[encodedStatus] >= threshold.count)
+          return {
+            tx: JSON.parse(txKey) as { txId: string; chain: string },
+            txStatus: threshold.key,
+          };
+      }
     }
     return undefined;
   };
@@ -164,17 +165,16 @@ export class Utils {
     }
 
     const aggregatedTxStatus = this.getAggregatedTxStatus(
-      statuses,
+      statuses.filter(
+        (status) => this.encodeEventStatus(status) === aggregatedEventStatus,
+      ),
       txStatusThresholds,
     );
     if (!aggregatedTxStatus) {
       return aggregatedStatus;
     }
 
-    const parts = aggregatedTxStatus.split('::');
-    aggregatedStatus.tx = JSON.parse(parts[0]);
-    aggregatedStatus.txStatus = parts[1] as AggregateTxStatus;
-    return aggregatedStatus;
+    return { ...aggregatedStatus, ...aggregatedTxStatus };
   };
 
   /**

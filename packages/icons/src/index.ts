@@ -100,6 +100,8 @@ export { default as Moon } from './icons/moon.svg?react';
 
 export { default as Newspaper } from './icons/newspaper.svg?react';
 
+export { default as Okta } from './icons/okta.svg?react';
+
 export { default as PauseCircle } from './icons/pause-circle.svg?react';
 
 export { default as Pause } from './icons/pause.svg?react';
