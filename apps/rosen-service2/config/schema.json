@@ -280,6 +280,36 @@
       }
     }
   },
+  "tokenMap": {
+    "type": "object",
+    "children": {
+      "onChainTokenMapEnabled": {
+        "type": "boolean",
+        "default": true,
+        "description": "Feature flag controlling whether the service loads and validates the on-chain token map.",
+        "validations": [
+          {
+            "required": true,
+            "error": "onChainTokenMapEnabled must be explicitly set"
+          }
+        ]
+      },
+      "path": {
+        "type": "string",
+        "default": "config/tokensMap.json",
+        "validations": [
+          {
+            "required": true,
+            "error": "path for the tokenMap file must be set",
+            "when": {
+              "path": "tokenMap.onChainTokenMapEnabled",
+              "value": false
+            }
+          }
+        ]
+      }
+    }
+  },
   "statistics": {
     "type": "object",
     "children": {
@@ -347,8 +377,8 @@
           }
         }
       }
-    }
-  },
+  }
+},
   "chains": {
     "type": "object",
     "children": {
@@ -1325,16 +1355,6 @@
   "paths": {
     "type": "object",
     "children": {
-      "tokens": {
-        "type": "string",
-        "default": "config/tokensMap.json",
-        "validations": [
-          {
-            "required": true,
-            "error": "path for the tokens file must be set"
-          }
-        ]
-      },
       "contracts": {
         "type": "string",
         "default": "config/contracts.json",

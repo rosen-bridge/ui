@@ -20,7 +20,7 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@rosen-bridge/tokens": "^6.0.0",
+    "@rosen-bridge/tokens": "^6.0.2",
     "@rosen-network/ergo": "^2.5.6",
     "@rosen-ui/constants": "^1.0.0",
     "@rosen-ui/types": "^0.5.0",
