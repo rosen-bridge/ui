@@ -16,6 +16,7 @@ export type StepProps = {
   sub?: Omit<StepProps, 'sub'>[];
   timestamp?: number;
   value?: string;
+  line?: boolean;
 };
 
 export const Step = (props: StepProps) => {

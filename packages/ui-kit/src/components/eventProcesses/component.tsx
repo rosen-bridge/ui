@@ -1,4 +1,7 @@
+import { CSSProperties, useMemo } from 'react';
+
 import { Skeleton } from '@/components';
+import { StepExtra } from '@/components/eventProcesses/stepExtra';
 import { useConfig } from '@/hooks';
 import { ElementBaseProps, OverridableType } from '@/types';
 
@@ -34,14 +37,39 @@ export const EventProcesses = (props: EventProcessesProps) => {
     orientation = 'horizontal',
     value,
     onChange,
+    style,
     ...rest
   } = useConfig('EventProcesses', props);
 
+  const gridTemplateColumns = useMemo(() => {
+    if (!items?.length) return '';
+
+    return items
+      .map((item) => {
+        if (item.line) {
+          return 'minmax(0, 0)';
+        }
+        return 'minmax(0, 1fr)';
+      })
+      .join(' ');
+  }, [items]);
+
+  const styles = useMemo(() => {
+    return {
+      gridTemplateColumns: gridTemplateColumns,
+      ...style,
+    } as CSSProperties;
+  }, [gridTemplateColumns]);
+
   return (
-    <div data-orientation={orientation} {...rest}>
-      {items?.map((item, index) => (
-        <Step key={index} active={value} setActive={onChange} {...item} />
-      ))}
+    <div style={{ ...styles }} data-orientation={orientation} {...rest}>
+      {items?.map((item, index) => {
+        if (item.line) return <StepExtra {...item} key={index} />;
+
+        return (
+          <Step key={index} active={value} setActive={onChange} {...item} />
+        );
+      })}
       {loading && <Skeleton attached variant="rounded" />}
     </div>
   );
