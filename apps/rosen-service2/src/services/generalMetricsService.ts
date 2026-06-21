@@ -1,29 +1,56 @@
 import { AbstractLogger } from '@rosen-bridge/abstract-logger';
+import { DataSource } from '@rosen-bridge/extended-typeorm';
 import {
   Dependency,
-  PeriodicTaskService,
+  ServiceAction,
   ServiceStatus,
 } from '@rosen-bridge/service-manager';
 import { generalMetrics } from '@rosen-ui/rosen-statistics';
 
 import { configs } from '../configs';
-import { TokensConfig } from '../tokensConfig';
-import { DBService } from './db';
+import {
+  AbstractGeneralMetricsService,
+  AbstractTokenMapService,
+  AbstractDBService,
+} from './abstracts';
 
-export class GeneralMetricsService extends PeriodicTaskService {
-  name = 'GeneralMetricsService';
-  private static instance: GeneralMetricsService;
-  readonly dbService: DBService;
+export class GeneralMetricsService extends AbstractGeneralMetricsService {
+  static serviceName = AbstractGeneralMetricsService.name;
+  private dataSource: DataSource;
   protected dependencies: Dependency[] = [
     {
-      serviceName: DBService.name,
-      allowedStatuses: [ServiceStatus.running],
+      serviceName: AbstractDBService.name,
+      allowedStatuses: [
+        ServiceStatus.running,
+        ServiceStatus.started,
+        ServiceStatus.dormant,
+      ],
+      action: ServiceAction.assemble,
+    },
+    {
+      serviceName: AbstractTokenMapService.name,
+      allowedStatuses: [ServiceStatus.running, ServiceStatus.started],
+      action: ServiceAction.start,
     },
   ];
 
-  private constructor(logger?: AbstractLogger) {
+  /**
+   * Assembles the service by initializing dependencies
+   * @async
+   * @returns {Promise<boolean>} Resolves to `true` when the assembly is successfully completed.
+   */
+  protected assemble = async (): Promise<boolean> => {
+    this.dataSource = AbstractDBService.getInstance().getDataSource();
+    this.setStatus(ServiceStatus.dormant);
+    return true;
+  };
+
+  /**
+   * Protected constructor
+   * @param {AbstractLogger} [logger] - Optional logger instance for recording service operations.
+   */
+  protected constructor(logger?: AbstractLogger) {
     super(logger);
-    this.dbService = DBService.getInstance();
   }
 
   /**
@@ -34,24 +61,10 @@ export class GeneralMetricsService extends PeriodicTaskService {
    * @memberof GeneralMetricsService
    */
   static init = (logger?: AbstractLogger) => {
-    if (this.instance != undefined) {
+    if (AbstractGeneralMetricsService.instance != undefined) {
       return;
     }
-    this.instance = new GeneralMetricsService(logger);
-  };
-
-  /**
-   * Returns the singleton instance of MetricsService
-   *
-   * @static
-   * @return {GeneralMetricsService}
-   * @memberof GeneralMetricsService
-   */
-  static getInstance = (): GeneralMetricsService => {
-    if (!this.instance) {
-      throw new Error(`${this.name} instance is not initialized yet`);
-    }
-    return this.instance;
+    AbstractGeneralMetricsService.instance = new GeneralMetricsService(logger);
   };
 
   /**
@@ -61,12 +74,12 @@ export class GeneralMetricsService extends PeriodicTaskService {
    * @returns {Promise<void>}
    */
   private generalMetricsCalculation = async (): Promise<void> => {
-    const tokenMap = TokensConfig.getInstance().getTokenMap();
+    const tokenMap = AbstractTokenMapService.getInstance().getTokenMap();
     const rsnTokenId = configs.contracts.tokens.RSN;
 
     try {
       await generalMetrics(
-        this.dbService.dataSource,
+        this.dataSource,
         tokenMap,
         rsnTokenId,
         this.logger.child('generalMetricsJob'),
@@ -115,10 +128,10 @@ export class GeneralMetricsService extends PeriodicTaskService {
     tasks.push({
       fn: async () => {
         try {
-          this.logger.info(`Running ${this.name} job`);
+          this.logger.info(`Running ${this.getName()} job`);
           await this.generalMetricsCalculation();
         } catch (err) {
-          this.logger.error(`${this.name} job failed: ${err}`);
+          this.logger.error(`${this.getName()} job failed: ${err}`);
           if (err instanceof Error && err.stack) {
             this.logger.debug(err.stack);
           }
