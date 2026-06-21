@@ -1,4 +1,8 @@
 import { PROCEED } from '@rosen-bridge/abstract-scanner';
+import { DataSource } from '@rosen-bridge/extended-typeorm';
+
+import { AbstractDBService } from '../../../src/services/abstracts';
+import { DBService } from '../../../src/services/dbService';
 
 const now = 1763288720000;
 
@@ -28,3 +32,9 @@ export const MockedBlockEntityData = [
     timestamp: now + 300,
   },
 ];
+
+export class MockedDBService extends DBService {
+  static init(dataSource: DataSource) {
+    AbstractDBService.instance = new DBService(dataSource);
+  }
+}

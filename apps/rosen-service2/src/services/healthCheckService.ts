@@ -6,10 +6,13 @@ import {
   HealthStatusLevel,
 } from '@rosen-bridge/health-check';
 import { LogLevelHealthCheck } from '@rosen-bridge/log-level-check';
-import { ScannerSyncHealthCheckParam } from '@rosen-bridge/scanner-sync-check';
+import {
+  LastSavedBlock,
+  ScannerSyncHealthCheckParam,
+} from '@rosen-bridge/scanner-sync-check';
 import {
   Dependency,
-  PeriodicTaskService,
+  ServiceAction,
   ServiceStatus,
 } from '@rosen-bridge/service-manager';
 import { NETWORKS } from '@rosen-ui/constants';
@@ -18,40 +21,54 @@ import path from 'node:path';
 
 import { configs } from '../configs';
 import {
-  BINANCE_BLOCK_TIME,
-  BITCOIN_BLOCK_TIME,
-  CARDANO_BLOCK_TIME,
-  DOGE_BLOCK_TIME,
-  ERGO_BLOCK_TIME,
-  ETHEREUM_BLOCK_TIME,
-} from '../constants';
-import { ChainsKeys } from '../types';
-import { DBService } from './db';
-import { ScannerService } from './scanner';
+  ChainsKeys,
+  ChainScannersType,
+  Chains,
+  BLOCK_TIMES,
+  ChainsWithScanner,
+} from '../types';
+import {
+  AbstractHealthService,
+  AbstractScannerService,
+  AbstractDBService,
+} from './abstracts';
 
-export class HealthService extends PeriodicTaskService {
-  name = 'HealthService';
-
-  private static instance: HealthService;
-  readonly dbService: DBService;
-  readonly scannerService: ScannerService;
+export class HealthService extends AbstractHealthService {
+  static serviceName = AbstractHealthService.name;
+  private getLastSavedBlock: (scanner: string) => Promise<LastSavedBlock>;
+  private getScanner: (chain: keyof Chains) => ChainScannersType | undefined;
   protected healthCheck: HealthCheck;
   protected params: AbstractHealthCheckParam[] = [];
   protected dependencies: Dependency[] = [
     {
-      serviceName: DBService.name,
-      allowedStatuses: [ServiceStatus.running],
+      serviceName: AbstractDBService.name,
+      allowedStatuses: [
+        ServiceStatus.started,
+        ServiceStatus.running,
+        ServiceStatus.dormant,
+      ],
+      action: ServiceAction.assemble,
     },
     {
-      serviceName: ScannerService.name,
-      allowedStatuses: [ServiceStatus.started],
+      serviceName: AbstractScannerService.name,
+      allowedStatuses: [
+        ServiceStatus.started,
+        ServiceStatus.running,
+        ServiceStatus.dormant,
+      ],
+      action: ServiceAction.assemble,
     },
   ];
 
-  private constructor(logger?: AbstractLogger) {
-    super(logger);
-    this.dbService = DBService.getInstance();
-    this.scannerService = ScannerService.getInstance();
+  /**
+   * Assembles the service by initializing dependencies
+   * @async
+   * @returns {Promise<boolean>} Resolves to `true` when the assembly is successfully completed.
+   */
+  protected assemble = async (): Promise<boolean> => {
+    this.getLastSavedBlock = AbstractDBService.getInstance().getLastSavedBlock;
+    this.getScanner = AbstractScannerService.getInstance().getScanner;
+    this.setStatus(ServiceStatus.dormant);
 
     let notify;
     let notificationConfig;
@@ -80,14 +97,64 @@ export class HealthService extends PeriodicTaskService {
       };
     }
     this.healthCheck = new HealthCheck(notify, notificationConfig);
+    return true;
+  };
+
+  /**
+   * Protected constructor
+   * @param {AbstractLogger} [logger] - Optional logger instance for recording service operations.
+   */
+  protected constructor(logger?: AbstractLogger) {
+    super(logger);
+  }
+
+  /**
+   * Adds a new ScannerSyncHealthCheckParam to the internal params array.
+   *
+   * @param chain - The key of the blockchain
+   * @param blockTimeAsMilliSecond - Expected average block time in milliseconds
+   */
+  protected addScannerSyncParam = (
+    chain: ChainsKeys,
+    blockTimeAsMilliSecond: number,
+  ) => {
+    const scanner = this.getScanner(chain);
+
+    if (!scanner) {
+      this.logger.warn(`Scanner not found for chain: ${chain}.`);
+    } else {
+      this.params.push(
+        new ScannerSyncHealthCheckParam(
+          chain,
+          async () => this.getLastSavedBlock(scanner.name()),
+          configs.healthCheck.scanner.warnDiff,
+          configs.healthCheck.scanner.criticalDiff,
+          blockTimeAsMilliSecond * 1000,
+        ),
+      );
+    }
+  };
+
+  /**
+   * initializes the singleton instance of HealthService
+   *
+   * @static
+   * @memberof HealthService
+   */
+  static readonly init = (logger?: AbstractLogger) => {
+    if (AbstractHealthService.instance != undefined) {
+      return;
+    }
+    AbstractHealthService.instance = new HealthService(logger);
+  };
+
+  /**
+   * start health-check scanner task
+   *
+   * @returns void
+   */
+  protected preStart = async () => {
     this.params = [
-      new ScannerSyncHealthCheckParam(
-        NETWORKS.ergo.key,
-        async () => this.dbService.getLastSavedBlock(NETWORKS.ergo.key),
-        configs.healthCheck.scanner.warnDiff,
-        configs.healthCheck.scanner.criticalDiff,
-        ERGO_BLOCK_TIME * 1000,
-      ),
       new LogLevelHealthCheck(
         HealthStatusLevel.UNSTABLE,
         configs.healthCheck.logging.maxWarns,
@@ -103,87 +170,17 @@ export class HealthService extends PeriodicTaskService {
     ];
 
     // Add chains Scanner params
-    if (configs.chains.cardano.active)
-      this.addScannerSyncParam(NETWORKS.cardano.key, CARDANO_BLOCK_TIME);
-    if (configs.chains.bitcoin.active)
-      this.addScannerSyncParam(NETWORKS.bitcoin.key, BITCOIN_BLOCK_TIME);
-    if (configs.chains.doge.active)
-      this.addScannerSyncParam(NETWORKS.doge.key, DOGE_BLOCK_TIME);
-    if (configs.chains.ethereum.active)
-      this.addScannerSyncParam(NETWORKS.ethereum.key, ETHEREUM_BLOCK_TIME);
-    if (configs.chains.binance.active)
-      this.addScannerSyncParam(NETWORKS.binance.key, BINANCE_BLOCK_TIME);
-  }
-
-  /**
-   * Adds a new ScannerSyncHealthCheckParam to the internal params array.
-   *
-   * @param chain - The key of the blockchain
-   * @param blockTimeAsMilliSecond - Expected average block time in milliseconds
-   */
-  protected addScannerSyncParam = (
-    chain: ChainsKeys,
-    blockTimeAsMilliSecond: number,
-  ) => {
-    this.params.push(
-      new ScannerSyncHealthCheckParam(
-        chain,
-        async () =>
-          this.dbService.getLastSavedBlock(
-            this.scannerService.getScanners()[chain]!.name(),
-          ),
-        configs.healthCheck.scanner.warnDiff,
-        configs.healthCheck.scanner.criticalDiff,
-        blockTimeAsMilliSecond * 1000,
-      ),
-    );
-  };
-
-  /**
-   * initializes the singleton instance of HealthService
-   *
-   * @static
-   * @param {DBService} [dbService]
-   * @param {ScannerService} [ergoScannerService]
-   * @memberof HealthService
-   */
-  static readonly init = (logger?: AbstractLogger) => {
-    if (this.instance != undefined) {
-      return;
-    }
-    this.instance = new HealthService(logger);
-  };
-
-  /**
-   * return the singleton instance of HealthService
-   *
-   * @static
-   * @return {HealthService}
-   * @memberof HealthService
-   */
-  static readonly getInstance = (): HealthService => {
-    if (!this.instance) {
-      throw new Error('HealthService instances is not initialized yet');
-    }
-    return this.instance;
-  };
-
-  /**
-   * start health-check scanner task
-   *
-   * @returns void
-   */
-  protected preStart = async () => {
-    for (const param of this.params)
-      try {
-        this.healthCheck.register(param);
-        this.logger.debug(`${param.getId()} health param registered`);
-      } catch (err) {
-        this.logger.error(
-          `Registering healthCheck ${param.getId()} parameter failed: ${err}`,
-        );
-        if (err instanceof Error && err.stack) this.logger.debug(err.stack);
+    this.addScannerSyncParam(NETWORKS.ergo.key, BLOCK_TIMES.ergo);
+    (Object.keys(configs.chains) as ChainsWithScanner[]).forEach((chain) => {
+      if (chain !== NETWORKS.ergo.key && configs.chains[chain].active) {
+        const blockTime = BLOCK_TIMES[chain];
+        this.addScannerSyncParam(chain, blockTime);
       }
+    });
+    for (const param of this.params) {
+      this.healthCheck.register(param);
+      this.logger.debug(`${param.getId()} health param registered`);
+    }
   };
 
   /**

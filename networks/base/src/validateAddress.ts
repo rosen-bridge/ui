@@ -11,7 +11,8 @@ export const validateAddress = async (
   walletAddress: string,
 ) => {
   try {
-    return validate(chain, walletAddress);
+    validate(chain, walletAddress);
+    return true;
   } catch {
     return false;
   }

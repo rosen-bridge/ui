@@ -1,10 +1,11 @@
 import { AbstractLogger } from '@rosen-bridge/abstract-logger';
 import {
   Dependency,
-  PeriodicTaskService,
+  ServiceAction,
   ServiceStatus,
 } from '@rosen-bridge/service-manager';
 import ergoExplorerClientFactory from '@rosen-clients/ergo-explorer';
+import { TotalSupply } from '@rosen-ui/asset-aggregator';
 import {
   BinanceEvmRpcDataAdapter,
   BitcoinEsploraDataAdapter,
@@ -14,35 +15,37 @@ import {
   ErgoExplorerDataAdapter,
   EthereumEvmRpcDataAdapter,
 } from '@rosen-ui/asset-data-adapter';
-import { ChainsAdapters } from '@rosen-ui/asset-data-adapter';
 import { AssetBalance } from '@rosen-ui/asset-data-adapter/dist/types';
 import { NETWORKS, NETWORKS_KEYS } from '@rosen-ui/constants';
-import { createClient } from '@vercel/kv';
+import { createClient, VercelKV } from '@vercel/kv';
 
 import { configs } from '../configs';
 import { TOTAL_SUPPLY_REDIS_KEY } from '../constants';
-import { TokensConfig } from '../tokensConfig';
-import { ChainChoices, TotalSupply } from '../types';
+import { ChainChoices } from '../types';
 import { stringSerializer } from '../utils';
-import { DBService } from './db';
+import {
+  AbstractAssetDataAdapterService,
+  AbstractTokenMapService,
+} from './abstracts';
 
-export class AssetDataAdapterService extends PeriodicTaskService {
-  name = 'AssetDataAdapterService';
-  private static instance: AssetDataAdapterService;
-  readonly dbService: DBService;
-  readonly redis;
-  protected adapters: { [key: string]: ChainsAdapters } = {};
-  protected explorerApi;
+export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
+  static serviceName = AbstractAssetDataAdapterService.name;
+  protected redis: VercelKV;
+  protected explorerApi: ReturnType<typeof ergoExplorerClientFactory>;
   protected dependencies: Dependency[] = [
     {
-      serviceName: DBService.name,
+      serviceName: AbstractTokenMapService.name,
       allowedStatuses: [ServiceStatus.running],
+      action: ServiceAction.start,
     },
   ];
 
-  private constructor(logger?: AbstractLogger) {
-    super(logger);
-    this.dbService = DBService.getInstance();
+  /**
+   * Assembles the service by initializing dependencies
+   * @async
+   * @returns {Promise<boolean>} Resolves to `true` when the assembly is successfully completed.
+   */
+  protected assemble = async (): Promise<boolean> => {
     this.redis = createClient({
       url: configs.redis.address,
       token: configs.redis.token,
@@ -50,7 +53,17 @@ export class AssetDataAdapterService extends PeriodicTaskService {
     this.explorerApi = ergoExplorerClientFactory(
       configs.chains.ergo.explorer.connections.at(0)!.url,
     );
-    this.createDataAdapters();
+    await this.createDataAdapters();
+    this.setStatus(ServiceStatus.dormant);
+    return true;
+  };
+
+  /**
+   * Protected constructor
+   * @param {AbstractLogger} [logger] - Optional logger instance for recording service operations.
+   */
+  protected constructor(logger?: AbstractLogger) {
+    super(logger);
   }
 
   /**
@@ -62,12 +75,20 @@ export class AssetDataAdapterService extends PeriodicTaskService {
     [chain: string]: TotalSupply[];
   }> => {
     const assets: { [chain: string]: TotalSupply[] } = {};
-    await Promise.all(
-      NETWORKS_KEYS.map(async (chain) => {
-        const adapter = this.adapters[chain];
-        if (adapter) assets[chain] = await adapter.getAllTokensTotalSupply();
-      }),
-    );
+    for (const chain of NETWORKS_KEYS) {
+      const adapter = this.adapters[chain];
+      if (adapter) {
+        try {
+          assets[chain] = await adapter.getAllTokensTotalSupply();
+        } catch (error) {
+          this.logger.error(
+            `Failed to get total supply for ${chain}: ${error}`,
+          );
+          assets[chain] = [];
+        }
+      }
+    }
+
     return assets;
   };
 
@@ -83,7 +104,7 @@ export class AssetDataAdapterService extends PeriodicTaskService {
    * const adapter = createDataAdapter(NETWORKS.bitcoin.key, { url: "https://blockstream.info" });
    */
   protected createChainSpecificDataAdapter = (chain: ChainChoices) => {
-    const tokenMap = TokensConfig.getInstance().getTokenMap();
+    const tokenMap = AbstractTokenMapService.getInstance().getTokenMap();
 
     const addresses: string[] = [
       configs.contracts[chain].addresses.lock,
@@ -256,26 +277,12 @@ export class AssetDataAdapterService extends PeriodicTaskService {
    * @memberof AssetDataAdapterService
    */
   static readonly init = async (logger?: AbstractLogger) => {
-    if (this.instance != undefined) {
+    if (AbstractAssetDataAdapterService.instance != undefined) {
       return;
     }
-    this.instance = new AssetDataAdapterService(logger);
-  };
-
-  /**
-   * return the singleton instance of AssetDataAdapterService
-   *
-   * @static
-   * @return {AssetDataAdapterService}
-   * @memberof AssetDataAdapterService
-   */
-  static readonly getInstance = (): AssetDataAdapterService => {
-    if (!this.instance) {
-      throw new Error(
-        'AssetDataAdapterService instances is not initialized yet',
-      );
-    }
-    return this.instance;
+    AbstractAssetDataAdapterService.instance = new AssetDataAdapterService(
+      logger,
+    );
   };
 
   /**
@@ -313,8 +320,8 @@ export class AssetDataAdapterService extends PeriodicTaskService {
                   } else {
                     newData[tokenId].forEach((item, index) => {
                       const finalItemIndex = finalData[tokenId]
-                        .map((addressBalance) => addressBalance.address)
-                        .indexOf(item.address);
+                        .map((addressBalance) => addressBalance?.address)
+                        .indexOf(item?.address);
                       if (finalItemIndex >= 0) {
                         finalData[tokenId][index] =
                           newData[tokenId][finalItemIndex];

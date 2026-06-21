@@ -1,8 +1,9 @@
 import {
   ChainMinimumFee,
-  ErgoNetworkType,
+  decodeRegister,
   MinimumFeeBox,
-} from '@rosen-bridge/minimum-fee';
+  MinimumFeeExplorerNetwork,
+} from '@rosen-bridge/extended-minimum-fee';
 import { Network } from '@rosen-ui/types';
 
 export type CalculateFee = (
@@ -34,8 +35,8 @@ export const calculateFeeCreator = (
     const minFeeBox = new MinimumFeeBox(
       tokenId,
       minimumFeeNFT,
-      ErgoNetworkType.explorer,
-      process.env.ERGO_EXPLORER_API!,
+      new MinimumFeeExplorerNetwork(process.env.ERGO_EXPLORER_API!),
+      decodeRegister,
     );
 
     await minFeeBox.fetchBox();

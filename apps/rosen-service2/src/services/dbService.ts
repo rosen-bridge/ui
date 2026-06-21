@@ -3,20 +3,35 @@ import { BlockEntity, PROCEED } from '@rosen-bridge/abstract-scanner';
 import { BoxEntity } from '@rosen-bridge/address-extractor';
 import { DataSource, IsNull } from '@rosen-bridge/extended-typeorm';
 import { LastSavedBlock } from '@rosen-bridge/scanner-sync-check';
-import {
-  AbstractService,
-  Dependency,
-  ServiceStatus,
-} from '@rosen-bridge/service-manager';
+import { Dependency, ServiceStatus } from '@rosen-bridge/service-manager';
 
 import { TOKEN_MAP_EXTRACTOR_ID } from '../constants';
+import { AbstractDBService } from './abstracts';
 
-export class DBService extends AbstractService {
-  name = 'DBService';
-  private static instance: DBService;
-  readonly dataSource: DataSource;
+export class DBService extends AbstractDBService {
+  static serviceName = AbstractDBService.name;
+  protected dataSource: DataSource;
+  protected dependencies: Dependency[] = [];
 
-  private constructor(dataSource: DataSource, logger?: AbstractLogger) {
+  /**
+   * Assembles the service by initializing dependencies
+   * @async
+   * @returns {Promise<boolean>} Resolves to `true` when the assembly is successfully completed.
+   */
+  protected assemble = async (): Promise<boolean> => {
+    this.logger.debug('Initializing data source');
+    await this.dataSource.initialize();
+    this.logger.info('data source initialized');
+    this.setStatus(ServiceStatus.dormant);
+    return true;
+  };
+
+  /**
+   * Protected constructor
+   * @param {DataSource} dataSource
+   * @param {AbstractLogger} [logger] - Optional logger instance for recording service operations.
+   */
+  protected constructor(dataSource: DataSource, logger?: AbstractLogger) {
     super(logger);
     this.dataSource = dataSource;
   }
@@ -26,9 +41,7 @@ export class DBService extends AbstractService {
    *
    * @param scanner considering scanned blocks by this scanner
    */
-  public getLastSavedBlock = async (
-    scanner: string,
-  ): Promise<LastSavedBlock> => {
+  getLastSavedBlock = async (scanner: string): Promise<LastSavedBlock> => {
     const lastBlock = await this.dataSource.getRepository(BlockEntity).find({
       where: { status: PROCEED, scanner: scanner },
       order: { height: 'DESC' },
@@ -41,6 +54,15 @@ export class DBService extends AbstractService {
   };
 
   /**
+   * return of dataSource
+   *
+   * @returns {DataSource} dataSource
+   */
+  getDataSource = (): DataSource => {
+    return this.dataSource;
+  };
+
+  /**
    * initializes the singleton instance of DBService
    *
    * @static
@@ -49,48 +71,30 @@ export class DBService extends AbstractService {
    * @memberof DBService
    */
   static init = (dataSource: DataSource, logger?: AbstractLogger) => {
-    if (this.instance != undefined) {
+    if (AbstractDBService.instance != undefined) {
       return;
     }
-    this.instance = new DBService(dataSource, logger);
+    AbstractDBService.instance = new DBService(dataSource, logger);
   };
 
   /**
-   * return the singleton instance of DBService
+   * start DB service
    *
-   * @static
-   * @return {DBService}
-   * @memberof DBService
+   * @returns void
    */
-  static getInstance = (): DBService => {
-    if (!this.instance) {
-      throw new Error(`${this.name} instances is not initialized yet`);
-    }
-    return this.instance;
-  };
-
-  protected dependencies: Dependency[] = [];
-
   protected start = async (): Promise<boolean> => {
-    try {
-      this.logger.debug('Initializing data source');
-      await this.dataSource.initialize();
-      this.logger.debug('data source initialized');
-
-      this.logger.debug('running data source migrations');
-      await this.dataSource.runMigrations();
-      this.logger.debug('data source migrations completed');
-
-      this.setStatus(ServiceStatus.running);
-    } catch (e) {
-      this.logger.error(
-        `Something went wrong while starting the DBService: ${e}`,
-      );
-      return false;
-    }
+    this.logger.debug('running data source migrations');
+    await this.dataSource.runMigrations();
+    this.logger.info('data source migrations completed');
+    this.setStatus(ServiceStatus.running);
     return true;
   };
 
+  /**
+   * stop DB service
+   *
+   * @returns void
+   */
   protected stop = async (): Promise<boolean> => {
     this.setStatus(ServiceStatus.dormant);
     return true;
@@ -99,7 +103,7 @@ export class DBService extends AbstractService {
   /**
    * gets an array of unspent token-map boxes
    */
-  public getTokenMapBoxes = async (): Promise<BoxEntity[]> => {
+  getTokenMapBoxes = async (): Promise<BoxEntity[]> => {
     const boxes = await this.dataSource.getRepository(BoxEntity).find({
       where: { extractor: TOKEN_MAP_EXTRACTOR_ID, spendHeight: IsNull() },
     });

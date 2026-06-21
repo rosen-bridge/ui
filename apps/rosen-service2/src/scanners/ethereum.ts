@@ -5,11 +5,11 @@ import {
 } from '@rosen-bridge/abstract-scanner';
 import { EthereumRpcObservationExtractor } from '@rosen-bridge/evm-observation-extractor';
 import { EvmRpcNetwork, EvmRpcScanner } from '@rosen-bridge/evm-scanner';
+import { TokenMap } from '@rosen-bridge/extended-tokens';
 import { DataSource } from '@rosen-bridge/extended-typeorm';
 import { TransactionResponse } from 'ethers';
 
 import { configs } from '../configs';
-import { TokensConfig } from '../tokensConfig';
 
 const logger = DefaultLogger.getInstance().child(import.meta.url);
 
@@ -22,6 +22,7 @@ const logger = DefaultLogger.getInstance().child(import.meta.url);
  */
 export const buildEthereumEvmScannerWithExtractors = async (
   dataSource: DataSource,
+  tokenMap: TokenMap,
 ) => {
   logger.info('Starting Ethereum scanner initialization...');
 
@@ -45,7 +46,6 @@ export const buildEthereumEvmScannerWithExtractors = async (
   });
 
   try {
-    const tokenMap = TokensConfig.getInstance().getTokenMap();
     logger.debug('Creating Ethereum observation extractor...');
     const observationExtractor = new EthereumRpcObservationExtractor(
       configs.contracts.ethereum.addresses.lock,

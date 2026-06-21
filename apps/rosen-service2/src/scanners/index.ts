@@ -1,4 +1,3 @@
-export { initializeErgoScanner } from './ergo';
 export {
   buildCardanoKoiosScannerWithExtractors,
   buildCardanoBlockFrostScannerWithExtractors,

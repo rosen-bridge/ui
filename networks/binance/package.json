@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "@rosen-bridge/icons": "^3.6.0",
-    "@rosen-bridge/tokens": "^6.0.0",
+    "@rosen-bridge/tokens": "^6.0.2",
     "@rosen-network/base": "^0.5.3",
     "@rosen-network/evm": "^0.3.7",
     "@rosen-ui/constants": "^1.0.0"

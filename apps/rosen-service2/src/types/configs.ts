@@ -2,6 +2,7 @@ export interface RosenService2BaseConfig {
   paths: Paths;
   chains: Chains;
   statistics: Statistics;
+  tokenMap: TokenMap;
   dataAggregator: DataAggregator;
   healthCheck: HealthCheck;
   redis: Redis;
@@ -62,11 +63,20 @@ export interface DataAggregator {
   interval: number;
 }
 
+export interface TokenMap {
+  onChainTokenMapEnabled: boolean;
+  path?: string;
+}
+
 export interface Statistics {
   lockedAssetsMetrics: StatisticsLockedAssetsMetrics;
   generalMetrics: StatisticsGeneralMetrics;
   eventCountMetrics: StatisticsEventCountMetrics;
-  userEventsMetric: StatisticsUserEventMetrics;
+  userEventsMetric: StatisticsUserEventsMetric;
+}
+
+export interface StatisticsUserEventsMetric {
+  interval: number;
 }
 
 export interface StatisticsEventCountMetrics {
@@ -78,9 +88,6 @@ export interface StatisticsGeneralMetrics {
 }
 
 export interface StatisticsLockedAssetsMetrics {
-  interval: number;
-}
-export interface StatisticsUserEventMetrics {
   interval: number;
 }
 export interface Chains {
@@ -308,7 +315,6 @@ export interface ChainsErgoAdapter {
 }
 
 export interface Paths {
-  tokens: string;
   contracts: string;
   healthReport: string;
 }
