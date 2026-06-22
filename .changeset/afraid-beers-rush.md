@@ -2,7 +2,7 @@
 '@rosen-bridge/rosen-service2': patch
 ---
 
-Update depenedencies
+Update dependencies
 
 - @rosen-bridge/abstract-observation-extractor@0.2.3
 - @rosen-bridge/abstract-scanner@0.2.3

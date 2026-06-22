@@ -1,5 +1,15 @@
 # @rosen-ui/wallet-connect
 
+## 0.3.1
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-bridge/tokens@6.0.2
+  - @rosen-network/ethereum@0.4.7
+  - @rosen-network/binance@0.4.7
+  - @rosen-ui/wallet-api@3.2.1
+
 ## 0.3.0
 
 ### Minor Changes

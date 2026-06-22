@@ -1,5 +1,14 @@
 # @rosen-network/ergo
 
+## 2.5.7
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-clients/ergo-explorer@2.1.3
+  - @rosen-bridge/tokens@6.0.2
+  - @rosen-network/base@0.5.4
+
 ## 2.5.6
 
 ### Patch Changes

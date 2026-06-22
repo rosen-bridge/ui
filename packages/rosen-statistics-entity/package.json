@@ -1,6 +1,6 @@
 {
   "name": "@rosen-ui/rosen-statistics-entity",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "private": true,
   "description": "Rosen statistics entity and migrations",
   "repository": {
@@ -33,7 +33,7 @@
     "@rosen-bridge/abstract-scanner": "^1.0.4",
     "@rosen-bridge/extended-typeorm": "^1.1.0",
     "@rosen-bridge/watcher-data-extractor": "^13.0.6",
-    "@rosen-ui/asset-calculator": "^2.3.2"
+    "@rosen-ui/asset-calculator": "^2.3.3"
   },
   "devDependencies": {
     "@vitest/coverage-istanbul": "^3.1.4",

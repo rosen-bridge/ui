@@ -1,5 +1,13 @@
 # @rosen-network/doge
 
+## 0.4.6
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-bridge/tokens@6.0.2
+  - @rosen-network/base@0.5.4
+
 ## 0.4.5
 
 ### Patch Changes

@@ -1,5 +1,14 @@
 # @rosen-network/cardano
 
+## 2.5.6
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-clients/cardano-koios@3.1.3
+  - @rosen-bridge/tokens@6.0.2
+  - @rosen-network/base@0.5.4
+
 ## 2.5.5
 
 ### Patch Changes
