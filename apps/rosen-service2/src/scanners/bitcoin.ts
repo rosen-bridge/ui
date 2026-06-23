@@ -25,6 +25,7 @@ import { TokenMap } from '@rosen-bridge/extended-tokens';
 import { DataSource } from '@rosen-bridge/extended-typeorm';
 
 import { configs } from '../configs';
+import { BITCOIN_METHOD_ESPLORA, BITCOIN_METHOD_RPC } from '../constants';
 
 const logger = DefaultLogger.getInstance().child(import.meta.url);
 
@@ -32,10 +33,11 @@ const logger = DefaultLogger.getInstance().child(import.meta.url);
  * Initializes and configures a Bitcoin RPC scanner instance.
  *
  * @param dataSource - TypeORM DataSource for DB connection
+ * @param tokenMap
  * @returns Configured and ready-to-use BitcoinScanner instance
  * @throws Error if observation extractor creation or registration fails
  */
-export const buildBitcoinRpcScannerWithExtractors = async (
+const buildBitcoinRpcScannerWithExtractors = async (
   dataSource: DataSource,
   tokenMap: TokenMap,
 ) => {
@@ -120,10 +122,11 @@ export const buildBitcoinRpcScannerWithExtractors = async (
  * Initializes and configures a Bitcoin Esplora scanner instance.
  *
  * @param dataSource - TypeORM DataSource for DB connection
+ * @param tokenMap
  * @returns Configured and ready-to-use BitcoinScanner instance
  * @throws Error if observation extractor creation or registration fails
  */
-export const buildBitcoinEsploraScannerWithExtractors = async (
+const buildBitcoinEsploraScannerWithExtractors = async (
   dataSource: DataSource,
   tokenMap: TokenMap,
 ) => {
@@ -200,4 +203,29 @@ export const buildBitcoinEsploraScannerWithExtractors = async (
 
   logger.info('Bitcoin scanner initialization completed successfully');
   return bitcoinScanner;
+};
+
+/**
+ * create a bitcoin scanner.
+ *
+ * @param dataSource - TypeORM DataSource for database connection
+ * @param tokenMap
+ * @returns {BitcoinEsploraScanner | BitcoinRpcScanner}
+ * @throws Error if observation extractor creation or registration fails
+ */
+export const getBitcoinScanner = async (
+  dataSource: DataSource,
+  tokenMap: TokenMap,
+): Promise<BitcoinEsploraScanner | BitcoinRpcScanner> => {
+  switch (configs.chains.bitcoin.method) {
+    case BITCOIN_METHOD_ESPLORA:
+      return await buildBitcoinEsploraScannerWithExtractors(
+        dataSource,
+        tokenMap,
+      );
+    case BITCOIN_METHOD_RPC:
+      return await buildBitcoinRpcScannerWithExtractors(dataSource, tokenMap);
+    default:
+      throw new Error(`Unsupported or missing Doge scanner method.`);
+  }
 };

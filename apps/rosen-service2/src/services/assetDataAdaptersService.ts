@@ -95,170 +95,116 @@ export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
   /**
    * Creates and returns a blockchain-specific data adapter instance.
    *
-   * @param chain - The target blockchain identifier (e.g., 'ergo', 'bitcoin', etc.)
-   * @returns An instance of the corresponding data adapter for the specified chain
-   *
-   * @throws Error if no adapter class exists for the given chain
-   *
-   * @example
-   * const adapter = createDataAdapter(NETWORKS.bitcoin.key, { url: "https://blockstream.info" });
-   */
-  protected createChainSpecificDataAdapter = (chain: ChainChoices) => {
-    const tokenMap = AbstractTokenMapService.getInstance().getTokenMap();
-
-    const addresses: string[] = [
-      configs.contracts[chain].addresses.lock,
-      configs.contracts[chain].addresses.cold,
-      ...(configs.chains[chain].adapter?.extraAddresses ?? []),
-    ].filter(Boolean);
-
-    switch (chain) {
-      case NETWORKS.ergo.key:
-        return new ErgoExplorerDataAdapter(
-          addresses,
-          tokenMap,
-          {
-            explorerUrl: configs.chains.ergo.explorer.connections.at(0)!.url,
-          },
-          this.logger.child(`ergoDataAdapter`),
-        );
-      case NETWORKS.bitcoin.key:
-        return new BitcoinEsploraDataAdapter(
-          addresses,
-          tokenMap,
-          {
-            url: configs.chains.bitcoin.esplora.connections.at(0)!.url,
-          },
-          this.logger.child('bitcoinDataAdapter'),
-        );
-      case NETWORKS['bitcoin-runes'].key:
-        return new BitcoinRunesDataAdapter(
-          addresses,
-          tokenMap,
-          configs.chains['bitcoin-runes'].unisatUrl,
-          configs.chains['bitcoin-runes'].unisatApiKey,
-          this.logger.child('bitcoinRunesDataAdapter'),
-        );
-      case NETWORKS.ethereum.key:
-        return new EthereumEvmRpcDataAdapter(
-          addresses,
-          tokenMap,
-          {
-            url: configs.chains.ethereum.rpc.connections.at(0)!.url!,
-            authToken: configs.chains.ethereum.rpc.connections.at(0)?.authToken,
-          },
-          configs.chains.ethereum.adapter.chunkSize,
-          this.logger.child('ethereumDataAdapter'),
-        );
-      case NETWORKS.binance.key:
-        return new BinanceEvmRpcDataAdapter(
-          addresses,
-          tokenMap,
-          {
-            url: configs.chains.binance.rpc.connections.at(0)!.url!,
-            authToken: configs.chains.binance.rpc.connections.at(0)?.authToken,
-          },
-          configs.chains.binance.adapter.chunkSize,
-          this.logger.child('binanceDataAdapter'),
-        );
-      case NETWORKS.cardano.key:
-        return new CardanoKoiosDataAdapter(
-          addresses,
-          tokenMap,
-          {
-            koiosUrl: configs.chains.cardano.koios.connections.at(0)!.url,
-            authToken: configs.chains.cardano.koios.connections
-              .at(0)
-              ?.authToken?.toString(),
-          },
-          this.logger.child('cardanoDataAdapter'),
-        );
-      case NETWORKS.doge.key:
-        return new DogeBlockCypherDataAdapter(
-          addresses,
-          tokenMap,
-          {
-            blockCypherUrl: configs.chains.doge.adapter.blockCypher.url,
-          },
-          this.logger.child('dogeDataAdapter'),
-        );
-    }
-  };
-
-  /**
-   * Generates and registers blockchain scanners along with their corresponding event extractors
-   * based on the active chains and configured methods.
-   *
    * Supported chains:
    * - Ergo     (Explorer, Node)
    * - Cardano  (Blockfrost, Ogmios, Koios)
    * - Bitcoin  (Esplora, RPC)
+   * - Bitcoin-Runs  (Esplora, RPC)
    * - Doge     (Esplora, RPC)
    * - Ethereum (EVM RPC)
    * - Binance  (RPC)
    *
-   * Each scanner will be initialized with its event extractors
-   * and stored in the `scanners` registry for later use.
+   * const adapter = createDataAdapter(NETWORKS.bitcoin.key, { url: "https://blockstream.info" });
    *
    * @async
-   * @returns {Promise<void>} Resolves once all active scanners are created and registered
-   * @throws {Error} If scanner or extractor creation fails
+   * @returns {Promise<void>}
    */
   protected createDataAdapters = async () => {
     try {
-      // Create Ergo data-adapter
-      this.adapters[NETWORKS.ergo.key] = this.createChainSpecificDataAdapter(
-        NETWORKS.ergo.key,
-      );
-
-      if (
-        configs.chains.cardano.active &&
-        configs.chains.cardano.koios.connections.at(0)
-      ) {
-        // Create Cardano data-adapter
-        this.adapters[NETWORKS.cardano.key] =
-          this.createChainSpecificDataAdapter(NETWORKS.cardano.key);
-      }
-
-      if (
-        configs.chains.bitcoin.active &&
-        configs.chains.bitcoin.esplora.connections.at(0)
-      ) {
-        // Create Bitcoin data-adapter
-        this.adapters[NETWORKS.bitcoin.key] =
-          this.createChainSpecificDataAdapter(NETWORKS.bitcoin.key);
-      }
-
-      if (configs.chains['bitcoin-runes'].active) {
-        // Create bitcoin-runes data-adapter
-        this.adapters[NETWORKS['bitcoin-runes'].key] =
-          this.createChainSpecificDataAdapter(NETWORKS['bitcoin-runes'].key);
-      }
-
-      if (configs.chains.doge.active) {
-        // Create Doge data-adapter
-        this.adapters[NETWORKS.doge.key] = this.createChainSpecificDataAdapter(
-          NETWORKS.doge.key,
-        );
-      }
-
-      if (
-        configs.chains.ethereum.active &&
-        configs.chains.ethereum.rpc.connections.at(0)
-      ) {
-        // Create Ethereum data-adapter
-        this.adapters[NETWORKS.ethereum.key] =
-          this.createChainSpecificDataAdapter(NETWORKS.ethereum.key);
-      }
-
-      if (
-        configs.chains.binance.active &&
-        configs.chains.binance.rpc.connections.at(0)
-      ) {
-        // Create Binance data-adapter
-        this.adapters[NETWORKS.binance.key] =
-          this.createChainSpecificDataAdapter(NETWORKS.binance.key);
-      }
+      const tokenMap = AbstractTokenMapService.getInstance().getTokenMap();
+      (Object.keys(configs.chains) as ChainChoices[]).forEach((chain) => {
+        const addresses: string[] = [
+          configs.contracts[chain].addresses.lock,
+          configs.contracts[chain].addresses.cold,
+          ...(configs.chains[chain].adapter?.extraAddresses ?? []),
+        ].filter(Boolean);
+        if (chain === NETWORKS.ergo.key || configs.chains[chain].active) {
+          switch (chain) {
+            case NETWORKS.ergo.key:
+              this.adapters[NETWORKS[chain].key] = new ErgoExplorerDataAdapter(
+                addresses,
+                tokenMap,
+                {
+                  explorerUrl:
+                    configs.chains.ergo.explorer.connections.at(0)!.url,
+                },
+                this.logger.child(`ergoDataAdapter`),
+              );
+              break;
+            case NETWORKS.bitcoin.key:
+              this.adapters[NETWORKS[chain].key] =
+                new BitcoinEsploraDataAdapter(
+                  addresses,
+                  tokenMap,
+                  {
+                    url: configs.chains.bitcoin.esplora.connections.at(0)!.url,
+                  },
+                  this.logger.child('bitcoinDataAdapter'),
+                );
+              break;
+            case NETWORKS['bitcoin-runes'].key:
+              this.adapters[NETWORKS[chain].key] = new BitcoinRunesDataAdapter(
+                addresses,
+                tokenMap,
+                configs.chains['bitcoin-runes'].unisatUrl,
+                configs.chains['bitcoin-runes'].unisatApiKey,
+                this.logger.child('bitcoinRunesDataAdapter'),
+              );
+              break;
+            case NETWORKS.ethereum.key:
+              this.adapters[NETWORKS[chain].key] =
+                new EthereumEvmRpcDataAdapter(
+                  addresses,
+                  tokenMap,
+                  {
+                    url: configs.chains.ethereum.rpc.connections.at(0)!.url!,
+                    authToken:
+                      configs.chains.ethereum.rpc.connections.at(0)?.authToken,
+                  },
+                  configs.chains.ethereum.adapter.chunkSize,
+                  this.logger.child('ethereumDataAdapter'),
+                );
+              break;
+            case NETWORKS.binance.key:
+              this.adapters[NETWORKS[chain].key] = new BinanceEvmRpcDataAdapter(
+                addresses,
+                tokenMap,
+                {
+                  url: configs.chains.binance.rpc.connections.at(0)!.url!,
+                  authToken:
+                    configs.chains.binance.rpc.connections.at(0)?.authToken,
+                },
+                configs.chains.binance.adapter.chunkSize,
+                this.logger.child('binanceDataAdapter'),
+              );
+              break;
+            case NETWORKS.cardano.key:
+              this.adapters[NETWORKS[chain].key] = new CardanoKoiosDataAdapter(
+                addresses,
+                tokenMap,
+                {
+                  koiosUrl: configs.chains.cardano.koios.connections.at(0)!.url,
+                  authToken: configs.chains.cardano.koios.connections
+                    .at(0)
+                    ?.authToken?.toString(),
+                },
+                this.logger.child('cardanoDataAdapter'),
+              );
+              break;
+            case NETWORKS.doge.key:
+              this.adapters[NETWORKS[chain].key] =
+                new DogeBlockCypherDataAdapter(
+                  addresses,
+                  tokenMap,
+                  {
+                    blockCypherUrl: configs.chains.doge.adapter.blockCypher.url,
+                  },
+                  this.logger.child('dogeDataAdapter'),
+                );
+              break;
+          }
+        }
+      });
     } catch (error) {
       this.logger.error(
         `Failed to create data-adaptors: ${error instanceof Error ? error.message : error}`,
@@ -292,7 +238,40 @@ export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
    */
   protected preStart = async () => {
     const assets = await this.getAssetsTotalSupply();
-    this.redis.set(TOTAL_SUPPLY_REDIS_KEY, stringSerializer(assets));
+    await this.redis.set(TOTAL_SUPPLY_REDIS_KEY, stringSerializer(assets));
+  };
+
+  /**
+   * Updates and merges EVM-chain (Ethereum/Binance) data in Redis.
+   * @param {ChainChoices} chain - The chain name of data adapter
+   * @returns {AssetBalance}
+   * @protected
+   */
+  protected evmChainDataUpdated = async (
+    chain: ChainChoices,
+  ): Promise<AssetBalance> => {
+    const adapter = this.adapters[chain];
+    const oldData =
+      (await this.redis.get<AssetBalance | null>(adapter.chain)) || {};
+    const newData = await adapter.fetch();
+    const finalData = { ...oldData };
+    for (const tokenId of Object.keys(newData)) {
+      if (!Object.hasOwn(finalData, tokenId)) {
+        finalData[tokenId] = newData[tokenId];
+      } else {
+        newData[tokenId].forEach((item, index) => {
+          const finalItemIndex = finalData[tokenId]
+            .map((addressBalance) => addressBalance?.address)
+            .indexOf(item?.address);
+          if (finalItemIndex >= 0) {
+            finalData[tokenId][index] = newData[tokenId][finalItemIndex];
+          } else {
+            finalData[tokenId].push(item);
+          }
+        });
+      }
+    }
+    return finalData;
   };
 
   /**
@@ -309,32 +288,15 @@ export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
           adapter.chain == NETWORKS.binance.key
             ? async () => {
                 // preventing of overriding old chunks of data
-                const oldData =
-                  (await this.redis.get<AssetBalance | null>(adapter.chain)) ||
-                  {};
-                const newData = await adapter.fetch();
-                const finalData = oldData;
-                for (const tokenId of Object.keys(newData)) {
-                  if (!Object.hasOwn(finalData, tokenId)) {
-                    finalData[tokenId] = newData[tokenId];
-                  } else {
-                    newData[tokenId].forEach((item, index) => {
-                      const finalItemIndex = finalData[tokenId]
-                        .map((addressBalance) => addressBalance?.address)
-                        .indexOf(item?.address);
-                      if (finalItemIndex >= 0) {
-                        finalData[tokenId][index] =
-                          newData[tokenId][finalItemIndex];
-                      } else {
-                        finalData[tokenId].push(item);
-                      }
-                    });
-                  }
-                }
-                this.redis.set(adapter.chain, stringSerializer(finalData));
+                await this.redis.set(
+                  adapter.chain,
+                  stringSerializer(
+                    await this.evmChainDataUpdated(adapter.chain),
+                  ),
+                );
               }
             : async () => {
-                this.redis.set(
+                await this.redis.set(
                   adapter.chain,
                   stringSerializer(await adapter.fetch()),
                 );
