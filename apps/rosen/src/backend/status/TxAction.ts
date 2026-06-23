@@ -25,9 +25,11 @@ class TxAction {
 
   /**
    * inserts a TxEntity into database or throw if it exists
+   * @param repository
    * @param txId
    * @param chain
    * @param eventId
+   * @param triggerTxId
    * @param insertedAt
    * @param txType
    * @returns a promise that resolves to void
@@ -37,6 +39,7 @@ class TxAction {
     txId: string,
     chain: string,
     eventId: string,
+    triggerTxId: string,
     insertedAt: number,
     txType: TxType,
   ): Promise<void> => {
@@ -51,6 +54,7 @@ class TxAction {
       txId,
       chain,
       eventId,
+      triggerTxId,
       insertedAt,
       txType,
     });

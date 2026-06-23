@@ -21,6 +21,10 @@ export class GuardStatusChangedEntity {
 
   @Column('varchar')
   @Index()
+  triggerTxId: string;
+
+  @Column('varchar')
+  @Index()
   guardPk: string;
 
   @Column('integer')

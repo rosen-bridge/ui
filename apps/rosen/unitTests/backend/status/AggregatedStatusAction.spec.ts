@@ -6,7 +6,13 @@ import {
 
 import AggregatedStatusAction from '@/backend/status/AggregatedStatusAction';
 
-import { mockAggregatedStatusRecords, id0, id1 } from './testData';
+import {
+  mockAggregatedStatusRecords,
+  id0,
+  id1,
+  triggerId0,
+  triggerId1,
+} from './testData';
 
 describe('AggregatedStatusAction', () => {
   beforeAll(() => {
@@ -34,13 +40,14 @@ describe('AggregatedStatusAction', () => {
       const currentStatus = await AggregatedStatusAction.getInstance().getOne(
         repository as unknown as Repository<AggregatedStatusEntity>,
         id0,
+        triggerId0,
       );
 
       // assert
       expect(currentStatus).toBeNull();
       expect(repository.findOne).toHaveBeenCalledOnce();
       expect(repository.findOne).toHaveBeenCalledWith({
-        where: { eventId: id0 },
+        where: { eventId: id0, triggerTxId: triggerId0 },
         relations: ['tx'],
       });
     });
@@ -66,14 +73,20 @@ describe('AggregatedStatusAction', () => {
       // act
       const records = await AggregatedStatusAction.getInstance().getMany(
         repository as unknown as Repository<AggregatedStatusEntity>,
-        [id0, id1],
+        [
+          [id0, triggerId0],
+          [id1, triggerId1],
+        ],
       );
 
       // assert
       expect(records).toHaveLength(0);
       expect(repository.find).toHaveBeenCalledOnce();
       expect(repository.find).toHaveBeenCalledWith({
-        where: { eventId: In([id0, id1]) },
+        where: [
+          { eventId: id0, triggerTxId: triggerId0 },
+          { eventId: id1, triggerTxId: triggerId1 },
+        ],
         relations: ['tx'],
         order: { eventId: 'ASC' },
       });
@@ -104,6 +117,7 @@ describe('AggregatedStatusAction', () => {
       await AggregatedStatusAction.getInstance().upsertOne(
         repository as unknown as Repository<AggregatedStatusEntity>,
         record.eventId,
+        record.triggerTxId,
         record.updatedAt,
         record.status,
         record.txStatus ?? undefined,
@@ -112,6 +126,7 @@ describe('AggregatedStatusAction', () => {
       await AggregatedStatusAction.getInstance().upsertOne(
         repository as unknown as Repository<AggregatedStatusEntity>,
         record2.eventId,
+        record2.triggerTxId,
         record2.updatedAt,
         record2.status,
         record2.txStatus ?? undefined,
@@ -147,6 +162,7 @@ describe('AggregatedStatusAction', () => {
       await AggregatedStatusAction.getInstance().upsertOne(
         repository as unknown as Repository<AggregatedStatusEntity>,
         record.eventId,
+        record.triggerTxId,
         record.updatedAt + 5,
         AggregateEventStatus.pendingPayment,
         undefined,
@@ -159,13 +175,14 @@ describe('AggregatedStatusAction', () => {
         [
           {
             eventId: record.eventId,
+            triggerTxId: record.triggerTxId,
             updatedAt: record.updatedAt + 5,
             status: AggregateEventStatus.pendingPayment,
             txStatus: null,
             tx: null,
           },
         ],
-        ['eventId'],
+        ['eventId', 'triggerTxId'],
       );
     });
 
@@ -192,6 +209,7 @@ describe('AggregatedStatusAction', () => {
       await AggregatedStatusAction.getInstance().upsertOne(
         repository as unknown as Repository<AggregatedStatusEntity>,
         record.eventId,
+        record.triggerTxId,
         record.updatedAt + 5,
         record.status,
         record.txStatus ?? undefined,

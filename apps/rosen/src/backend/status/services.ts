@@ -13,7 +13,7 @@ import {
  */
 export type AggregatedStatusChangedDTO = Omit<
   AggregatedStatusChangedEntity,
-  'id' | 'eventId'
+  'id' | 'eventId' | 'triggerTxId'
 >;
 
 /**
@@ -24,13 +24,16 @@ export type AggregatedStatusChangedDTO = Omit<
 export const aggregatedStatusChangedToDTO = (
   record: AggregatedStatusChangedEntity,
 ): AggregatedStatusChangedDTO => {
-  return Utils.cloneOmitting(record, ['id', 'eventId']);
+  return Utils.cloneOmitting(record, ['id', 'eventId', 'triggerTxId']);
 };
 
 /**
  * a response type used in api
  */
-export type AggregatedStatusDTO = Omit<AggregatedStatusEntity, 'eventId'>;
+export type AggregatedStatusDTO = Omit<
+  AggregatedStatusEntity,
+  'eventId' | 'triggerTxId'
+>;
 
 /**
  * helper function to map AggregatedStatusEntity to its DTO
@@ -40,7 +43,7 @@ export type AggregatedStatusDTO = Omit<AggregatedStatusEntity, 'eventId'>;
 export const aggregatedStatusToDTO = (
   record: AggregatedStatusEntity,
 ): AggregatedStatusDTO => {
-  return Utils.cloneOmitting(record, ['eventId']);
+  return Utils.cloneOmitting(record, ['eventId', 'triggerTxId']);
 };
 
 /**
@@ -48,7 +51,7 @@ export const aggregatedStatusToDTO = (
  */
 export type GuardStatusChangedDTO = Omit<
   GuardStatusChangedEntity,
-  'id' | 'eventId'
+  'id' | 'eventId' | 'triggerTxId'
 >;
 
 /**
@@ -59,7 +62,7 @@ export type GuardStatusChangedDTO = Omit<
 export const guardStatusChangedToDTO = (
   record: GuardStatusChangedEntity,
 ): GuardStatusChangedDTO => {
-  return Utils.cloneOmitting(record, ['id', 'eventId']);
+  return Utils.cloneOmitting(record, ['id', 'eventId', 'triggerTxId']);
 };
 
 /**

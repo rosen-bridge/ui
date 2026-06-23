@@ -35,6 +35,7 @@ describe('TxAction', () => {
         record.txId,
         record.chain,
         record.eventId,
+        record.triggerTxId,
         record.insertedAt,
         record.txType,
       );
@@ -72,6 +73,7 @@ describe('TxAction', () => {
           record.txId,
           record.chain,
           record.eventId,
+          record.triggerTxId,
           record.insertedAt + 10,
           record.txType,
         );

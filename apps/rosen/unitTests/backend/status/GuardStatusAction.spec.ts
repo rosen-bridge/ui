@@ -9,6 +9,7 @@ import {
   mockGuardStatusRecords,
   id0,
   mockPaginationTestData,
+  triggerId0,
 } from './testData';
 
 describe('GuardStatusAction', () => {
@@ -37,6 +38,7 @@ describe('GuardStatusAction', () => {
       const currentStatus = await GuardStatusAction.getInstance().getOne(
         repository as unknown as Repository<GuardStatusEntity>,
         id0,
+        triggerId0,
         'pk0',
       );
 
@@ -44,7 +46,7 @@ describe('GuardStatusAction', () => {
       expect(currentStatus).toBeNull();
       expect(repository.findOne).toHaveBeenCalledOnce();
       expect(repository.findOne).toHaveBeenCalledWith({
-        where: { eventId: id0, guardPk: 'pk0' },
+        where: { eventId: id0, triggerTxId: triggerId0, guardPk: 'pk0' },
         relations: ['tx'],
       });
     });
@@ -64,6 +66,7 @@ describe('GuardStatusAction', () => {
       const { total, items } = await GuardStatusAction.getInstance().getMany(
         testDataSource.getRepository(GuardStatusEntity),
         id0,
+        triggerId0,
         ['pk0', 'pk1'],
         0,
         100,
@@ -99,6 +102,7 @@ describe('GuardStatusAction', () => {
       const { total, items } = await GuardStatusAction.getInstance().getMany(
         testDataSource.getRepository(GuardStatusEntity),
         id0,
+        triggerId0,
         [],
         0,
         6,
@@ -107,15 +111,14 @@ describe('GuardStatusAction', () => {
       // assert
       expect(total).toBe(10);
       expect(items).toHaveLength(6);
-      expect(items).toEqual(
-        mockPaginationTestData.guardStatus.toReversed().slice(0, 6),
-      );
+      expect(items).toEqual(mockPaginationTestData.guardStatus.slice(0, 6));
 
       // act
       const { total: total2, items: items2 } =
         await GuardStatusAction.getInstance().getMany(
           testDataSource.getRepository(GuardStatusEntity),
           id0,
+          triggerId0,
           [],
           5,
           10,
@@ -124,9 +127,7 @@ describe('GuardStatusAction', () => {
       // assert
       expect(total2).toBe(10);
       expect(items2).toHaveLength(5);
-      expect(items2).toEqual(
-        mockPaginationTestData.guardStatus.toReversed().slice(5),
-      );
+      expect(items2).toEqual(mockPaginationTestData.guardStatus.slice(5));
     });
   });
 
@@ -154,6 +155,7 @@ describe('GuardStatusAction', () => {
       await GuardStatusAction.getInstance().upsertOne(
         repository as unknown as Repository<GuardStatusEntity>,
         record.eventId,
+        record.triggerTxId,
         record.guardPk,
         record.updatedAt,
         record.status,
@@ -167,6 +169,7 @@ describe('GuardStatusAction', () => {
       await GuardStatusAction.getInstance().upsertOne(
         repository as unknown as Repository<GuardStatusEntity>,
         record2.eventId,
+        record2.triggerTxId,
         record2.guardPk,
         record2.updatedAt,
         record2.status,
@@ -207,6 +210,7 @@ describe('GuardStatusAction', () => {
       await GuardStatusAction.getInstance().upsertOne(
         repository as unknown as Repository<GuardStatusEntity>,
         record.eventId,
+        record.triggerTxId,
         record.guardPk,
         record.updatedAt + 5,
         EventStatus.completed,
@@ -219,6 +223,7 @@ describe('GuardStatusAction', () => {
         [
           {
             eventId: record.eventId,
+            triggerTxId: record.triggerTxId,
             guardPk: record.guardPk,
             updatedAt: record.updatedAt + 5,
             status: EventStatus.completed,
@@ -226,7 +231,7 @@ describe('GuardStatusAction', () => {
             txStatus: null,
           },
         ],
-        ['eventId', 'guardPk'],
+        ['eventId', 'triggerTxId', 'guardPk'],
       );
     });
 
@@ -253,6 +258,7 @@ describe('GuardStatusAction', () => {
       await GuardStatusAction.getInstance().upsertOne(
         repository as unknown as Repository<GuardStatusEntity>,
         record.eventId,
+        record.triggerTxId,
         record.guardPk,
         record.updatedAt + 5,
         record.status,

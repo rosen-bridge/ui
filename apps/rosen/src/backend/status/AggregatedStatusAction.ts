@@ -1,4 +1,4 @@
-import { In, Repository } from '@rosen-bridge/extended-typeorm';
+import { Repository } from '@rosen-bridge/extended-typeorm';
 import {
   AggregateEventStatus,
   AggregateTxStatus,
@@ -30,34 +30,39 @@ class AggregatedStatusAction {
   };
 
   /**
-   * retrieves one AggregatedStatusEntity matching the specified eventId
+   * retrieves one AggregatedStatusEntity matching the specified eventId and triggerTxId
    * @param repository
    * @param eventId
+   * @param triggerTxId
    * @returns a promise that resolves to an AggregatedStatusEntity or null if no matching entity is found
    */
   getOne = async (
     repository: Repository<AggregatedStatusEntity>,
     eventId: string,
+    triggerTxId: string,
   ): Promise<AggregatedStatusEntity | null> => {
     return repository.findOne({
-      where: { eventId },
+      where: { eventId, triggerTxId },
       relations: ['tx'],
     });
   };
 
   /**
-   * retrieves multiple AggregatedStatusEntity objects for the given eventIds array
-   * note: no need for pagination since output.length == eventIds.length
+   * retrieves multiple AggregatedStatusEntity objects for the given eventAndTriggerIds array
+   * note: no need for pagination since output.length == eventAndTriggerIds.length
    * @param repository
-   * @param eventIds
+   * @param eventAndTriggerIds
    * @returns a promise that resolves to an array of AggregatedStatusEntity objects
    */
   getMany = async (
     repository: Repository<AggregatedStatusEntity>,
-    eventIds: string[],
+    eventAndTriggerIds: string[][],
   ): Promise<AggregatedStatusEntity[]> => {
     return repository.find({
-      where: { eventId: In(eventIds) },
+      where: eventAndTriggerIds.map((eventAndTriggerId) => ({
+        eventId: eventAndTriggerId[0],
+        triggerTxId: eventAndTriggerId[1],
+      })),
       relations: ['tx'],
       order: { eventId: 'ASC' },
     });
@@ -67,6 +72,7 @@ class AggregatedStatusAction {
    * upserts an AggregatedStatusEntity into database if it differs from its stored value
    * @param repository
    * @param eventId
+   * @param triggerTxId
    * @param updatedAt
    * @param status
    * @param txStatus
@@ -76,6 +82,7 @@ class AggregatedStatusAction {
   upsertOne = async (
     repository: Repository<AggregatedStatusEntity>,
     eventId: string,
+    triggerTxId: string,
     updatedAt: number,
     status: AggregateEventStatus,
     txStatus?: AggregateTxStatus,
@@ -84,7 +91,7 @@ class AggregatedStatusAction {
       chain: string;
     },
   ): Promise<void> => {
-    const storedValue = await this.getOne(repository, eventId);
+    const storedValue = await this.getOne(repository, eventId, triggerTxId);
 
     if (
       storedValue &&
@@ -100,13 +107,14 @@ class AggregatedStatusAction {
       [
         {
           eventId,
+          triggerTxId,
           updatedAt,
           status,
           txStatus: txStatus ?? null,
           tx: tx ? { txId: tx.txId, chain: tx.chain } : null,
         },
       ],
-      ['eventId'],
+      ['eventId', 'triggerTxId'],
     );
   };
 }

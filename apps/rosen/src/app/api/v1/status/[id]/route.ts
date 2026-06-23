@@ -15,6 +15,7 @@ const handler = async (params: GetAggregatedStatusTimelineRouteParam) => {
   const { total, items } =
     await PublicStatusAction.getInstance().getAggregatedStatusTimeline(
       params.id,
+      params.triggerTxId,
       params.offset,
       params.limit,
     );

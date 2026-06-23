@@ -9,17 +9,11 @@ import {
   Threshold,
   AggregatedStatusEntity,
   GuardStatusChangedEntity,
+  GuardStatusEntity,
+  TxEntity,
 } from '@rosen-ui/public-status';
 
-export const id0 =
-  '0000000000000000000000000000000000000000000000000000000000000000';
-export const id1 =
-  '0000000000000000000000000000000000000000000000000000000000000001';
-
-export const guardPk0 =
-  '0308b553ecd6c7fa3098c9d129150de25eff1bb52e25223980c9e304c566f5a8e1';
-export const guardPk1 =
-  '03a9d7dacdd1da2514188921cea39750035468dc1c7d4c23401231706c6027f5c6';
+import { guardPk0, guardPk1, id0, id1, triggerId0 } from './testData';
 
 export const mockTxDTO = {
   txId: id1,
@@ -28,10 +22,11 @@ export const mockTxDTO = {
   txStatus: TxStatus.inSign,
 };
 
-export const mockNewTx = {
+export const mockNewTx: TxEntity = {
   txId: id1,
   chain: ERGO_CHAIN,
   eventId: id0,
+  triggerTxId: triggerId0,
   insertedAt: 20,
   txType: TxType.payment,
 };
@@ -49,24 +44,27 @@ export const mockGuardStatusTx = {
   txStatus: mockTxDTO.txStatus,
 };
 
-export const mockNewGuardStatus = {
+export const mockNewGuardStatus: GuardStatusEntity = {
   eventId: id0,
+  triggerTxId: triggerId0,
   guardPk: guardPk0,
   updatedAt: 20,
   status: EventStatus.timeout,
   tx: null,
   txStatus: null,
 };
-export const mockNewGuardStatusAggregateChange = {
+export const mockNewGuardStatusAggregateChange: GuardStatusEntity = {
   eventId: id0,
+  triggerTxId: triggerId0,
   guardPk: guardPk0,
   updatedAt: 20,
   status: EventStatus.completed,
   tx: null,
   txStatus: null,
 };
-export const mockExistingGuardStatus = {
+export const mockExistingGuardStatus: GuardStatusEntity = {
   eventId: id0,
+  triggerTxId: triggerId0,
   guardPk: guardPk1,
   updatedAt: 10,
   status: EventStatus.inPayment,
@@ -77,6 +75,7 @@ export const mockExistingGuardStatus = {
 export const mockNewGuardStatusChanged: GuardStatusChangedEntity = {
   id: 1,
   eventId: id0,
+  triggerTxId: triggerId0,
   guardPk: guardPk0,
   insertedAt: 20,
   status: EventStatus.timeout,
@@ -87,6 +86,7 @@ export const mockNewGuardStatusChangedAggregateChange: GuardStatusChangedEntity 
   {
     id: 1,
     eventId: id0,
+    triggerTxId: triggerId0,
     guardPk: guardPk0,
     insertedAt: 20,
     status: EventStatus.completed,
@@ -96,6 +96,7 @@ export const mockNewGuardStatusChangedAggregateChange: GuardStatusChangedEntity 
 export const mockExistingGuardStatusChanged: GuardStatusChangedEntity = {
   id: 0,
   eventId: id0,
+  triggerTxId: triggerId0,
   guardPk: guardPk1,
   insertedAt: 10,
   status: EventStatus.inPayment,
@@ -105,6 +106,7 @@ export const mockExistingGuardStatusChanged: GuardStatusChangedEntity = {
 
 export const mockNewAggregatedStatus: AggregatedStatusEntity = {
   eventId: id0,
+  triggerTxId: triggerId0,
   updatedAt: 20,
   status: AggregateEventStatus.finished,
   txStatus: null,
@@ -113,6 +115,7 @@ export const mockNewAggregatedStatus: AggregatedStatusEntity = {
 export const mockNewAggregatedStatusChanged: AggregatedStatusChangedEntity = {
   id: 1,
   eventId: id0,
+  triggerTxId: triggerId0,
   insertedAt: 20,
   status: AggregateEventStatus.finished,
   txStatus: null,
@@ -121,6 +124,7 @@ export const mockNewAggregatedStatusChanged: AggregatedStatusChangedEntity = {
 
 export const mockExistingAggregatedStatus: AggregatedStatusEntity = {
   eventId: id0,
+  triggerTxId: triggerId0,
   updatedAt: 10,
   status: AggregateEventStatus.waitingForConfirmation,
   txStatus: null,
@@ -130,6 +134,7 @@ export const mockExistingAggregatedStatusChanged: AggregatedStatusChangedEntity 
   {
     id: 0,
     eventId: id0,
+    triggerTxId: triggerId0,
     insertedAt: 10,
     status: AggregateEventStatus.waitingForConfirmation,
     txStatus: null,

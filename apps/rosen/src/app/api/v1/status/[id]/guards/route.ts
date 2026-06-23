@@ -12,6 +12,7 @@ const handler = async (params: GetGuardStatusTimelineParams) => {
   const { total, items } =
     await PublicStatusAction.getInstance().getGuardStatusTimeline(
       params.id,
+      params.triggerTxId,
       params.guardPks,
       params.offset,
       params.limit,

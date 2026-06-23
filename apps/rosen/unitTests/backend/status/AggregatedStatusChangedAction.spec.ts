@@ -12,6 +12,7 @@ import {
   mockAggregatedStatusChangedRecords,
   id0,
   mockPaginationTestData,
+  triggerId0,
 } from './testData';
 
 describe('AggregatedStatusChangedAction', () => {
@@ -41,13 +42,14 @@ describe('AggregatedStatusChangedAction', () => {
         await AggregatedStatusChangedAction.getInstance().getLast(
           repository as unknown as Repository<AggregatedStatusChangedEntity>,
           id0,
+          triggerId0,
         );
 
       // assert
       expect(lastStatus).toBeNull();
       expect(repository.findOne).toHaveBeenCalledOnce();
       expect(repository.findOne).toHaveBeenCalledWith({
-        where: { eventId: id0 },
+        where: { eventId: id0, triggerTxId: triggerId0 },
         relations: ['tx'],
         order: { insertedAt: 'DESC' },
       });
@@ -69,6 +71,7 @@ describe('AggregatedStatusChangedAction', () => {
         await AggregatedStatusChangedAction.getInstance().getMany(
           testDataSource.getRepository(AggregatedStatusChangedEntity),
           id0,
+          triggerId0,
           0,
           100,
         );
@@ -104,6 +107,7 @@ describe('AggregatedStatusChangedAction', () => {
         await AggregatedStatusChangedAction.getInstance().getMany(
           testDataSource.getRepository(AggregatedStatusChangedEntity),
           id0,
+          triggerId0,
           0,
           6,
         );
@@ -120,6 +124,7 @@ describe('AggregatedStatusChangedAction', () => {
         await AggregatedStatusChangedAction.getInstance().getMany(
           testDataSource.getRepository(AggregatedStatusChangedEntity),
           id0,
+          triggerId0,
           5,
           10,
         );
@@ -156,6 +161,7 @@ describe('AggregatedStatusChangedAction', () => {
       await AggregatedStatusChangedAction.getInstance().insertOne(
         repository as unknown as Repository<AggregatedStatusChangedEntity>,
         record.eventId,
+        record.triggerTxId,
         record.insertedAt,
         record.status,
         record.txStatus ?? undefined,
@@ -190,6 +196,7 @@ describe('AggregatedStatusChangedAction', () => {
       await AggregatedStatusChangedAction.getInstance().insertOne(
         repository as unknown as Repository<AggregatedStatusChangedEntity>,
         record.eventId,
+        record.triggerTxId,
         record.insertedAt,
         AggregateEventStatus.paymentWaiting,
         record.txStatus ?? undefined,
@@ -229,6 +236,7 @@ describe('AggregatedStatusChangedAction', () => {
         await AggregatedStatusChangedAction.getInstance().insertOne(
           repository as unknown as Repository<AggregatedStatusChangedEntity>,
           record.eventId,
+          record.triggerTxId,
           record.insertedAt + 5,
           record.status,
           record.txStatus ?? undefined,

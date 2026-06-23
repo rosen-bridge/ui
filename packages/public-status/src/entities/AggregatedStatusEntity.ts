@@ -14,6 +14,9 @@ export class AggregatedStatusEntity {
   @PrimaryColumn('varchar')
   eventId: string;
 
+  @PrimaryColumn('varchar')
+  triggerTxId: string;
+
   @Column('integer')
   updatedAt: number;
 

@@ -52,6 +52,7 @@ describe('PublicStatusAction', () => {
       // act
       await PublicStatusAction.getInstance().insertStatus(
         mockNewGuardStatus.eventId,
+        mockNewGuardStatus.triggerTxId,
         mockNewGuardStatus.guardPk,
         mockNewGuardStatus.updatedAt,
         mockNewGuardStatus.status,
@@ -104,6 +105,7 @@ describe('PublicStatusAction', () => {
       // act
       await PublicStatusAction.getInstance().insertStatus(
         mockNewGuardStatus.eventId,
+        mockNewGuardStatus.triggerTxId,
         mockNewGuardStatus.guardPk,
         mockNewGuardStatus.updatedAt,
         mockNewGuardStatus.status,
@@ -179,6 +181,7 @@ describe('PublicStatusAction', () => {
       // act
       await PublicStatusAction.getInstance().insertStatus(
         mockNewGuardStatus.eventId,
+        mockNewGuardStatus.triggerTxId,
         mockNewGuardStatus.guardPk,
         mockNewGuardStatus.updatedAt,
         mockNewGuardStatus.status,
@@ -251,6 +254,7 @@ describe('PublicStatusAction', () => {
       // act
       await PublicStatusAction.getInstance().insertStatus(
         mockNewGuardStatusAggregateChange.eventId,
+        mockNewGuardStatusAggregateChange.triggerTxId,
         mockNewGuardStatusAggregateChange.guardPk,
         mockNewGuardStatusAggregateChange.updatedAt,
         mockNewGuardStatusAggregateChange.status,
@@ -328,6 +332,7 @@ describe('PublicStatusAction', () => {
       // act
       await PublicStatusAction.getInstance().insertStatus(
         mockNewGuardStatus.eventId,
+        mockNewGuardStatus.triggerTxId,
         mockNewGuardStatus.guardPk,
         mockNewGuardStatus.updatedAt,
         mockNewGuardStatus.status,
@@ -406,6 +411,7 @@ describe('PublicStatusAction', () => {
       // act
       await PublicStatusAction.getInstance().insertStatus(
         mockNewGuardStatusAggregateChange.eventId,
+        mockNewGuardStatusAggregateChange.triggerTxId,
         mockNewGuardStatusAggregateChange.guardPk,
         mockNewGuardStatusAggregateChange.updatedAt,
         mockNewGuardStatusAggregateChange.status,

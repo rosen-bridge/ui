@@ -12,10 +12,11 @@ type GetManyStatusResponse = Record<string, AggregatedStatusDTO>;
 
 const handler = async (params: GetAggregatedStatusesRequestBody) => {
   const records = await PublicStatusAction.getInstance().getAggregatedStatuses(
-    params.eventIds,
+    params.eventAndTriggerIds,
   );
   return records.reduce((dict, record) => {
-    dict[record.eventId] = aggregatedStatusToDTO(record);
+    dict[`${record.eventId}::${record.triggerTxId}`] =
+      aggregatedStatusToDTO(record);
     return dict;
   }, {} as GetManyStatusResponse);
 };

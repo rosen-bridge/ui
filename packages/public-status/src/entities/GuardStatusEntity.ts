@@ -15,6 +15,9 @@ export class GuardStatusEntity {
   eventId: string;
 
   @PrimaryColumn('varchar')
+  triggerTxId: string;
+
+  @PrimaryColumn('varchar')
   guardPk: string;
 
   @Column('integer')

@@ -22,6 +22,9 @@ export class TxEntity {
   @Column('varchar')
   eventId: string;
 
+  @Column('varchar')
+  triggerTxId: string;
+
   @Column('integer')
   insertedAt: number;
 

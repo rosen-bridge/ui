@@ -31,26 +31,29 @@ class AggregatedStatusChangedAction {
   };
 
   /**
-   * retrieves the most recent AggregatedStatusChangedEntity for a given eventId
+   * retrieves the most recent AggregatedStatusChangedEntity for a given eventId and triggerTxId
    * @param repository
    * @param eventId
+   * @param triggerTxId
    * @returns a promise resolving to the most recent AggregatedStatusChangedEntity or null if no matching entity is found
    */
   getLast = async (
     repository: Repository<AggregatedStatusChangedEntity>,
     eventId: string,
+    triggerTxId: string,
   ): Promise<AggregatedStatusChangedEntity | null> => {
     return repository.findOne({
-      where: { eventId },
+      where: { eventId, triggerTxId },
       relations: ['tx'],
       order: { insertedAt: 'DESC' },
     });
   };
 
   /**
-   * retrieves multiple AggregatedStatusChangedEntity objects for a given eventId (timeline)
+   * retrieves multiple AggregatedStatusChangedEntity objects for a given eventId and triggerTxId (timeline)
    * @param repository
    * @param eventId
+   * @param triggerTxId
    * @param offset
    * @param limit
    * @returns a promise that resolves to an array of AggregatedStatusChangedEntity objects
@@ -58,11 +61,12 @@ class AggregatedStatusChangedAction {
   getMany = async (
     repository: Repository<AggregatedStatusChangedEntity>,
     eventId: string,
+    triggerTxId: string,
     offset?: number,
     limit?: number,
   ): Promise<{ total: number; items: AggregatedStatusChangedEntity[] }> => {
     const [items, total] = await repository.findAndCount({
-      where: { eventId },
+      where: { eventId, triggerTxId },
       relations: ['tx'],
       order: { insertedAt: 'DESC' },
       ...(Number.isFinite(offset) ? { skip: offset } : {}),
@@ -80,6 +84,7 @@ class AggregatedStatusChangedAction {
    * information from its last value
    * @param repository
    * @param eventId
+   * @param triggerTxId
    * @param insertedAt
    * @param status
    * @param txStatus
@@ -89,6 +94,7 @@ class AggregatedStatusChangedAction {
   insertOne = async (
     repository: Repository<AggregatedStatusChangedEntity>,
     eventId: string,
+    triggerTxId: string,
     insertedAt: number,
     status: AggregateEventStatus,
     txStatus?: AggregateTxStatus,
@@ -97,7 +103,7 @@ class AggregatedStatusChangedAction {
       chain: string;
     },
   ): Promise<void> => {
-    const lastValue = await this.getLast(repository, eventId);
+    const lastValue = await this.getLast(repository, eventId, triggerTxId);
 
     if (
       lastValue &&
@@ -111,6 +117,7 @@ class AggregatedStatusChangedAction {
 
     await repository.insert({
       eventId,
+      triggerTxId,
       insertedAt,
       status,
       txStatus: txStatus ?? null,

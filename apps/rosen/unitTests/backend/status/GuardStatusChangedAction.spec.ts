@@ -9,6 +9,7 @@ import {
   mockGuardStatusChangedRecords,
   id0,
   mockPaginationTestData,
+  triggerId0,
 } from './testData';
 
 describe('GuardStatusChangedAction', () => {
@@ -37,6 +38,7 @@ describe('GuardStatusChangedAction', () => {
       const lastStatus = await GuardStatusChangedAction.getInstance().getLast(
         repository as unknown as Repository<GuardStatusChangedEntity>,
         id0,
+        triggerId0,
         'pk',
       );
 
@@ -44,7 +46,7 @@ describe('GuardStatusChangedAction', () => {
       expect(lastStatus).toBeNull();
       expect(repository.findOne).toHaveBeenCalledOnce();
       expect(repository.findOne).toHaveBeenCalledWith({
-        where: { eventId: id0, guardPk: 'pk' },
+        where: { eventId: id0, triggerTxId: triggerId0, guardPk: 'pk' },
         relations: ['tx'],
         order: { insertedAt: 'DESC' },
       });
@@ -66,6 +68,7 @@ describe('GuardStatusChangedAction', () => {
         await GuardStatusChangedAction.getInstance().getMany(
           testDataSource.getRepository(GuardStatusChangedEntity),
           id0,
+          triggerId0,
           ['pk'],
           0,
           100,
@@ -102,6 +105,7 @@ describe('GuardStatusChangedAction', () => {
         await GuardStatusChangedAction.getInstance().getMany(
           testDataSource.getRepository(GuardStatusChangedEntity),
           id0,
+          triggerId0,
           [],
           0,
           6,
@@ -119,6 +123,7 @@ describe('GuardStatusChangedAction', () => {
         await GuardStatusChangedAction.getInstance().getMany(
           testDataSource.getRepository(GuardStatusChangedEntity),
           id0,
+          triggerId0,
           [],
           5,
           10,
@@ -156,6 +161,7 @@ describe('GuardStatusChangedAction', () => {
       await GuardStatusChangedAction.getInstance().insertOne(
         repository as unknown as Repository<GuardStatusChangedEntity>,
         record.eventId,
+        record.triggerTxId,
         record.guardPk,
         record.insertedAt,
         record.status,
@@ -195,6 +201,7 @@ describe('GuardStatusChangedAction', () => {
       await GuardStatusChangedAction.getInstance().insertOne(
         repository as unknown as Repository<GuardStatusChangedEntity>,
         record.eventId,
+        record.triggerTxId,
         record.guardPk,
         record.insertedAt,
         EventStatus.paymentWaiting,
@@ -239,6 +246,7 @@ describe('GuardStatusChangedAction', () => {
         await GuardStatusChangedAction.getInstance().insertOne(
           repository as unknown as Repository<GuardStatusChangedEntity>,
           record.eventId,
+          record.triggerTxId,
           record.guardPk,
           record.insertedAt + 5,
           record.status,
