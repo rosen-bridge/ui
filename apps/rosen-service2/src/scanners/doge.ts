@@ -19,6 +19,7 @@ import { TokenMap } from '@rosen-bridge/extended-tokens';
 import { DataSource } from '@rosen-bridge/extended-typeorm';
 
 import { configs } from '../configs';
+import { DOGE_METHOD_ESPLORA, DOGE_METHOD_RPC } from '../constants';
 
 const logger = DefaultLogger.getInstance().child(import.meta.url);
 
@@ -26,10 +27,11 @@ const logger = DefaultLogger.getInstance().child(import.meta.url);
  * Initializes and configures a Doge Rpc scanner instance.
  *
  * @param dataSource - TypeORM DataSource for database connection
+ * @param tokenMap
  * @returns Configured and ready-to-use DogeScanner instance
  * @throws Error if observation extractor creation or registration fails
  */
-export const buildDogeRpcScannerWithExtractors = async (
+const buildDogeRpcScannerWithExtractors = async (
   dataSource: DataSource,
   tokenMap: TokenMap,
 ) => {
@@ -92,10 +94,11 @@ export const buildDogeRpcScannerWithExtractors = async (
  * Initializes and configures a Doge Esplora scanner instance.
  *
  * @param dataSource - TypeORM DataSource for database connection
+ * @param tokenMap
  * @returns Configured and ready-to-use DogeScanner instance
  * @throws Error if observation extractor creation or registration fails
  */
-export const buildDogeEsploraScannerWithExtractors = async (
+const buildDogeEsploraScannerWithExtractors = async (
   dataSource: DataSource,
   tokenMap: TokenMap,
 ) => {
@@ -147,4 +150,26 @@ export const buildDogeEsploraScannerWithExtractors = async (
 
   logger.info('Doge scanner initialization completed successfully');
   return dogeScanner;
+};
+
+/**
+ * create a Doge scanner.
+ *
+ * @param dataSource - TypeORM DataSource for database connection
+ * @param tokenMap
+ * @returns {DogeEsploraScanner | DogeRpcScanner}
+ * @throws Error if observation extractor creation or registration fails
+ */
+export const getDogeScanner = async (
+  dataSource: DataSource,
+  tokenMap: TokenMap,
+): Promise<DogeEsploraScanner | DogeRpcScanner> => {
+  switch (configs.chains.doge.method) {
+    case DOGE_METHOD_ESPLORA:
+      return await buildDogeEsploraScannerWithExtractors(dataSource, tokenMap);
+    case DOGE_METHOD_RPC:
+      return await buildDogeRpcScannerWithExtractors(dataSource, tokenMap);
+    default:
+      throw new Error(`Unsupported or missing Doge scanner method.`);
+  }
 };

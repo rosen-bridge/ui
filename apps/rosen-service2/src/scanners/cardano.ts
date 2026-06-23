@@ -21,6 +21,11 @@ import { TokenMap } from '@rosen-bridge/extended-tokens';
 import { DataSource } from '@rosen-bridge/extended-typeorm';
 
 import { configs } from '../configs';
+import {
+  CARDANO_METHOD_BLOCKFROST,
+  CARDANO_METHOD_KOIOS,
+  CARDANO_METHOD_OGMIOS,
+} from '../constants';
 
 const logger = DefaultLogger.getInstance().child(import.meta.url);
 
@@ -28,10 +33,11 @@ const logger = DefaultLogger.getInstance().child(import.meta.url);
  * Initializes and configures a Cardano Koios scanner instance.
  *
  * @param dataSource - TypeORM DataSource for DB connection
+ * @param tokenMap
  * @returns Configured and ready-to-use CardanoKoiosScanner instance
  * @throws Error if observation extractor creation or registration fails
  */
-export const buildCardanoKoiosScannerWithExtractors = async (
+const buildCardanoKoiosScannerWithExtractors = async (
   dataSource: DataSource,
   tokenMap: TokenMap,
 ) => {
@@ -84,10 +90,11 @@ export const buildCardanoKoiosScannerWithExtractors = async (
  * Initializes and configures a Cardano BlockFrost scanner instance.
  *
  * @param dataSource - TypeORM DataSource for DB connection
+ * @param tokenMap
  * @returns Configured and ready-to-use CardanoBlockFrostScanner instance
  * @throws Error if observation extractor creation or registration fails
  */
-export const buildCardanoBlockFrostScannerWithExtractors = async (
+const buildCardanoBlockFrostScannerWithExtractors = async (
   dataSource: DataSource,
   tokenMap: TokenMap,
 ) => {
@@ -142,10 +149,11 @@ export const buildCardanoBlockFrostScannerWithExtractors = async (
  * Initializes and configures a Cardano Ogmios scanner instance.
  *
  * @param dataSource - TypeORM DataSource for DB connection
+ * @param tokenMap
  * @returns Configured and ready-to-use CardanoOgmiosScanner instance
  * @throws Error if observation extractor creation or registration fails
  */
-export const buildCardanoOgmiosScannerWithExtractors = async (
+const buildCardanoOgmiosScannerWithExtractors = async (
   dataSource: DataSource,
   tokenMap: TokenMap,
 ) => {
@@ -187,4 +195,36 @@ export const buildCardanoOgmiosScannerWithExtractors = async (
 
   logger.info('Cardano scanner initialization completed successfully');
   return cardanoScanner;
+};
+
+/**
+ * create a cardano scanner.
+ *
+ * @param dataSource - TypeORM DataSource for database connection
+ * @param tokenMap
+ * @returns { CardanoKoiosScanner | CardanoBlockFrostScanner | CardanoOgmiosScanner}
+ * @throws Error if observation extractor creation or registration fails
+ */
+export const getCardanoScanner = async (
+  dataSource: DataSource,
+  tokenMap: TokenMap,
+): Promise<
+  CardanoKoiosScanner | CardanoBlockFrostScanner | CardanoOgmiosScanner
+> => {
+  switch (configs.chains.cardano.method) {
+    case CARDANO_METHOD_BLOCKFROST:
+      return await buildCardanoBlockFrostScannerWithExtractors(
+        dataSource,
+        tokenMap,
+      );
+    case CARDANO_METHOD_OGMIOS:
+      return await buildCardanoOgmiosScannerWithExtractors(
+        dataSource,
+        tokenMap,
+      );
+    case CARDANO_METHOD_KOIOS:
+      return await buildCardanoKoiosScannerWithExtractors(dataSource, tokenMap);
+    default:
+      throw new Error(`Unsupported or missing Doge scanner method.`);
+  }
 };
