@@ -1,5 +1,5 @@
+import { RosenChainToken } from '@rosen-bridge/tokens';
 import { FiroNetwork } from '@rosen-network/firo/dist/client';
-import { buildPaymentUri } from '@rosen-network/firo';
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
 import {
@@ -7,7 +7,6 @@ import {
   Wallet,
   WalletTransferParams,
 } from '@rosen-ui/wallet-api';
-import { RosenChainToken } from '@rosen-bridge/tokens';
 
 import { ICON } from './icon';
 import { FiroWalletConfig } from './types';
@@ -57,7 +56,7 @@ export class FiroWallet extends Wallet<FiroWalletConfig> {
       params.bridgeFee.toString(),
     );
 
-    const uri = buildPaymentUri(
+    const uri = await this.currentNetwork.buildPaymentUri(
       this.currentNetwork.lockAddress,
       params.amount.toString(),
       opReturnData,

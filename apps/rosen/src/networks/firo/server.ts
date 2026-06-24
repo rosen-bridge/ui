@@ -2,6 +2,7 @@
 
 import { validateAddress as validateAddressCore } from '@rosen-network/base';
 import {
+  buildPaymentUri as buildPaymentUriCore,
   calculateFee as calculateFeeCore,
   generateOpReturnData as generateOpReturnDataCore,
   generateUnsignedTx as generateUnsignedTxCore,
@@ -13,6 +14,15 @@ import {
 
 import { wrap } from '@/safeServerAction';
 import { getTokenMap } from '@/tokenMap/getServerTokenMap';
+
+export const buildPaymentUri = wrap(
+  async (...args: Parameters<typeof buildPaymentUriCore>) => {
+    return buildPaymentUriCore(...args);
+  },
+  {
+    traceKey: 'firo:buildPaymentUri',
+  },
+);
 
 export const calculateFee = wrap(calculateFeeCore, {
   cache: 10 * 60 * 1000,
