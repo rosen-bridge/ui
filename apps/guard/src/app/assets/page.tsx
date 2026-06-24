@@ -1,90 +1,211 @@
 'use client';
 
-import { useCallback, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 
-import { EnhancedTable } from '@rosen-bridge/ui-kit';
+import {
+  EmptyState,
+  LayoutList,
+  Pagination,
+  SmartSearch,
+  SortField,
+  useBreakpoint,
+  useCollection,
+  useToast,
+  ViewToggle,
+  ViewToggleType,
+} from '@rosen-bridge/ui-kit';
+import { fetcher } from '@rosen-ui/swr-helpers';
 import { Network } from '@rosen-ui/types';
+import useSWR from 'swr';
 
-import { useBalance } from '@/hooks';
-import { GuardTokenInfo } from '@/types/api';
+import { ApiBalanceResponse } from '@/types/api';
 
-import { MobileRow, TabletRow, mobileHeader, tabletHeader } from './TableRow';
-import { TableSkeleton } from './TableSkeleton';
+import { filters, sorts } from './config';
+import { ViewGrid } from './ViewGrid';
+import { ViewRow } from './ViewRow';
 
 const Assets = () => {
-  const { data, isLoading } = useBalance();
+  const dense = useBreakpoint('laptop-down');
 
-  const items = useMemo(() => {
-    if (!data) return [];
+  const toast = useToast();
+
+  const collection = useCollection({
+    defaultPageIndex: 0,
+    defaultPageSize: 25,
+    defaultSortField: 'name',
+    defaultSortOrder: 'DESC',
+    defaultView: 'grid',
+    localStorageKey: 'assets',
+  });
+
+  const {
+    data: DATA_API,
+    error,
+    isLoading,
+  } = useSWR<ApiBalanceResponse>(
+    collection.query && `/balance?${collection.query}`,
+    fetcher,
+    {
+      keepPreviousData: true,
+    },
+  );
+
+  const data = useMemo(() => {
+    if (!DATA_API) return [];
 
     const items = [
-      ...data.cold.items.map((item) => ({ ...item, type: 'cold' })),
-      ...data.hot.items.map((item) => ({ ...item, type: 'hot' })),
+      ...DATA_API.cold.items.map((item) => ({ ...item, type: 'cold' })),
+      ...DATA_API.hot.items.map((item) => ({ ...item, type: 'hot' })),
     ];
 
-    const all = Object.groupBy(
+    const grouped = Object.groupBy(
       items,
-      (item) => item.chain + ':' + item.balance.tokenId,
+      (item) => `${item.chain}:${item.balance.tokenId}`,
     );
 
-    return Object.values(all)
-      .filter((items) => !!items)
-      .map((items) => {
-        const cold = items.find((item) => item.type === 'cold');
+    return Object.values(grouped)
+      .filter((group): group is NonNullable<typeof group> => !!group)
+      .map((group) => {
+        const coldItem = group.find((i) => i.type === 'cold');
+        const hotItem = group.find((i) => i.type === 'hot');
 
-        const hot = items.find((item) => item.type === 'hot');
+        return {
+          id: `${Math.random()}`,
+          chain: (coldItem?.chain || hotItem?.chain) as Network,
 
-        const token = Object.assign({}, hot?.balance, cold?.balance, {
-          chain: (cold?.chain || hot?.chain) as Network,
-          amount: hot?.balance.amount || 0,
-          coldAmount: cold?.balance.amount || 0,
-        });
+          token: {
+            id: hotItem?.balance.tokenId || coldItem?.balance.tokenId,
+            decimals: hotItem?.balance.decimals ?? coldItem?.balance.decimals,
+            name: hotItem?.balance.name ?? coldItem?.balance.name,
+            isNativeToken:
+              hotItem?.balance.isNativeToken ??
+              coldItem?.balance.isNativeToken ??
+              false,
+          },
 
-        return token;
+          cold: {
+            address: coldItem?.address ?? '',
+            amount: BigInt(coldItem?.balance.amount ?? 0),
+          },
+
+          hot: {
+            address: hotItem?.address ?? '',
+            amount: BigInt(hotItem?.balance.amount ?? 0),
+          },
+        };
       });
-  }, [data]);
+  }, [DATA_API]);
 
-  const renderMobileRow = useCallback(
-    (rowData: GuardTokenInfo) => (
-      <MobileRow key={rowData.tokenId} {...rowData} isLoading={isLoading} />
-    ),
-    [isLoading],
-  );
+  const items = useMemo(() => {
+    if (!isLoading) {
+      return data || [];
+    }
+    return Array(collection.pageSize).fill({});
+  }, [isLoading, data, collection.pageSize]);
 
-  const renderTabletRow = useCallback(
-    (rowData: GuardTokenInfo) => (
-      <TabletRow key={rowData.tokenId} {...rowData} isLoading={isLoading} />
-    ),
-    [isLoading],
-  );
+  const current = useMemo(() => {
+    return items.find(
+      (item) => item.id && item.id.toString() === collection.fragment,
+    );
+  }, [collection.fragment, items]);
 
-  const tableHeaderProps = useMemo(
-    () => ({
-      mobile: mobileHeader,
-      tablet: tabletHeader,
-    }),
-    [],
-  );
-
-  const tableRenderRowProps = useMemo(
-    () => ({
-      mobile: renderMobileRow,
-      tablet: renderTabletRow,
-    }),
-    [renderMobileRow, renderTabletRow],
-  );
-
-  return isLoading ? (
-    <TableSkeleton numberOfItems={25} />
-  ) : (
-    data && (
-      <EnhancedTable
-        data={items}
-        responsiveHead={tableHeaderProps}
-        responsiveRenderRow={tableRenderRowProps}
-        paginated={false}
+  const renderSearch = useCallback(
+    () => (
+      <SmartSearch
+        disabled={isLoading}
+        namespace="assets"
+        options={filters}
+        value={collection.fields}
+        onChange={collection.setFields}
       />
-    )
+    ),
+    [collection.fields, collection.setFields, filters, isLoading],
+  );
+
+  const renderPagination = useCallback(
+    () => (
+      <Pagination
+        pageSizeOptions={[10, 25, 50, 100]}
+        disabled={isLoading}
+        total={data?.length}
+        pageSize={collection.pageSize}
+        pageIndex={collection.pageIndex}
+        onPageIndexChange={collection.setPageIndex}
+        onPageSizeChange={collection.setPageSize}
+      />
+    ),
+    [
+      collection.pageSize,
+      collection.pageIndex,
+      collection.setPageIndex,
+      collection.setPageSize,
+      data.length,
+      isLoading,
+    ],
+  );
+
+  const renderView = useCallback(
+    () => (
+      <ViewToggle
+        disabled={isLoading}
+        value={collection.view}
+        onChange={(value: ViewToggleType) => collection.setView(value)}
+      />
+    ),
+    [collection.view, isLoading],
+  );
+
+  const renderSort = useCallback(
+    () => (
+      <SortField
+        dense={dense}
+        disabled={isLoading}
+        value={collection.sort}
+        options={sorts}
+        onChange={collection.setSort}
+      />
+    ),
+    [collection.sort, collection.setSort, dense, isLoading],
+  );
+
+  useEffect(() => {
+    if (error) {
+      toast.add({
+        type: 'error',
+        description: error.message,
+        more: () => JSON.stringify(error, null, 2),
+      });
+    }
+  }, [error]);
+
+  return (
+    <LayoutList
+      search={renderSearch()}
+      sort={renderSort()}
+      sidebar={null}
+      pagination={renderPagination()}
+      view={renderView()}
+    >
+      {!isLoading && !items.length && (
+        <EmptyState style={{ height: 'calc(100vh - 288px)' }} />
+      )}
+      {collection.view === 'row' && !!items.length && (
+        <ViewRow
+          items={items}
+          isLoading={isLoading}
+          current={current}
+          setCurrent={(item) => {
+            item.id &&
+              collection.setFragment(
+                item.id === current?.id ? undefined : item.id.toString(),
+              );
+          }}
+        />
+      )}
+      {collection.view === 'grid' && !!items.length && (
+        <ViewGrid items={items} isLoading={isLoading} />
+      )}
+    </LayoutList>
   );
 };
 
