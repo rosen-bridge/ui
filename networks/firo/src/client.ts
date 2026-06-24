@@ -4,12 +4,18 @@ import { NETWORKS } from '@rosen-ui/constants';
 
 import type { generateUnsignedTx } from './generateUnsignedTx';
 import type {
+  buildPaymentUri,
   generateOpReturnData,
   getAddressBalance,
   submitTransaction,
 } from './utils';
 
+type MaybePromise<T> = T | Promise<T>;
+
 type FiroNetworkConfig = NetworkConfig & {
+  buildPaymentUri: (
+    ...args: Parameters<typeof buildPaymentUri>
+  ) => MaybePromise<ReturnType<typeof buildPaymentUri>>;
   generateOpReturnData: typeof generateOpReturnData;
   generateUnsignedTx: ReturnType<typeof generateUnsignedTx>;
   getAddressBalance: typeof getAddressBalance;
@@ -34,6 +40,10 @@ export class FiroNetwork implements Network {
 
   public calculateFee: FiroNetworkConfig['calculateFee'] = (...args) => {
     return this.config.calculateFee(...args);
+  };
+
+  public buildPaymentUri: FiroNetworkConfig['buildPaymentUri'] = (...args) => {
+    return this.config.buildPaymentUri(...args);
   };
 
   public generateOpReturnData: FiroNetworkConfig['generateOpReturnData'] = (
