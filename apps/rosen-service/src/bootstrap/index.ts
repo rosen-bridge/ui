@@ -6,3 +6,4 @@
 import './winston';
 import './register-signal-handlers';
 import './axios';
+import './addressManager';

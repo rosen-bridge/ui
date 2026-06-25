@@ -22,7 +22,7 @@
   "dependencies": {
     "@reown/appkit": "^1.8.19",
     "@reown/appkit-adapter-ethers": "^1.8.19",
-    "@rosen-bridge/tokens": "^6.0.0",
+    "@rosen-bridge/tokens": "^6.0.2",
     "@rosen-network/binance": "^0.4.6",
     "@rosen-network/ethereum": "^0.4.6",
     "@rosen-ui/constants": "^1.0.0",

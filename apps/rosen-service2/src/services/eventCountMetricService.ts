@@ -1,33 +1,56 @@
 import { AbstractLogger } from '@rosen-bridge/abstract-logger';
+import { DataSource } from '@rosen-bridge/extended-typeorm';
 import {
   Dependency,
-  PeriodicTaskService,
+  ServiceAction,
   ServiceStatus,
 } from '@rosen-bridge/service-manager';
 import { eventCountMetric } from '@rosen-ui/rosen-statistics';
 
 import { configs } from '../configs';
-import { DBService } from './db';
-import { ScannerService } from './scanner';
+import {
+  AbstractEventCountMetricService,
+  AbstractDBService,
+  AbstractScannerService,
+} from './abstracts';
 
-export class EventCountMetricService extends PeriodicTaskService {
-  name = 'EventCountMetricService';
-  private static instance: EventCountMetricService;
-  readonly dbService: DBService;
+export class EventCountMetricService extends AbstractEventCountMetricService {
+  static serviceName = AbstractEventCountMetricService.name;
+  private dataSource: DataSource;
   protected dependencies: Dependency[] = [
     {
-      serviceName: DBService.name,
-      allowedStatuses: [ServiceStatus.running],
+      serviceName: AbstractDBService.name,
+      allowedStatuses: [
+        ServiceStatus.running,
+        ServiceStatus.started,
+        ServiceStatus.dormant,
+      ],
+      action: ServiceAction.assemble,
     },
     {
-      serviceName: ScannerService.name,
+      serviceName: AbstractScannerService.name,
       allowedStatuses: [ServiceStatus.running],
+      action: ServiceAction.start,
     },
   ];
 
-  private constructor(logger?: AbstractLogger) {
+  /**
+   * Assembles the service by initializing dependencies
+   * @async
+   * @returns {Promise<boolean>} Resolves to `true` when the assembly is successfully completed.
+   */
+  protected assemble = async (): Promise<boolean> => {
+    this.dataSource = AbstractDBService.getInstance().getDataSource();
+    this.setStatus(ServiceStatus.dormant);
+    return true;
+  };
+
+  /**
+   * Protected constructor
+   * @param {AbstractLogger} [logger] - Optional logger instance for recording service operations.
+   */
+  protected constructor(logger?: AbstractLogger) {
     super(logger);
-    this.dbService = DBService.getInstance();
   }
 
   /**
@@ -38,24 +61,12 @@ export class EventCountMetricService extends PeriodicTaskService {
    * @memberof EventCountMetricService
    */
   static init = (logger?: AbstractLogger) => {
-    if (this.instance != undefined) {
+    if (AbstractEventCountMetricService.instance != undefined) {
       return;
     }
-    this.instance = new EventCountMetricService(logger);
-  };
-
-  /**
-   * Returns the singleton instance of event count metric service
-   *
-   * @static
-   * @return {EventCountMetricService} The singleton instance
-   * @memberof EventCountMetricService
-   */
-  static getInstance = (): EventCountMetricService => {
-    if (!this.instance) {
-      throw new Error(`${this.name} instance is not initialized yet`);
-    }
-    return this.instance;
+    AbstractEventCountMetricService.instance = new EventCountMetricService(
+      logger,
+    );
   };
 
   /**
@@ -67,7 +78,7 @@ export class EventCountMetricService extends PeriodicTaskService {
   private eventCountCalculation = async (): Promise<void> => {
     try {
       await eventCountMetric(
-        this.dbService.dataSource,
+        this.dataSource,
         this.logger.child('eventCountMetric'),
       );
 
@@ -105,17 +116,7 @@ export class EventCountMetricService extends PeriodicTaskService {
     const tasks = [];
 
     tasks.push({
-      fn: async () => {
-        try {
-          this.logger.info(`Running ${this.name} job`);
-          await this.eventCountCalculation();
-        } catch (err) {
-          this.logger.error(`${this.name} job failed: ${err}`);
-          if (err instanceof Error && err.stack) {
-            this.logger.debug(err.stack);
-          }
-        }
-      },
+      fn: async () => await this.eventCountCalculation(),
       interval: configs.statistics.eventCountMetrics.interval * 1000,
     });
     return tasks;
