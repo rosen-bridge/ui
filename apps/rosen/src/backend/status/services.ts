@@ -1,69 +1,8 @@
 import {
-  AggregatedStatusChangedEntity,
-  GuardStatusChangedEntity,
-  AggregatedStatusEntity,
-  Utils,
   Threshold,
   AggregateEventStatus,
   AggregateTxStatus,
 } from '@rosen-ui/public-status';
-
-/**
- * a response type used in api
- */
-export type AggregatedStatusChangedDTO = Omit<
-  AggregatedStatusChangedEntity,
-  'id' | 'eventId' | 'triggerTxId'
->;
-
-/**
- * helper function to map AggregatedStatusChangedEntity to its DTO
- * @param record
- * @returns AggregatedStatusChangedDTO
- */
-export const aggregatedStatusChangedToDTO = (
-  record: AggregatedStatusChangedEntity,
-): AggregatedStatusChangedDTO => {
-  return Utils.cloneOmitting(record, ['id', 'eventId', 'triggerTxId']);
-};
-
-/**
- * a response type used in api
- */
-export type AggregatedStatusDTO = Omit<
-  AggregatedStatusEntity,
-  'eventId' | 'triggerTxId'
->;
-
-/**
- * helper function to map AggregatedStatusEntity to its DTO
- * @param record
- * @returns AggregatedStatusDTO
- */
-export const aggregatedStatusToDTO = (
-  record: AggregatedStatusEntity,
-): AggregatedStatusDTO => {
-  return Utils.cloneOmitting(record, ['eventId', 'triggerTxId']);
-};
-
-/**
- * a response type used in api
- */
-export type GuardStatusChangedDTO = Omit<
-  GuardStatusChangedEntity,
-  'id' | 'eventId' | 'triggerTxId'
->;
-
-/**
- * helper function to map GuardStatusChangedEntity to its DTO
- * @param record
- * @returns GuardStatusChangedDTO
- */
-export const guardStatusChangedToDTO = (
-  record: GuardStatusChangedEntity,
-): GuardStatusChangedDTO => {
-  return Utils.cloneOmitting(record, ['id', 'eventId', 'triggerTxId']);
-};
 
 /**
  * reads the environment variable with the given key and converts it to a Threshold type
