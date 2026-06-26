@@ -26,6 +26,7 @@ export type SectionProps = {
   error?: unknown;
   load?: () => void;
   title?: string;
+  onOpenChange?: (open: boolean) => void;
 };
 
 export const Section = ({
@@ -35,11 +36,15 @@ export const Section = ({
   error,
   load,
   title,
+  onOpenChange,
 }: SectionProps) => {
   const disclosure = useDisclosure({
-    onOpen: () => {
+    onClose: async () => {
+      onOpenChange?.(false);
+    },
+    onOpen: async () => {
+      onOpenChange?.(true);
       load?.();
-      return Promise.resolve();
     },
   });
 

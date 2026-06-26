@@ -8,14 +8,13 @@ import {
   EventProcessesProps,
   IconProps,
 } from '@rosen-bridge/ui-kit';
-import { fetcher, mutatorWithHeaders } from '@rosen-ui/swr-helpers';
+import { fetcher } from '@rosen-ui/swr-helpers';
 import useSWR from 'swr';
 
 import { EventDetailsType, EventStatusType } from '@/backend/events/repository';
 
 import { Section } from './Section';
 import { ProcessSelect } from './ProcessSelect';
-import useSWRMutation from 'swr/mutation';
 
 type Step = {
   label:
@@ -832,24 +831,16 @@ export const Process = ({ id }: { id: string }) => {
 
   const [guardPublicKey, setGuardPublicKey] = useState<string>('');
 
-  const {
-    data,
-    isMutating,
-    trigger,
-  } = useSWRMutation<EventStatusType, unknown, string, never>(
-    guardPublicKey
-      ? `/v1/events/${id}/status`
-      : `/v1/events/${id}/status?guardPublicKey=${guardPublicKey}`,
-    mutatorWithHeaders,
+  const [open, setOpen] = useState(false);
+
+  const url = guardPublicKey
+      ? `/v1/events/${id}/status?guardPublicKey=${guardPublicKey}`
+      : `/v1/events/${id}/status`
+
+  const { data, error, isLoading, mutate } = useSWR<EventStatusType>(
+    open ? url : null,
+    fetcher,
   );
-
-
-  // const { data, error, isLoading,mutate } = useSWR<EventStatusType>(
-  //   guardPublicKey
-  //     ? `/v1/events/${id}/status`
-  //     : `/v1/events/${id}/status?guardPublicKey=${guardPublicKey}`,
-  //   fetcher,
-  // );
 
   const items = useMemo(() => {
     if (!data) return [];
@@ -864,10 +855,10 @@ export const Process = ({ id }: { id: string }) => {
     <Section 
       action={<ProcessSelect disabled={isLoading} value={guardPublicKey} onChange={setGuardPublicKey} />}
       collapsible 
-      load={() => {
-
-      }} 
+      error={error}
+      load={mutate} 
       title="Progress"
+      onOpenChange={setOpen}
     >
       <EventProcesses
         items={items}
