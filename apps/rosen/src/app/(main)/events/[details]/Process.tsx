@@ -8,12 +8,14 @@ import {
   EventProcessesProps,
   IconProps,
 } from '@rosen-bridge/ui-kit';
-import { fetcher } from '@rosen-ui/swr-helpers';
+import { fetcher, mutatorWithHeaders } from '@rosen-ui/swr-helpers';
 import useSWR from 'swr';
 
 import { EventDetailsType, EventStatusType } from '@/backend/events/repository';
 
 import { Section } from './Section';
+import { ProcessSelect } from './ProcessSelect';
+import useSWRMutation from 'swr/mutation';
 
 type Step = {
   label:
@@ -46,8 +48,6 @@ type Step = {
   value?: string;
   line?: boolean;
 };
-
-const GUARDS = JSON.parse(process.env['ALLOWED_PKS'] ?? '[]') as Array<{ key: string; label: string; }>;
 
 const INFO: Partial<Record<EventDetailsType['status'], string>> = {
   PAID: 'The transaction reached enough confirmation on blockchain at "confirmedAt"',
@@ -830,14 +830,26 @@ const toItems = (
 export const Process = ({ id }: { id: string }) => {
   const [active, setActive] = useState<string | undefined>();
 
-  const [guardPublicKey, setGuardPublicKey] = useState<string | undefined>();
+  const [guardPublicKey, setGuardPublicKey] = useState<string>('');
 
-  const { data, isLoading } = useSWR<EventStatusType>(
+  const {
+    data,
+    isMutating,
+    trigger,
+  } = useSWRMutation<EventStatusType, unknown, string, never>(
     guardPublicKey
       ? `/v1/events/${id}/status`
       : `/v1/events/${id}/status?guardPublicKey=${guardPublicKey}`,
-    fetcher,
+    mutatorWithHeaders,
   );
+
+
+  // const { data, error, isLoading,mutate } = useSWR<EventStatusType>(
+  //   guardPublicKey
+  //     ? `/v1/events/${id}/status`
+  //     : `/v1/events/${id}/status?guardPublicKey=${guardPublicKey}`,
+  //   fetcher,
+  // );
 
   const items = useMemo(() => {
     if (!data) return [];
@@ -849,17 +861,14 @@ export const Process = ({ id }: { id: string }) => {
   }, [data?.status]);
 
   return (
-    <Section title="Progress">
-      <select onChange={(event) => setGuardPublicKey(event.target.value)}>
-        <option value="" defaultChecked>
-          Overall
-        </option>
-        {GUARDS.map((guard) => (
-          <option key={guard.key} value={guard.key}>
-            {guard.label}
-          </option>
-        ))}
-      </select>
+    <Section 
+      action={<ProcessSelect disabled={isLoading} value={guardPublicKey} onChange={setGuardPublicKey} />}
+      collapsible 
+      load={() => {
+
+      }} 
+      title="Progress"
+    >
       <EventProcesses
         items={items}
         loading={isLoading}

@@ -19,14 +19,17 @@ import {
 } from '@rosen-bridge/ui-kit';
 
 export type SectionProps = {
+  action?: ReactNode;
   children?: ReactNode;
   collapsible?: boolean;
+  disabled?: boolean;
   error?: unknown;
   load?: () => void;
   title?: string;
 };
 
 export const Section = ({
+  action,
   children,
   collapsible,
   error,
@@ -46,11 +49,12 @@ export const Section = ({
         <CardTitle variant="h2" color="text-secondary">
           {title}
         </CardTitle>
-        {collapsible && (
           <CardAction>
-            <DisclosureButton disclosure={disclosure} />
+            {disclosure.state !== 'close' && action}
+            {collapsible && (
+              <DisclosureButton disclosure={disclosure} />
+            )}
           </CardAction>
-        )}
       </CardHeader>
       <Collapsible open={!collapsible || disclosure.state == 'open' || !!error}>
         <CardBody>
