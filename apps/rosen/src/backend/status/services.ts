@@ -207,7 +207,7 @@ const txStatusThresholds = defaultTxStatusMapping.map((status) => {
 
 export const publicStatusConfigs = {
   timeoutThresholdSeconds: getNumber('TIMEOUT_THRESHOLD_SECONDS') ?? 30,
-  allowedPks: Object.keys(JSON.parse(process.env['ALLOWED_PKS'] ?? '{}')),
+  allowedPks: (JSON.parse(process.env['ALLOWED_PKS'] ?? '[]') as Array<{ key: string; label: string; }>).map((guard) => guard.key),
   eventStatusThresholds,
   txStatusThresholds,
 };

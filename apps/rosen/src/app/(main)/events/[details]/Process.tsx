@@ -47,7 +47,7 @@ type Step = {
   line?: boolean;
 };
 
-const GUARDS = JSON.parse(process.env['ALLOWED_PKS'] ?? '{}');
+const GUARDS = JSON.parse(process.env['ALLOWED_PKS'] ?? '[]') as Array<{ key: string; label: string; }>;
 
 const INFO: Partial<Record<EventDetailsType['status'], string>> = {
   PAID: 'The transaction reached enough confirmation on blockchain at "confirmedAt"',
@@ -854,9 +854,9 @@ export const Process = ({ id }: { id: string }) => {
         <option value="" defaultChecked>
           Overall
         </option>
-        {Object.keys(GUARDS).map((key) => (
-          <option key={key} value={key}>
-            {GUARDS[key]}
+        {GUARDS.map((guard) => (
+          <option key={guard.key} value={guard.key}>
+            {guard.label}
           </option>
         ))}
       </select>
