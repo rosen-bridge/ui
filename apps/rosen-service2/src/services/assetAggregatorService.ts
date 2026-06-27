@@ -11,7 +11,7 @@ import {
 } from '@rosen-ui/asset-aggregator';
 import { AssetBalance } from '@rosen-ui/asset-data-adapter';
 import { NETWORKS } from '@rosen-ui/constants';
-import { createClient, VercelKV } from '@vercel/kv';
+import { VercelKV } from '@vercel/kv';
 
 import { configs } from '../configs';
 import { TOTAL_SUPPLY_REDIS_KEY } from '../constants';
@@ -22,6 +22,8 @@ import {
   AbstractTokenMapService,
   AbstractDBService,
 } from './abstracts';
+import { AbstractRedisService } from './abstracts/abstractRedisService';
+import { RedisService } from './redisService';
 
 export class AssetAggregatorService extends AbstractAssetAggregatorService {
   static serviceName = AbstractAssetAggregatorService.name;
@@ -36,6 +38,15 @@ export class AssetAggregatorService extends AbstractAssetAggregatorService {
     },
     {
       serviceName: AbstractTokenMapService.name,
+      allowedStatuses: [
+        ServiceStatus.running,
+        ServiceStatus.started,
+        ServiceStatus.dormant,
+      ],
+      action: ServiceAction.assemble,
+    },
+    {
+      serviceName: AbstractRedisService.name,
       allowedStatuses: [
         ServiceStatus.running,
         ServiceStatus.started,
@@ -65,10 +76,7 @@ export class AssetAggregatorService extends AbstractAssetAggregatorService {
       AbstractDBService.getInstance().getDataSource(),
       this.logger.child('assetAggregator'),
     );
-    this.redis = createClient({
-      url: configs.redis.address,
-      token: configs.redis.token,
-    });
+    this.redis = RedisService.getInstance().getRedisClient();
     this.setStatus(ServiceStatus.dormant);
     return true;
   };

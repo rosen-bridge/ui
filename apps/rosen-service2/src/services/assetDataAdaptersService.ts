@@ -17,7 +17,7 @@ import {
 } from '@rosen-ui/asset-data-adapter';
 import { AssetBalance } from '@rosen-ui/asset-data-adapter/dist/types';
 import { NETWORKS, NETWORKS_KEYS } from '@rosen-ui/constants';
-import { createClient, VercelKV } from '@vercel/kv';
+import { VercelKV } from '@vercel/kv';
 
 import { configs } from '../configs';
 import { TOTAL_SUPPLY_REDIS_KEY } from '../constants';
@@ -27,6 +27,8 @@ import {
   AbstractAssetDataAdapterService,
   AbstractTokenMapService,
 } from './abstracts';
+import { AbstractRedisService } from './abstracts/abstractRedisService';
+import { RedisService } from './redisService';
 
 export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
   static serviceName = AbstractAssetDataAdapterService.name;
@@ -38,6 +40,15 @@ export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
       allowedStatuses: [ServiceStatus.running],
       action: ServiceAction.start,
     },
+    {
+      serviceName: AbstractRedisService.name,
+      allowedStatuses: [
+        ServiceStatus.dormant,
+        ServiceStatus.started,
+        ServiceStatus.running,
+      ],
+      action: ServiceAction.assemble,
+    },
   ];
 
   /**
@@ -46,10 +57,7 @@ export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
    * @returns {Promise<boolean>} Resolves to `true` when the assembly is successfully completed.
    */
   protected assemble = async (): Promise<boolean> => {
-    this.redis = createClient({
-      url: configs.redis.address,
-      token: configs.redis.token,
-    });
+    this.redis = RedisService.getInstance().getRedisClient();
     this.explorerApi = ergoExplorerClientFactory(
       configs.chains.ergo.explorer.connections.at(0)!.url,
     );
