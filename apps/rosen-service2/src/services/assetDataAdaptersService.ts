@@ -251,6 +251,7 @@ export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
     chain: ChainChoices,
   ): Promise<AssetBalance> => {
     const adapter = this.adapters[chain];
+    // preventing of overriding old chunks of data
     const oldData =
       (await this.redis.get<AssetBalance | null>(adapter.chain)) || {};
     const newData = await adapter.fetch();
@@ -287,7 +288,6 @@ export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
           adapter.chain == NETWORKS.ethereum.key ||
           adapter.chain == NETWORKS.binance.key
             ? async () => {
-                // preventing of overriding old chunks of data
                 await this.redis.set(
                   adapter.chain,
                   stringSerializer(
