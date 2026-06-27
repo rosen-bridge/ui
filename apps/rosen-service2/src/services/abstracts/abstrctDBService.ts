@@ -8,7 +8,7 @@ export abstract class AbstractDBService extends AbstractService {
   protected static instance: AbstractDBService;
 
   /**
-   * return the singleton instance of AbstractDBService
+   * Returns the singleton instance of AbstractDBService
    *
    * @static
    * @return {AbstractDBService}
@@ -19,19 +19,19 @@ export abstract class AbstractDBService extends AbstractService {
   };
 
   /**
-   * return of dataSource
+   * Returns of dataSource
    *
    * @returns {DataSource} dataSource
    */
   abstract getDataSource: () => DataSource;
 
   /**
-   * gets an array of unspent token-map boxes
+   * Gets an array of unspent token-map boxes
    */
   abstract getTokenMapBoxes: () => Promise<BoxEntity[]>;
 
   /**
-   * returns the last saved block height based on the scanner name
+   * Returns the last saved block height based on the scanner name
    *
    * @param scanner considering scanned blocks by this scanner
    */

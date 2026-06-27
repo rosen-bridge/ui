@@ -14,13 +14,13 @@ import { configs } from '../configs';
 const logger = DefaultLogger.getInstance().child(import.meta.url);
 
 /**
- * Initializes and configures an Ethereum scanner instance.
+ * Creates and configures an Ethereum scanner instance.
  *
  * @param dataSource - TypeORM DataSource for DB connection
  * @returns Configured and ready-to-use EthereumScanner instance
  * @throws Error if observation extractor creation or registration fails
  */
-const buildEthereumEvmScannerWithExtractors = async (
+export const getEthereumScanner = async (
   dataSource: DataSource,
   tokenMap: TokenMap,
 ) => {
@@ -68,18 +68,4 @@ const buildEthereumEvmScannerWithExtractors = async (
 
   logger.info('Ethereum scanner initialization completed successfully');
   return ethereumScanner;
-};
-
-/**
- * create a ethereum scanner.
- *
- * @param dataSource - TypeORM DataSource for database connection
- * @param tokenMap
- * @returns {EvmRpcScanner}
- */
-export const getEthereumScanner = async (
-  dataSource: DataSource,
-  tokenMap: TokenMap,
-): Promise<EvmRpcScanner> => {
-  return await buildEthereumEvmScannerWithExtractors(dataSource, tokenMap);
 };

@@ -153,7 +153,7 @@ const buildDogeEsploraScannerWithExtractors = async (
 };
 
 /**
- * create a Doge scanner.
+ * Creates a Doge scanner.
  *
  * @param dataSource - TypeORM DataSource for database connection
  * @param tokenMap
@@ -170,6 +170,6 @@ export const getDogeScanner = async (
     case DOGE_METHOD_RPC:
       return await buildDogeRpcScannerWithExtractors(dataSource, tokenMap);
     default:
-      throw new Error(`Unsupported or missing Doge scanner method.`);
+      throw new Error(`Unsupported or missing Doge scanner method`);
   }
 };
