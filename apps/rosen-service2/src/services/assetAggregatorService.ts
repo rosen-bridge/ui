@@ -82,7 +82,7 @@ export class AssetAggregatorService extends AbstractAssetAggregatorService {
   }
 
   /**
-   * initializes the singleton instance of AssetAggregatorService
+   * Initializes the singleton instance of AssetAggregatorService
    *
    * @static
    * @param {AbstractLogger} [logger]
@@ -98,7 +98,7 @@ export class AssetAggregatorService extends AbstractAssetAggregatorService {
   };
 
   /**
-   * write assets total-supply to the redis
+   * Writes assets total-supply to the redis
    *
    * @returns void
    */
@@ -139,7 +139,7 @@ export class AssetAggregatorService extends AbstractAssetAggregatorService {
   protected getTasks = () => {
     return [
       {
-        fn: async () => this.aggregateActiveChainBalances(),
+        fn: this.aggregateActiveChainBalances,
         interval: configs.dataAggregator.interval * 1000,
       },
     ];

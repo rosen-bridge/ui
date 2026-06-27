@@ -15,7 +15,10 @@ import {
   ErgoExplorerDataAdapter,
   EthereumEvmRpcDataAdapter,
 } from '@rosen-ui/asset-data-adapter';
-import { AssetBalance } from '@rosen-ui/asset-data-adapter/dist/types';
+import {
+  AssetBalance,
+  ChainsAdapters,
+} from '@rosen-ui/asset-data-adapter/dist/types';
 import { NETWORKS, NETWORKS_KEYS } from '@rosen-ui/constants';
 import { createClient, VercelKV } from '@vercel/kv';
 
@@ -67,7 +70,7 @@ export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
   }
 
   /**
-   * calculate total supply of the wrapped-tokens
+   * Calculates total supply of the wrapped-tokens
    *
    * @returns { {[chain: string]: TotalSupply[]} }
    */
@@ -96,15 +99,13 @@ export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
    * Creates and returns a blockchain-specific data adapter instance.
    *
    * Supported chains:
-   * - Ergo     (Explorer, Node)
-   * - Cardano  (Blockfrost, Ogmios, Koios)
-   * - Bitcoin  (Esplora, RPC)
-   * - Bitcoin-Runs  (Esplora, RPC)
-   * - Doge     (Esplora, RPC)
-   * - Ethereum (EVM RPC)
-   * - Binance  (RPC)
-   *
-   * const adapter = createDataAdapter(NETWORKS.bitcoin.key, { url: "https://blockstream.info" });
+   * - Ergo
+   * - Cardano
+   * - Bitcoin
+   * - Bitcoin-Runs
+   * - Doge
+   * - Ethereum
+   * - Binance
    *
    * @async
    * @returns {Promise<void>}
@@ -216,7 +217,7 @@ export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
   };
 
   /**
-   * initializes the singleton instance of AssetDataAdapterService
+   * Initializes the singleton instance of AssetDataAdapterService
    *
    * @static
    * @param {AbstractLogger} [logger]
@@ -232,7 +233,7 @@ export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
   };
 
   /**
-   * write assets total-supply to the redis
+   * Writes assets total-supply to the redis
    *
    * @returns void
    */
@@ -242,37 +243,45 @@ export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
   };
 
   /**
-   * Updates and merges EVM-chain (Ethereum/Binance) data in Redis.
+   * Updates and merges chain  data in Redis.
    * @param {ChainChoices} chain - The chain name of data adapter
-   * @returns {AssetBalance}
    * @protected
    */
-  protected evmChainDataUpdated = async (
-    chain: ChainChoices,
-  ): Promise<AssetBalance> => {
-    const adapter = this.adapters[chain];
-    // preventing of overriding old chunks of data
-    const oldData =
-      (await this.redis.get<AssetBalance | null>(adapter.chain)) || {};
-    const newData = await adapter.fetch();
-    const finalData = { ...oldData };
-    for (const tokenId of Object.keys(newData)) {
-      if (!Object.hasOwn(finalData, tokenId)) {
-        finalData[tokenId] = newData[tokenId];
-      } else {
-        newData[tokenId].forEach((item, index) => {
-          const finalItemIndex = finalData[tokenId]
-            .map((addressBalance) => addressBalance?.address)
-            .indexOf(item?.address);
-          if (finalItemIndex >= 0) {
-            finalData[tokenId][index] = newData[tokenId][finalItemIndex];
-          } else {
-            finalData[tokenId].push(item);
-          }
-        });
+  protected chainDataUpdated = async (
+    adapter: ChainsAdapters,
+  ): Promise<void> => {
+    if (
+      adapter.chain == NETWORKS.ethereum.key ||
+      adapter.chain == NETWORKS.binance.key
+    ) {
+      // preventing of overriding old chunks of data
+      const oldData =
+        (await this.redis.get<AssetBalance | null>(adapter.chain)) || {};
+      const newData = await adapter.fetch();
+      const finalData = { ...oldData };
+      for (const tokenId of Object.keys(newData)) {
+        if (!Object.hasOwn(finalData, tokenId)) {
+          finalData[tokenId] = newData[tokenId];
+        } else {
+          newData[tokenId].forEach((item, index) => {
+            const finalItemIndex = finalData[tokenId]
+              .map((addressBalance) => addressBalance?.address)
+              .indexOf(item?.address);
+            if (finalItemIndex >= 0) {
+              finalData[tokenId][index] = newData[tokenId][finalItemIndex];
+            } else {
+              finalData[tokenId].push(item);
+            }
+          });
+        }
       }
+      await this.redis.set(adapter.chain, stringSerializer(finalData));
+    } else {
+      await this.redis.set(
+        adapter.chain,
+        stringSerializer(await adapter.fetch()),
+      );
     }
-    return finalData;
   };
 
   /**
@@ -284,23 +293,7 @@ export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
     const tasks = [];
     for (const adapter of Object.values(this.adapters)) {
       tasks.push({
-        fn:
-          adapter.chain == NETWORKS.ethereum.key ||
-          adapter.chain == NETWORKS.binance.key
-            ? async () => {
-                await this.redis.set(
-                  adapter.chain,
-                  stringSerializer(
-                    await this.evmChainDataUpdated(adapter.chain),
-                  ),
-                );
-              }
-            : async () => {
-                await this.redis.set(
-                  adapter.chain,
-                  stringSerializer(await adapter.fetch()),
-                );
-              },
+        fn: () => this.chainDataUpdated(adapter),
         interval: configs.dataAggregator.interval * 1000,
       });
     }

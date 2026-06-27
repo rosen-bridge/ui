@@ -6,7 +6,7 @@ export abstract class AbstractTokenMapService extends AbstractService {
   static name = 'TokenMap';
 
   /**
-   * return the singleton instance of AbstractTokenMapService
+   * Returns the singleton instance of AbstractTokenMapService
    *
    * @static
    * @return {AbstractTokenMapService}
@@ -17,7 +17,7 @@ export abstract class AbstractTokenMapService extends AbstractService {
   };
 
   /**
-   * returns of tokenMap
+   * Returns of tokenMap
    *
    * @returns {TokenMap} tokenMap
    */

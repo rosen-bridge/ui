@@ -71,7 +71,7 @@ const buildEthereumEvmScannerWithExtractors = async (
 };
 
 /**
- * create a ethereum scanner.
+ * Creates a ethereum scanner.
  *
  * @param dataSource - TypeORM DataSource for database connection
  * @param tokenMap

@@ -72,7 +72,7 @@ const buildBinanceRpcScannerWithExtractors = async (
 };
 
 /**
- * create a binance scanner.
+ * Creates a binance scanner.
  *
  * @param dataSource - TypeORM DataSource for database connection
  * @param tokenMap
