@@ -19,13 +19,13 @@ tokenMap:
   onChainTokenMapEnabled: true
   path: config/tokensMap.json
 statistics:
-  userEventsMetric:
-    interval: 86400
   lockedAssetsMetrics:
     interval: 86400
   generalMetrics:
     interval: 86400
   eventCountMetrics:
+    interval: 86400
+  userEventsMetric:
     interval: 86400
 chains:
   ergo:
