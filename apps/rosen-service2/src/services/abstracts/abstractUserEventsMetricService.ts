@@ -5,7 +5,7 @@ export abstract class AbstractUserEventsMetricService extends PeriodicTaskServic
   protected static instance: AbstractUserEventsMetricService;
 
   /**
-   * return the singleton instance of AbstractUserEventsMetricService
+   * Returns the singleton instance of AbstractUserEventsMetricService
    *
    * @static
    * @return {AbstractUserEventsMetricService}

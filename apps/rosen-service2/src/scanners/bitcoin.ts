@@ -206,7 +206,7 @@ const buildBitcoinEsploraScannerWithExtractors = async (
 };
 
 /**
- * create a bitcoin scanner.
+ * Creates a bitcoin scanner.
  *
  * @param dataSource - TypeORM DataSource for database connection
  * @param tokenMap
@@ -226,6 +226,6 @@ export const getBitcoinScanner = async (
     case BITCOIN_METHOD_RPC:
       return await buildBitcoinRpcScannerWithExtractors(dataSource, tokenMap);
     default:
-      throw new Error(`Unsupported or missing Doge scanner method.`);
+      throw new Error(`Unsupported or missing Bitcoin scanner method`);
   }
 };

@@ -136,7 +136,7 @@ export class HealthService extends AbstractHealthService {
   };
 
   /**
-   * initializes the singleton instance of HealthService
+   * Initializes the singleton instance of HealthService
    *
    * @static
    * @memberof HealthService
@@ -214,14 +214,14 @@ export class HealthService extends AbstractHealthService {
   protected getTasks = () => {
     return [
       {
-        fn: async () => this.updateAndExportHealthStatus(),
+        fn: this.updateAndExportHealthStatus,
         interval: configs.healthCheck.updateInterval * 1000,
       },
     ];
   };
 
   /**
-   * post-stop action of service.
+   * Post-stop action of service.
    *
    * @protected
    * @return {Promise<boolean>} true if service stopped successfully

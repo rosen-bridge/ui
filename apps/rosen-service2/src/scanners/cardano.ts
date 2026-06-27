@@ -198,7 +198,7 @@ const buildCardanoOgmiosScannerWithExtractors = async (
 };
 
 /**
- * create a cardano scanner.
+ * Creates a cardano scanner.
  *
  * @param dataSource - TypeORM DataSource for database connection
  * @param tokenMap
@@ -225,6 +225,6 @@ export const getCardanoScanner = async (
     case CARDANO_METHOD_KOIOS:
       return await buildCardanoKoiosScannerWithExtractors(dataSource, tokenMap);
     default:
-      throw new Error(`Unsupported or missing Doge scanner method.`);
+      throw new Error(`Unsupported or missing Cardano scanner method`);
   }
 };
