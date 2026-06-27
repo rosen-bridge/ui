@@ -102,6 +102,26 @@
         "basicAuth": {
           "type": "string",
           "default": ""
+        },
+        "format": {
+          "type": "string",
+          "default": "plain",
+          "validations": [
+            {
+              "choices": [
+                "plain",
+                "json"
+              ]
+            }
+          ]
+        },
+        "createSymlink": {
+          "type": "boolean",
+          "default": false
+        },
+        "symlinkName": {
+          "type": "string",
+          "default": ""
         }
       }
     }
