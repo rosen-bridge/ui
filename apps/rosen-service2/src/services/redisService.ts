@@ -6,7 +6,8 @@ import { configs } from '../configs';
 import { AbstractRedisService } from './abstracts/abstractRedisService';
 
 export class RedisService extends AbstractRedisService {
-  redis: VercelKV;
+  protected redis: VercelKV;
+  static serviceName = AbstractRedisService.name;
   protected dependencies: Dependency[] = [];
 
   /**
@@ -18,7 +19,7 @@ export class RedisService extends AbstractRedisService {
   }
 
   /**
-   * Start service
+   * Starts service
    * @returns {Promise<boolean>} True if the service started successfully, false otherwise.
    */
   protected start = async (): Promise<boolean> => {
@@ -27,12 +28,12 @@ export class RedisService extends AbstractRedisService {
   };
 
   /**
-   * initializes the singleton instance of HealthService
+   * Initializes the singleton instance of RedisService
    *
    * @static
-   * @memberof HealthService
+   * @memberof RedisService
    */
-  static readonly init = (logger?: AbstractLogger) => {
+  static init = (logger?: AbstractLogger) => {
     if (AbstractRedisService.instance != undefined) {
       return;
     }
@@ -55,16 +56,29 @@ export class RedisService extends AbstractRedisService {
   };
 
   /**
-   * returns of redis client
+   * Retrieves data with the specified key from the Redis.
    *
-   * @returns {VercelKV}
+   * @template T - The expected type of data.
+   * @param {string} key
+   * @returns {Promise<T | null>}
    */
-  getRedisClient = (): VercelKV => {
-    return this.redis;
+  getFromRedis = async <T>(key: string): Promise<T | null> => {
+    return await this.redis.get<T>(key);
   };
 
   /**
-   * Stop service
+   * Stores data in the Redis with the specified key.
+   *
+   * @param {string} key
+   * @param {string} data
+   * @returns {Promise<void>}
+   */
+  setToRedis = async (key: string, data: string): Promise<void> => {
+    await this.redis.set(key, data);
+  };
+
+  /**
+   * Stops service
    * @returns {Promise<boolean>} True if the service stopped successfully, false otherwise.
    */
   protected stop = async (): Promise<boolean> => {

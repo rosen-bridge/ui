@@ -102,11 +102,11 @@ export class ScannerService extends AbstractScannerService {
    * based on the active chains and configured methods.
    *
    * Supported chains:
-   * - Cardano  (Blockfrost, Ogmios, Koios)
-   * - Bitcoin  (Esplora, RPC)
-   * - Doge     (Esplora, RPC)
-   * - Ethereum (EVM RPC)
-   * - Binance  (RPC)
+   * - Cardano
+   * - Bitcoin
+   * - Doge
+   * - Ethereum
+   * - Binance
    *
    * Each scanner will be initialized with its event extractors
    * and stored in the `scanners` registry for later use.
@@ -116,63 +116,59 @@ export class ScannerService extends AbstractScannerService {
    * @throws {Error} If scanner or extractor creation fails
    */
   protected generateAndRegisterScannersWithExtractors = async () => {
-    try {
-      (Object.keys(configs.chains) as ChainChoices[]).forEach(async (chain) => {
-        switch (chain) {
-          case NETWORKS.binance.key:
-            if (configs.chains.binance.active) {
-              this.scanners[NETWORKS.binance.key] = await getBinanceScanner(
-                this.dataSource,
-                this.tokenMap,
-              );
-            }
-            break;
-          case NETWORKS.ethereum.key:
-            if (configs.chains.ethereum.active) {
-              this.scanners[NETWORKS.ethereum.key] = await getEthereumScanner(
-                this.dataSource,
-                this.tokenMap,
-              );
-            }
-            break;
-          case NETWORKS.cardano.key:
-            if (configs.chains.cardano.active) {
-              this.scanners[NETWORKS.cardano.key] = await getCardanoScanner(
-                this.dataSource,
-                this.tokenMap,
-              );
-            }
-            break;
-          case NETWORKS.bitcoin.key:
-            if (
-              configs.chains.bitcoin.active ||
-              configs.chains['bitcoin-runes'].active
-            ) {
-              this.scanners[NETWORKS.bitcoin.key] = await getBitcoinScanner(
-                this.dataSource,
-                this.tokenMap,
-              );
-            }
-            break;
-          case NETWORKS.doge.key:
-            if (configs.chains.doge.active) {
-              this.scanners[NETWORKS.doge.key] = await getDogeScanner(
-                this.dataSource,
-                this.tokenMap,
-              );
-            }
-            break;
-        }
-      });
-    } catch (error) {
-      throw new Error(
-        `cannot create or register event trigger extractors due to error: ${error}`,
-      );
+    const chains = Object.keys(configs.chains) as ChainChoices[];
+
+    for (const chain of chains) {
+      switch (chain) {
+        case NETWORKS.binance.key:
+          if (configs.chains.binance.active) {
+            this.scanners[NETWORKS.binance.key] = await getBinanceScanner(
+              this.dataSource,
+              this.tokenMap,
+            );
+          }
+          break;
+        case NETWORKS.ethereum.key:
+          if (configs.chains.ethereum.active) {
+            this.scanners[NETWORKS.ethereum.key] = await getEthereumScanner(
+              this.dataSource,
+              this.tokenMap,
+            );
+          }
+          break;
+        case NETWORKS.cardano.key:
+          if (configs.chains.cardano.active) {
+            this.scanners[NETWORKS.cardano.key] = await getCardanoScanner(
+              this.dataSource,
+              this.tokenMap,
+            );
+          }
+          break;
+        case NETWORKS.bitcoin.key:
+          if (
+            configs.chains.bitcoin.active ||
+            configs.chains['bitcoin-runes'].active
+          ) {
+            this.scanners[NETWORKS.bitcoin.key] = await getBitcoinScanner(
+              this.dataSource,
+              this.tokenMap,
+            );
+          }
+          break;
+        case NETWORKS.doge.key:
+          if (configs.chains.doge.active) {
+            this.scanners[NETWORKS.doge.key] = await getDogeScanner(
+              this.dataSource,
+              this.tokenMap,
+            );
+          }
+          break;
+      }
     }
   };
 
   /**
-   * initializes the singleton instance of ScannerService
+   * Initializes the singleton instance of ScannerService
    *
    * @static
    * @param {AbstractLogger} [logger]
@@ -186,7 +182,7 @@ export class ScannerService extends AbstractScannerService {
   };
 
   /**
-   * start scanners with extractors
+   * Starts only web socket scanners with extractors
    *
    * @returns void
    */
@@ -223,7 +219,7 @@ export class ScannerService extends AbstractScannerService {
 
   /**
    * Performs necessary cleanup after stopping the service,
-   * including stopping connected CardanoOgmiosScanners.
+   * stops web socket scanners like CardanoOgmiosScanners.
    *
    * @returns void
    */

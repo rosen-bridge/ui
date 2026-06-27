@@ -11,7 +11,6 @@ import {
 } from '@rosen-ui/asset-aggregator';
 import { AssetBalance } from '@rosen-ui/asset-data-adapter';
 import { NETWORKS } from '@rosen-ui/constants';
-import { VercelKV } from '@vercel/kv';
 
 import { configs } from '../configs';
 import { TOTAL_SUPPLY_REDIS_KEY } from '../constants';
@@ -28,7 +27,6 @@ import { RedisService } from './redisService';
 export class AssetAggregatorService extends AbstractAssetAggregatorService {
   static serviceName = AbstractAssetAggregatorService.name;
   protected assetAggregator: AssetAggregator;
-  protected redis: VercelKV;
 
   protected dependencies: Dependency[] = [
     {
@@ -47,12 +45,8 @@ export class AssetAggregatorService extends AbstractAssetAggregatorService {
     },
     {
       serviceName: AbstractRedisService.name,
-      allowedStatuses: [
-        ServiceStatus.running,
-        ServiceStatus.started,
-        ServiceStatus.dormant,
-      ],
-      action: ServiceAction.assemble,
+      allowedStatuses: [ServiceStatus.running, ServiceStatus.started],
+      action: ServiceAction.start,
     },
     {
       serviceName: AbstractDBService.name,
@@ -76,7 +70,6 @@ export class AssetAggregatorService extends AbstractAssetAggregatorService {
       AbstractDBService.getInstance().getDataSource(),
       this.logger.child('assetAggregator'),
     );
-    this.redis = RedisService.getInstance().getRedisClient();
     this.setStatus(ServiceStatus.dormant);
     return true;
   };
@@ -90,7 +83,7 @@ export class AssetAggregatorService extends AbstractAssetAggregatorService {
   }
 
   /**
-   * initializes the singleton instance of AssetAggregatorService
+   * Initializes the singleton instance of AssetAggregatorService
    *
    * @static
    * @param {AbstractLogger} [logger]
@@ -106,7 +99,7 @@ export class AssetAggregatorService extends AbstractAssetAggregatorService {
   };
 
   /**
-   * write assets total-supply to the redis
+   * Writes assets total-supply to the redis
    *
    * @returns void
    */
@@ -125,7 +118,10 @@ export class AssetAggregatorService extends AbstractAssetAggregatorService {
       Object.keys(configs.chains).map(async (chainKey) => {
         const chain = chainKey as ChainsKeys;
         if (chain === NETWORKS.ergo.key || configs.chains[chain].active) {
-          const data = await this.redis.get<AssetBalance | null>(chainKey);
+          const data =
+            await RedisService.getInstance().getFromRedis<AssetBalance>(
+              chainKey,
+            );
           if (data) {
             assetBalances[chain as ChainChoices] = data;
           }
@@ -134,7 +130,9 @@ export class AssetAggregatorService extends AbstractAssetAggregatorService {
     );
 
     const totalSupply: { [chain: string]: TotalSupply[] } =
-      (await this.redis.get(TOTAL_SUPPLY_REDIS_KEY)) ?? {};
+      (await RedisService.getInstance().getFromRedis<{
+        [chain: string]: TotalSupply[];
+      }>(TOTAL_SUPPLY_REDIS_KEY)) ?? {};
 
     await this.assetAggregator.update(assetBalances, totalSupply);
   };
@@ -147,7 +145,7 @@ export class AssetAggregatorService extends AbstractAssetAggregatorService {
   protected getTasks = () => {
     return [
       {
-        fn: async () => this.aggregateActiveChainBalances(),
+        fn: this.aggregateActiveChainBalances,
         interval: configs.dataAggregator.interval * 1000,
       },
     ];

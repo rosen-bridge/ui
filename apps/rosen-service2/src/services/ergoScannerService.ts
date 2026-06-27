@@ -52,14 +52,14 @@ export class ErgoScannerService extends AbstractErgoScannerService {
   ];
 
   /**
-   * stop Ergo scanner
+   * Stops Ergo scanner
    *
    * @returns void
    */
   protected postStop = async () => {};
 
   /**
-   * start Ergo scanner
+   * Starts Ergo scanner
    *
    * @returns void
    */

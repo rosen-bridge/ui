@@ -6,7 +6,7 @@ export abstract class AbstractErgoScannerService extends PeriodicTaskService {
   static name = 'ErgoScanner';
 
   /**
-   * return the singleton instance of AbstractErgoScannerService
+   * Returns the singleton instance of AbstractErgoScannerService
    *
    * @static
    * @return {AbstractErgoScannerService}
