@@ -40,6 +40,8 @@
     "@rosen-bridge/ergo-scanner": "^1.1.0",
     "@rosen-bridge/evm-observation-extractor": "^7.0.2",
     "@rosen-bridge/evm-scanner": "^1.1.0",
+    "@rosen-bridge/firo-observation-extractor": "^1.1.0",
+    "@rosen-bridge/firo-scanner": "^0.2.0",
     "@rosen-bridge/health-check": "^8.0.0",
     "@rosen-bridge/log-level-check": "^4.0.0",
     "@rosen-bridge/scanner-interfaces": "^1.0.0",

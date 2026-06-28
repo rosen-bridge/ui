@@ -1,5 +1,6 @@
 {
   "singleQuote": true,
+  "endOfLine": "auto",
   "quoteProps": "consistent",
   "importOrder": [
     "^\\./bootstrap$",

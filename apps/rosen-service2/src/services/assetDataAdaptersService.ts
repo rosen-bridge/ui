@@ -21,7 +21,6 @@ import { createClient, VercelKV } from '@vercel/kv';
 
 import { configs } from '../configs';
 import { TOTAL_SUPPLY_REDIS_KEY } from '../constants';
-import { ChainChoices } from '../types';
 import { stringSerializer } from '../utils';
 import {
   AbstractAssetDataAdapterService,
@@ -103,7 +102,9 @@ export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
    * @example
    * const adapter = createDataAdapter(NETWORKS.bitcoin.key, { url: "https://blockstream.info" });
    */
-  protected createChainSpecificDataAdapter = (chain: ChainChoices) => {
+  protected createChainSpecificDataAdapter = (
+    chain: keyof typeof configs.chains,
+  ) => {
     const tokenMap = AbstractTokenMapService.getInstance().getTokenMap();
 
     const addresses: string[] = [

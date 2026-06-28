@@ -144,6 +144,25 @@ const getConfig = () => {
           }>
         >('doge.rpcConnections'),
       },
+      firo: {
+        addresses: {
+          lock: nodeConfig.get<string>('firo.addresses.lock'),
+          eventTrigger: nodeConfig.get<string>('firo.addresses.eventTrigger'),
+          permit: nodeConfig.get<string>('firo.addresses.permit'),
+          fraud: nodeConfig.get<string>('firo.addresses.fraud'),
+          commitment: nodeConfig.get<string>('firo.addresses.commitment'),
+        },
+        initialHeight: nodeConfig.get<number>('firo.initialHeight'),
+        tokens: {
+          rwt: nodeConfig.get<string>('firo.tokens.rwt'),
+        },
+        explorerUrl: nodeConfig.get<string>('firo.explorerUrl'),
+        electrumxHost: nodeConfig.get<string>('firo.electrumx.host'),
+        electrumxPort: nodeConfig.get<number>('firo.electrumx.port'),
+        electrumxReconnectDelay: nodeConfig.get<number>(
+          'firo.electrumx.reconnectDelay',
+        ),
+      },
       postgres: {
         url: nodeConfig.get<string>('postgres.url'),
         logging: nodeConfig.get<boolean>('postgres.logging'),
@@ -160,6 +179,7 @@ const getConfig = () => {
           ethereum: nodeConfig.get<string[]>('calculator.addresses.ethereum'),
           binance: nodeConfig.get<string[]>('calculator.addresses.binance'),
           doge: nodeConfig.get<string[]>('calculator.addresses.doge'),
+          firo: nodeConfig.get<string[]>('calculator.addresses.firo'),
         },
         interval: nodeConfig.get<number>('calculator.interval'),
       },
@@ -199,6 +219,12 @@ const getConfig = () => {
         ),
         binanceScannerCriticalDiff: nodeConfig.get<number>(
           'healthCheck.binanceScannerCriticalDiff',
+        ),
+        firoScannerWarnDiff: nodeConfig.get<number>(
+          'healthCheck.firoScannerWarnDiff',
+        ),
+        firoScannerCriticalDiff: nodeConfig.get<number>(
+          'healthCheck.firoScannerCriticalDiff',
         ),
         updateInterval: nodeConfig.get<number>('healthCheck.interval'),
         logDuration: nodeConfig.get<number>('healthCheck.duration'),
