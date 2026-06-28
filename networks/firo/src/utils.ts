@@ -6,7 +6,6 @@ import {
 } from '@rosen-network/base';
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
-import { Psbt, address } from 'bitcoinjs-lib';
 import { createHash } from 'node:crypto';
 import * as tls from 'node:tls';
 
@@ -392,20 +391,6 @@ export const getTxHex = async (txId: string): Promise<string> => {
 };
 
 /**
- * gets address Firo balance from ElectrumX
- * @param address
- * @returns this is a UNWRAPPED-VALUE amount
- */
-export const getAddressBalance = async (address: string): Promise<bigint> => {
-  const scripthash = addressToScripthash(address);
-  const balance = await callElectrumX<{
-    confirmed: number;
-    unconfirmed: number;
-  }>('blockchain.scripthash.get_balance', [scripthash]);
-  return BigInt(balance.confirmed);
-};
-
-/**
  * gets current fee ratio of the network from ElectrumX
  * @returns fee ratio in satoshis per byte
  */
@@ -463,35 +448,6 @@ export const estimateTxSize = (
     inputSize * FIRO_INPUT_SIZE + // inputs size
     outputSize * FIRO_OUTPUT_SIZE; // outputs size
   return x;
-};
-
-/**
- * submits a transaction to ElectrumX
- * @param serializedPsbt psbt in base64 or hex format
- * @param encoding psbt encoding ('base64' or 'hex')
- */
-export const submitTransaction = async (
-  serializedPsbt: string,
-  encoding: 'base64' | 'hex',
-): Promise<string> => {
-  const psbt =
-    encoding === 'base64'
-      ? Psbt.fromBase64(serializedPsbt)
-      : Psbt.fromHex(serializedPsbt);
-  psbt.finalizeAllInputs();
-  const txHex = psbt.extractTransaction().toHex();
-
-  return callElectrumX<string>('blockchain.transaction.broadcast', [txHex]);
-};
-
-export const isValidAddress = (addr: string) => {
-  try {
-    address.toOutputScript(addr, FIRO_NETWORK);
-    return true;
-  } catch {
-    // If an error is thrown, the address is invalid
-    return false;
-  }
 };
 
 export const getHeight = async (): Promise<number> => {
