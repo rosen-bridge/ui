@@ -7,8 +7,8 @@ import {
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
 import { Psbt, address } from 'bitcoinjs-lib';
-import { createHash } from 'crypto';
-import * as tls from 'tls';
+import { createHash } from 'node:crypto';
+import * as tls from 'node:tls';
 
 import {
   CONFIRMATION_TARGET,
