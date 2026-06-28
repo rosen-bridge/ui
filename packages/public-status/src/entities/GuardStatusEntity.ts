@@ -12,13 +12,13 @@ import { TxEntity } from './TxEntity';
 @Entity('guard_status_entity')
 export class GuardStatusEntity {
   @PrimaryColumn('varchar')
-  eventId: string;
-
-  @PrimaryColumn('varchar')
   triggerTxId: string;
 
   @PrimaryColumn('varchar')
   guardPk: string;
+
+  @Column('varchar')
+  eventId: string;
 
   @Column('integer')
   updatedAt: number;

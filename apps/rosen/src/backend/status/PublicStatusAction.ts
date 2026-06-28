@@ -119,7 +119,6 @@ export class PublicStatusAction {
             tx.txId,
             tx.chain,
             eventId,
-            triggerTxId,
             timestampSeconds,
             tx.txType,
           );
@@ -133,7 +132,6 @@ export class PublicStatusAction {
       // get array of last status of all guards
       const guardsStatus = await GuardStatusAction.getInstance().getMany(
         guardStatusRepository,
-        eventId,
         triggerTxId,
         [],
       );
@@ -194,7 +192,6 @@ export class PublicStatusAction {
       const lastAggregatedStatus =
         await AggregatedStatusAction.getInstance().getOne(
           aggregatedStatusRepository,
-          eventId,
           triggerTxId,
         );
 
@@ -282,11 +279,11 @@ export class PublicStatusAction {
 
   /**
    * gets array of AggregatedStatusEntity
-   * @param eventAndTriggerIds
+   * @param triggerTxIds
    * @returns promise of AggregatedStatusEntity array
    */
   getAggregatedStatuses = (
-    eventAndTriggerIds: string[][],
+    triggerTxIds: string[],
   ): Promise<AggregatedStatusEntity[]> => {
     const aggregatedStatusRepository = this.dataSource.getRepository(
       AggregatedStatusEntity,
@@ -294,20 +291,18 @@ export class PublicStatusAction {
 
     return AggregatedStatusAction.getInstance().getMany(
       aggregatedStatusRepository,
-      eventAndTriggerIds,
+      triggerTxIds,
     );
   };
 
   /**
    * gets array of AggregatedStatusChangedEntity (timeline)
-   * @param eventId
    * @param triggerTxId
    * @param offset
    * @param limit
    * @returns promise of AggregatedStatusChangedEntity array
    */
   getAggregatedStatusTimeline = (
-    eventId: string,
     triggerTxId: string,
     offset?: number,
     limit?: number,
@@ -318,7 +313,6 @@ export class PublicStatusAction {
 
     return AggregatedStatusChangedAction.getInstance().getMany(
       aggregatedStatusChangedRepository,
-      eventId,
       triggerTxId,
       offset,
       limit,
@@ -327,7 +321,6 @@ export class PublicStatusAction {
 
   /**
    * gets array of GuardStatusChangedEntity (timeline)
-   * @param eventId
    * @param triggerTxId
    * @param guardPks
    * @param offset
@@ -335,7 +328,6 @@ export class PublicStatusAction {
    * @returns promise of GuardStatusChangedEntity array
    */
   getGuardStatusTimeline = (
-    eventId: string,
     triggerTxId: string,
     guardPks: string[],
     offset?: number,
@@ -347,7 +339,6 @@ export class PublicStatusAction {
 
     return GuardStatusChangedAction.getInstance().getMany(
       guardStatusChangedRepository,
-      eventId,
       triggerTxId,
       guardPks,
       offset,

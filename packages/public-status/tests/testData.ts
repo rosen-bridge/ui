@@ -27,7 +27,6 @@ export const mockTx0: TxEntity = {
   txId: id1,
   chain: 'c1',
   eventId: id0,
-  triggerTxId: triggerId0,
   insertedAt: 0,
   txType: TxType.payment,
 };

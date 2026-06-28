@@ -21,16 +21,16 @@ describe('AggregatedStatusAction', () => {
 
   describe('getOne', () => {
     /**
-     * @target AggregatedStatusAction.getOne should call repository.findOne using the eventId as query
+     * @target AggregatedStatusAction.getOne should call repository.findOne using the triggerTxId as query
      * @dependencies
      * @scenario
      * - stub repository.findOne to resolve to null
      * - call getOne
      * @expected
      * - should have returned null
-     * - findOne should have been called once with eventId query
+     * - findOne should have been called once with triggerTxId query
      */
-    it('should call repository.findOne using the eventId as query', async () => {
+    it('should call repository.findOne using the triggerTxId as query', async () => {
       // arrange
       const repository = {
         findOne: vi.fn().mockResolvedValue(null),
@@ -39,7 +39,6 @@ describe('AggregatedStatusAction', () => {
       // act
       const currentStatus = await AggregatedStatusAction.getInstance().getOne(
         repository as unknown as Repository<AggregatedStatusEntity>,
-        id0,
         triggerId0,
       );
 
@@ -47,7 +46,7 @@ describe('AggregatedStatusAction', () => {
       expect(currentStatus).toBeNull();
       expect(repository.findOne).toHaveBeenCalledOnce();
       expect(repository.findOne).toHaveBeenCalledWith({
-        where: { eventId: id0, triggerTxId: triggerId0 },
+        where: { triggerTxId: triggerId0 },
         relations: ['tx'],
       });
     });
@@ -55,16 +54,16 @@ describe('AggregatedStatusAction', () => {
 
   describe('getMany', () => {
     /**
-     * @target AggregatedStatusAction.getMany should call repository.find using the eventIds as query
+     * @target AggregatedStatusAction.getMany should call repository.find using the triggerTxIds as query
      * @dependencies
      * @scenario
      * - stub repository.find to resolve to empty array
      * - call getMany
      * @expected
      * - should have returned an empty array
-     * - repository.find should have been called once with a query to find records satisfying eventId = id0 or id1
+     * - repository.find should have been called once with a query to find records satisfying triggerId0 anf triggerId1
      */
-    it('should call repository.find using the eventIds as query', async () => {
+    it('should call repository.find using the triggerTxIds as query', async () => {
       // arrange
       const repository = {
         find: vi.fn().mockResolvedValue([]),
@@ -73,37 +72,31 @@ describe('AggregatedStatusAction', () => {
       // act
       const records = await AggregatedStatusAction.getInstance().getMany(
         repository as unknown as Repository<AggregatedStatusEntity>,
-        [
-          [id0, triggerId0],
-          [id1, triggerId1],
-        ],
+        [triggerId0, triggerId1],
       );
 
       // assert
       expect(records).toHaveLength(0);
       expect(repository.find).toHaveBeenCalledOnce();
       expect(repository.find).toHaveBeenCalledWith({
-        where: [
-          { eventId: id0, triggerTxId: triggerId0 },
-          { eventId: id1, triggerTxId: triggerId1 },
-        ],
+        where: { triggerTxId: In([triggerId0, triggerId1]) },
         relations: ['tx'],
-        order: { eventId: 'ASC' },
+        order: { triggerTxId: 'ASC' },
       });
     });
   });
 
   describe('upsertOne', () => {
     /**
-     * @target AggregatedStatusAction.upsertOne should call upsert when eventId is new
+     * @target AggregatedStatusAction.upsertOne should call upsert when triggerTxId is new
      * @dependencies
      * @scenario
      * - stub repository.findOne and upsert to resolve to null
-     * - call upsertOne with 2 objects containing different eventIds
+     * - call upsertOne with 2 objects containing different triggerTxIds
      * @expected
-     * - upsert should have been called twice, once for each eventId
+     * - upsert should have been called twice, once for each triggerTxId
      */
-    it('should call upsert when eventId is new', async () => {
+    it('should call upsert when triggerTxId is new', async () => {
       // arrange
       const repository = {
         findOne: vi.fn().mockResolvedValue(null),
@@ -140,7 +133,7 @@ describe('AggregatedStatusAction', () => {
     });
 
     /**
-     * @target AggregatedStatusAction.upsertOne should call upsert when a record with matching eventId exists and its status is changed
+     * @target AggregatedStatusAction.upsertOne should call upsert when a record with matching triggerTxId exists and its status is changed
      * @dependencies
      * @scenario
      * - define a mock AggregatedStatusEntity
@@ -149,7 +142,7 @@ describe('AggregatedStatusAction', () => {
      * @expected
      * - repository.upsert should have been called once with the new status
      */
-    it('should call upsert when a record with matching eventId exists and its status is changed', async () => {
+    it('should call upsert when a record with matching triggerTxId exists and its status is changed', async () => {
       // arrange
       const record = mockAggregatedStatusRecords[0];
 
@@ -182,7 +175,7 @@ describe('AggregatedStatusAction', () => {
             tx: null,
           },
         ],
-        ['eventId', 'triggerTxId'],
+        ['triggerTxId'],
       );
     });
 

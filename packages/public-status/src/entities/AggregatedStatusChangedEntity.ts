@@ -20,7 +20,6 @@ export class AggregatedStatusChangedEntity {
   triggerTxId: string;
 
   @Column('varchar')
-  @Index()
   eventId: string;
 
   @Column('integer')

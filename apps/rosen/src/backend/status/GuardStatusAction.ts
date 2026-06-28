@@ -30,30 +30,27 @@ class GuardStatusAction {
   };
 
   /**
-   * retrieves one GuardStatusEntity matching the specified eventId, triggerTxId, and guardPk
+   * retrieves one GuardStatusEntity
    * @param repository
-   * @param eventId
    * @param triggerTxId
    * @param guardPk
    * @returns a promise that resolves to an GuardStatusEntity or null if no matching entity is found
    */
   getOne = async (
     repository: Repository<GuardStatusEntity>,
-    eventId: string,
     triggerTxId: string,
     guardPk: string,
   ): Promise<GuardStatusEntity | null> => {
     return repository.findOne({
-      where: { eventId, triggerTxId, guardPk },
+      where: { triggerTxId, guardPk },
       relations: ['tx'],
     });
   };
 
   /**
-   * retrieves multiple GuardStatusEntity objects for a given eventId, triggerTxId and guardPks array
+   * retrieves multiple GuardStatusEntity
    * empty guardPks will be ignored from filter
    * @param repository
-   * @param eventId
    * @param triggerTxId
    * @param guardPks
    * @param offset
@@ -62,7 +59,6 @@ class GuardStatusAction {
    */
   getMany = async (
     repository: Repository<GuardStatusEntity>,
-    eventId: string,
     triggerTxId: string,
     guardPks: string[],
     offset?: number,
@@ -70,13 +66,13 @@ class GuardStatusAction {
   ): Promise<{ total: number; items: GuardStatusEntity[] }> => {
     const whereClause =
       guardPks.length > 0
-        ? { eventId, triggerTxId, guardPk: In(guardPks) }
-        : { eventId, triggerTxId };
+        ? { triggerTxId, guardPk: In(guardPks) }
+        : { triggerTxId };
 
     const [items, total] = await repository.findAndCount({
       where: whereClause,
       relations: ['tx'],
-      order: { eventId: 'ASC' },
+      order: { triggerTxId: 'ASC' },
       ...(Number.isFinite(offset) ? { skip: offset } : {}),
       ...(Number.isFinite(limit) ? { take: limit } : {}),
     });
@@ -111,12 +107,7 @@ class GuardStatusAction {
       txStatus: TxStatus;
     },
   ): Promise<void> => {
-    const storedValue = await this.getOne(
-      repository,
-      eventId,
-      triggerTxId,
-      guardPk,
-    );
+    const storedValue = await this.getOne(repository, triggerTxId, guardPk);
 
     if (
       storedValue &&
@@ -140,7 +131,7 @@ class GuardStatusAction {
           txStatus: tx?.txStatus ?? null,
         },
       ],
-      ['eventId', 'triggerTxId', 'guardPk'],
+      ['triggerTxId', 'guardPk'],
     );
   };
 }

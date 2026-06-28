@@ -37,7 +37,6 @@ describe('GuardStatusChangedAction', () => {
       // act
       const lastStatus = await GuardStatusChangedAction.getInstance().getLast(
         repository as unknown as Repository<GuardStatusChangedEntity>,
-        id0,
         triggerId0,
         'pk',
       );
@@ -46,7 +45,7 @@ describe('GuardStatusChangedAction', () => {
       expect(lastStatus).toBeNull();
       expect(repository.findOne).toHaveBeenCalledOnce();
       expect(repository.findOne).toHaveBeenCalledWith({
-        where: { eventId: id0, triggerTxId: triggerId0, guardPk: 'pk' },
+        where: { triggerTxId: triggerId0, guardPk: 'pk' },
         relations: ['tx'],
         order: { insertedAt: 'DESC' },
       });
@@ -67,7 +66,6 @@ describe('GuardStatusChangedAction', () => {
       const { total, items } =
         await GuardStatusChangedAction.getInstance().getMany(
           testDataSource.getRepository(GuardStatusChangedEntity),
-          id0,
           triggerId0,
           ['pk'],
           0,
@@ -104,7 +102,6 @@ describe('GuardStatusChangedAction', () => {
       const { total, items } =
         await GuardStatusChangedAction.getInstance().getMany(
           testDataSource.getRepository(GuardStatusChangedEntity),
-          id0,
           triggerId0,
           [],
           0,
@@ -122,7 +119,6 @@ describe('GuardStatusChangedAction', () => {
       const { total: total2, items: items2 } =
         await GuardStatusChangedAction.getInstance().getMany(
           testDataSource.getRepository(GuardStatusChangedEntity),
-          id0,
           triggerId0,
           [],
           5,
@@ -140,7 +136,7 @@ describe('GuardStatusChangedAction', () => {
 
   describe('insertOne', () => {
     /**
-     * @target GuardStatusChangedAction.insertOne should call insert when eventId is new
+     * @target GuardStatusChangedAction.insertOne should call insert when triggerTxId is new
      * @dependencies
      * @scenario
      * - stub repository.findOne and insert to resolve to null
@@ -148,7 +144,7 @@ describe('GuardStatusChangedAction', () => {
      * @expected
      * - insert should have been called once with the mock record
      */
-    it('should call insert when eventId is new', async () => {
+    it('should call insert when triggerTxId is new', async () => {
       // arrange
       const repository = {
         findOne: vi.fn().mockResolvedValue(null),

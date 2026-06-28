@@ -30,31 +30,28 @@ class GuardStatusChangedAction {
   };
 
   /**
-   * retrieves the most recent GuardStatusChangedEntity for a given eventId, triggerTxId and guardPk
+   * retrieves the most recent GuardStatusChangedEntity
    * @param repository
-   * @param eventId
    * @param triggerTxId
    * @param guardPk
    * @returns a promise resolving to the most recent GuardStatusChangedEntity or null if no matching entity is found
    */
   getLast = async (
     repository: Repository<GuardStatusChangedEntity>,
-    eventId: string,
     triggerTxId: string,
     guardPk: string,
   ): Promise<GuardStatusChangedEntity | null> => {
     return repository.findOne({
-      where: { eventId, triggerTxId, guardPk },
+      where: { triggerTxId, guardPk },
       relations: ['tx'],
       order: { insertedAt: 'DESC' },
     });
   };
 
   /**
-   * retrieves multiple GuardStatusChangedEntity objects for a given eventId, triggerTxId and guardPks array (timeline)
+   * retrieves multiple GuardStatusChangedEntity
    * empty guardPks will be ignored from filter
    * @param repository
-   * @param eventId
    * @param triggerTxId
    * @param guardPks
    * @param offset
@@ -63,7 +60,6 @@ class GuardStatusChangedAction {
    */
   getMany = async (
     repository: Repository<GuardStatusChangedEntity>,
-    eventId: string,
     triggerTxId: string,
     guardPks: string[],
     offset?: number,
@@ -71,8 +67,8 @@ class GuardStatusChangedAction {
   ): Promise<{ total: number; items: GuardStatusChangedEntity[] }> => {
     const whereClause =
       guardPks.length > 0
-        ? { eventId, triggerTxId, guardPk: In(guardPks) }
-        : { eventId, triggerTxId };
+        ? { triggerTxId, guardPk: In(guardPks) }
+        : { triggerTxId };
 
     const [items, total] = await repository.findAndCount({
       where: whereClause,
@@ -112,12 +108,7 @@ class GuardStatusChangedAction {
       txStatus: TxStatus;
     },
   ): Promise<void> => {
-    const lastValue = await this.getLast(
-      repository,
-      eventId,
-      triggerTxId,
-      guardPk,
-    );
+    const lastValue = await this.getLast(repository, triggerTxId, guardPk);
 
     if (
       lastValue &&

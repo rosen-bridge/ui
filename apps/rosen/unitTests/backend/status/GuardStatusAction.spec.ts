@@ -19,16 +19,16 @@ describe('GuardStatusAction', () => {
 
   describe('getOne', () => {
     /**
-     * @target GuardStatusAction.getOne should call repository.findOne using the eventId and guardPk as query
+     * @target GuardStatusAction.getOne should call repository.findOne using the triggerTxId and guardPk as query
      * @dependencies
      * @scenario
      * - stub repository.findOne to resolve to null
      * - call getOne
      * @expected
      * - should have returned null
-     * - findOne should have been called once with eventId and guardPk query
+     * - findOne should have been called once with triggerTxId and guardPk query
      */
-    it('should call repository.findOne using the eventId and guardPk as query', async () => {
+    it('should call repository.findOne using the triggerTxId and guardPk as query', async () => {
       // arrange
       const repository = {
         findOne: vi.fn().mockResolvedValue(null),
@@ -37,7 +37,6 @@ describe('GuardStatusAction', () => {
       // act
       const currentStatus = await GuardStatusAction.getInstance().getOne(
         repository as unknown as Repository<GuardStatusEntity>,
-        id0,
         triggerId0,
         'pk0',
       );
@@ -46,7 +45,7 @@ describe('GuardStatusAction', () => {
       expect(currentStatus).toBeNull();
       expect(repository.findOne).toHaveBeenCalledOnce();
       expect(repository.findOne).toHaveBeenCalledWith({
-        where: { eventId: id0, triggerTxId: triggerId0, guardPk: 'pk0' },
+        where: { triggerTxId: triggerId0, guardPk: 'pk0' },
         relations: ['tx'],
       });
     });
@@ -54,18 +53,17 @@ describe('GuardStatusAction', () => {
 
   describe('getMany', () => {
     /**
-     * @target GuardStatusAction.getMany should call repository.find using the eventId and guardPks as query
+     * @target GuardStatusAction.getMany should call repository.find using the triggerTxId and guardPks as query
      * @dependencies
      * @scenario
      * - call getMany
      * @expected
      * - should have returned an empty array
      */
-    it('should call repository.find using the eventId and guardPks as query', async () => {
+    it('should call repository.find using the triggerTxId and guardPks as query', async () => {
       // act
       const { total, items } = await GuardStatusAction.getInstance().getMany(
         testDataSource.getRepository(GuardStatusEntity),
-        id0,
         triggerId0,
         ['pk0', 'pk1'],
         0,
@@ -101,7 +99,6 @@ describe('GuardStatusAction', () => {
       // act
       const { total, items } = await GuardStatusAction.getInstance().getMany(
         testDataSource.getRepository(GuardStatusEntity),
-        id0,
         triggerId0,
         [],
         0,
@@ -117,7 +114,6 @@ describe('GuardStatusAction', () => {
       const { total: total2, items: items2 } =
         await GuardStatusAction.getInstance().getMany(
           testDataSource.getRepository(GuardStatusEntity),
-          id0,
           triggerId0,
           [],
           5,
@@ -133,15 +129,15 @@ describe('GuardStatusAction', () => {
 
   describe('upsertOne', () => {
     /**
-     * @target GuardStatusAction.upsertOne should call upsert when eventId is new
+     * @target GuardStatusAction.upsertOne should call upsert when triggerTxId is new
      * @dependencies
      * @scenario
      * - stub repository.findOne and upsert to resolve to null
-     * - call upsertOne with 2 objects containing different eventId guard pk pairs
+     * - call upsertOne with 2 objects containing different triggerTxId guard pk pairs
      * @expected
-     * - repository.upsert should have been called twice, once for each eventId guard pk pair
+     * - repository.upsert should have been called twice, once for each triggerTxId guard pk pair
      */
-    it('should call upsert when eventId is new', async () => {
+    it('should call upsert when triggerTxId is new', async () => {
       // arrange
       const repository = {
         findOne: vi.fn().mockResolvedValue(null),
@@ -188,7 +184,7 @@ describe('GuardStatusAction', () => {
     });
 
     /**
-     * @target GuardStatusAction.upsertOne should call upsert when a record with matching eventId exists and its status is changed
+     * @target GuardStatusAction.upsertOne should call upsert when a record with matching triggerTxId exists and its status is changed
      * @dependencies
      * @scenario
      * - define a mock GuardStatusEntity
@@ -197,7 +193,7 @@ describe('GuardStatusAction', () => {
      * @expected
      * - repository.upsert should have been called once with the new status
      */
-    it('should call upsert when a record with matching eventId exists and its status is changed', async () => {
+    it('should call upsert when a record with matching triggerTxId exists and its status is changed', async () => {
       // arrange
       const record = mockGuardStatusRecords[0];
 
@@ -231,7 +227,7 @@ describe('GuardStatusAction', () => {
             txStatus: null,
           },
         ],
-        ['eventId', 'triggerTxId', 'guardPk'],
+        ['triggerTxId', 'guardPk'],
       );
     });
 

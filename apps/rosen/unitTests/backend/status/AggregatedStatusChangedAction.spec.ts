@@ -41,7 +41,6 @@ describe('AggregatedStatusChangedAction', () => {
       const lastStatus =
         await AggregatedStatusChangedAction.getInstance().getLast(
           repository as unknown as Repository<AggregatedStatusChangedEntity>,
-          id0,
           triggerId0,
         );
 
@@ -49,7 +48,7 @@ describe('AggregatedStatusChangedAction', () => {
       expect(lastStatus).toBeNull();
       expect(repository.findOne).toHaveBeenCalledOnce();
       expect(repository.findOne).toHaveBeenCalledWith({
-        where: { eventId: id0, triggerTxId: triggerId0 },
+        where: { triggerTxId: triggerId0 },
         relations: ['tx'],
         order: { insertedAt: 'DESC' },
       });
@@ -70,7 +69,6 @@ describe('AggregatedStatusChangedAction', () => {
       const { total, items } =
         await AggregatedStatusChangedAction.getInstance().getMany(
           testDataSource.getRepository(AggregatedStatusChangedEntity),
-          id0,
           triggerId0,
           0,
           100,
@@ -106,7 +104,6 @@ describe('AggregatedStatusChangedAction', () => {
       const { total, items } =
         await AggregatedStatusChangedAction.getInstance().getMany(
           testDataSource.getRepository(AggregatedStatusChangedEntity),
-          id0,
           triggerId0,
           0,
           6,
@@ -123,7 +120,6 @@ describe('AggregatedStatusChangedAction', () => {
       const { total: total2, items: items2 } =
         await AggregatedStatusChangedAction.getInstance().getMany(
           testDataSource.getRepository(AggregatedStatusChangedEntity),
-          id0,
           triggerId0,
           5,
           10,
@@ -140,7 +136,7 @@ describe('AggregatedStatusChangedAction', () => {
 
   describe('insertOne', () => {
     /**
-     * @target AggregatedStatusChangedAction.insertOne should call insert when eventId is new
+     * @target AggregatedStatusChangedAction.insertOne should call insert when triggerTxId is new
      * @dependencies
      * @scenario
      * - stub repository.findOne and insert to resolve to null
@@ -148,7 +144,7 @@ describe('AggregatedStatusChangedAction', () => {
      * @expected
      * - insert should have been called once with the mock record
      */
-    it('should call insert when eventId is new', async () => {
+    it('should call insert when triggerTxId is new', async () => {
       // arrange
       const repository = {
         findOne: vi.fn().mockResolvedValue(null),

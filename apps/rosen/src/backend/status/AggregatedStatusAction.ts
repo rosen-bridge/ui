@@ -1,4 +1,4 @@
-import { Repository } from '@rosen-bridge/extended-typeorm';
+import { In, Repository } from '@rosen-bridge/extended-typeorm';
 import {
   AggregateEventStatus,
   AggregateTxStatus,
@@ -30,41 +30,38 @@ class AggregatedStatusAction {
   };
 
   /**
-   * retrieves one AggregatedStatusEntity matching the specified eventId and triggerTxId
+   * retrieves one AggregatedStatusEntity
    * @param repository
-   * @param eventId
    * @param triggerTxId
    * @returns a promise that resolves to an AggregatedStatusEntity or null if no matching entity is found
    */
   getOne = async (
     repository: Repository<AggregatedStatusEntity>,
-    eventId: string,
     triggerTxId: string,
   ): Promise<AggregatedStatusEntity | null> => {
     return repository.findOne({
-      where: { eventId, triggerTxId },
+      where: { triggerTxId },
       relations: ['tx'],
     });
   };
 
   /**
-   * retrieves multiple AggregatedStatusEntity objects for the given eventAndTriggerIds array
-   * note: no need for pagination since output.length == eventAndTriggerIds.length
+   * retrieves multiple AggregatedStatusEntity
+   * note: no need for pagination since output.length == triggerTxIds.length
    * @param repository
-   * @param eventAndTriggerIds
+   * @param triggerTxIds
    * @returns a promise that resolves to an array of AggregatedStatusEntity objects
    */
   getMany = async (
     repository: Repository<AggregatedStatusEntity>,
-    eventAndTriggerIds: string[][],
+    triggerTxIds: string[],
   ): Promise<AggregatedStatusEntity[]> => {
     return repository.find({
-      where: eventAndTriggerIds.map((eventAndTriggerId) => ({
-        eventId: eventAndTriggerId[0],
-        triggerTxId: eventAndTriggerId[1],
-      })),
+      where: {
+        triggerTxId: In(triggerTxIds),
+      },
       relations: ['tx'],
-      order: { eventId: 'ASC' },
+      order: { triggerTxId: 'ASC' },
     });
   };
 
@@ -91,7 +88,7 @@ class AggregatedStatusAction {
       chain: string;
     },
   ): Promise<void> => {
-    const storedValue = await this.getOne(repository, eventId, triggerTxId);
+    const storedValue = await this.getOne(repository, triggerTxId);
 
     if (
       storedValue &&
@@ -114,7 +111,7 @@ class AggregatedStatusAction {
           tx: tx ? { txId: tx.txId, chain: tx.chain } : null,
         },
       ],
-      ['eventId', 'triggerTxId'],
+      ['triggerTxId'],
     );
   };
 }
