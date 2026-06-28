@@ -89,6 +89,7 @@ firo:
   electrumx:
     host: 127.0.0.1
     port: 50001
+    reconnectDelay: 5
 ethereum:
   addresses:
     lock:
