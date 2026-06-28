@@ -37,7 +37,7 @@ export const createFiroNetworkConnectorManager = () => {
     new FiroElectrumXNetwork(
       config.firo.electrumxHost,
       config.firo.electrumxPort,
-      undefined,
+      config.firo.electrumxReconnectDelay,
       SCANNER_API_TIMEOUT / 1000,
     ),
   );

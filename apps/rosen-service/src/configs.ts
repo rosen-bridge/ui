@@ -159,6 +159,9 @@ const getConfig = () => {
         explorerUrl: nodeConfig.get<string>('firo.explorerUrl'),
         electrumxHost: nodeConfig.get<string>('firo.electrumx.host'),
         electrumxPort: nodeConfig.get<number>('firo.electrumx.port'),
+        electrumxReconnectDelay: nodeConfig.get<number>(
+          'firo.electrumx.reconnectDelay',
+        ),
       },
       postgres: {
         url: nodeConfig.get<string>('postgres.url'),
