@@ -21,7 +21,6 @@ import { createClient, VercelKV } from '@vercel/kv';
 
 import { configs } from '../configs';
 import { TOTAL_SUPPLY_REDIS_KEY } from '../constants';
-import { ChainChoices } from '../types';
 import { stringSerializer } from '../utils';
 import {
   AbstractAssetDataAdapterService,
