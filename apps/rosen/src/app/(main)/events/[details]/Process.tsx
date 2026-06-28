@@ -863,7 +863,7 @@ export const Process = ({ id }: { id: string }) => {
       <EventProcesses
         items={items}
         loading={isLoading}
-        style={{ width: '100%', height: '230px' }}
+        style={{ width: '100%', height: '165px' }}
         value={active}
         onChange={setActive}
       />
