@@ -1,5 +1,48 @@
 # @rosen-bridge/rosen-app
 
+## 5.4.0
+
+### Minor Changes
+
+- Remove Styled component from `Bridge` page layout
+- Fix NoSsr import issue during pre-rendering from `ui-kit`
+- Add Under Development pages for Support and Dashboard
+- Implement not-found page
+- Fix Event List drawer reopening on mobile refresh
+
+### Patch Changes
+
+- Retrieve aggregated status from database rather than recalculating
+- Define consistent ordering for public-status thresholds
+- Update dependencies
+  - @rosen-bridge/abstract-observation-extractor@1.0.7
+  - @rosen-bridge/abstract-scanner@2.0.0
+  - @rosen-bridge/extended-typeorm@1.1.0
+  - @rosen-bridge/tokens@6.0.2
+  - @rosen-bridge/ui-kit@5.7.0
+  - @rosen-bridge/watcher-data-extractor@13.0.7
+  - @rosen-ui/data-source@0.2.6
+  - @rosen-network/base@0.5.4
+  - @rosen-network/binance@0.4.7
+  - @rosen-network/bitcoin@2.4.6
+  - @rosen-network/bitcoin-runes@1.0.6
+  - @rosen-network/evm@0.3.8
+  - @rosen-ui/asset-calculator@2.3.3
+  - @rosen-ui/public-status@0.1.2
+  - @rosen-network/cardano@2.5.6
+  - @rosen-network/doge@0.4.6
+  - @rosen-network/ergo@2.5.7
+  - @rosen-network/ethereum@0.4.7
+  - @rosen-ui/eternl-wallet@3.1.8
+  - @rosen-ui/lace-wallet@3.1.8
+  - @rosen-ui/metamask-wallet@2.2.1
+  - @rosen-ui/my-doge-wallet@1.1.10
+  - @rosen-ui/nautilus-wallet@3.1.8
+  - @rosen-ui/okx-wallet@2.2.3
+  - @rosen-ui/wallet-api@3.2.1
+  - @rosen-ui/wallet-connect@0.3.1
+  - @rosen-ui/xverse-wallet@0.5.1
+
 ## 5.3.0
 
 ### Minor Changes

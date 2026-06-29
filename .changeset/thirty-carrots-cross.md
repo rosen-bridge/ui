@@ -1,5 +1,4 @@
 ---
-'@rosen-ui/rosen-statistics-entity': patch
 '@rosen-ui/rosen-statistics': patch
 ---
 
