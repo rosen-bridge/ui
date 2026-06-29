@@ -1,5 +1,15 @@
 # @rosen-ui/xverse-wallet
 
+## 0.5.1
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-bridge/tokens@6.0.2
+  - @rosen-network/bitcoin-runes@1.0.6
+  - @rosen-network/bitcoin@2.4.6
+  - @rosen-ui/wallet-api@3.2.1
+
 ## 0.5.0
 
 ### Minor Changes
