@@ -1,6 +1,19 @@
 {
   "logs": {
     "type": "array",
+    "default": [
+      {
+        "type": "console",
+        "level": "info"
+      },
+      {
+        "type": "file",
+        "path": "./logs/",
+        "maxSize": "20m",
+        "maxFiles": "14d",
+        "level": "info"
+      }
+    ],
     "items": {
       "type": "object",
       "children": {
@@ -24,7 +37,6 @@
         },
         "maxSize": {
           "type": "string",
-          "default": "20m",
           "validations": [
             {
               "required": true,
@@ -38,7 +50,6 @@
         },
         "maxFiles": {
           "type": "string",
-          "default": "14d",
           "validations": [
             {
               "required": true,
@@ -78,7 +89,7 @@
           "validations": [
             {
               "required": true,
-              "error": "Service-Name for the \"loki\" log type must be specified",
+              "error": "serviceName for the \"loki\" log type must be specified",
               "when": {
                 "path": "logs.type",
                 "value": "loki"
@@ -100,12 +111,10 @@
           ]
         },
         "basicAuth": {
-          "type": "string",
-          "default": ""
+          "type": "string"
         },
         "format": {
           "type": "string",
-          "default": "plain",
           "validations": [
             {
               "choices": [
@@ -116,12 +125,10 @@
           ]
         },
         "createSymlink": {
-          "type": "boolean",
-          "default": false
+          "type": "boolean"
         },
         "symlinkName": {
-          "type": "string",
-          "default": ""
+          "type": "string"
         }
       }
     }
