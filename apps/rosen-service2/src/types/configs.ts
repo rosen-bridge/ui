@@ -19,6 +19,9 @@ export interface Logs {
   serviceName?: string;
   host?: string;
   basicAuth?: string;
+  format?: 'plain' | 'json';
+  createSymlink?: boolean;
+  symlinkName?: string;
 }
 
 export interface Db {
@@ -90,6 +93,7 @@ export interface StatisticsGeneralMetrics {
 export interface StatisticsLockedAssetsMetrics {
   interval: number;
 }
+
 export interface Chains {
   'ergo': ChainsErgo;
   'cardano': ChainsCardano;
