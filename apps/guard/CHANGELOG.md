@@ -1,5 +1,16 @@
 # @rosen-bridge/guard-app
 
+## 4.4.0
+
+### Minor Changes
+
+- Fix NoSsr import issue during pre-rendering from `ui-kit`
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-bridge/ui-kit@5.7.0
+
 ## 4.3.0
 
 ### Minor Changes

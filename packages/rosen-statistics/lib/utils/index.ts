@@ -1,5 +1,5 @@
 export { calculateBridgeData } from './calculateBridgeData';
-export { calculateWatcherCounts } from './calculateWatcherCounts ';
+export { calculateWatcherCounts } from './calculateWatcherCounts';
 export {
   getDecimalString,
   getNonDecimalString,

@@ -2,7 +2,7 @@ import { useWatch, useFormContext, FieldValues } from 'react-hook-form';
 
 import { Network } from '@rosen-ui/types';
 
-import type { BridgeForm } from '@/app/(bridge)/page';
+import type { BridgeForm } from '@/app/(main)/(bridge)/page';
 
 /**
  * provide access to the bridge form context and current form values

@@ -15,10 +15,10 @@ import {
   DogeRpcTransaction,
   BitcoinEsploraTransaction,
 } from '@rosen-bridge/bitcoin-scanner';
+import { TokenMap } from '@rosen-bridge/extended-tokens';
 import { DataSource } from '@rosen-bridge/extended-typeorm';
 
 import { configs } from '../configs';
-import { TokensConfig } from '../tokensConfig';
 
 const logger = DefaultLogger.getInstance().child(import.meta.url);
 
@@ -31,6 +31,7 @@ const logger = DefaultLogger.getInstance().child(import.meta.url);
  */
 export const buildDogeRpcScannerWithExtractors = async (
   dataSource: DataSource,
+  tokenMap: TokenMap,
 ) => {
   logger.info('Starting Doge scanner initialization...');
 
@@ -63,7 +64,6 @@ export const buildDogeRpcScannerWithExtractors = async (
   });
 
   try {
-    const tokenMap = TokensConfig.getInstance().getTokenMap();
     logger.debug('Creating Doge observation extractor...');
     const observationExtractor = new DogeRpcObservationExtractor(
       configs.contracts.doge.addresses.lock,
@@ -97,6 +97,7 @@ export const buildDogeRpcScannerWithExtractors = async (
  */
 export const buildDogeEsploraScannerWithExtractors = async (
   dataSource: DataSource,
+  tokenMap: TokenMap,
 ) => {
   logger.info('Starting Doge scanner initialization...');
 
@@ -124,7 +125,6 @@ export const buildDogeEsploraScannerWithExtractors = async (
   });
 
   try {
-    const tokenMap = TokensConfig.getInstance().getTokenMap();
     logger.debug('Creating Doge observation extractor...');
     const observationExtractor = new DogeEsploraObservationExtractor(
       configs.contracts.doge.addresses.lock,

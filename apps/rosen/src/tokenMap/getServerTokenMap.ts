@@ -2,7 +2,6 @@ import { TokenMap } from '@rosen-bridge/tokens';
 import crypto from 'crypto';
 
 import { getOnChainRosenTokens } from './getOnChainRosenTokens';
-import { getRosenTokens } from './getRosenTokens';
 
 let tokenMap: TokenMap;
 
@@ -25,9 +24,9 @@ export const getTokenMap = async () => {
     }
   } else {
     if (tokenMap) return tokenMap;
-    const tokens = await getRosenTokens();
+    const { TOKENS } = await import('../../configs');
     tokenMap = new TokenMap();
-    await tokenMap.updateConfigByJson(tokens);
+    await tokenMap.updateConfigByJson(TOKENS);
   }
 
   return tokenMap;

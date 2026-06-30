@@ -40,6 +40,7 @@ export * from './gridContainer';
 export * from './icon';
 export * from './iconButton';
 export * from './identifier';
+export * from './illustrations';
 export * from './image';
 export * from './infoIcon';
 export * from './label';

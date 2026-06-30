@@ -15,6 +15,9 @@ healthCheck:
   updateInterval: 60
 dataAggregator:
   interval: 60
+tokenMap:
+  onChainTokenMapEnabled: true
+  path: config/tokensMap.json
 statistics:
   userEventsMetric:
     interval: 86400
@@ -63,6 +66,5 @@ chains:
     initialHeight: 1
     scanInterval: 10
 paths:
-  tokens: config/tokensMap.json
   contracts: config/contracts.json
   healthReport: healthReport.json

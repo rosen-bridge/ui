@@ -1,5 +1,13 @@
 # @rosen-bridge/ui-kit
 
+## 5.7.0
+
+### Minor Changes
+
+- Add NotFound illustrations
+- Expose `NoSsr` component
+- Add Under Development illustration
+
 ## 5.6.0
 
 ### Minor Changes
