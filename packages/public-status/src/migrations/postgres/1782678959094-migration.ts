@@ -9,6 +9,9 @@ export class Migration1782678959094 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     // aggregated_status_entity
     await queryRunner.query(`
+      DELETE FROM "aggregated_status_entity";
+    `);
+    await queryRunner.query(`
       ALTER TABLE "aggregated_status_entity"
         ADD "triggerTxId" character varying NOT NULL
     `);
@@ -22,6 +25,9 @@ export class Migration1782678959094 implements MigrationInterface {
 
     // guard_status_changed_entity
     await queryRunner.query(`
+      DELETE FROM "guard_status_changed_entity";
+    `);
+    await queryRunner.query(`
       DROP INDEX "public"."IDX_d2411e3bb5bbcd79d5cef6ddde"
     `);
     await queryRunner.query(`
@@ -33,6 +39,9 @@ export class Migration1782678959094 implements MigrationInterface {
     `);
 
     // guard_status_entity
+    await queryRunner.query(`
+      DELETE FROM "guard_status_entity";
+    `);
     await queryRunner.query(`
       ALTER TABLE "guard_status_entity"
         ADD "triggerTxId" character varying NOT NULL
@@ -46,6 +55,9 @@ export class Migration1782678959094 implements MigrationInterface {
     `);
 
     // aggregated_status_changed_entity
+    await queryRunner.query(`
+      DELETE FROM "aggregated_status_changed_entity";
+    `);
     await queryRunner.query(`
       DROP INDEX "public"."IDX_ea5b8b459baaccb7c72523cb52"
     `);

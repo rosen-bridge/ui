@@ -32,27 +32,6 @@ export class Migration1782679956690 implements MigrationInterface {
       )
     `);
     await queryRunner.query(`
-      INSERT INTO "temporary_guard_status_changed_entity"(
-          "id",
-          "eventId",
-          "guardPk",
-          "insertedAt",
-          "status",
-          "txStatus",
-          "txId",
-          "txChain"
-        )
-      SELECT "id",
-        "eventId",
-        "guardPk",
-        "insertedAt",
-        "status",
-        "txStatus",
-        "txId",
-        "txChain"
-      FROM "guard_status_changed_entity"
-    `);
-    await queryRunner.query(`
       DROP TABLE "guard_status_changed_entity"
     `);
     await queryRunner.query(`
@@ -83,23 +62,6 @@ export class Migration1782679956690 implements MigrationInterface {
       )
     `);
     await queryRunner.query(`
-      INSERT INTO "temporary_aggregated_status_entity"(
-          "eventId",
-          "updatedAt",
-          "status",
-          "txStatus",
-          "txId",
-          "txChain"
-        )
-      SELECT "eventId",
-        "updatedAt",
-        "status",
-        "txStatus",
-        "txId",
-        "txChain"
-      FROM "aggregated_status_entity"
-    `);
-    await queryRunner.query(`
       DROP TABLE "aggregated_status_entity"
     `);
     await queryRunner.query(`
@@ -121,25 +83,6 @@ export class Migration1782679956690 implements MigrationInterface {
         CONSTRAINT "FK_4d2d2228185a1be4e5f26b54667" FOREIGN KEY ("txId", "txChain") REFERENCES "tx_entity" ("txId", "chain") ON DELETE NO ACTION ON UPDATE NO ACTION,
         PRIMARY KEY ("guardPk", "triggerTxId")
       )
-    `);
-    await queryRunner.query(`
-      INSERT INTO "temporary_guard_status_entity"(
-          "eventId",
-          "guardPk",
-          "updatedAt",
-          "status",
-          "txStatus",
-          "txId",
-          "txChain"
-        )
-      SELECT "eventId",
-        "guardPk",
-        "updatedAt",
-        "status",
-        "txStatus",
-        "txId",
-        "txChain"
-      FROM "guard_status_entity"
     `);
     await queryRunner.query(`
       DROP TABLE "guard_status_entity"
@@ -168,25 +111,6 @@ export class Migration1782679956690 implements MigrationInterface {
         "triggerTxId" varchar NOT NULL,
         CONSTRAINT "FK_2dc2218d76c16a68ef9de380fb1" FOREIGN KEY ("txId", "txChain") REFERENCES "tx_entity" ("txId", "chain") ON DELETE NO ACTION ON UPDATE NO ACTION
       )
-    `);
-    await queryRunner.query(`
-      INSERT INTO "temporary_aggregated_status_changed_entity"(
-          "id",
-          "eventId",
-          "insertedAt",
-          "status",
-          "txStatus",
-          "txId",
-          "txChain"
-        )
-      SELECT "id",
-        "eventId",
-        "insertedAt",
-        "status",
-        "txStatus",
-        "txId",
-        "txChain"
-      FROM "aggregated_status_changed_entity"
     `);
     await queryRunner.query(`
       DROP TABLE "aggregated_status_changed_entity"
