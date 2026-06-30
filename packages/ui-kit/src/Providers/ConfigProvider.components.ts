@@ -39,6 +39,11 @@ import {
   LabelGroupProps,
   LayoutListProps,
   LinkProps,
+  Menu2Props,
+  MenuBodyProps,
+  MenuGroupProps,
+  MenuItem2Props,
+  MenuTriggerProps,
   NetworkProps,
   PageHeadingProps,
   QrCodeDialogProps,
@@ -109,6 +114,11 @@ export type Components = {
   LabelGroup: LabelGroupProps;
   LayoutList: LayoutListProps;
   Link: LinkProps;
+  Menu: Menu2Props;
+  MenuBody: MenuBodyProps;
+  MenuGroup: MenuGroupProps;
+  MenuViewport: MenuTriggerProps;
+  MenuItem2: MenuItem2Props;
   Network: NetworkProps;
   PageHeading: PageHeadingProps;
   QrCodeDialog: QrCodeDialogProps;

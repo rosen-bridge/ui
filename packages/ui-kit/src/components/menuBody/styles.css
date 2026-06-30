@@ -1,0 +1,5 @@
+.RosenPopup {
+  background: var(--rosen-palette-background-paper);
+  padding: var(--rosen-spacing) 0;
+  border-radius: calc(var(--rosen-spacing) * 2);
+}

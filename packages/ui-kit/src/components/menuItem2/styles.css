@@ -1,0 +1,7 @@
+.RosenMenuItem2 {
+  padding: var(--rosen-spacing) calc(var(--rosen-spacing) * 2);
+  cursor: pointer;
+}
+.RosenMenuItem2[data-highlighted] {
+  background: var(--rosen-palette-neutral-light);
+}
