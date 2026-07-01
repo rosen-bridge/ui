@@ -15,6 +15,7 @@ import {
   id0,
   mockGuardStatusRecords,
   mockTx0,
+  triggerId0,
 } from './testData';
 
 describe('Utils', () => {
@@ -31,6 +32,7 @@ describe('Utils', () => {
       // arrange
       const mockGuardStatus: GuardStatusEntity = {
         eventId: id0,
+        triggerTxId: triggerId0,
         guardPk: guardPk0,
         updatedAt: 0,
         status: EventStatus.inPayment,
@@ -57,6 +59,7 @@ describe('Utils', () => {
       // arrange
       const mockGuardStatus: GuardStatusEntity = {
         eventId: id0,
+        triggerTxId: triggerId0,
         guardPk: guardPk0,
         updatedAt: 0,
         status: EventStatus.inPayment,
