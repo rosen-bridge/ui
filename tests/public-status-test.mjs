@@ -1206,7 +1206,7 @@ const startApi = async () => {
 
     cd(`apps/rosen`);
 
-    await $`export ALLOWED_PKS="0308b553ecd6c7fa3098c9d129150de25eff1bb52e25223980c9e304c566f5a8e1,03a9d7dacdd1da2514188921cea39750035468dc1c7d4c23401231706c6027f5c6,03a0fd33438b413ddd0781260901817615aab9e3933a102320f1f606a35b8ed099"`;
+    await $`export ALLOWED_PKS="[{"key": "0308b553ecd6c7fa3098c9d129150de25eff1bb52e25223980c9e304c566f5a8e1"}, {"key": "03a9d7dacdd1da2514188921cea39750035468dc1c7d4c23401231706c6027f5c6"}, {"key": "03a0fd33438b413ddd0781260901817615aab9e3933a102320f1f606a35b8ed099"}]"`;
     await $`export POSTGRES_URL="postgresql://public_status_test_user@localhost:5432/public_status_test"`;
     await $`export POSTGRES_USE_SSL="false"`;
 
