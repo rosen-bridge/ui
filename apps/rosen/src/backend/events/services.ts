@@ -1,4 +1,4 @@
-import { getEvent, getEvents } from './repository';
+import { getEvent, getEvents, getEventStatus } from './repository';
 
 /**
  * return events with full token data
@@ -15,4 +15,11 @@ export const getEventById = async (id: string) => {
     ...item,
     totalFee: (+item.bridgeFee + +item.networkFee).toString(),
   };
+};
+
+export const getEventStatusById = async (
+  id: string,
+  guardPublicKey?: string,
+) => {
+  return await getEventStatus(id, guardPublicKey);
 };
