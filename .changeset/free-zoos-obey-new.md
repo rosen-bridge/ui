@@ -1,6 +1,5 @@
 ---
 '@rosen-ui/asset-data-adapter': patch
-'@rosen-ui/asset-calculator': patch
 ---
 
 Update dependencies

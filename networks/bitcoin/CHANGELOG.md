@@ -1,5 +1,14 @@
 # @rosen-network/bitcoin
 
+## 2.4.6
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-bridge/address-codec@2.1.0
+  - @rosen-bridge/tokens@6.0.2
+  - @rosen-network/base@0.5.4
+
 ## 2.4.5
 
 ### Patch Changes

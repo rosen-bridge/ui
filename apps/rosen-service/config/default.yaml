@@ -1,6 +1,11 @@
 logs:
   - type: 'console'
     level: 'info'
+  - type: 'file'
+    level: 'info'
+    path: './logs/'
+    maxSize: '20m'
+    maxFiles: '14d'
 ergo:
   addresses:
     lock:
