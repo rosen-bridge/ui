@@ -125,7 +125,7 @@ const Assets = () => {
         onChange={(value: ViewToggleType) => collection.setView(value)}
       />
     ),
-    [collection.view, isLoading],
+    [collection.setView, collection.view, isLoading],
   );
 
   useEffect(() => {
@@ -160,7 +160,7 @@ const Assets = () => {
         more: () => JSON.stringify(serializeError(error), null, 2),
       });
     }
-  }, [error]);
+  }, [error, toast.add]);
 
   return (
     <LayoutList

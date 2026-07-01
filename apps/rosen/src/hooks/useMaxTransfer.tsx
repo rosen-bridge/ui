@@ -1,8 +1,5 @@
 import {
-  PropsWithChildren,
-  createContext,
   useCallback,
-  useContext,
   useEffect,
   useMemo,
   useState,
@@ -18,22 +15,7 @@ import { useTokenMap } from './useTokenMap';
 import { useTransactionFormData } from './useTransactionFormData';
 import { useWallet } from './useWallet';
 
-const MaxTransferContext = createContext<MaxTransferContextType | null>(null);
-
-/**
- * a hook version of `getMaxTransfer` util
- */
-export const useMaxTransfer = () => {
-  const context = useContext(MaxTransferContext);
-
-  if (!context) {
-    throw new Error('useMaxTransfer must be used within MaxTransferProvider');
-  }
-
-  return context;
-};
-
-export type MaxTransferContextType = {
+export type MaxTransferState = {
   amount: RosenAmountValue;
   error: unknown;
   isLoading: boolean;
@@ -41,7 +23,7 @@ export type MaxTransferContextType = {
   load: () => void;
 };
 
-export const MaxTransferProvider = ({ children }: PropsWithChildren) => {
+export const useMaxTransfer = (): MaxTransferState => {
   const balance = useBalance();
 
   const network = useNetwork();
@@ -54,7 +36,7 @@ export const MaxTransferProvider = ({ children }: PropsWithChildren) => {
 
   const [amount, setAmount] = useState<RosenAmountValue>(0n);
 
-  const [error, setError] = useState<unknown>();
+  const [error, setError] = useState<unknown>(null);
 
   const [isTransitionLoading, startTransition] = useTransition();
 
@@ -114,20 +96,8 @@ export const MaxTransferProvider = ({ children }: PropsWithChildren) => {
 
   useEffect(load, [load]);
 
-  const state = useMemo<MaxTransferContextType>(
-    () => ({
-      amount,
-      error,
-      isLoading,
-      raw,
-      load,
-    }),
+  return useMemo(
+    () => ({ amount, error, isLoading, raw, load }),
     [amount, error, isLoading, raw, load],
-  );
-
-  return (
-    <MaxTransferContext.Provider value={state}>
-      {children}
-    </MaxTransferContext.Provider>
   );
 };
