@@ -19,6 +19,12 @@ export const id2 =
   '0000000000000000000000000000000000000000000000000000000000000002';
 export const id3 =
   '0000000000000000000000000000000000000000000000000000000000000003';
+export const triggerId0 =
+  '1000000000000000000000000000000000000000000000000000000000000000';
+export const triggerId1 =
+  '1000000000000000000000000000000000000000000000000000000000000001';
+export const triggerId2 =
+  '1000000000000000000000000000000000000000000000000000000000000002';
 
 export const guardPk0 =
   '0308b553ecd6c7fa3098c9d129150de25eff1bb52e25223980c9e304c566f5a8e1';
@@ -41,6 +47,7 @@ export const mockAggregatedStatusChangedRecords: Omit<
 >[] = [
   {
     eventId: id0,
+    triggerTxId: triggerId0,
     insertedAt: 1000,
     status: AggregateEventStatus.pendingPayment,
     txStatus: null,
@@ -48,6 +55,7 @@ export const mockAggregatedStatusChangedRecords: Omit<
   },
   {
     eventId: id0,
+    triggerTxId: triggerId0,
     insertedAt: 1005,
     status: AggregateEventStatus.finished,
     txStatus: AggregateTxStatus.signed,
@@ -55,6 +63,7 @@ export const mockAggregatedStatusChangedRecords: Omit<
   },
   {
     eventId: id1,
+    triggerTxId: triggerId1,
     insertedAt: 1010,
     status: AggregateEventStatus.pendingPayment,
     txStatus: null,
@@ -62,6 +71,7 @@ export const mockAggregatedStatusChangedRecords: Omit<
   },
   {
     eventId: id2,
+    triggerTxId: triggerId2,
     insertedAt: 1001,
     status: AggregateEventStatus.timeout,
     txStatus: null,
@@ -72,6 +82,7 @@ export const mockAggregatedStatusChangedRecords: Omit<
 export const mockAggregatedStatusRecords: AggregatedStatusEntity[] = [
   {
     eventId: id0,
+    triggerTxId: triggerId0,
     updatedAt: 1005,
     status: AggregateEventStatus.finished,
     txStatus: AggregateTxStatus.signed,
@@ -79,6 +90,7 @@ export const mockAggregatedStatusRecords: AggregatedStatusEntity[] = [
   },
   {
     eventId: id1,
+    triggerTxId: triggerId1,
     updatedAt: 1010,
     status: AggregateEventStatus.pendingPayment,
     txStatus: null,
@@ -86,6 +98,7 @@ export const mockAggregatedStatusRecords: AggregatedStatusEntity[] = [
   },
   {
     eventId: id2,
+    triggerTxId: triggerId2,
     updatedAt: 1001,
     status: AggregateEventStatus.timeout,
     txStatus: null,
@@ -99,6 +112,7 @@ export const mockGuardStatusChangedRecords: Omit<
 >[] = [
   {
     eventId: id0,
+    triggerTxId: triggerId0,
     guardPk: guardPk0,
     insertedAt: 1000,
     status: EventStatus.pendingPayment,
@@ -107,6 +121,7 @@ export const mockGuardStatusChangedRecords: Omit<
   },
   {
     eventId: id1,
+    triggerTxId: triggerId1,
     guardPk: guardPk0,
     insertedAt: 1010,
     status: EventStatus.pendingPayment,
@@ -115,6 +130,7 @@ export const mockGuardStatusChangedRecords: Omit<
   },
   {
     eventId: id0,
+    triggerTxId: triggerId0,
     guardPk: guardPk0,
     insertedAt: 1005,
     status: EventStatus.completed,
@@ -123,6 +139,7 @@ export const mockGuardStatusChangedRecords: Omit<
   },
   {
     eventId: id0,
+    triggerTxId: triggerId0,
     guardPk: guardPk1,
     insertedAt: 1001,
     status: EventStatus.timeout,
@@ -134,6 +151,7 @@ export const mockGuardStatusChangedRecords: Omit<
 export const mockGuardStatusRecords: GuardStatusEntity[] = [
   {
     eventId: id1,
+    triggerTxId: triggerId1,
     guardPk: guardPk0,
     updatedAt: 1010,
     status: EventStatus.pendingPayment,
@@ -142,6 +160,7 @@ export const mockGuardStatusRecords: GuardStatusEntity[] = [
   },
   {
     eventId: id0,
+    triggerTxId: triggerId0,
     guardPk: guardPk0,
     updatedAt: 1005,
     status: EventStatus.inPayment,
@@ -150,6 +169,7 @@ export const mockGuardStatusRecords: GuardStatusEntity[] = [
   },
   {
     eventId: id0,
+    triggerTxId: triggerId0,
     guardPk: guardPk1,
     updatedAt: 1001,
     status: EventStatus.timeout,
@@ -192,6 +212,7 @@ export const mockPaginationTestData = {
   aggregatedStatusChanged: Array.from(Array(10).keys()).map((i) => ({
     id: i,
     eventId: id0,
+    triggerTxId: triggerId0,
     insertedAt: i,
     status: AggregateEventStatus.finished,
     txStatus: null,
@@ -200,6 +221,7 @@ export const mockPaginationTestData = {
   guardStatusChanged: Array.from(Array(10).keys()).map((i) => ({
     id: i,
     eventId: id0,
+    triggerTxId: triggerId0,
     guardPk: `${i}`,
     insertedAt: i,
     status: EventStatus.completed,
@@ -208,6 +230,7 @@ export const mockPaginationTestData = {
   })),
   guardStatus: Array.from(Array(10).keys()).map((i) => ({
     eventId: id0,
+    triggerTxId: triggerId0,
     guardPk: `${i}`,
     updatedAt: i,
     status: EventStatus.completed,
