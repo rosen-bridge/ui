@@ -41,7 +41,7 @@ type Step = {
     | 'Reward Stalled'
     | 'Timeout'
     | 'In Reward';
-  status: 'DONE' | 'ERROR' | 'PENDING' | 'PROGRESS';
+  status: 'DISABLED' | 'DONE' | 'ERROR' | 'PENDING' | 'PROGRESS' | 'WARNING';
   sub?: Omit<Step, 'line' | 'sub'>[];
   detailsKey?: EventDetailsType['status'];
   line?: boolean;
@@ -154,11 +154,11 @@ const FLOWS: Record<EventDetailsType['status'], Step[]> = {
     },
     {
       label: 'Payment',
-      status: 'PENDING',
+      status: 'DISABLED',
     },
     {
       label: 'Reward',
-      status: 'PENDING',
+      status: 'DISABLED',
     },
     {
       label: 'Fraud',
@@ -382,7 +382,7 @@ const FLOWS: Record<EventDetailsType['status'], Step[]> = {
     },
     {
       label: 'Payment Stalled',
-      status: 'PROGRESS',
+      status: 'WARNING',
       detailsKey: 'PAYMENT_STALLED',
     },
     {
@@ -413,15 +413,15 @@ const FLOWS: Record<EventDetailsType['status'], Step[]> = {
     },
     {
       label: 'Payment',
-      status: 'PENDING',
+      status: 'DISABLED',
     },
     {
       label: 'Reward',
-      status: 'PENDING',
+      status: 'DISABLED',
     },
     {
       label: 'Completion',
-      status: 'PENDING',
+      status: 'DISABLED',
     },
   ],
   REJECTED: [
@@ -443,15 +443,15 @@ const FLOWS: Record<EventDetailsType['status'], Step[]> = {
     },
     {
       label: 'Payment',
-      status: 'PENDING',
+      status: 'DISABLED',
     },
     {
       label: 'Reward',
-      status: 'PENDING',
+      status: 'DISABLED',
     },
     {
       label: 'Completion',
-      status: 'PENDING',
+      status: 'DISABLED',
     },
   ],
   REWARDED: [],
@@ -722,7 +722,7 @@ const FLOWS: Record<EventDetailsType['status'], Step[]> = {
     },
     {
       label: 'Reward Stalled',
-      status: 'PROGRESS',
+      status: 'WARNING',
       detailsKey: 'REWARD_STALLED',
     },
     {
@@ -749,15 +749,15 @@ const FLOWS: Record<EventDetailsType['status'], Step[]> = {
     },
     {
       label: 'Payment',
-      status: 'PENDING',
+      status: 'DISABLED',
     },
     {
       label: 'Reward',
-      status: 'PENDING',
+      status: 'DISABLED',
     },
     {
       label: 'Completion',
-      status: 'PENDING',
+      status: 'DISABLED',
     },
   ],
   TRIGGERED: [
@@ -794,6 +794,8 @@ const toItems = (
   return steps.map((step) => {
     const color: Color = (() => {
       switch (step.status) {
+        case 'DISABLED':
+          return 'neutral-light';
         case 'DONE':
           return 'success';
         case 'ERROR':
@@ -802,6 +804,8 @@ const toItems = (
           return 'neutral';
         case 'PROGRESS':
           return 'info';
+        case 'WARNING':
+          return 'warning';
       }
     })();
 
@@ -809,14 +813,18 @@ const toItems = (
 
     const icon: IconProps['name'] = (() => {
       switch (step.status) {
+        case 'DISABLED':
+          return 'CircleFill';
         case 'DONE':
           return 'Check';
         case 'ERROR':
-          return 'Times';
+          return step.line ? 'ExclamationTriangleFill' : 'Times';
         case 'PENDING':
           return 'CircleFill';
         case 'PROGRESS':
           return 'Hourglass';
+        case 'WARNING':
+          return 'ExclamationCircle';
       }
     })();
 

@@ -42,7 +42,7 @@ export const STATUS_MAP: Record<string, EventStatusMeta> = {
     icon: 'Coins',
   },
   PAYMENT_SIGNING: {
-    label: 'Payment Signing',
+    label: 'Signing Payment',
     color: 'info',
     icon: 'Coins',
   },
@@ -77,7 +77,7 @@ export const STATUS_MAP: Record<string, EventStatusMeta> = {
     icon: 'Gift',
   },
   REWARD_SIGNING: {
-    label: 'Reward Signing',
+    label: 'Signing Reward',
     color: 'info',
     icon: 'Gift',
   },
