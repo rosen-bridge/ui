@@ -15,7 +15,7 @@ import { createClient, VercelKV } from '@vercel/kv';
 
 import { configs } from '../configs';
 import { TOTAL_SUPPLY_REDIS_KEY } from '../constants';
-import { ChainChoices } from '../types';
+import { ChainChoices, ChainsKeys } from '../types';
 import {
   AbstractAssetAggregatorService,
   AbstractAssetDataAdapterService,
@@ -82,7 +82,7 @@ export class AssetAggregatorService extends AbstractAssetAggregatorService {
   }
 
   /**
-   * initializes the singleton instance of AssetAggregatorService
+   * Initializes the singleton instance of AssetAggregatorService
    *
    * @static
    * @param {AbstractLogger} [logger]
@@ -98,12 +98,37 @@ export class AssetAggregatorService extends AbstractAssetAggregatorService {
   };
 
   /**
-   * write assets total-supply to the redis
+   * Writes assets total-supply to the redis
    *
    * @returns void
    */
   protected preStart = async () => {
     await this.assetAggregator.updateTokens();
+  };
+
+  /**
+   * Fetches balances from Redis for all active chains and updates the asset aggregator.
+   *
+   */
+  protected aggregateActiveChainBalances = async () => {
+    const assetBalances: Partial<Record<NetworkItem, AssetBalance>> = {};
+
+    await Promise.all(
+      Object.keys(configs.chains).map(async (chainKey) => {
+        const chain = chainKey as ChainsKeys;
+        if (chain === NETWORKS.ergo.key || configs.chains[chain].active) {
+          const data = await this.redis.get<AssetBalance | null>(chainKey);
+          if (data) {
+            assetBalances[chain as ChainChoices] = data;
+          }
+        }
+      }),
+    );
+
+    const totalSupply: { [chain: string]: TotalSupply[] } =
+      (await this.redis.get(TOTAL_SUPPLY_REDIS_KEY)) ?? {};
+
+    await this.assetAggregator.update(assetBalances, totalSupply);
   };
 
   /**
@@ -114,24 +139,7 @@ export class AssetAggregatorService extends AbstractAssetAggregatorService {
   protected getTasks = () => {
     return [
       {
-        fn: async () => {
-          const assetBalances: Partial<Record<NetworkItem, AssetBalance>> = {};
-          await Promise.all(
-            Object.keys(configs.chains).map(async (chain) => {
-              const chainConfig = configs.chains[chain as ChainChoices];
-              if (
-                chain == NETWORKS.ergo.key ||
-                ('active' in chainConfig && chainConfig.active)
-              ) {
-                const data = await this.redis.get<AssetBalance | null>(chain);
-                if (data) assetBalances[chain as ChainChoices] = data;
-              }
-            }),
-          );
-          const totalSupply: { [chain: string]: TotalSupply[] } =
-            (await this.redis.get(TOTAL_SUPPLY_REDIS_KEY)) ?? {};
-          await this.assetAggregator.update(assetBalances, totalSupply);
-        },
+        fn: this.aggregateActiveChainBalances,
         interval: configs.dataAggregator.interval * 1000,
       },
     ];

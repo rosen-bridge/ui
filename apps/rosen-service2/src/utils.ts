@@ -9,7 +9,7 @@ import { ERGO_METHOD_EXPLORER } from './constants';
 import { ChainConfigs, ErgoNetworkConfig } from './types';
 
 /**
- * map bigint value in data to string before inserting in redis
+ * Maps bigint value in data to string before inserting in redis
  *
  * @returns string
  */
@@ -54,7 +54,7 @@ export const formatChainName = (
 };
 
 /**
- * create an event trigger extractor
+ * Creates an event trigger extractor
  * @param chain
  * @param networkType
  * @param url

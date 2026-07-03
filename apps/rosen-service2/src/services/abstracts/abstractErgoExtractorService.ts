@@ -5,7 +5,7 @@ export abstract class AbstractErgoExtractorsService extends AbstractService {
   static name = 'ErgoExtractor';
 
   /**
-   * return the singleton instance of AbstractErgoExtractorsService
+   * Returns the singleton instance of AbstractErgoExtractorsService
    *
    * @static
    * @return {AbstractErgoExtractorsService}

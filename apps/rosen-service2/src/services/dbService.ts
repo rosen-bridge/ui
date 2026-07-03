@@ -37,7 +37,7 @@ export class DBService extends AbstractDBService {
   }
 
   /**
-   * returns the last saved block height based on the scanner name
+   * Returns the last saved block height based on the scanner name
    *
    * @param scanner considering scanned blocks by this scanner
    */
@@ -54,7 +54,7 @@ export class DBService extends AbstractDBService {
   };
 
   /**
-   * return of dataSource
+   * Returns of dataSource
    *
    * @returns {DataSource} dataSource
    */
@@ -63,7 +63,7 @@ export class DBService extends AbstractDBService {
   };
 
   /**
-   * initializes the singleton instance of DBService
+   * Initializes the singleton instance of DBService
    *
    * @static
    * @param {DataSource} dataSource
@@ -78,7 +78,7 @@ export class DBService extends AbstractDBService {
   };
 
   /**
-   * start DB service
+   * Starts DB service
    *
    * @returns void
    */
@@ -91,7 +91,7 @@ export class DBService extends AbstractDBService {
   };
 
   /**
-   * stop DB service
+   * Stops DB service
    *
    * @returns void
    */
@@ -101,7 +101,7 @@ export class DBService extends AbstractDBService {
   };
 
   /**
-   * gets an array of unspent token-map boxes
+   * Gets an array of unspent token-map boxes
    */
   getTokenMapBoxes = async (): Promise<BoxEntity[]> => {
     const boxes = await this.dataSource.getRepository(BoxEntity).find({

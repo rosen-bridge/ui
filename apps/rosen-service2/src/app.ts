@@ -105,10 +105,6 @@ const startApp = async () => {
   await serviceManager.start(ScannerService.getInstance().getName());
   await serviceManager.start(HealthService.getInstance().getName());
   await serviceManager.start(AssetAggregatorService.getInstance().getName());
-  await serviceManager.start(GeneralMetricsService.getInstance().getName());
-  await serviceManager.start(UserEventsMetricService.getInstance().getName());
-  await serviceManager.start(LockedAssetsMetricService.getInstance().getName());
-  await serviceManager.start(EventCountMetricService.getInstance().getName());
 
   await Promise.resolve(() => {});
 };
