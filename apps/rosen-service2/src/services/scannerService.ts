@@ -1,6 +1,5 @@
 import { AbstractLogger } from '@rosen-bridge/abstract-logger';
 import { WebSocketScanner } from '@rosen-bridge/abstract-scanner';
-import { CardanoOgmiosScanner } from '@rosen-bridge/cardano-scanner';
 import { TokenMap } from '@rosen-bridge/extended-tokens';
 import { DataSource } from '@rosen-bridge/extended-typeorm';
 import {
@@ -225,7 +224,7 @@ export class ScannerService extends AbstractScannerService {
    */
   protected postStop = async () => {
     Object.values(this.scanners).map(async (scanner) => {
-      if (scanner instanceof CardanoOgmiosScanner) {
+      if (scanner instanceof WebSocketScanner) {
         if (scanner.getConnectionStatus()) {
           await scanner.stop();
         }

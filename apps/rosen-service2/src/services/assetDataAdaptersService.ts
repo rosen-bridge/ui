@@ -129,7 +129,7 @@ export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
                 explorerUrl:
                   configs.chains.ergo.explorer.connections.at(0)!.url,
               },
-              this.logger.child(`ergoDataAdapter`),
+              this.logger.child(`ergoExplorerDataAdapter`),
             );
             break;
           case NETWORKS.bitcoin.key:
@@ -139,7 +139,7 @@ export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
               {
                 url: configs.chains.bitcoin.esplora.connections.at(0)!.url,
               },
-              this.logger.child('bitcoinDataAdapter'),
+              this.logger.child('bitcoinEsploraDataAdapter'),
             );
             break;
           case NETWORKS['bitcoin-runes'].key:
@@ -161,7 +161,7 @@ export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
                   configs.chains.ethereum.rpc.connections.at(0)?.authToken,
               },
               configs.chains.ethereum.adapter.chunkSize,
-              this.logger.child('ethereumDataAdapter'),
+              this.logger.child('ethereumEvmRpcDataAdapter'),
             );
             break;
           case NETWORKS.binance.key:
@@ -174,7 +174,7 @@ export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
                   configs.chains.binance.rpc.connections.at(0)?.authToken,
               },
               configs.chains.binance.adapter.chunkSize,
-              this.logger.child('binanceDataAdapter'),
+              this.logger.child('binanceEvmRpcDataAdapter'),
             );
             break;
           case NETWORKS.cardano.key:
@@ -187,7 +187,7 @@ export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
                   .at(0)
                   ?.authToken?.toString(),
               },
-              this.logger.child('cardanoDataAdapter'),
+              this.logger.child('cardanoKoiosDataAdapter'),
             );
             break;
           case NETWORKS.doge.key:
@@ -197,7 +197,7 @@ export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
               {
                 blockCypherUrl: configs.chains.doge.adapter.blockCypher.url,
               },
-              this.logger.child('dogeDataAdapter'),
+              this.logger.child('dogeBlockCypherDataAdapter'),
             );
             break;
         }
@@ -242,32 +242,49 @@ export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
   protected chainDataUpdated = async (
     adapter: ChainsAdapters,
   ): Promise<void> => {
+    let newData = await adapter.fetch();
+
     if (
       adapter.chain == NETWORKS.ethereum.key ||
       adapter.chain == NETWORKS.binance.key
     ) {
       // preventing of overriding old chunks of data
       const oldData =
-        (await RedisService.getInstance().getFromRedis<AssetBalance>(
+        (await RedisService.getInstance().getFromRedis<AssetBalance | null>(
           adapter.chain,
         )) || {};
-      const newData = await adapter.fetch();
       const finalData = { ...oldData };
-      for (const tokenId of Object.keys(newData)) {
+      for (const tokenId of new Set([
+        ...Object.keys(oldData),
+        ...Object.keys(newData),
+      ])) {
         if (!Object.hasOwn(finalData, tokenId)) {
           finalData[tokenId] = newData[tokenId];
+        } else if (!Object.hasOwn(newData, tokenId)) {
+          finalData[tokenId] = finalData[tokenId].map((item) => ({
+            ...item,
+            balance: 0n,
+          }));
         } else {
-          newData[tokenId].forEach((item, index) => {
-            const finalItemIndex = finalData[tokenId]
-              .map((addressBalance) => addressBalance?.address)
-              .indexOf(item?.address);
+          finalData[tokenId] = finalData[tokenId].map((oldItem) => {
+            const isStillPresent = newData[tokenId].some(
+              (newItem) => newItem?.address === oldItem?.address,
+            );
+            return isStillPresent ? oldItem : { ...oldItem, balance: 0n };
+          });
+          newData[tokenId].forEach((item) => {
+            const finalItemIndex = finalData[tokenId].findIndex(
+              (addressBalance) => addressBalance?.address === item?.address,
+            );
+
             if (finalItemIndex >= 0) {
-              finalData[tokenId][index] = newData[tokenId][finalItemIndex];
+              finalData[tokenId][finalItemIndex] = { ...item };
             } else {
-              finalData[tokenId].push(item);
+              finalData[tokenId].push({ ...item });
             }
           });
         }
+        newData = finalData;
       }
       await RedisService.getInstance().setToRedis(
         adapter.chain,
@@ -279,6 +296,10 @@ export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
         stringSerializer(await adapter.fetch()),
       );
     }
+    await RedisService.getInstance().setToRedis(
+      adapter.chain,
+      stringSerializer(newData),
+    );
   };
 
   /**

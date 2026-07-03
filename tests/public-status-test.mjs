@@ -39,6 +39,11 @@ const guardSecret3 =
 const guardPk3 =
   '03a0fd33438b413ddd0781260901817615aab9e3933a102320f1f606a35b8ed099';
 
+const guardSecret4 =
+  '3b0fb06d2c9a0974554123b926eef20d1a4ff7b5748a74e6437c6be904b3cf06';
+const guardPk4 =
+  '020e0e8f88a63aea5687650ed303bd823aa626e732719ced2256fe143361ec8514';
+
 const apiBaseUrl = 'http://localhost:3000';
 
 const mockTx0 = {
@@ -93,24 +98,26 @@ const assertObjectsMatch = (_o1, _o2) => {
   }
 };
 
-const getMockTxExpectation = (tx, eventId, insertedAt) => {
+const getMockTxExpectation = (tx, eventId, triggerTxId, insertedAt) => {
   return {
     txId: tx.txId,
     chain: tx.chain,
     eventId,
+    triggerTxId,
     insertedAt,
     txType: tx.txType,
   };
 };
 
 const paramsToSignMessage = (params) => {
-  return params.tx
-    ? `${params.eventId}${params.status}${params.tx.txId}${params.tx.chain}${params.tx.txType}${params.tx.txStatus}${params.timestamp}`
-    : `${params.eventId}${params.status}${params.timestamp}`;
+  const txData = params.tx
+    ? `${params.tx.txId}${params.tx.chain}${params.tx.txType}${params.tx.txStatus}`
+    : '';
+  return `${params.triggerTxId}${params.eventId}${params.status}${txData}${params.timestamp}`;
 };
 
 const submitStatus = async (params) => {
-  const { guard, timestamp, eventId, status, tx } = params;
+  const { guard, timestamp, eventId, triggerTxId, status, tx } = params;
 
   let pk = guardPk0;
   let secret = guardPk0;
@@ -136,6 +143,11 @@ const submitStatus = async (params) => {
       secret = guardSecret3;
       break;
 
+    case 4:
+      pk = guardPk4;
+      secret = guardSecret4;
+      break;
+
     default:
       throw new Error('invalid guard');
   }
@@ -145,6 +157,7 @@ const submitStatus = async (params) => {
   return axios.post(`${apiBaseUrl}/api/v1/status/submit`, {
     date: timestamp,
     eventId,
+    triggerTxId,
     status,
     pk,
     signature,
@@ -158,6 +171,7 @@ const testInvalidTimestampPast = async () => {
       guard: 0,
       timestamp: getTime() - 30,
       eventId: id0,
+      triggerTxId: id0,
       status: 'completed',
       tx: mockTx0,
     });
@@ -180,6 +194,7 @@ const testInvalidTimestampFuture = async () => {
       guard: 0,
       timestamp: getTime() + 1,
       eventId: id0,
+      triggerTxId: id0,
       status: 'completed',
       tx: mockTx0,
     });
@@ -202,6 +217,7 @@ const testNotAllowedPk = async () => {
       guard: 2,
       timestamp: getTime(),
       eventId: id0,
+      triggerTxId: id0,
       status: 'completed',
       tx: mockTx0,
     });
@@ -227,6 +243,7 @@ const testSignatureInvalid = async () => {
       guard: 0,
       timestamp: getTime(),
       eventId: id0,
+      triggerTxId: id0,
       status: 'completed',
       tx: mockTx0,
     });
@@ -248,12 +265,14 @@ const testSignatureInvalid = async () => {
 const testValidRequest = async () => {
   const timestamp = getTime();
   const eventId = id0;
+  const triggerTxId = id0;
 
   let response = await submitStatus({
     guard: 0,
     timestamp,
     eventId,
-    status: 'completed',
+    triggerTxId,
+    status: 'in-payment',
     tx: mockTx0,
   });
   assert(response.status === 200);
@@ -261,19 +280,21 @@ const testValidRequest = async () => {
 
   // get aggregated status of this eventId
   response = await axios.post(`${apiBaseUrl}/api/v1/status`, {
-    eventIds: [eventId],
+    eventAndTriggerIds: [[eventId, triggerTxId]],
   });
   assert(response.status === 200);
-  assertObjectsMatch(response.data[eventId], {
-    updatedAt: response.data[eventId].updatedAt,
+  assertObjectsMatch(response.data[`${eventId}::${triggerTxId}`], {
+    updatedAt: response.data[`${eventId}::${triggerTxId}`].updatedAt,
     status: 'waiting-for-confirmation',
     txStatus: null,
     tx: null,
   });
-  assert(response.data[eventId].updatedAt >= timestamp);
+  assert(response.data[`${eventId}::${triggerTxId}`].updatedAt >= timestamp);
 
   // get aggregated status timeline of this eventId
-  response = await axios.get(`${apiBaseUrl}/api/v1/status/${eventId}`);
+  response = await axios.get(
+    `${apiBaseUrl}/api/v1/status/${eventId}?triggerTxId=${triggerTxId}`,
+  );
   assert(response.status === 200);
   assert(response.data.items.length === 1);
   assert(response.data.items[0].insertedAt >= timestamp);
@@ -286,6 +307,7 @@ const testValidRequest = async () => {
 
   // get guard status timeline of this eventId
   response = await axios.post(`${apiBaseUrl}/api/v1/status/${eventId}/guards`, {
+    triggerTxId,
     guardPks: [guardPk0],
   });
   assert(response.status === 200);
@@ -294,11 +316,12 @@ const testValidRequest = async () => {
   assertObjectsMatch(response.data.items[0], {
     guardPk: guardPk0,
     insertedAt: response.data.items[0].insertedAt,
-    status: 'completed',
+    status: 'in-payment',
     txStatus: mockTx0.txStatus,
     tx: getMockTxExpectation(
       mockTx0,
       eventId,
+      triggerTxId,
       response.data.items[0].insertedAt,
     ),
   });
@@ -309,32 +332,37 @@ const testValidRequest = async () => {
 const testValidRequest2 = async () => {
   const timestamp = getTime() - 20;
   const eventId = id1;
+  const triggerTxId = id1;
 
   let response = await submitStatus({
     guard: 1,
     timestamp,
     eventId,
-    status: 'pending-payment',
+    triggerTxId,
+    status: 'in-payment',
     tx: mockTx1,
   });
   assert(response.status === 200);
 
   // get aggregated status of this eventId
   response = await axios.post(`${apiBaseUrl}/api/v1/status`, {
-    eventIds: [eventId],
+    eventAndTriggerIds: [[eventId, triggerTxId]],
   });
   assert(response.status === 200);
-  assertObjectsMatch(response.data[eventId], {
-    updatedAt: response.data[eventId].updatedAt,
+  assertObjectsMatch(response.data[`${eventId}::${triggerTxId}`], {
+    updatedAt: response.data[`${eventId}::${triggerTxId}`].updatedAt,
     status: 'waiting-for-confirmation',
     txStatus: null,
     tx: null,
   });
-  assert(response.data[eventId].updatedAt >= timestamp);
-  validRequest2Timestamp = response.data[eventId].updatedAt;
+  assert(response.data[`${eventId}::${triggerTxId}`].updatedAt >= timestamp);
+  validRequest2Timestamp =
+    response.data[`${eventId}::${triggerTxId}`].updatedAt;
 
   // get aggregated status timeline of this eventId
-  response = await axios.get(`${apiBaseUrl}/api/v1/status/${eventId}`);
+  response = await axios.get(
+    `${apiBaseUrl}/api/v1/status/${eventId}?triggerTxId=${triggerTxId}`,
+  );
   assert(response.status === 200);
   assert(response.data.items.length === 1);
   assert(response.data.items[0].insertedAt >= timestamp);
@@ -347,6 +375,7 @@ const testValidRequest2 = async () => {
 
   // get guard status timeline of this eventId
   response = await axios.post(`${apiBaseUrl}/api/v1/status/${eventId}/guards`, {
+    triggerTxId,
     guardPks: [guardPk1],
   });
   assert(response.status === 200);
@@ -355,17 +384,19 @@ const testValidRequest2 = async () => {
   assertObjectsMatch(response.data.items[0], {
     guardPk: guardPk1,
     insertedAt: response.data.items[0].insertedAt,
-    status: 'pending-payment',
+    status: 'in-payment',
     txStatus: mockTx1.txStatus,
     tx: getMockTxExpectation(
       mockTx1,
       eventId,
+      triggerTxId,
       response.data.items[0].insertedAt,
     ),
   });
 
   // get guard status timeline of this eventId with another guard
   response = await axios.post(`${apiBaseUrl}/api/v1/status/${eventId}/guards`, {
+    triggerTxId,
     guardPks: [guardPk3],
   });
   assert(response.status === 200);
@@ -373,6 +404,7 @@ const testValidRequest2 = async () => {
 
   // get guard status timeline of this eventId with all guards
   response = await axios.post(`${apiBaseUrl}/api/v1/status/${eventId}/guards`, {
+    triggerTxId,
     guardPks: [],
   });
   assert(response.status === 200);
@@ -381,11 +413,12 @@ const testValidRequest2 = async () => {
   assertObjectsMatch(response.data.items[0], {
     guardPk: guardPk1,
     insertedAt: response.data.items[0].insertedAt,
-    status: 'pending-payment',
+    status: 'in-payment',
     txStatus: mockTx1.txStatus,
     tx: getMockTxExpectation(
       mockTx1,
       eventId,
+      triggerTxId,
       response.data.items[0].insertedAt,
     ),
   });
@@ -397,13 +430,15 @@ const testDuplicateRequest = async () => {
   await new Promise((r) => setTimeout(r, 1000));
   const timestamp = getTime();
   const eventId = id1;
+  const triggerTxId = id1;
 
   for (let i = 0; i < 2; i += 1) {
     const response = await submitStatus({
       guard: 1,
       timestamp: getTime(),
       eventId,
-      status: 'pending-payment',
+      triggerTxId,
+      status: 'in-payment',
       tx: mockTx1,
     });
     assert(response.status === 200);
@@ -412,19 +447,21 @@ const testDuplicateRequest = async () => {
 
   // get aggregated status of this eventId
   let response = await axios.post(`${apiBaseUrl}/api/v1/status`, {
-    eventIds: [eventId],
+    eventAndTriggerIds: [[eventId, triggerTxId]],
   });
   assert(response.status === 200);
-  assertObjectsMatch(response.data[eventId], {
-    updatedAt: response.data[eventId].updatedAt,
+  assertObjectsMatch(response.data[`${eventId}::${triggerTxId}`], {
+    updatedAt: response.data[`${eventId}::${triggerTxId}`].updatedAt,
     status: 'waiting-for-confirmation',
     txStatus: null,
     tx: null,
   });
-  assert(response.data[eventId].updatedAt < timestamp); // <
+  assert(response.data[`${eventId}::${triggerTxId}`].updatedAt < timestamp); // <
 
   // get aggregated status timeline of this eventId
-  response = await axios.get(`${apiBaseUrl}/api/v1/status/${eventId}`);
+  response = await axios.get(
+    `${apiBaseUrl}/api/v1/status/${eventId}?triggerTxId=${triggerTxId}`,
+  );
   assert(response.status === 200);
   assert(response.data.items.length === 1);
   assert(response.data.items[0].insertedAt < timestamp); // <
@@ -437,6 +474,7 @@ const testDuplicateRequest = async () => {
 
   // get guard status timeline of this eventId
   response = await axios.post(`${apiBaseUrl}/api/v1/status/${eventId}/guards`, {
+    triggerTxId,
     guardPks: [guardPk1],
   });
   assert(response.status === 200);
@@ -445,11 +483,12 @@ const testDuplicateRequest = async () => {
   assertObjectsMatch(response.data.items[0], {
     guardPk: guardPk1,
     insertedAt: response.data.items[0].insertedAt,
-    status: 'pending-payment',
+    status: 'in-payment',
     txStatus: mockTx1.txStatus,
     tx: getMockTxExpectation(
       mockTx1,
       eventId,
+      triggerTxId,
       response.data.items[0].insertedAt,
     ),
   });
@@ -459,6 +498,7 @@ const testDuplicateRequest = async () => {
 
 const testAggregateStatusChange = async () => {
   const eventId = id2;
+  const triggerTxId = id2;
 
   // =======
   // submit guard 0
@@ -468,26 +508,30 @@ const testAggregateStatusChange = async () => {
     guard: 0,
     timestamp,
     eventId,
-    status: 'pending-payment',
+    triggerTxId,
+    status: 'reward-waiting',
     tx: undefined,
   });
   assert(response.status === 200);
 
   // get aggregated status of this eventId
   response = await axios.post(`${apiBaseUrl}/api/v1/status`, {
-    eventIds: [eventId],
+    eventAndTriggerIds: [[eventId, triggerTxId]],
   });
+
   assert(response.status === 200);
-  assertObjectsMatch(response.data[eventId], {
-    updatedAt: response.data[eventId].updatedAt,
+  assertObjectsMatch(response.data[`${eventId}::${triggerTxId}`], {
+    updatedAt: response.data[`${eventId}::${triggerTxId}`].updatedAt,
     status: 'waiting-for-confirmation',
     txStatus: null,
     tx: null,
   });
-  assert(response.data[eventId].updatedAt >= timestamp);
+  assert(response.data[`${eventId}::${triggerTxId}`].updatedAt >= timestamp);
 
   // get aggregated status timeline of this eventId
-  response = await axios.get(`${apiBaseUrl}/api/v1/status/${eventId}`);
+  response = await axios.get(
+    `${apiBaseUrl}/api/v1/status/${eventId}?triggerTxId=${triggerTxId}`,
+  );
   assert(response.status === 200);
   assert(response.data.items.length === 1);
   assert(response.data.items[0].insertedAt >= timestamp);
@@ -500,6 +544,7 @@ const testAggregateStatusChange = async () => {
 
   // get guard status timeline of this eventId
   response = await axios.post(`${apiBaseUrl}/api/v1/status/${eventId}/guards`, {
+    triggerTxId,
     guardPks: [],
   });
   assert(response.status === 200);
@@ -508,7 +553,7 @@ const testAggregateStatusChange = async () => {
   assertObjectsMatch(response.data.items[0], {
     guardPk: guardPk0,
     insertedAt: response.data.items[0].insertedAt,
-    status: 'pending-payment',
+    status: 'reward-waiting',
     txStatus: null,
     tx: null,
   });
@@ -522,26 +567,29 @@ const testAggregateStatusChange = async () => {
     guard: 1,
     timestamp,
     eventId,
-    status: 'pending-payment',
+    triggerTxId,
+    status: 'reward-waiting',
     tx: undefined,
   });
   assert(response.status === 200);
 
   // get aggregated status of this eventId
   response = await axios.post(`${apiBaseUrl}/api/v1/status`, {
-    eventIds: [eventId],
+    eventAndTriggerIds: [[eventId, triggerTxId]],
   });
   assert(response.status === 200);
-  assertObjectsMatch(response.data[eventId], {
-    updatedAt: response.data[eventId].updatedAt,
+  assertObjectsMatch(response.data[`${eventId}::${triggerTxId}`], {
+    updatedAt: response.data[`${eventId}::${triggerTxId}`].updatedAt,
     status: 'waiting-for-confirmation',
     txStatus: null,
     tx: null,
   });
-  assert(response.data[eventId].updatedAt < timestamp);
+  assert(response.data[`${eventId}::${triggerTxId}`].updatedAt < timestamp);
 
   // get aggregated status timeline of this eventId
-  response = await axios.get(`${apiBaseUrl}/api/v1/status/${eventId}`);
+  response = await axios.get(
+    `${apiBaseUrl}/api/v1/status/${eventId}?triggerTxId=${triggerTxId}`,
+  );
   assert(response.status === 200);
   assert(response.data.items.length === 1);
   assert(response.data.items[0].insertedAt < timestamp);
@@ -554,6 +602,7 @@ const testAggregateStatusChange = async () => {
 
   // get guard status timeline of this eventId
   response = await axios.post(`${apiBaseUrl}/api/v1/status/${eventId}/guards`, {
+    triggerTxId,
     guardPks: [],
   });
   assert(response.status === 200);
@@ -563,14 +612,14 @@ const testAggregateStatusChange = async () => {
   assertObjectsMatch(response.data.items[0], {
     guardPk: guardPk1,
     insertedAt: response.data.items[0].insertedAt,
-    status: 'pending-payment',
+    status: 'reward-waiting',
     txStatus: null,
     tx: null,
   });
   assertObjectsMatch(response.data.items[1], {
     guardPk: guardPk0,
     insertedAt: response.data.items[1].insertedAt,
-    status: 'pending-payment',
+    status: 'reward-waiting',
     txStatus: null,
     tx: null,
   });
@@ -584,33 +633,36 @@ const testAggregateStatusChange = async () => {
     guard: 3,
     timestamp,
     eventId,
-    status: 'pending-payment',
+    triggerTxId,
+    status: 'reward-waiting',
     tx: undefined,
   });
   assert(response.status === 200);
 
   // get aggregated status of this eventId
   response = await axios.post(`${apiBaseUrl}/api/v1/status`, {
-    eventIds: [eventId],
+    eventAndTriggerIds: [[eventId, triggerTxId]],
   });
   assert(response.status === 200);
-  assertObjectsMatch(response.data[eventId], {
-    updatedAt: response.data[eventId].updatedAt,
-    status: 'pending-payment',
+  assertObjectsMatch(response.data[`${eventId}::${triggerTxId}`], {
+    updatedAt: response.data[`${eventId}::${triggerTxId}`].updatedAt,
+    status: 'reward-waiting',
     txStatus: null,
     tx: null,
   });
-  assert(response.data[eventId].updatedAt >= timestamp);
+  assert(response.data[`${eventId}::${triggerTxId}`].updatedAt >= timestamp);
 
   // get aggregated status timeline of this eventId
-  response = await axios.get(`${apiBaseUrl}/api/v1/status/${eventId}`);
+  response = await axios.get(
+    `${apiBaseUrl}/api/v1/status/${eventId}?triggerTxId=${triggerTxId}`,
+  );
   assert(response.status === 200);
   assert(response.data.items.length === 2);
   assert(response.data.items[0].insertedAt >= timestamp);
   assert(response.data.items[1].insertedAt < timestamp);
   assertObjectsMatch(response.data.items[0], {
     insertedAt: response.data.items[0].insertedAt,
-    status: 'pending-payment',
+    status: 'reward-waiting',
     txStatus: null,
     tx: null,
   });
@@ -623,6 +675,7 @@ const testAggregateStatusChange = async () => {
 
   // get guard status timeline of this eventId
   response = await axios.post(`${apiBaseUrl}/api/v1/status/${eventId}/guards`, {
+    triggerTxId,
     guardPks: [],
   });
   assert(response.status === 200);
@@ -633,21 +686,21 @@ const testAggregateStatusChange = async () => {
   assertObjectsMatch(response.data.items[0], {
     guardPk: guardPk3,
     insertedAt: response.data.items[0].insertedAt,
-    status: 'pending-payment',
+    status: 'reward-waiting',
     txStatus: null,
     tx: null,
   });
   assertObjectsMatch(response.data.items[1], {
     guardPk: guardPk1,
     insertedAt: response.data.items[1].insertedAt,
-    status: 'pending-payment',
+    status: 'reward-waiting',
     txStatus: null,
     tx: null,
   });
   assertObjectsMatch(response.data.items[2], {
     guardPk: guardPk0,
     insertedAt: response.data.items[2].insertedAt,
-    status: 'pending-payment',
+    status: 'reward-waiting',
     txStatus: null,
     tx: null,
   });
@@ -663,6 +716,7 @@ const testAggregateStatusChange = async () => {
     guard: 0,
     timestamp,
     eventId,
+    triggerTxId,
     status: 'in-reward',
     tx: mockTx2,
   });
@@ -670,19 +724,21 @@ const testAggregateStatusChange = async () => {
 
   // get aggregated status of this eventId
   response = await axios.post(`${apiBaseUrl}/api/v1/status`, {
-    eventIds: [eventId],
+    eventAndTriggerIds: [[eventId, triggerTxId]],
   });
   assert(response.status === 200);
-  assertObjectsMatch(response.data[eventId], {
-    updatedAt: response.data[eventId].updatedAt,
+  assertObjectsMatch(response.data[`${eventId}::${triggerTxId}`], {
+    updatedAt: response.data[`${eventId}::${triggerTxId}`].updatedAt,
     status: 'waiting-for-confirmation',
     txStatus: null,
     tx: null,
   });
-  assert(response.data[eventId].updatedAt >= timestamp);
+  assert(response.data[`${eventId}::${triggerTxId}`].updatedAt >= timestamp);
 
   // get aggregated status timeline of this eventId
-  response = await axios.get(`${apiBaseUrl}/api/v1/status/${eventId}`);
+  response = await axios.get(
+    `${apiBaseUrl}/api/v1/status/${eventId}?triggerTxId=${triggerTxId}`,
+  );
   assert(response.status === 200);
   assert(response.data.items.length === 3);
   assert(response.data.items[0].insertedAt >= timestamp);
@@ -696,7 +752,7 @@ const testAggregateStatusChange = async () => {
   });
   assertObjectsMatch(response.data.items[1], {
     insertedAt: response.data.items[1].insertedAt,
-    status: 'pending-payment',
+    status: 'reward-waiting',
     txStatus: null,
     tx: null,
   });
@@ -709,6 +765,7 @@ const testAggregateStatusChange = async () => {
 
   // get guard status timeline of this eventId
   response = await axios.post(`${apiBaseUrl}/api/v1/status/${eventId}/guards`, {
+    triggerTxId,
     guardPks: [],
   });
   assert(response.status === 200);
@@ -723,26 +780,26 @@ const testAggregateStatusChange = async () => {
     insertedAt: response.data.items[0].insertedAt,
     status: 'in-reward',
     txStatus: mockTx2.txStatus,
-    tx: getMockTxExpectation(mockTx2, eventId, txTimestamp),
+    tx: getMockTxExpectation(mockTx2, eventId, triggerTxId, txTimestamp),
   });
   assertObjectsMatch(response.data.items[1], {
     guardPk: guardPk3,
     insertedAt: response.data.items[1].insertedAt,
-    status: 'pending-payment',
+    status: 'reward-waiting',
     txStatus: null,
     tx: null,
   });
   assertObjectsMatch(response.data.items[2], {
     guardPk: guardPk1,
     insertedAt: response.data.items[2].insertedAt,
-    status: 'pending-payment',
+    status: 'reward-waiting',
     txStatus: null,
     tx: null,
   });
   assertObjectsMatch(response.data.items[3], {
     guardPk: guardPk0,
     insertedAt: response.data.items[3].insertedAt,
-    status: 'pending-payment',
+    status: 'reward-waiting',
     txStatus: null,
     tx: null,
   });
@@ -756,6 +813,7 @@ const testAggregateStatusChange = async () => {
     guard: 1,
     timestamp,
     eventId,
+    triggerTxId,
     status: 'in-reward',
     tx: mockTx2,
   });
@@ -763,19 +821,21 @@ const testAggregateStatusChange = async () => {
 
   // get aggregated status of this eventId
   response = await axios.post(`${apiBaseUrl}/api/v1/status`, {
-    eventIds: [eventId],
+    eventAndTriggerIds: [[eventId, triggerTxId]],
   });
   assert(response.status === 200);
-  assertObjectsMatch(response.data[eventId], {
-    updatedAt: response.data[eventId].updatedAt,
+  assertObjectsMatch(response.data[`${eventId}::${triggerTxId}`], {
+    updatedAt: response.data[`${eventId}::${triggerTxId}`].updatedAt,
     status: 'waiting-for-confirmation',
     txStatus: null,
     tx: null,
   });
-  assert(response.data[eventId].updatedAt < timestamp);
+  assert(response.data[`${eventId}::${triggerTxId}`].updatedAt < timestamp);
 
   // get aggregated status timeline of this eventId
-  response = await axios.get(`${apiBaseUrl}/api/v1/status/${eventId}`);
+  response = await axios.get(
+    `${apiBaseUrl}/api/v1/status/${eventId}?triggerTxId=${triggerTxId}`,
+  );
   assert(response.status === 200);
   assert(response.data.items.length === 3);
   assert(response.data.items[0].insertedAt < timestamp);
@@ -789,7 +849,7 @@ const testAggregateStatusChange = async () => {
   });
   assertObjectsMatch(response.data.items[1], {
     insertedAt: response.data.items[1].insertedAt,
-    status: 'pending-payment',
+    status: 'reward-waiting',
     txStatus: null,
     tx: null,
   });
@@ -802,6 +862,7 @@ const testAggregateStatusChange = async () => {
 
   // get guard status timeline of this eventId
   response = await axios.post(`${apiBaseUrl}/api/v1/status/${eventId}/guards`, {
+    triggerTxId,
     guardPks: [],
   });
   assert(response.status === 200);
@@ -816,33 +877,33 @@ const testAggregateStatusChange = async () => {
     insertedAt: response.data.items[0].insertedAt,
     status: 'in-reward',
     txStatus: mockTx2.txStatus,
-    tx: getMockTxExpectation(mockTx2, eventId, txTimestamp),
+    tx: getMockTxExpectation(mockTx2, eventId, triggerTxId, txTimestamp),
   });
   assertObjectsMatch(response.data.items[1], {
     guardPk: guardPk0,
     insertedAt: response.data.items[1].insertedAt,
     status: 'in-reward',
     txStatus: mockTx2.txStatus,
-    tx: getMockTxExpectation(mockTx2, eventId, txTimestamp),
+    tx: getMockTxExpectation(mockTx2, eventId, triggerTxId, txTimestamp),
   });
   assertObjectsMatch(response.data.items[2], {
     guardPk: guardPk3,
     insertedAt: response.data.items[2].insertedAt,
-    status: 'pending-payment',
+    status: 'reward-waiting',
     txStatus: null,
     tx: null,
   });
   assertObjectsMatch(response.data.items[3], {
     guardPk: guardPk1,
     insertedAt: response.data.items[3].insertedAt,
-    status: 'pending-payment',
+    status: 'reward-waiting',
     txStatus: null,
     tx: null,
   });
   assertObjectsMatch(response.data.items[4], {
     guardPk: guardPk0,
     insertedAt: response.data.items[4].insertedAt,
-    status: 'pending-payment',
+    status: 'reward-waiting',
     txStatus: null,
     tx: null,
   });
@@ -856,6 +917,7 @@ const testAggregateStatusChange = async () => {
     guard: 3,
     timestamp,
     eventId,
+    triggerTxId,
     status: 'in-reward',
     tx: mockTx2,
   });
@@ -863,45 +925,40 @@ const testAggregateStatusChange = async () => {
 
   // get aggregated status of this eventId
   response = await axios.post(`${apiBaseUrl}/api/v1/status`, {
-    eventIds: [eventId],
+    eventAndTriggerIds: [[eventId, triggerTxId]],
   });
   assert(response.status === 200);
-  assertObjectsMatch(response.data[eventId], {
-    updatedAt: response.data[eventId].updatedAt,
-    status: 'in-reward',
-    txStatus: mockTx2.txStatus,
-    tx: getMockTxExpectation(mockTx2, eventId, txTimestamp),
+  assertObjectsMatch(response.data[`${eventId}::${triggerTxId}`], {
+    updatedAt: response.data[`${eventId}::${triggerTxId}`].updatedAt,
+    status: 'waiting-for-confirmation',
+    txStatus: null,
+    tx: null,
   });
-  assert(response.data[eventId].updatedAt >= timestamp);
+  assert(response.data[`${eventId}::${triggerTxId}`].updatedAt < timestamp);
 
   // get aggregated status timeline of this eventId
-  response = await axios.get(`${apiBaseUrl}/api/v1/status/${eventId}`);
+  response = await axios.get(
+    `${apiBaseUrl}/api/v1/status/${eventId}?triggerTxId=${triggerTxId}`,
+  );
   assert(response.status === 200);
-  assert(response.data.items.length === 4);
-  assert(response.data.items[0].insertedAt >= timestamp);
+  assert(response.data.items.length === 3);
+  assert(response.data.items[0].insertedAt < timestamp);
   assert(response.data.items[1].insertedAt < timestamp);
   assert(response.data.items[2].insertedAt < timestamp);
-  assert(response.data.items[3].insertedAt < timestamp);
   assertObjectsMatch(response.data.items[0], {
     insertedAt: response.data.items[0].insertedAt,
-    status: 'in-reward',
-    txStatus: mockTx2.txStatus,
-    tx: getMockTxExpectation(mockTx2, eventId, txTimestamp),
+    status: 'waiting-for-confirmation',
+    txStatus: null,
+    tx: null,
   });
   assertObjectsMatch(response.data.items[1], {
     insertedAt: response.data.items[1].insertedAt,
-    status: 'waiting-for-confirmation',
+    status: 'reward-waiting',
     txStatus: null,
     tx: null,
   });
   assertObjectsMatch(response.data.items[2], {
     insertedAt: response.data.items[2].insertedAt,
-    status: 'pending-payment',
-    txStatus: null,
-    tx: null,
-  });
-  assertObjectsMatch(response.data.items[3], {
-    insertedAt: response.data.items[3].insertedAt,
     status: 'waiting-for-confirmation',
     txStatus: null,
     tx: null,
@@ -909,6 +966,7 @@ const testAggregateStatusChange = async () => {
 
   // get guard status timeline of this eventId
   response = await axios.post(`${apiBaseUrl}/api/v1/status/${eventId}/guards`, {
+    triggerTxId,
     guardPks: [],
   });
   assert(response.status === 200);
@@ -924,40 +982,167 @@ const testAggregateStatusChange = async () => {
     insertedAt: response.data.items[0].insertedAt,
     status: 'in-reward',
     txStatus: mockTx2.txStatus,
-    tx: getMockTxExpectation(mockTx2, eventId, txTimestamp),
+    tx: getMockTxExpectation(mockTx2, eventId, triggerTxId, txTimestamp),
   });
   assertObjectsMatch(response.data.items[1], {
     guardPk: guardPk1,
     insertedAt: response.data.items[1].insertedAt,
     status: 'in-reward',
     txStatus: mockTx2.txStatus,
-    tx: getMockTxExpectation(mockTx2, eventId, txTimestamp),
+    tx: getMockTxExpectation(mockTx2, eventId, triggerTxId, txTimestamp),
   });
   assertObjectsMatch(response.data.items[2], {
     guardPk: guardPk0,
     insertedAt: response.data.items[2].insertedAt,
     status: 'in-reward',
     txStatus: mockTx2.txStatus,
-    tx: getMockTxExpectation(mockTx2, eventId, txTimestamp),
+    tx: getMockTxExpectation(mockTx2, eventId, triggerTxId, txTimestamp),
   });
   assertObjectsMatch(response.data.items[3], {
     guardPk: guardPk3,
     insertedAt: response.data.items[3].insertedAt,
-    status: 'pending-payment',
+    status: 'reward-waiting',
     txStatus: null,
     tx: null,
   });
   assertObjectsMatch(response.data.items[4], {
     guardPk: guardPk1,
     insertedAt: response.data.items[4].insertedAt,
-    status: 'pending-payment',
+    status: 'reward-waiting',
     txStatus: null,
     tx: null,
   });
   assertObjectsMatch(response.data.items[5], {
     guardPk: guardPk0,
     insertedAt: response.data.items[5].insertedAt,
-    status: 'pending-payment',
+    status: 'reward-waiting',
+    txStatus: null,
+    tx: null,
+  });
+
+  // =======
+  // submit guard 4
+  // =======
+  await sleep(1000);
+  timestamp = getTime();
+  response = await submitStatus({
+    guard: 4,
+    timestamp,
+    eventId,
+    triggerTxId,
+    status: 'in-reward',
+    tx: mockTx2,
+  });
+  assert(response.status === 200);
+
+  // get aggregated status of this eventId
+  response = await axios.post(`${apiBaseUrl}/api/v1/status`, {
+    eventAndTriggerIds: [[eventId, triggerTxId]],
+  });
+  assert(response.status === 200);
+  assertObjectsMatch(response.data[`${eventId}::${triggerTxId}`], {
+    updatedAt: response.data[`${eventId}::${triggerTxId}`].updatedAt,
+    status: 'in-reward',
+    txStatus: mockTx2.txStatus,
+    tx: getMockTxExpectation(mockTx2, eventId, triggerTxId, txTimestamp),
+  });
+  assert(response.data[`${eventId}::${triggerTxId}`].updatedAt >= timestamp);
+
+  // get aggregated status timeline of this eventId
+  response = await axios.get(
+    `${apiBaseUrl}/api/v1/status/${eventId}?triggerTxId=${triggerTxId}`,
+  );
+  assert(response.status === 200);
+  assert(response.data.items.length === 4);
+  assert(response.data.items[0].insertedAt >= timestamp);
+  assert(response.data.items[1].insertedAt < timestamp);
+  assert(response.data.items[2].insertedAt < timestamp);
+  assert(response.data.items[3].insertedAt < timestamp);
+  assertObjectsMatch(response.data.items[0], {
+    insertedAt: response.data.items[0].insertedAt,
+    status: 'in-reward',
+    txStatus: mockTx2.txStatus,
+    tx: getMockTxExpectation(mockTx2, eventId, triggerTxId, txTimestamp),
+  });
+  assertObjectsMatch(response.data.items[1], {
+    insertedAt: response.data.items[1].insertedAt,
+    status: 'waiting-for-confirmation',
+    txStatus: null,
+    tx: null,
+  });
+  assertObjectsMatch(response.data.items[2], {
+    insertedAt: response.data.items[2].insertedAt,
+    status: 'reward-waiting',
+    txStatus: null,
+    tx: null,
+  });
+  assertObjectsMatch(response.data.items[3], {
+    insertedAt: response.data.items[3].insertedAt,
+    status: 'waiting-for-confirmation',
+    txStatus: null,
+    tx: null,
+  });
+
+  // get guard status timeline of this eventId
+  response = await axios.post(`${apiBaseUrl}/api/v1/status/${eventId}/guards`, {
+    triggerTxId,
+    guardPks: [],
+  });
+  assert(response.status === 200);
+  assert(response.data.items.length === 7);
+  assert(response.data.items[0].insertedAt >= timestamp);
+  assert(response.data.items[1].insertedAt < timestamp);
+  assert(response.data.items[2].insertedAt < timestamp);
+  assert(response.data.items[3].insertedAt < timestamp);
+  assert(response.data.items[4].insertedAt < timestamp);
+  assert(response.data.items[5].insertedAt < timestamp);
+  assert(response.data.items[6].insertedAt < timestamp);
+  assertObjectsMatch(response.data.items[0], {
+    guardPk: guardPk4,
+    insertedAt: response.data.items[0].insertedAt,
+    status: 'in-reward',
+    txStatus: mockTx2.txStatus,
+    tx: getMockTxExpectation(mockTx2, eventId, triggerTxId, txTimestamp),
+  });
+  assertObjectsMatch(response.data.items[1], {
+    guardPk: guardPk3,
+    insertedAt: response.data.items[1].insertedAt,
+    status: 'in-reward',
+    txStatus: mockTx2.txStatus,
+    tx: getMockTxExpectation(mockTx2, eventId, triggerTxId, txTimestamp),
+  });
+  assertObjectsMatch(response.data.items[2], {
+    guardPk: guardPk1,
+    insertedAt: response.data.items[2].insertedAt,
+    status: 'in-reward',
+    txStatus: mockTx2.txStatus,
+    tx: getMockTxExpectation(mockTx2, eventId, triggerTxId, txTimestamp),
+  });
+  assertObjectsMatch(response.data.items[3], {
+    guardPk: guardPk0,
+    insertedAt: response.data.items[3].insertedAt,
+    status: 'in-reward',
+    txStatus: mockTx2.txStatus,
+    tx: getMockTxExpectation(mockTx2, eventId, triggerTxId, txTimestamp),
+  });
+  assertObjectsMatch(response.data.items[4], {
+    guardPk: guardPk3,
+    insertedAt: response.data.items[4].insertedAt,
+    status: 'reward-waiting',
+    txStatus: null,
+    tx: null,
+  });
+  assertObjectsMatch(response.data.items[5], {
+    guardPk: guardPk1,
+    insertedAt: response.data.items[5].insertedAt,
+    status: 'reward-waiting',
+    txStatus: null,
+    tx: null,
+  });
+  assertObjectsMatch(response.data.items[6], {
+    guardPk: guardPk0,
+    insertedAt: response.data.items[6].insertedAt,
+    status: 'reward-waiting',
     txStatus: null,
     tx: null,
   });
@@ -968,7 +1153,7 @@ const testAggregateStatusChange = async () => {
 const testGetInvalidEventIds = async () => {
   // get aggregated status
   const response = await axios.post(`${apiBaseUrl}/api/v1/status`, {
-    eventIds: [id3],
+    eventAndTriggerIds: [[id3, id3]],
   });
   assert(response.status === 200);
   assert(Object.keys(response.data).length === 0);
@@ -977,7 +1162,9 @@ const testGetInvalidEventIds = async () => {
 };
 
 const testGetInvalidEventTimeline = async () => {
-  const response = await axios.get(`${apiBaseUrl}/api/v1/status/${id3}`);
+  const response = await axios.get(
+    `${apiBaseUrl}/api/v1/status/${id3}?triggerTxId=${id3}`,
+  );
   assert(response.status === 200);
   assert(response.data.items.length === 0);
 
@@ -985,7 +1172,9 @@ const testGetInvalidEventTimeline = async () => {
 };
 
 const testGetValidEventTimeline = async () => {
-  const response = await axios.get(`${apiBaseUrl}/api/v1/status/${id1}`);
+  const response = await axios.get(
+    `${apiBaseUrl}/api/v1/status/${id1}?triggerTxId=${id1}`,
+  );
   assert(response.status === 200);
   assert(response.data.items.length === 1);
   assertObjectsMatch(response.data.items[0], {
@@ -1002,6 +1191,7 @@ const testGetInvalidGuardEventTimeline = async () => {
   const response = await axios.post(
     `${apiBaseUrl}/api/v1/status/${id3}/guards`,
     {
+      triggerTxId: id3,
       guardPks: [guardPk0],
     },
   );
@@ -1015,6 +1205,7 @@ const testGetValidGuardEventTimeline = async () => {
   const response = await axios.post(
     `${apiBaseUrl}/api/v1/status/${id1}/guards`,
     {
+      triggerTxId: id1,
       guardPks: [guardPk1],
     },
   );
@@ -1023,9 +1214,9 @@ const testGetValidGuardEventTimeline = async () => {
   assertObjectsMatch(response.data.items[0], {
     guardPk: guardPk1,
     insertedAt: validRequest2Timestamp,
-    status: 'pending-payment',
+    status: 'in-payment',
     txStatus: mockTx1.txStatus,
-    tx: getMockTxExpectation(mockTx1, id1, validRequest2Timestamp),
+    tx: getMockTxExpectation(mockTx1, id1, id1, validRequest2Timestamp),
   });
 
   console.log(`testGetValidGuardEventTimeline: Passed`);
@@ -1035,7 +1226,7 @@ const testGetEventTimelinePagination = async () => {
   // page 1
   await (async () => {
     const response = await axios.get(
-      `${apiBaseUrl}/api/v1/status/${id1}?offset=0&limit=10`,
+      `${apiBaseUrl}/api/v1/status/${id1}?triggerTxId=${id1}&offset=0&limit=10`,
     );
     assert(response.status === 200);
     assert(response.data.items.length === 10);
@@ -1051,7 +1242,7 @@ const testGetEventTimelinePagination = async () => {
 
   // page 2
   const response = await axios.get(
-    `${apiBaseUrl}/api/v1/status/${id1}?offset=7&limit=20`,
+    `${apiBaseUrl}/api/v1/status/${id1}?triggerTxId=${id1}&offset=7&limit=20`,
   );
 
   assert(response.status === 200);
@@ -1074,6 +1265,7 @@ const testGetGuardEventTimelinePagination = async () => {
     const response = await axios.post(
       `${apiBaseUrl}/api/v1/status/${id1}/guards?offset=0&limit=10`,
       {
+        triggerTxId: id1,
         guardPks: [guardPk1],
       },
     );
@@ -1094,6 +1286,7 @@ const testGetGuardEventTimelinePagination = async () => {
   const response = await axios.post(
     `${apiBaseUrl}/api/v1/status/${id1}/guards?offset=7&limit=20`,
     {
+      triggerTxId: id1,
       guardPks: [guardPk1],
     },
   );
@@ -1118,35 +1311,35 @@ const insertMockDataForPaginationTest = async () => {
 
   p.stdin.write('BEGIN;\n');
   p.stdin
-    .write(`INSERT INTO aggregated_status_changed_entity ("id", "eventId", "insertedAt", "status", "txStatus", "txId", "txChain")
+    .write(`INSERT INTO aggregated_status_changed_entity ("id", "eventId", "triggerTxId", "insertedAt", "status", "txStatus", "txId", "txChain")
       VALUES
-          (10, '${id1}', 10, 'finished', NULL, NULL, NULL),
-          (11, '${id1}', 11, 'finished', NULL, NULL, NULL),
-          (12, '${id1}', 12, 'finished', NULL, NULL, NULL),
-          (13, '${id1}', 13, 'finished', NULL, NULL, NULL),
-          (14, '${id1}', 14, 'finished', NULL, NULL, NULL),
-          (15, '${id1}', 15, 'finished', NULL, NULL, NULL),
-          (16, '${id1}', 16, 'finished', NULL, NULL, NULL),
-          (17, '${id1}', 17, 'finished', NULL, NULL, NULL),
-          (18, '${id1}', 18, 'finished', NULL, NULL, NULL),
-          (19, '${id1}', 19, 'finished', NULL, NULL, NULL),
-          (20, '${id1}', 20, 'finished', NULL, NULL, NULL),
-          (21, '${id1}', 21, 'finished', NULL, NULL, NULL);
+          (10, '${id1}', '${id1}', 10, 'finished', NULL, NULL, NULL),
+          (11, '${id1}', '${id1}', 11, 'finished', NULL, NULL, NULL),
+          (12, '${id1}', '${id1}', 12, 'finished', NULL, NULL, NULL),
+          (13, '${id1}', '${id1}', 13, 'finished', NULL, NULL, NULL),
+          (14, '${id1}', '${id1}', 14, 'finished', NULL, NULL, NULL),
+          (15, '${id1}', '${id1}', 15, 'finished', NULL, NULL, NULL),
+          (16, '${id1}', '${id1}', 16, 'finished', NULL, NULL, NULL),
+          (17, '${id1}', '${id1}', 17, 'finished', NULL, NULL, NULL),
+          (18, '${id1}', '${id1}', 18, 'finished', NULL, NULL, NULL),
+          (19, '${id1}', '${id1}', 19, 'finished', NULL, NULL, NULL),
+          (20, '${id1}', '${id1}', 20, 'finished', NULL, NULL, NULL),
+          (21, '${id1}', '${id1}', 21, 'finished', NULL, NULL, NULL);
 
-      INSERT INTO guard_status_changed_entity ("id", "eventId", "guardPk", "insertedAt", "status", "txStatus", "txId", "txChain")
+      INSERT INTO guard_status_changed_entity ("id", "eventId", "triggerTxId", "guardPk", "insertedAt", "status", "txStatus", "txId", "txChain")
       VALUES
-          (10, '${id1}', '${guardPk1}', 10, 'in-payment', NULL, NULL, NULL),
-          (11, '${id1}', '${guardPk1}', 11, 'in-payment', NULL, NULL, NULL),
-          (12, '${id1}', '${guardPk1}', 12, 'in-payment', NULL, NULL, NULL),
-          (13, '${id1}', '${guardPk1}', 13, 'in-payment', NULL, NULL, NULL),
-          (14, '${id1}', '${guardPk1}', 14, 'in-payment', NULL, NULL, NULL),
-          (15, '${id1}', '${guardPk1}', 15, 'in-payment', NULL, NULL, NULL),
-          (16, '${id1}', '${guardPk1}', 16, 'in-payment', NULL, NULL, NULL),
-          (17, '${id1}', '${guardPk1}', 17, 'in-payment', NULL, NULL, NULL),
-          (18, '${id1}', '${guardPk1}', 18, 'in-payment', NULL, NULL, NULL),
-          (19, '${id1}', '${guardPk1}', 19, 'in-payment', NULL, NULL, NULL),
-          (20, '${id1}', '${guardPk1}', 20, 'in-payment', NULL, NULL, NULL),
-          (21, '${id1}', '${guardPk1}', 21, 'in-payment', NULL, NULL, NULL);\n`);
+          (10, '${id1}', '${id1}', '${guardPk1}', 10, 'in-payment', NULL, NULL, NULL),
+          (11, '${id1}', '${id1}', '${guardPk1}', 11, 'in-payment', NULL, NULL, NULL),
+          (12, '${id1}', '${id1}', '${guardPk1}', 12, 'in-payment', NULL, NULL, NULL),
+          (13, '${id1}', '${id1}', '${guardPk1}', 13, 'in-payment', NULL, NULL, NULL),
+          (14, '${id1}', '${id1}', '${guardPk1}', 14, 'in-payment', NULL, NULL, NULL),
+          (15, '${id1}', '${id1}', '${guardPk1}', 15, 'in-payment', NULL, NULL, NULL),
+          (16, '${id1}', '${id1}', '${guardPk1}', 16, 'in-payment', NULL, NULL, NULL),
+          (17, '${id1}', '${id1}', '${guardPk1}', 17, 'in-payment', NULL, NULL, NULL),
+          (18, '${id1}', '${id1}', '${guardPk1}', 18, 'in-payment', NULL, NULL, NULL),
+          (19, '${id1}', '${id1}', '${guardPk1}', 19, 'in-payment', NULL, NULL, NULL),
+          (20, '${id1}', '${id1}', '${guardPk1}', 20, 'in-payment', NULL, NULL, NULL),
+          (21, '${id1}', '${id1}', '${guardPk1}', 21, 'in-payment', NULL, NULL, NULL);\n`);
   p.stdin.write('COMMIT;\n');
 
   p.stdin.end();
@@ -1206,9 +1399,12 @@ const startApi = async () => {
 
     cd(`apps/rosen`);
 
-    await $`export ALLOWED_PKS="0308b553ecd6c7fa3098c9d129150de25eff1bb52e25223980c9e304c566f5a8e1,03a9d7dacdd1da2514188921cea39750035468dc1c7d4c23401231706c6027f5c6,03a0fd33438b413ddd0781260901817615aab9e3933a102320f1f606a35b8ed099"`;
+    await $`export ALLOWED_PKS="0308b553ecd6c7fa3098c9d129150de25eff1bb52e25223980c9e304c566f5a8e1,03a9d7dacdd1da2514188921cea39750035468dc1c7d4c23401231706c6027f5c6,03a0fd33438b413ddd0781260901817615aab9e3933a102320f1f606a35b8ed099,020e0e8f88a63aea5687650ed303bd823aa626e732719ced2256fe143361ec8514"`;
     await $`export POSTGRES_URL="postgresql://public_status_test_user@localhost:5432/public_status_test"`;
     await $`export POSTGRES_USE_SSL="false"`;
+    await $`export REQUIRED_PARTICIPANTS=4`;
+    await $`export MINIMUM_PARTICIPANTS=1`;
+    await $`export VETO_NUMBER=3`;
 
     api = $`npm run dev`;
 

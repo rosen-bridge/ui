@@ -1,5 +1,16 @@
 # @rosen-ui/asset-calculator
 
+## 2.3.3
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-bridge/extended-typeorm@1.1.0
+  - @rosen-bridge/tokens@6.0.2
+  - @rosen-clients/cardano-koios@3.1.3
+  - @rosen-clients/ergo-explorer@2.1.3
+  - @rosen-clients/rate-limited-axios@2.0.1
+
 ## 2.3.2
 
 ### Patch Changes
