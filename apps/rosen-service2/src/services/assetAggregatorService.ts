@@ -22,7 +22,6 @@ import {
   AbstractDBService,
 } from './abstracts';
 import { AbstractRedisService } from './abstracts/abstractRedisService';
-import { RedisService } from './redisService';
 
 export class AssetAggregatorService extends AbstractAssetAggregatorService {
   static serviceName = AbstractAssetAggregatorService.name;
@@ -119,7 +118,7 @@ export class AssetAggregatorService extends AbstractAssetAggregatorService {
         const chain = chainKey as ChainsKeys;
         if (chain === NETWORKS.ergo.key || configs.chains[chain].active) {
           const data =
-            await RedisService.getInstance().getFromRedis<AssetBalance>(
+            await AbstractRedisService.getInstance().getFromRedis<AssetBalance>(
               chainKey,
             );
           if (data) {
@@ -130,7 +129,7 @@ export class AssetAggregatorService extends AbstractAssetAggregatorService {
     );
 
     const totalSupply: { [chain: string]: TotalSupply[] } =
-      (await RedisService.getInstance().getFromRedis<{
+      (await AbstractRedisService.getInstance().getFromRedis<{
         [chain: string]: TotalSupply[];
       }>(TOTAL_SUPPLY_REDIS_KEY)) ?? {};
 

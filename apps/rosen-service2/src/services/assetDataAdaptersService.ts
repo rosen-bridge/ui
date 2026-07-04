@@ -30,7 +30,6 @@ import {
   AbstractTokenMapService,
 } from './abstracts';
 import { AbstractRedisService } from './abstracts/abstractRedisService';
-import { RedisService } from './redisService';
 
 export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
   static serviceName = AbstractAssetDataAdapterService.name;
@@ -228,7 +227,7 @@ export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
    */
   protected preStart = async () => {
     const assets = await this.getAssetsTotalSupply();
-    await RedisService.getInstance().setToRedis(
+    await AbstractRedisService.getInstance().setToRedis(
       TOTAL_SUPPLY_REDIS_KEY,
       stringSerializer(assets),
     );
@@ -250,7 +249,7 @@ export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
     ) {
       // preventing of overriding old chunks of data
       const oldData =
-        (await RedisService.getInstance().getFromRedis<AssetBalance | null>(
+        (await AbstractRedisService.getInstance().getFromRedis<AssetBalance | null>(
           adapter.chain,
         )) || {};
       const finalData = { ...oldData };
@@ -286,17 +285,8 @@ export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
         }
         newData = finalData;
       }
-      await RedisService.getInstance().setToRedis(
-        adapter.chain,
-        stringSerializer(finalData),
-      );
-    } else {
-      await RedisService.getInstance().setToRedis(
-        adapter.chain,
-        stringSerializer(await adapter.fetch()),
-      );
     }
-    await RedisService.getInstance().setToRedis(
+    await AbstractRedisService.getInstance().setToRedis(
       adapter.chain,
       stringSerializer(newData),
     );
