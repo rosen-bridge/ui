@@ -87,9 +87,9 @@ firo:
   initialHeight:
   explorerUrl: https://explorer.firo.org
   electrumx:
-    host: 127.0.0.1
-    port: 50001
-    reconnectDelay: 5
+    host:
+    port:
+    reconnectDelay:
 ethereum:
   addresses:
     lock:

@@ -19,21 +19,10 @@ export const registerExtractors = async (scanner: ErgoScanner) => {
     for (let key of NETWORKS_KEYS) {
       const chain =
         key == NETWORKS['bitcoin-runes'].key ? BITCOIN_RUNES_CONFIG_KEY : key;
-      const chainConfig = (configs as Record<string, unknown>)[chain] as
-        | {
-            addresses?: { commitment?: string };
-            tokens?: { rwt?: string };
-          }
-        | undefined;
-
-      // Skip networks that are present in shared constants but not configured
-      // in this service.
-      if (!chainConfig?.addresses?.commitment || !chainConfig?.tokens?.rwt) {
-        logger.debug(
-          `Skipping [${chain}] commitment extractor due to missing config`,
-        );
-        continue;
-      }
+      const chainConfig = configs[chain as keyof typeof configs] as {
+        addresses: { commitment: string };
+        tokens: { rwt: string };
+      };
 
       const commitmentExtractor = new CommitmentExtractor(
         `${chain}-commitment-extractor`,
