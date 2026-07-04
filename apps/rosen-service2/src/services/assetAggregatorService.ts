@@ -11,7 +11,6 @@ import {
 } from '@rosen-ui/asset-aggregator';
 import { AssetBalance } from '@rosen-ui/asset-data-adapter';
 import { NETWORKS } from '@rosen-ui/constants';
-import { createClient, VercelKV } from '@vercel/kv';
 
 import { configs } from '../configs';
 import { TOTAL_SUPPLY_REDIS_KEY } from '../constants';
@@ -22,11 +21,11 @@ import {
   AbstractTokenMapService,
   AbstractDBService,
 } from './abstracts';
+import { AbstractRedisService } from './abstracts/abstractRedisService';
 
 export class AssetAggregatorService extends AbstractAssetAggregatorService {
   static serviceName = AbstractAssetAggregatorService.name;
   protected assetAggregator: AssetAggregator;
-  protected redis: VercelKV;
 
   protected dependencies: Dependency[] = [
     {
@@ -42,6 +41,11 @@ export class AssetAggregatorService extends AbstractAssetAggregatorService {
         ServiceStatus.dormant,
       ],
       action: ServiceAction.assemble,
+    },
+    {
+      serviceName: AbstractRedisService.name,
+      allowedStatuses: [ServiceStatus.running, ServiceStatus.started],
+      action: ServiceAction.start,
     },
     {
       serviceName: AbstractDBService.name,
@@ -65,10 +69,6 @@ export class AssetAggregatorService extends AbstractAssetAggregatorService {
       AbstractDBService.getInstance().getDataSource(),
       this.logger.child('assetAggregator'),
     );
-    this.redis = createClient({
-      url: configs.redis.address,
-      token: configs.redis.token,
-    });
     this.setStatus(ServiceStatus.dormant);
     return true;
   };
@@ -117,7 +117,10 @@ export class AssetAggregatorService extends AbstractAssetAggregatorService {
       Object.keys(configs.chains).map(async (chainKey) => {
         const chain = chainKey as ChainsKeys;
         if (chain === NETWORKS.ergo.key || configs.chains[chain].active) {
-          const data = await this.redis.get<AssetBalance | null>(chainKey);
+          const data =
+            await AbstractRedisService.getInstance().getFromRedis<AssetBalance>(
+              chainKey,
+            );
           if (data) {
             assetBalances[chain as ChainChoices] = data;
           }
@@ -126,7 +129,9 @@ export class AssetAggregatorService extends AbstractAssetAggregatorService {
     );
 
     const totalSupply: { [chain: string]: TotalSupply[] } =
-      (await this.redis.get(TOTAL_SUPPLY_REDIS_KEY)) ?? {};
+      (await AbstractRedisService.getInstance().getFromRedis<{
+        [chain: string]: TotalSupply[];
+      }>(TOTAL_SUPPLY_REDIS_KEY)) ?? {};
 
     await this.assetAggregator.update(assetBalances, totalSupply);
   };

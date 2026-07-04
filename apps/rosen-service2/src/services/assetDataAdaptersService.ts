@@ -20,7 +20,6 @@ import {
   ChainsAdapters,
 } from '@rosen-ui/asset-data-adapter/dist/types';
 import { NETWORKS, NETWORKS_KEYS } from '@rosen-ui/constants';
-import { createClient, VercelKV } from '@vercel/kv';
 
 import { configs } from '../configs';
 import { TOTAL_SUPPLY_REDIS_KEY } from '../constants';
@@ -30,15 +29,20 @@ import {
   AbstractAssetDataAdapterService,
   AbstractTokenMapService,
 } from './abstracts';
+import { AbstractRedisService } from './abstracts/abstractRedisService';
 
 export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
   static serviceName = AbstractAssetDataAdapterService.name;
-  protected redis: VercelKV;
   protected explorerApi: ReturnType<typeof ergoExplorerClientFactory>;
   protected dependencies: Dependency[] = [
     {
       serviceName: AbstractTokenMapService.name,
       allowedStatuses: [ServiceStatus.running],
+      action: ServiceAction.start,
+    },
+    {
+      serviceName: AbstractRedisService.name,
+      allowedStatuses: [ServiceStatus.started, ServiceStatus.running],
       action: ServiceAction.start,
     },
   ];
@@ -49,10 +53,6 @@ export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
    * @returns {Promise<boolean>} Resolves to `true` when the assembly is successfully completed.
    */
   protected assemble = async (): Promise<boolean> => {
-    this.redis = createClient({
-      url: configs.redis.address,
-      token: configs.redis.token,
-    });
     this.explorerApi = ergoExplorerClientFactory(
       configs.chains.ergo.explorer.connections.at(0)!.url,
     );
@@ -227,7 +227,10 @@ export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
    */
   protected preStart = async () => {
     const assets = await this.getAssetsTotalSupply();
-    await this.redis.set(TOTAL_SUPPLY_REDIS_KEY, stringSerializer(assets));
+    await AbstractRedisService.getInstance().setToRedis(
+      TOTAL_SUPPLY_REDIS_KEY,
+      stringSerializer(assets),
+    );
   };
 
   /**
@@ -246,7 +249,9 @@ export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
     ) {
       // preventing of overriding old chunks of data
       const oldData =
-        (await this.redis.get<AssetBalance | null>(adapter.chain)) || {};
+        (await AbstractRedisService.getInstance().getFromRedis<AssetBalance | null>(
+          adapter.chain,
+        )) || {};
       const finalData = { ...oldData };
       for (const tokenId of new Set([
         ...Object.keys(oldData),
@@ -281,7 +286,10 @@ export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
         newData = finalData;
       }
     }
-    await this.redis.set(adapter.chain, stringSerializer(newData));
+    await AbstractRedisService.getInstance().setToRedis(
+      adapter.chain,
+      stringSerializer(newData),
+    );
   };
 
   /**

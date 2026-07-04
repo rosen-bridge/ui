@@ -1,5 +1,6 @@
 import { DefaultLogger } from '@rosen-bridge/abstract-logger';
 import { ServiceManager } from '@rosen-bridge/service-manager';
+import { RedisService } from 'services/redisService';
 
 import dataSource from './dataSource';
 import { AssetAggregatorService } from './services/assetAggregatorService';
@@ -58,7 +59,10 @@ const startApp = async () => {
   );
   serviceManager.register(GeneralMetricsService.getInstance());
   logger.debug('GeneralMetricsService registered to the service manager');
-
+  logger.debug('Initializing RedisService');
+  RedisService.init(DefaultLogger.getInstance().child('redisServer'));
+  serviceManager.register(RedisService.getInstance());
+  logger.debug('RedisService registered to the service manager');
   logger.debug('Initializing AssetDataAdapterService');
   AssetDataAdapterService.init(
     DefaultLogger.getInstance().child('assetDataAdapterService'),
