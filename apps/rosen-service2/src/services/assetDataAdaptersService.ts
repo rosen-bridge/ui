@@ -23,6 +23,7 @@ import { NETWORKS, NETWORKS_KEYS } from '@rosen-ui/constants';
 
 import { configs } from '../configs';
 import { TOTAL_SUPPLY_REDIS_KEY } from '../constants';
+import { ChainChoices } from '../types';
 import { stringSerializer } from '../utils';
 import {
   AbstractAssetDataAdapterService,
