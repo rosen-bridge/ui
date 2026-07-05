@@ -15,6 +15,7 @@ import {
   TableGridCell,
   TableGridHeader,
   TableGridRow,
+  Toolbar,
   useBreakpoint,
 } from '@rosen-bridge/ui-kit';
 
@@ -42,8 +43,7 @@ export const RecentTransactions = () => {
           {isLarge && <TableGridCell>Type</TableGridCell>}
           {isLarge && <TableGridCell>Status</TableGridCell>}
           {isLarge && <TableGridCell>Last Update</TableGridCell>}
-          <TableGridCell/>
-          {!isLarge && <TableGridCell />}
+          <TableGridCell />
         </TableGridHeader>
         <TableGridBody>
           {items.map((item, index, items) => (
@@ -60,9 +60,7 @@ export const RecentTransactions = () => {
               </TableGridCell>
               {!isLarge && (
                 <TableGridCell>
-                  <Chip color="primary" loading={isLoading}>
-                    {item.status}
-                  </Chip>
+                  <Chip color="primary" label={item.status} loading={isLoading} />
                 </TableGridCell>
               )}
               <TableGridCell>
@@ -70,16 +68,12 @@ export const RecentTransactions = () => {
               </TableGridCell>
               {isLarge && (
                 <TableGridCell>
-                  <Chip color="primary" loading={isLoading}>
-                    {item.type}
-                  </Chip>
+                  <Chip color="primary" label={item.type} loading={isLoading} />
                 </TableGridCell>
               )}
               {isLarge && (
                 <TableGridCell>
-                  <Chip color="primary" loading={isLoading}>
-                    {item.status}
-                  </Chip>
+                  <Chip color="primary" label={item.status} loading={isLoading} />
                 </TableGridCell>
               )}
               {isLarge && (
@@ -87,18 +81,20 @@ export const RecentTransactions = () => {
                   <DateTime loading={isLoading} timestamp={item.lastUpdate} />
                 </TableGridCell>
               )}
-              <TableGridCell>
-                <IconButton size="small">
-                  <Icon name="TrashAlt" />
-                </IconButton>
+              <TableGridCell style={{ display: 'flex', justifyContent: 'end' }}>
+                {!isLoading && (
+                  <Toolbar>
+                    <IconButton size="small">
+                      <Icon name="TrashAlt" />
+                    </IconButton>
+                    {!isLarge && (
+                      <IconButton size="small">
+                        <Icon name="Eye" />
+                      </IconButton>
+                    )}
+                  </Toolbar>
+                )}
               </TableGridCell>
-              {!isLarge && (
-                <TableGridCell>
-                  <IconButton size="small">
-                    <Icon name="Eye" />
-                  </IconButton>
-                </TableGridCell>
-              )}
             </TableGridRow>
           ))}
         </TableGridBody>
