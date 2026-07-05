@@ -146,6 +146,8 @@ export { default as ThumbsUp } from './icons/thumbs-up.svg?react';
 
 export { default as Times } from './icons/times.svg?react';
 
+export { default as TrashAlt } from './icons/trash-alt.svg?react';
+
 export { default as Unlock } from './icons/unlock.svg?react';
 
 export { default as Wallet } from './icons/wallet.svg?react';

@@ -3,18 +3,20 @@
 import { CSSProperties, ReactNode } from 'react';
 
 import {
-  Box,
   Card,
   CardBody,
   CardHeader,
   CardTitle,
   Divider,
   PageHeading,
+  Stack,
   Typography,
   useResponsive,
 } from '@rosen-bridge/ui-kit';
 
 import { Actions as ActionsCore } from '@/components';
+
+import { RecentTransactions } from './recentTransactions';
 
 type ActionsProps = {
   form: ReactNode;
@@ -44,8 +46,8 @@ const Actions = ({ form, text, title }: ActionsProps) => {
   return (
     <>
       <PageHeading title="Actions" />
-      <ActionsCore>
-        <Box pt={3} />
+      <Stack spacing={2}>
+        <ActionsCore />
         <Card>
           <CardHeader>
             <CardTitle>{title}</CardTitle>
@@ -58,7 +60,8 @@ const Actions = ({ form, text, title }: ActionsProps) => {
             </Typography>
           </CardBody>
         </Card>
-      </ActionsCore>
+        <RecentTransactions />
+      </Stack>
     </>
   );
 };

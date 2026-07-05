@@ -1,17 +1,12 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import { ReactNode } from 'react';
 
 import { Tabs, TabsList, TabsTab } from '@rosen-bridge/ui-kit';
 
 import './style.css';
 
-export type ActionsProps = {
-  children?: ReactNode;
-};
-
-export const Actions = ({ children }: ActionsProps) => {
+export const Actions = () => {
   const pathname = usePathname();
 
   return (
@@ -37,7 +32,6 @@ export const Actions = ({ children }: ActionsProps) => {
           Unlock
         </TabsTab>
       </TabsList>
-      {children}
     </Tabs>
   );
 };
