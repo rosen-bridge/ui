@@ -9,7 +9,12 @@ export const TYPE_MAP: Record<RecentTransaction['type'], string> = {
 
 export const STATUS_MAP: Record<
   RecentTransaction['status'],
-  { backgroundColor: Color; color: Color; icon: IconProps['name']; label: string }
+  {
+    backgroundColor: Color;
+    color: Color;
+    icon: IconProps['name'];
+    label: string;
+  }
 > = {
   'completed': {
     backgroundColor: 'success-light',

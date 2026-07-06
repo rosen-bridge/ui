@@ -115,7 +115,7 @@ const Revenues = () => {
     >
       {!isLoading && !items.length && <EmptyState style={{ height: '100%' }} />}
       {!!items.length && (
-        <TableGrid>
+        <TableGrid variant="separated">
           <TableGridHeader>
             <TableGridCell data-width="30%">Event Id</TableGridCell>
             <TableGridCell>Token</TableGridCell>

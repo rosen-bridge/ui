@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 
 import {
@@ -11,6 +11,7 @@ import {
   SubmitButton,
   Typography,
   useApiKey,
+  useConfirm,
   useToast,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
@@ -30,13 +31,13 @@ import {
   ApiInfoResponse,
 } from '@/types/api';
 
-import { ConfirmationModal } from '../../ConfirmationModal';
 import {
   TokenAmountTextField,
   TokenAmountCompatibleFormSchema,
 } from '../../TokenAmountTextField';
 
 const LockForm = () => {
+  const { confirm, ConfirmDialog } = useConfirm();
   const toast = useToast();
 
   const { rsnToken, isLoading: isRsnTokenLoading } = useRsnToken();
@@ -58,8 +59,6 @@ const LockForm = () => {
       },
     [info, rsnToken],
   );
-
-  const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
 
   const {
     trigger,
@@ -145,7 +144,17 @@ const LockForm = () => {
   };
 
   const onSubmit: SubmitHandler<TokenAmountCompatibleFormSchema> = async () => {
-    setConfirmationModalOpen(true);
+    await confirm({
+      title: 'Confirm Lock',
+      /**
+       * TODO: The content should show the amounts of collateral and
+       * received permits
+       * local:ergo/rosen-bridge/ui#104
+       */
+      content: `You are going to lock ${formData.amount} ${rsnToken?.name ?? 'token'}. You will get some reporting permits in return.`,
+      confirmText: 'Lock',
+      onConfirm: submit,
+    });
   };
 
   const disabled =
@@ -257,19 +266,7 @@ const LockForm = () => {
             Lock
           </SubmitButton>
         </Stack>
-        <ConfirmationModal
-          open={confirmationModalOpen}
-          title="Confirm Lock"
-          /**
-           * TODO: The content should show the amounts of collateral and
-           * received permits
-           * local:ergo/rosen-bridge/ui#104
-           */
-          content={`You are going to lock ${formData.amount} ${rsnToken?.name ?? 'token'}. You will get some reporting permits in return.`}
-          buttonText="Lock"
-          handleClose={() => setConfirmationModalOpen(false)}
-          onConfirm={submit}
-        />
+        {ConfirmDialog}
       </form>
     </FormProvider>
   );
