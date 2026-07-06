@@ -19,10 +19,7 @@ export const registerExtractors = async (scanner: ErgoScanner) => {
     for (let key of NETWORKS_KEYS) {
       const chain =
         key == NETWORKS['bitcoin-runes'].key ? BITCOIN_RUNES_CONFIG_KEY : key;
-      const chainConfig = configs[chain as keyof typeof configs] as {
-        addresses: { commitment: string };
-        tokens: { rwt: string };
-      };
+      const chainConfig = configs[chain];
 
       const commitmentExtractor = new CommitmentExtractor(
         `${chain}-commitment-extractor`,
