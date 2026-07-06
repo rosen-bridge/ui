@@ -5,6 +5,7 @@ import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 
 import {
   Alert,
+  ApiKeyDialogProtectedAction,
   ApiKeyDialogWarning,
   Link,
   Stack,
@@ -259,12 +260,14 @@ const LockForm = () => {
           {renderTokenAmountTextField()}
           {renderCollateralAlert()}
           {renderReportsCountAlert()}
-          <SubmitButton
-            loading={isLockPending}
-            disabled={!formState.isValid || !apiKey || disabled}
-          >
-            Lock
-          </SubmitButton>
+          <ApiKeyDialogProtectedAction>
+            <SubmitButton
+              loading={isLockPending}
+              disabled={!formState.isValid || disabled}
+              >
+              Lock
+            </SubmitButton>
+          </ApiKeyDialogProtectedAction>
         </Stack>
         {ConfirmDialog}
       </form>

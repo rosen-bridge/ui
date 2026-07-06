@@ -11,6 +11,7 @@ import {
   Stack,
   useToast,
   useConfirm,
+  ApiKeyDialogProtectedAction,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 import { fetcher, mutatorWithHeaders } from '@rosen-ui/swr-helpers';
@@ -193,12 +194,14 @@ const UnlockForm = () => {
         <Stack spacing={2}>
           <ApiKeyDialogWarning />
           {renderTokenAmountTextField()}
-          <SubmitButton
-            loading={isUnlockPending}
-            disabled={!formState.isValid || !apiKey || disabled}
-          >
-            Unlock
-          </SubmitButton>
+          <ApiKeyDialogProtectedAction>
+            <SubmitButton
+              loading={isUnlockPending}
+              disabled={!formState.isValid || disabled}
+              >
+              Unlock
+            </SubmitButton>
+          </ApiKeyDialogProtectedAction>
         </Stack>
         {ConfirmDialog}
       </form>

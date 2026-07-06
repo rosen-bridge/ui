@@ -3,6 +3,7 @@
 import { useState } from 'react';
 
 import {
+  ApiKeyDialogProtectedAction,
   Avatar,
   Button,
   Card,
@@ -21,7 +22,6 @@ import {
   TableGridHeader,
   TableGridRow,
   Toolbar,
-  useApiKey,
   useBreakpoint,
   useConfirm,
   useToast,
@@ -32,7 +32,6 @@ import { Details } from './Details';
 import { RecentTransaction } from './types';
 
 export const RecentTransactions = () => {
-  const { apiKey } = useApiKey();
   const [current, setCurrent] = useState<RecentTransaction>();
   const isLarge = useBreakpoint('laptop-up');
   const { confirm, ConfirmDialog } = useConfirm();
@@ -194,13 +193,14 @@ export const RecentTransactions = () => {
                     >
                       {!isLoading && (
                         <Toolbar>
-                          <IconButton
-                            disabled={!apiKey}
-                            size="small"
-                            onClick={() => onRemove(item.id)}
-                          >
-                            <Icon name="TrashAlt" />
-                          </IconButton>
+                          <ApiKeyDialogProtectedAction>
+                            <IconButton
+                              size="small"
+                              onClick={() => onRemove(item.id)}
+                            >
+                              <Icon name="TrashAlt" />
+                            </IconButton>
+                          </ApiKeyDialogProtectedAction>
                           {!isLarge && (
                             <IconButton
                               size="small"

@@ -22,6 +22,7 @@ import {
   useResponsive,
   useToast,
   useConfirm,
+  ApiKeyDialogProtectedAction,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS, TOKEN_NAME_PLACEHOLDER } from '@rosen-ui/constants';
 import { fetcher, mutatorWithHeaders } from '@rosen-ui/swr-helpers';
@@ -270,12 +271,15 @@ const WithdrawForm = () => {
             {renderTokensListSelect()}
             {renderTokenAmountTextField()}
           </Stack>
+          <ApiKeyDialogProtectedAction>
+
           <SubmitButton
-            disabled={!formState.isValid || !apiKey || disabled}
+            disabled={!formState.isValid || disabled}
             loading={isWithdrawPending}
-          >
+            >
             Withdraw
           </SubmitButton>
+            </ApiKeyDialogProtectedAction>
         </Stack>
         {ConfirmDialog}
       </form>
