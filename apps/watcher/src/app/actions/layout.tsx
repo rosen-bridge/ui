@@ -16,7 +16,7 @@ import {
 
 import { Actions as ActionsCore } from '@/components';
 
-import { RecentTransactions } from './recentTransactions';
+import { Transactions } from './transactions';
 
 type ActionsProps = {
   form: ReactNode;
@@ -60,7 +60,7 @@ const Actions = ({ form, text, title }: ActionsProps) => {
             </Typography>
           </CardBody>
         </Card>
-        <RecentTransactions />
+        <Transactions />
       </Stack>
     </>
   );

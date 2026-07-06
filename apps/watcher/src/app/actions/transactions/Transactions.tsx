@@ -31,7 +31,7 @@ import { STATUS_MAP, TYPE_MAP } from './constants';
 import { Details } from './Details';
 import { RecentTransaction } from './types';
 
-export const RecentTransactions = () => {
+export const Transactions = () => {
   const [current, setCurrent] = useState<RecentTransaction>();
   const isLarge = useBreakpoint('laptop-up');
   const { confirm, ConfirmDialog } = useConfirm();
@@ -58,21 +58,25 @@ export const RecentTransactions = () => {
     },
   ];
 
-  const items = useMemo<RecentTransaction[] | Partial<RecentTransaction>[]>(() => {
+  const items = useMemo(() => {
     if (!isLoading) return data;
-    return Array(3).fill({});
+    return Array(3)
+             .fill(null)
+             .map((_, index) => ({id: index.toString()} as Partial<RecentTransaction>));
   }, [data, isLoading]);
 
   const remove = async (id: string) => {
     try {
+      // TODO
       await id;
-
       await new Promise((resolve, reject) => {
         setTimeout(() => {
           if (Math.random() > 0.5) resolve(undefined);
           else reject();
         }, 500);
       });
+
+      // TODO remove the item or refresh the list
 
       toast.add({
         type: 'success',
