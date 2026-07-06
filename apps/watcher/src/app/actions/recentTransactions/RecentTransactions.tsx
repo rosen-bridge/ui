@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import {
   ApiKeyDialogProtectedAction,
@@ -36,8 +36,8 @@ export const RecentTransactions = () => {
   const isLarge = useBreakpoint('laptop-up');
   const { confirm, ConfirmDialog } = useConfirm();
   const toast = useToast();
-  const isLoading = !true;
-  const items: RecentTransaction[] = [
+  const isLoading = true;
+  const data: RecentTransaction[] = [
     {
       id: '3WyiVN7TNcX7ZVRMTqdR7jvbaUqLZRc61cxXkv6LjpQhusg7rddt',
       type: 'reward',
@@ -57,6 +57,12 @@ export const RecentTransactions = () => {
       lastUpdate: Date.now(),
     },
   ];
+
+  const items = useMemo<RecentTransaction[] | Partial<RecentTransaction>[]>(() => {
+    if (!isLoading) return data;
+    return Array(3).fill({});
+  }, [data, isLoading]);
+
   const remove = async (id: string) => {
     try {
       await id;
@@ -139,9 +145,9 @@ export const RecentTransactions = () => {
             </TableGridHeader>
             <TableGridBody>
               {items.map((item, index) => {
-                const status = STATUS_MAP[item.status];
+                const status = item.status && STATUS_MAP[item.status];
 
-                const type = TYPE_MAP[item.type];
+                const type = item.type && TYPE_MAP[item.type];
 
                 return (
                   <TableGridRow key={item.id || index}>
@@ -149,12 +155,12 @@ export const RecentTransactions = () => {
                     {!isLarge && (
                       <TableGridCell>
                         <Avatar
-                          background={status.backgroundColor}
-                          color={status.color}
+                          background={status?.backgroundColor}
+                          color={status?.color}
                           loading={isLoading}
                           size="28px"
                         >
-                          <Icon name={status.icon} size="16px" />
+                          <Icon name={status?.icon} size="16px" />
                         </Avatar>
                       </TableGridCell>
                     )}
@@ -173,8 +179,8 @@ export const RecentTransactions = () => {
                     {isLarge && (
                       <TableGridCell>
                         <Chip
-                          color={status.color}
-                          icon={status.icon}
+                          color={status?.color}
+                          icon={status?.icon}
                           label={item.status}
                           loading={isLoading}
                         />
@@ -196,7 +202,7 @@ export const RecentTransactions = () => {
                           <ApiKeyDialogProtectedAction>
                             <IconButton
                               size="small"
-                              onClick={() => onRemove(item.id)}
+                              onClick={() => item.id && onRemove(item.id)}
                             >
                               <Icon name="TrashAlt" />
                             </IconButton>
@@ -204,7 +210,7 @@ export const RecentTransactions = () => {
                           {!isLarge && (
                             <IconButton
                               size="small"
-                              onClick={() => setCurrent(item)}
+                              onClick={() => setCurrent(item as RecentTransaction)}
                             >
                               <Icon name="Eye" />
                             </IconButton>
