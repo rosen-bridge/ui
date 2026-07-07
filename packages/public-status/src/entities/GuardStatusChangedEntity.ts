@@ -16,8 +16,11 @@ export class GuardStatusChangedEntity {
   id: number;
 
   @Column('varchar')
-  @Index()
   eventId: string;
+
+  @Column('varchar')
+  @Index()
+  triggerTxId: string;
 
   @Column('varchar')
   @Index()

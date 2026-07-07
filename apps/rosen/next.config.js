@@ -3,9 +3,6 @@ const path = require('path');
 
 const nextConfig = {
   typedRoutes: true,
-  env: {
-    ALLOWED_PKS: process.env.ALLOWED_PKS,
-  },
   serverExternalPackages: [
     'ergo-lib-wasm-nodejs',
     '@emurgo/cardano-serialization-lib-nodejs',

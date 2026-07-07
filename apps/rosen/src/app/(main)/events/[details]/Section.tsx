@@ -22,7 +22,6 @@ export type SectionProps = {
   action?: ReactNode;
   children?: ReactNode;
   collapsible?: boolean;
-  disabled?: boolean;
   error?: unknown;
   load?: () => void;
   title?: string;

@@ -106,7 +106,7 @@ export class TokenMapService extends AbstractTokenMapService {
   };
 
   /**
-   * constructor for tokenMap service
+   * Constructor for tokenMap service
    * @param {AbstractLogger} logger.
    */
   protected constructor(logger: AbstractLogger = new DummyLogger()) {
@@ -114,7 +114,7 @@ export class TokenMapService extends AbstractTokenMapService {
   }
 
   /**
-   * initializes the singleton instance of TokenMapService
+   * Initializes the singleton instance of TokenMapService
    *
    * @static
    * @param {AbstractLogger} [logger]
@@ -128,7 +128,7 @@ export class TokenMapService extends AbstractTokenMapService {
   };
 
   /**
-   * Start service by loading token map from file or initializes on-chain token map depending on config.
+   * Starts service by loading token map from file or initializes on-chain token map depending on config.
    * @returns {Promise<boolean>} True if the service started successfully, false otherwise.
    */
   protected start = async (): Promise<boolean> => {
@@ -199,7 +199,7 @@ export class TokenMapService extends AbstractTokenMapService {
   };
 
   /**
-   * returns of tokenMap
+   * Returns of tokenMap
    *
    * @returns {TokenMap} tokenMap
    */

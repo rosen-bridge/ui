@@ -5,7 +5,7 @@ export abstract class AbstractHealthService extends PeriodicTaskService {
   protected static instance: AbstractHealthService;
 
   /**
-   * return the singleton instance of AbstractHealthService
+   * Returns the singleton instance of AbstractHealthService
    *
    * @static
    * @return {AbstractHealthService}

@@ -7,7 +7,7 @@ export abstract class AbstractScannerService extends PeriodicTaskService {
   protected static instance: AbstractScannerService;
 
   /**
-   * return the singleton instance of AbstractScannerService
+   * Returns the singleton instance of AbstractScannerService
    *
    * @static
    * @return {AbstractScannerService}

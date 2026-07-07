@@ -4,14 +4,17 @@ import { TokenMap } from '@rosen-bridge/extended-tokens';
 import { DataSource } from '@rosen-bridge/extended-typeorm';
 import { TokenEntity } from '@rosen-ui/asset-aggregator';
 import { NETWORKS } from '@rosen-ui/constants';
+import { VercelKV } from '@vercel/kv';
 import { describe, it, beforeEach, expect, vi, Mock } from 'vitest';
 
 import {
   AbstractAssetDataAdapterService,
   AbstractTokenMapService,
 } from '../../src/services/abstracts';
+import { AbstractRedisService } from '../../src/services/abstracts/abstractRedisService';
 import { AssetDataAdapterService } from '../../src/services/assetDataAdaptersService';
 import { DBService } from '../../src/services/dbService';
+import { RedisService } from '../../src/services/redisService';
 import { TokenMapService } from '../../src/services/tokenMapService';
 import {
   expectedErgoGetAssetsTotalSupplyResult,
@@ -21,6 +24,7 @@ import {
 interface TestContext {
   service: AbstractAssetDataAdapterService;
   mockTokenMap: TokenMap;
+  mockRedis: VercelKV;
   mockExplorer: { v1: { [k: string]: Mock } };
 }
 
@@ -47,6 +51,13 @@ describe('AssetDataAdapterService', () => {
           getName: () => 'Mocked Token Map Service',
         };
       });
+      RedisService.init = vi.fn().mockImplementation(() => {
+        (AbstractRedisService as any).instance = {
+          logger: new DummyLogger(),
+          getName: () => 'Mocked Redis Service',
+        };
+      });
+      await RedisService.init();
       await TokenMapService.init();
       AbstractTokenMapService.getInstance().getTokenMap = vi
         .fn()

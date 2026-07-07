@@ -26,7 +26,6 @@
     display: flex;
     flex-direction: column;
     gap: calc(var(--rosen-spacing) * 2);
-    z-index: 0;
   }
 
   .rosen-bridge-page-alert {
