@@ -264,7 +264,7 @@ const LockForm = () => {
             <SubmitButton
               loading={isLockPending}
               disabled={!formState.isValid || disabled}
-              >
+            >
               Lock
             </SubmitButton>
           </ApiKeyDialogProtectedAction>

@@ -198,7 +198,7 @@ const UnlockForm = () => {
             <SubmitButton
               loading={isUnlockPending}
               disabled={!formState.isValid || disabled}
-              >
+            >
               Unlock
             </SubmitButton>
           </ApiKeyDialogProtectedAction>

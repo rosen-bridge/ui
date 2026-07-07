@@ -272,14 +272,13 @@ const WithdrawForm = () => {
             {renderTokenAmountTextField()}
           </Stack>
           <ApiKeyDialogProtectedAction>
-
-          <SubmitButton
-            disabled={!formState.isValid || disabled}
-            loading={isWithdrawPending}
+            <SubmitButton
+              disabled={!formState.isValid || disabled}
+              loading={isWithdrawPending}
             >
-            Withdraw
-          </SubmitButton>
-            </ApiKeyDialogProtectedAction>
+              Withdraw
+            </SubmitButton>
+          </ApiKeyDialogProtectedAction>
         </Stack>
         {ConfirmDialog}
       </form>

@@ -36,7 +36,7 @@ export const Transactions = () => {
   const isLarge = useBreakpoint('laptop-up');
   const { confirm, ConfirmDialog } = useConfirm();
   const toast = useToast();
-  const isLoading = true;
+  const isLoading = !true;
   const data: RecentTransaction[] = [
     {
       id: '3WyiVN7TNcX7ZVRMTqdR7jvbaUqLZRc61cxXkv6LjpQhusg7rddt',
@@ -61,8 +61,10 @@ export const Transactions = () => {
   const items = useMemo(() => {
     if (!isLoading) return data;
     return Array(3)
-             .fill(null)
-             .map((_, index) => ({id: index.toString()} as Partial<RecentTransaction>));
+      .fill(null)
+      .map(
+        (_, index) => ({ id: index.toString() }) as Partial<RecentTransaction>,
+      );
   }, [data, isLoading]);
 
   const remove = async (id: string) => {
@@ -185,7 +187,7 @@ export const Transactions = () => {
                         <Chip
                           color={status?.color}
                           icon={status?.icon}
-                          label={item.status}
+                          label={status?.label}
                           loading={isLoading}
                         />
                       </TableGridCell>
@@ -214,7 +216,9 @@ export const Transactions = () => {
                           {!isLarge && (
                             <IconButton
                               size="small"
-                              onClick={() => setCurrent(item as RecentTransaction)}
+                              onClick={() =>
+                                setCurrent(item as RecentTransaction)
+                              }
                             >
                               <Icon name="Eye" />
                             </IconButton>
