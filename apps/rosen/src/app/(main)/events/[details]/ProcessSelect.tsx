@@ -4,7 +4,7 @@ import { Button, Icon, Menu, MenuItem } from '@rosen-bridge/ui-kit';
 
 const GUARDS = [
   { key: '', label: 'Overall' },
-  ...JSON.parse(process.env['ALLOWED_PKS'] ?? '[]'),
+  ...JSON.parse(process.env['NEXT_PUBLIC_ALLOWED_PKS'] ?? '[]'),
 ] as Array<{ key: string; label: string }>;
 
 type ProcessSelectProps = {

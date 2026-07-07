@@ -147,7 +147,7 @@ export class ErgoExtractorService extends AbstractErgoExtractorsService {
   }
 
   /**
-   * initializes the singleton instance of ErgoExtractorService
+   * Initializes the singleton instance of ErgoExtractorService
    *
    * @static
    * @param {AbstractLogger} [logger]
