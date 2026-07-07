@@ -10,3 +10,4 @@ export * from './useTablePagination';
 export * from './useTheme';
 export * from './useThemeToggler';
 export * from './useToast';
+export * from './useMenu';

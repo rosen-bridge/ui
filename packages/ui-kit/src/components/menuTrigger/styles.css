@@ -1,0 +1,19 @@
+.RosenMenuTrigger {
+  outline: none;
+  border: none;
+  background: none;
+  width: fit-content;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.RosenMenuTrigger-icon {
+  display: inline-flex;
+  align-items: center;
+  transition: transform 0.2s ease;
+}
+
+.RosenMenuTrigger-icon[data-popup-open] {
+  transform: rotate(180deg);
+}
