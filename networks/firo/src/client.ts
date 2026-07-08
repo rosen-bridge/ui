@@ -6,7 +6,7 @@ import type { buildPaymentUri, generateOpReturnData } from './utils';
 
 type MaybePromise<T> = T | Promise<T>;
 
-type FiroNetworkConfig = NetworkConfig & {
+type FiroNetworkConfig = Omit<NetworkConfig, 'getMaxTransfer'> & {
   buildPaymentUri: (
     ...args: Parameters<typeof buildPaymentUri>
   ) => MaybePromise<ReturnType<typeof buildPaymentUri>>;
@@ -43,8 +43,8 @@ export class FiroNetwork implements Network {
     return this.config.generateOpReturnData(...args);
   };
 
-  public getMaxTransfer: FiroNetworkConfig['getMaxTransfer'] = (...args) => {
-    return this.config.getMaxTransfer(...args);
+  public getMaxTransfer: Network['getMaxTransfer'] = async () => {
+    return BigInt(Number.MAX_VALUE);
   };
 
   public getMinTransfer: FiroNetworkConfig['getMinTransfer'] = (...args) => {
