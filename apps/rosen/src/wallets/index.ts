@@ -1,6 +1,7 @@
 import './base';
 
 export * from './eternl';
+export * from './firo';
 export * from './lace';
 export * from './metaMask';
 export * from './myDoge';

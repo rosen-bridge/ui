@@ -78,6 +78,10 @@ const start = async () => {
       addresses: config.calculator.addresses.doge,
       blockcypherUrl: config.doge.blockcypherUrl,
     },
+    {
+      addresses: config.calculator.addresses.firo,
+      explorerUrl: config.firo.explorerUrl,
+    },
     dataSource,
     logger,
   );

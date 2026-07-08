@@ -19,10 +19,12 @@ export const registerExtractors = async (scanner: ErgoScanner) => {
     for (let key of NETWORKS_KEYS) {
       const chain =
         key == NETWORKS['bitcoin-runes'].key ? BITCOIN_RUNES_CONFIG_KEY : key;
+      const chainConfig = configs[chain];
+
       const commitmentExtractor = new CommitmentExtractor(
         `${chain}-commitment-extractor`,
-        [configs[chain].addresses.commitment],
-        configs[chain].tokens.rwt,
+        [chainConfig.addresses.commitment],
+        chainConfig.tokens.rwt,
         dataSource,
         await getTokenMap(),
         logger.child(`${chain}CommitmentExtractor`),
