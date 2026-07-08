@@ -59,7 +59,9 @@ export const generateOpReturnData = async (
 
 const getHeight = async (): Promise<number> => {
   const firoExplorerUrl = `${process.env.FIRO_EXPLORER_API}`;
-  const response = await fetch(`${firoExplorerUrl}/status?q=getInfo`);
+  const response = await fetch(
+    `${firoExplorerUrl}/insight-api-zcoin/status?q=getInfo`,
+  );
   if (!response.ok) {
     throw Error(
       `Cannot fetch Firo height from explorer: ${response.status} ${response.statusText}`,
