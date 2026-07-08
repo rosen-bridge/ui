@@ -33,14 +33,14 @@ export const createFiroNetworkConnectorManager = () => {
       scannerLogger,
     );
 
-  networkConnectorManager.addConnector(
-    new FiroElectrumXNetwork(
-      config.firo.electrumxHost,
-      config.firo.electrumxPort,
-      config.firo.electrumxReconnectDelay,
-      SCANNER_API_TIMEOUT / 1000,
-    ),
+  const network = new FiroElectrumXNetwork(
+    config.firo.electrumxHost,
+    config.firo.electrumxPort,
+    config.firo.electrumxReconnectDelay,
+    SCANNER_API_TIMEOUT / 1000,
   );
+  network.setupSocket();
+  networkConnectorManager.addConnector(network);
 
   return networkConnectorManager;
 };
