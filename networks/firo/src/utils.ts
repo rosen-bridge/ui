@@ -7,8 +7,6 @@ import {
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
 
-const FIRO_EXPLORER_API = 'https://explorer.firo.org/insight-api-zcoin';
-
 /**
  * builds a firo: payment URI with amount and op_return metadata
  * @param address - lock address
@@ -60,7 +58,8 @@ export const generateOpReturnData = async (
 };
 
 const getHeight = async (): Promise<number> => {
-  const response = await fetch(`${FIRO_EXPLORER_API}/status?q=getInfo`);
+  const firoExplorerUrl = `${process.env.FIRO_EXPLORER_API}`;
+  const response = await fetch(`${firoExplorerUrl}/status?q=getInfo`);
   if (!response.ok) {
     throw Error(
       `Cannot fetch Firo height from explorer: ${response.status} ${response.statusText}`,
