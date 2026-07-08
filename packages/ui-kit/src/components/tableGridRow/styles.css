@@ -2,7 +2,18 @@
   grid-column: 1 / -1;
   display: grid;
   grid-template-columns: subgrid;
-  padding: var(--rosen-spacing) 0;
   background-color: var(--rosen-palette-background-paper);
+}
+
+.RosenTableGrid[data-variant='separated'] .RosenTableGridRow {
+  padding: var(--rosen-spacing) 0;
   border-radius: var(--rosen-shape-borderRadius);
+}
+
+.RosenTableGrid[data-variant='standard'] .RosenTableGridRow {
+  padding: calc(var(--rosen-spacing) * 0.5) 0;
+}
+
+.RosenTableGrid[data-variant='standard'] .RosenTableGridRow {
+  border-bottom: solid 1px var(--rosen-palette-divider);
 }

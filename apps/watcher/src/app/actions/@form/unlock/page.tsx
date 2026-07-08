@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useMemo, useState, useEffect } from 'react';
+import { useMemo, useEffect } from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 
 import {
@@ -10,6 +10,8 @@ import {
   ApiKeyDialogWarning,
   Stack,
   useToast,
+  useConfirm,
+  ApiKeyDialogProtectedAction,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 import { fetcher, mutatorWithHeaders } from '@rosen-ui/swr-helpers';
@@ -25,13 +27,13 @@ import {
   ApiPermitReturnResponse,
 } from '@/types/api';
 
-import { ConfirmationModal } from '../../ConfirmationModal';
 import {
   TokenAmountTextField,
   TokenAmountCompatibleFormSchema,
 } from '../../TokenAmountTextField';
 
 const UnlockForm = () => {
+  const { confirm } = useConfirm();
   const toast = useToast();
 
   const { data: info, isLoading: isInfoLoading } = useSWR<ApiInfoResponse>(
@@ -55,8 +57,6 @@ const UnlockForm = () => {
         : undefined,
     [info, rsnToken],
   );
-
-  const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
 
   const { trigger, isMutating: isUnlockPending } = useSWRMutation<
     ApiPermitReturnResponse,
@@ -163,7 +163,17 @@ const UnlockForm = () => {
   };
 
   const onSubmit: SubmitHandler<TokenAmountCompatibleFormSchema> = async () => {
-    setConfirmationModalOpen(true);
+    await confirm({
+      title: 'Confirm Unlock',
+      /**
+       * TODO: The content should show the amounts of collateral and
+       * unlocked RSN
+       * local:ergo/rosen-bridge/ui#104
+       */
+      content: `You are going to unlock ${formData.amount} ${rsnToken?.name ?? 'token'}.`,
+      confirmText: 'Unlock',
+      onConfirm: submit,
+    });
   };
 
   const disabled =
@@ -184,28 +194,15 @@ const UnlockForm = () => {
         <Stack spacing={2}>
           <ApiKeyDialogWarning />
           {renderTokenAmountTextField()}
-          <SubmitButton
-            loading={isUnlockPending}
-            disabled={!formState.isValid || !apiKey || disabled}
-          >
-            Unlock
-          </SubmitButton>
+          <ApiKeyDialogProtectedAction>
+            <SubmitButton
+              loading={isUnlockPending}
+              disabled={!formState.isValid || disabled}
+            >
+              Unlock
+            </SubmitButton>
+          </ApiKeyDialogProtectedAction>
         </Stack>
-        <ConfirmationModal
-          open={confirmationModalOpen}
-          title="Confirm Unlock"
-          /**
-           * TODO: The content should show the amounts of collateral and
-           * unlocked RSN
-           * local:ergo/rosen-bridge/ui#104
-           */
-          content={`You are going to unlock ${formData.amount} ${
-            rsnToken?.name ?? 'token'
-          }.`}
-          buttonText="Unlock"
-          handleClose={() => setConfirmationModalOpen(false)}
-          onConfirm={submit}
-        />
       </form>
     </FormProvider>
   );
