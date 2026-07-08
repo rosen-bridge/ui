@@ -31,7 +31,7 @@ declare module '@rosen-bridge/ui-kit' {
   }
 }
 
-export const getUiKitConfig: () => ConfigContextType = () => ({
+const getUiKitConfig: () => ConfigContextType = () => ({
   components: {
     Connector: {
       defaultProps: {

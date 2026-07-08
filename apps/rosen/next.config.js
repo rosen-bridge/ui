@@ -1,6 +1,7 @@
-/** @type {import('next').NextConfig} */
 const path = require('path');
+const { withSentryConfig } = require('@sentry/nextjs');
 
+/** @type {import('next').NextConfig} */
 const nextConfig = {
   typedRoutes: true,
   serverExternalPackages: [
@@ -29,31 +30,35 @@ const nextConfig = {
     config.externals.push('pino-pretty', 'lokijs', 'encoding');
 
     config.experiments = {
+      ...config.experiments,
       asyncWebAssembly: true,
       syncWebAssembly: true,
       layers: true,
     };
+
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      '@react-native-async-storage/async-storage': false,
+      '@sap/hana-client/extension/Stream': false,
+      '@solana/kit': false,
+      'mysql': false,
+      'react-native-sqlite-storage': false,
+    };
+
     if (!options.isServer) {
       config.resolve.fallback = {
-        'fs': false,
-        // Ignore the dependency imported internally by @reown/appkit since we don't use Solana
-        '@solana/kit': false,
-        // Ignore the dependency warning from @metamask/sdk
-        '@react-native-async-storage/async-storage': false,
+        ...config.resolve.fallback,
+        fs: false,
       };
     }
-    config.resolve.alias['@solana/kit'] = false;
 
     return config;
   },
   outputFileTracingRoot: path.join(__dirname, '../../'),
 };
 
-module.exports = nextConfig;
-
-const { withSentryConfig } = require('@sentry/nextjs');
-
-module.exports = withSentryConfig(module.exports, {
+/** @type {import('@sentry/nextjs').SentryBuildOptions} */
+const sentryOptions = {
   org: process.env.SENTRY_ORG,
   project: process.env.SENTRY_PROJECT,
   authToken: process.env.SENTRY_AUTH_TOKEN,
@@ -65,4 +70,6 @@ module.exports = withSentryConfig(module.exports, {
       removeDebugLogging: false,
     },
   },
-});
+};
+
+module.exports = nextConfig;
