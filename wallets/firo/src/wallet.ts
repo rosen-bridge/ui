@@ -2,6 +2,7 @@ import { RosenChainToken } from '@rosen-bridge/tokens';
 import { FiroNetwork } from '@rosen-network/firo/dist/client';
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
+import { getDecimalString } from '@rosen-ui/utils';
 import {
   UnsupportedChainError,
   Wallet,
@@ -58,7 +59,7 @@ export class FiroWallet extends Wallet<FiroWalletConfig> {
 
     const uri = await this.currentNetwork.buildPaymentUri(
       this.currentNetwork.lockAddress,
-      params.amount.toString(),
+      getDecimalString(params.amount, params.token.decimals),
       opReturnData,
     );
 
