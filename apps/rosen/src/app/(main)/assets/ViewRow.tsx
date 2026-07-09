@@ -38,7 +38,7 @@ export const ViewRow = ({
   const isDesktopUp = useBreakpoint('desktop-up');
   const isLaptopUp = useBreakpoint('laptop-up');
   return (
-    <TableGrid>
+    <TableGrid variant="separated">
       <TableGridHeader>
         <TableGridCell>Name </TableGridCell>
         <TableGridCell>Network</TableGridCell>

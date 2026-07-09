@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import {
   FormProvider,
   SubmitHandler,
@@ -21,6 +21,8 @@ import {
   Stack,
   useResponsive,
   useToast,
+  useConfirm,
+  ApiKeyDialogProtectedAction,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS, TOKEN_NAME_PLACEHOLDER } from '@rosen-ui/constants';
 import { fetcher, mutatorWithHeaders } from '@rosen-ui/swr-helpers';
@@ -35,7 +37,6 @@ import {
   ApiWithdrawResponse,
 } from '@/types/api';
 
-import { ConfirmationModal } from '../../ConfirmationModal';
 import {
   TokenAmountTextField,
   TokenAmountCompatibleFormSchema,
@@ -47,6 +48,7 @@ interface Form extends TokenAmountCompatibleFormSchema {
 }
 
 const WithdrawForm = () => {
+  const { confirm } = useConfirm();
   const toast = useToast();
 
   const { data, isLoading: isTokensListLoading } =
@@ -61,8 +63,6 @@ const WithdrawForm = () => {
   );
 
   const info = useInfo();
-
-  const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
 
   const { trigger, isMutating: isWithdrawPending } = useSWRMutation<
     ApiWithdrawResponse,
@@ -176,8 +176,13 @@ const WithdrawForm = () => {
     }
   };
 
-  const onSubmit: SubmitHandler<Form> = () => {
-    setConfirmationModalOpen(true);
+  const onSubmit: SubmitHandler<Form> = async () => {
+    await confirm({
+      title: 'Confirm Withdraw',
+      content: `You are going to withdraw ${formData.amount} of token with id ${formData.tokenId} to address ${formData.address}.`,
+      confirmText: 'Withdraw',
+      onConfirm: submit,
+    });
   };
 
   const disabled =
@@ -266,21 +271,15 @@ const WithdrawForm = () => {
             {renderTokensListSelect()}
             {renderTokenAmountTextField()}
           </Stack>
-          <SubmitButton
-            disabled={!formState.isValid || !apiKey || disabled}
-            loading={isWithdrawPending}
-          >
-            Withdraw
-          </SubmitButton>
+          <ApiKeyDialogProtectedAction>
+            <SubmitButton
+              disabled={!formState.isValid || disabled}
+              loading={isWithdrawPending}
+            >
+              Withdraw
+            </SubmitButton>
+          </ApiKeyDialogProtectedAction>
         </Stack>
-        <ConfirmationModal
-          open={confirmationModalOpen}
-          title="Confirm Withdraw"
-          content={`You are going to withdraw ${formData.amount} of token with id ${formData.tokenId} to address ${formData.address}.`}
-          buttonText="Withdraw"
-          handleClose={() => setConfirmationModalOpen(false)}
-          onConfirm={submit}
-        />
       </form>
     </FormProvider>
   );

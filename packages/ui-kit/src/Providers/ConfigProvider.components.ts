@@ -3,6 +3,7 @@ import {
   AlertProps,
   ApiKeyDialogProps,
   ApiKeyDialogButtonProps,
+  ApiKeyDialogProtectedActionProps,
   ApiKeyDialogWarningProps,
   AppProps,
   AppBarProps,
@@ -73,6 +74,7 @@ export type Components = {
   Alert: AlertProps;
   ApiKeyDialog: ApiKeyDialogProps;
   ApiKeyDialogButton: ApiKeyDialogButtonProps;
+  ApiKeyDialogProtectedAction: ApiKeyDialogProtectedActionProps;
   ApiKeyDialogWarning: ApiKeyDialogWarningProps;
   App: AppProps;
   AppBar: AppBarProps;
