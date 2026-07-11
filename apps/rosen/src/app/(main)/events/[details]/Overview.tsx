@@ -1,5 +1,7 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+
 import {
   Amount,
   Columns,
@@ -11,19 +13,45 @@ import {
   DateTime,
   EventStatus,
   useResponsive,
+  Typography,
+  Menu,
+  MenuItem,
+  Icon,
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import { Network as NetworkType } from '@rosen-ui/types';
 import { getAddressUrl } from '@rosen-ui/utils';
 import useSWR from 'swr';
 
+import { EventDetailsType } from '@/backend/events/repository';
+
 import { Section } from './Section';
 
-export const Overview = ({ id }: { id: string }) => {
-  const { error, data, isLoading, mutate } = useSWR(
-    `/v1/events/${id}`,
-    fetcher,
-  );
+export const Overview = ({
+  id,
+  flowId,
+  onFlowIdChange,
+}: {
+  id: string;
+  flowId: string;
+  onFlowIdChange: (flowId: string) => void;
+}) => {
+  const {
+    error,
+    data: events,
+    isLoading,
+    mutate,
+  } = useSWR<EventDetailsType[]>(`/v1/events/${id}`, fetcher);
+
+  useEffect(() => {
+    if (events && events.length) {
+      onFlowIdChange(events.at(0)?.txId || '');
+    }
+  }, [events]);
+
+  const data = events?.find((event) => event.txId === flowId);
+
+  const multipleFLow = events && events.length > 1;
 
   const labelOrientation = useResponsive({
     mobile: 'horizontal',
@@ -40,16 +68,59 @@ export const Overview = ({ id }: { id: string }) => {
     tablet: 'both',
   } as const);
 
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
   return (
     <Section error={error} load={mutate} title="Overview">
-      <Label label="Event Id" orientation={labelOrientation}>
-        <Identifier
-          style={{ width: isLoading ? '100%' : 'auto' }}
-          loading={isLoading}
-          value={data?.eventId}
-          copyable
-        />
-      </Label>
+      <Columns count={multipleFLow ? 3 : 1} width="320px" gap="24px">
+        <Label label="Event Id" orientation={labelOrientation}>
+          <Identifier
+            style={{ width: isLoading ? '100%' : 'auto' }}
+            loading={isLoading}
+            value={data?.eventId}
+            copyable
+          />
+        </Label>
+        {multipleFLow && (
+          <>
+            <div style={{ height: '0.1px' }} />
+            <div>
+              <Label label="Flow Id" orientation={labelOrientation}>
+                <div
+                  style={{
+                    display: 'flex',
+                    flexWrap: 'nowrap',
+                    minWidth: 0,
+                    alignItems: 'center',
+                    cursor: 'pointer',
+                  }}
+                  onClick={(event) => setAnchorEl(event.currentTarget)}
+                >
+                  <Identifier loading={isLoading} value={data?.txId} />
+                  <Icon name="AngleDown" />
+                </div>
+              </Label>
+              <Menu
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={() => setAnchorEl(null)}
+              >
+                {events.map((event) => (
+                  <MenuItem
+                    key={event.txId}
+                    onClick={() => {
+                      onFlowIdChange(event.txId);
+                      setAnchorEl(null);
+                    }}
+                  >
+                    {event.txId}
+                  </MenuItem>
+                ))}
+              </Menu>
+            </div>
+          </>
+        )}
+      </Columns>
       <Columns count={3} width="320px" gap="24px">
         <Label label="Token" orientation={labelOrientation}>
           <Token
@@ -124,6 +195,16 @@ export const Overview = ({ id }: { id: string }) => {
             copyable
           />
         </Label>
+        {multipleFLow && (
+          <Label label="Number of Flows" orientation={labelOrientation}>
+            <Typography
+              style={{ width: isLoading ? '100%' : 'auto' }}
+              loading={isLoading}
+            >
+              {events?.length}
+            </Typography>
+          </Label>
+        )}
       </Columns>
     </Section>
   );
