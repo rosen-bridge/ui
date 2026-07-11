@@ -60,7 +60,7 @@ export const NETWORKS = {
     hasTokenSupport: false,
   },
   'firo': {
-    index: 8,
+    index: 7,
     key: 'firo',
     label: 'Firo',
     nativeToken: 'firo',

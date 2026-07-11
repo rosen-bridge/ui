@@ -20,7 +20,7 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@rosen-bridge/address-codec": "^1.2.0",
+    "@rosen-bridge/address-codec": "^2.1.0",
     "@rosen-bridge/icons": "^3.5.0",
     "@rosen-network/base": "^0.5.2",
     "@rosen-ui/constants": "^1.0.0",
