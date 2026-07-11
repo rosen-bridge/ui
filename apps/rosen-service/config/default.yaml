@@ -75,6 +75,21 @@ doge:
     # - url:
     #   username:
     #   password:
+firo:
+  addresses:
+    lock:
+    eventTrigger:
+    permit:
+    fraud:
+    commitment:
+  tokens:
+    rwt:
+  initialHeight:
+  explorerUrl: https://explorer.firo.org
+  electrumx:
+    host:
+    port:
+    reconnectDelay:
 ethereum:
   addresses:
     lock:
@@ -112,6 +127,7 @@ calculator:
     doge: []
     ethereum: []
     binance: []
+    firo: []
 healthCheck:
   ergoScannerWarnDiff: 3
   ergoScannerCriticalDiff: 5
@@ -125,6 +141,8 @@ healthCheck:
   ethereumScannerCriticalDiff: 5
   binanceScannerWarnDiff: 3
   binanceScannerCriticalDiff: 5
+  firoScannerWarnDiff: 3
+  firoScannerCriticalDiff: 5
   interval: 60 # health check update interval (in seconds)
   duration: 600 # log duration time check (in seconds)
   maxAllowedErrorCount: 1 # maximum allowed error log lines

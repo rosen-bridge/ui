@@ -21,6 +21,8 @@ import {
   ERGO_SCANNER_INTERVAL,
   ETHEREUM_BLOCK_TIME,
   ETHEREUM_SCANNER_INTERVAL,
+  FIRO_BLOCK_TIME,
+  FIRO_SCANNER_INTERVAL,
 } from '../constants';
 import scannerService from '../scanner/scanner-service';
 import { getLastSavedBlock } from './health-check-utils';
@@ -130,6 +132,17 @@ const registerAllHealthChecks = (healthCheck: HealthCheck) => {
         BINANCE_SCANNER_INTERVAL,
       ),
       label: 'binance',
+    },
+    {
+      instance: new ScannerSyncHealthCheckParam(
+        scannerService.getFiroScanner().name(),
+        async () => getLastSavedBlock(scannerService.getFiroScanner().name()),
+        config.healthCheck.firoScannerWarnDiff,
+        config.healthCheck.firoScannerCriticalDiff,
+        FIRO_BLOCK_TIME,
+        FIRO_SCANNER_INTERVAL,
+      ),
+      label: 'firo',
     },
   ];
 

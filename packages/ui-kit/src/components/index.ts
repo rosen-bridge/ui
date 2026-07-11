@@ -9,6 +9,7 @@ export * from './action';
 export * from './alert';
 export * from './apiKeyDialog';
 export * from './apiKeyDialogButton';
+export * from './apiKeyDialogProtectedAction';
 export * from './apiKeyDialogWarning';
 export * from './app';
 export * from './appBar';

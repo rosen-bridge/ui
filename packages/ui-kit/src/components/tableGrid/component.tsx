@@ -6,8 +6,9 @@ import './styles.css';
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface TableGridOverrides {}
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export type TableGridOwnProps = {};
+export type TableGridOwnProps = {
+  variant?: 'separated' | 'standard';
+};
 
 export type TableGridBaseProps = ElementBaseProps<'div', TableGridOwnProps>;
 
@@ -18,9 +19,9 @@ export type TableGridProps = OverridableType<
 >;
 
 export const TableGrid = (props: TableGridProps) => {
-  const { ...rest } = useConfig('TableGrid', props);
+  const { variant = 'standard', ...rest } = useConfig('TableGrid', props);
 
-  return <div {...rest} />;
+  return <div data-variant={variant} {...rest} />;
 };
 
 TableGrid.displayName = 'TableGrid';

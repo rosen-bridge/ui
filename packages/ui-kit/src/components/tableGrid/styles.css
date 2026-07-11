@@ -1,4 +1,7 @@
 .RosenTableGrid {
   display: grid;
+}
+
+.RosenTableGrid[data-variant='separated'] {
   row-gap: var(--rosen-spacing);
 }
