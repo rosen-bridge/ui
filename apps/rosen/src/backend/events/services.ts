@@ -17,9 +17,10 @@ export const getEventById = async (id: string) => {
   };
 };
 
-export const getEventStatusById = async (
-  id: string,
+export const getEventStatusByTriggerTxId = async (
+  eventId: string,
+  triggerTxId?: string,
   guardPublicKey?: string,
 ) => {
-  return await getEventStatus(id, guardPublicKey);
+  return await getEventStatus(eventId, triggerTxId, guardPublicKey);
 };

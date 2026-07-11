@@ -854,12 +854,14 @@ export const Process = ({ id }: { id: string }) => {
 
   const [open, setOpen] = useState(false);
 
+  const { data: eventData } = useSWR(`/v1/events/${id}`, fetcher);
+
   const url = guardPublicKey
-    ? `/v1/events/${id}/status?guardPublicKey=${guardPublicKey}`
-    : `/v1/events/${id}/status`;
+    ? `/v1/events/${id}/status?triggerTxId=${eventData?.txId}&guardPublicKey=${guardPublicKey}`
+    : `/v1/events/${id}/status?triggerTxId=${eventData?.txId}`;
 
   const { data, error, isLoading, mutate } = useSWR<EventStatusType>(
-    open ? url : null,
+    open && eventData ? url : null,
     fetcher,
   );
 

@@ -18,7 +18,6 @@ import {
   GuardStatusEntity,
 } from '@rosen-ui/public-status';
 import { Network } from '@rosen-ui/types';
-import * as Sentry from '@sentry/nextjs';
 
 import { dataSource } from '../dataSource';
 import '../initialize-datasource-if-needed';
@@ -55,6 +54,7 @@ interface EventWithTotal
 }
 
 export type EventDetailsType = Omit<EventWithTotal, 'status' | 'total'> & {
+  txId: string;
   status:
     | 'COMPLETED'
     | 'CREATED'
@@ -297,7 +297,7 @@ export const getEvent = async (id: string) => {
     event.timestamp,
   );
 
-  const { status, timestamps } = await getEventStatus(id);
+  const { status, timestamps } = await getEventStatus(id, event.txId);
   event.status = status;
   event.timestamps = timestamps;
 
@@ -309,6 +309,7 @@ export const getEvent = async (id: string) => {
 
 export const getEventStatus = async (
   eventId: string,
+  triggerTxId?: string,
   guardPublicKey?: string,
 ): Promise<EventStatusType> => {
   const result: EventStatusType = {
@@ -325,17 +326,17 @@ export const getEventStatus = async (
   }
 
   if (observations.length > 1) {
-    Sentry.withScope((scope) => {
-      scope.setTag('layer', 'database');
-
-      scope.setContext('params', {
-        eventId,
-        guardPublicKey,
-        observationCount: observations.length,
-      });
-
-      Sentry.captureException(new Error(`Impossible Behavior`));
-    });
+    throw new Error(
+      `ImpossibleBehavior: found more than 1 observation records`,
+      {
+        cause: {
+          eventId,
+          triggerTxId,
+          guardPublicKey,
+          observationCount: observations.length,
+        },
+      },
+    );
   }
 
   const observation = observations[0];
@@ -345,19 +346,14 @@ export const getEventStatus = async (
   });
 
   if (blocks.length !== 1) {
-    Sentry.withScope((scope) => {
-      scope.setTag('layer', 'database');
-
-      scope.setContext('params', {
+    throw new Error(`ImpossibleBehavior: found more than 1 block records`, {
+      cause: {
         eventId,
+        triggerTxId,
         guardPublicKey,
         hash: observation.sourceBlockId,
         blockCount: blocks.length,
-      });
-
-      Sentry.captureException(
-        new Error(`Impossible Behavior to extract created timestamp`),
-      );
+      },
     });
   }
 
@@ -366,11 +362,24 @@ export const getEventStatus = async (
   result.status = 'CREATED';
   result.timestamps['CREATED'] = block.timestamp;
 
+  if (!triggerTxId) return result;
+
   const eventTrigger = await eventTriggerRepository.findOneBy({
-    eventId: eventId,
+    txId: triggerTxId,
   });
 
   if (!eventTrigger) return result;
+
+  if (eventId !== eventTrigger.eventId) {
+    throw new Error(`ImpossibleBehavior`, {
+      cause: {
+        eventId,
+        triggerTxId,
+        guardPublicKey,
+        eventTrigger,
+      },
+    });
+  }
 
   if (eventTrigger.result === 'fraud') {
     result.status = 'FRAUD';
@@ -390,11 +399,9 @@ export const getEventStatus = async (
     }
   }
 
-  if (eventTrigger) {
-    result.timestamps['TRIGGERED'] = (
-      await blockRepository.findOneBy({ hash: eventTrigger.block })
-    )?.timestamp;
-  }
+  result.timestamps['TRIGGERED'] = (
+    await blockRepository.findOneBy({ hash: eventTrigger.block })
+  )?.timestamp;
 
   let aggregatedStatusChangedItems:
     | AggregatedStatusChangedEntity[]
@@ -402,13 +409,13 @@ export const getEventStatus = async (
 
   if (guardPublicKey) {
     aggregatedStatusChangedItems = await guardStatusChangedRepository.find({
-      where: { eventId: eventId, guardPk: guardPublicKey },
+      where: { triggerTxId: triggerTxId, guardPk: guardPublicKey },
       order: { insertedAt: 'DESC' },
     });
   } else {
     aggregatedStatusChangedItems = await aggregatedStatusChangedRepository.find(
       {
-        where: { eventId: eventId },
+        where: { triggerTxId: triggerTxId },
         order: { insertedAt: 'DESC' },
       },
     );
@@ -430,12 +437,12 @@ export const getEventStatus = async (
 
     if (guardPublicKey) {
       aggregatedStatus = await guardStatusRepository.findOneBy({
-        eventId: eventId,
+        triggerTxId: triggerTxId,
         guardPk: guardPublicKey,
       });
     } else {
       aggregatedStatus = await aggregatedStatusRepository.findOneBy({
-        eventId: eventId,
+        triggerTxId: triggerTxId,
       });
     }
 
@@ -545,21 +552,19 @@ export const getEventStatus = async (
       (item) => item.status === AggregateEventStatus.finished,
     );
 
-    if (items.length !== 1) {
-      Sentry.withScope((scope) => {
-        scope.setTag('layer', 'database');
-
-        scope.setContext('params', {
-          eventId,
-          guardPublicKey,
-          observation,
-          aggregatedStatusChangedItemsCount: items.length,
-        });
-
-        Sentry.captureException(
-          new Error(`Impossible Behavior to extract paid confirmed timestamp`),
-        );
-      });
+    if (items.length > 1) {
+      throw new Error(
+        `ImpossibleBehavior: found more than 1 finished state records`,
+        {
+          cause: {
+            eventId,
+            triggerTxId,
+            guardPublicKey,
+            observation,
+            aggregatedStatusChangedItemsCount: items.length,
+          },
+        },
+      );
     }
 
     result.timestamps['PAID_CONFIRMED_AT_EXPERIMENTAL'] =
@@ -593,20 +598,18 @@ export const getEventStatus = async (
     });
 
     if (blocks.length !== 1) {
-      Sentry.withScope((scope) => {
-        scope.setTag('layer', 'database');
-
-        scope.setContext('params', {
-          eventId,
-          guardPublicKey,
-          spendBlock: eventTrigger.spendBlock,
-          blockCount: blocks.length,
-        });
-
-        Sentry.captureException(
-          new Error(`Impossible Behavior to extract rewarded timestamp`),
-        );
-      });
+      throw new Error(
+        `ImpossibleBehavior: found more than 1 spend block records`,
+        {
+          cause: {
+            eventId,
+            triggerTxId,
+            guardPublicKey,
+            spendBlock: eventTrigger.spendBlock,
+            blockCount: blocks.length,
+          },
+        },
+      );
     }
 
     const block = blocks[0];

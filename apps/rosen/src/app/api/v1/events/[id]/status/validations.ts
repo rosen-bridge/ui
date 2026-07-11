@@ -4,12 +4,14 @@ import Joi from 'joi';
 
 export type GetEventStatusParams = {
   id: string;
+  triggerTxId?: string;
   guardPublicKey?: string;
 };
 
 const ParamsSchema = Joi.object<GetEventStatusParams>().keys({
   id: Joi.string().required(),
-  guardPublicKey: Joi.string(),
+  triggerTxId: Joi.string(),
+  guardPublicKey: Joi.string().hex().length(66),
 });
 
 export const validateGet = async (
