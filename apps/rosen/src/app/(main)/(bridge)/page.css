@@ -37,7 +37,7 @@
     width: 100%;
   }
 }
-.RosenApp[data-orientation='horizontal'] {
+.RosenApp[data-orientation="horizontal"] {
   .rosen-bridge-page-action {
     grid-column: 1 / -1;
     width: 33%;

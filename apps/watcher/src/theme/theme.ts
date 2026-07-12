@@ -10,11 +10,11 @@ export const base = {
     MuiFilledInput: {
       styleOverrides: {
         root: ({ theme }: { theme: Theme }) => ({
-          'overflow': 'hidden',
-          'borderRadius': theme.shape.borderRadius,
-          'backgroundColor': theme.palette.background.default,
-          'minHeight': theme.spacing(7),
-          'transition': theme.transitions.create([
+          overflow: 'hidden',
+          borderRadius: theme.shape.borderRadius,
+          backgroundColor: theme.palette.background.default,
+          minHeight: theme.spacing(7),
+          transition: theme.transitions.create([
             'background-color',
             'box-shadow',
           ]),

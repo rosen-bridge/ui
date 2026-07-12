@@ -1,10 +1,11 @@
+import fs from 'node:fs';
+import path from 'node:path';
+
 import { DefaultLogger } from '@rosen-bridge/abstract-logger';
 import { DiscordNotification } from '@rosen-bridge/discord-notification';
 import { HealthCheck, HealthStatusLevel } from '@rosen-bridge/health-check';
 import { LogLevelHealthCheck } from '@rosen-bridge/log-level-check';
 import { ScannerSyncHealthCheckParam } from '@rosen-bridge/scanner-sync-check';
-import fs from 'node:fs';
-import path from 'node:path';
 
 import config from '../configs';
 import {

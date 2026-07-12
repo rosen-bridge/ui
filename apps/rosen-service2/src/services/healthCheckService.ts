@@ -1,3 +1,6 @@
+import fs from 'node:fs';
+import path from 'node:path';
+
 import type { AbstractLogger } from '@rosen-bridge/abstract-logger';
 import { DiscordNotification } from '@rosen-bridge/discord-notification';
 import {
@@ -16,8 +19,6 @@ import {
   ServiceStatus,
 } from '@rosen-bridge/service-manager';
 import { NETWORKS } from '@rosen-ui/constants';
-import fs from 'node:fs';
-import path from 'node:path';
 
 import { configs } from '../configs';
 import {

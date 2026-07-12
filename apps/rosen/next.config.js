@@ -41,7 +41,7 @@ const nextConfig = {
       '@react-native-async-storage/async-storage': false,
       '@sap/hana-client/extension/Stream': false,
       '@solana/kit': false,
-      'mysql': false,
+      mysql: false,
       'react-native-sqlite-storage': false,
     };
 

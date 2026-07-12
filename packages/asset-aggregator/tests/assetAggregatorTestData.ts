@@ -195,7 +195,7 @@ export const SAMPLE_TOKEN_ENTITY_DATA = [
  */
 export const NATIVE_TOKEN_CHAIN_BALANCE_INFO: Record<string, AssetBalance> = {
   ergo: {
-    'erg': [
+    erg: [
       { address: 'test-address-1', balance: 1000n },
       { address: 'test-address-2', balance: 2000n },
     ],
@@ -205,7 +205,7 @@ export const NATIVE_TOKEN_CHAIN_BALANCE_INFO: Record<string, AssetBalance> = {
     ],
   },
   binance: {
-    'bnb': [
+    bnb: [
       { address: 'test-address-1', balance: 1000n },
       { address: 'test-address-2', balance: 2000n },
     ],

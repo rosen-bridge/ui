@@ -1,3 +1,5 @@
+import crypto from 'node:crypto';
+
 import type { DataSource } from '@rosen-bridge/extended-typeorm';
 import {
   AggregatedStatusChangedEntity,
@@ -14,7 +16,6 @@ import {
   Utils,
 } from '@rosen-ui/public-status';
 import * as Sentry from '@sentry/nextjs';
-import crypto from 'node:crypto';
 
 import AggregatedStatusAction from './AggregatedStatusAction';
 import AggregatedStatusChangedAction from './AggregatedStatusChangedAction';

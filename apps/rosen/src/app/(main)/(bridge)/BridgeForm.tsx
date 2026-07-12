@@ -278,7 +278,7 @@ export const BridgeForm = () => {
             ),
         }}
         inputProps={{
-          'style': { fontSize: '2rem' },
+          style: { fontSize: '2rem' },
           'aria-label': 'amount input',
         }}
         variant="filled"

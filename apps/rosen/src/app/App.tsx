@@ -1,8 +1,9 @@
 'use client';
 
+import type { PropsWithChildren } from 'react';
+
 import type { Route } from 'next';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import type { PropsWithChildren } from 'react';
 
 import {
   FrameworkProvider,

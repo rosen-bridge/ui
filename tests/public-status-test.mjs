@@ -1,8 +1,9 @@
 #!/usr/bin/env zx
+import assert from 'node:assert';
+
 // c && zx --install public-status-test.mjs
 import { blake2b } from '@noble/hashes/blake2b';
 import axios from 'axios';
-import assert from 'node:assert';
 import pkg from 'secp256k1';
 
 const sign = (secret, message) => {
@@ -1310,8 +1311,7 @@ const insertMockDataForPaginationTest = async () => {
   const p = $`psql -p 5432 -U postgres -d public_status_test`.stdio('pipe');
 
   p.stdin.write('BEGIN;\n');
-  p.stdin
-    .write(`INSERT INTO aggregated_status_changed_entity ("id", "eventId", "triggerTxId", "insertedAt", "status", "txStatus", "txId", "txChain")
+  p.stdin.write(`INSERT INTO aggregated_status_changed_entity ("id", "eventId", "triggerTxId", "insertedAt", "status", "txStatus", "txId", "txChain")
       VALUES
           (10, '${id1}', '${id1}', 10, 'finished', NULL, NULL, NULL),
           (11, '${id1}', '${id1}', 11, 'finished', NULL, NULL, NULL),

@@ -1,7 +1,8 @@
 'use client';
 
-import NextError from 'next/error';
 import { useEffect } from 'react';
+
+import NextError from 'next/error';
 
 import * as Sentry from '@sentry/nextjs';
 

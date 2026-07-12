@@ -12,7 +12,7 @@
     "build:mono-packages": "./build.sh",
     "coverage": "npm run coverage --workspaces",
     "postinstall": "patch-package",
-    "lint": "npm run lint --workspaces",
+    "lint": "biome check --write --max-diagnostics 1000",
     "lint:check": "npm run lint:check --workspaces",
     "prepare": "husky install",
     "prettify": "npm run prettify --workspaces",
@@ -29,6 +29,7 @@
     "patch-package": "^8.0.0"
   },
   "devDependencies": {
+    "@biomejs/biome": "2.5.3",
     "@eslint/eslintrc": "^3.3.1",
     "@eslint/js": "^9.36.0",
     "@next/eslint-plugin-next": "^15.5.3",

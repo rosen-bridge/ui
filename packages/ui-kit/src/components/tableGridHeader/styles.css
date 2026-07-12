@@ -6,6 +6,6 @@
   background-color: var(--rosen-palette-secondary-light);
 }
 
-.RosenTableGrid[data-variant='separated'] .RosenTableGridHeader {
+.RosenTableGrid[data-variant="separated"] .RosenTableGridHeader {
   border-radius: var(--rosen-shape-borderRadius);
 }

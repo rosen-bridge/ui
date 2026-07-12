@@ -10,9 +10,9 @@ const Root = styled('div')(({ theme }) => ({
 }));
 
 const Scrollable = styled('div')(({ theme }) => ({
-  'overflow': 'hidden',
-  'overflowY': 'auto',
-  'maxHeight': '25rem',
+  overflow: 'hidden',
+  overflowY: 'auto',
+  maxHeight: '25rem',
   '::-webkit-scrollbar': {
     background: 'transparent',
     width: theme.spacing(1),

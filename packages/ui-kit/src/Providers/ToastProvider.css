@@ -21,6 +21,6 @@
   }
 }
 
-body:has(div[data-orientation='horizontal']) .RosenToast-viewport {
+body:has(div[data-orientation="horizontal"]) .RosenToast-viewport {
   left: 122px;
 }

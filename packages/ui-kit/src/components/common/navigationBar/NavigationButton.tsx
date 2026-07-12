@@ -7,15 +7,15 @@ import { Icon, type IconProps } from '../../icon';
 import { Link } from '../../link';
 
 const NavigationButtonBase = styled(Button)(({ theme }) => ({
-  'flexDirection': 'column',
-  'fontSize': theme.typography.subtitle2.fontSize,
-  'gap': theme.spacing(1),
-  'color': theme.palette.common.white,
-  'backgroundColor': 'transparent!important',
-  'padding': theme.spacing(1),
-  'fontWeight': 700,
-  'lineHeight': 1,
-  'opacity': 0.8,
+  flexDirection: 'column',
+  fontSize: theme.typography.subtitle2.fontSize,
+  gap: theme.spacing(1),
+  color: theme.palette.common.white,
+  backgroundColor: 'transparent!important',
+  padding: theme.spacing(1),
+  fontWeight: 700,
+  lineHeight: 1,
+  opacity: 0.8,
   '&:hover': {
     opacity: 1,
   },
@@ -32,8 +32,8 @@ const NavigationButtonBase = styled(Button)(({ theme }) => ({
     color: alpha(theme.palette.common.white, 0.3),
   },
   '&.active': {
-    'opacity': 1,
-    'color':
+    opacity: 1,
+    color:
       theme.palette.mode === 'light'
         ? theme.palette.common.white
         : theme.palette.primary.main,
@@ -49,15 +49,15 @@ const NavigationButtonBase = styled(Button)(({ theme }) => ({
     },
   },
   [theme.breakpoints.down('tablet')]: {
-    'color': theme.palette.primary.main,
+    color: theme.palette.primary.main,
     '& .MuiButton-startIcon': {
       backgroundColor: 'transparent',
       padding: 0,
     },
     '&.active': {
       '& .MuiButton-startIcon': {
-        'color': theme.palette.primary.main,
-        'backgroundColor': 'transparent',
+        color: theme.palette.primary.main,
+        backgroundColor: 'transparent',
         '&  > svg': {
           fontSize: '32px',
         },

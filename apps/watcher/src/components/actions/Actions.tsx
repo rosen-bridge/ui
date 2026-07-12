@@ -1,7 +1,8 @@
 'use client';
 
-import { usePathname } from 'next/navigation';
 import type { ReactNode } from 'react';
+
+import { usePathname } from 'next/navigation';
 
 import { Tabs, TabsList, TabsTab } from '@rosen-bridge/ui-kit';
 

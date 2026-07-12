@@ -7,6 +7,6 @@
   min-width: 0;
 }
 
-.RosenToken[data-variant='reverse'] {
+.RosenToken[data-variant="reverse"] {
   flex-direction: row-reverse;
 }

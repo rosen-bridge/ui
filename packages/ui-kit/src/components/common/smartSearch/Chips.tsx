@@ -6,14 +6,14 @@ import type { Filter, Selected } from './types';
 import { parseFilter } from './utils';
 
 const Root = styled('div')(({ theme }) => ({
-  'display': 'flex',
-  'gap': theme.spacing(1),
-  'whiteSpace': 'nowrap',
-  'userSelect': 'none',
+  display: 'flex',
+  gap: theme.spacing(1),
+  whiteSpace: 'nowrap',
+  userSelect: 'none',
   '.items': {
-    'display': 'flex',
-    'alignItems': 'center',
-    'gap': '2px',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '2px',
 
     '.item-middle': {
       borderRadius: 0,
@@ -37,8 +37,8 @@ const Root = styled('div')(({ theme }) => ({
   },
   '.multiple': {},
   '.MuiIconButton-root': {
-    'padding': theme.spacing(0.25),
-    'marginLeft': theme.spacing(0.5),
+    padding: theme.spacing(0.25),
+    marginLeft: theme.spacing(0.5),
     '.MuiSvgIcon-root': {
       fontSize: '20px',
     },

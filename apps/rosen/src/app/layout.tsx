@@ -1,5 +1,6 @@
-import type { Metadata } from 'next';
 import { type PropsWithChildren, Suspense } from 'react';
+
+import type { Metadata } from 'next';
 
 import '@rosen-bridge/ui-kit/style.css';
 

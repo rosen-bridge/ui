@@ -1,230 +1,147 @@
 export { default as AlignCenter } from './icons/align-center.svg?react';
-
 export { default as AngleDown } from './icons/angle-down.svg?react';
-
 export { default as AngleLeft } from './icons/angle-left.svg?react';
-
 export { default as AngleRight } from './icons/angle-right.svg?react';
-
 export { default as AngleUp } from './icons/angle-up.svg?react';
-
 export { default as Archway } from './icons/archway.svg?react';
-
 export { default as ArrowRight } from './icons/arrow-right.svg?react';
-
 export { default as Ban } from './icons/ban.svg?react';
-
 export { default as BitcoinCircle } from './icons/bitcoin-circle.svg?react';
-
 export { default as BitcoinSign } from './icons/bitcoin-sign.svg?react';
-
 export { default as CaretDown } from './icons/caret-down.svg?react';
-
-export { default as CheckCircle } from './icons/check-circle.svg?react';
-
 export { default as Check } from './icons/check.svg?react';
-
+export { default as CheckCircle } from './icons/check-circle.svg?react';
 export { default as ClipboardNotes } from './icons/clipboard-notes.svg?react';
-
 export { default as ClockThree } from './icons/clock-three.svg?react';
-
 export { default as CloseCircle } from './icons/close-circle.svg?react';
-
 export { default as CodeBranch } from './icons/code-branch.svg?react';
-
 export { default as Coins } from './icons/coins.svg?react';
-
 export { default as CommentAltExclamation } from './icons/comment-alt-exclamation.svg?react';
-
 export { default as Copy } from './icons/copy.svg?react';
-
 export { default as Dashboard } from './icons/dashboard.svg?react';
-
 export { default as Estate } from './icons/estate.svg?react';
-
 export { default as Exchange } from './icons/exchange.svg?react';
-
 export { default as ExclamationCircle } from './icons/exclamation-circle.svg?react';
-
 export { default as ExclamationOctagon } from './icons/exclamation-octagon.svg?react';
-
-export { default as ExclamationTriangleFill } from './icons/exclamation-triangle-fill.svg?react';
-
 export { default as ExclamationTriangle } from './icons/exclamation-triangle.svg?react';
-
+export { default as ExclamationTriangleFill } from './icons/exclamation-triangle-fill.svg?react';
 export { default as ExternalLinkAlt } from './icons/external-link-alt.svg?react';
-
-export { default as EyeSlash } from './icons/eye-slash.svg?react';
-
 export { default as Eye } from './icons/eye.svg?react';
-
+export { default as EyeSlash } from './icons/eye-slash.svg?react';
 export { default as Favorite } from './icons/favorite.svg?react';
-
 export { default as FileAlt } from './icons/file-alt.svg?react';
-
 export { default as FileCopyAlt } from './icons/file-copy-alt.svg?react';
-
 export { default as FileEditAlt } from './icons/file-edit-alt.svg?react';
-
 export { default as Fire } from './icons/fire.svg?react';
-
 export { default as Gift } from './icons/gift.svg?react';
-
 export { default as Grid } from './icons/grid.svg?react';
-
 export { default as Headphones } from './icons/headphones.svg?react';
-
 export { default as Heartbeat } from './icons/heartbeat.svg?react';
-
 export { default as History } from './icons/history.svg?react';
-
 export { default as Hourglass } from './icons/hourglass.svg?react';
-
 export { default as InfoCircle } from './icons/info-circle.svg?react';
-
 export { default as KeySkeleton } from './icons/key-skeleton.svg?react';
-
 export { default as LinkBroken } from './icons/link-broken.svg?react';
-
 export { default as ListUiAlt } from './icons/list-ui-alt.svg?react';
-
 export { default as LockAlt } from './icons/lock-alt.svg?react';
-
 export { default as MoneyWithdrawal } from './icons/money-withdrawal.svg?react';
-
 export { default as Moneybag } from './icons/moneybag.svg?react';
-
 export { default as Moon } from './icons/moon.svg?react';
-
 export { default as Newspaper } from './icons/newspaper.svg?react';
-
-export { default as PauseCircle } from './icons/pause-circle.svg?react';
-
 export { default as Pause } from './icons/pause.svg?react';
-
-export { default as QrcodeScan } from './icons/qrcode-scan.svg?react';
-
+export { default as PauseCircle } from './icons/pause-circle.svg?react';
 export { default as Qrcode } from './icons/qrcode.svg?react';
-
+export { default as QrcodeScan } from './icons/qrcode-scan.svg?react';
 export { default as ReceiptAlt } from './icons/receipt-alt.svg?react';
-
 export { default as Redo } from './icons/redo.svg?react';
-
 export { default as Row } from './icons/row.svg?react';
-
 export { default as Search } from './icons/search.svg?react';
-
 export { default as Setting } from './icons/setting.svg?react';
-
 export { default as Share } from './icons/share.svg?react';
-
 export { default as ShieldCheck } from './icons/shield-check.svg?react';
-
 export { default as ShieldExclamation } from './icons/shield-exclamation.svg?react';
-
 export { default as ShieldQuestion } from './icons/shield-question.svg?react';
-
 export { default as SignOutAlt } from './icons/sign-out-alt.svg?react';
-
 export { default as SnowFlake } from './icons/snow-flake.svg?react';
-
 export { default as SortAmountDown } from './icons/sort-amount-down.svg?react';
-
 export { default as SortAmountUp } from './icons/sort-amount-up.svg?react';
-
 export { default as SquareShape } from './icons/square-shape.svg?react';
-
 export { default as StopCircle } from './icons/stop-circle.svg?react';
-
 export { default as Sun } from './icons/sun.svg?react';
-
 export { default as Swatchbook } from './icons/swatchbook.svg?react';
-
 export { default as SyncExclamation } from './icons/sync-exclamation.svg?react';
-
 export { default as ThumbsUp } from './icons/thumbs-up.svg?react';
-
 export { default as Times } from './icons/times.svg?react';
-
 export { default as Unlock } from './icons/unlock.svg?react';
-
 export { default as Wallet } from './icons/wallet.svg?react';
-
 export { default as Binance } from './networks/binance.svg?react';
-
-export { default as BitcoinRunes } from './networks/bitcoin-runes.svg?react';
-
 export { default as Bitcoin } from './networks/bitcoin.svg?react';
-
+export { default as BitcoinRunes } from './networks/bitcoin-runes.svg?react';
 export { default as Cardano } from './networks/cardano.svg?react';
-
 export { default as Doge } from './networks/doge.svg?react';
-
 export { default as Ergo } from './networks/ergo.svg?react';
-
 export { default as Ethereum } from './networks/ethereum.svg?react';
-
 export { default as Firo } from './networks/firo.svg?react';
 
 export const TOKENS = {
-  'fcfca7654fb0da57ecf9a3f489bcbeb1d43b56dce7e73b352f7bc6f2561d2a1b': new URL(
+  fcfca7654fb0da57ecf9a3f489bcbeb1d43b56dce7e73b352f7bc6f2561d2a1b: new URL(
     /* @vite-ignore */ 'tokens/fcfca7654fb0da57ecf9a3f489bcbeb1d43b56dce7e73b352f7bc6f2561d2a1b.svg',
     import.meta.url,
   ).href,
-  'fa8fd58c4ad2203dace0d517226da72facf1421c6bae1935d591b526316a7af9': new URL(
+  fa8fd58c4ad2203dace0d517226da72facf1421c6bae1935d591b526316a7af9: new URL(
     /* @vite-ignore */ 'tokens/fa8fd58c4ad2203dace0d517226da72facf1421c6bae1935d591b526316a7af9.svg',
     import.meta.url,
   ).href,
-  'f31bfeaa68564b49775eface452f831d9f60b4567837bbeb909c6401e0a19485': new URL(
+  f31bfeaa68564b49775eface452f831d9f60b4567837bbeb909c6401e0a19485: new URL(
     /* @vite-ignore */ 'tokens/f31bfeaa68564b49775eface452f831d9f60b4567837bbeb909c6401e0a19485.svg',
     import.meta.url,
   ).href,
-  'f0d5bdf474fcbd4249608e6dc6e9cf34a327b218f66445ea545b4c711b4676e3': new URL(
+  f0d5bdf474fcbd4249608e6dc6e9cf34a327b218f66445ea545b4c711b4676e3: new URL(
     /* @vite-ignore */ 'tokens/f0d5bdf474fcbd4249608e6dc6e9cf34a327b218f66445ea545b4c711b4676e3.png',
     import.meta.url,
   ).href,
-  'erg': new URL(/* @vite-ignore */ 'tokens/erg.svg', import.meta.url).href,
-  'eeb17283c641d1c74c1d44b1dee7509766350ec31ca954c420ddd788bff8f412': new URL(
+  erg: new URL(/* @vite-ignore */ 'tokens/erg.svg', import.meta.url).href,
+  eeb17283c641d1c74c1d44b1dee7509766350ec31ca954c420ddd788bff8f412: new URL(
     /* @vite-ignore */ 'tokens/eeb17283c641d1c74c1d44b1dee7509766350ec31ca954c420ddd788bff8f412.png',
     import.meta.url,
   ).href,
-  'e023c5f382b6e96fbd878f6811aac73345489032157ad5affb84aefd4956c297': new URL(
+  e023c5f382b6e96fbd878f6811aac73345489032157ad5affb84aefd4956c297: new URL(
     /* @vite-ignore */ 'tokens/e023c5f382b6e96fbd878f6811aac73345489032157ad5affb84aefd4956c297.svg',
     import.meta.url,
   ).href,
-  'da754307c5823cf39e098414919b3fac8821f4aa0c909fac474742942878dc1c': new URL(
+  da754307c5823cf39e098414919b3fac8821f4aa0c909fac474742942878dc1c: new URL(
     /* @vite-ignore */ 'tokens/da754307c5823cf39e098414919b3fac8821f4aa0c909fac474742942878dc1c.svg',
     import.meta.url,
   ).href,
-  'd1dcfca3330bc884298c7111a9ef1e7b2970ab0c1d11bbcbacf31d319f0c2d55': new URL(
+  d1dcfca3330bc884298c7111a9ef1e7b2970ab0c1d11bbcbacf31d319f0c2d55: new URL(
     /* @vite-ignore */ 'tokens/d1dcfca3330bc884298c7111a9ef1e7b2970ab0c1d11bbcbacf31d319f0c2d55.png',
     import.meta.url,
   ).href,
-  'c15a8e1ff8c60e1cd280d9c5b4daa0e92292da06919c2496c27374f9507da65d': new URL(
+  c15a8e1ff8c60e1cd280d9c5b4daa0e92292da06919c2496c27374f9507da65d: new URL(
     /* @vite-ignore */ 'tokens/c15a8e1ff8c60e1cd280d9c5b4daa0e92292da06919c2496c27374f9507da65d.svg',
     import.meta.url,
   ).href,
-  'b780a9682ba1ea68eedfe3dd00169e414ea8968d96142ee95e2391d64df05c3d': new URL(
+  b780a9682ba1ea68eedfe3dd00169e414ea8968d96142ee95e2391d64df05c3d: new URL(
     /* @vite-ignore */ 'tokens/b780a9682ba1ea68eedfe3dd00169e414ea8968d96142ee95e2391d64df05c3d.svg',
     import.meta.url,
   ).href,
-  'b2bb4d99ffd6f73c06a4ca1fe9fadd1ad4a20b5b9052373e3cee5ddeb4534e27': new URL(
+  b2bb4d99ffd6f73c06a4ca1fe9fadd1ad4a20b5b9052373e3cee5ddeb4534e27: new URL(
     /* @vite-ignore */ 'tokens/b2bb4d99ffd6f73c06a4ca1fe9fadd1ad4a20b5b9052373e3cee5ddeb4534e27.svg',
     import.meta.url,
   ).href,
-  'b0b312cde931c8bbdac0dac5bfd8e2c03bf4611275dc967988c8d15bd5ec20e0': new URL(
+  b0b312cde931c8bbdac0dac5bfd8e2c03bf4611275dc967988c8d15bd5ec20e0: new URL(
     /* @vite-ignore */ 'tokens/b0b312cde931c8bbdac0dac5bfd8e2c03bf4611275dc967988c8d15bd5ec20e0.png',
     import.meta.url,
   ).href,
-  'a55b8735ed1a99e46c2c89f8994aacdf4b1109bdcf682f1e5b34479c6e392669': new URL(
+  a55b8735ed1a99e46c2c89f8994aacdf4b1109bdcf682f1e5b34479c6e392669: new URL(
     /* @vite-ignore */ 'tokens/a55b8735ed1a99e46c2c89f8994aacdf4b1109bdcf682f1e5b34479c6e392669.svg',
     import.meta.url,
   ).href,
-  'a50d95830f150f8ffb5da1a65e2313b1269807a855e30cd2f0b3fbaee0a47386': new URL(
+  a50d95830f150f8ffb5da1a65e2313b1269807a855e30cd2f0b3fbaee0a47386: new URL(
     /* @vite-ignore */ 'tokens/a50d95830f150f8ffb5da1a65e2313b1269807a855e30cd2f0b3fbaee0a47386.svg',
     import.meta.url,
   ).href,
-  'a01cb7b8ab08dec2e191b3ba58165a88a510d0f310dff5d81eb8e62e4ea6ab20': new URL(
+  a01cb7b8ab08dec2e191b3ba58165a88a510d0f310dff5d81eb8e62e4ea6ab20: new URL(
     /* @vite-ignore */ 'tokens/a01cb7b8ab08dec2e191b3ba58165a88a510d0f310dff5d81eb8e62e4ea6ab20.svg',
     import.meta.url,
   ).href,

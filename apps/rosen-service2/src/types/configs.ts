@@ -95,13 +95,13 @@ export interface StatisticsLockedAssetsMetrics {
 }
 
 export interface Chains {
-  'ergo': ChainsErgo;
-  'cardano': ChainsCardano;
-  'bitcoin': ChainsBitcoin;
+  ergo: ChainsErgo;
+  cardano: ChainsCardano;
+  bitcoin: ChainsBitcoin;
   'bitcoin-runes': ChainsBitcoinRunes;
-  'doge': ChainsDoge;
-  'ethereum': ChainsEthereum;
-  'binance': ChainsBinance;
+  doge: ChainsDoge;
+  ethereum: ChainsEthereum;
+  binance: ChainsBinance;
 }
 
 export interface ChainsBinance {

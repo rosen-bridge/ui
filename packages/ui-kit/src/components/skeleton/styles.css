@@ -6,12 +6,12 @@
   border-radius: 4px;
 }
 
-.RosenSkeleton[data-attached='true'] {
+.RosenSkeleton[data-attached="true"] {
   position: absolute;
   inset: 0;
 }
 
-*:has(> .RosenSkeleton[data-attached='true']) {
+*:has(> .RosenSkeleton[data-attached="true"]) {
   position: relative !important;
   overflow: hidden !important;
   color: transparent !important;
@@ -23,16 +23,16 @@
   }
 }
 
-.RosenSkeleton[data-variant='circular'] {
+.RosenSkeleton[data-variant="circular"] {
   border-radius: 10000px;
   flex-shrink: 0;
 }
 
-.RosenSkeleton[data-variant='rounded'] {
+.RosenSkeleton[data-variant="rounded"] {
   border-radius: var(--rosen-shape-borderRadius);
 }
 
-.RosenSkeleton[data-variant='text'] {
+.RosenSkeleton[data-variant="text"] {
   border-radius: 4px;
   transform: scale(1, 0.6);
 }
