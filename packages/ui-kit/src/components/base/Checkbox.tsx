@@ -1,2 +1,2 @@
-export { Checkbox } from '@mui/material';
 export type { CheckboxProps } from '@mui/material';
+export { Checkbox } from '@mui/material';

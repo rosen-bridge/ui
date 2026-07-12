@@ -12,10 +12,10 @@ import {
   Skeleton,
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
-import { ChartPeriod } from '@rosen-ui/types';
+import type { ChartPeriod } from '@rosen-ui/types';
 import useSWR from 'swr';
 
-import { ApiRevenueChartResponse } from '@/types/api';
+import type { ApiRevenueChartResponse } from '@/types/api';
 
 import { PeriodSelect } from './PeriodSelect';
 
@@ -27,7 +27,10 @@ const Loading = () => <Skeleton height={285} width="100%" variant="rounded" />;
  */
 const RevenueChart = dynamic(
   () => import('./RevenueChart').then((mod) => mod.RevenueChart),
-  { ssr: false, loading: () => <Loading /> },
+  {
+    ssr: false,
+    loading: () => <Loading />,
+  },
 );
 
 const Revenue = () => {

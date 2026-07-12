@@ -1,17 +1,17 @@
-import { AbstractLogger } from '@rosen-bridge/abstract-logger';
+import type { AbstractLogger } from '@rosen-bridge/abstract-logger';
 import { DiscordNotification } from '@rosen-bridge/discord-notification';
 import {
-  AbstractHealthCheckParam,
+  type AbstractHealthCheckParam,
   HealthCheck,
   HealthStatusLevel,
 } from '@rosen-bridge/health-check';
 import { LogLevelHealthCheck } from '@rosen-bridge/log-level-check';
 import {
-  LastSavedBlock,
+  type LastSavedBlock,
   ScannerSyncHealthCheckParam,
 } from '@rosen-bridge/scanner-sync-check';
 import {
-  Dependency,
+  type Dependency,
   ServiceAction,
   ServiceStatus,
 } from '@rosen-bridge/service-manager';
@@ -21,16 +21,16 @@ import path from 'node:path';
 
 import { configs } from '../configs';
 import {
-  ChainsKeys,
-  ChainScannersType,
-  Chains,
   BLOCK_TIMES,
-  ChainsWithScanner,
+  type ChainScannersType,
+  type Chains,
+  type ChainsKeys,
+  type ChainsWithScanner,
 } from '../types';
 import {
+  AbstractDBService,
   AbstractHealthService,
   AbstractScannerService,
-  AbstractDBService,
 } from './abstracts';
 
 export class HealthService extends AbstractHealthService {

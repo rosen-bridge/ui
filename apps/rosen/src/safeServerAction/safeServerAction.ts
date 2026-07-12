@@ -1,9 +1,9 @@
 /* eslint-disable */
-import { Schema } from 'joi';
+import type { Schema } from 'joi';
 import {
   addKnownErrorConstructor,
-  serializeError,
   deserializeError,
+  serializeError,
 } from 'serialize-error';
 
 import { fromSafeData, toSafeData } from './safeData';
@@ -93,7 +93,7 @@ export const createSafeAction = (config: CreateSafeActionConfig) => {
       } catch (error: unknown) {
         await config.onError?.(error, options?.traceKey, args);
         return {
-          serializedError: config.serializeError!(error),
+          serializedError: config.serializeError?.(error),
           traceKey: options?.traceKey,
         };
       }
@@ -138,7 +138,7 @@ export const createSafeAction = (config: CreateSafeActionConfig) => {
       if (unwrapResult.serializedError) {
         delete caches[key];
 
-        const error = config.deserializeError!(unwrapResult.serializedError);
+        const error = config.deserializeError?.(unwrapResult.serializedError);
 
         await config.onError?.(error, unwrapResult.traceKey, args);
 

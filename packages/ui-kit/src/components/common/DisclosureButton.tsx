@@ -1,6 +1,6 @@
 import { IconButton } from '@mui/material';
 
-import { useDisclosure } from '../../hooks/useDisclosure';
+import type { useDisclosure } from '../../hooks/useDisclosure';
 import { CircularProgress } from '../base';
 import { Icon } from '../icon';
 
@@ -47,10 +47,10 @@ export const DisclosureButton = ({
   return (
     <IconButton
       size={size}
-      disabled={disclosure.state == 'loading' || disabled}
+      disabled={disclosure.state === 'loading' || disabled}
       sx={{
-        color: disclosure.state == 'error' ? 'red' : undefined,
-        transform: `rotate(${disclosure.state == 'open' ? 180 : 0}deg)`,
+        color: disclosure.state === 'error' ? 'red' : undefined,
+        transform: `rotate(${disclosure.state === 'open' ? 180 : 0}deg)`,
         transition: (theme) => {
           return theme.transitions.create('transform', {
             duration: theme.transitions.duration.shortest,
@@ -71,11 +71,11 @@ export const DisclosureButton = ({
         }
       }}
     >
-      {disclosure.state == 'loading' ? (
+      {disclosure.state === 'loading' ? (
         <CircularProgress size={24} />
       ) : (
         <Icon
-          name={disclosure.state == 'error' ? 'SyncExclamation' : 'AngleDown'}
+          name={disclosure.state === 'error' ? 'SyncExclamation' : 'AngleDown'}
         />
       )}
     </IconButton>

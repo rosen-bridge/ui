@@ -1,6 +1,6 @@
-import { useWatch, useFormContext, FieldValues } from 'react-hook-form';
+import { type FieldValues, useFormContext, useWatch } from 'react-hook-form';
 
-import { Network } from '@rosen-ui/types';
+import type { Network } from '@rosen-ui/types';
 
 import type { BridgeForm } from '@/app/(main)/(bridge)/page';
 

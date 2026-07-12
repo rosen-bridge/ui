@@ -1,10 +1,15 @@
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
 import { Dialog as DialogBaseUI } from '@base-ui/react/dialog';
 
-import { CloseButton, CloseButtonProps, Icon, IconProps } from '@/components';
+import {
+  CloseButton,
+  type CloseButtonProps,
+  Icon,
+  type IconProps,
+} from '@/components';
 import { useConfig } from '@/hooks';
-import { ElementBaseProps, OverridableType } from '@/types';
+import type { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.css';
 

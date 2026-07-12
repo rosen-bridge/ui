@@ -1,6 +1,6 @@
-import { TokenMap } from '@rosen-bridge/tokens';
+import type { TokenMap } from '@rosen-bridge/tokens';
 import { NETWORKS } from '@rosen-ui/constants';
-import { RosenAmountValue } from '@rosen-ui/types';
+import type { RosenAmountValue } from '@rosen-ui/types';
 
 import { feeAndMinBoxValue } from './constants';
 

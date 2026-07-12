@@ -1,7 +1,10 @@
-import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
-import { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
+import {
+  type AbstractLogger,
+  DummyLogger,
+} from '@rosen-bridge/abstract-logger';
+import type { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
 import { LockedAssetEntity, TokenEntity } from '@rosen-ui/asset-calculator';
-import { describe, it, expect, beforeEach } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 import { LockedAssetsMetricAction } from '../../lib';
 import { lockedAssetsMetricActionTestData } from '../testData';

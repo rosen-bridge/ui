@@ -1,20 +1,20 @@
 import { NETWORKS } from '@rosen-ui/constants';
-import { FakeData } from '@rosen-ui/swr-helpers';
-import { ChartPeriod } from '@rosen-ui/types';
+import type { FakeData } from '@rosen-ui/swr-helpers';
+import type { ChartPeriod } from '@rosen-ui/types';
 import moment from 'moment';
 
-import {
+import type {
   ApiAddressAssetsResponse,
+  ApiBalanceResponse,
   ApiHealthStatusResponse,
+  ApiHistoryResponse as ApiHistoryEventResponse,
   ApiInfoResponse,
+  ApiEventResponse as ApiOngoingEventResponse,
   ApiRevenueChartResponse,
   ApiRevenueResponse,
   ApiSignResponse,
-  ApiEventResponse as ApiOngoingEventResponse,
-  ApiHistoryResponse as ApiHistoryEventResponse,
   HistoryEvent,
   OngoingEvent,
-  ApiBalanceResponse,
 } from '@/types/api';
 
 const info: ApiInfoResponse = {
@@ -351,7 +351,7 @@ const generateOngoingEventRecords = (
 };
 
 const generateRevenueRecords = (numberOfRecords: number) => {
-  return new Array(numberOfRecords).fill(null).map((data, index) => ({
+  return new Array(numberOfRecords).fill(null).map((_data, index) => ({
     id: index,
     rewardTxId:
       '95baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90f7',

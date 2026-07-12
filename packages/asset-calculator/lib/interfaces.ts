@@ -31,12 +31,12 @@ interface CalculatorInterface {
   addresses: string[];
 }
 
-export {
-  ErgoCalculatorInterface,
-  CardanoCalculatorInterface,
+export type {
   BitcoinCalculatorInterface,
   BitcoinRunesCalculatorInterface,
-  EvmCalculatorInterface,
+  CardanoCalculatorInterface,
   DogeCalculatorInterface,
+  ErgoCalculatorInterface,
+  EvmCalculatorInterface,
   FiroCalculatorInterface,
 };

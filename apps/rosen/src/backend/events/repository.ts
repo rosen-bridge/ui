@@ -3,12 +3,12 @@ import { BlockEntity } from '@rosen-bridge/abstract-scanner';
 import { In } from '@rosen-bridge/extended-typeorm';
 import { TokenPriceAction } from '@rosen-bridge/token-price-entity';
 import {
-  Filters,
+  type Filters,
   filtersToTypeorm,
 } from '@rosen-bridge/ui-kit/dist/components/common/smartSearch/server';
 import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
 import { TokenEntity } from '@rosen-ui/asset-calculator';
-import { Network } from '@rosen-ui/types';
+import type { Network } from '@rosen-ui/types';
 
 import { dataSource } from '../dataSource';
 import '../initialize-datasource-if-needed';
@@ -56,7 +56,7 @@ export const getEvents = async (filters: Filters) => {
 
   await (async () => {
     const field = filters.fields?.find(
-      (field) => field.key == 'originalTokenId',
+      (field) => field.key === 'originalTokenId',
     );
 
     if (!field) return;
@@ -88,7 +88,7 @@ export const getEvents = async (filters: Filters) => {
   })();
 
   const statusIndex =
-    filters.fields?.findIndex((field) => field.key == 'status') ?? -1;
+    filters.fields?.findIndex((field) => field.key === 'status') ?? -1;
 
   const status =
     statusIndex > -1 ? filters.fields?.splice(statusIndex, 1)[0] : undefined;
@@ -105,7 +105,7 @@ export const getEvents = async (filters: Filters) => {
   });
 
   if (status) {
-    query = `${query ? `${query} AND ` : ''}(${status.operator == '!=' ? 'NOT ' : ''}('${status.value}' = ANY(sub."statuses")))`;
+    query = `${query ? `${query} AND ` : ''}(${status.operator === '!=' ? 'NOT ' : ''}('${status.value}' = ANY(sub."statuses")))`;
   }
 
   const subquery = observationRepository
@@ -240,7 +240,7 @@ export const getEvent = async (id: string) => {
     .where('oe.requestId = :id', { id })
     .getRawOne<EventDetailsType>();
 
-  if (!event || !event.lockToken) throw new Error(`Not found`);
+  if (!event?.lockToken) throw new Error(`Not found`);
 
   const token = await tokenRepository.findOne({
     where: {

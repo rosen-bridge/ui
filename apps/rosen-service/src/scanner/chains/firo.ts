@@ -6,7 +6,7 @@ import {
 import {
   FiroElectrumXNetwork,
   FiroElectrumXScanner,
-  FiroRpcTransaction,
+  type FiroRpcTransaction,
 } from '@rosen-bridge/firo-scanner';
 
 import config from '../../configs';

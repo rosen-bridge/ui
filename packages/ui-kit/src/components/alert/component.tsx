@@ -1,10 +1,10 @@
-import { ReactNode, useCallback, useEffect, useMemo } from 'react';
+import { type ReactNode, useCallback, useEffect, useMemo } from 'react';
 
 import { Alert as AlertMUI } from '@mui/material';
 
-import { Collapsible, Icon, IconProps, IconButton } from '@/components';
+import { Collapsible, Icon, IconButton, type IconProps } from '@/components';
 import { useConfig } from '@/hooks';
-import { OverridableType, ElementBaseProps } from '@/types';
+import type { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.css';
 

@@ -1,33 +1,33 @@
-import { AbstractLogger } from '@rosen-bridge/abstract-logger';
+import type { AbstractLogger } from '@rosen-bridge/abstract-logger';
 import { WebSocketScanner } from '@rosen-bridge/abstract-scanner';
-import { TokenMap } from '@rosen-bridge/extended-tokens';
-import { DataSource } from '@rosen-bridge/extended-typeorm';
+import type { TokenMap } from '@rosen-bridge/extended-tokens';
+import type { DataSource } from '@rosen-bridge/extended-typeorm';
 import {
-  Dependency,
-  ServiceStatus,
+  type Dependency,
   ServiceAction,
+  ServiceStatus,
 } from '@rosen-bridge/service-manager';
 import { NETWORKS } from '@rosen-ui/constants';
 import {
-  getDogeScanner,
-  getCardanoScanner,
-  getBitcoinScanner,
   getBinanceScanner,
+  getBitcoinScanner,
+  getCardanoScanner,
+  getDogeScanner,
   getEthereumScanner,
 } from 'scanners';
 
 import { configs } from '../configs';
-import {
+import type {
   ChainChoices,
   ChainScannersType,
   ChainsKeys,
   ChainsWithScanner,
 } from '../types';
 import {
+  AbstractDBService,
   AbstractErgoScannerService,
   AbstractScannerService,
   AbstractTokenMapService,
-  AbstractDBService,
 } from './abstracts';
 
 export class ScannerService extends AbstractScannerService {

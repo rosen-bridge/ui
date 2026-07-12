@@ -1,6 +1,6 @@
 import {
-  PropsWithChildren,
   createContext,
+  type PropsWithChildren,
   useCallback,
   useContext,
   useEffect,
@@ -10,8 +10,8 @@ import {
 } from 'react';
 
 import { useToast } from '@rosen-bridge/ui-kit';
-import { RosenAmountValue } from '@rosen-ui/types';
-import { getNonDecimalString, getDecimalString } from '@rosen-ui/utils';
+import type { RosenAmountValue } from '@rosen-ui/types';
+import { getDecimalString, getNonDecimalString } from '@rosen-ui/utils';
 
 import { FEE_CONFIG_TOKEN_ID } from '../../configs';
 import { useNetwork } from './useNetwork';
@@ -117,7 +117,7 @@ export const TransactionFeesProvider = ({ children }: PropsWithChildren) => {
     const networkFeeRaw = getDecimalString(fees.networkFee, decimals);
 
     const receivingAmount = feesInfo
-      ? paymentAmount - (fees.networkFee + bridgeFee!)
+      ? paymentAmount - (fees.networkFee + bridgeFee)
       : 0n;
 
     const receivingAmountRaw =

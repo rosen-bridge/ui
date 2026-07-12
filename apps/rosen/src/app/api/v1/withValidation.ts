@@ -1,8 +1,8 @@
 /* eslint-disable */
-import { NextRequest } from 'next/server';
+import type { NextRequest } from 'next/server';
 
 import * as Sentry from '@sentry/nextjs';
-import { ValidationResult } from 'joi';
+import type { ValidationResult } from 'joi';
 
 export class AccessDeniedError extends Error {
   constructor(message: string) {

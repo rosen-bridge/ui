@@ -1,6 +1,6 @@
 import { InfoIcon, Typography } from '@/components';
 import { useConfig } from '@/hooks';
-import { Color, ElementBaseProps, OverridableType } from '@/types';
+import type { Color, ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.css';
 

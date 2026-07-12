@@ -1,17 +1,17 @@
 import { BitcoinNetwork } from '@rosen-network/bitcoin/dist/client';
 import { NETWORKS } from '@rosen-ui/constants';
-import { Network } from '@rosen-ui/types';
+import type { Network } from '@rosen-ui/types';
 import {
+  NonNativeSegWitAddressError,
+  SubmitTransactionError,
+  UnsupportedChainError,
   UserDeniedTransactionSignatureError,
   Wallet,
-  WalletTransferParams,
-  UnsupportedChainError,
-  SubmitTransactionError,
-  NonNativeSegWitAddressError,
+  type WalletTransferParams,
 } from '@rosen-ui/wallet-api';
 
 import { ICON } from './icon';
-import { OKXWalletConfig } from './types';
+import type { OKXWalletConfig } from './types';
 
 export class OKXWallet extends Wallet<OKXWalletConfig> {
   icon = ICON;
@@ -91,7 +91,7 @@ export class OKXWallet extends Wallet<OKXWalletConfig> {
       params.token,
     );
 
-    let signedPsbtHex;
+    let signedPsbtHex: string;
 
     try {
       signedPsbtHex = await this.api.signPsbt(psbtData.psbt.hex, {

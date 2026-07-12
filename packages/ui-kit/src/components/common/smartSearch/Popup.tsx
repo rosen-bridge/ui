@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useRef } from 'react';
+import { type ReactNode, useEffect, useRef } from 'react';
 
 import { Popper, styled } from '@mui/material';
 

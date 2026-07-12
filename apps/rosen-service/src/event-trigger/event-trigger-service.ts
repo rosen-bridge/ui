@@ -1,5 +1,5 @@
 import { DefaultLogger } from '@rosen-bridge/abstract-logger';
-import { ErgoScanner } from '@rosen-bridge/ergo-scanner';
+import type { ErgoScanner } from '@rosen-bridge/ergo-scanner';
 import { ErgoNetworkType } from '@rosen-bridge/scanner-interfaces';
 import { EventTriggerExtractor } from '@rosen-bridge/watcher-data-extractor';
 

@@ -1,5 +1,5 @@
 import type { EipWalletApi } from '@rosen-network/ergo';
-import { WalletConfig } from '@rosen-ui/wallet-api';
+import type { WalletConfig } from '@rosen-ui/wallet-api';
 
 export type NautilusWalletConfig = WalletConfig & {};
 

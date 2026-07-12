@@ -1,4 +1,9 @@
-import { ComponentProps, forwardRef, HTMLAttributes, useMemo } from 'react';
+import {
+  type ComponentProps,
+  forwardRef,
+  type HTMLAttributes,
+  useMemo,
+} from 'react';
 
 import { Divider as MuiDivider } from '@mui/material';
 

@@ -1,4 +1,4 @@
-import { GuardStatusEntity, Threshold } from '../src';
+import type { GuardStatusEntity, Threshold } from '../src';
 import {
   AggregateEventStatus,
   AggregateTxStatus,

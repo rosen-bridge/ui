@@ -1,7 +1,7 @@
-import { AbstractLogger } from '@rosen-bridge/abstract-logger';
-import { DataSource } from '@rosen-bridge/extended-typeorm';
+import type { AbstractLogger } from '@rosen-bridge/abstract-logger';
+import type { DataSource } from '@rosen-bridge/extended-typeorm';
 import {
-  Dependency,
+  type Dependency,
   ServiceAction,
   ServiceStatus,
 } from '@rosen-bridge/service-manager';
@@ -9,8 +9,8 @@ import { eventCountMetric } from '@rosen-ui/rosen-statistics';
 
 import { configs } from '../configs';
 import {
-  AbstractEventCountMetricService,
   AbstractDBService,
+  AbstractEventCountMetricService,
   AbstractScannerService,
 } from './abstracts';
 

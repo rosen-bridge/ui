@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
 import { useConfig } from '@/hooks';
-import { ElementBaseProps, Gap, OverridableType, Width } from '@/types';
+import type { ElementBaseProps, Gap, OverridableType, Width } from '@/types';
 import { toCSSUnit } from '@/utils';
 
 import './styles.css';

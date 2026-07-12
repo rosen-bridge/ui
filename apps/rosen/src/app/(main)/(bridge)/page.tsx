@@ -1,10 +1,10 @@
 'use client';
 
-import { useForm, FormProvider } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 
 import { Alert, Link } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
-import { RosenAmountValue } from '@rosen-ui/types';
+import type { RosenAmountValue } from '@rosen-ui/types';
 
 import {
   NetworkProvider,
@@ -57,8 +57,8 @@ const RosenBridge = () => {
                 local:ergo/rosen-bridge/ui#486
                 */}
 
-                {(methods.getValues().source == NETWORKS.binance.key ||
-                  methods.getValues().source == NETWORKS.ethereum.key) && (
+                {(methods.getValues().source === NETWORKS.binance.key ||
+                  methods.getValues().source === NETWORKS.ethereum.key) && (
                   <div className="rosen-bridge-page-alert">
                     <Alert
                       severity="warning"

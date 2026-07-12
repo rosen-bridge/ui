@@ -1,22 +1,22 @@
 import {
   Amount,
-  AmountProps,
+  type AmountProps,
   Card,
   CardBody,
   Connector,
   EventStatus,
-  EventStatusProps,
+  type EventStatusProps,
   Identifier,
-  IdentifierProps,
+  type IdentifierProps,
   Network,
-  NetworkProps,
+  type NetworkProps,
   RelativeTime,
-  RelativeTimeProps,
+  type RelativeTimeProps,
   Token,
-  TokenProps,
+  type TokenProps,
 } from '@/components';
 import { useConfig } from '@/hooks';
-import { ElementBaseProps, OverridableType } from '@/types';
+import type { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.css';
 

@@ -1,6 +1,6 @@
-import { Collapsible, CollapsibleProps } from '@/components';
+import { Collapsible, type CollapsibleProps } from '@/components';
 import { useConfig } from '@/hooks';
-import { ElementBaseProps, OverridableType } from '@/types';
+import type { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.css';
 

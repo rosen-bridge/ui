@@ -1,6 +1,6 @@
 import { DefaultLogger } from '@rosen-bridge/abstract-logger';
 import { CardanoKoiosObservationExtractor } from '@rosen-bridge/cardano-observation-extractor';
-import { CardanoKoiosScanner } from '@rosen-bridge/cardano-scanner';
+import type { CardanoKoiosScanner } from '@rosen-bridge/cardano-scanner';
 
 import config from '../../configs';
 import dataSource from '../../data-source';

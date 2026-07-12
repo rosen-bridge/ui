@@ -1,8 +1,8 @@
-import { cloneElement, ReactElement } from 'react';
+import { cloneElement, type ReactElement } from 'react';
 
 import { Tooltip } from '@/components';
 import { useApiKey, useConfig } from '@/hooks';
-import { ElementBaseProps, OverridableType } from '@/types';
+import type { ElementBaseProps, OverridableType } from '@/types';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface ApiKeyDialogProtectedActionOverrides {}

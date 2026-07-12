@@ -12,10 +12,10 @@ export const useConfig = <C extends string, P extends WithClassName>(
 ): P => {
   const config = useContext(ConfigContext);
 
-  const baseClass = 'Rosen' + componentName;
+  const baseClass = `Rosen${componentName}`;
 
   const className = props.className
-    ? baseClass + ' ' + props.className
+    ? `${baseClass} ${props.className}`
     : baseClass;
 
   const global =

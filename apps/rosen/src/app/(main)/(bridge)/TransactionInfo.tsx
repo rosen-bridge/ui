@@ -1,6 +1,6 @@
 'use client';
 
-import { RosenChainToken } from '@rosen-bridge/tokens';
+import type { RosenChainToken } from '@rosen-bridge/tokens';
 import {
   Alert,
   Amount,
@@ -39,8 +39,7 @@ export const TransactionInfo = () => {
 
   const targetTokenSearchResults =
     sourceValue &&
-    tokenValue &&
-    tokenValue.tokenId &&
+    tokenValue?.tokenId &&
     tokenMap.search(sourceValue, {
       tokenId: tokenValue.tokenId,
     });

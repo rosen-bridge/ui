@@ -1,6 +1,6 @@
 import { DefaultLogger } from '@rosen-bridge/abstract-logger';
 import { DogeRpcObservationExtractor } from '@rosen-bridge/bitcoin-observation-extractor';
-import { DogeRpcScanner } from '@rosen-bridge/bitcoin-scanner';
+import type { DogeRpcScanner } from '@rosen-bridge/bitcoin-scanner';
 
 import config from '../../configs';
 import dataSource from '../../data-source';

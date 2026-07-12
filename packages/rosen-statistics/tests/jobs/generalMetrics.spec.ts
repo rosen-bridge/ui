@@ -1,9 +1,8 @@
-import { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
+import type { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
 import { TokenPriceEntity } from '@rosen-bridge/token-price-entity';
 import { TokenMap } from '@rosen-bridge/tokens';
-import { MetricEntity } from '@rosen-ui/rosen-statistics-entity';
-import { METRIC_KEYS } from '@rosen-ui/rosen-statistics-entity';
-import { describe, it, expect, beforeEach } from 'vitest';
+import { METRIC_KEYS, MetricEntity } from '@rosen-ui/rosen-statistics-entity';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 import { generalMetrics } from '../../lib/jobs';
 import { tokenMapData } from '../testData';

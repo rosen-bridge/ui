@@ -1,10 +1,10 @@
-import { HTMLAttributes, MouseEventHandler, ReactNode } from 'react';
+import type { HTMLAttributes, MouseEventHandler, ReactNode } from 'react';
 
 import { styled } from '@mui/material';
 
 import { DialogTitle } from '../base';
 import { CloseButton } from '../closeButton';
-import { Icon, IconProps } from '../icon';
+import { Icon, type IconProps } from '../icon';
 
 const IconContainer = styled('div')(({ theme }) => ({
   display: 'flex',

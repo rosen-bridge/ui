@@ -1,7 +1,7 @@
 import { NETWORKS } from '@rosen-ui/constants';
 
-import { LockedAssetEntity, TokenEntity } from '../../lib';
-import { BridgedAssetEntity } from '../../lib/database/bridgedAsset/BridgedAssetEntity';
+import type { LockedAssetEntity, TokenEntity } from '../../lib';
+import type { BridgedAssetEntity } from '../../lib/database/bridgedAsset/BridgedAssetEntity';
 
 const tokens: TokenEntity[] = [
   {
@@ -58,4 +58,4 @@ const lockedAssets: LockedAssetEntity[] = [
   },
 ];
 
-export { lockedAssets, bridgedAssets, tokens };
+export { bridgedAssets, lockedAssets, tokens };

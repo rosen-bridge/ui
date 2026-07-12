@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
 import { useConfig } from '@/hooks';
-import { Color, ElementBaseProps, OverridableType } from '@/types';
+import type { Color, ElementBaseProps, OverridableType } from '@/types';
 import { toCSSColor } from '@/utils';
 
 import './styles.css';

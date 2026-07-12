@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import { Tabs as TabsBaseUI } from '@base-ui/react/tabs';
 
 import { useConfig } from '@/hooks';
-import { ElementBaseProps, Gap, OverridableType } from '@/types';
+import type { ElementBaseProps, Gap, OverridableType } from '@/types';
 import { toCSSUnit } from '@/utils';
 
 import './styles.css';

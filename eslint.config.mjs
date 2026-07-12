@@ -14,7 +14,7 @@ const compat = new FlatCompat({
 const eslintConfig = [
   // General Ignore Patterns
   {
-    ignores: ['**/.next/*', '**/dist/*', '**/out/*'],
+    ignores: ['**/.next/**/*', '**/dist/**/*', '**/out/**/*'],
   },
 
   // Base Configuration for JS/TS Files

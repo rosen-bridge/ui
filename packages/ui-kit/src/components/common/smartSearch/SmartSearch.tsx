@@ -1,6 +1,6 @@
 import {
-  ChangeEvent,
-  KeyboardEvent,
+  type ChangeEvent,
+  type KeyboardEvent,
   useCallback,
   useEffect,
   useMemo,
@@ -16,9 +16,9 @@ import { IconButton } from '../../iconButton';
 import { VirtualScroll } from '../../virtualScroll';
 import { Divider } from '../Divider';
 import { Chips } from './Chips';
-import { History, HistoryRef } from './History';
+import { History, type HistoryRef } from './History';
 import { Picker } from './Picker';
-import { Filter, Input, Selected } from './types';
+import type { Filter, Input, Selected } from './types';
 import { parseFilter } from './utils';
 
 const Root = styled(Card)(({ theme }) => ({
@@ -107,7 +107,7 @@ export const SmartSearch = ({
           if (!Array.isArray(current.value)) return;
           if (!current.value.length) return;
           if (!parsed.value.length) return;
-          if (parsed.value.length != current.value.length) return;
+          if (parsed.value.length !== current.value.length) return;
         }
 
         return current;
@@ -131,7 +131,7 @@ export const SmartSearch = ({
             .filter(
               (flow) =>
                 !flow.unique ||
-                !selectedValidated.find((item) => item.flow == flow.name),
+                !selectedValidated.find((item) => item.flow === flow.name),
             )
             .map((flow) => ({
               label: flow.label,
@@ -180,7 +180,7 @@ export const SmartSearch = ({
     (event: KeyboardEvent<HTMLInputElement>) => {
       switch (event.key) {
         case 'Enter': {
-          if (state == 'flow' && !query) {
+          if (state === 'flow' && !query) {
             onChange(selected);
           }
           break;
@@ -210,7 +210,7 @@ export const SmartSearch = ({
             }
             case 'value': {
               const moreTwoSteps =
-                (filtersInput.find((flow) => flow.name == current!.flow)
+                (filtersInput.find((flow) => flow.name === current!.flow)
                   ?.operators.length || 0) > 1;
 
               if (moreTwoSteps) {
@@ -245,9 +245,9 @@ export const SmartSearch = ({
 
   const handlePickerSelect = useCallback(
     (value: Selected['value']) => {
-      if (state == 'idle') return;
+      if (state === 'idle') return;
 
-      if (!(state == 'value' && picker?.type == 'multiple')) {
+      if (!(state === 'value' && picker?.type === 'multiple')) {
         $anchor.current?.focus({ preventScroll: true });
       }
 
@@ -331,7 +331,7 @@ export const SmartSearch = ({
             onFocus={handleInputFocus}
             onKeyDown={handleInputKeyDown}
             onBlur={() => {
-              if (picker?.type == 'multiple') return;
+              if (picker?.type === 'multiple') return;
               timeout.current = window.setTimeout(() => {
                 setCurrent(undefined);
               }, 250);

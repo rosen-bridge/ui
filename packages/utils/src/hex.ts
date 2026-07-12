@@ -1,5 +1,5 @@
-import { Buffer } from 'buffer';
 import { encode } from 'cbor-x';
+import { Buffer } from 'node:buffer';
 
 export function decodeHex(s: string): Uint8Array {
   return Uint8Array.from(Buffer.from(s, 'hex'));

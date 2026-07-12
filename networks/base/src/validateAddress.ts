@@ -1,5 +1,5 @@
 import { validateAddress as validate } from '@rosen-bridge/address-codec';
-import { Network } from '@rosen-ui/types';
+import type { Network } from '@rosen-ui/types';
 
 /**
  * action to verify the wallet addresses

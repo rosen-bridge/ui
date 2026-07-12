@@ -1,6 +1,6 @@
-import { Network } from '@rosen-ui/types';
+import type { Network } from '@rosen-ui/types';
 
-import { BridgedAssetEntity, TokenEntity } from '../../lib/entities';
+import { BridgedAssetEntity, type TokenEntity } from '../../lib/entities';
 
 export class AbstractAssetTestData {
   /**

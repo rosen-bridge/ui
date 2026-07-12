@@ -1,12 +1,12 @@
-import { TokenMap } from '@rosen-bridge/tokens';
+import type { TokenMap } from '@rosen-bridge/tokens';
 import { NETWORKS } from '@rosen-ui/constants';
-import { Network, RosenAmountValue } from '@rosen-ui/types';
+import type { Network, RosenAmountValue } from '@rosen-ui/types';
 
 import {
   estimateTxWeight,
   generateOpReturnData,
-  getFeeRatio,
   getAddressUtxos,
+  getFeeRatio,
   getMinimumMeaningfulSatoshi,
 } from './utils';
 

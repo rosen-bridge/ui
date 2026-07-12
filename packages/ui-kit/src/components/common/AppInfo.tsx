@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import type React from 'react';
+import { useState } from 'react';
 
 import { Typography } from '@mui/material';
-import { Network as NetworkType } from '@rosen-ui/types';
+import type { Network as NetworkType } from '@rosen-ui/types';
 
 import { useToast } from '../../hooks';
 import { Avatar } from '../avatar';
-import { Icon, IconProps } from '../icon';
+import { Icon, type IconProps } from '../icon';
 import { IconButton } from '../iconButton';
 import { Network } from '../network';
 import { Stack } from '../stack';
@@ -39,7 +40,7 @@ export const AppInfo = ({ children, resolver }: AppInfoProps) => {
 
   const [loading, setLoading] = useState(false);
 
-  const [versions, setVersions] = useState<VersionApp[]>();
+  const [versions, setVersions] = useState<VersionApp[]>([]);
 
   const [networks, setNetworks] = useState<NetworkHeight[]>();
 
@@ -56,7 +57,7 @@ export const AppInfo = ({ children, resolver }: AppInfoProps) => {
 
       const result = await resolver();
 
-      setVersions(result.versions);
+      setVersions(result.versions || []);
       setNetworks(result.networks);
 
       setOpen(true);
@@ -93,23 +94,19 @@ export const AppInfo = ({ children, resolver }: AppInfoProps) => {
                 App Version
               </Typography>
             </Divider>
-            {versions && (
-              <>
-                {versions.map(({ label, icon, value }) => (
-                  <Stack key={label} direction="row" justify="between">
-                    <Stack direction="row" spacing={1} align="center">
-                      <Avatar size="32px" background="neutral-contrastText">
-                        <Icon name={icon} />
-                      </Avatar>
-                      <Typography noWrap variant="body1">
-                        {label}
-                      </Typography>
-                    </Stack>
-                    {value}
-                  </Stack>
-                ))}
-              </>
-            )}
+            {versions.map(({ label, icon, value }) => (
+              <Stack key={label} direction="row" justify="between">
+                <Stack direction="row" spacing={1} align="center">
+                  <Avatar size="32px" background="neutral-contrastText">
+                    <Icon name={icon} />
+                  </Avatar>
+                  <Typography noWrap variant="body1">
+                    {label}
+                  </Typography>
+                </Stack>
+                {value}
+              </Stack>
+            ))}
 
             {networks && (
               <>

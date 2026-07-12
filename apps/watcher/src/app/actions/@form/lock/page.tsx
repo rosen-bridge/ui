@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo } from 'react';
-import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
+import { FormProvider, type SubmitHandler, useForm } from 'react-hook-form';
 
 import {
   Alert,
@@ -16,25 +16,25 @@ import {
   useToast,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
-import { mutatorWithHeaders, fetcher } from '@rosen-ui/swr-helpers';
+import { fetcher, mutatorWithHeaders } from '@rosen-ui/swr-helpers';
 import {
-  getNonDecimalString,
   getDecimalString,
+  getNonDecimalString,
   getTxURL,
 } from '@rosen-ui/utils';
 import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
 
 import { useRsnToken, useToken } from '@/hooks';
-import {
+import type {
+  ApiInfoResponse,
   ApiPermitRequestBody,
   ApiPermitResponse,
-  ApiInfoResponse,
 } from '@/types/api';
 
 import {
+  type TokenAmountCompatibleFormSchema,
   TokenAmountTextField,
-  TokenAmountCompatibleFormSchema,
 } from '../../TokenAmountTextField';
 
 const LockForm = () => {
@@ -79,7 +79,7 @@ const LockForm = () => {
         timeout: 0,
       });
     }
-  }, [isRsnTokenLoading, rsnToken]);
+  }, [isRsnTokenLoading, rsnToken, toast.add]);
 
   const formMethods = useForm({
     mode: 'onChange',
@@ -205,7 +205,7 @@ const LockForm = () => {
 
     const nonDecimalAmount = +getNonDecimalString(
       formData.amount,
-      rsnToken!.decimals,
+      rsnToken?.decimals,
     );
 
     const reportsCount = Math.floor(+nonDecimalAmount / info?.permitsPerEvent);

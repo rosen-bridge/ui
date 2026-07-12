@@ -1,26 +1,26 @@
 import { useState } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { type SubmitHandler, useForm } from 'react-hook-form';
 
 import {
   Alert,
-  AlertProps,
+  type AlertProps,
   ApiKeyDialogWarning,
   Card,
+  CardBody,
+  CardHeader,
+  CardTitle,
   MenuItem,
+  Stack,
   SubmitButton,
   TextField,
   useApiKey,
-  CardHeader,
-  CardTitle,
-  CardBody,
-  Stack,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS, NETWORKS_KEYS } from '@rosen-ui/constants';
 import { mutatorWithHeaders } from '@rosen-ui/swr-helpers';
-import { Network } from '@rosen-ui/types';
+import type { Network } from '@rosen-ui/types';
 import useSWRMutation from 'swr/mutation';
 
-import { ApiOrderRequestBody, ApiOrderResponse } from '@/types/api';
+import type { ApiOrderRequestBody, ApiOrderResponse } from '@/types/api';
 
 interface Form {
   id: string;

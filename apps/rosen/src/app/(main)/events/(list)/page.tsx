@@ -3,10 +3,10 @@
 import { useCallback, useEffect, useMemo } from 'react';
 
 import {
-  LayoutList,
   EmptyState,
   EventCard,
   GridContainer,
+  LayoutList,
   Pagination,
   SmartSearch,
   SortField,
@@ -19,7 +19,7 @@ import { serializeError } from 'serialize-error';
 import useSWR from 'swr';
 
 import { useTokenMap } from '@/hooks';
-import { ApiEventResponse } from '@/types';
+import type { ApiEventResponse } from '@/types';
 
 import { getFilters, sorts } from './config';
 import { Sidebar } from './Sidebar';
@@ -96,7 +96,7 @@ const Page = () => {
         onClose={() => collection.setFragment(undefined)}
       />
     ),
-    [current],
+    [current, collection.setFragment],
   );
 
   const renderSort = useCallback(
@@ -124,7 +124,7 @@ const Page = () => {
         more: () => JSON.stringify(serializeError(error), null, 2),
       });
     }
-  }, [error]);
+  }, [error, toast.add]);
 
   return (
     <LayoutList
@@ -140,7 +140,7 @@ const Page = () => {
           {isLoading
             ? Array(collection.pageSize)
                 .fill(null)
-                .map((_, index) => <EventCard key={index} loading />)
+                .map((_, index) => <EventCard key={index.toString()} loading />)
             : items.map((item) => (
                 <EventCard
                   id={item.id.toString()}

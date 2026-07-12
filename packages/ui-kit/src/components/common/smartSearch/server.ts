@@ -107,7 +107,7 @@ export const searchParamsToFilters = (
     const operator =
       OPERATORS.find((operator) => key.at(-1) === operator.at(0)) || '==';
 
-    const name = (key + '=')
+    const name = `${key}=`
       .split(`${isArray ? '[]' : ''}${operator.at(0)}`)
       .at(0)!;
 

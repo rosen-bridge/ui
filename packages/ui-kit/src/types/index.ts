@@ -1,4 +1,4 @@
-import { Breakpoint } from './breakpoint';
+import type { Breakpoint } from './breakpoint';
 
 export * from './breakpoint';
 export * from './color';

@@ -1,23 +1,23 @@
 import type { MetaMaskSDK } from '@metamask/sdk';
-import { RosenChainToken } from '@rosen-bridge/tokens';
+import type { RosenChainToken } from '@rosen-bridge/tokens';
 import { BinanceNetwork } from '@rosen-network/binance/dist/client';
 import { EthereumNetwork } from '@rosen-network/ethereum/dist/client';
 import { tokenABI } from '@rosen-network/evm/dist/constants';
 import { NETWORKS } from '@rosen-ui/constants';
-import { Network } from '@rosen-ui/types';
+import type { Network } from '@rosen-ui/types';
 import {
   ChainNotAddedError,
   ChainSwitchingRejectedError,
-  UnsupportedChainError,
-  Wallet,
-  InteractionError,
-  WalletTransferParams,
-  UserDeniedTransactionSignatureError,
   CurrentChainError,
+  InteractionError,
+  UnsupportedChainError,
+  UserDeniedTransactionSignatureError,
+  Wallet,
+  type WalletTransferParams,
 } from '@rosen-ui/wallet-api';
 
 import { ICON } from './icon';
-import { MetaMaskWalletConfig } from './types';
+import type { MetaMaskWalletConfig } from './types';
 
 export class MetaMaskWallet extends Wallet<MetaMaskWalletConfig> {
   icon = ICON;
@@ -41,7 +41,7 @@ export class MetaMaskWallet extends Wallet<MetaMaskWalletConfig> {
 
   get currentChain(): Network {
     const chain = Object.values(NETWORKS).find(
-      (network) => network.id == this.provider.chainId,
+      (network) => network.id === this.provider.chainId,
     )?.key;
 
     if (!chain) throw new CurrentChainError(this.name);
@@ -147,8 +147,7 @@ export class MetaMaskWallet extends Wallet<MetaMaskWalletConfig> {
 
     if (silent) {
       const has = (await this.permissions())
-        .map((permission) => permission.caveats)
-        .flat()
+        .flatMap((permission) => permission.caveats)
         .some(
           (caveat) =>
             caveat.type === 'restrictNetworkSwitching' &&

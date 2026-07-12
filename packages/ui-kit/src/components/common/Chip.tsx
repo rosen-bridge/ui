@@ -1,10 +1,15 @@
-import { ComponentProps, forwardRef, HtmlHTMLAttributes, useMemo } from 'react';
+import {
+  type ComponentProps,
+  forwardRef,
+  type HtmlHTMLAttributes,
+  useMemo,
+} from 'react';
 
 import { styled } from '@mui/material';
 
 import { Skeleton } from '@/components';
 
-import { Icon, IconProps } from '../icon';
+import { Icon, type IconProps } from '../icon';
 import { Typography } from '../typography';
 
 /**

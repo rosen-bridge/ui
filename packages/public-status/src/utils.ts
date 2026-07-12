@@ -4,8 +4,8 @@ import {
   EventStatus,
   TxStatus,
 } from './constants';
-import { GuardStatusEntity } from './entities/GuardStatusEntity';
-import { AggregatedStatus, Threshold } from './types';
+import type { GuardStatusEntity } from './entities/GuardStatusEntity';
+import type { AggregatedStatus, Threshold } from './types';
 
 export class Utils {
   /**
@@ -45,8 +45,8 @@ export class Utils {
   ): string | undefined => {
     if (!guardStatus.tx) return undefined;
     const txKey = JSON.stringify({
-      txId: guardStatus.tx!.txId,
-      chain: guardStatus.tx!.chain,
+      txId: guardStatus.tx.txId,
+      chain: guardStatus.tx.chain,
     });
     return `${txKey}::${this.txStatusToAggregate(guardStatus.txStatus!)}`;
   };

@@ -1,4 +1,4 @@
-import { createElement, FC, SVGAttributes } from 'react';
+import { createElement, type FC, type SVGAttributes } from 'react';
 
 import { Wallet } from '@rosen-ui/wallet-api';
 

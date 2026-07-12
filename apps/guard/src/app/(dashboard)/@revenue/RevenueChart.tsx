@@ -2,11 +2,11 @@ import { useMemo } from 'react';
 import Chart from 'react-apexcharts';
 
 import { useTheme } from '@rosen-bridge/ui-kit';
-import { ChartPeriod } from '@rosen-ui/types';
+import type { ChartPeriod } from '@rosen-ui/types';
 import { getDecimalString } from '@rosen-ui/utils';
 import moment from 'moment';
 
-import { ApiRevenueChartResponse } from '@/types/api';
+import type { ApiRevenueChartResponse } from '@/types/api';
 
 /**
  * get date format for a period to be used as chart x axis labels
@@ -82,10 +82,9 @@ export const RevenueChart = ({ period, data }: RevenueChartProps) => {
 
   const slots = useMemo(() => {
     const raw = data
-      .map((token) => token.data)
-      .flat()
+      .flatMap((token) => token.data)
       .map((item) => +item.label)
-      .filter((item, index, items) => items.indexOf(item) == index)
+      .filter((item, index, items) => items.indexOf(item) === index)
       .sort((a, b) => a - b);
 
     const min = raw[0];
@@ -160,7 +159,7 @@ export const RevenueChart = ({ period, data }: RevenueChartProps) => {
         name: token.title.name,
         data: slots.map((slot) => {
           const amount = token.data.find(
-            (item) => item.label == slot.toString(),
+            (item) => item.label === slot.toString(),
           )?.amount;
           return +getDecimalString(amount, token.title.decimals);
         }),

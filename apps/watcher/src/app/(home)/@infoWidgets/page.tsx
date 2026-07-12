@@ -1,6 +1,10 @@
 'use client';
 
-import { GridContainer, IconProps, useResponsive } from '@rosen-bridge/ui-kit';
+import {
+  GridContainer,
+  type IconProps,
+  useResponsive,
+} from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import { getDecimalString } from '@rosen-ui/utils';
@@ -8,9 +12,9 @@ import { upperFirst } from 'lodash-es';
 import useSWR from 'swr';
 
 import { useERsnToken, useRsnToken, useToken } from '@/hooks';
-import { ApiInfoResponse } from '@/types/api';
+import type { ApiInfoResponse } from '@/types/api';
 
-import { InfoWidgetCard, InfoWidgetCardProps } from './InfoWidgetCard';
+import { InfoWidgetCard, type InfoWidgetCardProps } from './InfoWidgetCard';
 
 const healthStatusColorMap: Record<
   ApiInfoResponse['health']['status'],
@@ -30,15 +34,14 @@ const InfoWidgets = () => {
   const { rsnToken, isLoading: isRsnTokenLoading } = useRsnToken();
   const { eRsnToken, isLoading: isERsnTokenLoading } = useERsnToken();
 
-  let titleRSN =
+  const titleRSN =
     rsnToken?.amount !== undefined && rsnToken?.amount !== 0
-      ? getDecimalString(rsnToken.amount.toString(), rsnToken.decimals) + ' RSN'
+      ? `${getDecimalString(rsnToken.amount.toString(), rsnToken.decimals)} RSN`
       : '';
 
-  let titleERSN =
+  const titleERSN =
     eRsnToken?.amount !== undefined && eRsnToken?.amount !== 0
-      ? getDecimalString(eRsnToken?.amount.toString(), eRsnToken.decimals) +
-        ' eRSN'
+      ? `${getDecimalString(eRsnToken?.amount.toString(), eRsnToken.decimals)} eRSN`
       : '';
 
   const { token: ergToken, isLoading: isErgTokenLoading } = useToken('erg');

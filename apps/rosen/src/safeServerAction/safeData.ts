@@ -18,7 +18,7 @@ const processDataType = (
 ): any => {
   const type = typeof input;
 
-  if (type != 'object') return convertor(input, type);
+  if (type !== 'object') return convertor(input, type);
 
   if (Array.isArray(input)) {
     return input.map((item: any) => processDataType(item, convertor));
@@ -43,13 +43,13 @@ const processDataType = (
 
 const from = <T>(input: T): T =>
   processDataType(input, (value, type) => {
-    if (type != 'string' || !value.startsWith(BIGINT_KEY)) return value;
+    if (type !== 'string' || !value.startsWith(BIGINT_KEY)) return value;
     return BigInt(value.replace(BIGINT_KEY, ''));
   });
 
 const to = <T>(input: T): T =>
   processDataType(input, (value, type) => {
-    if (type != 'bigint') return value;
+    if (type !== 'bigint') return value;
     return BIGINT_KEY + value.toString();
   });
 

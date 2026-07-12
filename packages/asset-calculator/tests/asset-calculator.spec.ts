@@ -3,7 +3,7 @@ import { NETWORKS } from '@rosen-ui/constants';
 import { beforeEach, describe, expect, it, vitest } from 'vitest';
 
 import { AssetCalculator } from '../lib';
-import AbstractCalculator from '../lib/calculator/abstract-calculator';
+import type AbstractCalculator from '../lib/calculator/abstract-calculator';
 import { initDatabase } from './database/bridgedAsset/BridgedAssetModel.mock';
 import { bridgedAssets, lockedAssets, tokens } from './database/test-data';
 import { tokenMapData } from './test-data';

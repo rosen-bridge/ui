@@ -1,7 +1,7 @@
 import { Collapsible as CollapsibleBaseUI } from '@base-ui/react/collapsible';
 
 import { useConfig } from '@/hooks';
-import { ElementBaseProps, OverridableType } from '@/types';
+import type { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.css';
 

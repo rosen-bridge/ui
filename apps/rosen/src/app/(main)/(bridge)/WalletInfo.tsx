@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { Card, CardBody, Button, Typography, Icon } from '@rosen-bridge/ui-kit';
+import { Button, Card, CardBody, Icon, Typography } from '@rosen-bridge/ui-kit';
 
 import { useWallet } from '@/hooks';
 

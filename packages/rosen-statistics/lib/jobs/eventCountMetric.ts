@@ -1,11 +1,14 @@
-import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
-import { BlockDbAction } from '@rosen-bridge/abstract-scanner';
-import { DataSource } from '@rosen-bridge/extended-typeorm';
 import {
-  MetricAction,
-  METRIC_KEYS,
+  type AbstractLogger,
+  DummyLogger,
+} from '@rosen-bridge/abstract-logger';
+import { BlockDbAction } from '@rosen-bridge/abstract-scanner';
+import type { DataSource } from '@rosen-bridge/extended-typeorm';
+import {
+  type AggregatedEvents,
   EventCountMetricAction,
-  AggregatedEvents,
+  METRIC_KEYS,
+  MetricAction,
 } from '@rosen-ui/rosen-statistics-entity';
 
 /**

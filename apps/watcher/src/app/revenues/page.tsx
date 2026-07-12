@@ -26,7 +26,7 @@ import { getDecimalString } from '@rosen-ui/utils';
 import useSWR from 'swr';
 
 import { useERsnToken, useRsnToken } from '@/hooks';
-import { ApiRevenueResponse, Revenue } from '@/types/api';
+import type { ApiRevenueResponse, Revenue } from '@/types/api';
 
 const Revenues = () => {
   const collection = useCollection({

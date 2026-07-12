@@ -1,17 +1,17 @@
-import { FormEvent, useEffect, useState } from 'react';
+import { type FormEvent, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
 import {
-  InputAdornment,
-  TextField,
   Button,
   CloseButton,
   Icon,
   IconButton,
+  InputAdornment,
+  TextField,
   Tooltip,
 } from '@/components';
 import { useApiKey, useConfig, useToast } from '@/hooks';
-import { ElementBaseProps, OverridableType } from '@/types';
+import type { ElementBaseProps, OverridableType } from '@/types';
 
 import { Dialog } from '../dialog';
 import { DialogContent } from '../dialogContent';
@@ -77,53 +77,51 @@ export const ApiKeyDialog = (props: ApiKeyDialogProps) => {
   }, [apiKey, open, setValue]);
 
   return (
-    <>
-      <Dialog maxWidth="tablet" open={open} onClose={onClose} {...rest}>
-        <DialogHeader>
-          <DialogTitle>Authorization</DialogTitle>
-        </DialogHeader>
-        <DialogDescription>Set API key to access actions</DialogDescription>
-        <DialogContent>
-          <form id="api-key-form" onSubmit={onSubmit}>
-            <Controller
-              name="apiKey"
-              control={control}
-              {...(apiKey ? { defaultValue: apiKey } : {})}
-              render={({ field }) => (
-                <TextField
-                  type={showKey ? 'text' : 'password'}
-                  autoFocus
-                  fullWidth
-                  {...field}
-                  slotProps={{
-                    input: {
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <Tooltip title="Clear">
-                            <CloseButton onClick={() => reset()} />
-                          </Tooltip>
-                          <Tooltip title={showKey ? 'Hide key' : 'Show key'}>
-                            <IconButton onClick={handleToggleShowKey}>
-                              <Icon name={showKey ? 'EyeSlash' : 'Eye'} />
-                            </IconButton>
-                          </Tooltip>
-                        </InputAdornment>
-                      ),
-                    },
-                  }}
-                />
-              )}
-            />
-          </form>
-        </DialogContent>
-        <DialogFooter>
-          <Button onClick={onClose}>Cancel</Button>
-          <Button form="api-key-form" type="submit">
-            Set key
-          </Button>
-        </DialogFooter>
-      </Dialog>
-    </>
+    <Dialog maxWidth="tablet" open={open} onClose={onClose} {...rest}>
+      <DialogHeader>
+        <DialogTitle>Authorization</DialogTitle>
+      </DialogHeader>
+      <DialogDescription>Set API key to access actions</DialogDescription>
+      <DialogContent>
+        <form id="api-key-form" onSubmit={onSubmit}>
+          <Controller
+            name="apiKey"
+            control={control}
+            {...(apiKey ? { defaultValue: apiKey } : {})}
+            render={({ field }) => (
+              <TextField
+                type={showKey ? 'text' : 'password'}
+                autoFocus
+                fullWidth
+                {...field}
+                slotProps={{
+                  input: {
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <Tooltip title="Clear">
+                          <CloseButton onClick={() => reset()} />
+                        </Tooltip>
+                        <Tooltip title={showKey ? 'Hide key' : 'Show key'}>
+                          <IconButton onClick={handleToggleShowKey}>
+                            <Icon name={showKey ? 'EyeSlash' : 'Eye'} />
+                          </IconButton>
+                        </Tooltip>
+                      </InputAdornment>
+                    ),
+                  },
+                }}
+              />
+            )}
+          />
+        </form>
+      </DialogContent>
+      <DialogFooter>
+        <Button onClick={onClose}>Cancel</Button>
+        <Button form="api-key-form" type="submit">
+          Set key
+        </Button>
+      </DialogFooter>
+    </Dialog>
   );
 };
 

@@ -1,20 +1,20 @@
 import { NETWORKS } from '@rosen-ui/constants';
-import { FakeData } from '@rosen-ui/swr-helpers';
-import { ChartPeriod } from '@rosen-ui/types';
+import type { FakeData } from '@rosen-ui/swr-helpers';
+import type { ChartPeriod } from '@rosen-ui/types';
 import moment from 'moment';
 
-import {
-  ApiPermitReturnResponse,
-  Event,
-  ApiEventResponse,
+import type {
   ApiAddressAssetsResponse,
+  ApiEventResponse,
   ApiHealthStatusResponse,
   ApiInfoResponse,
   ApiObservationResponse,
   ApiPermitResponse,
+  ApiPermitReturnResponse,
   ApiRevenueChartResponse,
-  ApiWithdrawResponse,
   ApiRevenueResponse,
+  ApiWithdrawResponse,
+  Event,
 } from '@/types/api';
 
 const info: ApiInfoResponse = {
@@ -262,7 +262,7 @@ const permitReturn: ApiPermitReturnResponse = {
 };
 
 const generateObservationRecords = (numberOfRecords: number) => {
-  return new Array(numberOfRecords).fill(null).map((data, index) => ({
+  return new Array(numberOfRecords).fill(null).map((_data, index) => ({
     id: index,
     fromChain: NETWORKS.ergo.key,
     toChain: NETWORKS.cardano.key,
@@ -289,7 +289,7 @@ const generateObservationRecords = (numberOfRecords: number) => {
 };
 
 const generateEventRecords = (numberOfRecords: number): Event[] => {
-  return new Array(numberOfRecords).fill(null).map((data, index) => ({
+  return new Array(numberOfRecords).fill(null).map((_data, index) => ({
     id: index,
     eventId: `${Math.floor(Date.now() * Math.random())}`,
     txId: `${Math.floor(Date.now() * Math.random())}`,
@@ -324,7 +324,7 @@ const generateEventRecords = (numberOfRecords: number): Event[] => {
 };
 
 const generateRevenueRecords = (numberOfRecords: number) => {
-  return new Array(numberOfRecords).fill(null).map((data, index) => ({
+  return new Array(numberOfRecords).fill(null).map((_data, index) => ({
     id: index,
     permitTxId:
       '95baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90f7',

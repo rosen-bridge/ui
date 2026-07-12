@@ -5,7 +5,7 @@ import {
   PrimaryColumn,
 } from '@rosen-bridge/extended-typeorm';
 
-import { TxType } from '../constants';
+import type { TxType } from '../constants';
 import { AggregatedStatusChangedEntity } from './AggregatedStatusChangedEntity';
 import { AggregatedStatusEntity } from './AggregatedStatusEntity';
 import { GuardStatusChangedEntity } from './GuardStatusChangedEntity';

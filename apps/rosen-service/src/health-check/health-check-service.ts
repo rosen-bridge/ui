@@ -1,5 +1,4 @@
 import { DefaultLogger } from '@rosen-bridge/abstract-logger';
-import CallbackLogger from '@rosen-bridge/callback-logger';
 import { DiscordNotification } from '@rosen-bridge/discord-notification';
 import { HealthCheck, HealthStatusLevel } from '@rosen-bridge/health-check';
 import { LogLevelHealthCheck } from '@rosen-bridge/log-level-check';
@@ -200,9 +199,7 @@ const start = async () => {
       } catch (e) {
         if (e instanceof AggregateError) {
           logger.warn(
-            `Health check update job failed: ${e.errors.map(
-              (error) => error.message,
-            )}`,
+            `Health check update job failed: ${e.errors.map((error) => error.message)}`,
           );
         } else logger.warn(`Health check update job failed: ${e}`);
       }

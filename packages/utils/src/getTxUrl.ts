@@ -1,5 +1,5 @@
 import { NETWORKS } from '@rosen-ui/constants';
-import { Network } from '@rosen-ui/types';
+import type { Network } from '@rosen-ui/types';
 
 /**
  * TODO: This util is temporary and its logic should be moved to individual

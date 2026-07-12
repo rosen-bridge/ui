@@ -1,5 +1,5 @@
-import { NETWORKS_KEYS } from '@rosen-ui/constants';
-import { Network } from '@rosen-ui/types';
+import type { NETWORKS_KEYS } from '@rosen-ui/constants';
+import type { Network } from '@rosen-ui/types';
 
 export type TokenChainInfoType = { tokenId: string; chain: Network };
 export type TokenAddressInfoType = { tokenId: string; address: string };

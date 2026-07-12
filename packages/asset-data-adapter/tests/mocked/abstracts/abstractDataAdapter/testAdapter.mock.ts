@@ -1,7 +1,7 @@
 import { NETWORKS } from '@rosen-ui/constants';
 
 import { AbstractDataAdapter } from '../../../../lib/abstracts/abstractDataAdapter';
-import { ChainAssetBalance } from '../../../../lib/types';
+import type { ChainAssetBalance } from '../../../../lib/types';
 
 export class TestAdapter extends AbstractDataAdapter {
   chain = NETWORKS.ergo.key;

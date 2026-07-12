@@ -1,9 +1,9 @@
 export {
-  TestAdapter,
   sampleTokenMapConfig,
   sampleTokenMapConfigWithDuplicateTokenId,
+  TestAdapter,
 } from './abstractDataAdapter';
 export {
-  TestEvmRpcAdapter,
   expectedGetAddressAssetsResult,
+  TestEvmRpcAdapter,
 } from './abstractEvmRpcDataAdapter';

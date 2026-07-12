@@ -1,8 +1,14 @@
-import { AbstractLogger } from '@rosen-bridge/abstract-logger';
-import { NATIVE_TOKEN, RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
-import ergoExplorerClientFactory, { V1 } from '@rosen-clients/ergo-explorer';
+import type { AbstractLogger } from '@rosen-bridge/abstract-logger';
+import {
+  NATIVE_TOKEN,
+  type RosenChainToken,
+  type TokenMap,
+} from '@rosen-bridge/tokens';
+import ergoExplorerClientFactory, {
+  type V1,
+} from '@rosen-clients/ergo-explorer';
 import { NETWORKS } from '@rosen-ui/constants';
-import { Network } from '@rosen-ui/types';
+import type { Network } from '@rosen-ui/types';
 import { zipWith } from 'lodash-es';
 
 import { ERG_TOTAL_SUPPLY } from '../../constants';
@@ -56,7 +62,7 @@ export class ErgoCalculator extends AbstractCalculator {
       const balance =
         await this.explorerApi.v1.getApiV1AddressesP1BalanceConfirmed(address);
       const addressTokenBalance =
-        balance.tokens!.filter((asset) => asset.tokenId == token.tokenId)[0]
+        balance.tokens?.filter((asset) => asset.tokenId === token.tokenId)[0]
           ?.amount ?? 0n;
       this.logger.debug(
         `Balance of token [${token.name}] in address [${address}] is [${addressTokenBalance}]`,

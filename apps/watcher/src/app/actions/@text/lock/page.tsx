@@ -6,7 +6,7 @@ import { getDecimalString } from '@rosen-ui/utils';
 import useSWR from 'swr';
 
 import { useRsnToken, useToken } from '@/hooks';
-import { ApiInfoResponse } from '@/types/api';
+import type { ApiInfoResponse } from '@/types/api';
 
 const LockText = () => {
   const { data: info, isLoading: isInfoLoading } = useSWR<ApiInfoResponse>(

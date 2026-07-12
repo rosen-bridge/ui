@@ -1,6 +1,6 @@
-import { Icon, Tooltip, TooltipProps } from '@/components';
+import { Icon, Tooltip, type TooltipProps } from '@/components';
 import { useConfig } from '@/hooks';
-import { ElementBaseProps, OverridableType } from '@/types';
+import type { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.css';
 

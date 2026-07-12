@@ -1,15 +1,15 @@
 import ergoExplorerClientFactory from '@rosen-clients/ergo-explorer';
 import {
-  CalculateFee,
+  type CalculateFee,
   calculateFeeCreator,
   getMinTransferCreator as getMinTransferCreatorBase,
 } from '@rosen-network/base';
 import { NETWORKS } from '@rosen-ui/constants';
-import { Network } from '@rosen-ui/types';
+import type { Network } from '@rosen-ui/types';
 import * as wasm from 'ergo-lib-wasm-nodejs';
 
 import { minBoxValue } from './constants';
-import {
+import type {
   AssetBalance,
   BoxInfo,
   CoveringBoxes,

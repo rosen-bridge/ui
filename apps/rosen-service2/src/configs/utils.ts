@@ -1,12 +1,12 @@
 import { ConfigValidator } from '@rosen-bridge/config';
 import JsonBigInt from '@rosen-bridge/json-bigint';
-import { TransportOptions } from '@rosen-bridge/winston-logger';
+import type { TransportOptions } from '@rosen-bridge/winston-logger';
 import * as fs from 'node:fs';
 import path from 'node:path';
 import { exit } from 'node:process';
 import { fileURLToPath } from 'node:url';
 
-import { AllChainsConfigs, Logs, RosenService2Configs } from '../types';
+import type { AllChainsConfigs, Logs, RosenService2Configs } from '../types';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 

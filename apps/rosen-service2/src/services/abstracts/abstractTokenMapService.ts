@@ -1,4 +1,4 @@
-import { TokenMap } from '@rosen-bridge/extended-tokens';
+import type { TokenMap } from '@rosen-bridge/extended-tokens';
 import { AbstractService } from '@rosen-bridge/service-manager';
 
 export abstract class AbstractTokenMapService extends AbstractService {

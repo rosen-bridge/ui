@@ -1,22 +1,22 @@
 import { encodeAddress } from '@rosen-bridge/address-codec';
 import {
-  CalculateFee,
+  type CalculateFee,
   calculateFeeCreator,
   getMinTransferCreator as getMinTransferCreatorBase,
 } from '@rosen-network/base';
 import { NETWORKS } from '@rosen-ui/constants';
-import { Network } from '@rosen-ui/types';
+import type { Network } from '@rosen-ui/types';
 import Axios from 'axios';
-import { Psbt, address } from 'bitcoinjs-lib';
+import { address, Psbt } from 'bitcoinjs-lib';
 
 import {
-  DOGE_TX_BASE_SIZE,
   DOGE_INPUT_SIZE,
-  MINIMUM_UTXO_VALUE,
-  DOGE_OUTPUT_SIZE,
   DOGE_NETWORK,
+  DOGE_OUTPUT_SIZE,
+  DOGE_TX_BASE_SIZE,
+  MINIMUM_UTXO_VALUE,
 } from './constants';
-import type { DogeUtxo, BlockCypherAddress } from './types';
+import type { BlockCypherAddress, DogeUtxo } from './types';
 
 /**
  * generates metadata for lock transaction

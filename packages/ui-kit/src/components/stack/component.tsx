@@ -1,7 +1,7 @@
-import { CSSProperties, useMemo } from 'react';
+import { type CSSProperties, useMemo } from 'react';
 
 import { useConfig } from '@/hooks';
-import { ElementBaseProps, Gap, OverridableType } from '@/types';
+import type { ElementBaseProps, Gap, OverridableType } from '@/types';
 import { toCSSUnit } from '@/utils';
 
 const ALIGN_MAP: Record<NonNullable<StackBaseProps['align']>, string> = {

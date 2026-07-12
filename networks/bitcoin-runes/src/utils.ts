@@ -1,21 +1,21 @@
 import { encodeAddress } from '@rosen-bridge/address-codec';
 import {
   BitcoinRunesBoxSelection,
-  BitcoinRunesUtxo,
-  CoveringBoxes,
-  FeeEstimator,
+  type BitcoinRunesUtxo,
+  type CoveringBoxes,
+  type FeeEstimator,
 } from '@rosen-bridge/bitcoin-runes-utxo-selection';
 import JsonBigInt from '@rosen-bridge/json-bigint';
 import {
-  CalculateFee,
+  type CalculateFee,
   calculateFeeCreator,
   getMinTransferCreator as getMinTransferCreatorBase,
 } from '@rosen-network/base';
 import { NETWORKS } from '@rosen-ui/constants';
-import { Network } from '@rosen-ui/types';
+import type { Network } from '@rosen-ui/types';
 import Axios from 'axios';
-import { Psbt } from 'bitcoinjs-lib';
 import * as bitcoinJs from 'bitcoinjs-lib';
+import { Psbt } from 'bitcoinjs-lib';
 
 import {
   CONFIRMATION_TARGET,
@@ -176,7 +176,7 @@ export async function* getAddressAvailableBtcUtxos(
     } catch (e: any) {
       const baseError = `Failed to get available UTxOs containing BTC only for address [${address}] with offset/limit [${offset}/${limit}] from Unisat: `;
       if (e.response) {
-        throw new Error(baseError + `${JsonBigInt.stringify(e.response.data)}`);
+        throw new Error(`${baseError}${JsonBigInt.stringify(e.response.data)}`);
       }
       throw new Error(baseError + e.message);
     }
@@ -222,7 +222,7 @@ export async function* getAddressAllBtcUtxos(
     } catch (e: any) {
       const baseError = `Failed to get all UTxOs containing BTC only for address [${address}] with offset/limit [${offset}/${limit}] from Unisat: `;
       if (e.response) {
-        throw new Error(baseError + `${JsonBigInt.stringify(e.response.data)}`);
+        throw new Error(`${baseError}${JsonBigInt.stringify(e.response.data)}`);
       }
       throw new Error(baseError + e.message);
     }
@@ -273,7 +273,7 @@ export async function* getAddressRunesUtxos(
     } catch (e: any) {
       const baseError = `Failed to get UTxOs containing rune [${runeId}] for address [${address}] with offset/limit [${offset}/${limit}] from Unisat: `;
       if (e.response) {
-        throw new Error(baseError + `${JsonBigInt.stringify(e.response.data)}`);
+        throw new Error(`${baseError}${JsonBigInt.stringify(e.response.data)}`);
       }
       throw new Error(baseError + e.message);
     }

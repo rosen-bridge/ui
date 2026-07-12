@@ -1,16 +1,19 @@
 import { CallbackType } from '@rosen-bridge/abstract-extractor';
-import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
-import { ErgoUTXOExtractor } from '@rosen-bridge/address-extractor';
-import { ErgoScanner } from '@rosen-bridge/ergo-scanner';
-import { ExtendedTokenMap, TokenMap } from '@rosen-bridge/extended-tokens';
 import {
-  Dependency,
+  type AbstractLogger,
+  DummyLogger,
+} from '@rosen-bridge/abstract-logger';
+import { ErgoUTXOExtractor } from '@rosen-bridge/address-extractor';
+import type { ErgoScanner } from '@rosen-bridge/ergo-scanner';
+import { ExtendedTokenMap, type TokenMap } from '@rosen-bridge/extended-tokens';
+import {
+  type Dependency,
   ServiceAction,
   ServiceStatus,
 } from '@rosen-bridge/service-manager';
-import { createClient, VercelKV } from '@vercel/kv';
-import crypto from 'crypto';
+import { createClient, type VercelKV } from '@vercel/kv';
 import * as ergoLib from 'ergo-lib-wasm-nodejs';
+import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -18,9 +21,9 @@ import { configs } from '../configs';
 import { TOKEN_MAP_EXTRACTOR_ID, TOKEN_MAP_REDIS_KEY } from '../constants';
 import { resolveErgoNetworkConfig } from '../utils';
 import {
+  AbstractDBService,
   AbstractErgoScannerService,
   AbstractTokenMapService,
-  AbstractDBService,
 } from './abstracts';
 
 export class TokenMapService extends AbstractTokenMapService {

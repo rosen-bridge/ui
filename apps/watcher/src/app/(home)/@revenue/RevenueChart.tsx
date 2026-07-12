@@ -2,11 +2,11 @@ import { useMemo } from 'react';
 import Chart from 'react-apexcharts';
 
 import { useTheme } from '@rosen-bridge/ui-kit';
-import { ChartPeriod } from '@rosen-ui/types';
+import type { ChartPeriod } from '@rosen-ui/types';
 import { getDecimalString, roundToPrecision } from '@rosen-ui/utils';
 import moment from 'moment';
 
-import { ApiRevenueChartResponse } from '@/types/api';
+import type { ApiRevenueChartResponse } from '@/types/api';
 
 /**
  * get date format for a period to be used as chart x axis labels

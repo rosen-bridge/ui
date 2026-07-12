@@ -1,5 +1,5 @@
 import { TokenMap } from '@rosen-bridge/tokens';
-import crypto from 'crypto';
+import crypto from 'node:crypto';
 
 import { getOnChainRosenTokens } from './getOnChainRosenTokens';
 

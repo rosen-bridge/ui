@@ -1,8 +1,8 @@
 import { Tabs } from '@base-ui/react/tabs';
 
-import { Action, Icon, IconProps } from '@/components';
+import { Action, Icon, type IconProps } from '@/components';
 import { useConfig } from '@/hooks';
-import { ElementBaseProps, OverridableType } from '@/types';
+import type { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.css';
 

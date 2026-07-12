@@ -1,10 +1,10 @@
 import {
-  ChainMinimumFee,
+  type ChainMinimumFee,
   decodeRegister,
   MinimumFeeBox,
   MinimumFeeExplorerNetwork,
 } from '@rosen-bridge/extended-minimum-fee';
-import { Network } from '@rosen-ui/types';
+import type { Network } from '@rosen-ui/types';
 
 export type CalculateFee = (
   targetNetwork: Network,

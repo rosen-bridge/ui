@@ -7,7 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from '@rosen-bridge/extended-typeorm';
 
-import { AggregateTxStatus, AggregateEventStatus } from '../constants';
+import type { AggregateEventStatus, AggregateTxStatus } from '../constants';
 import { TxEntity } from './TxEntity';
 
 @Entity('aggregated_status_changed_entity')

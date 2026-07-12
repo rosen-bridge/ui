@@ -1,5 +1,5 @@
 import { PROCEED } from '@rosen-bridge/abstract-scanner';
-import { DataSource } from '@rosen-bridge/extended-typeorm';
+import type { DataSource } from '@rosen-bridge/extended-typeorm';
 
 import { AbstractDBService } from '../../../src/services/abstracts';
 import { DBService } from '../../../src/services/dbService';

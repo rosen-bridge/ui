@@ -1,7 +1,7 @@
 import {
-  Threshold,
   AggregateEventStatus,
   AggregateTxStatus,
+  type Threshold,
 } from '@rosen-ui/public-status';
 
 /**
@@ -149,7 +149,7 @@ const txStatusThresholds = defaultTxStatusMapping.map((status) => {
 
 export const publicStatusConfigs = {
   timeoutThresholdSeconds: getNumber('TIMEOUT_THRESHOLD_SECONDS') ?? 30,
-  allowedPks: (process.env['ALLOWED_PKS'] ?? '').split(','),
+  allowedPks: (process.env.ALLOWED_PKS ?? '').split(','),
   eventStatusThresholds,
   txStatusThresholds,
 };

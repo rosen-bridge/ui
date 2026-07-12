@@ -3,7 +3,7 @@
  * local:ergo/rosen-bridge/ui#441
  */
 /* eslint-disable */
-import { Key, Middleware, SWRHook } from 'swr';
+import type { Key, Middleware, SWRHook } from 'swr';
 
 export interface FakeData {
   withStringKeys: Record<string, any>;
@@ -18,7 +18,7 @@ export interface FakeData {
  * @param fakeData
  */
 export const mockMiddlewareFactory: (fakeData: FakeData) => Middleware =
-  (fakeData) => (useSWRNext: SWRHook) => (key, fetcher, config) => {
+  (fakeData) => (useSWRNext: SWRHook) => (key, _fetcher, config) => {
     const mockedFetcher = (key: Key) =>
       new Promise<any>((resolve, reject) => {
         if (typeof key === 'string') {

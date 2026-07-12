@@ -1,10 +1,13 @@
 import { TokenMap } from '@rosen-bridge/tokens';
-import { Mock } from 'vitest';
+import type { Mock } from 'vitest';
 
-import { AbstractDataAdapter } from '../../lib';
-import { ChainAssetBalance } from '../../lib/types';
-import { sampleTokenMapConfig } from '../mocked';
-import { expectedGetAddressAssetsResult, TestEvmRpcAdapter } from '../mocked';
+import type { AbstractDataAdapter } from '../../lib';
+import type { ChainAssetBalance } from '../../lib/types';
+import {
+  expectedGetAddressAssetsResult,
+  sampleTokenMapConfig,
+  TestEvmRpcAdapter,
+} from '../mocked';
 
 interface TestContext {
   adapter: AbstractDataAdapter;

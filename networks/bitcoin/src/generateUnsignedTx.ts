@@ -2,17 +2,17 @@ import {
   BitcoinBoxSelection,
   generateFeeEstimator,
 } from '@rosen-bridge/bitcoin-utxo-selection';
-import { TokenMap, RosenChainToken } from '@rosen-bridge/tokens';
+import type { RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
 import { handleUncoveredAssets } from '@rosen-network/base';
 import { NETWORKS } from '@rosen-ui/constants';
-import { RosenAmountValue } from '@rosen-ui/types';
-import { Psbt, address, payments } from 'bitcoinjs-lib';
+import type { RosenAmountValue } from '@rosen-ui/types';
+import { address, Psbt, payments } from 'bitcoinjs-lib';
 
 import {
   SEGWIT_INPUT_WEIGHT_UNIT,
   SEGWIT_OUTPUT_WEIGHT_UNIT,
 } from './constants';
-import { BitcoinUtxo, UnsignedPsbtData } from './types';
+import type { BitcoinUtxo, UnsignedPsbtData } from './types';
 import {
   getAddressUtxos,
   getFeeRatio,

@@ -1,5 +1,12 @@
-import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
-import { DataSource, In, Repository } from '@rosen-bridge/extended-typeorm';
+import {
+  type AbstractLogger,
+  DummyLogger,
+} from '@rosen-bridge/abstract-logger';
+import {
+  type DataSource,
+  In,
+  type Repository,
+} from '@rosen-bridge/extended-typeorm';
 import JsonBigInt from '@rosen-bridge/json-bigint';
 
 import { TokenEntity } from './TokenEntity';

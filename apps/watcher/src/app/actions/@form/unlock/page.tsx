@@ -1,35 +1,35 @@
 'use client';
 
 import Link from 'next/link';
-import { useMemo, useEffect } from 'react';
-import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
+import { useEffect, useMemo } from 'react';
+import { FormProvider, type SubmitHandler, useForm } from 'react-hook-form';
 
 import {
-  SubmitButton,
-  useApiKey,
+  ApiKeyDialogProtectedAction,
   ApiKeyDialogWarning,
   Stack,
-  useToast,
+  SubmitButton,
+  useApiKey,
   useConfirm,
-  ApiKeyDialogProtectedAction,
+  useToast,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 import { fetcher, mutatorWithHeaders } from '@rosen-ui/swr-helpers';
-import { TokenInfo } from '@rosen-ui/types';
+import type { TokenInfo } from '@rosen-ui/types';
 import { getNonDecimalString, getTxURL } from '@rosen-ui/utils';
 import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
 
 import { useRsnToken } from '@/hooks';
-import {
+import type {
   ApiInfoResponse,
   ApiPermitReturnRequestBody,
   ApiPermitReturnResponse,
 } from '@/types/api';
 
 import {
+  type TokenAmountCompatibleFormSchema,
   TokenAmountTextField,
-  TokenAmountCompatibleFormSchema,
 } from '../../TokenAmountTextField';
 
 const UnlockForm = () => {
@@ -96,6 +96,7 @@ const UnlockForm = () => {
     info?.permitCount.active,
     info?.permitCount.total,
     rwtPartialToken,
+    toast.add,
   ]);
 
   useEffect(() => {
@@ -107,7 +108,7 @@ const UnlockForm = () => {
         timeout: 0,
       });
     }
-  }, [isInfoLoading, rwtPartialToken?.amount]);
+  }, [isInfoLoading, rwtPartialToken?.amount, toast.add]);
 
   const submit = async () => {
     try {

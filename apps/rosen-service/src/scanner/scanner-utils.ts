@@ -1,5 +1,5 @@
 import { DefaultLogger } from '@rosen-bridge/abstract-logger';
-import { GeneralScanner } from '@rosen-bridge/abstract-scanner';
+import type { GeneralScanner } from '@rosen-bridge/abstract-scanner';
 
 import AppError from '../errors/AppError';
 import { handleError, runAndSetInterval } from '../utils';

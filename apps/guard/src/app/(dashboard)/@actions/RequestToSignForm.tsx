@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { type SubmitHandler, useForm } from 'react-hook-form';
 
 import {
   Alert,
-  AlertProps,
+  type AlertProps,
   ApiKeyDialogWarning,
   Card,
   CardBody,
@@ -19,10 +19,10 @@ import {
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS, NETWORKS_KEYS } from '@rosen-ui/constants';
 import { mutatorWithHeaders } from '@rosen-ui/swr-helpers';
-import { Network } from '@rosen-ui/types';
+import type { Network } from '@rosen-ui/types';
 import useSWRMutation from 'swr/mutation';
 
-import { ApiSignRequestBody, ApiSignResponse } from '@/types/api';
+import type { ApiSignRequestBody, ApiSignResponse } from '@/types/api';
 
 interface Form {
   chain: Network;

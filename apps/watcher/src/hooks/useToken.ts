@@ -1,7 +1,7 @@
 import { fetcher } from '@rosen-ui/swr-helpers';
 import useSWR from 'swr';
 
-import { ApiAddressAssetsResponse } from '@/types/api';
+import type { ApiAddressAssetsResponse } from '@/types/api';
 
 /**
  * fetch a token info (if present)

@@ -1,13 +1,12 @@
-import { useState } from 'react';
-import React from 'react';
+import React, { useState } from 'react';
 
-import { RosenChainToken } from '@rosen-bridge/tokens';
+import type { RosenChainToken } from '@rosen-bridge/tokens';
 import { useToast } from '@rosen-bridge/ui-kit';
 import { InsufficientAssetsError } from '@rosen-network/base/dist/handleUncoveredAssets';
 import { getNonDecimalString, getTxURL } from '@rosen-ui/utils';
 import {
   UserDeniedTransactionSignatureError,
-  WalletTransferParams,
+  type WalletTransferParams,
 } from '@rosen-ui/wallet-api';
 import * as Sentry from '@sentry/nextjs';
 import { serializeError } from 'serialize-error';
@@ -60,7 +59,7 @@ export const useTransaction = () => {
 
     setIsSubmitting(true);
 
-    let parameters: WalletTransferParams | undefined = undefined;
+    let parameters: WalletTransferParams | undefined;
 
     try {
       parameters = {

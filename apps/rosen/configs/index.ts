@@ -2,8 +2,8 @@
  * THIS FILE IS AUTO-GENERATED. PLEASE DO NOT EDIT IT
  * MANUALLY OR COMMIT IT TO THE REPOSITORY HOSTING SERVICE
  **************************************************/
-import { RosenTokens } from '@rosen-bridge/tokens';
-import { NETWORKS } from '@rosen-ui/constants';
+import type { RosenTokens } from '@rosen-bridge/tokens';
+import type { NETWORKS } from '@rosen-ui/constants';
 
 export const CONTRACT_VERSION = '';
 

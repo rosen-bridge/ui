@@ -1,8 +1,11 @@
-import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
-import { DataSource } from '@rosen-bridge/extended-typeorm';
+import {
+  type AbstractLogger,
+  DummyLogger,
+} from '@rosen-bridge/abstract-logger';
+import type { DataSource } from '@rosen-bridge/extended-typeorm';
 import { LockedAssetEntity } from '@rosen-ui/asset-calculator';
 
-import { LockedAssetsType } from '../types';
+import type { LockedAssetsType } from '../types';
 
 export class LockedAssetsMetricAction {
   private readonly logger: AbstractLogger;

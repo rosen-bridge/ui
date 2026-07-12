@@ -1,6 +1,6 @@
-import { AbstractLogger } from '@rosen-bridge/abstract-logger';
-import { Dependency, ServiceStatus } from '@rosen-bridge/service-manager';
-import { createClient, VercelKV } from '@vercel/kv';
+import type { AbstractLogger } from '@rosen-bridge/abstract-logger';
+import { type Dependency, ServiceStatus } from '@rosen-bridge/service-manager';
+import { createClient, type VercelKV } from '@vercel/kv';
 
 import { configs } from '../configs';
 import { AbstractRedisService } from './abstracts/abstractRedisService';

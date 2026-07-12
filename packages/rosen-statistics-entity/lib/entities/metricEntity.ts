@@ -1,6 +1,6 @@
 import {
-  Entity,
   Column,
+  Entity,
   PrimaryGeneratedColumn,
 } from '@rosen-bridge/extended-typeorm';
 

@@ -1,20 +1,20 @@
-import { DataSource } from '@rosen-bridge/extended-typeorm';
+import type { DataSource } from '@rosen-bridge/extended-typeorm';
 import {
-  AggregateEventStatus,
-  AggregateTxStatus,
-  EventStatus,
-  TxStatus,
-  TxType,
-  Threshold,
-  Utils,
   AggregatedStatusChangedEntity,
   AggregatedStatusEntity,
+  AggregateEventStatus,
+  type AggregateTxStatus,
+  type EventStatus,
   GuardStatusChangedEntity,
   GuardStatusEntity,
+  type Threshold,
   TxEntity,
+  type TxStatus,
+  type TxType,
+  Utils,
 } from '@rosen-ui/public-status';
 import * as Sentry from '@sentry/nextjs';
-import crypto from 'crypto';
+import crypto from 'node:crypto';
 
 import AggregatedStatusAction from './AggregatedStatusAction';
 import AggregatedStatusChangedAction from './AggregatedStatusChangedAction';
@@ -203,7 +203,7 @@ export class PublicStatusAction {
           }
         : undefined;
 
-      let promises = [
+      const promises = [
         GuardStatusAction.getInstance().upsertOne(
           guardStatusRepository,
           eventId,

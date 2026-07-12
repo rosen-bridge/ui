@@ -1,10 +1,10 @@
-import { DataSource } from '@rosen-bridge/extended-typeorm';
+import type { DataSource } from '@rosen-bridge/extended-typeorm';
 import { TokenMap } from '@rosen-bridge/tokens';
 
 import { AssetAggregator } from '../lib';
 import {
-  SAMPLE_TOKEN_MAP,
   SAMPLE_TOKEN_ENTITY_DATA,
+  SAMPLE_TOKEN_MAP,
 } from './assetAggregatorTestData';
 
 interface BridgedAssetTestContext {

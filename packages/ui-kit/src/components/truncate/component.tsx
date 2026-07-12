@@ -1,8 +1,8 @@
 import { Slot } from '@radix-ui/react-slot';
 
-import { Tooltip, TooltipProps } from '@/components';
+import { Tooltip, type TooltipProps } from '@/components';
 import { useConfig } from '@/hooks';
-import { ElementBaseProps, OverridableType } from '@/types';
+import type { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.css';
 

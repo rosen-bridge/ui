@@ -1,12 +1,12 @@
-import { AbstractLogger } from '@rosen-bridge/abstract-logger';
-import { RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
-import axios, { Axios } from '@rosen-clients/rate-limited-axios';
+import type { AbstractLogger } from '@rosen-bridge/abstract-logger';
+import type { RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
+import axios, { type Axios } from '@rosen-clients/rate-limited-axios';
 import { NETWORKS } from '@rosen-ui/constants';
-import { Network } from '@rosen-ui/types';
+import type { Network } from '@rosen-ui/types';
 import { zipWith } from 'lodash-es';
 
 import AbstractCalculator from '../../abstract-calculator';
-import { AddressRunesBalance, RuneInfo, UnisatResponse } from './types';
+import type { AddressRunesBalance, RuneInfo, UnisatResponse } from './types';
 
 export class BitcoinRunesCalculator extends AbstractCalculator {
   readonly chain: Network = NETWORKS['bitcoin-runes'].key;

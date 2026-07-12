@@ -1,11 +1,15 @@
 import { useState } from 'react';
 
-import { RosenChainToken } from '@rosen-bridge/tokens';
+import type { RosenChainToken } from '@rosen-bridge/tokens';
 import {
+  Alert,
   Amount,
+  Button,
   Card,
   CardBody,
+  Center,
   Connector,
+  DialogContentText,
   Divider,
   EnhancedDialog,
   EnhancedDialogActions,
@@ -13,14 +17,10 @@ import {
   EnhancedDialogTitle,
   Identifier,
   Label,
-  Button,
   Network,
+  QRCodeCanvas,
   Stack,
   Typography,
-  QRCodeCanvas,
-  DialogContentText,
-  Center,
-  Alert,
   useIsDarkMode,
 } from '@rosen-bridge/ui-kit';
 
@@ -78,8 +78,8 @@ export const SubmitButton = () => {
        * local:ergo/rosen-bridge/ui#1191
        */
       const isQrCode = !!result?.startsWith('qrcode:');
-      if (isQrCode) {
-        setQrCode(result!.replace('qrcode:', ''));
+      if (result && isQrCode) {
+        setQrCode(result.replace('qrcode:', ''));
       } else {
         close();
       }
@@ -89,19 +89,18 @@ export const SubmitButton = () => {
   const { availableSources } = useNetwork();
 
   const source = availableSources.find(
-    (availableNetwork) => availableNetwork.name == sourceValue,
+    (availableNetwork) => availableNetwork.name === sourceValue,
   );
 
   const target = availableSources.find(
-    (availableNetwork) => availableNetwork.name == targetValue,
+    (availableNetwork) => availableNetwork.name === targetValue,
   );
 
   const tokenInfo = tokenValue as RosenChainToken;
 
   const targetTokenSearchResults =
     sourceValue &&
-    tokenValue &&
-    tokenValue.tokenId &&
+    tokenValue?.tokenId &&
     tokenMap.search(sourceValue, {
       tokenId: tokenValue.tokenId,
     });

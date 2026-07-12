@@ -1,6 +1,6 @@
 'use client';
 
-import { Fragment, PropsWithChildren } from 'react';
+import { Fragment, type PropsWithChildren } from 'react';
 
 import { PageHeading } from '@rosen-bridge/ui-kit';
 

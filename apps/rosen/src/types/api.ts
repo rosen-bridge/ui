@@ -1,5 +1,8 @@
-import { getAsset, getAllAssets } from '@/backend/assets';
-import { getEventById, getEventsWithFullTokenData } from '@/backend/events';
+import type { getAllAssets, getAsset } from '@/backend/assets';
+import type {
+  getEventById,
+  getEventsWithFullTokenData,
+} from '@/backend/events';
 
 export type ApiEventResponse = Awaited<
   ReturnType<typeof getEventsWithFullTokenData>

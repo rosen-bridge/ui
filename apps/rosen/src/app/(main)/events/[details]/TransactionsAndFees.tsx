@@ -1,6 +1,6 @@
 'use client';
 
-import { CSSProperties, useMemo } from 'react';
+import { type CSSProperties, useMemo } from 'react';
 
 import {
   Amount,

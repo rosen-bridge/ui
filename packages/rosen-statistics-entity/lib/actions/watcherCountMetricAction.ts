@@ -1,8 +1,11 @@
-import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
-import { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
+import {
+  type AbstractLogger,
+  DummyLogger,
+} from '@rosen-bridge/abstract-logger';
+import type { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
 
 import { WatcherCountEntity } from '../entities';
-import { WatcherCountType } from '../types';
+import type { WatcherCountType } from '../types';
 
 export class WatcherCountMetricAction {
   protected readonly watcherRepo: Repository<WatcherCountEntity>;

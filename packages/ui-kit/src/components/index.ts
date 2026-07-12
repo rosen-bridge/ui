@@ -2,9 +2,6 @@ import './index.css';
 
 export { QRCodeCanvas } from 'qrcode.react';
 
-export * from './base';
-export * from './common';
-
 export * from './action';
 export * from './alert';
 export * from './apiKeyDialog';
@@ -15,6 +12,7 @@ export * from './app';
 export * from './appBar';
 export * from './avatar';
 export * from './badge';
+export * from './base';
 export * from './button';
 export * from './card';
 export * from './cardAction';
@@ -29,6 +27,7 @@ export * from './center';
 export * from './closeButton';
 export * from './collapsible';
 export * from './columns';
+export * from './common';
 export * from './connector';
 export * from './copyButton';
 export * from './cubeNetBackground';

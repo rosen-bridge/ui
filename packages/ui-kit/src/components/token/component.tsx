@@ -2,16 +2,16 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 
 import {
   Avatar,
-  AvatarProps,
+  type AvatarProps,
   Icon,
   IconButton,
   Image,
-  ImageProps,
+  type ImageProps,
   Typography,
-  TypographyProps,
+  type TypographyProps,
 } from '@/components';
 import { useConfig } from '@/hooks';
-import { ElementBaseProps, OverridableType } from '@/types';
+import type { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.css';
 

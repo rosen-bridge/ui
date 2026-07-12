@@ -1,7 +1,7 @@
 import { Dialog as DialogBaseUI } from '@base-ui/react/dialog';
 
 import { useConfig } from '@/hooks';
-import { ElementBaseProps, OverridableType } from '@/types';
+import type { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.css';
 

@@ -1,15 +1,18 @@
-import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
+import {
+  type AbstractLogger,
+  DummyLogger,
+} from '@rosen-bridge/abstract-logger';
 import { BlockEntity } from '@rosen-bridge/abstract-scanner';
-import { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
+import type { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
 import { TokenPriceEntity } from '@rosen-bridge/token-price-entity';
 import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
 import { TokenEntity } from '@rosen-ui/asset-calculator';
 import {
+  BridgedAmountEntity,
   METRIC_KEYS,
   MetricEntity,
-  BridgedAmountEntity,
 } from '@rosen-ui/rosen-statistics-entity';
-import { describe, it, expect, beforeEach } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 import { bridgeAmountMetric } from '../../lib';
 import { bridgeMetricTestData } from '../testData';

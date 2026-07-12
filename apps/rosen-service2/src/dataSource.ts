@@ -8,8 +8,8 @@ import {
   migrations as scannerMigrations,
 } from '@rosen-bridge/abstract-scanner';
 import {
-  BoxEntity,
   migrations as addressExtractorMigrations,
+  BoxEntity,
 } from '@rosen-bridge/address-extractor';
 import { DataSource } from '@rosen-bridge/extended-typeorm';
 import {
@@ -17,10 +17,10 @@ import {
   migrations as eventTriggerExtractorMigrations,
 } from '@rosen-bridge/watcher-data-extractor';
 import {
+  migrations as assetAggregatorMigrations,
   BridgedAssetEntity,
   LockedAssetEntity,
   TokenEntity,
-  migrations as assetAggregatorMigrations,
 } from '@rosen-ui/asset-aggregator';
 
 import { configs } from './configs';

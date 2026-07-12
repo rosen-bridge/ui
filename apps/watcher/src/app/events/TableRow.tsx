@@ -1,4 +1,4 @@
-import { useState, FC, useMemo } from 'react';
+import { type FC, useMemo, useState } from 'react';
 
 import { AngleDown, AngleUp } from '@rosen-bridge/icons';
 import {
@@ -10,7 +10,7 @@ import {
 } from '@rosen-bridge/ui-kit';
 import { getTxURL } from '@rosen-ui/utils';
 
-import { Event } from '@/types/api';
+import type { Event } from '@/types/api';
 
 interface RowProps extends Event {
   isLoading?: boolean;
