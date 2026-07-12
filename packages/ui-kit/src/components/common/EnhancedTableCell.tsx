@@ -1,6 +1,6 @@
-import { FC, useMemo } from 'react';
+import { type FC, useMemo } from 'react';
 
-import { TableCell, TableCellProps } from '@mui/material';
+import { TableCell, type TableCellProps } from '@mui/material';
 
 export interface EnhancedTableCellProps extends TableCellProps {
   isContained?: boolean;

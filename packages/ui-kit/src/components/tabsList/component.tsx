@@ -1,11 +1,10 @@
 import { Tabs } from '@base-ui/react/tabs';
 
 import { useConfig } from '@/hooks';
-import { ElementBaseProps, OverridableType } from '@/types';
+import type { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.css';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface TabsListOverrides {}
 
 export type TabsListOwnProps = {

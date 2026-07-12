@@ -1,15 +1,15 @@
-import {
+import type {
+  BitcoinEsploraScanner,
   BitcoinRpcScanner,
   DogeRpcScanner,
-  BitcoinEsploraScanner,
 } from '@rosen-bridge/bitcoin-scanner';
-import {
+import type {
   CardanoBlockFrostScanner,
   CardanoKoiosScanner,
   CardanoOgmiosScanner,
 } from '@rosen-bridge/cardano-scanner';
-import { ErgoScanner } from '@rosen-bridge/ergo-scanner';
-import { EvmRpcScanner } from '@rosen-bridge/evm-scanner';
+import type { ErgoScanner } from '@rosen-bridge/ergo-scanner';
+import type { EvmRpcScanner } from '@rosen-bridge/evm-scanner';
 
 export type ChainScannersType =
   | ErgoScanner

@@ -2,7 +2,7 @@ import {
   createTheme,
   darkThemeOptions,
   lightThemeOptions,
-  Theme,
+  type Theme,
 } from '@rosen-bridge/ui-kit';
 
 export const base = {

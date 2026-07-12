@@ -1,16 +1,16 @@
 import { ERGO_CHAIN } from '@rosen-bridge/tokens';
 import {
-  TxType,
-  TxStatus,
-  EventStatus,
+  type AggregatedStatusChangedEntity,
+  type AggregatedStatusEntity,
   AggregateEventStatus,
   AggregateTxStatus,
-  AggregatedStatusChangedEntity,
-  Threshold,
-  AggregatedStatusEntity,
-  GuardStatusChangedEntity,
-  GuardStatusEntity,
-  TxEntity,
+  EventStatus,
+  type GuardStatusChangedEntity,
+  type GuardStatusEntity,
+  type Threshold,
+  type TxEntity,
+  TxStatus,
+  TxType,
 } from '@rosen-ui/public-status';
 
 import { guardPk0, guardPk1, id0, id1, triggerId0 } from './testData';

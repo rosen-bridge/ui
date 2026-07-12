@@ -9,7 +9,7 @@ import {
 } from '../../base';
 import { Icon } from '../../icon';
 import { Popup } from './Popup';
-import { Input, SelectOption, Selected } from './types';
+import type { Input, Selected, SelectOption } from './types';
 
 export type PickerProps = {
   anchorEl?: HTMLInputElement | null;
@@ -111,7 +111,7 @@ export const Picker = ({
         event.preventDefault();
       }
 
-      const key = event.key + ':' + value.type;
+      const key = `${event.key}:${value.type}`;
 
       switch (key) {
         case 'ArrowLeft:multiple':
@@ -141,7 +141,7 @@ export const Picker = ({
           break;
         }
         case 'Enter:number': {
-          if (!query || isNaN(Number(query))) break;
+          if (!query || Number.isNaN(Number(query))) break;
           event.stopPropagation();
           onSelect?.(Number(query));
           break;
@@ -165,6 +165,9 @@ export const Picker = ({
   );
 
   useEffect(() => {
+    void open;
+    void query;
+
     setIndexSelected(-1);
   }, [open, query]);
 
@@ -179,7 +182,7 @@ export const Picker = ({
   }, [anchorEl, handleKeyDown]);
 
   useEffect(() => {
-    if (value?.type == 'select' && value?.options.length == 1) {
+    if (value?.type === 'select' && value?.options.length === 1) {
       handleClick(value.options.at(0)!);
     }
   }, [value, handleClick]);
@@ -196,7 +199,7 @@ export const Picker = ({
 
   return (
     <Popup anchorEl={anchorEl} open={open} onFocusOut={handleFocusOut}>
-      {(value.type == 'multiple' || value.type == 'select') && (
+      {(value.type === 'multiple' || value.type === 'select') && (
         <List>
           {options.map((option, index) => {
             const post = (() => {
@@ -219,7 +222,7 @@ export const Picker = ({
                   selected={indexSelected === index}
                   onClick={() => handleClick(option)}
                 >
-                  {value.type == 'select' && option.pre && (
+                  {value.type === 'select' && option.pre && (
                     <ListItemIcon>{option.pre}</ListItemIcon>
                   )}
                   <ListItemText primary={option.label} />

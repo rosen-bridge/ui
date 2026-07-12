@@ -1,16 +1,16 @@
 import * as runelib from '@magiceden-oss/runestone-lib';
 import {
   BitcoinRunesBoxSelection,
-  BitcoinRunesUtxo,
+  type BitcoinRunesUtxo,
 } from '@rosen-bridge/bitcoin-runes-utxo-selection';
-import { TokenMap, RosenChainToken } from '@rosen-bridge/tokens';
+import type { RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
 import { handleUncoveredAssets } from '@rosen-network/base';
 import { NETWORKS } from '@rosen-ui/constants';
-import { RosenAmountValue } from '@rosen-ui/types';
+import type { RosenAmountValue } from '@rosen-ui/types';
 import * as bitcoinJs from 'bitcoinjs-lib';
 
 import { MINIMUM_BTC_FOR_NATIVE_SEGWIT_OUTPUT } from './constants';
-import { AssetBalance, UnsignedPsbtData } from './types';
+import type { AssetBalance, UnsignedPsbtData } from './types';
 import {
   generateFeeEstimatorWithAssumptions,
   getAdditionalBoxes,
@@ -124,7 +124,7 @@ export const generateUnsignedTx =
     const taprootPayment = makeTaprootPayment(internalPubkey, fromAddress);
     const p2wpkhPayment = makeP2wpkhPayment(fromPaymentAddress);
 
-    let psbt = new bitcoinJs.Psbt();
+    const psbt = new bitcoinJs.Psbt();
 
     coveredRunesBoxes.boxes.forEach((box) => {
       psbt.addInput({

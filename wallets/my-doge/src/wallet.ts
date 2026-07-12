@@ -1,15 +1,15 @@
 import { DogeNetwork } from '@rosen-network/doge/dist/client';
 import { NETWORKS } from '@rosen-ui/constants';
-import { Network } from '@rosen-ui/types';
+import type { Network } from '@rosen-ui/types';
 import {
+  UnsupportedChainError,
   UserDeniedTransactionSignatureError,
   Wallet,
-  WalletTransferParams,
-  UnsupportedChainError,
+  type WalletTransferParams,
 } from '@rosen-ui/wallet-api';
 
 import { ICON } from './icon';
-import { MyDogeWalletConfig } from './types';
+import type { MyDogeWalletConfig } from './types';
 
 export class MyDogeWallet extends Wallet<MyDogeWalletConfig> {
   icon = ICON;

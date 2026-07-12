@@ -1,11 +1,11 @@
-import { TokenMap } from '@rosen-bridge/tokens';
+import type { TokenMap } from '@rosen-bridge/tokens';
 import {
-  OPERATORS_COMPARATIVE,
-  OPERATORS_EQUALITY,
-  Filter,
+  type Filter,
   OPERATOR_CONTAINS,
   OPERATOR_IS,
   OPERATOR_NOT,
+  OPERATORS_COMPARATIVE,
+  OPERATORS_EQUALITY,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS, NETWORKS_KEYS } from '@rosen-ui/constants';
 
@@ -19,9 +19,8 @@ export const getFilters = (tokenMap: TokenMap): Filter[] => [
       type: context.operator.endsWith('one-of') ? 'multiple' : 'select',
       options: tokenMap
         .getConfig()
-        .map((item) => Object.values(item))
-        .flat()
-        .filter((item) => item.residency == 'native')
+        .flatMap((item) => Object.values(item))
+        .filter((item) => item.residency === 'native')
         .map((item) => ({
           label: item.name,
           value: item.tokenId,

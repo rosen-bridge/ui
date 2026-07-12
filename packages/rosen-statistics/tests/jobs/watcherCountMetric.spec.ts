@@ -1,14 +1,17 @@
-import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
-import { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
+import {
+  type AbstractLogger,
+  DummyLogger,
+} from '@rosen-bridge/abstract-logger';
+import type { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
 import {
   METRIC_KEYS,
   MetricEntity,
   WatcherCountEntity,
 } from '@rosen-ui/rosen-statistics-entity';
-import { describe, it, expect, beforeEach } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 import { watcherCountMetric } from '../../lib';
-import { setupNodeMock, resetMocks } from '../mocked/boxFetcher.mock';
+import { resetMocks, setupNodeMock } from '../mocked/boxFetcher.mock';
 import { watcherCountMetricTestData } from '../testData';
 import { createDatabase } from '../utils';
 

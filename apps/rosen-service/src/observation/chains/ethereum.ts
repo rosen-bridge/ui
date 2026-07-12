@@ -1,6 +1,6 @@
 import { DefaultLogger } from '@rosen-bridge/abstract-logger';
 import { EthereumRpcObservationExtractor } from '@rosen-bridge/evm-observation-extractor';
-import { EvmRpcScanner } from '@rosen-bridge/evm-scanner';
+import type { EvmRpcScanner } from '@rosen-bridge/evm-scanner';
 
 import config from '../../configs';
 import dataSource from '../../data-source';

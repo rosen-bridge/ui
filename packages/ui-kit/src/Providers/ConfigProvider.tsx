@@ -1,6 +1,6 @@
-import { createContext, ReactNode } from 'react';
+import { createContext, type ReactNode } from 'react';
 
-import { Components } from './ConfigProvider.components';
+import type { Components } from './ConfigProvider.components';
 
 export type ConfigContextType = ConfigProviderProps['configs'];
 

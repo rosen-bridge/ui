@@ -1,6 +1,6 @@
 import { use } from 'react';
 
-import { TokenMap } from '@rosen-bridge/tokens';
+import type { TokenMap } from '@rosen-bridge/tokens';
 
 import { getTokenMap } from '@/tokenMap/getClientTokenMap';
 

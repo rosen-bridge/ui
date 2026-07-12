@@ -13,7 +13,7 @@ const RealNode = Services.NodeBoxFetcher;
  *
  * @param returnValue mocked response for `fetchUnspentBoxesByTokenId`
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// biome-ignore lint/suspicious/noExplicitAny: Use a better type
 export const setupNodeMock = (returnValue: any) => {
   if (returnValue instanceof Error) {
     mockFetchUnspentBoxes.mockRejectedValue(returnValue);

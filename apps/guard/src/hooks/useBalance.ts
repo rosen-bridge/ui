@@ -1,10 +1,10 @@
 import { useMemo } from 'react';
 
 import { fetcher } from '@rosen-ui/swr-helpers';
-import { Network } from '@rosen-ui/types';
+import type { Network } from '@rosen-ui/types';
 import useSWR from 'swr';
 
-import { ApiBalanceResponse } from '@/types/api';
+import type { ApiBalanceResponse } from '@/types/api';
 
 /**
  * wrap useSWR for fetching balance api

@@ -1,9 +1,13 @@
-import { AbstractLogger } from '@rosen-bridge/abstract-logger';
-import { NATIVE_TOKEN, RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
+import type { AbstractLogger } from '@rosen-bridge/abstract-logger';
+import {
+  NATIVE_TOKEN,
+  type RosenChainToken,
+  type TokenMap,
+} from '@rosen-bridge/tokens';
 import { ethers, JsonRpcProvider } from 'ethers';
 
 import { PartialERC20ABI } from '../constants';
-import {
+import type {
   ChainAssetBalance,
   EVMChainsType,
   EvmRpcDataAdapterAuthParams,
@@ -48,7 +52,7 @@ export abstract class AbstractEvmRpcDataAdapter extends AbstractDataAdapter {
 
     for (const chainTokenDetails of chunk) {
       try {
-        if (chainTokenDetails.type == NATIVE_TOKEN) {
+        if (chainTokenDetails.type === NATIVE_TOKEN) {
           const balance = await this.provider.getBalance(address);
           assets.push({
             assetId: chainTokenDetails.tokenId,

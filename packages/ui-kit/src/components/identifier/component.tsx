@@ -7,16 +7,15 @@ import {
   QrCodeDialog,
   Skeleton,
   Tooltip,
-  TooltipProps,
+  type TooltipProps,
   Typography,
-  TypographyProps,
+  type TypographyProps,
 } from '@/components';
 import { useConfig } from '@/hooks';
-import { ElementBaseProps, OverridableType } from '@/types';
+import type { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.css';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface IdentifierOverrides {}
 
 export type IdentifierOwnProps = {
@@ -114,7 +113,7 @@ export const Identifier = (props: IdentifierProps) => {
     let text = value.slice(0, 10);
 
     if (variant === 'legacy-middle') {
-      text += '...' + value.slice(-8);
+      text += `...${value.slice(-8)}`;
     }
 
     return (

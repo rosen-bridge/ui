@@ -1,17 +1,17 @@
-import { BlockEntity, PROCEED } from '@rosen-bridge/abstract-scanner';
-import { DeepPartial } from '@rosen-bridge/extended-typeorm';
-import { TokenPriceEntity } from '@rosen-bridge/token-price-entity';
-import { RosenTokens } from '@rosen-bridge/tokens';
-import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
-import { TokenEntity } from '@rosen-ui/asset-calculator';
+import { type BlockEntity, PROCEED } from '@rosen-bridge/abstract-scanner';
+import type { DeepPartial } from '@rosen-bridge/extended-typeorm';
+import type { TokenPriceEntity } from '@rosen-bridge/token-price-entity';
+import type { RosenTokens } from '@rosen-bridge/tokens';
+import type { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
+import type { TokenEntity } from '@rosen-ui/asset-calculator';
 import {
-  BridgedAmountEntity,
-  BridgeFeeEntity,
+  type BridgedAmountEntity,
+  type BridgeFeeEntity,
   METRIC_KEYS,
-  MetricEntity,
+  type MetricEntity,
 } from '@rosen-ui/rosen-statistics-entity';
 
-import { WatcherCountConfig } from '../lib';
+import type { WatcherCountConfig } from '../lib';
 
 /**
  * Helper function to create a TokenEntity for tests

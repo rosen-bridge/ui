@@ -1,2 +1,2 @@
-export { ListSubheader } from '@mui/material';
 export type { ListSubheaderProps } from '@mui/material';
+export { ListSubheader } from '@mui/material';

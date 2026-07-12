@@ -1,27 +1,27 @@
-export { migrations } from './migrations';
 export {
-  UserEventEntity,
-  WatcherCountEntity,
-  EventCountEntity,
-  BridgeFeeEntity,
-  BridgedAmountEntity,
-  MetricEntity,
-} from './entities';
-export {
-  MetricAction,
-  LockedAssetsMetricAction,
+  BridgeMetricsAction,
   EventCountMetricAction,
+  LockedAssetsMetricAction,
+  MetricAction,
   UserEventMetricAction,
   WatcherCountMetricAction,
-  BridgeMetricsAction,
 } from './actions';
 export { METRIC_KEYS, MetricKey } from './constants';
 export {
+  BridgedAmountEntity,
+  BridgeFeeEntity,
+  EventCountEntity,
+  MetricEntity,
+  UserEventEntity,
+  WatcherCountEntity,
+} from './entities';
+export { migrations } from './migrations';
+export {
   AggregatedEvents,
-  EventCountStatus,
   AggregatedUserEvents,
-  WatcherCountType,
-  LockedAssetsType,
   BridgeEventData,
   BridgeMetricRecord,
+  EventCountStatus,
+  LockedAssetsType,
+  WatcherCountType,
 } from './types';

@@ -24,7 +24,7 @@ import { IconButton } from '../../iconButton';
 import { Truncate } from '../../truncate';
 import { Divider } from '../Divider';
 import { Popup } from './Popup';
-import { Filter, Selected } from './types';
+import type { Filter, Selected } from './types';
 import { parseFilter } from './utils';
 
 type Item = {
@@ -43,6 +43,18 @@ export type HistoryProps = {
   onSelect: (selected: Selected[]) => void;
 };
 
+const trim = (items: Item[]) => {
+  const booked = items.filter((item) => item.bookmark);
+
+  const unbooked = items
+    .filter((item) => !item.bookmark)
+    .reverse()
+    .slice(0, 10)
+    .reverse();
+
+  return [...booked, ...unbooked];
+};
+
 export const History = forwardRef<HistoryRef, HistoryProps>(
   ({ disabled, filter, namespace, onSelect }, ref) => {
     const isMobile = useBreakpoint('tablet-down');
@@ -54,12 +66,12 @@ export const History = forwardRef<HistoryRef, HistoryProps>(
     const [items, setItems] = useState<Item[]>([]);
 
     const bookmarks = useMemo(
-      () => items.filter((item) => item.bookmark == true),
+      () => items.filter((item) => item.bookmark),
       [items],
     );
 
     const recent = useMemo(
-      () => items.filter((item) => item.bookmark != true),
+      () => items.filter((item) => !item.bookmark),
       [items],
     );
 
@@ -88,25 +100,13 @@ export const History = forwardRef<HistoryRef, HistoryProps>(
       [namespace],
     );
 
-    const trim = (items: Item[]) => {
-      const booked = items.filter((item) => item.bookmark);
-
-      const unbooked = items
-        .filter((item) => !item.bookmark)
-        .reverse()
-        .slice(0, 10)
-        .reverse();
-
-      return [...booked, ...unbooked];
-    };
-
     const add = useCallback(
       (selected: Selected[]) => {
         if (!selected.length) return;
 
         const key = getKey(selected);
 
-        const has = items.some((item) => getKey(item.selected) == key);
+        const has = items.some((item) => getKey(item.selected) === key);
 
         if (has) return;
 
@@ -121,7 +121,7 @@ export const History = forwardRef<HistoryRef, HistoryProps>(
 
     const book = useCallback(
       (item: Item) => {
-        const filtered = items.filter((current) => current != item);
+        const filtered = items.filter((current) => current !== item);
 
         const next = trim([...filtered, { ...item, bookmark: true }]);
 
@@ -134,7 +134,7 @@ export const History = forwardRef<HistoryRef, HistoryProps>(
 
     const remove = useCallback(
       (item: Item) => {
-        const filtered = items.filter((current) => current != item);
+        const filtered = items.filter((current) => current !== item);
 
         const next = trim([...filtered, { ...item, bookmark: false }]);
 
@@ -155,7 +155,7 @@ export const History = forwardRef<HistoryRef, HistoryProps>(
           const sections = [parsed.flow.label, parsed.operator!.label];
 
           [parsed.value].flat().forEach((value) => {
-            if (typeof value == 'object' && 'label' in value) {
+            if (typeof value === 'object' && 'label' in value) {
               sections.push(value.label);
             } else {
               sections.push(`${value}`);

@@ -1,6 +1,11 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { OPERATORS, Selected, SortValue, ViewToggleType } from '../components';
+import {
+  OPERATORS,
+  type Selected,
+  type SortValue,
+  type ViewToggleType,
+} from '../components';
 import { useFramework } from './useFramework';
 
 type Options = {
@@ -147,15 +152,15 @@ export const useCollection = (options?: Options) => {
     }
 
     if (typeof pageSize === 'number') {
-      params['limit'] = String(pageSize);
+      params.limit = String(pageSize);
     }
 
     if (typeof pageSize === 'number' && typeof pageIndex === 'number') {
-      params['offset'] = String(pageSize * pageIndex);
+      params.offset = String(pageSize * pageIndex);
     }
 
     if (sort?.key) {
-      params['sort'] = sort.order ? `${sort.key}-${sort.order}` : sort.key;
+      params.sort = sort.order ? `${sort.key}-${sort.order}` : sort.key;
     }
 
     if (!Object.keys(params).length) return;
@@ -322,19 +327,15 @@ export const useCollection = (options?: Options) => {
       handleFieldsChange,
 
       fragment,
-      setFragment,
 
       pageIndex,
-      setPageIndex,
 
       pageSize,
       handlePageSizeChange,
 
       sort,
-      setSort,
 
       view,
-      setView,
     ],
   );
 };

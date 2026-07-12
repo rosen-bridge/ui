@@ -1,4 +1,4 @@
-import {
+import type {
   MigrationInterface,
   QueryRunner,
 } from '@rosen-bridge/extended-typeorm';

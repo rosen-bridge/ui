@@ -1,5 +1,5 @@
 import {
-  Filters,
+  type Filters,
   filtersToTypeorm,
 } from '@rosen-bridge/ui-kit/dist/components/common/smartSearch/server';
 import {
@@ -7,7 +7,7 @@ import {
   LockedAssetEntity,
   TokenEntity,
 } from '@rosen-ui/asset-calculator';
-import { Network } from '@rosen-ui/types';
+import type { Network } from '@rosen-ui/types';
 
 import { dataSource } from '../dataSource';
 import '../initialize-datasource-if-needed';
@@ -82,7 +82,7 @@ export const getAllAssets = async (filters: Filters) => {
     filters.search.in ||= [];
   }
 
-  let { pagination, query, sort } = filtersToTypeorm(filters, (key) => {
+  const { pagination, query, sort } = filtersToTypeorm(filters, (key) => {
     switch (key) {
       case 'bridged':
         return `sub."${key}Normalized"`;
@@ -152,7 +152,6 @@ export const getAllAssets = async (filters: Filters) => {
 
   const rawItems = await queryBuilder.getRawMany<AssetWithTotal>();
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const items = rawItems.map(({ total, ...item }) => item);
 
   return {

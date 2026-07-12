@@ -1,12 +1,12 @@
 import { DefaultLogger } from '@rosen-bridge/abstract-logger';
-import {
+import type {
   BitcoinRpcScanner,
   DogeRpcScanner,
 } from '@rosen-bridge/bitcoin-scanner';
-import { CardanoKoiosScanner } from '@rosen-bridge/cardano-scanner';
-import { ErgoScanner } from '@rosen-bridge/ergo-scanner';
-import { EvmRpcScanner } from '@rosen-bridge/evm-scanner';
-import { FiroElectrumXScanner } from '@rosen-bridge/firo-scanner';
+import type { CardanoKoiosScanner } from '@rosen-bridge/cardano-scanner';
+import type { ErgoScanner } from '@rosen-bridge/ergo-scanner';
+import type { EvmRpcScanner } from '@rosen-bridge/evm-scanner';
+import type { FiroElectrumXScanner } from '@rosen-bridge/firo-scanner';
 
 import { handleError } from '../utils';
 import { startBinanceScanner } from './chains/binance';

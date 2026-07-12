@@ -1,8 +1,8 @@
 import { useCallback, useState } from 'react';
 
 import { fetcher } from '@rosen-ui/swr-helpers';
-import { Paginated } from '@rosen-ui/types';
-import useSWR, { Key } from 'swr';
+import type { Paginated } from '@rosen-ui/types';
+import useSWR, { type Key } from 'swr';
 
 /**
  * this hook uses swr to to fetch and manage paginated data.

@@ -1,169 +1,86 @@
 export { default as AlignCenter } from './icons/align-center.svg?react';
-
 export { default as AngleDown } from './icons/angle-down.svg?react';
-
 export { default as AngleLeft } from './icons/angle-left.svg?react';
-
 export { default as AngleRight } from './icons/angle-right.svg?react';
-
 export { default as AngleUp } from './icons/angle-up.svg?react';
-
 export { default as Archway } from './icons/archway.svg?react';
-
 export { default as ArrowRight } from './icons/arrow-right.svg?react';
-
 export { default as Ban } from './icons/ban.svg?react';
-
 export { default as BitcoinCircle } from './icons/bitcoin-circle.svg?react';
-
 export { default as BitcoinSign } from './icons/bitcoin-sign.svg?react';
-
 export { default as CaretDown } from './icons/caret-down.svg?react';
-
-export { default as CheckCircle } from './icons/check-circle.svg?react';
-
 export { default as Check } from './icons/check.svg?react';
-
+export { default as CheckCircle } from './icons/check-circle.svg?react';
 export { default as ClipboardNotes } from './icons/clipboard-notes.svg?react';
-
 export { default as ClockThree } from './icons/clock-three.svg?react';
-
 export { default as CloseCircle } from './icons/close-circle.svg?react';
-
 export { default as CodeBranch } from './icons/code-branch.svg?react';
-
 export { default as Coins } from './icons/coins.svg?react';
-
 export { default as CommentAltExclamation } from './icons/comment-alt-exclamation.svg?react';
-
 export { default as Copy } from './icons/copy.svg?react';
-
 export { default as Dashboard } from './icons/dashboard.svg?react';
-
 export { default as Estate } from './icons/estate.svg?react';
-
 export { default as Exchange } from './icons/exchange.svg?react';
-
 export { default as ExclamationCircle } from './icons/exclamation-circle.svg?react';
-
 export { default as ExclamationOctagon } from './icons/exclamation-octagon.svg?react';
-
-export { default as ExclamationTriangleFill } from './icons/exclamation-triangle-fill.svg?react';
-
 export { default as ExclamationTriangle } from './icons/exclamation-triangle.svg?react';
-
+export { default as ExclamationTriangleFill } from './icons/exclamation-triangle-fill.svg?react';
 export { default as ExternalLinkAlt } from './icons/external-link-alt.svg?react';
-
-export { default as EyeSlash } from './icons/eye-slash.svg?react';
-
 export { default as Eye } from './icons/eye.svg?react';
-
+export { default as EyeSlash } from './icons/eye-slash.svg?react';
 export { default as Favorite } from './icons/favorite.svg?react';
-
 export { default as FileAlt } from './icons/file-alt.svg?react';
-
 export { default as FileCopyAlt } from './icons/file-copy-alt.svg?react';
-
 export { default as FileEditAlt } from './icons/file-edit-alt.svg?react';
-
 export { default as Fire } from './icons/fire.svg?react';
-
 export { default as Gift } from './icons/gift.svg?react';
-
 export { default as Grid } from './icons/grid.svg?react';
-
 export { default as Headphones } from './icons/headphones.svg?react';
-
 export { default as Heartbeat } from './icons/heartbeat.svg?react';
-
 export { default as History } from './icons/history.svg?react';
-
 export { default as Hourglass } from './icons/hourglass.svg?react';
-
 export { default as InfoCircle } from './icons/info-circle.svg?react';
-
 export { default as KeySkeleton } from './icons/key-skeleton.svg?react';
-
 export { default as LinkBroken } from './icons/link-broken.svg?react';
-
 export { default as ListUiAlt } from './icons/list-ui-alt.svg?react';
-
 export { default as LockAlt } from './icons/lock-alt.svg?react';
-
 export { default as MoneyWithdrawal } from './icons/money-withdrawal.svg?react';
-
 export { default as Moneybag } from './icons/moneybag.svg?react';
-
 export { default as Moon } from './icons/moon.svg?react';
-
 export { default as Newspaper } from './icons/newspaper.svg?react';
-
-export { default as PauseCircle } from './icons/pause-circle.svg?react';
-
 export { default as Pause } from './icons/pause.svg?react';
-
-export { default as QrcodeScan } from './icons/qrcode-scan.svg?react';
-
+export { default as PauseCircle } from './icons/pause-circle.svg?react';
 export { default as Qrcode } from './icons/qrcode.svg?react';
-
+export { default as QrcodeScan } from './icons/qrcode-scan.svg?react';
 export { default as ReceiptAlt } from './icons/receipt-alt.svg?react';
-
 export { default as Redo } from './icons/redo.svg?react';
-
 export { default as Row } from './icons/row.svg?react';
-
 export { default as Search } from './icons/search.svg?react';
-
 export { default as Setting } from './icons/setting.svg?react';
-
 export { default as Share } from './icons/share.svg?react';
-
 export { default as ShieldCheck } from './icons/shield-check.svg?react';
-
 export { default as ShieldExclamation } from './icons/shield-exclamation.svg?react';
-
 export { default as ShieldQuestion } from './icons/shield-question.svg?react';
-
 export { default as SignOutAlt } from './icons/sign-out-alt.svg?react';
-
 export { default as SnowFlake } from './icons/snow-flake.svg?react';
-
 export { default as SortAmountDown } from './icons/sort-amount-down.svg?react';
-
 export { default as SortAmountUp } from './icons/sort-amount-up.svg?react';
-
 export { default as SquareShape } from './icons/square-shape.svg?react';
-
 export { default as StopCircle } from './icons/stop-circle.svg?react';
-
 export { default as Sun } from './icons/sun.svg?react';
-
 export { default as Swatchbook } from './icons/swatchbook.svg?react';
-
 export { default as SyncExclamation } from './icons/sync-exclamation.svg?react';
-
 export { default as ThumbsUp } from './icons/thumbs-up.svg?react';
-
 export { default as Times } from './icons/times.svg?react';
-
 export { default as Unlock } from './icons/unlock.svg?react';
-
 export { default as Wallet } from './icons/wallet.svg?react';
-
 export { default as Binance } from './networks/binance.svg?react';
-
-export { default as BitcoinRunes } from './networks/bitcoin-runes.svg?react';
-
 export { default as Bitcoin } from './networks/bitcoin.svg?react';
-
+export { default as BitcoinRunes } from './networks/bitcoin-runes.svg?react';
 export { default as Cardano } from './networks/cardano.svg?react';
-
 export { default as Doge } from './networks/doge.svg?react';
-
 export { default as Ergo } from './networks/ergo.svg?react';
-
 export { default as Ethereum } from './networks/ethereum.svg?react';
-
 export { default as Firo } from './networks/firo.svg?react';
 
 export const TOKENS = {

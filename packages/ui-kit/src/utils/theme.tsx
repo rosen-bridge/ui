@@ -1,10 +1,10 @@
 import {
   alpha,
-  ComponentsOverrides,
-  ComponentsVariants,
+  type ComponentsOverrides,
+  type ComponentsVariants,
   SvgIcon,
-  Theme,
-  ThemeOptions,
+  type Theme,
+  type ThemeOptions,
 } from '@mui/material';
 import {
   CheckCircle,
@@ -13,7 +13,7 @@ import {
   InfoCircle,
 } from '@rosen-bridge/icons';
 
-import { AppProps } from '../components';
+import type { AppProps } from '../components';
 
 export { alpha, createTheme, styled, type Theme } from '@mui/material';
 

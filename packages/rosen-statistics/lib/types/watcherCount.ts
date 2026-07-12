@@ -1,4 +1,4 @@
-import { WatcherCountType } from '@rosen-ui/rosen-statistics-entity';
+import type { WatcherCountType } from '@rosen-ui/rosen-statistics-entity';
 
 export interface WatcherCountConfig {
   url: string;

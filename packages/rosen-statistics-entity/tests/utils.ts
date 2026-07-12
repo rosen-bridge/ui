@@ -1,6 +1,6 @@
 import {
-  BlockEntity,
   migrations as abstractScannerMigrations,
+  BlockEntity,
 } from '@rosen-bridge/abstract-scanner';
 import { DataSource } from '@rosen-bridge/extended-typeorm';
 import {
@@ -8,19 +8,19 @@ import {
   migrations as watcherExtractorMigration,
 } from '@rosen-bridge/watcher-data-extractor';
 import {
+  migrations as assetCalculatorMigrations,
   LockedAssetEntity,
   TokenEntity,
-  migrations as assetCalculatorMigrations,
 } from '@rosen-ui/asset-calculator';
 
 import {
-  MetricEntity,
+  BridgedAmountEntity,
+  BridgeFeeEntity,
   EventCountEntity,
+  MetricEntity,
+  migrations as statisticsMigrations,
   UserEventEntity,
   WatcherCountEntity,
-  migrations as statisticsMigrations,
-  BridgeFeeEntity,
-  BridgedAmountEntity,
 } from '../lib';
 
 export const createDatabase = async () => {

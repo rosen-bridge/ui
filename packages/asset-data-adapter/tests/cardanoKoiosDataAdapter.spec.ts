@@ -13,7 +13,7 @@ interface TestContext {
   mockTokenMap: TokenMap;
 }
 
-let mockKoios = {
+const mockKoios = {
   addressInfo: vi.fn().mockReturnValue(CardanoAddressInfoMockValue),
   addressAssets: vi.fn().mockReturnValue(koiosAPIAddressAssetsMockedData),
 };

@@ -1,5 +1,5 @@
 import { TokenMap } from '@rosen-bridge/tokens';
-import { Mock } from 'vitest';
+import type { Mock } from 'vitest';
 
 import { ErgoExplorerDataAdapter } from '../lib';
 import { sampleTokenMapConfig } from './mocked';
@@ -14,7 +14,7 @@ interface TestContext {
   mockExplorer: { v1: { [k: string]: Mock } };
 }
 
-let mockExplorer = {
+const mockExplorer = {
   v1: {
     getApiV1AddressesP1BalanceConfirmed: vi.fn(),
     getApiV1TokensP1: vi.fn(),

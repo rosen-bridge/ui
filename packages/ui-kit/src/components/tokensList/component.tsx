@@ -1,13 +1,12 @@
-import { Network, TokenInfoWithColdAmount } from '@rosen-ui/types';
+import type { Network, TokenInfoWithColdAmount } from '@rosen-ui/types';
 import { getTokenUrl } from '@rosen-ui/utils';
 
-import { Amount, Identifier, NetworkProps, Token } from '@/components';
+import { Amount, Identifier, type NetworkProps, Token } from '@/components';
 import { useConfig } from '@/hooks';
-import { ElementBaseProps, OverridableType } from '@/types';
+import type { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.css';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface TokensListOverrides {}
 
 export type TokensListOwnProps = {

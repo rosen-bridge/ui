@@ -1,6 +1,6 @@
 'use client';
 
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
 import {
   Button,
@@ -52,7 +52,9 @@ export const Section = ({
           </CardAction>
         )}
       </CardHeader>
-      <Collapsible open={!collapsible || disclosure.state == 'open' || !!error}>
+      <Collapsible
+        open={!collapsible || disclosure.state === 'open' || !!error}
+      >
         <CardBody>
           {!error && children}
           {!!error && (

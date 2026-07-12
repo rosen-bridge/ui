@@ -1,4 +1,4 @@
-import { Filter, Selected } from './types';
+import type { Filter, Selected } from './types';
 
 export const parseFilter = (filters: Filter[], current: Partial<Selected>) => {
   const filter = filters.find((filter) => filter.name === current.flow);
@@ -6,7 +6,7 @@ export const parseFilter = (filters: Filter[], current: Partial<Selected>) => {
   if (!filter) return;
 
   const operator = filter.operators.find(
-    (operator) => operator.value == current.operator,
+    (operator) => operator.value === current.operator,
   );
 
   if (!operator) return { flow: filter };

@@ -1,13 +1,11 @@
-import { AbstractLogger } from '@rosen-bridge/abstract-logger';
-import { DefaultLogger } from '@rosen-bridge/abstract-logger';
-import { TokenMap } from '@rosen-bridge/tokens';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import AppError from './errors/AppError';
+import type { AbstractLogger } from '@rosen-bridge/abstract-logger';
+import { TokenMap } from '@rosen-bridge/tokens';
 
-const logger = DefaultLogger.getInstance().child(import.meta.url);
+import AppError from './errors/AppError';
 
 /**
  * get token map instance

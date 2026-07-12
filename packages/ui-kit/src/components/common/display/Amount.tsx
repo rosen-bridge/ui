@@ -1,4 +1,4 @@
-import { HTMLAttributes, useMemo } from 'react';
+import { type HTMLAttributes, useMemo } from 'react';
 
 import { getDecimalString } from '@rosen-ui/utils';
 
@@ -95,7 +95,7 @@ const AmountBase = ({
       case 'bigint':
         return value.toString();
       case 'number':
-        if (isNaN(value)) return;
+        if (Number.isNaN(value)) return;
         return value
           .toLocaleString('en', {
             useGrouping: false,
@@ -105,7 +105,7 @@ const AmountBase = ({
           .replace(/\.0$/, '');
       case 'string':
         if (!value.trim()) return;
-        if (isNaN(Number(value))) return;
+        if (Number.isNaN(Number(value))) return;
         return Number(value)
           .toLocaleString('en', {
             useGrouping: false,
@@ -253,50 +253,45 @@ const AmountBase = ({
           direction={orientation === 'vertical' ? 'column' : 'row'}
           spacing="4px"
         >
-          <>
-            {!!error && (
-              <Icon
-                name="ExclamationTriangle"
-                style={{ fontSize: 'inherit' }}
-              />
-            )}
-            {!error && (
-              <Tooltip disabled={loading} title={tooltip}>
-                <Typography
-                  component="div"
-                  loading={loading}
-                  style={{ fontSize: 'inherit', whiteSpace: 'nowrap' }}
-                >
-                  {!!parts && (
-                    <>
-                      {parts.number}
-                      {parts.fraction && (
-                        <Typography
-                          component="span"
-                          fontSize="75%"
-                          style={{ opacity: 0.7 }}
-                        >
-                          .{!!parts.zeros && '0'}
-                          {!!parts.zeros && (
-                            <sub style={{ fontSize: '0.75em' }}>
-                              {parts.zeros}
-                            </sub>
-                          )}
-                          {parts.fraction}
-                        </Typography>
-                      )}
-                      {!!parts.unit && ` ${parts.unit}`}
-                    </>
-                  )}
-                </Typography>
-              </Tooltip>
-            )}
-            {!error &&
-              !parts &&
-              !!fallback &&
-              value === undefined &&
-              !loading && <>{fallback}</>}
-          </>
+          {!!error && (
+            <Icon name="ExclamationTriangle" style={{ fontSize: 'inherit' }} />
+          )}
+          {!error && (
+            <Tooltip disabled={loading} title={tooltip}>
+              <Typography
+                component="div"
+                loading={loading}
+                style={{ fontSize: 'inherit', whiteSpace: 'nowrap' }}
+              >
+                {!!parts && (
+                  <>
+                    {parts.number}
+                    {parts.fraction && (
+                      <Typography
+                        component="span"
+                        fontSize="75%"
+                        style={{ opacity: 0.7 }}
+                      >
+                        .{!!parts.zeros && '0'}
+                        {!!parts.zeros && (
+                          <sub style={{ fontSize: '0.75em' }}>
+                            {parts.zeros}
+                          </sub>
+                        )}
+                        {parts.fraction}
+                      </Typography>
+                    )}
+                    {!!parts.unit && ` ${parts.unit}`}
+                  </>
+                )}
+              </Typography>
+            </Tooltip>
+          )}
+          {!error &&
+            !parts &&
+            !!fallback &&
+            value === undefined &&
+            !loading && <>{fallback}</>}
           {unit && (
             <Typography
               component="div"

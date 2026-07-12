@@ -1,6 +1,6 @@
-import { RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
-import { Network as NetworkBase } from '@rosen-network/base';
-import { Network, RosenAmountValue } from '@rosen-ui/types';
+import type { RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
+import type { Network as NetworkBase } from '@rosen-network/base';
+import type { Network, RosenAmountValue } from '@rosen-ui/types';
 
 import {
   AddressRetrievalError,
@@ -48,7 +48,7 @@ export abstract class Wallet<Config extends WalletConfig = WalletConfig> {
   abstract fetchAddress: () => Promise<string | undefined>;
   abstract fetchBalance: (
     token: RosenChainToken,
-  ) => Promise<bigint | number | string | undefined>;
+  ) => Promise<bigint | number | string | undefined | null>;
   abstract isAvailable: () => boolean;
   abstract performTransfer: (params: WalletTransferParams) => Promise<string>;
   transfer = async (params: WalletTransferParams): Promise<string> => {
@@ -56,7 +56,7 @@ export abstract class Wallet<Config extends WalletConfig = WalletConfig> {
 
     await this.requireConnection();
 
-    if (this.currentNetwork?.name != this.currentChain) {
+    if (this.currentNetwork?.name !== this.currentChain) {
       throw new UnsupportedChainError(this.name, this.currentChain);
     }
 
@@ -98,7 +98,7 @@ export abstract class Wallet<Config extends WalletConfig = WalletConfig> {
 
   get currentNetwork() {
     return this.config.networks.find(
-      (network) => network.name == this.currentChain,
+      (network) => network.name === this.currentChain,
     );
   }
 
@@ -146,7 +146,7 @@ export abstract class Wallet<Config extends WalletConfig = WalletConfig> {
 
     await this.requireConnection();
 
-    let raw;
+    let raw: bigint | number | string | undefined | null;
 
     try {
       raw = await this.fetchBalance(token);

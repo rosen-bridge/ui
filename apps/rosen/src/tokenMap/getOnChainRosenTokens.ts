@@ -1,6 +1,6 @@
 'use server';
 
-import { RosenTokens } from '@rosen-bridge/tokens';
+import type { RosenTokens } from '@rosen-bridge/tokens';
 import { createClient } from '@vercel/kv';
 
 import { wrap } from '@/safeServerAction';

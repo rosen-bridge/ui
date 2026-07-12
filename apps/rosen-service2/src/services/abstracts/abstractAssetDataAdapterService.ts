@@ -1,6 +1,6 @@
 import { PeriodicTaskService } from '@rosen-bridge/service-manager';
-import { TotalSupply } from '@rosen-ui/asset-aggregator';
-import { ChainsAdapters } from '@rosen-ui/asset-data-adapter';
+import type { TotalSupply } from '@rosen-ui/asset-aggregator';
+import type { ChainsAdapters } from '@rosen-ui/asset-data-adapter';
 
 export abstract class AbstractAssetDataAdapterService extends PeriodicTaskService {
   protected static instance: AbstractAssetDataAdapterService;

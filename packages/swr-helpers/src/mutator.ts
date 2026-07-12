@@ -10,7 +10,7 @@ import JSONBigInt from 'json-bigint';
  * TODO: remove the inline ESLint comment
  * local:ergo/rosen-bridge/ui#441
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// biome-ignore lint/suspicious/noExplicitAny: Use a better type
 const mutator = async (url: string, { arg }: { arg: any }) => {
   const response = await axios.post(url, arg, {
     transformRequest: (data) =>

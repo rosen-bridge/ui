@@ -1,25 +1,25 @@
-import { AbstractLogger } from '@rosen-bridge/abstract-logger';
+import type { AbstractLogger } from '@rosen-bridge/abstract-logger';
 import {
-  Dependency,
+  type Dependency,
   ServiceAction,
   ServiceStatus,
 } from '@rosen-bridge/service-manager';
 import {
   AssetAggregator,
-  NetworkItem,
-  TotalSupply,
+  type NetworkItem,
+  type TotalSupply,
 } from '@rosen-ui/asset-aggregator';
-import { AssetBalance } from '@rosen-ui/asset-data-adapter';
+import type { AssetBalance } from '@rosen-ui/asset-data-adapter';
 import { NETWORKS } from '@rosen-ui/constants';
 
 import { configs } from '../configs';
 import { TOTAL_SUPPLY_REDIS_KEY } from '../constants';
-import { ChainChoices, ChainsKeys } from '../types';
+import type { ChainChoices, ChainsKeys } from '../types';
 import {
   AbstractAssetAggregatorService,
   AbstractAssetDataAdapterService,
-  AbstractTokenMapService,
   AbstractDBService,
+  AbstractTokenMapService,
 } from './abstracts';
 import { AbstractRedisService } from './abstracts/abstractRedisService';
 

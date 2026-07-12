@@ -1,6 +1,6 @@
-import * as wasm from 'ergo-lib-wasm-nodejs';
+import type * as wasm from 'ergo-lib-wasm-nodejs';
 
-import { ErgoBoxProxy, UnsignedErgoTxProxy } from './types';
+import type { ErgoBoxProxy, UnsignedErgoTxProxy } from './types';
 
 /**
  * converts wasm UnsignedTransaction to UnsignedErgoTxProxy format

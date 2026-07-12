@@ -1,20 +1,20 @@
-import { RosenChainToken } from '@rosen-bridge/tokens';
+import type { RosenChainToken } from '@rosen-bridge/tokens';
 import type { ErgoTxProxy } from '@rosen-network/ergo';
 import { ErgoNetwork } from '@rosen-network/ergo/dist/client';
 import { NETWORKS } from '@rosen-ui/constants';
-import { Network } from '@rosen-ui/types';
+import type { Network } from '@rosen-ui/types';
 import {
+  ConnectionTimeoutError,
   SubmitTransactionError,
+  UnsupportedChainError,
   UserDeniedTransactionSignatureError,
   UtxoFetchError,
   Wallet,
-  WalletTransferParams,
-  ConnectionTimeoutError,
-  UnsupportedChainError,
+  type WalletTransferParams,
 } from '@rosen-ui/wallet-api';
 
 import { ICON } from './icon';
-import { NautilusWalletConfig } from './types';
+import type { NautilusWalletConfig } from './types';
 
 export class NautilusWallet extends Wallet<NautilusWalletConfig> {
   icon = ICON;

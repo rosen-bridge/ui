@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo } from 'react';
-import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
+import { FormProvider, type SubmitHandler, useForm } from 'react-hook-form';
 
 import {
   Alert,
@@ -16,25 +16,25 @@ import {
   useToast,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
-import { mutatorWithHeaders, fetcher } from '@rosen-ui/swr-helpers';
+import { fetcher, mutatorWithHeaders } from '@rosen-ui/swr-helpers';
 import {
-  getNonDecimalString,
   getDecimalString,
+  getNonDecimalString,
   getTxURL,
 } from '@rosen-ui/utils';
 import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
 
 import { useRsnToken, useToken } from '@/hooks';
-import {
+import type {
+  ApiInfoResponse,
   ApiPermitRequestBody,
   ApiPermitResponse,
-  ApiInfoResponse,
 } from '@/types/api';
 
 import {
+  type TokenAmountCompatibleFormSchema,
   TokenAmountTextField,
-  TokenAmountCompatibleFormSchema,
 } from '../../TokenAmountTextField';
 
 const LockForm = () => {
@@ -64,7 +64,7 @@ const LockForm = () => {
   const {
     trigger,
     isMutating: isLockPending,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // biome-ignore lint/suspicious/noExplicitAny: Use a better type
   } = useSWRMutation<ApiPermitResponse, any, '/permit', ApiPermitRequestBody>(
     '/permit',
     mutatorWithHeaders,
@@ -79,7 +79,7 @@ const LockForm = () => {
         timeout: 0,
       });
     }
-  }, [isRsnTokenLoading, rsnToken]);
+  }, [isRsnTokenLoading, rsnToken, toast.add]);
 
   const formMethods = useForm({
     mode: 'onChange',
@@ -125,7 +125,7 @@ const LockForm = () => {
           'Server responded but the response message was unexpected',
         );
       }
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // biome-ignore lint/suspicious/noExplicitAny: Use a better type
     } catch (error: any) {
       if (error?.response?.status === 403) {
         toast.add({
@@ -205,7 +205,7 @@ const LockForm = () => {
 
     const nonDecimalAmount = +getNonDecimalString(
       formData.amount,
-      rsnToken!.decimals,
+      rsnToken?.decimals,
     );
 
     const reportsCount = Math.floor(+nonDecimalAmount / info?.permitsPerEvent);

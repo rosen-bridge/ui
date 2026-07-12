@@ -1,7 +1,12 @@
-import { Dispatch, MouseEvent, SetStateAction, useState } from 'react';
+import {
+  type Dispatch,
+  type MouseEvent,
+  type SetStateAction,
+  useState,
+} from 'react';
 
 import { Button, Icon, Menu, MenuItem } from '@rosen-bridge/ui-kit';
-import { ChartPeriod } from '@rosen-ui/types';
+import type { ChartPeriod } from '@rosen-ui/types';
 
 const periodOptions = ['week', 'month', 'year'] as const;
 

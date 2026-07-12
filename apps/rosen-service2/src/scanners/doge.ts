@@ -4,19 +4,19 @@ import {
   RoundRobinStrategy,
 } from '@rosen-bridge/abstract-scanner';
 import {
-  DogeRpcObservationExtractor,
   DogeEsploraObservationExtractor,
+  DogeRpcObservationExtractor,
 } from '@rosen-bridge/bitcoin-observation-extractor';
 import {
+  type BitcoinEsploraTransaction,
   DogeEsploraScanner,
-  EsploraNetwork,
   DogeRpcNetwork,
   DogeRpcScanner,
-  DogeRpcTransaction,
-  BitcoinEsploraTransaction,
+  type DogeRpcTransaction,
+  EsploraNetwork,
 } from '@rosen-bridge/bitcoin-scanner';
-import { TokenMap } from '@rosen-bridge/extended-tokens';
-import { DataSource } from '@rosen-bridge/extended-typeorm';
+import type { TokenMap } from '@rosen-bridge/extended-tokens';
+import type { DataSource } from '@rosen-bridge/extended-typeorm';
 
 import { configs } from '../configs';
 import { DOGE_METHOD_ESPLORA, DOGE_METHOD_RPC } from '../constants';

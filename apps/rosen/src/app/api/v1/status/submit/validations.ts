@@ -1,10 +1,10 @@
-import { NextRequest } from 'next/server';
+import type { NextRequest } from 'next/server';
 
 import {
-  EventStatus,
+  type EventStatus,
   eventStatuses,
-  TxType,
-  TxStatus,
+  type TxStatus,
+  type TxType,
   txStatuses,
   txTypes,
 } from '@rosen-ui/public-status';

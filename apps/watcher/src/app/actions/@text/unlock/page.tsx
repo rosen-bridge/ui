@@ -4,7 +4,7 @@ import { Typography } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import useSWR from 'swr';
 
-import { ApiInfoResponse } from '@/types/api';
+import type { ApiInfoResponse } from '@/types/api';
 
 const LockText = () => {
   const { data: info, isLoading: isInfoLoading } = useSWR<ApiInfoResponse>(
@@ -27,9 +27,7 @@ const LockText = () => {
         {!isInfoLoading &&
           info &&
           info?.permitCount.active !== info?.permitCount.total &&
-          ` (You have ${
-            info.permitCount.total - info.permitCount.active
-          } pending permits)`}
+          ` (You have ${info.permitCount.total - info.permitCount.active} pending permits)`}
       </Typography>
     </>
   );

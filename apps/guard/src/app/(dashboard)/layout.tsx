@@ -1,11 +1,11 @@
 'use client';
 
-import { Fragment, ReactNode } from 'react';
+import { Fragment, type ReactNode } from 'react';
 
 import {
   PageHeading,
   Stack,
-  StackProps,
+  type StackProps,
   useResponsive,
 } from '@rosen-bridge/ui-kit';
 

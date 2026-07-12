@@ -1,10 +1,10 @@
 import { TokenMap } from '@rosen-bridge/tokens';
-import { Network } from '@rosen-ui/types';
+import type { Network } from '@rosen-ui/types';
 import { Psbt } from 'bitcoinjs-lib';
 import { describe, expect, it, vi } from 'vitest';
 
 import { generateUnsignedTx } from '../../src';
-import { testTokenMap, multiDecimalTokenMap } from '../test-data';
+import { multiDecimalTokenMap, testTokenMap } from '../test-data';
 
 const testData = await vi.hoisted(async () => await import('./testData'));
 
@@ -63,7 +63,7 @@ describe('generateUnsignedTx', () => {
        * TODO: remove the inline ESLint comment
        * local:ergo/rosen-bridge/ui#441
        */
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // biome-ignore lint/suspicious/noExplicitAny: Use a better type
       {} as any,
     );
 
@@ -193,7 +193,7 @@ describe('generateUnsignedTx', () => {
          * TODO: remove the inline ESLint comment
          * local:ergo/rosen-bridge/ui#441
          */
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        // biome-ignore lint/suspicious/noExplicitAny: Use a better type
         {} as any,
       );
     }).rejects.toThrow(Error);

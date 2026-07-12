@@ -1,21 +1,24 @@
-import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
+import {
+  type AbstractLogger,
+  DummyLogger,
+} from '@rosen-bridge/abstract-logger';
 import { BlockDbAction } from '@rosen-bridge/abstract-scanner';
-import { DataSource } from '@rosen-bridge/extended-typeorm';
+import type { DataSource } from '@rosen-bridge/extended-typeorm';
 import { TokenPriceAction } from '@rosen-bridge/token-price-entity';
 import {
   BridgeMetricsAction,
-  MetricAction,
   METRIC_KEYS,
+  MetricAction,
 } from '@rosen-ui/rosen-statistics-entity';
 
 import { DAY_IN_SECONDS } from '../constants';
-import { MappedBridgeEventData } from '../types';
+import type { MappedBridgeEventData } from '../types';
 import {
+  calculateBridgeData,
   getDecimalString,
   getNonDecimalString,
   getNumberOfDecimals,
   multiplyByPowerOfTen,
-  calculateBridgeData,
 } from '../utils';
 
 /**
@@ -61,9 +64,9 @@ export const bridgeAmountMetric = async (
     );
 
     // Load existing total USD value as raw BigInt with its decimals
-    let lastTotalUsdValue = lastTotalUsd ? lastTotalUsd.value : '0';
-    let lastTotalUsdDecimals = getNumberOfDecimals(lastTotalUsdValue);
-    let lastTotalUsdRaw = BigInt(
+    const lastTotalUsdValue = lastTotalUsd ? lastTotalUsd.value : '0';
+    const lastTotalUsdDecimals = getNumberOfDecimals(lastTotalUsdValue);
+    const lastTotalUsdRaw = BigInt(
       getNonDecimalString(lastTotalUsdValue, lastTotalUsdDecimals),
     );
 
@@ -113,7 +116,7 @@ export const bridgeAmountMetric = async (
       const endTs = startTs + DAY_IN_SECONDS;
 
       const events = await bridgeAmountAction.getEventsInRange(startTs, endTs);
-      if (events.length == 0) {
+      if (events.length === 0) {
         startTs += DAY_IN_SECONDS;
         continue;
       }

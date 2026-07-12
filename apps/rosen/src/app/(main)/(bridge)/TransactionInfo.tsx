@@ -1,6 +1,6 @@
 'use client';
 
-import { RosenChainToken } from '@rosen-bridge/tokens';
+import type { RosenChainToken } from '@rosen-bridge/tokens';
 import {
   Alert,
   Amount,
@@ -39,8 +39,7 @@ export const TransactionInfo = () => {
 
   const targetTokenSearchResults =
     sourceValue &&
-    tokenValue &&
-    tokenValue.tokenId &&
+    tokenValue?.tokenId &&
     tokenMap.search(sourceValue, {
       tokenId: tokenValue.tokenId,
     });
@@ -99,7 +98,7 @@ export const TransactionInfo = () => {
         {!!error && (
           <Alert severity="error">
             <Truncate lines={1} style={{ whiteSpace: 'nowrap' }}>
-              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+              {/* biome-ignore lint/suspicious/noExplicitAny: Use a better type */}
               {(error as any)?.message}
             </Truncate>
           </Alert>

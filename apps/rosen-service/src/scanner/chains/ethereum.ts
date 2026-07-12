@@ -4,7 +4,7 @@ import {
   NetworkConnectorManager,
 } from '@rosen-bridge/abstract-scanner';
 import { EvmRpcNetwork, EvmRpcScanner } from '@rosen-bridge/evm-scanner';
-import { TransactionResponse } from 'ethers';
+import type { TransactionResponse } from 'ethers';
 
 import config from '../../configs';
 import {

@@ -1,12 +1,12 @@
-import { AbstractLogger } from '@rosen-bridge/abstract-logger';
-import { DataSource } from '@rosen-bridge/extended-typeorm';
+import type { AbstractLogger } from '@rosen-bridge/abstract-logger';
+import type { DataSource } from '@rosen-bridge/extended-typeorm';
 import JsonBigInt from '@rosen-bridge/json-bigint';
 import { ErgoNetworkType } from '@rosen-bridge/scanner-interfaces';
 import { EventTriggerExtractor } from '@rosen-bridge/watcher-data-extractor';
 
 import { configs } from './configs';
 import { ERGO_METHOD_EXPLORER } from './constants';
-import { ChainConfigs, ErgoNetworkConfig } from './types';
+import type { ChainConfigs, ErgoNetworkConfig } from './types';
 
 /**
  * Maps bigint value in data to string before inserting in redis

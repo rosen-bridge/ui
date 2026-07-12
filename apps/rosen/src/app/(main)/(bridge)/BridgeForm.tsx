@@ -1,21 +1,21 @@
 'use client';
 
-import { useCallback, ChangeEvent, SyntheticEvent } from 'react';
+import { type ChangeEvent, type SyntheticEvent, useCallback } from 'react';
 
-import { RosenChainToken } from '@rosen-bridge/tokens';
+import type { RosenChainToken } from '@rosen-bridge/tokens';
 import {
-  TextField,
-  MenuItem,
-  CircularProgress,
   Alert,
   Autocomplete,
-  InputAdornment,
-  IconButton,
+  CircularProgress,
   Icon,
+  IconButton,
+  InputAdornment,
+  MenuItem,
   Network,
   Stack,
+  type StackProps,
+  TextField,
   useResponsive,
-  StackProps,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 
@@ -66,15 +66,15 @@ export const BridgeForm = () => {
   });
 
   const renderSelectedNetwork = (value: unknown) => {
-    const network = sources.find((network) => network.name === value)!;
+    const network = sources.find((network) => network.name === value);
     return (
-      <Network value={network.name} slots={{ logo: { size: 'medium' } }} />
+      <Network value={network?.name} slots={{ logo: { size: 'medium' } }} />
     );
   };
 
   const handleTokenChange = useCallback(
-    (e: SyntheticEvent, value: RosenChainToken | null, reason: string) => {
-      if (reason == 'clear') return;
+    (_e: SyntheticEvent, value: RosenChainToken | null, reason: string) => {
+      if (reason === 'clear') return;
       const currentToken = value || undefined;
       setValue('token', currentToken, {
         shouldDirty: true,
@@ -229,7 +229,7 @@ export const BridgeForm = () => {
           });
         }}
       />
-      {targetField.value == NETWORKS.bitcoin.key && (
+      {targetField.value === NETWORKS.bitcoin.key && (
         <Alert severity="warning">
           Only Native SegWit (P2WPKH or P2WSH) addresses are supported.
         </Alert>

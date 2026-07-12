@@ -1,10 +1,10 @@
-import { Filters } from '@rosen-bridge/ui-kit/dist/components/common/smartSearch/server';
+import type { Filters } from '@rosen-bridge/ui-kit/dist/components/common/smartSearch/server';
 
 import { getTokenMap } from '@/tokenMap/getServerTokenMap';
 
 import {
-  getAsset as repositoryGetAsset,
   getAllAssets as repositoryGetAllAssets,
+  getAsset as repositoryGetAsset,
 } from './repository';
 
 /**

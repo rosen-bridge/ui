@@ -1,9 +1,9 @@
-import { TokenMap } from '@rosen-bridge/tokens';
+import type { TokenMap } from '@rosen-bridge/tokens';
 import { NETWORKS } from '@rosen-ui/constants';
-import { RosenAmountValue } from '@rosen-ui/types';
+import type { RosenAmountValue } from '@rosen-ui/types';
 
 import { NATIVE_TOKEN_TRANSFER_GAS } from './constants';
-import { EvmChains } from './types';
+import type { EvmChains } from './types';
 import { getFeeData } from './utils';
 
 export const getMaxTransferCreator =

@@ -2,19 +2,19 @@ import {
   BitcoinBoxSelection,
   generateFeeEstimator,
 } from '@rosen-bridge/bitcoin-utxo-selection';
-import { TokenMap, RosenChainToken } from '@rosen-bridge/tokens';
+import type { RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
 import { handleUncoveredAssets } from '@rosen-network/base';
 import { NETWORKS } from '@rosen-ui/constants';
-import { RosenAmountValue } from '@rosen-ui/types';
-import { Psbt, address, payments } from 'bitcoinjs-lib';
+import type { RosenAmountValue } from '@rosen-ui/types';
+import { address, Psbt, payments } from 'bitcoinjs-lib';
 
 import {
-  DOGE_NETWORK,
   DOGE_INPUT_SIZE,
-  DOGE_TX_BASE_SIZE,
+  DOGE_NETWORK,
   DOGE_OUTPUT_SIZE,
+  DOGE_TX_BASE_SIZE,
 } from './constants';
-import { DogeUtxo, UnsignedPsbtData } from './types';
+import type { DogeUtxo, UnsignedPsbtData } from './types';
 import {
   getAddressUtxos,
   getFeeRatio,

@@ -1,4 +1,4 @@
-import { InterfaceAbi } from 'ethers';
+import type { InterfaceAbi } from 'ethers';
 
 export const PartialERC20ABI: InterfaceAbi = [
   {

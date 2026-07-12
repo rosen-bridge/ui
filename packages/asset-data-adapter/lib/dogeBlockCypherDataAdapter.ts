@@ -1,10 +1,10 @@
-import { AbstractLogger } from '@rosen-bridge/abstract-logger';
-import { TokenMap } from '@rosen-bridge/tokens';
+import type { AbstractLogger } from '@rosen-bridge/abstract-logger';
+import type { TokenMap } from '@rosen-bridge/tokens';
 import { Axios } from '@rosen-clients/rate-limited-axios';
 import { NETWORKS } from '@rosen-ui/constants';
 
 import { AbstractDataAdapter } from './abstracts';
-import {
+import type {
   ChainAssetBalance,
   DogeBlockCypherDataAdapterAuthParams,
 } from './types';

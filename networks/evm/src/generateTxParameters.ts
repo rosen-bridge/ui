@@ -1,6 +1,6 @@
-import { TokenMap, RosenChainToken } from '@rosen-bridge/tokens';
+import type { RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
 import { NETWORKS } from '@rosen-ui/constants';
-import { Network, RosenAmountValue } from '@rosen-ui/types';
+import type { Network, RosenAmountValue } from '@rosen-ui/types';
 import { Contract } from 'ethers';
 
 import { transferABI } from './constants';
@@ -29,13 +29,18 @@ export const generateTxParameters =
       NETWORKS[fromChain].key,
     ).amount;
 
-    let transactionParameters;
+    let transactionParameters: {
+      to: string;
+      from: string;
+      data: string;
+      value?: string;
+    };
     if (token.type === 'native') {
       transactionParameters = {
         to: lockAddress,
         from: fromAddress,
-        data: '0x' + rosenData,
-        value: '0x' + unwrappedAmount.toString(16),
+        data: `0x${rosenData}`,
+        value: `0x${unwrappedAmount.toString(16)}`,
       };
     } else {
       const contract = new Contract(tokenId, transferABI, undefined);

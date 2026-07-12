@@ -4,12 +4,10 @@ import { Alert } from '@mui/material';
 
 import { ApiKeyDialog, Button } from '@/components';
 import { useApiKey, useConfig } from '@/hooks';
-import { ElementBaseProps, OverridableType } from '@/types';
+import type { ElementBaseProps, OverridableType } from '@/types';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface ApiKeyDialogWarningOverrides {}
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export type ApiKeyDialogWarningOwnProps = {};
 
 export type ApiKeyDialogWarningBaseProps = ElementBaseProps<

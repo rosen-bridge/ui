@@ -1,10 +1,10 @@
 'use client';
 
-import { useForm, FormProvider } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 
 import { Alert, Link } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
-import { RosenAmountValue } from '@rosen-ui/types';
+import type { RosenAmountValue } from '@rosen-ui/types';
 
 import {
   NetworkProvider,
@@ -12,11 +12,12 @@ import {
   WalletProvider,
 } from '@/hooks';
 
-import { BridgeForm } from './BridgeForm';
-import './page.css';
+import { BridgeForm as BridgeFormComponent } from './BridgeForm';
 import { SubmitButton } from './SubmitButton';
 import { TransactionInfo } from './TransactionInfo';
 import { WalletInfo } from './WalletInfo';
+
+import './page.css';
 
 export interface BridgeForm {
   source: string | null;
@@ -46,7 +47,7 @@ const RosenBridge = () => {
             <TransactionFeesProvider>
               <div className="rosen-bridge-page-main">
                 <div className="rosen-bridge-page-form">
-                  <BridgeForm />
+                  <BridgeFormComponent />
                 </div>
                 <div className="rosen-bridge-page-info">
                   <WalletInfo />
@@ -57,8 +58,8 @@ const RosenBridge = () => {
                 local:ergo/rosen-bridge/ui#486
                 */}
 
-                {(methods.getValues().source == NETWORKS.binance.key ||
-                  methods.getValues().source == NETWORKS.ethereum.key) && (
+                {(methods.getValues().source === NETWORKS.binance.key ||
+                  methods.getValues().source === NETWORKS.ethereum.key) && (
                   <div className="rosen-bridge-page-alert">
                     <Alert
                       severity="warning"

@@ -1,17 +1,17 @@
-import { MouseEvent, useEffect, useState } from 'react';
+import { type MouseEvent, useEffect, useState } from 'react';
 
 import {
   Alert,
+  Button,
   Card,
   CardBody,
-  Button,
   Dialog,
   DialogContent,
   DialogContentText,
   EnhancedDialogTitle,
-  Tooltip,
-  Stack,
   Icon,
+  Stack,
+  Tooltip,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 
@@ -68,7 +68,7 @@ export const WalletModal = ({ open, onClose }: WalletModalProps) => {
             It may be necessary to reload this page after the following
             extensions have been installed in order to connect to them.
           </Alert>
-          {transactionFormData.sourceValue == NETWORKS.bitcoin.key && (
+          {transactionFormData.sourceValue === NETWORKS.bitcoin.key && (
             <Alert severity="warning">
               We only support native SegWit addresses (P2WPKH or P2WSH) for the
               source address.

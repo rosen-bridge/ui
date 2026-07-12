@@ -1,6 +1,6 @@
 import {
+  type CalculateFee,
   calculateFeeCreator,
-  CalculateFee,
   getMinTransferCreator as getMinTransferCreatorBase,
 } from '@rosen-network/base';
 import { EvmChains, getHeight as getHeightCore } from '@rosen-network/evm';

@@ -1,10 +1,10 @@
 import { useMemo } from 'react';
 
-import { HealthParamInfo } from '@rosen-ui/types';
+import type { HealthParamInfo } from '@rosen-ui/types';
 
 import {
   Alert,
-  AlertProps,
+  type AlertProps,
   Button,
   Card,
   CardAction,
@@ -12,13 +12,13 @@ import {
   CardHeader,
   CardTitle,
   Icon,
-  IconProps,
+  type IconProps,
   Skeleton,
   Stack,
   Tooltip,
   Typography,
 } from '@/components';
-import { Color } from '@/types';
+import type { Color } from '@/types';
 
 export type HealthParamCardProps = {
   checking?: boolean;

@@ -1,7 +1,8 @@
 #!/usr/bin/env zx
+import assert from 'node:assert';
+
 // c && zx --install public-status-test.mjs
 import { blake2b } from '@noble/hashes/blake2b';
-import assert from 'assert';
 import axios from 'axios';
 import pkg from 'secp256k1';
 
@@ -1310,8 +1311,7 @@ const insertMockDataForPaginationTest = async () => {
   const p = $`psql -p 5432 -U postgres -d public_status_test`.stdio('pipe');
 
   p.stdin.write('BEGIN;\n');
-  p.stdin
-    .write(`INSERT INTO aggregated_status_changed_entity ("id", "eventId", "triggerTxId", "insertedAt", "status", "txStatus", "txId", "txChain")
+  p.stdin.write(`INSERT INTO aggregated_status_changed_entity ("id", "eventId", "triggerTxId", "insertedAt", "status", "txStatus", "txId", "txChain")
       VALUES
           (10, '${id1}', '${id1}', 10, 'finished', NULL, NULL, NULL),
           (11, '${id1}', '${id1}', 11, 'finished', NULL, NULL, NULL),
@@ -1369,7 +1369,7 @@ const resetDB = async () => {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const resetSchema = async () => {
+const _resetSchema = async () => {
   await $`psql -p 5432 -U postgres -d public_status_test <<EOF
   DROP SCHEMA public CASCADE;
   CREATE SCHEMA public;
@@ -1379,7 +1379,7 @@ const resetSchema = async () => {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const setupDB = async () => {
+const _setupDB = async () => {
   await $`psql -p 5432 -U postgres -d postgres <<EOF
   DROP DATABASE public_status_test;
   CREATE DATABASE public_status_test;

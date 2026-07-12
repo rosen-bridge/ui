@@ -38,7 +38,7 @@ const Actions = () => {
       gap={2}
       value={tab}
       orientation={tabsOrientation}
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // biome-ignore lint/suspicious/noExplicitAny: Use a better type
       onChange={(value) => setTab(value as any)}
     >
       <TabsList align="center" grow={tabsListGrow}>

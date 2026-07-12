@@ -1,4 +1,4 @@
-import { Input, Operator } from './types';
+import type { Input, Operator } from './types';
 
 export const OPERATOR_IS: Operator = {
   value: 'is',

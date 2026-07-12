@@ -7,7 +7,7 @@ import { getAddressUrl } from '@rosen-ui/utils';
 import useSWR from 'swr';
 
 import { useInfo } from '@/hooks';
-import { ApiAddressAssetsResponse } from '@/types/api';
+import type { ApiAddressAssetsResponse } from '@/types/api';
 
 const Tokens = () => {
   const { data: info } = useInfo();

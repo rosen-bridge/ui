@@ -4,16 +4,16 @@ import {
   Amount,
   Columns,
   Connector,
+  DateTime,
+  EventStatus,
   Identifier,
   Label,
   Network,
   Token,
-  DateTime,
-  EventStatus,
   useResponsive,
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
-import { Network as NetworkType } from '@rosen-ui/types';
+import type { Network as NetworkType } from '@rosen-ui/types';
 import { getAddressUrl } from '@rosen-ui/utils';
 import useSWR from 'swr';
 

@@ -10,10 +10,10 @@ import {
 } from '@rosen-bridge/ui-kit';
 import { HEALTH_DATA_REFRESH_INTERVAL } from '@rosen-ui/constants';
 import { fetcher } from '@rosen-ui/swr-helpers';
-import { HealthParamInfo } from '@rosen-ui/types';
+import type { HealthParamInfo } from '@rosen-ui/types';
 import useSWR from 'swr';
 
-import { ApiHealthStatusResponse } from '@/types/api';
+import type { ApiHealthStatusResponse } from '@/types/api';
 
 const Health = () => {
   const [checking, setChecking] = useState<string[]>([]);
@@ -56,20 +56,23 @@ const Health = () => {
           return void setTimeout(trying, 1000);
         }
 
-        setChecking((checking) => checking.filter((item) => item != paramId));
+        setChecking((checking) => checking.filter((item) => item !== paramId));
 
-        const healthParamIndex = data!.findIndex(
+        if (!data) return;
+
+        const healthParamIndex = data.findIndex(
           (healthParam) => healthParam.id === paramId,
         );
+
         toast.add({
           type: 'info',
-          description: currentHealthParamInfo.title + ' status updated',
+          description: `${currentHealthParamInfo.title} status updated`,
         });
 
         mutate([
-          ...data!.slice(0, healthParamIndex),
+          ...data.slice(0, healthParamIndex),
           newHealthParamInfo,
-          ...data!.slice(healthParamIndex + 1),
+          ...data.slice(healthParamIndex + 1),
         ]);
       };
 

@@ -1,16 +1,16 @@
-import { RosenChainToken } from '@rosen-bridge/tokens';
+import type { RosenChainToken } from '@rosen-bridge/tokens';
 import { FiroNetwork } from '@rosen-network/firo/dist/client';
 import { NETWORKS } from '@rosen-ui/constants';
-import { Network } from '@rosen-ui/types';
+import type { Network } from '@rosen-ui/types';
 import { getDecimalString } from '@rosen-ui/utils';
 import {
   UnsupportedChainError,
   Wallet,
-  WalletTransferParams,
+  type WalletTransferParams,
 } from '@rosen-ui/wallet-api';
 
 import { ICON } from './icon';
-import { FiroWalletConfig } from './types';
+import type { FiroWalletConfig } from './types';
 
 export class FiroWallet extends Wallet<FiroWalletConfig> {
   icon = ICON;
@@ -63,6 +63,6 @@ export class FiroWallet extends Wallet<FiroWalletConfig> {
       opReturnData,
     );
 
-    return 'qrcode:' + uri;
+    return `qrcode:${uri}`;
   };
 }

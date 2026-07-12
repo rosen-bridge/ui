@@ -1,4 +1,4 @@
-import { TokenMap } from '@rosen-bridge/tokens';
+import type { TokenMap } from '@rosen-bridge/tokens';
 import {
   EvmChains,
   getMaxTransferCreator as getMaxTransferCreatorBase,

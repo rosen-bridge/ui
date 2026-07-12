@@ -2,10 +2,9 @@ import { useMemo } from 'react';
 
 import { Typography } from '@/components';
 import { useConfig } from '@/hooks';
-import { ElementBaseProps, OverridableType } from '@/types';
+import type { ElementBaseProps, OverridableType } from '@/types';
 import { formatDateTime } from '@/utils';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface DateTimeOverrides {}
 
 export type DateTimeOwnProps = {

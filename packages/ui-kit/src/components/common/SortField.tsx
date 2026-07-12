@@ -1,6 +1,6 @@
 import {
-  HTMLAttributes,
-  MouseEvent,
+  type HTMLAttributes,
+  type MouseEvent,
   useCallback,
   useEffect,
   useMemo,
@@ -65,7 +65,7 @@ export const SortField = ({
   const handleSortOrderChange = useCallback(() => {
     const next = value || {};
 
-    next.order = next.order == 'ASC' ? 'DESC' : 'ASC';
+    next.order = next.order === 'ASC' ? 'DESC' : 'ASC';
 
     onChange?.({ ...next });
   }, [value, onChange]);
@@ -187,7 +187,7 @@ export const SortField = ({
       </div>
       <IconButton disabled={disabled} onClick={handleSortOrderChange}>
         <Icon
-          name={value?.order == 'ASC' ? 'SortAmountDown' : 'SortAmountUp'}
+          name={value?.order === 'ASC' ? 'SortAmountDown' : 'SortAmountUp'}
         />
       </IconButton>
     </Root>

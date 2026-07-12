@@ -1,6 +1,10 @@
-import { AbstractLogger } from '@rosen-bridge/abstract-logger';
-import { NATIVE_TOKEN, RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
-import { Network } from '@rosen-ui/types';
+import type { AbstractLogger } from '@rosen-bridge/abstract-logger';
+import {
+  NATIVE_TOKEN,
+  type RosenChainToken,
+  type TokenMap,
+} from '@rosen-bridge/tokens';
+import type { Network } from '@rosen-ui/types';
 import { ethers, JsonRpcProvider } from 'ethers';
 import { zipWith } from 'lodash-es';
 
@@ -60,9 +64,7 @@ export class EvmCalculator extends AbstractCalculator {
     for (const address of this.addresses) {
       const balance = await contract.balanceOf(address);
       this.logger.debug(
-        `Balance of token [${
-          token.tokenId
-        }] in address [${address}] is [${balance}]`,
+        `Balance of token [${token.tokenId}] in address [${address}] is [${balance}]`,
       );
       tokenBalance += balance;
     }
@@ -77,10 +79,10 @@ export class EvmCalculator extends AbstractCalculator {
    * @param token
    */
   getRawLockedAmountsPerAddress = async (token: RosenChainToken) => {
-    let tokenBalances: bigint[] = [];
+    const tokenBalances: bigint[] = [];
     for (const address of this.addresses) {
       let balance = 0n;
-      if (token.type == NATIVE_TOKEN) {
+      if (token.type === NATIVE_TOKEN) {
         balance = await this.provider.getBalance(address);
       } else {
         const contract = new ethers.Contract(

@@ -1,16 +1,17 @@
 'use client';
 
-import { Route } from 'next';
+import type { PropsWithChildren } from 'react';
+
+import type { Route } from 'next';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { PropsWithChildren } from 'react';
 
 import {
-  App as AppBase,
   ApiKeyProvider,
+  App as AppBase,
   FrameworkProvider,
+  NoSsr,
   ThemeProvider,
   ToastProvider,
-  NoSsr,
 } from '@rosen-bridge/ui-kit';
 import { mockMiddlewareFactory } from '@rosen-ui/swr-helpers';
 import { SWRConfig } from 'swr';

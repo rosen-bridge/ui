@@ -1,17 +1,18 @@
-import { Route } from 'next';
+import { type PropsWithChildren, useMemo } from 'react';
+
+import type { Route } from 'next';
 import NextImage from 'next/image';
 import NextLink from 'next/link';
-import { PropsWithChildren, useMemo } from 'react';
 
 import * as AllIcons from '@rosen-bridge/icons';
-import { TokenMap } from '@rosen-bridge/tokens';
+import type { TokenMap } from '@rosen-bridge/tokens';
 import {
-  ConfigProvider,
   type ConfigContextType,
+  ConfigProvider,
   type DefaultColor,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
-import { Network } from '@rosen-ui/types';
+import type { Network } from '@rosen-ui/types';
 
 import { Actions } from './app/(main)/Actions';
 import { useTokenMap } from './hooks';
@@ -67,8 +68,7 @@ const getUiKitConfig: (tokenMap: TokenMap) => ConfigContextType = (
     },
     Link: {
       defaultProps: {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        as: NextLink as any,
+        as: NextLink,
       },
     },
     Network: {
@@ -98,20 +98,17 @@ const getUiKitConfig: (tokenMap: TokenMap) => ConfigContextType = (
     Token: {
       defaultProps: {
         tokens: Object.fromEntries(
-          tokenMap
-            .getConfig()
-            .map((tokens) =>
-              Object.entries(tokens).map(([, token]) => [
-                token.tokenId,
-                {
-                  label: token.name,
-                  logo: AllIcons.TOKENS[
-                    tokens.ergo.tokenId as keyof (typeof AllIcons)['TOKENS']
-                  ],
-                },
-              ]),
-            )
-            .flat(1),
+          tokenMap.getConfig().flatMap((tokens) =>
+            Object.entries(tokens).map(([, token]) => [
+              token.tokenId,
+              {
+                label: token.name,
+                logo: AllIcons.TOKENS[
+                  tokens.ergo.tokenId as keyof (typeof AllIcons)['TOKENS']
+                ],
+              },
+            ]),
+          ),
         ),
       },
     },

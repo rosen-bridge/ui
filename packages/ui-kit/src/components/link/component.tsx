@@ -1,16 +1,15 @@
 import { useMemo } from 'react';
 
 import { useConfig } from '@/hooks';
-import { Color, ElementBaseProps, OverridableType } from '@/types';
+import type { Color, ElementBaseProps, OverridableType } from '@/types';
 import { toCSSColor } from '@/utils';
 
 import './styles.css';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface LinkOverrides {}
 
 export type LinkOwnProps = {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // biome-ignore lint/suspicious/noExplicitAny: Use a better type
   as?: any;
   color?: Color;
   underline?: 'always' | 'hover' | 'none';

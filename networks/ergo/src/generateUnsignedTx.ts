@@ -1,12 +1,12 @@
 import { ErgoBoxSelection } from '@rosen-bridge/ergo-box-selection';
-import { TokenMap, RosenChainToken } from '@rosen-bridge/tokens';
+import type { RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
 import { handleUncoveredAssets } from '@rosen-network/base';
 import { NETWORKS } from '@rosen-ui/constants';
-import { Network, RosenAmountValue } from '@rosen-ui/types';
+import type { Network, RosenAmountValue } from '@rosen-ui/types';
 import * as wasm from 'ergo-lib-wasm-nodejs';
 
 import { fee, minBoxValue } from './constants';
-import { AssetBalance, ErgoBoxProxy, UnsignedErgoTxProxy } from './types';
+import type { AssetBalance, ErgoBoxProxy, UnsignedErgoTxProxy } from './types';
 import { unsignedTransactionToProxy } from './unsignedTransactionToProxy';
 import { createChangeBox, createLockBox, getHeight } from './utils';
 

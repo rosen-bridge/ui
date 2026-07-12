@@ -1,2 +1,2 @@
-export { Menu } from '@mui/material';
 export type { MenuProps } from '@mui/material';
+export { Menu } from '@mui/material';

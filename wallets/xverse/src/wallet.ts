@@ -1,8 +1,8 @@
-import { RosenChainToken } from '@rosen-bridge/tokens';
-import { BitcoinRunesNetwork } from '@rosen-network/bitcoin-runes/dist/client';
+import type { RosenChainToken } from '@rosen-bridge/tokens';
 import { BitcoinNetwork } from '@rosen-network/bitcoin/dist/client';
+import { BitcoinRunesNetwork } from '@rosen-network/bitcoin-runes/dist/client';
 import { NETWORKS } from '@rosen-ui/constants';
-import { Network } from '@rosen-ui/types';
+import type { Network } from '@rosen-ui/types';
 import {
   NonNativeSegWitAddressError,
   NonTaprootAddressError,
@@ -10,12 +10,12 @@ import {
   UnsupportedChainError,
   UserDeniedTransactionSignatureError,
   Wallet,
-  WalletTransferParams,
+  type WalletTransferParams,
 } from '@rosen-ui/wallet-api';
 import type { request as Request } from 'sats-connect';
 
 import { ICON } from './icon';
-import { AddressPurpose, XverseWalletConfig } from './types';
+import { AddressPurpose, type XverseWalletConfig } from './types';
 
 const request: typeof Request = (...props) => {
   /**
@@ -71,14 +71,14 @@ export class XverseWallet extends Wallet<XverseWalletConfig> {
     switch (this.currentChain) {
       case 'bitcoin':
         return await this.findAddress(AddressPurpose.Payment).then(
-          (address) => address.address,
+          (address) => address?.address,
         );
       case 'bitcoin-runes':
         await this.findAddress(AddressPurpose.Payment).then(
-          (address) => address.address,
+          (address) => address?.address,
         );
         return await this.findAddress(AddressPurpose.Ordinals).then(
-          (address) => address.address,
+          (address) => address?.address,
         );
     }
   };
@@ -88,7 +88,7 @@ export class XverseWallet extends Wallet<XverseWalletConfig> {
       purposes: [purpose],
     });
 
-    if (response.status == 'error') throw response.error;
+    if (response.status === 'error') throw response.error;
 
     const address = response.result.addresses.find(
       (address) => address.purpose === purpose,
@@ -96,8 +96,7 @@ export class XverseWallet extends Wallet<XverseWalletConfig> {
 
     switch (purpose) {
       case AddressPurpose.Ordinals: {
-        const isNonTaproot =
-          !address || !address.address.toLowerCase().startsWith('bc1p');
+        const isNonTaproot = !address?.address.toLowerCase().startsWith('bc1p');
 
         if (isNonTaproot) {
           throw new NonTaprootAddressError(this.name);
@@ -106,8 +105,9 @@ export class XverseWallet extends Wallet<XverseWalletConfig> {
         break;
       }
       case AddressPurpose.Payment: {
-        const isNonNativeSegWit =
-          !address || !address.address.toLowerCase().startsWith('bc1q');
+        const isNonNativeSegWit = !address?.address
+          .toLowerCase()
+          .startsWith('bc1q');
 
         if (isNonNativeSegWit) {
           throw new NonNativeSegWitAddressError(this.name);
@@ -154,7 +154,7 @@ export class XverseWallet extends Wallet<XverseWalletConfig> {
     const response = await request('getAddresses', {
       purposes: this.purposes,
     });
-    return response.status == 'success';
+    return response.status === 'success';
   };
 
   performSwitchChain = async (chain: Network): Promise<void> => {
@@ -178,15 +178,15 @@ export class XverseWallet extends Wallet<XverseWalletConfig> {
       params.bridgeFee.toString(),
     );
 
-    let signedPsbtBase64;
+    let signedPsbtBase64: string;
 
     if (this.currentNetwork instanceof BitcoinRunesNetwork) {
-      const { publicKey: userPublicKey } = await this.findAddress(
+      const { publicKey: userPublicKey } = (await this.findAddress(
         AddressPurpose.Ordinals,
-      );
-      const { address: userPaymentAddress } = await this.findAddress(
+      ))!;
+      const { address: userPaymentAddress } = (await this.findAddress(
         AddressPurpose.Payment,
-      );
+      ))!;
 
       const { psbt, signInputs } = await this.currentNetwork.generateUnsignedTx(
         params.lockAddress,

@@ -1,13 +1,11 @@
 import { Link } from '@/components';
 import { useConfig } from '@/hooks';
-import { ElementBaseProps, OverridableType } from '@/types';
+import type { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.css';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface ActionOverrides {}
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export type ActionOwnProps = {};
 
 type ActionAsAnchor = ElementBaseProps<
@@ -31,10 +29,10 @@ export const Action = (props: ActionProps) => {
 
   const isLink = 'href' in rest;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // biome-ignore lint/suspicious/noExplicitAny: Use a better type
   const Component = (isLink ? Link : 'button') as any;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // biome-ignore lint/suspicious/noExplicitAny: Use a better type
   const next = { ...rest } as any;
 
   if (isLink) {

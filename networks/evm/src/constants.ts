@@ -1,4 +1,4 @@
-import { InterfaceAbi } from 'ethers';
+import type { InterfaceAbi } from 'ethers';
 
 export const NATIVE_TOKEN_TRANSFER_GAS = 21000n;
 

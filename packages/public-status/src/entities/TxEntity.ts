@@ -5,7 +5,7 @@ import {
   PrimaryColumn,
 } from '@rosen-bridge/extended-typeorm';
 
-import { TxType } from '../constants';
+import type { TxType } from '../constants';
 import { AggregatedStatusChangedEntity } from './AggregatedStatusChangedEntity';
 import { AggregatedStatusEntity } from './AggregatedStatusEntity';
 import { GuardStatusChangedEntity } from './GuardStatusChangedEntity';
@@ -28,15 +28,27 @@ export class TxEntity {
   @Column('varchar')
   txType: TxType;
 
-  @OneToMany(() => AggregatedStatusEntity, (record) => record.tx)
+  @OneToMany(
+    () => AggregatedStatusEntity,
+    (record) => record.tx,
+  )
   aggregatedStatusRecords?: Promise<AggregatedStatusEntity[]>;
 
-  @OneToMany(() => AggregatedStatusChangedEntity, (record) => record.tx)
+  @OneToMany(
+    () => AggregatedStatusChangedEntity,
+    (record) => record.tx,
+  )
   aggregatedStatusChangedRecords?: Promise<AggregatedStatusChangedEntity[]>;
 
-  @OneToMany(() => GuardStatusEntity, (record) => record.tx)
+  @OneToMany(
+    () => GuardStatusEntity,
+    (record) => record.tx,
+  )
   guardStatusRecords?: Promise<GuardStatusEntity[]>;
 
-  @OneToMany(() => GuardStatusChangedEntity, (record) => record.tx)
+  @OneToMany(
+    () => GuardStatusChangedEntity,
+    (record) => record.tx,
+  )
   guardStatusChangedRecords?: Promise<GuardStatusChangedEntity[]>;
 }

@@ -7,7 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from '@rosen-bridge/extended-typeorm';
 
-import { EventStatus, TxStatus } from '../constants';
+import type { EventStatus, TxStatus } from '../constants';
 import { TxEntity } from './TxEntity';
 
 @Entity('guard_status_changed_entity')
@@ -33,11 +33,15 @@ export class GuardStatusChangedEntity {
   @Column('varchar')
   status: EventStatus;
 
-  @ManyToOne(() => TxEntity, (tx) => tx.guardStatusChangedRecords, {
-    cascade: false,
-    nullable: true,
-    eager: true,
-  })
+  @ManyToOne(
+    () => TxEntity,
+    (tx) => tx.guardStatusChangedRecords,
+    {
+      cascade: false,
+      nullable: true,
+      eager: true,
+    },
+  )
   @JoinColumn([
     { name: 'txId', referencedColumnName: 'txId' },
     { name: 'txChain', referencedColumnName: 'chain' },

@@ -1,6 +1,6 @@
 import { useMediaQuery } from '@mui/material';
 
-import { Breakpoint } from '@/types';
+import type { Breakpoint } from '@/types';
 
 import { useTheme } from './useTheme';
 
@@ -22,9 +22,9 @@ export const useBreakpoint = (breakpoint: BreakpointQuery) => {
     args.push(keys[2]);
   }
 
-  let action = keys[1] == 'to' ? 'between' : keys[1] || 'only';
+  let action = keys[1] === 'to' ? 'between' : keys[1] || 'only';
 
-  if (breakpoint == 'mobile-down' || breakpoint == 'desktop-up') {
+  if (breakpoint === 'mobile-down' || breakpoint === 'desktop-up') {
     action = 'only';
   }
 
