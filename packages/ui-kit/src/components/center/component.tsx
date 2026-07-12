@@ -3,7 +3,6 @@ import type { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.css';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface CenterOverrides {}
 
 export type CenterOwnProps = {

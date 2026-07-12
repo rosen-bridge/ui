@@ -8,7 +8,6 @@ import { Dialog } from '../dialog';
 import { DialogContent } from '../dialogContent';
 import { DialogFooter } from '../dialogFooter';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface QrCodeDialogOverrides {}
 
 export type QrCodeDialogOwnProps = {

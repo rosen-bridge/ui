@@ -6,10 +6,8 @@ import { ApiKeyDialog, Button } from '@/components';
 import { useApiKey, useConfig } from '@/hooks';
 import type { ElementBaseProps, OverridableType } from '@/types';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface ApiKeyDialogWarningOverrides {}
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export type ApiKeyDialogWarningOwnProps = {};
 
 export type ApiKeyDialogWarningBaseProps = ElementBaseProps<
@@ -43,8 +41,8 @@ export const ApiKeyDialogWarning = (props: ApiKeyDialogWarningProps) => {
         severity="warning"
         sx={{
           '@container (max-width: 480px)': {
-            'display': 'grid',
-            'gridTemplateColumns': 'auto 1fr',
+            display: 'grid',
+            gridTemplateColumns: 'auto 1fr',
             '.MuiAlert-action': {
               gridColumn: '2',
               gridRow: '2',

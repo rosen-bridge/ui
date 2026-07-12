@@ -6,7 +6,6 @@ import type { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.css';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface TabsTabOverrides {}
 
 export type TabsTabOwnProps = {
@@ -51,7 +50,6 @@ export const TabsTab = (props: TabsTabProps) => {
       nativeButton={!rest.href}
       {...rest}
       value={rest.href ?? value}
-      // eslint-disable-next-line @typescript-eslint/no-empty-object-type
       render={(props: {}) => (
         <Action {...props} {...rest}>
           {icon && <Icon name={icon} size="small" {...slots?.icon} />}

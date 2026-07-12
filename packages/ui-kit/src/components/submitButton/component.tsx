@@ -4,10 +4,8 @@ import { Button } from '@/components';
 import { useConfig, useResponsive } from '@/hooks';
 import type { ElementBaseProps, OverridableType } from '@/types';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface SubmitButtonOverrides {}
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export type SubmitButtonOwnProps = {};
 
 export type SubmitButtonBaseProps = ElementBaseProps<

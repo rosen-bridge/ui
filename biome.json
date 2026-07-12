@@ -87,6 +87,16 @@
           }
         }
       }
+    },
+    {
+      "includes": ["packages/ui-kit/**/*"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noEmptyInterface": "off"
+          }
+        }
+      }
     }
   ]
 }

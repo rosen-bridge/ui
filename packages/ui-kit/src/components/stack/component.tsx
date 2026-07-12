@@ -21,7 +21,6 @@ const JUSTIFY_MAP: Record<NonNullable<StackBaseProps['justify']>, string> = {
   start: 'flex-start',
 };
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface StackOverrides {}
 
 export type StackOwnProps = {

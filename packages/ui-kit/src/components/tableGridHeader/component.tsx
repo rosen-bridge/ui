@@ -5,10 +5,8 @@ import type { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.css';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface TableGridHeaderOverrides {}
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export type TableGridHeaderOwnProps = {};
 
 export type TableGridHeaderBaseProps = ElementBaseProps<

@@ -3,10 +3,8 @@ import type { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.css';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface CardHeaderOverrides {}
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export type CardHeaderOwnProps = {};
 
 export type CardHeaderBaseProps = ElementBaseProps<'div', CardHeaderOwnProps>;

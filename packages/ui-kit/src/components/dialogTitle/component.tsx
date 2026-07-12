@@ -2,7 +2,6 @@ import { Typography, type TypographyProps } from '@/components';
 import { useConfig } from '@/hooks';
 import type { ElementBaseProps, OverridableType } from '@/types';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface DialogTitleOverrides {}
 
 export type DialogTitleOwnProps = TypographyProps & {};

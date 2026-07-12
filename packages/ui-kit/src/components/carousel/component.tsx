@@ -4,10 +4,8 @@ import type { ElementBaseProps, OverridableType } from '@/types';
 import { useCarousel } from './hook';
 import './styles.css';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface CarouselOverrides {}
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export type CarouselOwnProps = {};
 
 export type CarouselBaseProps = ElementBaseProps<'div', CarouselOwnProps>;

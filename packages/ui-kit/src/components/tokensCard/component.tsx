@@ -13,7 +13,6 @@ import {
 import { useConfig } from '@/hooks';
 import type { ElementBaseProps, OverridableType } from '@/types';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface TokensCardOverrides {}
 
 export type TokensCardOwnProps = {

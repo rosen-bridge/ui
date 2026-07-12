@@ -6,7 +6,6 @@ import type { ElementBaseProps, OverridableType } from '@/types';
 
 import { STATUS_MAP } from './constants';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface EventStatusOverrides {}
 
 export type EventStatusMeta = {

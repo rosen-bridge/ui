@@ -20,10 +20,8 @@ import { DialogFooter } from '../dialogFooter';
 import { DialogHeader } from '../dialogHeader';
 import { DialogTitle } from '../dialogTitle';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface ApiKeyDialogOverrides {}
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export type ApiKeyDialogOwnProps = {};
 
 export type ApiKeyDialogBaseProps = ElementBaseProps<

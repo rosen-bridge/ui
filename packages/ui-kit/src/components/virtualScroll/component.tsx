@@ -4,10 +4,8 @@ import type { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.css';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface VirtualScrollOverrides {}
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export type VirtualScrollOwnProps = {};
 
 export type VirtualScrollBaseProps = ElementBaseProps<

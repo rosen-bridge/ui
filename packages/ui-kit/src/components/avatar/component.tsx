@@ -7,7 +7,6 @@ import { useConfig } from '@/hooks';
 import type { Color, ElementBaseProps, OverridableType } from '@/types';
 import { toCSSColor } from '@/utils';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface AvatarOverrides {}
 
 export type AvatarOwnProps = {
