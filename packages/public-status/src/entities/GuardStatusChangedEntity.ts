@@ -33,15 +33,11 @@ export class GuardStatusChangedEntity {
   @Column('varchar')
   status: EventStatus;
 
-  @ManyToOne(
-    () => TxEntity,
-    (tx) => tx.guardStatusChangedRecords,
-    {
-      cascade: false,
-      nullable: true,
-      eager: true,
-    },
-  )
+  @ManyToOne(() => TxEntity, (tx) => tx.guardStatusChangedRecords, {
+    cascade: false,
+    nullable: true,
+    eager: true,
+  })
   @JoinColumn([
     { name: 'txId', referencedColumnName: 'txId' },
     { name: 'txChain', referencedColumnName: 'chain' },

@@ -15,7 +15,7 @@
   }
 }
 
-[data-theme="light"] .RosenCubeNetBackground {
+[data-theme='light'] .RosenCubeNetBackground {
   background-image: linear-gradient(
     180deg,
     var(--rosen-palette-primary-light),

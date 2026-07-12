@@ -2,6 +2,6 @@
   display: grid;
 }
 
-.RosenTableGrid[data-variant="separated"] {
+.RosenTableGrid[data-variant='separated'] {
   row-gap: var(--rosen-spacing);
 }

@@ -3,13 +3,13 @@
   justify-content: flex-start;
 }
 
-.RosenLabel[data-orientation="horizontal"] {
+.RosenLabel[data-orientation='horizontal'] {
   flex-direction: row;
   align-items: center;
   gap: calc(var(--rosen-spacing) * 2);
 }
 
-.RosenLabel[data-orientation="vertical"] {
+.RosenLabel[data-orientation='vertical'] {
   flex-direction: column;
   align-items: flex-start;
   gap: 0;
@@ -21,23 +21,23 @@
   gap: calc(var(--rosen-spacing) * 1);
 }
 
-.RosenLabel[data-dense="false"] {
+.RosenLabel[data-dense='false'] {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-.RosenLabel[data-dense="true"] {
+.RosenLabel[data-dense='true'] {
   padding-top: 0;
   padding-bottom: 0;
 }
 
-.RosenLabel[data-inset="true"] .RosenLabel-header {
+.RosenLabel[data-inset='true'] .RosenLabel-header {
   position: relative;
   padding-left: 24px;
 }
 
-.RosenLabel[data-inset="true"] .RosenLabel-header::before {
-  content: "";
+.RosenLabel[data-inset='true'] .RosenLabel-header::before {
+  content: '';
   position: absolute;
   left: 0;
   top: 0;
@@ -61,14 +61,14 @@
   max-width: 100%;
 }
 
-.RosenLabel[data-orientation="horizontal"] .RosenLabel-content {
+.RosenLabel[data-orientation='horizontal'] .RosenLabel-content {
   height: unset;
   flex-grow: 1;
   align-self: center;
   justify-content: end;
 }
 
-.RosenLabel[data-orientation="vertical"] .RosenLabel-content {
+.RosenLabel[data-orientation='vertical'] .RosenLabel-content {
   height: 2em;
   flex-grow: 0;
   align-self: stretch;

@@ -30,8 +30,13 @@
   "javascript": {
     "formatter": {
       "quoteStyle": "single",
-      "quoteProperties": "asNeeded",
+      "quoteProperties": "preserve",
       "trailingCommas": "all"
+    }
+  },
+  "css": {
+    "formatter": {
+      "quoteStyle": "single"
     }
   },
   "assist": {

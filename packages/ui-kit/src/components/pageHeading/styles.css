@@ -7,7 +7,7 @@
   margin-bottom: calc(var(--rosen-spacing) * 4);
 }
 
-.RosenApp[data-orientation="vertical"] .RosenPageHeading {
+.RosenApp[data-orientation='vertical'] .RosenPageHeading {
   justify-content: center;
   margin-bottom: calc(var(--rosen-spacing) * 2);
 }

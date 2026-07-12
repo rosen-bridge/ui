@@ -1,6 +1,6 @@
 import type { RosenChainToken } from '@rosen-bridge/tokens';
-import { BitcoinNetwork } from '@rosen-network/bitcoin/dist/client';
 import { BitcoinRunesNetwork } from '@rosen-network/bitcoin-runes/dist/client';
+import { BitcoinNetwork } from '@rosen-network/bitcoin/dist/client';
 import { NETWORKS } from '@rosen-ui/constants';
 import type { Network } from '@rosen-ui/types';
 import {

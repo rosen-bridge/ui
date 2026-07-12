@@ -32,15 +32,11 @@ export class AggregatedStatusChangedEntity {
   @Column('varchar', { nullable: true })
   txStatus: AggregateTxStatus | null;
 
-  @ManyToOne(
-    () => TxEntity,
-    (tx) => tx.aggregatedStatusChangedRecords,
-    {
-      cascade: false,
-      nullable: true,
-      eager: true,
-    },
-  )
+  @ManyToOne(() => TxEntity, (tx) => tx.aggregatedStatusChangedRecords, {
+    cascade: false,
+    nullable: true,
+    eager: true,
+  })
   @JoinColumn([
     { name: 'txId', referencedColumnName: 'txId' },
     { name: 'txChain', referencedColumnName: 'chain' },

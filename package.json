@@ -12,6 +12,7 @@
     "build:mono-packages": "./build.sh",
     "coverage": "npm run coverage --workspaces",
     "postinstall": "patch-package",
+    "lint1": "npm run lint --workspaces",
     "lint": "biome check --write --max-diagnostics 1000",
     "lint:check": "npm run lint:check --workspaces",
     "prepare": "husky install",

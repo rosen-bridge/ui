@@ -7,6 +7,6 @@
   gap: 0.5em;
 }
 
-.RosenNetwork[data-variant="reverse"] {
+.RosenNetwork[data-variant='reverse'] {
   flex-direction: row-reverse;
 }

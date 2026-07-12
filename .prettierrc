@@ -3,7 +3,9 @@
   "quoteProps": "consistent",
   "importOrder": [
     "^\\./bootstrap$",
-    "^(@?react|@?next)",
+    "^node",
+    "^(@?react)",
+    "^(@?next)",
     "<THIRD_PARTY_MODULES>",
     "^@/(.*)$",
     "^[.](.*)"

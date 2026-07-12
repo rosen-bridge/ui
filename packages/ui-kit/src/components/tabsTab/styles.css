@@ -1,10 +1,10 @@
 .RosenTabsTab {
-  &[data-icon-position="start"] {
+  &[data-icon-position='start'] {
     flex-direction: row;
     justify-content: flex-start;
   }
 
-  &[data-icon-position="top"] {
+  &[data-icon-position='top'] {
     flex-direction: column;
     justify-content: center;
   }

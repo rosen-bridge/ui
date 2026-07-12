@@ -84,64 +84,64 @@ export { default as Ethereum } from './networks/ethereum.svg?react';
 export { default as Firo } from './networks/firo.svg?react';
 
 export const TOKENS = {
-  fcfca7654fb0da57ecf9a3f489bcbeb1d43b56dce7e73b352f7bc6f2561d2a1b: new URL(
+  'fcfca7654fb0da57ecf9a3f489bcbeb1d43b56dce7e73b352f7bc6f2561d2a1b': new URL(
     /* @vite-ignore */ 'tokens/fcfca7654fb0da57ecf9a3f489bcbeb1d43b56dce7e73b352f7bc6f2561d2a1b.svg',
     import.meta.url,
   ).href,
-  fa8fd58c4ad2203dace0d517226da72facf1421c6bae1935d591b526316a7af9: new URL(
+  'fa8fd58c4ad2203dace0d517226da72facf1421c6bae1935d591b526316a7af9': new URL(
     /* @vite-ignore */ 'tokens/fa8fd58c4ad2203dace0d517226da72facf1421c6bae1935d591b526316a7af9.svg',
     import.meta.url,
   ).href,
-  f31bfeaa68564b49775eface452f831d9f60b4567837bbeb909c6401e0a19485: new URL(
+  'f31bfeaa68564b49775eface452f831d9f60b4567837bbeb909c6401e0a19485': new URL(
     /* @vite-ignore */ 'tokens/f31bfeaa68564b49775eface452f831d9f60b4567837bbeb909c6401e0a19485.svg',
     import.meta.url,
   ).href,
-  f0d5bdf474fcbd4249608e6dc6e9cf34a327b218f66445ea545b4c711b4676e3: new URL(
+  'f0d5bdf474fcbd4249608e6dc6e9cf34a327b218f66445ea545b4c711b4676e3': new URL(
     /* @vite-ignore */ 'tokens/f0d5bdf474fcbd4249608e6dc6e9cf34a327b218f66445ea545b4c711b4676e3.png',
     import.meta.url,
   ).href,
-  erg: new URL(/* @vite-ignore */ 'tokens/erg.svg', import.meta.url).href,
-  eeb17283c641d1c74c1d44b1dee7509766350ec31ca954c420ddd788bff8f412: new URL(
+  'erg': new URL(/* @vite-ignore */ 'tokens/erg.svg', import.meta.url).href,
+  'eeb17283c641d1c74c1d44b1dee7509766350ec31ca954c420ddd788bff8f412': new URL(
     /* @vite-ignore */ 'tokens/eeb17283c641d1c74c1d44b1dee7509766350ec31ca954c420ddd788bff8f412.png',
     import.meta.url,
   ).href,
-  e023c5f382b6e96fbd878f6811aac73345489032157ad5affb84aefd4956c297: new URL(
+  'e023c5f382b6e96fbd878f6811aac73345489032157ad5affb84aefd4956c297': new URL(
     /* @vite-ignore */ 'tokens/e023c5f382b6e96fbd878f6811aac73345489032157ad5affb84aefd4956c297.svg',
     import.meta.url,
   ).href,
-  da754307c5823cf39e098414919b3fac8821f4aa0c909fac474742942878dc1c: new URL(
+  'da754307c5823cf39e098414919b3fac8821f4aa0c909fac474742942878dc1c': new URL(
     /* @vite-ignore */ 'tokens/da754307c5823cf39e098414919b3fac8821f4aa0c909fac474742942878dc1c.svg',
     import.meta.url,
   ).href,
-  d1dcfca3330bc884298c7111a9ef1e7b2970ab0c1d11bbcbacf31d319f0c2d55: new URL(
+  'd1dcfca3330bc884298c7111a9ef1e7b2970ab0c1d11bbcbacf31d319f0c2d55': new URL(
     /* @vite-ignore */ 'tokens/d1dcfca3330bc884298c7111a9ef1e7b2970ab0c1d11bbcbacf31d319f0c2d55.png',
     import.meta.url,
   ).href,
-  c15a8e1ff8c60e1cd280d9c5b4daa0e92292da06919c2496c27374f9507da65d: new URL(
+  'c15a8e1ff8c60e1cd280d9c5b4daa0e92292da06919c2496c27374f9507da65d': new URL(
     /* @vite-ignore */ 'tokens/c15a8e1ff8c60e1cd280d9c5b4daa0e92292da06919c2496c27374f9507da65d.svg',
     import.meta.url,
   ).href,
-  b780a9682ba1ea68eedfe3dd00169e414ea8968d96142ee95e2391d64df05c3d: new URL(
+  'b780a9682ba1ea68eedfe3dd00169e414ea8968d96142ee95e2391d64df05c3d': new URL(
     /* @vite-ignore */ 'tokens/b780a9682ba1ea68eedfe3dd00169e414ea8968d96142ee95e2391d64df05c3d.svg',
     import.meta.url,
   ).href,
-  b2bb4d99ffd6f73c06a4ca1fe9fadd1ad4a20b5b9052373e3cee5ddeb4534e27: new URL(
+  'b2bb4d99ffd6f73c06a4ca1fe9fadd1ad4a20b5b9052373e3cee5ddeb4534e27': new URL(
     /* @vite-ignore */ 'tokens/b2bb4d99ffd6f73c06a4ca1fe9fadd1ad4a20b5b9052373e3cee5ddeb4534e27.svg',
     import.meta.url,
   ).href,
-  b0b312cde931c8bbdac0dac5bfd8e2c03bf4611275dc967988c8d15bd5ec20e0: new URL(
+  'b0b312cde931c8bbdac0dac5bfd8e2c03bf4611275dc967988c8d15bd5ec20e0': new URL(
     /* @vite-ignore */ 'tokens/b0b312cde931c8bbdac0dac5bfd8e2c03bf4611275dc967988c8d15bd5ec20e0.png',
     import.meta.url,
   ).href,
-  a55b8735ed1a99e46c2c89f8994aacdf4b1109bdcf682f1e5b34479c6e392669: new URL(
+  'a55b8735ed1a99e46c2c89f8994aacdf4b1109bdcf682f1e5b34479c6e392669': new URL(
     /* @vite-ignore */ 'tokens/a55b8735ed1a99e46c2c89f8994aacdf4b1109bdcf682f1e5b34479c6e392669.svg',
     import.meta.url,
   ).href,
-  a50d95830f150f8ffb5da1a65e2313b1269807a855e30cd2f0b3fbaee0a47386: new URL(
+  'a50d95830f150f8ffb5da1a65e2313b1269807a855e30cd2f0b3fbaee0a47386': new URL(
     /* @vite-ignore */ 'tokens/a50d95830f150f8ffb5da1a65e2313b1269807a855e30cd2f0b3fbaee0a47386.svg',
     import.meta.url,
   ).href,
-  a01cb7b8ab08dec2e191b3ba58165a88a510d0f310dff5d81eb8e62e4ea6ab20: new URL(
+  'a01cb7b8ab08dec2e191b3ba58165a88a510d0f310dff5d81eb8e62e4ea6ab20': new URL(
     /* @vite-ignore */ 'tokens/a01cb7b8ab08dec2e191b3ba58165a88a510d0f310dff5d81eb8e62e4ea6ab20.svg',
     import.meta.url,
   ).href,

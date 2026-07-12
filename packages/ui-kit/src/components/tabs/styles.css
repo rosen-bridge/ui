@@ -1,11 +1,11 @@
 .RosenTabs {
   display: flex;
 
-  &[data-orientation="horizontal"] {
+  &[data-orientation='horizontal'] {
     flex-direction: column;
   }
 
-  &[data-orientation="vertical"] {
+  &[data-orientation='vertical'] {
     flex-direction: row;
   }
 }
