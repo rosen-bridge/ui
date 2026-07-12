@@ -27,6 +27,7 @@
         "noUnusedVariables": "error"
       },
       "suspicious": {
+        "noExplicitAny": "error",
         "useIterableCallbackReturn": "off"
       }
     }

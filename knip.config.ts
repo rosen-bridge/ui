@@ -25,10 +25,8 @@ const config: KnipConfig = {
   ignore: ['**/node_modules/', '**/dist/', '**/.next/'],
   ignoreDependencies: [
     '@mui/material',
-    '@next/eslint-plugin-next',
     '@types/moment',
     '@vitest/runner',
-    'eslint-config-next',
     'pg',
   ],
 };
