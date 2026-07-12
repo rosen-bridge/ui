@@ -104,12 +104,12 @@ export class MetaMaskWallet extends Wallet<MetaMaskWalletConfig> {
 
   fetchBalance = async (
     token: RosenChainToken,
-  ): Promise<string | undefined> => {
+  ): Promise<string | undefined | null> => {
     const { BrowserProvider, Contract } = await import('ethers');
 
     const address = await this.getAddress();
 
-    let amount;
+    let amount: string | undefined | null;
 
     if (token.type === 'native') {
       amount = await this.provider.request<string>({

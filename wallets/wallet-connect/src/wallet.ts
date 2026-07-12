@@ -204,7 +204,7 @@ export class WalletConnect<
   };
 
   performSwitchChain = async (chain: Network): Promise<void> => {
-    if (this.modal.getChainId() == Number(NETWORKS[chain].id)) {
+    if (this.modal.getChainId() === Number(NETWORKS[chain].id)) {
       return;
     }
 

@@ -12,11 +12,12 @@ import {
   WalletProvider,
 } from '@/hooks';
 
-import { BridgeForm } from './BridgeForm';
-import './page.css';
+import { BridgeForm as BridgeFormComponent } from './BridgeForm';
 import { SubmitButton } from './SubmitButton';
 import { TransactionInfo } from './TransactionInfo';
 import { WalletInfo } from './WalletInfo';
+
+import './page.css';
 
 export interface BridgeForm {
   source: string | null;
@@ -46,7 +47,7 @@ const RosenBridge = () => {
             <TransactionFeesProvider>
               <div className="rosen-bridge-page-main">
                 <div className="rosen-bridge-page-form">
-                  <BridgeForm />
+                  <BridgeFormComponent />
                 </div>
                 <div className="rosen-bridge-page-info">
                   <WalletInfo />

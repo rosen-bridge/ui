@@ -267,6 +267,8 @@ export const SmartSearch = ({
   );
 
   useEffect(() => {
+    void current;
+
     setQuery('');
   }, [current]);
 

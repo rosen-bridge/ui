@@ -29,7 +29,12 @@ export const generateTxParameters =
       NETWORKS[fromChain].key,
     ).amount;
 
-    let transactionParameters;
+    let transactionParameters: {
+      to: string;
+      from: string;
+      data: string;
+      value?: string;
+    };
     if (token.type === 'native') {
       transactionParameters = {
         to: lockAddress,

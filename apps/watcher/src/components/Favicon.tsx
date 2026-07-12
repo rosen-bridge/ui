@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 
-import { Icon, type IconProps, useTheme } from '@rosen-bridge/ui-kit';
+import { Icon, type IconProps } from '@rosen-bridge/ui-kit';
 import { upperFirst } from 'lodash-es';
 
 import { useInfo } from '@/hooks';
@@ -9,8 +9,6 @@ export const Favicon = () => {
   const ref = useRef<SVGSVGElement>(null);
 
   const { data } = useInfo();
-
-  const theme = useTheme();
 
   /**
    * TODO: In the next phase, refactor this React hook to utilize SSR and data fetching
@@ -40,7 +38,7 @@ export const Favicon = () => {
       URL.revokeObjectURL(url);
       document.head.removeChild(link);
     };
-  }, [data, theme.palette.mode]);
+  }, [data]);
 
   return (
     <Icon

@@ -48,7 +48,7 @@ export abstract class Wallet<Config extends WalletConfig = WalletConfig> {
   abstract fetchAddress: () => Promise<string | undefined>;
   abstract fetchBalance: (
     token: RosenChainToken,
-  ) => Promise<bigint | number | string | undefined>;
+  ) => Promise<bigint | number | string | undefined | null>;
   abstract isAvailable: () => boolean;
   abstract performTransfer: (params: WalletTransferParams) => Promise<string>;
   transfer = async (params: WalletTransferParams): Promise<string> => {
@@ -146,7 +146,7 @@ export abstract class Wallet<Config extends WalletConfig = WalletConfig> {
 
     await this.requireConnection();
 
-    let raw: bigint | number | string | undefined;
+    let raw: bigint | number | string | undefined | null;
 
     try {
       raw = await this.fetchBalance(token);

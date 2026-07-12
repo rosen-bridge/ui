@@ -165,6 +165,9 @@ export const Picker = ({
   );
 
   useEffect(() => {
+    void open;
+    void query;
+
     setIndexSelected(-1);
   }, [open, query]);
 

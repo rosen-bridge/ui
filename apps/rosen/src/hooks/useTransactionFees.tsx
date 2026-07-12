@@ -193,6 +193,10 @@ export const TransactionFeesProvider = ({ children }: PropsWithChildren) => {
   }, [feesInfo, tokenId, load]);
 
   useEffect(() => {
+    void sourceValue;
+    void targetValue;
+    void tokenValue;
+
     setFeesInfo(undefined);
   }, [sourceValue, targetValue, tokenValue]);
 

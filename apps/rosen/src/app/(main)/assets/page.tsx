@@ -149,6 +149,10 @@ const Assets = () => {
   }, [collection.setFragment, current?.id]);
 
   useEffect(() => {
+    void collection.sort;
+    void collection.fields;
+    void collection.pageIndex;
+
     setCurrent(undefined);
   }, [collection.sort, collection.fields, collection.pageIndex]);
 

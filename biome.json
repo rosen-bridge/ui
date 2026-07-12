@@ -7,7 +7,7 @@
   },
   "files": {
     "ignoreUnknown": false,
-    "includes": ["**", "**/.next/*", "**/dist/*", "**/out/*"]
+    "includes": ["**", "!**/.next/**/*", "!**/dist/**/*", "!**/out/**/*"]
   },
   "formatter": {
     "enabled": true,
@@ -21,6 +21,10 @@
       "preset": "recommended",
       "a11y": {
         "noSvgWithoutTitle": "off"
+      },
+      "correctness": {
+        "noUnusedImports": "error",
+        "noUnusedVariables": "error"
       },
       "suspicious": {
         "useIterableCallbackReturn": "off"
@@ -80,6 +84,31 @@
   },
   "overrides": [
     {
+      "includes": ["apps/guard/**/*", "apps/rosen/**/*", "apps/watcher/**/*"],
+      "linter": {
+        "domains": {
+          "next": "recommended",
+          "react": "recommended"
+        }
+      }
+    },
+    {
+      "includes": ["packages/ui-kit/**/*"],
+      "linter": {
+        "domains": {
+          "react": "recommended"
+        },
+        "rules": {
+          "suspicious": {
+            "noEmptyInterface": "off"
+          },
+          "complexity": {
+            "noBannedTypes": "off"
+          }
+        }
+      }
+    },
+    {
       "includes": [
         "apps/rosen-service2/**/*",
         "packages/asset-calculator/**/*",
@@ -89,16 +118,6 @@
         "rules": {
           "suspicious": {
             "noDoubleEquals": "off"
-          }
-        }
-      }
-    },
-    {
-      "includes": ["packages/ui-kit/**/*"],
-      "linter": {
-        "rules": {
-          "suspicious": {
-            "noEmptyInterface": "off"
           }
         }
       }
