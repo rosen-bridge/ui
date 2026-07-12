@@ -24,10 +24,10 @@ const IconWrapper = styled('div')(({ theme }) => ({
   opacity: 0.5,
 }));
 const SearchCircle = styled('div')(({ theme }) => ({
-  position: 'relative',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
+  'position': 'relative',
+  'display': 'flex',
+  'alignItems': 'center',
+  'justifyContent': 'center',
   '& > svg': {
     width: '40px',
     height: '40px',

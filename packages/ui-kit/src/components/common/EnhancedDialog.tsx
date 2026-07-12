@@ -30,7 +30,7 @@ export const EnhancedDialog = ({
         stick
           ? {
               '& > .MuiDialog-container': {
-                alignItems: 'end',
+                'alignItems': 'end',
                 '& > .MuiPaper-root': {
                   margin: 0,
                   borderBottomRightRadius: 0,

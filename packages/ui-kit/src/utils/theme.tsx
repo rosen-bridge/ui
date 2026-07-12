@@ -204,8 +204,8 @@ export const lightThemeOptions: ThemeOptions = {
     MuiButton: {
       styleOverrides: {
         containedSecondary: ({ theme }: { theme: Theme }) => ({
-          color: theme.palette.text.primary,
-          backgroundColor: theme.palette.neutral.light,
+          'color': theme.palette.text.primary,
+          'backgroundColor': theme.palette.neutral.light,
           '&:hover': {
             backgroundColor: theme.palette.neutral.light,
           },
@@ -246,7 +246,7 @@ export const lightThemeOptions: ThemeOptions = {
       styleOverrides: {
         root: ({ theme }: { theme: Theme }) => ({
           '.MuiInputLabel-root': {
-            transform: 'translate(12px, 16px) scale(1)',
+            'transform': 'translate(12px, 16px) scale(1)',
             '&.MuiInputLabel-shrink': {
               transform: 'translate(12px, 7px) scale(0.75)',
             },
@@ -255,11 +255,11 @@ export const lightThemeOptions: ThemeOptions = {
             transform: 'translateY(8px)',
           },
           '.MuiOutlinedInput-root': {
-            overflow: 'hidden',
-            borderRadius: theme.spacing(2),
-            backgroundColor: alpha(theme.palette.background.paper, 0.75),
-            minHeight: theme.spacing(7),
-            transition: theme.transitions.create([
+            'overflow': 'hidden',
+            'borderRadius': theme.spacing(2),
+            'backgroundColor': alpha(theme.palette.background.paper, 0.75),
+            'minHeight': theme.spacing(7),
+            'transition': theme.transitions.create([
               'background-color',
               'box-shadow',
             ]),
@@ -273,7 +273,7 @@ export const lightThemeOptions: ThemeOptions = {
               backgroundColor: alpha(theme.palette.background.paper, 1.0),
             },
           },
-          fieldset: {
+          'fieldset': {
             border: 'none',
           },
         }),
@@ -282,11 +282,11 @@ export const lightThemeOptions: ThemeOptions = {
     MuiFilledInput: {
       styleOverrides: {
         root: ({ theme }: { theme: Theme }) => ({
-          overflow: 'hidden',
-          borderRadius: theme.shape.borderRadius,
-          backgroundColor: alpha(theme.palette.background.paper, 0.75),
-          minHeight: theme.spacing(7),
-          transition: theme.transitions.create([
+          'overflow': 'hidden',
+          'borderRadius': theme.shape.borderRadius,
+          'backgroundColor': alpha(theme.palette.background.paper, 0.75),
+          'minHeight': theme.spacing(7),
+          'transition': theme.transitions.create([
             'background-color',
             'box-shadow',
           ]),

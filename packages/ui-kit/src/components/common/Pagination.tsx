@@ -124,9 +124,9 @@ export const Pagination = ({
 
       <Box
         sx={{
-          display: 'flex',
-          flex: 1,
-          justifyContent: 'center',
+          'display': 'flex',
+          'flex': 1,
+          'justifyContent': 'center',
           '@container (max-width: 863px)': {
             justifyContent: 'flex-end',
           },
@@ -167,7 +167,7 @@ export const Pagination = ({
           variant="middle"
           flexItem
           sx={{
-            display: 'none',
+            'display': 'none',
             '@container (max-width: 864px)': {
               display: 'block',
             },
@@ -201,10 +201,10 @@ export const Pagination = ({
 
                 <SvgIcon
                   sx={{
-                    color: (theme) => theme.palette.text.secondary,
-                    width: 24,
-                    height: 24,
-                    display: 'none',
+                    'color': (theme) => theme.palette.text.secondary,
+                    'width': 24,
+                    'height': 24,
+                    'display': 'none',
                     '@container (min-width: 865px)': {
                       display: 'inline',
                     },
@@ -215,10 +215,10 @@ export const Pagination = ({
 
                 <SvgIcon
                   sx={{
-                    color: (theme) => theme.palette.text.secondary,
-                    width: 24,
-                    height: 24,
-                    display: 'initial',
+                    'color': (theme) => theme.palette.text.secondary,
+                    'width': 24,
+                    'height': 24,
+                    'display': 'initial',
 
                     '@container (min-width: 865px)': {
                       display: 'none',
@@ -241,8 +241,8 @@ export const Pagination = ({
             >
               <ListSubheader
                 sx={{
-                  display: 'none',
-                  backgroundColor: 'transparent',
+                  'display': 'none',
+                  'backgroundColor': 'transparent',
                   '@container (max-width: 864px)': {
                     display: 'block',
                   },

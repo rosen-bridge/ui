@@ -122,6 +122,13 @@ const eslintConfig = [
     },
   },
 
+  {
+    files: ['packages/ui-kit/**/*.{js,jsx,ts,tsx}'],
+    rules: {
+      '@typescript-eslint/no-empty-object-type': 'off',
+    },
+  },
+
   ...compat.config({
     extends: ['next/core-web-vitals'],
     settings: {
