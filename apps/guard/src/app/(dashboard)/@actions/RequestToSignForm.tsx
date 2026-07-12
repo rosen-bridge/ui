@@ -41,7 +41,7 @@ export const RequestToSignForm = () => {
     trigger,
     isMutating: isSignPending,
     error,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // biome-ignore lint/suspicious/noExplicitAny: Use a better type
   } = useSWRMutation<ApiSignResponse, any, '/sign', ApiSignRequestBody>(
     '/sign',
     mutatorWithHeaders,
@@ -89,7 +89,7 @@ export const RequestToSignForm = () => {
           'Server responded but the response message was unexpected',
         );
       }
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // biome-ignore lint/suspicious/noExplicitAny: Use a better type
     } catch (error: any) {
       if (error?.response?.status === 403) {
         setAlertData({

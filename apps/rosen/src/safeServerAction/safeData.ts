@@ -1,4 +1,4 @@
-/* eslint-disable */
+/** biome-ignore-all lint/suspicious/noExplicitAny: Use a better type */
 
 const BIGINT_KEY = 'BIGINT:';
 

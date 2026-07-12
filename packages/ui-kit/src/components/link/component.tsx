@@ -9,7 +9,7 @@ import './styles.css';
 export interface LinkOverrides {}
 
 export type LinkOwnProps = {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // biome-ignore lint/suspicious/noExplicitAny: Use a better type
   as?: any;
   color?: Color;
   underline?: 'always' | 'hover' | 'none';

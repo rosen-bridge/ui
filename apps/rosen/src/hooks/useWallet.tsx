@@ -76,7 +76,7 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
         await wallet.switchChain(selectedSource.name);
 
         await wallet.getAddress();
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        // biome-ignore lint/suspicious/noExplicitAny: Use a better type
       } catch (error: any) {
         setState('DISCONNECTED');
         toast.add({

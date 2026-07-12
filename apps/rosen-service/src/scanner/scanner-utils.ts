@@ -11,6 +11,7 @@ import { handleError, runAndSetInterval } from '../utils';
  * @param updateInterval
  */
 export const startScanner = async (
+  // biome-ignore lint/suspicious/noExplicitAny: Use a better type
   scanner: GeneralScanner<any>,
   loggerFileName: string,
   updateInterval: number,

@@ -1,4 +1,4 @@
-/* eslint-disable */
+/** biome-ignore-all lint/suspicious/noExplicitAny: Use a better type */
 import type { Schema } from 'joi';
 import {
   addKnownErrorConstructor,

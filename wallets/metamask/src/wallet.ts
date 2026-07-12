@@ -163,7 +163,7 @@ export class MetaMaskWallet extends Wallet<MetaMaskWalletConfig> {
         params: [{ chainId }],
       });
     } catch (error) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // biome-ignore lint/suspicious/noExplicitAny: Use a better type
       switch ((error as any)?.code) {
         case 4001:
           throw new ChainSwitchingRejectedError(this.name, chain, error);

@@ -38,10 +38,10 @@ export const TabsTab = (props: TabsTabProps) => {
     props,
   );
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // biome-ignore lint/suspicious/noExplicitAny: Use a better type
   const Component = Tabs.Tab as any;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // biome-ignore lint/suspicious/noExplicitAny: Use a better type
   const value = (rest as any).value;
 
   return (

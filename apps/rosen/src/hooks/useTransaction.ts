@@ -107,7 +107,7 @@ export const useTransaction = () => {
         ]),
       });
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // biome-ignore lint/suspicious/noExplicitAny: Use a better type
     } catch (error: any) {
       toast.add({
         type: 'error',

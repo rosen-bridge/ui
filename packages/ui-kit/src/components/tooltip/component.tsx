@@ -34,7 +34,7 @@ export const Tooltip = (props: TooltipProps) => {
   const { children, disabled, title, ...rest } = useConfig('Tooltip', props);
 
   const child = useMemo(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // biome-ignore lint/suspicious/noExplicitAny: Use a better type
     () => Children.only(children) as ReactElement<any, any>,
     [children],
   );

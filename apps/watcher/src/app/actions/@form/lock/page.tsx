@@ -64,7 +64,7 @@ const LockForm = () => {
   const {
     trigger,
     isMutating: isLockPending,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // biome-ignore lint/suspicious/noExplicitAny: Use a better type
   } = useSWRMutation<ApiPermitResponse, any, '/permit', ApiPermitRequestBody>(
     '/permit',
     mutatorWithHeaders,
@@ -125,7 +125,7 @@ const LockForm = () => {
           'Server responded but the response message was unexpected',
         );
       }
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // biome-ignore lint/suspicious/noExplicitAny: Use a better type
     } catch (error: any) {
       if (error?.response?.status === 403) {
         toast.add({

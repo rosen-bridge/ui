@@ -152,7 +152,6 @@ export const getAllAssets = async (filters: Filters) => {
 
   const rawItems = await queryBuilder.getRawMany<AssetWithTotal>();
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const items = rawItems.map(({ total, ...item }) => item);
 
   return {

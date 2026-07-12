@@ -98,7 +98,7 @@ export const TransactionInfo = () => {
         {!!error && (
           <Alert severity="error">
             <Truncate lines={1} style={{ whiteSpace: 'nowrap' }}>
-              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+              {/* biome-ignore lint/suspicious/noExplicitAny: Use a better type */}
               {(error as any)?.message}
             </Truncate>
           </Alert>

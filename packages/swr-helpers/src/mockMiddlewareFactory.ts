@@ -2,7 +2,7 @@
  * TODO: remove the inline ESLint comment
  * local:ergo/rosen-bridge/ui#441
  */
-/* eslint-disable */
+/** biome-ignore-all lint/suspicious/noExplicitAny: Use a better type */
 import type { Key, Middleware, SWRHook } from 'swr';
 
 export interface FakeData {

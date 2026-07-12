@@ -172,7 +172,7 @@ export async function* getAddressAvailableBtcUtxos(
       yield* page;
 
       offset += limit;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // biome-ignore lint/suspicious/noExplicitAny: Use a better type
     } catch (e: any) {
       const baseError = `Failed to get available UTxOs containing BTC only for address [${address}] with offset/limit [${offset}/${limit}] from Unisat: `;
       if (e.response) {
@@ -218,7 +218,7 @@ export async function* getAddressAllBtcUtxos(
       yield* page;
 
       offset += limit;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // biome-ignore lint/suspicious/noExplicitAny: Use a better type
     } catch (e: any) {
       const baseError = `Failed to get all UTxOs containing BTC only for address [${address}] with offset/limit [${offset}/${limit}] from Unisat: `;
       if (e.response) {
@@ -269,7 +269,7 @@ export async function* getAddressRunesUtxos(
       yield* page;
 
       offset += limit;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // biome-ignore lint/suspicious/noExplicitAny: Use a better type
     } catch (e: any) {
       const baseError = `Failed to get UTxOs containing rune [${runeId}] for address [${address}] with offset/limit [${offset}/${limit}] from Unisat: `;
       if (e.response) {

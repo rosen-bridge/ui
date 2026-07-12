@@ -51,7 +51,7 @@ export const Button = (props: ButtonProps) => {
     <ButtonMUI
       LinkComponent={(props) => <Link underline="none" {...props} />}
       data-block={!!block}
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // biome-ignore lint/suspicious/noExplicitAny: Use a better type
       color={color as any}
       loading={loading}
       size={size}

@@ -66,7 +66,7 @@ const WithdrawForm = () => {
 
   const { trigger, isMutating: isWithdrawPending } = useSWRMutation<
     ApiWithdrawResponse,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // biome-ignore lint/suspicious/noExplicitAny: Use a better type
     any,
     '/withdraw',
     ApiWithdrawRequestBody
@@ -157,7 +157,7 @@ const WithdrawForm = () => {
           'Server responded but the response message was unexpected',
         );
       }
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // biome-ignore lint/suspicious/noExplicitAny: Use a better type
     } catch (error: any) {
       if (error?.response?.status === 403) {
         toast.add({

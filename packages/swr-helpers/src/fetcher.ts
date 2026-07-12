@@ -16,7 +16,7 @@ const fetcher = async (
    * TODO: remove the inline ESLint comment
    * local:ergo/rosen-bridge/ui#441
    */
-  key: // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  key: // biome-ignore lint/suspicious/noExplicitAny: Use a better type
   [url: string, params?: Record<string, any>, method?: 'get' | 'put'] | string,
 ) => {
   const method = (typeof key !== 'string' && key[2]) || 'get';

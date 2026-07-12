@@ -29,10 +29,10 @@ export const Action = (props: ActionProps) => {
 
   const isLink = 'href' in rest;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // biome-ignore lint/suspicious/noExplicitAny: Use a better type
   const Component = (isLink ? Link : 'button') as any;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // biome-ignore lint/suspicious/noExplicitAny: Use a better type
   const next = { ...rest } as any;
 
   if (isLink) {

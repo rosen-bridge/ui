@@ -1,4 +1,4 @@
-/* eslint-disable */
+/** biome-ignore-all lint/suspicious/noExplicitAny: Use a better type */
 
 type Listed<T> = T extends string | number
   ? T extends `${infer _}` | number

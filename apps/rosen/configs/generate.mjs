@@ -35,7 +35,7 @@ const content = [
     (network) =>
       `  '${network}': '${contracts[network]?.addresses?.lock || ''}',`,
   ),
-  `} as any;`,
+  `};`,
   '',
   `export const TOKENS: RosenTokens = ${JSON.stringify(tokensMap.tokens, null, 2)};`,
 ];

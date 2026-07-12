@@ -1,4 +1,4 @@
-/* eslint-disable */
+/* biome-ignore-all lint/suspicious/noExplicitAny: Use a better type */
 import type { NextRequest } from 'next/server';
 
 import * as Sentry from '@sentry/nextjs';

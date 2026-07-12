@@ -34,7 +34,7 @@ export const RequestAnOrderForm = () => {
   const {
     trigger,
     isMutating: isOrderPending,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // biome-ignore lint/suspicious/noExplicitAny: Use a better type
   } = useSWRMutation<ApiOrderResponse, any, '/order', ApiOrderRequestBody>(
     '/order',
     mutatorWithHeaders,
@@ -75,7 +75,7 @@ export const RequestAnOrderForm = () => {
           'Server responded but the response message was unexpected',
         );
       }
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // biome-ignore lint/suspicious/noExplicitAny: Use a better type
     } catch (error: any) {
       if (error?.response?.status === 403) {
         setAlertData({
