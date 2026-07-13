@@ -1,8 +1,13 @@
-import { MouseEvent, useState } from 'react';
+import {
+  Button,
+  Icon,
+  Menu,
+  MenuBody,
+  MenuItem,
+  MenuTrigger,
+} from '@rosen-bridge/ui-kit';
 
-import { Button, Icon, Menu, MenuItem } from '@rosen-bridge/ui-kit';
-
-const GUARDS = [
+const guards = [
   { key: '', label: 'Overall' },
   ...JSON.parse(process.env['NEXT_PUBLIC_ALLOWED_PKS'] ?? '[]'),
 ] as Array<{ key: string; label: string }>;
@@ -18,65 +23,27 @@ export const ProcessSelect = ({
   value,
   onChange,
 }: ProcessSelectProps) => {
-  const [anchorElement, setAnchorElement] = useState<HTMLButtonElement | null>(
-    null,
-  );
-
-  const open = !!anchorElement;
-
-  const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
-    setAnchorElement(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorElement(null);
-  };
-
-  const handleSelect = (value: string) => () => {
-    onChange(value);
-    handleClose();
-  };
-
   return (
-    <>
-      <Button
+    <Menu>
+      <MenuTrigger
+        as={Button}
         disabled={disabled}
         endIcon={<Icon name="AngleDown" size="20px" />}
         size="small"
-        onClick={handleClick}
       >
-        {GUARDS.find((guard) => guard.key === value)?.label}
-      </Button>
-      <Menu
-        anchorEl={anchorElement}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'right',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
-        }}
-        open={open}
-        onClose={handleClose}
-        MenuListProps={{ dense: true }}
-        slotProps={{
-          paper: {
-            elevation: 1,
-            sx: { borderRadius: 0.5 },
-          },
-        }}
-      >
-        {GUARDS.map((guard) => (
+        {guards.find((guard) => guard.key === value)?.label}
+      </MenuTrigger>
+      <MenuBody offset={[0, 4]} placement="bottom-start">
+        {guards.map((guard) => (
           <MenuItem
             key={guard.key}
             selected={guard.key === value}
-            onClick={handleSelect(guard.key)}
+            onClick={() => onChange(guard.key)}
           >
             {guard.label}
           </MenuItem>
         ))}
-      </Menu>
-    </>
+      </MenuBody>
+    </Menu>
   );
 };

@@ -1,0 +1,16 @@
+.RosenMenuItem {
+  padding: 6px calc(var(--rosen-spacing) * 2);
+  cursor: pointer;
+  min-height: 48px;
+
+  display: flex;
+  align-items: center;
+
+  &[data-selected='true'] {
+    background-color: var(--rosen-palette-background-default);
+  }
+}
+
+.RosenMenuItem[data-highlighted] {
+  background: var(--rosen-palette-action-hover);
+}

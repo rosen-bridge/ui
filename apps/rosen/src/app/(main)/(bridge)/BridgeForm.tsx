@@ -5,7 +5,6 @@ import { useCallback, ChangeEvent, SyntheticEvent } from 'react';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import {
   TextField,
-  MenuItem,
   CircularProgress,
   Alert,
   Autocomplete,
@@ -16,6 +15,7 @@ import {
   Stack,
   useResponsive,
   StackProps,
+  MenuItemMui,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 
@@ -148,12 +148,12 @@ export const BridgeForm = () => {
           onChange={handleSourceChange}
         >
           {availableSources.map((network) => (
-            <MenuItem key={network.name} value={network.name}>
+            <MenuItemMui key={network.name} value={network.name}>
               <Network
                 value={network.name}
                 slots={{ logo: { size: 'medium' } }}
               />
-            </MenuItem>
+            </MenuItemMui>
           ))}
         </TextField>
         <TextField
@@ -173,12 +173,12 @@ export const BridgeForm = () => {
           onChange={handleTargetChange}
         >
           {availableTargets.map((network) => (
-            <MenuItem key={network.name} value={network.name}>
+            <MenuItemMui key={network.name} value={network.name}>
               <Network
                 value={network.name}
                 slots={{ logo: { size: 'medium' } }}
               />
-            </MenuItem>
+            </MenuItemMui>
           ))}
         </TextField>
       </Stack>
