@@ -15,7 +15,7 @@ import {
   Identifier,
   InputAdornment,
   Link,
-  MenuItem,
+  MenuItemMui,
   Stack,
   SubmitButton,
   TextField,
@@ -235,7 +235,7 @@ const WithdrawForm = () => {
       disabled={disabled}
     >
       {tokens?.map((token) => (
-        <MenuItem value={token.tokenId} key={token.tokenId}>
+        <MenuItemMui value={token.tokenId} key={token.tokenId}>
           {token.name ?? TOKEN_NAME_PLACEHOLDER}
           &nbsp;
           {!token.isNativeToken && (
@@ -243,7 +243,7 @@ const WithdrawForm = () => {
               (<Identifier value={token.tokenId} variant="legacy-middle" />)
             </>
           )}
-        </MenuItem>
+        </MenuItemMui>
       ))}
     </TextField>
   );

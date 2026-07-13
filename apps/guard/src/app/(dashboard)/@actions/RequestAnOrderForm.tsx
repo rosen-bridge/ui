@@ -9,7 +9,7 @@ import {
   CardBody,
   CardHeader,
   CardTitle,
-  MenuItem,
+  MenuItemMui,
   Stack,
   SubmitButton,
   TextField,
@@ -124,9 +124,9 @@ export const RequestAnOrderForm = () => {
 
             <TextField select label="Chain" {...register('chain')} fullWidth>
               {NETWORKS_KEYS.map((key) => (
-                <MenuItem key={key} value={key}>
+                <MenuItemMui key={key} value={key}>
                   {NETWORKS[key].label}
-                </MenuItem>
+                </MenuItemMui>
               ))}
             </TextField>
 

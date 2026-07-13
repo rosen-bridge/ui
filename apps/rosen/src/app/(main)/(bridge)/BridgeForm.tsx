@@ -10,7 +10,7 @@ import {
   Icon,
   IconButton,
   InputAdornment,
-  MenuItem,
+  MenuItemMui,
   Network,
   Stack,
   type StackProps,
@@ -148,12 +148,12 @@ export const BridgeForm = () => {
           onChange={handleSourceChange}
         >
           {availableSources.map((network) => (
-            <MenuItem key={network.name} value={network.name}>
+            <MenuItemMui key={network.name} value={network.name}>
               <Network
                 value={network.name}
                 slots={{ logo: { size: 'medium' } }}
               />
-            </MenuItem>
+            </MenuItemMui>
           ))}
         </TextField>
         <TextField
@@ -173,12 +173,12 @@ export const BridgeForm = () => {
           onChange={handleTargetChange}
         >
           {availableTargets.map((network) => (
-            <MenuItem key={network.name} value={network.name}>
+            <MenuItemMui key={network.name} value={network.name}>
               <Network
                 value={network.name}
                 slots={{ logo: { size: 'medium' } }}
               />
-            </MenuItem>
+            </MenuItemMui>
           ))}
         </TextField>
       </Stack>

@@ -1,0 +1,15 @@
+.RosenMenuBody {
+  background: var(--rosen-palette-background-paper);
+  padding: var(--rosen-spacing) 0;
+  border-radius: calc(var(--rosen-spacing) * 2);
+  box-shadow: var(--rosen-shadows-8);
+  transition:
+    opacity 291ms cubic-bezier(0.4, 0, 0.2, 1),
+    transform 194ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.RosenMenuBody[data-starting-style],
+.RosenMenuBody[data-ending-style] {
+  opacity: 0;
+  transform: scale(0.9);
+}

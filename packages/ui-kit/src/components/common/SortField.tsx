@@ -1,15 +1,18 @@
+import { type HTMLAttributes, useCallback, useEffect, useMemo } from 'react';
+
+import { Card, styled } from '@mui/material';
+
 import {
-  type HTMLAttributes,
-  type MouseEvent,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+  Button,
+  Menu,
+  MenuBody,
+  MenuGroup,
+  MenuGroupLabel,
+  MenuItem,
+  MenuTrigger,
+} from '@/components';
+import { useMenu } from '@/hooks';
 
-import { Button, Card, styled } from '@mui/material';
-
-import { ListItemText, ListSubheader, Menu, MenuItem } from '../base';
 import { Icon } from '../icon';
 import { IconButton } from '../iconButton';
 import { Stack } from '../stack';
@@ -54,9 +57,7 @@ export const SortField = ({
   onChange,
   ...rest
 }: SortFieldProps) => {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-
-  const open = Boolean(anchorEl);
+  const handleMenu = useMenu();
 
   const current = useMemo(() => {
     return options.find((option) => option.value === value?.key);
@@ -70,25 +71,15 @@ export const SortField = ({
     onChange?.({ ...next });
   }, [value, onChange]);
 
-  const handleMenuOpen = useCallback((event: MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  }, []);
-
-  const handleMenuClose = useCallback(() => {
-    setAnchorEl(null);
-  }, []);
-
   const handleSortChange = useCallback(
     (option: SortOption) => {
-      handleMenuClose();
-
       const next = value || { order: defaultOrder };
 
       next.key = option.value;
 
       onChange?.({ ...next });
     },
-    [defaultOrder, value, handleMenuClose, onChange],
+    [defaultOrder, value, onChange],
   );
 
   useEffect(() => {
@@ -105,12 +96,15 @@ export const SortField = ({
   return (
     <Root {...rest}>
       {dense ? (
-        <IconButton disabled={disabled} onClick={handleMenuOpen}>
+        <MenuTrigger as={IconButton} disabled={disabled} handle={handleMenu}>
           <Icon name="ListUiAlt" />
-        </IconButton>
+        </MenuTrigger>
       ) : (
-        <Button
+        <MenuTrigger
+          as={Button}
           disabled={disabled}
+          endIcon={<Icon name="CaretDown" size="small" />}
+          handle={handleMenu}
           style={{
             whiteSpace: 'nowrap',
             textTransform: 'none',
@@ -119,13 +113,6 @@ export const SortField = ({
             justifyContent: 'space-between',
             padding: '2px 8px',
           }}
-          endIcon={
-            <Icon
-              name="CaretDown"
-              style={{ rotate: open ? '180deg' : '0deg' }}
-            />
-          }
-          onClick={handleMenuOpen}
         >
           <Stack align="start">
             <Typography
@@ -140,47 +127,41 @@ export const SortField = ({
               {current?.label}
             </Typography>
           </Stack>
-        </Button>
+        </MenuTrigger>
       )}
-      <Menu
-        anchorEl={anchorEl}
-        open={open}
-        PaperProps={{
-          style: {
-            marginTop: 12,
-            marginLeft: -4,
-          },
-        }}
-        onClose={handleMenuClose}
-      >
-        <ListSubheader
-          style={{
-            display: dense ? 'flex' : 'none',
-            backgroundColor: 'transparent',
-          }}
-        >
-          <Typography variant="caption" color="text-secondary">
-            Sort by
-          </Typography>
-        </ListSubheader>
-        {options.map((item) => (
-          <MenuItem
-            key={item.value}
-            value={item.value}
-            onClick={() => handleSortChange(item)}
-          >
-            <ListItemText> {item.label}</ListItemText>
-            <Icon
-              name="Check"
+      <Menu handle={handleMenu}>
+        <MenuBody placement="bottom-start" offset={[-4, 12]}>
+          <MenuGroup>
+            <MenuGroupLabel
               style={{
-                display:
-                  dense && current && item.value === current.value
-                    ? 'flex'
-                    : 'none',
+                display: dense ? 'flex' : 'none',
+                backgroundColor: 'transparent',
               }}
-            />
-          </MenuItem>
-        ))}
+            >
+              <Typography variant="caption" color="text-secondary">
+                Sort by
+              </Typography>
+            </MenuGroupLabel>
+            {options.map((item) => (
+              <MenuItem
+                style={{ display: 'flex', flexDirection: 'row' }}
+                key={item.value}
+                onClick={() => handleSortChange(item)}
+              >
+                {item.label}
+                <Icon
+                  name="Check"
+                  style={{
+                    display:
+                      dense && current && item.value === current.value
+                        ? 'flex'
+                        : 'none',
+                  }}
+                />
+              </MenuItem>
+            ))}
+          </MenuGroup>
+        </MenuBody>
       </Menu>
       <div style={{ alignSelf: 'stretch' }}>
         <Divider orientation="vertical" />

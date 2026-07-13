@@ -1,7 +1,6 @@
-import { type MouseEvent, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import {
-  Button,
   Divider,
   Pagination as PaginationMui,
   SvgIcon,
@@ -9,7 +8,18 @@ import {
 } from '@mui/material';
 import { AlignCenter, CaretDown } from '@rosen-bridge/icons';
 
-import { Box, ListSubheader, Menu, MenuItem } from '../base';
+import {
+  Button,
+  Menu,
+  MenuBody,
+  MenuGroup,
+  MenuGroupLabel,
+  MenuItem,
+  MenuTrigger,
+} from '@/components';
+import { useBreakpoint } from '@/hooks';
+
+import { Box } from '../base';
 import { Stack } from '../stack';
 
 export interface PaginationProps {
@@ -35,6 +45,8 @@ export const Pagination = ({
   onPageIndexChange,
   onPageSizeChange,
 }: PaginationProps) => {
+  const isTablet = useBreakpoint('tablet-down');
+
   const pageIndexCurrent = pageIndex ?? defaultPageIndex;
   const pageSizeCurrent = pageSize ?? defaultPageSize;
 
@@ -57,20 +69,8 @@ export const Pagination = ({
   const from = pageIndexCurrent * pageSizeCurrent + 1;
   const to = Math.min((pageIndexCurrent + 1) * pageSizeCurrent, total);
 
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const menuOpen = Boolean(anchorEl);
-
-  const handleMenuOpen = (event: MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
-
   const handleSelect = (value: number) => {
     onPageSizeChange?.(value);
-    handleMenuClose();
   };
 
   useEffect(() => {
@@ -175,92 +175,85 @@ export const Pagination = ({
         />
         <Stack direction="row" align="center" justify="evenly">
           <Stack align="center">
-            <Button
-              disabled={disabled}
-              size="small"
-              sx={{ padding: 1, textTransform: 'none' }}
-              onClick={handleMenuOpen}
-            >
-              <Stack
-                direction="row"
-                justify="center"
-                align="center"
-                spacing={1}
+            <Menu>
+              <MenuTrigger
+                as={Button}
+                disabled={disabled}
+                size="small"
+                style={{ padding: 1, textTransform: 'none' }}
               >
-                <Typography
-                  color="text.secondary"
-                  variant="body2"
-                  sx={{
-                    '@container (max-width: 864px)': {
-                      display: 'none',
-                    },
-                  }}
+                <Stack
+                  direction="row"
+                  justify="center"
+                  align="center"
+                  spacing={1}
                 >
-                  Items per page: {pageSizeCurrent}
-                </Typography>
+                  <Typography
+                    color="text.secondary"
+                    variant="body2"
+                    sx={{
+                      '@container (max-width: 864px)': {
+                        display: 'none',
+                      },
+                    }}
+                  >
+                    Items per page: {pageSizeCurrent}
+                  </Typography>
 
-                <SvgIcon
-                  sx={{
-                    'color': (theme) => theme.palette.text.secondary,
-                    'width': 24,
-                    'height': 24,
-                    'display': 'none',
-                    '@container (min-width: 865px)': {
-                      display: 'inline',
-                    },
-                  }}
-                >
-                  <CaretDown />
-                </SvgIcon>
+                  <SvgIcon
+                    sx={{
+                      'color': (theme) => theme.palette.text.secondary,
+                      'width': 24,
+                      'height': 24,
+                      'display': 'none',
+                      '@container (min-width: 865px)': {
+                        display: 'inline',
+                      },
+                    }}
+                  >
+                    <CaretDown />
+                  </SvgIcon>
 
-                <SvgIcon
-                  sx={{
-                    'color': (theme) => theme.palette.text.secondary,
-                    'width': 24,
-                    'height': 24,
-                    'display': 'initial',
+                  <SvgIcon
+                    sx={{
+                      'color': (theme) => theme.palette.text.secondary,
+                      'width': 24,
+                      'height': 24,
+                      'display': 'initial',
 
-                    '@container (min-width: 865px)': {
-                      display: 'none',
-                    },
-                  }}
-                >
-                  <AlignCenter />
-                </SvgIcon>
-              </Stack>
-            </Button>
-
-            <Menu
-              anchorEl={anchorEl}
-              open={menuOpen}
-              onClose={handleMenuClose}
-              anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-              transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-              PaperProps={{ sx: { width: 204 } }}
-              disablePortal
-            >
-              <ListSubheader
-                sx={{
-                  'display': 'none',
-                  'backgroundColor': 'transparent',
-                  '@container (max-width: 864px)': {
-                    display: 'block',
-                  },
-                }}
+                      '@container (min-width: 865px)': {
+                        display: 'none',
+                      },
+                    }}
+                  >
+                    <AlignCenter />
+                  </SvgIcon>
+                </Stack>
+              </MenuTrigger>
+              <MenuBody
+                offset={[-50, -40]}
+                placement="top-start"
+                style={{ width: 204 }}
               >
-                <Typography variant="body2" color="text.secondary">
-                  Items per page: {pageSizeCurrent}
-                </Typography>
-              </ListSubheader>
-              {pageSizeOptions.map((option) => (
-                <MenuItem
-                  key={option}
-                  selected={option === pageSizeCurrent}
-                  onClick={() => handleSelect(option)}
-                >
-                  {option}
-                </MenuItem>
-              ))}
+                <MenuGroup>
+                  {isTablet && (
+                    <MenuGroupLabel>
+                      <Typography variant="body2" color="text.secondary">
+                        Items per page: {pageSizeCurrent}
+                      </Typography>
+                    </MenuGroupLabel>
+                  )}
+                  {pageSizeOptions.map((option) => (
+                    <MenuItem
+                      key={option}
+                      selected={option === pageSizeCurrent}
+                      onClick={() => handleSelect(option)}
+                    >
+                      {option}
+                    </MenuItem>
+                  ))}
+                </MenuGroup>
+              </MenuBody>
             </Menu>
           </Stack>
         </Stack>
