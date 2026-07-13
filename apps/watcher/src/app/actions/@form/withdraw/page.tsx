@@ -12,7 +12,6 @@ import {
   CircularProgress,
   Identifier,
   InputAdornment,
-  MenuItem,
   SubmitButton,
   TextField,
   useApiKey,
@@ -23,6 +22,7 @@ import {
   useToast,
   useConfirm,
   ApiKeyDialogProtectedAction,
+  MenuItemMui,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS, TOKEN_NAME_PLACEHOLDER } from '@rosen-ui/constants';
 import { fetcher, mutatorWithHeaders } from '@rosen-ui/swr-helpers';
@@ -235,7 +235,7 @@ const WithdrawForm = () => {
       disabled={disabled}
     >
       {tokens?.map((token) => (
-        <MenuItem value={token.tokenId} key={token.tokenId}>
+        <MenuItemMui value={token.tokenId} key={token.tokenId}>
           {token.name ?? TOKEN_NAME_PLACEHOLDER}
           &nbsp;
           {!token.isNativeToken && (
@@ -243,7 +243,7 @@ const WithdrawForm = () => {
               (<Identifier value={token.tokenId} variant="legacy-middle" />)
             </>
           )}
-        </MenuItem>
+        </MenuItemMui>
       ))}
     </TextField>
   );

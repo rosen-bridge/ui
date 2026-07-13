@@ -10,7 +10,7 @@ import {
   CardHeader,
   CardTitle,
   Checkbox,
-  MenuItem,
+  MenuItemMui,
   Stack,
   SubmitButton,
   TextField,
@@ -142,9 +142,9 @@ export const RequestToSignForm = () => {
               fullWidth
             >
               {NETWORKS_KEYS.map((key) => (
-                <MenuItem key={key} value={key}>
+                <MenuItemMui key={key} id={key}>
                   {NETWORKS[key].label}
-                </MenuItem>
+                </MenuItemMui>
               ))}
             </TextField>
 
