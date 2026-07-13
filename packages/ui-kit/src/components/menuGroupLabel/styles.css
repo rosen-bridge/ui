@@ -1,0 +1,4 @@
+.RosenMenuGroupLabel {
+  padding: 0 calc(var(--rosen-spacing) * 2);
+  color: var(--rosen-palette-text-secondary);
+}

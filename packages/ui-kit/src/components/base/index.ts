@@ -18,7 +18,6 @@ export * from './ListItemButton';
 export * from './ListItemIcon';
 export * from './ListItemText';
 export * from './ListSubheader';
-export * from './Menu';
-export * from './MenuItem';
+export * from './MenuItemMui';
 export * from './NoSsr';
 export * from './TextField';
