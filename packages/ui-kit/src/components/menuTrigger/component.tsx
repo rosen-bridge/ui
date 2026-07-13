@@ -38,7 +38,7 @@ export const MenuTrigger = <T extends ElementType = 'button'>(
     handle,
     openOnHover,
     ...rest
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // biome-ignore lint/suspicious/noExplicitAny: Use a better type
   } = useConfig('MenuTrigger', props as any);
 
   const isNativeButton =

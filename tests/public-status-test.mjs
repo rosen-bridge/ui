@@ -1368,7 +1368,6 @@ const resetDB = async () => {
   console.log('done resetting db');
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const _resetSchema = async () => {
   await $`psql -p 5432 -U postgres -d public_status_test <<EOF
   DROP SCHEMA public CASCADE;
@@ -1378,7 +1377,6 @@ const _resetSchema = async () => {
   EOF`;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const _setupDB = async () => {
   await $`psql -p 5432 -U postgres -d postgres <<EOF
   DROP DATABASE public_status_test;
