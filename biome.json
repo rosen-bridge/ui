@@ -120,11 +120,16 @@
     {
       "includes": [
         "apps/rosen-service2/**/*",
+        "packages/asset-aggregator/**/*",
         "packages/asset-calculator/**/*",
         "packages/asset-data-adapter/**/*"
       ],
       "linter": {
         "rules": {
+          "complexity": {
+            "useLiteralKeys": "off",
+            "useOptionalChain": "off"
+          },
           "suspicious": {
             "noDoubleEquals": "off"
           }

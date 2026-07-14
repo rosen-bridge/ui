@@ -53,7 +53,7 @@ export const bridgeFeeMetric = async (
 
   try {
     const lastBlock = await blockDbAction.getLastSavedBlock();
-    if (!lastBlock || !lastBlock.year || !lastBlock.month || !lastBlock.day) {
+    if (!lastBlock?.year || !lastBlock.month || !lastBlock.day) {
       logger.debug('No valid block found with required date fields.');
       return;
     }
