@@ -22,9 +22,17 @@
       "a11y": {
         "noSvgWithoutTitle": "off"
       },
+      "complexity": {
+        "noImportantStyles": "off",
+        "noStaticOnlyClass": "off"
+      },
       "correctness": {
         "noUnusedImports": "error",
         "noUnusedVariables": "error"
+      },
+      "style": {
+        "noNonNullAssertion": "off",
+        "useLiteralEnumMembers": "off"
       },
       "suspicious": {
         "noExplicitAny": "error",
