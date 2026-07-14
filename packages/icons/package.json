@@ -20,10 +20,10 @@
   ],
   "scripts": {
     "build": "node ./generate.js && tsc && vite build && npm run lint",
-    "lint": "eslint --fix . && npm run prettify",
-    "lint:check": "eslint . && npm run prettify:check",
-    "prettify": "prettier --write . --ignore-path ../../.gitignore",
-    "prettify:check": "prettier --check . --ignore-path ../../.gitignore",
+    "lint": "biome check --write",
+    "lint:check": "biome check",
+    "prettify": "biome format --write",
+    "prettify:check": "biome format",
     "release": "echo 'this package should not be published due to the license constraints'",
     "type-check": "tsc"
   },

@@ -13,10 +13,10 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc --build",
-    "lint": "eslint --fix . && npm run prettify",
-    "lint:check": "eslint . && npm run prettify:check",
-    "prettify": "prettier --write . --ignore-path ../../.gitignore",
-    "prettify:check": "prettier --check . --ignore-path ../../.gitignore",
+    "lint": "biome check --write",
+    "lint:check": "biome check",
+    "prettify": "biome format --write",
+    "prettify:check": "biome format",
     "type-check": "tsc --noEmit"
   },
   "engines": {

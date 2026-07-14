@@ -38,9 +38,8 @@ const runKnipConditional = (files) => {
 };
 
 const configs = {
-  '*': ['prettier --ignore-unknown --write', runKnipConditional],
-  '**/{networks,packages,wallets,apps/{guard,rosen,rosen-service2,watcher}}/**/*.{js,jsx,ts,tsx}':
-    'eslint --fix',
+  '*': runKnipConditional,
+  '*.{js,jsx,mjs,ts,tsx}': 'biome check --write',
   '**/*.{ts,tsx}': perPackage((directory) => {
     return `npm run type-check --workspace ${path.relative(process.cwd(), directory)}`;
   }),

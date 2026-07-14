@@ -23,12 +23,7 @@ const config: KnipConfig = {
   },
   ignoreBinaries: ['typeorm'],
   ignore: ['**/node_modules/', '**/dist/', '**/.next/'],
-  ignoreDependencies: [
-    '@mui/material',
-    '@types/moment',
-    '@vitest/runner',
-    'pg',
-  ],
+  ignoreDependencies: ['@types/moment', '@vitest/runner', 'pg'],
 };
 
 export default config;

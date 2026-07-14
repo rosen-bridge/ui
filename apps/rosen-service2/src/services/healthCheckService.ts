@@ -2,7 +2,6 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 import type { AbstractLogger } from '@rosen-bridge/abstract-logger';
-import type { NotifyWithSeverity } from '@rosen-bridge/abstract-notification';
 import { DiscordNotification } from '@rosen-bridge/discord-notification';
 import {
   type AbstractHealthCheckParam,
@@ -73,7 +72,7 @@ export class HealthService extends AbstractHealthService {
     this.getScanner = AbstractScannerService.getInstance().getScanner;
     this.setStatus(ServiceStatus.dormant);
 
-    let notify: NotifyWithSeverity | undefined;
+    let notify: ConstructorParameters<typeof HealthCheck>[0] | undefined;
     let notificationConfig: HealthCheckConfig | undefined;
     if (configs.healthCheck.notification?.discordWebHookUrl != undefined) {
       const discordNotification = new DiscordNotification(
