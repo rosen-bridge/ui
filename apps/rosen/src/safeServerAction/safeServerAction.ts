@@ -62,7 +62,7 @@ const DEFAULT_CONFIG: Partial<CreateSafeActionConfig> = {
 export const createSafeAction = (config: CreateSafeActionConfig) => {
   config = Object.assign({}, DEFAULT_CONFIG, config);
 
-  const actions = new Map<Function, number>();
+  const actions = new Map<AsyncFunction, number>();
 
   const caches: Record<
     string,

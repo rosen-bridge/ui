@@ -1,4 +1,5 @@
-import crypto from 'node:crypto';
+// biome-ignore lint/style/useNodejsImportProtocol: Replace with a browser-compatible package
+import crypto from 'crypto';
 
 import { TokenMap } from '@rosen-bridge/tokens';
 

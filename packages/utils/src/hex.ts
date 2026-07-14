@@ -1,4 +1,5 @@
-import { Buffer } from 'node:buffer';
+// biome-ignore lint/style/useNodejsImportProtocol: Keep it, as it's used in both Node.js and browsers
+import { Buffer } from 'buffer';
 
 import { encode } from 'cbor-x';
 

@@ -78,6 +78,7 @@ const getUiKitConfig: (tokenMap: TokenMap) => ConfigContextType = (
             key,
             {
               label: value.label,
+              // biome-ignore lint/performance/noDynamicNamespaceImportAccess: Keep it
               logo: AllIcons[
                 key
                   .split('-')
