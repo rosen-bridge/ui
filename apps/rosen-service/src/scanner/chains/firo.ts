@@ -38,6 +38,7 @@ export const createFiroNetworkConnectorManager = () => {
     config.firo.electrumxPort,
     config.firo.electrumxReconnectDelay,
     SCANNER_API_TIMEOUT / 1000,
+    logger.child(`firoElectrumXNetwork`),
   );
   network.setupSocket();
   networkConnectorManager.addConnector(network);
