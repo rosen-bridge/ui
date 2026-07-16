@@ -127,3 +127,24 @@ export interface Revenue {
 }
 
 export type ApiRevenueResponse = Paginated<Revenue>;
+
+export interface Assets {
+  id?: string;
+  chain?: Network;
+  token?: {
+    id?: string;
+    decimals?: number;
+    name?: string;
+    isNativeToken?: boolean;
+  };
+  cold?: {
+    address?: string;
+    amount?: bigint;
+  };
+  hot?: {
+    address?: string;
+    amount?: bigint;
+  };
+}
+
+export type ApiAssetsResponse = Paginated<Assets>;
