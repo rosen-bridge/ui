@@ -1,6 +1,6 @@
 import { HTMLAttributes, ReactNode } from 'react';
 
-import { DialogContent } from '../base';
+import { DialogContent } from './Mui';
 
 export type EnhancedDialogContentProps = {
   children?: ReactNode;
