@@ -78,6 +78,8 @@ export type EventDetailsType = Omit<EventWithTotal, 'status' | 'total'> & {
     | 'TRIGGERED'
     | 'UNKNOWN';
   timestamps: Partial<Record<EventDetailsType['status'], number>>;
+  price?: number;
+  totalFee: string;
 };
 
 export type EventStatusType = {
@@ -252,7 +254,7 @@ export const getEvents = async (filters: Filters) => {
 };
 
 export const getEvent = async (id: string) => {
-  const event = await dataSource
+  const events = await dataSource
     .getRepository(ObservationEntity)
     .createQueryBuilder('oe')
     .leftJoin(BlockEntity, 'be', 'be.hash = oe.block')
@@ -279,32 +281,39 @@ export const getEvent = async (id: string) => {
       'to_jsonb(te) AS "lockToken"',
     ])
     .where('oe.requestId = :id', { id })
-    .getRawOne<EventDetailsType>();
+    .getRawMany<EventDetailsType>();
 
-  if (!event || !event.lockToken) throw new Error(`Not found`);
+  if (!events.length) throw new Error(`Not found`);
 
-  const token = await tokenRepository.findOne({
-    where: {
-      isResident: true,
-      ergoSideTokenId: event.lockToken.ergoSideTokenId,
-    },
+  const result = events.map(async (event) => {
+    if (!event.lockToken) throw new Error(`Not found`);
+
+    const token = await tokenRepository.findOne({
+      where: {
+        isResident: true,
+        ergoSideTokenId: event.lockToken.ergoSideTokenId,
+      },
+    });
+
+    if (!token) throw new Error(`Not found`);
+
+    const price = await tokenPriceAction.getLatestTokenPrice(
+      token.id,
+      event.timestamp,
+    );
+
+    const { status, timestamps } = await getEventStatus(id, event.txId);
+    event.status = status;
+    event.timestamps = timestamps;
+
+    return {
+      ...event,
+      price,
+      totalFee: (+event.bridgeFee + +event.networkFee).toString(),
+    };
   });
 
-  if (!token) throw new Error(`Not found`);
-
-  const price = await tokenPriceAction.getLatestTokenPrice(
-    token.id,
-    event.timestamp,
-  );
-
-  const { status, timestamps } = await getEventStatus(id, event.txId);
-  event.status = status;
-  event.timestamps = timestamps;
-
-  return {
-    ...event,
-    price,
-  };
+  return await Promise.all(result);
 };
 
 export const getEventStatus = async (
