@@ -430,17 +430,6 @@ export const getEventStatus = async (
     );
   }
 
-  const getStatusTimestamp = (
-    status: AggregateEventStatus,
-    txStatus?: AggregateTxStatus,
-  ) => {
-    return aggregatedStatusChangedItems.find(
-      (item) =>
-        item.status === status &&
-        (txStatus ? item.txStatus === txStatus : true),
-    )?.insertedAt;
-  };
-
   if (eventTrigger.result === null) {
     let aggregatedStatus: AggregatedStatusEntity | GuardStatusEntity | null;
 
@@ -536,25 +525,63 @@ export const getEventStatus = async (
     }
   }
 
-  result.timestamps['PAYMENT_APPROVED'] = getStatusTimestamp(
-    AggregateEventStatus.inPayment,
-    AggregateTxStatus.inSign,
-  );
+  const TIMESTAMP_EXTRACTION_MAP: {
+    [key in EventDetailsType['status']]?: [
+      AggregateEventStatus,
+      AggregateTxStatus | undefined,
+    ];
+  } = {
+    PAYMENT_APPROVED: [
+      AggregateEventStatus.inPayment,
+      AggregateTxStatus.inSign,
+    ],
+    PAYMENT_SIGNED: [AggregateEventStatus.inPayment, AggregateTxStatus.signed],
+    PAYMENT_SENT: [AggregateEventStatus.inPayment, AggregateTxStatus.sent],
+    PAID: [AggregateEventStatus.inPayment, AggregateTxStatus.sent],
+    REWARD_APPROVED: [AggregateEventStatus.inReward, AggregateTxStatus.inSign],
+    REWARD_SIGNED: [AggregateEventStatus.inReward, AggregateTxStatus.signed],
+    REWARD_SENT: [AggregateEventStatus.inReward, AggregateTxStatus.sent],
+    REJECTED: [AggregateEventStatus.rejected, undefined],
+    REACHED_LIMIT: [AggregateEventStatus.reachedLimit, undefined],
+    TIMEOUT: [AggregateEventStatus.timeout, undefined],
+  };
 
-  result.timestamps['PAYMENT_SIGNED'] = getStatusTimestamp(
-    AggregateEventStatus.inPayment,
-    AggregateTxStatus.signed,
-  );
+  Object.keys(TIMESTAMP_EXTRACTION_MAP).forEach((keyRaw) => {
+    const key = keyRaw as EventDetailsType['status'];
 
-  result.timestamps['PAYMENT_SENT'] = getStatusTimestamp(
-    AggregateEventStatus.inPayment,
-    AggregateTxStatus.sent,
-  );
+    const [status, txStatus] = TIMESTAMP_EXTRACTION_MAP[key] || [];
 
-  result.timestamps['PAID'] = getStatusTimestamp(
-    AggregateEventStatus.inPayment,
-    AggregateTxStatus.sent,
-  );
+    result.timestamps[key] = aggregatedStatusChangedItems.find(
+      (item) =>
+        item.status === status &&
+        (txStatus ? item.txStatus === txStatus : true),
+    )?.insertedAt;
+  });
+
+  if (eventTrigger.result === 'successful' && eventTrigger.spendBlock) {
+    const blocks = await blockRepository.findBy({
+      hash: eventTrigger.spendBlock,
+    });
+
+    if (blocks.length !== 1) {
+      throw new Error(
+        `ImpossibleBehavior: found more than 1 spend block records`,
+        {
+          cause: {
+            eventId,
+            triggerTxId,
+            guardPublicKey,
+            spendBlock: eventTrigger.spendBlock,
+            blockCount: blocks.length,
+          },
+        },
+      );
+    }
+
+    const block = blocks[0];
+
+    result.timestamps['REWARDED'] = block?.timestamp;
+  }
 
   if (observation.toChain === NETWORKS.ergo.key) {
     const items = aggregatedStatusChangedItems.filter(
@@ -585,58 +612,6 @@ export const getEventStatus = async (
 
     result.timestamps['PAID_CONFIRMED_AT_EXPERIMENTAL'] = item?.insertedAt;
   }
-
-  result.timestamps['REWARD_APPROVED'] = getStatusTimestamp(
-    AggregateEventStatus.inReward,
-    AggregateTxStatus.inSign,
-  );
-
-  result.timestamps['REWARD_SIGNED'] = getStatusTimestamp(
-    AggregateEventStatus.inReward,
-    AggregateTxStatus.signed,
-  );
-
-  result.timestamps['REWARD_SENT'] = getStatusTimestamp(
-    AggregateEventStatus.inReward,
-    AggregateTxStatus.sent,
-  );
-
-  if (eventTrigger.result === 'successful' && eventTrigger.spendBlock) {
-    const blocks = await blockRepository.findBy({
-      hash: eventTrigger.spendBlock,
-    });
-
-    if (blocks.length !== 1) {
-      throw new Error(
-        `ImpossibleBehavior: found more than 1 spend block records`,
-        {
-          cause: {
-            eventId,
-            triggerTxId,
-            guardPublicKey,
-            spendBlock: eventTrigger.spendBlock,
-            blockCount: blocks.length,
-          },
-        },
-      );
-    }
-
-    const block = blocks[0];
-
-    result.timestamps['REWARDED'] = block?.timestamp;
-  }
-
-  result.timestamps['REJECTED'] = getStatusTimestamp(
-    AggregateEventStatus.rejected,
-  );
-
-  result.timestamps['REACHED_LIMIT'] = getStatusTimestamp(
-    AggregateEventStatus.reachedLimit,
-  );
-
-  result.timestamps['TIMEOUT'] = getStatusTimestamp(
-    AggregateEventStatus.timeout,
-  );
 
   return result;
 };
