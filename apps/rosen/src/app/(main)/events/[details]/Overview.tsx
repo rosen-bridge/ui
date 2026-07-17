@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 import {
   Amount,
@@ -17,6 +17,8 @@ import {
   Menu,
   MenuItem,
   Icon,
+  MenuTrigger,
+  MenuBody,
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import { Network as NetworkType } from '@rosen-ui/types';
@@ -68,8 +70,6 @@ export const Overview = ({
     tablet: 'both',
   } as const);
 
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-
   return (
     <Section error={error} load={mutate} title="Overview">
       <Columns count={multipleFLow ? 3 : 1} width="320px" gap="24px">
@@ -86,37 +86,33 @@ export const Overview = ({
             <div style={{ height: '0.1px' }} />
             <div>
               <Label label="Flow Id" orientation={labelOrientation}>
-                <div
-                  style={{
-                    display: 'flex',
-                    flexWrap: 'nowrap',
-                    minWidth: 0,
-                    alignItems: 'center',
-                    cursor: 'pointer',
-                  }}
-                  onClick={(event) => setAnchorEl(event.currentTarget)}
-                >
-                  <Identifier loading={isLoading} value={data?.txId} />
-                  <Icon name="AngleDown" />
-                </div>
-              </Label>
-              <Menu
-                anchorEl={anchorEl}
-                open={Boolean(anchorEl)}
-                onClose={() => setAnchorEl(null)}
-              >
-                {events.map((event) => (
-                  <MenuItem
-                    key={event.txId}
-                    onClick={() => {
-                      onFlowIdChange(event.txId);
-                      setAnchorEl(null);
+                <Menu>
+                  <MenuTrigger 
+                    as="div" 
+                    style={{
+                      display: 'flex',
+                      flexWrap: 'nowrap',
+                      minWidth: 0,
+                      alignItems: 'center',
+                      cursor: 'pointer',
                     }}
                   >
-                    {event.txId}
-                  </MenuItem>
-                ))}
-              </Menu>
+                    <Identifier loading={isLoading} value={data?.txId} />
+                    <Icon name="AngleDown" />
+                  </MenuTrigger>
+                  <MenuBody offset={[0, 4]} placement="bottom-end">
+                    {events.map((event) => (
+                      <MenuItem
+                        key={event.txId}
+                        selected={event.txId === data?.txId}
+                        onClick={() => onFlowIdChange(event.txId)}
+                      >
+                        {event.txId}
+                      </MenuItem>
+                    ))}
+                  </MenuBody>
+                </Menu>
+              </Label>
             </div>
           </>
         )}
