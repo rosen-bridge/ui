@@ -4,6 +4,8 @@ import { useForm, Controller } from 'react-hook-form';
 import { Button, Tooltip, IconButton, Typography } from '@mui/material';
 
 import { useApiKey, useToast } from '../../hooks';
+import { CloseButton } from '../closeButton';
+import { Icon } from '../icon';
 import {
   Dialog,
   DialogActions,
@@ -11,9 +13,7 @@ import {
   DialogTitle,
   InputAdornment,
   TextField,
-} from '../base';
-import { CloseButton } from '../closeButton';
-import { Icon } from '../icon';
+} from './Mui';
 
 interface FormValues {
   apiKey: string;

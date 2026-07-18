@@ -1,6 +1,6 @@
 import { HTMLAttributes, ReactNode } from 'react';
 
-import { DialogActions } from '../base';
+import { DialogActions } from './Mui';
 
 export type EnhancedDialogActionsProps = {
   children?: ReactNode;

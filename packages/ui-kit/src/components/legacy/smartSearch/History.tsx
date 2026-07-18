@@ -11,18 +11,18 @@ import {
 import { ClickAwayListener } from '@mui/material';
 
 import { useBreakpoint } from '../../../hooks';
+import { CloseButton } from '../../closeButton';
+import { Icon } from '../../icon';
+import { IconButton } from '../../iconButton';
+import { Truncate } from '../../truncate';
+import { Divider } from '../Divider';
 import {
   List,
   ListItem,
   ListItemButton,
   ListItemText,
   ListSubheader,
-} from '../../base';
-import { CloseButton } from '../../closeButton';
-import { Icon } from '../../icon';
-import { IconButton } from '../../iconButton';
-import { Truncate } from '../../truncate';
-import { Divider } from '../Divider';
+} from '../Mui';
 import { Popup } from './Popup';
 import { Filter, Selected } from './types';
 import { parseFilter } from './utils';

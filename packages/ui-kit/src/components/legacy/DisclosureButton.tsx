@@ -1,8 +1,8 @@
 import { IconButton } from '@mui/material';
 
 import { useDisclosure } from '../../hooks/useDisclosure';
-import { CircularProgress } from '../base';
 import { Icon } from '../icon';
+import { CircularProgress } from './Mui';
 
 /**
  * Return type of the useDisclosure hook for type safety

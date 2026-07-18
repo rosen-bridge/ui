@@ -5,7 +5,7 @@ import { TokenPriceAction } from '@rosen-bridge/token-price-entity';
 import {
   Filters,
   filtersToTypeorm,
-} from '@rosen-bridge/ui-kit/dist/components/common/smartSearch/server';
+} from '@rosen-bridge/ui-kit/dist/components/legacy/smartSearch/server';
 import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
 import { TokenEntity } from '@rosen-ui/asset-calculator';
 import { Network } from '@rosen-ui/types';

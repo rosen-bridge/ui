@@ -19,8 +19,8 @@ import {
 } from '@/components';
 import { useBreakpoint } from '@/hooks';
 
-import { Box } from '../base';
 import { Stack } from '../stack';
+import { Box } from './Mui';
 
 export interface PaginationProps {
   defaultPageIndex?: number;
