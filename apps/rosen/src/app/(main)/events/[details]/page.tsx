@@ -19,7 +19,7 @@ const Page = () => {
     <Stack spacing={2} direction="column">
       <Overview id={id} />
       <TransactionsAndFees id={id} />
-      <Process />
+      <Process id={id} />
       <Watchers />
       <SourceTx />
     </Stack>
