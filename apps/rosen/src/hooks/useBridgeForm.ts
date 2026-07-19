@@ -112,31 +112,6 @@ export const useBridgeForm = () => {
   const { field: addressField } = useController({
     name: 'walletAddress',
     control,
-    rules: {
-      validate: async (value) => {
-        try {
-          if (!value) {
-            return 'Address cannot be empty';
-          }
-
-          const network = Object.values(networks).find(
-            (wallet) => wallet.name == targetField.value,
-          );
-
-          if (!network) return;
-
-          const isValid = await network.validateAddress(
-            network.toSafeAddress(value),
-          );
-
-          if (isValid) return;
-
-          return 'Invalid Address';
-        } catch {
-          return 'Something went wrong! please try again';
-        }
-      },
-    },
   });
 
   return {
