@@ -2,9 +2,6 @@ import './index.css';
 
 export { QRCodeCanvas } from 'qrcode.react';
 
-export * from './base';
-export * from './common';
-
 export * from './action';
 export * from './alert';
 export * from './apiKeyDialog';
@@ -36,6 +33,7 @@ export * from './dateTime';
 export * from './duration';
 export * from './eventCard';
 export * from './eventDetails';
+export * from './eventProcesses';
 export * from './eventStatus';
 export * from './gridContainer';
 export * from './icon';
@@ -48,6 +46,7 @@ export * from './label';
 export * from './labelGroup';
 export * from './layoutList';
 export * from './link';
+export * from './legacy';
 export * from './menu';
 export * from './menuBody';
 export * from './menuGroup';
