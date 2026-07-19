@@ -7,7 +7,7 @@ import type {
 export type ApiEventResponse = Awaited<
   ReturnType<typeof getEventsWithFullTokenData>
 >;
-export type EventItem = Awaited<ReturnType<typeof getEventById>>;
+export type EventItem = Awaited<ReturnType<typeof getEventById>>[number];
 type ArrayElement<T> = T extends (infer Element)[] ? Element : never;
 export type Event = ArrayElement<ApiEventResponse['items']>;
 

@@ -31,10 +31,12 @@ const Content = ({ value }: SidebarProps) => {
     return !!value && !!value.eventId && value.status !== 'multipleFlows';
   }, [value]);
 
-  const { data, isLoading } = useSWR<EventItem>(
+  const { data: events, isLoading } = useSWR<EventItem[]>(
     shouldLoad && `/v1/events/${value?.eventId}`,
     fetcher,
   );
+
+  const data = events?.at(0);
 
   const eventData = useMemo(() => {
     const result: EventDetailsProps['value'] = {

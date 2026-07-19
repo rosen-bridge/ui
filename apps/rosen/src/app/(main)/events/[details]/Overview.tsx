@@ -1,15 +1,23 @@
 'use client';
 
+import { useEffect } from 'react';
+
 import {
   Amount,
   Columns,
   Connector,
   DateTime,
   EventStatus,
+  Icon,
   Identifier,
   Label,
+  Menu,
+  MenuBody,
+  MenuItem,
+  MenuTrigger,
   Network,
   Token,
+  Typography,
   useResponsive,
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
@@ -18,13 +26,35 @@ import { getAddressUrl } from '@rosen-ui/utils';
 
 import useSWR from 'swr';
 
+import type { EventDetailsType } from '@/backend/events/repository';
+
 import { Section } from './Section';
 
-export const Overview = ({ id }: { id: string }) => {
-  const { error, data, isLoading, mutate } = useSWR(
-    `/v1/events/${id}`,
-    fetcher,
-  );
+export const Overview = ({
+  id,
+  flowId,
+  onFlowIdChange,
+}: {
+  id: string;
+  flowId: string;
+  onFlowIdChange: (flowId: string) => void;
+}) => {
+  const {
+    error,
+    data: events,
+    isLoading,
+    mutate,
+  } = useSWR<EventDetailsType[]>(`/v1/events/${id}`, fetcher);
+
+  useEffect(() => {
+    if (events?.length) {
+      onFlowIdChange(events.at(0)?.txId || '');
+    }
+  }, [events, onFlowIdChange]);
+
+  const data = events?.find((event) => event.txId === flowId);
+
+  const multipleFLow = events && events.length > 1;
 
   const labelOrientation = useResponsive({
     mobile: 'horizontal',
@@ -43,14 +73,51 @@ export const Overview = ({ id }: { id: string }) => {
 
   return (
     <Section error={error} load={mutate} title="Overview">
-      <Label label="Event Id" orientation={labelOrientation}>
-        <Identifier
-          style={{ width: isLoading ? '100%' : 'auto' }}
-          loading={isLoading}
-          value={data?.eventId}
-          copyable
-        />
-      </Label>
+      <Columns count={multipleFLow ? 3 : 1} width="320px" gap="24px">
+        <Label label="Event Id" orientation={labelOrientation}>
+          <Identifier
+            style={{ width: isLoading ? '100%' : 'auto' }}
+            loading={isLoading}
+            value={data?.eventId}
+            copyable
+          />
+        </Label>
+        {multipleFLow && (
+          <>
+            <div style={{ height: '0.1px' }} />
+            <div>
+              <Label label="Flow Id" orientation={labelOrientation}>
+                <Menu>
+                  <MenuTrigger
+                    as="div"
+                    style={{
+                      display: 'flex',
+                      flexWrap: 'nowrap',
+                      minWidth: 0,
+                      alignItems: 'center',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    <Identifier loading={isLoading} value={data?.txId} />
+                    <Icon name="AngleDown" />
+                  </MenuTrigger>
+                  <MenuBody offset={[0, 4]} placement="bottom-end">
+                    {events.map((event) => (
+                      <MenuItem
+                        key={event.txId}
+                        selected={event.txId === data?.txId}
+                        onClick={() => onFlowIdChange(event.txId)}
+                      >
+                        {event.txId}
+                      </MenuItem>
+                    ))}
+                  </MenuBody>
+                </Menu>
+              </Label>
+            </div>
+          </>
+        )}
+      </Columns>
       <Columns count={3} width="320px" gap="24px">
         <Label label="Token" orientation={labelOrientation}>
           <Token
@@ -125,6 +192,16 @@ export const Overview = ({ id }: { id: string }) => {
             copyable
           />
         </Label>
+        {multipleFLow && (
+          <Label label="Number of Flows" orientation={labelOrientation}>
+            <Typography
+              style={{ width: isLoading ? '100%' : 'auto' }}
+              loading={isLoading}
+            >
+              {events?.length}
+            </Typography>
+          </Label>
+        )}
       </Columns>
     </Section>
   );
