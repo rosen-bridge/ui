@@ -1,7 +1,7 @@
 import {
   type Filters,
   filtersToTypeorm,
-} from '@rosen-bridge/ui-kit/dist/components/common/smartSearch/server';
+} from '@rosen-bridge/ui-kit/dist/components/legacy/smartSearch/server';
 import {
   BridgedAssetEntity,
   LockedAssetEntity,

@@ -3,7 +3,7 @@ import type { NextRequest } from 'next/server';
 import {
   FiltersSchema,
   searchParamsToFilters,
-} from '@rosen-bridge/ui-kit/dist/components/common/smartSearch/server';
+} from '@rosen-bridge/ui-kit/dist/components/legacy/smartSearch/server';
 
 /**
  * validate get requests

@@ -29,6 +29,7 @@ import type {
   DurationProps,
   EventCardProps,
   EventDetailsProps,
+  EventProcessesProps,
   EventStatusProps,
   GridContainerProps,
   IconButtonProps,
@@ -106,6 +107,7 @@ export type Components = {
   Duration: DurationProps;
   EventCard: EventCardProps;
   EventDetails: EventDetailsProps;
+  EventProcesses: EventProcessesProps;
   EventStatus: EventStatusProps;
   GridContainer: GridContainerProps;
   Icon: IconProps;

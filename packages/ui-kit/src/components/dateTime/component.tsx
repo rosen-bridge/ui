@@ -2,12 +2,14 @@ import { useMemo } from 'react';
 
 import { Typography } from '@/components';
 import { useConfig } from '@/hooks';
-import type { ElementBaseProps, OverridableType } from '@/types';
+import type { Color, ElementBaseProps, OverridableType } from '@/types';
 import { formatDateTime } from '@/utils';
 
 export interface DateTimeOverrides {}
 
 export type DateTimeOwnProps = {
+  color?: Color;
+
   /**
    * Whether the component is in loading state.
    * When `true`, a skeleton placeholder will be shown.
@@ -40,9 +42,7 @@ export type DateTimeProps = OverridableType<
  * Example output: `"Aug 27 2025 01:33:12"`.
  */
 export const DateTime = (props: DateTimeProps) => {
-  const { color, loading, timestamp, ...rest } = useConfig('DateTime', props);
-
-  void color;
+  const { loading, timestamp, ...rest } = useConfig('DateTime', props);
 
   const parts = useMemo(() => formatDateTime(timestamp), [timestamp]);
 

@@ -13,7 +13,7 @@
   "exports": {
     ".": "./dist/index.js",
     "./style.css": "./dist/style.css",
-    "./dist/components/common/smartSearch/server": "./dist/components/common/smartSearch/server.js"
+    "./dist/components/legacy/smartSearch/server": "./dist/components/legacy/smartSearch/server.js"
   },
   "main": "./dist/index.js",
   "files": [
