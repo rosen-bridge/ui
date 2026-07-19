@@ -21,6 +21,7 @@ import {
 import { NETWORKS } from '@rosen-ui/constants';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import { getAddressUrl, getTxURL } from '@rosen-ui/utils';
+
 import useSWR from 'swr';
 
 import type { ApiEventResponse, EventItem } from '@/types';

@@ -8,6 +8,7 @@ import {
 import { NETWORKS } from '@rosen-ui/constants';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import { getDecimalString } from '@rosen-ui/utils';
+
 import { upperFirst } from 'lodash-es';
 import useSWR from 'swr';
 

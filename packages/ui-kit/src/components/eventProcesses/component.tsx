@@ -6,6 +6,7 @@ import type { ElementBaseProps, OverridableType } from '@/types';
 
 import { StepExtra } from './stepExtra';
 import { Step, type StepProps } from './steps';
+
 import './styles.css';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type

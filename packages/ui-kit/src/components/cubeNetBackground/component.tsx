@@ -2,6 +2,7 @@ import { useConfig } from '@/hooks';
 import type { ElementBaseProps, OverridableType } from '@/types';
 
 import { CubeNetSvg } from './CubeNet';
+
 import './styles.css';
 
 export interface CubeNetBackgroundOverrides {}

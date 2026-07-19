@@ -1,4 +1,3 @@
-import * as wasm from '@emurgo/cardano-serialization-lib-nodejs';
 import {
   type AssetBalance,
   CardanoBoxSelection,
@@ -8,6 +7,8 @@ import type { TokenMap } from '@rosen-bridge/tokens';
 import { handleUncoveredAssets } from '@rosen-network/base';
 import { NETWORKS } from '@rosen-ui/constants';
 import type { RosenAmountValue } from '@rosen-ui/types';
+
+import * as wasm from '@emurgo/cardano-serialization-lib-nodejs';
 
 import { feeAndMinBoxValue } from './constants';
 import { ADA_POLICY_ID, type CardanoProtocolParams } from './types';

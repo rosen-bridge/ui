@@ -10,6 +10,7 @@ import {
   METRIC_KEYS,
   MetricEntity,
 } from '@rosen-ui/rosen-statistics-entity';
+
 import { beforeEach, describe, expect, it } from 'vitest';
 
 import { eventCountMetric } from '../../lib';

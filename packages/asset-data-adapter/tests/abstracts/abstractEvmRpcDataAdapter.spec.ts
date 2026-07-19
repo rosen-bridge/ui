@@ -1,4 +1,5 @@
 import { TokenMap } from '@rosen-bridge/tokens';
+
 import type { Mock } from 'vitest';
 
 import type { AbstractDataAdapter } from '../../lib';

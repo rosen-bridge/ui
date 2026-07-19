@@ -20,6 +20,7 @@ import {
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import type { ChartPeriod } from '@rosen-ui/types';
+
 import useSWR from 'swr';
 
 import type { ApiRevenueChartResponse } from '@/types/api';

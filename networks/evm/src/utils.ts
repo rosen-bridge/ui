@@ -1,6 +1,7 @@
 import { encodeAddress } from '@rosen-bridge/address-codec';
 import { NETWORKS } from '@rosen-ui/constants';
 import type { Network } from '@rosen-ui/types';
+
 import { type FeeData, isAddress, JsonRpcProvider } from 'ethers';
 
 import { EvmChains } from './types';

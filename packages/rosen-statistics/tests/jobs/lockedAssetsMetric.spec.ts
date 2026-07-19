@@ -6,6 +6,7 @@ import type { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
 import { TokenPriceEntity } from '@rosen-bridge/token-price-entity';
 import { LockedAssetEntity, TokenEntity } from '@rosen-ui/asset-calculator';
 import { METRIC_KEYS, MetricEntity } from '@rosen-ui/rosen-statistics-entity';
+
 import { beforeEach, describe, expect, it } from 'vitest';
 
 import { lockedAssetsMetric } from '../../lib';

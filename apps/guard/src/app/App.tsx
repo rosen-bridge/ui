@@ -14,6 +14,7 @@ import {
   ToastProvider,
 } from '@rosen-bridge/ui-kit';
 import { mockMiddlewareFactory } from '@rosen-ui/swr-helpers';
+
 import { SWRConfig } from 'swr';
 
 import { mockedData } from '@/mock/mockedData';

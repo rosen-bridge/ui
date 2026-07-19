@@ -3,6 +3,7 @@ import {
   DummyLogger,
 } from '@rosen-bridge/abstract-logger';
 import type { IndexedErgoBox } from '@rosen-clients/ergo-node';
+
 import { Constant } from 'ergo-lib-wasm-nodejs';
 
 /**

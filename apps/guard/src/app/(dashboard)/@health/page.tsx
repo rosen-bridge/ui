@@ -13,6 +13,7 @@ import {
   useBreakpoint,
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
+
 import useSWR from 'swr';
 
 import type { ApiInfoResponse } from '@/types/api';

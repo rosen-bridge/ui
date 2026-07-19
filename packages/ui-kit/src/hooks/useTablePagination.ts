@@ -2,6 +2,7 @@ import { useCallback, useState } from 'react';
 
 import { fetcher } from '@rosen-ui/swr-helpers';
 import type { Paginated } from '@rosen-ui/types';
+
 import useSWR, { type Key } from 'swr';
 
 /**

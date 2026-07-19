@@ -1,4 +1,5 @@
 import type { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
+
 import { beforeEach, describe, expect, it } from 'vitest';
 
 import { WatcherCountEntity, WatcherCountMetricAction } from '../../lib';

@@ -11,6 +11,7 @@ import {
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import { getTokenUrl } from '@rosen-ui/utils';
+
 import useSWR from 'swr';
 
 import type { ApiAssetResponse } from '@/types';

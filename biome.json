@@ -56,34 +56,37 @@
     "enabled": true,
     "actions": {
       "source": {
+        "useSortedPackageJson": "on",
         "organizeImports": {
           "level": "on",
           "options": {
+            "sortBareImports": true,
             "groups": [
+              "**/bootstrap",
+              ":BLANK_LINE:",
+
               ":NODE:",
               ":BLANK_LINE:",
 
-              "react",
-              "react/**",
-              "@react/**",
-              "react-*",
+              ["react", "react/**", "react-*", "@react/**"],
               ":BLANK_LINE:",
 
-              "next",
-              "next/**",
-              "@next/**",
+              ["next", "next/**", "@next/**"],
               ":BLANK_LINE:",
 
-              ":PACKAGE:",
+              ["@rosen-*/**", "!:STYLE:"],
               ":BLANK_LINE:",
 
-              ":ALIAS:",
+              [":PACKAGE:", "!:STYLE:"],
+              ":BLANK_LINE:",
+
+              [":ALIAS:", "!:STYLE:"],
+              ":BLANK_LINE:",
+
+              [":PATH:", "!:STYLE:"],
               ":BLANK_LINE:",
 
               ":STYLE:",
-              ":BLANK_LINE:",
-
-              ":PATH:",
               ":BLANK_LINE:"
             ]
           }

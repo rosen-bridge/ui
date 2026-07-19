@@ -10,6 +10,7 @@ import { useConfig } from '@/hooks';
 import type { ElementBaseProps, OverridableType } from '@/types';
 
 import { Logo } from './logo';
+
 import './styles.css';
 
 export interface NetworkOverrides {}

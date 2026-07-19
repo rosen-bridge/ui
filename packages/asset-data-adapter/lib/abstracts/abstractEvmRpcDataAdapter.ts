@@ -4,6 +4,7 @@ import {
   type RosenChainToken,
   type TokenMap,
 } from '@rosen-bridge/tokens';
+
 import { ethers, JsonRpcProvider } from 'ethers';
 
 import { PartialERC20ABI } from '../constants';

@@ -6,6 +6,7 @@ import {
 } from '@rosen-network/base';
 import { NETWORKS } from '@rosen-ui/constants';
 import type { Network } from '@rosen-ui/types';
+
 import * as wasm from 'ergo-lib-wasm-nodejs';
 
 import { minBoxValue } from './constants';

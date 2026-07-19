@@ -2,6 +2,7 @@ import { useConfig } from '@/hooks';
 import type { ElementBaseProps, OverridableType } from '@/types';
 
 import { useCarousel } from './hook';
+
 import './styles.css';
 
 export interface CarouselOverrides {}

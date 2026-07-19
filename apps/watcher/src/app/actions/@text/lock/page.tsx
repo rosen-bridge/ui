@@ -3,6 +3,7 @@
 import { CircularProgress, Typography } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import { getDecimalString } from '@rosen-ui/utils';
+
 import useSWR from 'swr';
 
 import { useRsnToken, useToken } from '@/hooks';

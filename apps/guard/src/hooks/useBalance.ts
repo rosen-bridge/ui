@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 
 import { fetcher } from '@rosen-ui/swr-helpers';
 import type { Network } from '@rosen-ui/types';
+
 import useSWR from 'swr';
 
 import type { ApiBalanceResponse } from '@/types/api';

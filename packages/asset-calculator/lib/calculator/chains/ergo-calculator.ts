@@ -9,6 +9,7 @@ import ergoExplorerClientFactory, {
 } from '@rosen-clients/ergo-explorer';
 import { NETWORKS } from '@rosen-ui/constants';
 import type { Network } from '@rosen-ui/types';
+
 import { zipWith } from 'lodash-es';
 
 import { ERG_TOTAL_SUPPLY } from '../../constants';

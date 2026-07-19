@@ -2,6 +2,7 @@ import type { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
 import { TokenPriceEntity } from '@rosen-bridge/token-price-entity';
 import { TokenMap } from '@rosen-bridge/tokens';
 import { METRIC_KEYS, MetricEntity } from '@rosen-ui/rosen-statistics-entity';
+
 import { beforeEach, describe, expect, it } from 'vitest';
 
 import { generalMetrics } from '../../lib/jobs';

@@ -4,6 +4,7 @@ import {
 } from '@rosen-bridge/abstract-logger';
 import type { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
 import { LockedAssetEntity, TokenEntity } from '@rosen-ui/asset-calculator';
+
 import { beforeEach, describe, expect, it } from 'vitest';
 
 import { LockedAssetsMetricAction } from '../../lib';

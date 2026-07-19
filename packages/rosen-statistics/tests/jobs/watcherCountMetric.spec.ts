@@ -8,6 +8,7 @@ import {
   MetricEntity,
   WatcherCountEntity,
 } from '@rosen-ui/rosen-statistics-entity';
+
 import { beforeEach, describe, expect, it } from 'vitest';
 
 import { watcherCountMetric } from '../../lib';

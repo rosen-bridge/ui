@@ -1,8 +1,8 @@
 import { type PropsWithChildren, Suspense } from 'react';
 
-import '@rosen-bridge/ui-kit/style.css';
-
 import { App } from './App';
+
+import '@rosen-bridge/ui-kit/style.css';
 
 const RootLayout = ({ children }: PropsWithChildren) => {
   return (

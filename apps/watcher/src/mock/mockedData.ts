@@ -1,6 +1,7 @@
 import { NETWORKS } from '@rosen-ui/constants';
 import type { FakeData } from '@rosen-ui/swr-helpers';
 import type { ChartPeriod } from '@rosen-ui/types';
+
 import moment from 'moment';
 
 import type {

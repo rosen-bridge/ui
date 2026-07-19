@@ -11,6 +11,7 @@ import {
 import { HEALTH_DATA_REFRESH_INTERVAL } from '@rosen-ui/constants';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import type { HealthParamInfo } from '@rosen-ui/types';
+
 import useSWR from 'swr';
 
 import type { ApiHealthStatusResponse } from '@/types/api';

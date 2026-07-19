@@ -12,6 +12,7 @@ import {
   Wallet,
   type WalletTransferParams,
 } from '@rosen-ui/wallet-api';
+
 import type { request as Request } from 'sats-connect';
 
 import { ICON } from './icon';

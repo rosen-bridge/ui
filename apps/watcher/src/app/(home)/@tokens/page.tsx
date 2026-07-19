@@ -4,6 +4,7 @@ import { TokensCard } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import { getAddressUrl } from '@rosen-ui/utils';
+
 import useSWR from 'swr';
 
 import { useInfo } from '@/hooks';

@@ -1,4 +1,3 @@
-import * as runelib from '@magiceden-oss/runestone-lib';
 import {
   BitcoinRunesBoxSelection,
   type BitcoinRunesUtxo,
@@ -7,6 +6,8 @@ import type { RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
 import { handleUncoveredAssets } from '@rosen-network/base';
 import { NETWORKS } from '@rosen-ui/constants';
 import type { RosenAmountValue } from '@rosen-ui/types';
+
+import * as runelib from '@magiceden-oss/runestone-lib';
 import * as bitcoinJs from 'bitcoinjs-lib';
 
 import { MINIMUM_BTC_FOR_NATIVE_SEGWIT_OUTPUT } from './constants';

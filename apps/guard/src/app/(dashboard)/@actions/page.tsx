@@ -12,6 +12,7 @@ import {
 
 import { RequestAnOrderForm } from './RequestAnOrderForm';
 import { RequestToSignForm } from './RequestToSignForm';
+
 import './style.css';
 
 const Actions = () => {
@@ -39,7 +40,7 @@ const Actions = () => {
       value={tab}
       orientation={tabsOrientation}
       // biome-ignore lint/suspicious/noExplicitAny: Use a better type
-      onChange={(value) => setTab(value as any)}
+      onChange={(value: any) => setTab(value as any)}
     >
       <TabsList align="center" grow={tabsListGrow}>
         <TabsTab
