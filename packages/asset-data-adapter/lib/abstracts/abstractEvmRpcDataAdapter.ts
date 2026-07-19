@@ -1,11 +1,11 @@
+import { ethers, JsonRpcProvider } from 'ethers';
+
 import type { AbstractLogger } from '@rosen-bridge/abstract-logger';
 import {
   NATIVE_TOKEN,
   type RosenChainToken,
   type TokenMap,
 } from '@rosen-bridge/tokens';
-
-import { ethers, JsonRpcProvider } from 'ethers';
 
 import { PartialERC20ABI } from '../constants';
 import type {

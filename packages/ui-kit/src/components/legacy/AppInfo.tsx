@@ -1,9 +1,9 @@
 import type React from 'react';
 import { useState } from 'react';
 
-import type { Network as NetworkType } from '@rosen-ui/types';
-
 import { Typography } from '@mui/material';
+
+import type { Network as NetworkType } from '@rosen-ui/types';
 
 import { useToast } from '../../hooks';
 import { Avatar } from '../avatar';

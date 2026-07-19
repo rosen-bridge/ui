@@ -1,6 +1,6 @@
-import type { WalletConfig } from '@rosen-ui/wallet-api';
-
 import type { MetaMaskInpageProvider } from '@metamask/providers';
+
+import type { WalletConfig } from '@rosen-ui/wallet-api';
 
 export type MetaMaskWalletConfig = WalletConfig & {};
 

@@ -2,6 +2,8 @@
 
 import { useEffect, useMemo, useState } from 'react';
 
+import useSWR from 'swr';
+
 import {
   type Color,
   EventProcesses,
@@ -9,8 +11,6 @@ import {
   type IconProps,
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
-
-import useSWR from 'swr';
 
 import type {
   EventDetailsType,

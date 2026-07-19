@@ -1,7 +1,10 @@
 'use client';
 
 import { useEffect, useMemo } from 'react';
+
 import { FormProvider, type SubmitHandler, useForm } from 'react-hook-form';
+import useSWR from 'swr';
+import useSWRMutation from 'swr/mutation';
 
 import {
   Alert,
@@ -22,9 +25,6 @@ import {
   getNonDecimalString,
   getTxURL,
 } from '@rosen-ui/utils';
-
-import useSWR from 'swr';
-import useSWRMutation from 'swr/mutation';
 
 import { useRsnToken, useToken } from '@/hooks';
 import type {

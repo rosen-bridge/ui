@@ -2,6 +2,8 @@
 
 import { type CSSProperties, useMemo } from 'react';
 
+import useSWR from 'swr';
+
 import {
   Amount,
   Box,
@@ -15,8 +17,6 @@ import {
 import { NETWORKS } from '@rosen-ui/constants';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import { getTxURL } from '@rosen-ui/utils';
-
-import useSWR from 'swr';
 
 import type { EventDetailsType } from '@/backend/events/repository';
 

@@ -1,8 +1,8 @@
+import { Contract } from 'ethers';
+
 import type { RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
 import { NETWORKS } from '@rosen-ui/constants';
 import type { Network, RosenAmountValue } from '@rosen-ui/types';
-
-import { Contract } from 'ethers';
 
 import { transferABI } from './constants';
 

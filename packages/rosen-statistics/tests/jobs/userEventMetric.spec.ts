@@ -1,3 +1,5 @@
+import { beforeEach, describe, expect, it } from 'vitest';
+
 import {
   type AbstractLogger,
   DummyLogger,
@@ -10,8 +12,6 @@ import {
   MetricEntity,
   UserEventEntity,
 } from '@rosen-ui/rosen-statistics-entity';
-
-import { beforeEach, describe, expect, it } from 'vitest';
 
 import { userEventMetric } from '../../lib';
 import { userEventMetricTestData } from '../testData';

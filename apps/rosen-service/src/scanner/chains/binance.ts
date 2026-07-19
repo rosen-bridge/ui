@@ -1,11 +1,11 @@
+import type { TransactionResponse } from 'ethers';
+
 import { DefaultLogger } from '@rosen-bridge/abstract-logger';
 import {
   FailoverStrategy,
   NetworkConnectorManager,
 } from '@rosen-bridge/abstract-scanner';
 import { EvmRpcNetwork, EvmRpcScanner } from '@rosen-bridge/evm-scanner';
-
-import type { TransactionResponse } from 'ethers';
 
 import config from '../../configs';
 import {

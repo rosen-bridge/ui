@@ -1,10 +1,9 @@
 import { type PropsWithChildren, Suspense } from 'react';
-
 import type { Metadata } from 'next';
 
-import { App } from './App';
-
 import '@rosen-bridge/ui-kit/style.css';
+
+import { App } from './App';
 
 export const metadata: Metadata = {
   title: 'Rosen Bridge',

@@ -2,6 +2,8 @@
 
 import { useMemo } from 'react';
 
+import useSWR from 'swr';
+
 import {
   Card,
   CardBody,
@@ -13,8 +15,6 @@ import {
 import { NETWORKS } from '@rosen-ui/constants';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import type { Network as NetworkType } from '@rosen-ui/types';
-
-import useSWR from 'swr';
 
 import type { ApiBalanceResponse } from '@/types/api';
 

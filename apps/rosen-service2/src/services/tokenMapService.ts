@@ -2,6 +2,9 @@ import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 
+import { createClient, type VercelKV } from '@vercel/kv';
+import * as ergoLib from 'ergo-lib-wasm-nodejs';
+
 import { CallbackType } from '@rosen-bridge/abstract-extractor';
 import {
   type AbstractLogger,
@@ -15,9 +18,6 @@ import {
   ServiceAction,
   ServiceStatus,
 } from '@rosen-bridge/service-manager';
-
-import { createClient, type VercelKV } from '@vercel/kv';
-import * as ergoLib from 'ergo-lib-wasm-nodejs';
 
 import { configs } from '../configs';
 import { TOKEN_MAP_EXTRACTOR_ID, TOKEN_MAP_REDIS_KEY } from '../constants';

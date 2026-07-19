@@ -1,8 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-
 import dynamic from 'next/dynamic';
+
+import useSWR from 'swr';
 
 import {
   Button,
@@ -20,8 +21,6 @@ import {
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import type { ChartPeriod } from '@rosen-ui/types';
-
-import useSWR from 'swr';
 
 import type { ApiRevenueChartResponse } from '@/types/api';
 

@@ -1,7 +1,7 @@
+import { beforeEach, describe, expect, it } from 'vitest';
+
 import { BlockEntity } from '@rosen-bridge/abstract-scanner';
 import { DataSource } from '@rosen-bridge/extended-typeorm';
-
-import { beforeEach, describe, expect, it } from 'vitest';
 
 import { AbstractDBService } from '../../src/services/abstracts';
 import { MockedBlockEntityData, MockedDBService } from './mocked/db.mock';

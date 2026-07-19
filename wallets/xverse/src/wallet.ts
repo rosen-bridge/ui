@@ -1,3 +1,5 @@
+import type { request as Request } from 'sats-connect';
+
 import type { RosenChainToken } from '@rosen-bridge/tokens';
 import { BitcoinNetwork } from '@rosen-network/bitcoin/dist/client';
 import { BitcoinRunesNetwork } from '@rosen-network/bitcoin-runes/dist/client';
@@ -12,8 +14,6 @@ import {
   Wallet,
   type WalletTransferParams,
 } from '@rosen-ui/wallet-api';
-
-import type { request as Request } from 'sats-connect';
 
 import { ICON } from './icon';
 import { AddressPurpose, type XverseWalletConfig } from './types';

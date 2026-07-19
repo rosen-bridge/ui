@@ -2,6 +2,9 @@
 
 import { useCallback, useEffect, useMemo } from 'react';
 
+import { serializeError } from 'serialize-error';
+import useSWR from 'swr';
+
 import {
   EmptyState,
   EventCard,
@@ -15,9 +18,6 @@ import {
   useToast,
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
-
-import { serializeError } from 'serialize-error';
-import useSWR from 'swr';
 
 import { useTokenMap } from '@/hooks';
 import type { ApiEventResponse } from '@/types';

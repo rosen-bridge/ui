@@ -1,3 +1,5 @@
+import * as wasm from '@emurgo/cardano-serialization-lib-nodejs';
+
 import type {
   AssetBalance,
   CardanoAsset,
@@ -13,8 +15,6 @@ import {
 import { NETWORKS } from '@rosen-ui/constants';
 import type { Network } from '@rosen-ui/types';
 import { decodeHex, encodeHex } from '@rosen-ui/utils';
-
-import * as wasm from '@emurgo/cardano-serialization-lib-nodejs';
 
 import { AdaAssetName, AdaAssetNameHex, AdaPolicyId } from './constants';
 import type {

@@ -1,12 +1,15 @@
 'use client';
 
 import { useEffect, useMemo } from 'react';
+
 import {
   FormProvider,
   type SubmitHandler,
   useController,
   useForm,
 } from 'react-hook-form';
+import useSWR from 'swr';
+import useSWRMutation from 'swr/mutation';
 
 import {
   ApiKeyDialogProtectedAction,
@@ -27,9 +30,6 @@ import {
 import { NETWORKS, TOKEN_NAME_PLACEHOLDER } from '@rosen-ui/constants';
 import { fetcher, mutatorWithHeaders } from '@rosen-ui/swr-helpers';
 import { getNonDecimalString, getTxURL } from '@rosen-ui/utils';
-
-import useSWR from 'swr';
-import useSWRMutation from 'swr/mutation';
 
 import { useInfo, useToken } from '@/hooks';
 import type {

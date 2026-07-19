@@ -69,19 +69,17 @@
               ":NODE:",
               ":BLANK_LINE:",
 
-              ["react", "react/**", "react-*", "@react/**"],
+              ["react", "react/**"],
+              ["next", "next/**"],
               ":BLANK_LINE:",
 
-              ["next", "next/**", "@next/**"],
+              [":PACKAGE:", "!@rosen-*/**"],
               ":BLANK_LINE:",
 
-              ["@rosen-*/**", "!:STYLE:"],
+              "@rosen*/**",
               ":BLANK_LINE:",
 
-              [":PACKAGE:", "!:STYLE:"],
-              ":BLANK_LINE:",
-
-              [":ALIAS:", "!:STYLE:"],
+              ":ALIAS:",
               ":BLANK_LINE:",
 
               [":PATH:", "!:STYLE:"],

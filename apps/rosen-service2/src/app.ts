@@ -1,7 +1,7 @@
+import { RedisService } from 'services/redisService';
+
 import { DefaultLogger } from '@rosen-bridge/abstract-logger';
 import { ServiceManager } from '@rosen-bridge/service-manager';
-
-import { RedisService } from 'services/redisService';
 
 import dataSource from './dataSource';
 import { AssetAggregatorService } from './services/assetAggregatorService';

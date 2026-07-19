@@ -1,3 +1,5 @@
+import { difference, differenceWith, isEqual } from 'lodash-es';
+
 import {
   type AbstractLogger,
   DummyLogger,
@@ -12,8 +14,6 @@ import {
 } from '@rosen-bridge/tokens';
 import { NETWORKS } from '@rosen-ui/constants';
 import type { Network } from '@rosen-ui/types';
-
-import { difference, differenceWith, isEqual } from 'lodash-es';
 
 import type AbstractCalculator from './calculator/abstract-calculator';
 import { BitcoinCalculator } from './calculator/chains/bitcoin-calculator';

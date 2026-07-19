@@ -1,11 +1,11 @@
 import { useMemo } from 'react';
+
+import moment from 'moment';
 import Chart from 'react-apexcharts';
 
 import { useTheme } from '@rosen-bridge/ui-kit';
 import type { ChartPeriod } from '@rosen-ui/types';
 import { getDecimalString } from '@rosen-ui/utils';
-
-import moment from 'moment';
 
 import type { ApiRevenueChartResponse } from '@/types/api';
 

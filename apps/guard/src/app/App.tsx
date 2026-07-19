@@ -1,9 +1,10 @@
 'use client';
 
 import type { PropsWithChildren } from 'react';
-
 import type { Route } from 'next';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+
+import { SWRConfig } from 'swr';
 
 import {
   ApiKeyProvider,
@@ -14,8 +15,6 @@ import {
   ToastProvider,
 } from '@rosen-bridge/ui-kit';
 import { mockMiddlewareFactory } from '@rosen-ui/swr-helpers';
-
-import { SWRConfig } from 'swr';
 
 import { mockedData } from '@/mock/mockedData';
 import { theme } from '@/theme/theme';

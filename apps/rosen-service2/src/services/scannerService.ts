@@ -1,3 +1,11 @@
+import {
+  getBinanceScanner,
+  getBitcoinScanner,
+  getCardanoScanner,
+  getDogeScanner,
+  getEthereumScanner,
+} from 'scanners';
+
 import type { AbstractLogger } from '@rosen-bridge/abstract-logger';
 import { WebSocketScanner } from '@rosen-bridge/abstract-scanner';
 import type { TokenMap } from '@rosen-bridge/extended-tokens';
@@ -8,14 +16,6 @@ import {
   ServiceStatus,
 } from '@rosen-bridge/service-manager';
 import { NETWORKS } from '@rosen-ui/constants';
-
-import {
-  getBinanceScanner,
-  getBitcoinScanner,
-  getCardanoScanner,
-  getDogeScanner,
-  getEthereumScanner,
-} from 'scanners';
 
 import { configs } from '../configs';
 import type {

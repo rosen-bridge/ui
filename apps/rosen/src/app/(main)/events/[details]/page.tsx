@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-
 import { useParams } from 'next/navigation';
 
 import { Stack } from '@rosen-bridge/ui-kit';

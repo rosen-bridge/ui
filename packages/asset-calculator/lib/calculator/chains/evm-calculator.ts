@@ -1,3 +1,6 @@
+import { ethers, JsonRpcProvider } from 'ethers';
+import { zipWith } from 'lodash-es';
+
 import type { AbstractLogger } from '@rosen-bridge/abstract-logger';
 import {
   NATIVE_TOKEN,
@@ -5,9 +8,6 @@ import {
   type TokenMap,
 } from '@rosen-bridge/tokens';
 import type { Network } from '@rosen-ui/types';
-
-import { ethers, JsonRpcProvider } from 'ethers';
-import { zipWith } from 'lodash-es';
 
 import { PartialERC20ABI } from '../../constants';
 import AbstractCalculator from '../abstract-calculator';

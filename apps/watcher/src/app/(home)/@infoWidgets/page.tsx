@@ -1,5 +1,8 @@
 'use client';
 
+import { upperFirst } from 'lodash-es';
+import useSWR from 'swr';
+
 import {
   GridContainer,
   type IconProps,
@@ -8,9 +11,6 @@ import {
 import { NETWORKS } from '@rosen-ui/constants';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import { getDecimalString } from '@rosen-ui/utils';
-
-import { upperFirst } from 'lodash-es';
-import useSWR from 'swr';
 
 import { useERsnToken, useRsnToken, useToken } from '@/hooks';
 import type { ApiInfoResponse } from '@/types/api';

@@ -6,6 +6,9 @@
  */
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
+import { serializeError } from 'serialize-error';
+import useSWR from 'swr';
+
 import {
   EmptyState,
   LayoutList,
@@ -19,9 +22,6 @@ import {
   type ViewToggleType,
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
-
-import { serializeError } from 'serialize-error';
-import useSWR from 'swr';
 
 import type { ApiAssetsResponse } from '@/types/api';
 

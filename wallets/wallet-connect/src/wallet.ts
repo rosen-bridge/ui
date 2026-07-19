@@ -1,3 +1,6 @@
+import type { AppKit, Provider, RequestArguments } from '@reown/appkit';
+import { bsc, mainnet } from '@reown/appkit/networks';
+
 import type { RosenChainToken } from '@rosen-bridge/tokens';
 import { BinanceNetwork } from '@rosen-network/binance/dist/client';
 import { EthereumNetwork } from '@rosen-network/ethereum/dist/client';
@@ -10,9 +13,6 @@ import {
   Wallet,
   type WalletTransferParams,
 } from '@rosen-ui/wallet-api';
-
-import type { AppKit, Provider, RequestArguments } from '@reown/appkit';
-import { bsc, mainnet } from '@reown/appkit/networks';
 
 import { ICON } from './icon';
 import type { WalletConnectConfig } from './types';

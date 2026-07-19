@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 
+import * as Sentry from '@sentry/nextjs';
+import { serializeError } from 'serialize-error';
+
 import type { RosenChainToken } from '@rosen-bridge/tokens';
 import { useToast } from '@rosen-bridge/ui-kit';
 import { InsufficientAssetsError } from '@rosen-network/base/dist/handleUncoveredAssets';
@@ -8,9 +11,6 @@ import {
   UserDeniedTransactionSignatureError,
   type WalletTransferParams,
 } from '@rosen-ui/wallet-api';
-
-import * as Sentry from '@sentry/nextjs';
-import { serializeError } from 'serialize-error';
 
 import { useNetwork } from './useNetwork';
 import { useTokenMap } from './useTokenMap';

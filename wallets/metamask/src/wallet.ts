@@ -1,3 +1,5 @@
+import type { MetaMaskSDK } from '@metamask/sdk';
+
 import type { RosenChainToken } from '@rosen-bridge/tokens';
 import { BinanceNetwork } from '@rosen-network/binance/dist/client';
 import { EthereumNetwork } from '@rosen-network/ethereum/dist/client';
@@ -14,8 +16,6 @@ import {
   Wallet,
   type WalletTransferParams,
 } from '@rosen-ui/wallet-api';
-
-import type { MetaMaskSDK } from '@metamask/sdk';
 
 import { ICON } from './icon';
 import type { MetaMaskWalletConfig } from './types';

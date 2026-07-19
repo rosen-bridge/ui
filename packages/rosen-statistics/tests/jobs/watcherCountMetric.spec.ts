@@ -1,3 +1,5 @@
+import { beforeEach, describe, expect, it } from 'vitest';
+
 import {
   type AbstractLogger,
   DummyLogger,
@@ -8,8 +10,6 @@ import {
   MetricEntity,
   WatcherCountEntity,
 } from '@rosen-ui/rosen-statistics-entity';
-
-import { beforeEach, describe, expect, it } from 'vitest';
 
 import { watcherCountMetric } from '../../lib';
 import { resetMocks, setupNodeMock } from '../mocked/boxFetcher.mock';

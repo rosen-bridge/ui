@@ -1,7 +1,7 @@
+import { beforeEach, describe, expect, it, type Mock, vi } from 'vitest';
+
 import { BitcoinRunesBoxSelection } from '@rosen-bridge/bitcoin-runes-utxo-selection';
 import type { TokenMap } from '@rosen-bridge/tokens';
-
-import { beforeEach, describe, expect, it, type Mock, vi } from 'vitest';
 
 import { generateUnsignedTx } from '../src';
 import * as testData from './testData';

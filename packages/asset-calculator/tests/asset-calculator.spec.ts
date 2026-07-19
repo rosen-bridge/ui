@@ -1,7 +1,7 @@
+import { beforeEach, describe, expect, it, vitest } from 'vitest';
+
 import { TokenMap } from '@rosen-bridge/tokens';
 import { NETWORKS } from '@rosen-ui/constants';
-
-import { beforeEach, describe, expect, it, vitest } from 'vitest';
 
 import { AssetCalculator } from '../lib';
 import type AbstractCalculator from '../lib/calculator/abstract-calculator';

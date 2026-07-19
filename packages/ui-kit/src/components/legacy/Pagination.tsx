@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 
-import { AlignCenter, CaretDown } from '@rosen-bridge/icons';
-
 import {
   Divider,
   Pagination as PaginationMui,
   SvgIcon,
   Typography,
 } from '@mui/material';
+
+import { AlignCenter, CaretDown } from '@rosen-bridge/icons';
 
 import {
   Button,

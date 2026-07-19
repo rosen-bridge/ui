@@ -1,6 +1,6 @@
-import type { TransportOptions } from '@rosen-bridge/winston-logger';
-
 import nodeConfig from 'config';
+
+import type { TransportOptions } from '@rosen-bridge/winston-logger';
 
 import AppError from './errors/AppError';
 

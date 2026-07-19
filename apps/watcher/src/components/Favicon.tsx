@@ -1,8 +1,8 @@
 import { useEffect, useRef } from 'react';
 
-import { Icon, type IconProps } from '@rosen-bridge/ui-kit';
-
 import { upperFirst } from 'lodash-es';
+
+import { Icon, type IconProps } from '@rosen-bridge/ui-kit';
 
 import { useInfo } from '@/hooks';
 

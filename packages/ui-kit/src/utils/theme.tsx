@@ -1,11 +1,4 @@
 import {
-  CheckCircle,
-  ExclamationCircle,
-  ExclamationTriangle,
-  InfoCircle,
-} from '@rosen-bridge/icons';
-
-import {
   alpha,
   type ComponentsOverrides,
   type ComponentsVariants,
@@ -13,6 +6,13 @@ import {
   type Theme,
   type ThemeOptions,
 } from '@mui/material';
+
+import {
+  CheckCircle,
+  ExclamationCircle,
+  ExclamationTriangle,
+  InfoCircle,
+} from '@rosen-bridge/icons';
 
 import type { AppProps } from '../components';
 

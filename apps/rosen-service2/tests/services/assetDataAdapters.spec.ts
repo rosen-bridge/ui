@@ -1,12 +1,13 @@
 /** biome-ignore-all lint/suspicious/noExplicitAny: Use a better type */
+
+import type { VercelKV } from '@vercel/kv';
+import { beforeEach, describe, expect, it, type Mock, vi } from 'vitest';
+
 import { DummyLogger } from '@rosen-bridge/abstract-logger';
 import { TokenMap } from '@rosen-bridge/extended-tokens';
 import { DataSource } from '@rosen-bridge/extended-typeorm';
 import { TokenEntity } from '@rosen-ui/asset-aggregator';
 import { NETWORKS } from '@rosen-ui/constants';
-
-import type { VercelKV } from '@vercel/kv';
-import { beforeEach, describe, expect, it, type Mock, vi } from 'vitest';
 
 import {
   AbstractAssetDataAdapterService,

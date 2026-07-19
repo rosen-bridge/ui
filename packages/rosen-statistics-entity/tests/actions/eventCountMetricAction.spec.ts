@@ -1,11 +1,11 @@
+import { beforeEach, describe, expect, it } from 'vitest';
+
 import {
   type AbstractLogger,
   DummyLogger,
 } from '@rosen-bridge/abstract-logger';
 import type { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
 import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
-
-import { beforeEach, describe, expect, it } from 'vitest';
 
 import {
   EventCountEntity,

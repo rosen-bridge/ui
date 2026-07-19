@@ -1,3 +1,5 @@
+import { zipWith } from 'lodash-es';
+
 import type { AbstractLogger } from '@rosen-bridge/abstract-logger';
 import {
   NATIVE_TOKEN,
@@ -7,8 +9,6 @@ import {
 import axios, { type Axios } from '@rosen-clients/rate-limited-axios';
 import { NETWORKS } from '@rosen-ui/constants';
 import type { Network } from '@rosen-ui/types';
-
-import { zipWith } from 'lodash-es';
 
 import AbstractCalculator from '../abstract-calculator';
 
