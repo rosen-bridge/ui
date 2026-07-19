@@ -402,8 +402,8 @@ export const Process = ({ id }: { id: string }) => {
     }
 
     if (info[2]?.key === 'PAID') {
-      if (data.timestamps['PAID_CONFIRMED_AT_EXPERIMENTAL']) {
-        info[2].description += ` at "${new Date(data.timestamps['PAID_CONFIRMED_AT_EXPERIMENTAL'] * 1000).toString()}"`;
+      if (data.timestamps.PAID_CONFIRMED_AT_EXPERIMENTAL) {
+        info[2].description += ` at "${new Date(data.timestamps.PAID_CONFIRMED_AT_EXPERIMENTAL * 1000).toString()}"`;
       }
     }
 

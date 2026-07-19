@@ -15,8 +15,6 @@
     "get-config": "npx @rosen-bridge/cli download-assets --chain-type public-launch --out config",
     "lint": "biome check --write",
     "lint:check": "biome check",
-    "prettify": "biome format --write",
-    "prettify:check": "biome format",
     "start": "tsx watch ./src/main.ts",
     "start:prod": "tsx ./src/main.ts",
     "type-check": "tsc --noEmit",

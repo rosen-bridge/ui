@@ -359,7 +359,7 @@ export const getEventStatus = async (
   const block = blocks[0];
 
   result.status = 'CREATED';
-  result.timestamps['CREATED'] = block.timestamp;
+  result.timestamps.CREATED = block.timestamp;
 
   if (!triggerTxId) return result;
 
@@ -383,7 +383,7 @@ export const getEventStatus = async (
   if (eventTrigger.result === 'fraud') {
     result.status = 'FRAUD';
     if (eventTrigger.spendBlock) {
-      result.timestamps['FRAUD'] = (
+      result.timestamps.FRAUD = (
         await blockRepository.findOneBy({ hash: eventTrigger.spendBlock })
       )?.timestamp;
     }
@@ -392,13 +392,13 @@ export const getEventStatus = async (
   if (eventTrigger.result === 'successful') {
     result.status = 'COMPLETED';
     if (eventTrigger.spendBlock) {
-      result.timestamps['COMPLETED'] = (
+      result.timestamps.COMPLETED = (
         await blockRepository.findOneBy({ hash: eventTrigger.spendBlock })
       )?.timestamp;
     }
   }
 
-  result.timestamps['TRIGGERED'] = (
+  result.timestamps.TRIGGERED = (
     await blockRepository.findOneBy({ hash: eventTrigger.block })
   )?.timestamp;
 
@@ -570,7 +570,7 @@ export const getEventStatus = async (
 
     const block = blocks[0];
 
-    result.timestamps['REWARDED'] = block?.timestamp;
+    result.timestamps.REWARDED = block?.timestamp;
   }
 
   if (observation.toChain === NETWORKS.ergo.key) {
@@ -593,14 +593,13 @@ export const getEventStatus = async (
       );
     }
 
-    result.timestamps['PAID_CONFIRMED_AT_EXPERIMENTAL'] =
-      items.at(0)?.insertedAt;
+    result.timestamps.PAID_CONFIRMED_AT_EXPERIMENTAL = items.at(0)?.insertedAt;
   } else {
     const item = aggregatedStatusChangedItems
       .sort((a, b) => a.insertedAt - b.insertedAt)
       .find((item) => item.status === AggregateEventStatus.pendingReward);
 
-    result.timestamps['PAID_CONFIRMED_AT_EXPERIMENTAL'] = item?.insertedAt;
+    result.timestamps.PAID_CONFIRMED_AT_EXPERIMENTAL = item?.insertedAt;
   }
 
   return result;

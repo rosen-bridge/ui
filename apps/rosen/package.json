@@ -16,8 +16,6 @@
     "get-config": "npx @rosen-bridge/cli download-assets --chain-type public-launch --out configs --include-prereleases && node ./configs/generate.mjs",
     "lint": "biome check --write",
     "lint:check": "biome check",
-    "prettify": "biome format --write",
-    "prettify:check": "biome format",
     "start": "next start",
     "test": "NODE_OPTIONS='--import tsx' vitest",
     "type-check": "tsc --noEmit"

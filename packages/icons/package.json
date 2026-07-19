@@ -22,8 +22,6 @@
     "build": "node ./generate.js && tsc && vite build && npm run lint",
     "lint": "biome check --write",
     "lint:check": "biome check",
-    "prettify": "biome format --write",
-    "prettify:check": "biome format",
     "release": "echo 'this package should not be published due to the license constraints'",
     "type-check": "tsc"
   },

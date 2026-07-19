@@ -15,8 +15,6 @@
     "build": "tsc --build tsconfig.build.json",
     "lint": "biome check --write",
     "lint:check": "biome check",
-    "prettify": "biome format --write",
-    "prettify:check": "biome format",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {

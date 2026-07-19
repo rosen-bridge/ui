@@ -22,8 +22,6 @@
     "coverage": "npm run test -- --coverage",
     "lint": "biome check --write",
     "lint:check": "biome check",
-    "prettify": "biome format --write",
-    "prettify:check": "biome format",
     "release": "npm run test -- --run && npm run clean && npm run build && npm publish --access public",
     "test": "NODE_OPTIONS='--import tsx' vitest",
     "type-check": "tsc --noEmit"

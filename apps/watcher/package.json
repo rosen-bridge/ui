@@ -13,8 +13,6 @@
     "dev": "next dev",
     "lint": "biome check --write",
     "lint:check": "biome check",
-    "prettify": "biome format --write",
-    "prettify:check": "biome format",
     "start": "next start",
     "tauri": "tauri",
     "type-check": "tsc --noEmit"

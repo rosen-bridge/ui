@@ -15,8 +15,6 @@
     "lint": "biome check --write",
     "lint:check": "biome check",
     "prepare": "husky install",
-    "prettify": "biome format --write",
-    "prettify:check": "biome format",
     "test": "npm run test --workspaces",
     "type-check": "npm run type-check --workspaces",
     "version": "npx changeset version && npm i && npx changeset --empty",

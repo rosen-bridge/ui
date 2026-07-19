@@ -16,8 +16,6 @@
     "gen-config-types": "NODE_OPTIONS='--import tsx' npx @rosen-bridge/config generate-ts-types --schema ./config/schema.json --output ./src/types/configs.ts --root-type RosenService2BaseConfig",
     "lint": "biome check --write",
     "lint:check": "biome check",
-    "prettify": "biome format --write",
-    "prettify:check": "biome format",
     "start": "tsx ./src/index.ts",
     "start:dev": "tsx watch ./src/index.ts",
     "test": "NODE_OPTIONS='--import tsx' vitest",
