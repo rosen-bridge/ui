@@ -7,7 +7,7 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
-} from '../base';
+} from './Mui';
 
 interface QrCodeModalProps {
   text: string;

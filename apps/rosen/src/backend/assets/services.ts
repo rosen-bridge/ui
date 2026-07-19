@@ -1,4 +1,4 @@
-import { Filters } from '@rosen-bridge/ui-kit/dist/components/common/smartSearch/server';
+import { Filters } from '@rosen-bridge/ui-kit/dist/components/legacy/smartSearch/server';
 
 import { getTokenMap } from '@/tokenMap/getServerTokenMap';
 
