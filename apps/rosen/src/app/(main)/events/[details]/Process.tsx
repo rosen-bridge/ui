@@ -361,7 +361,13 @@ const toItems = (
   });
 };
 
-export const Process = ({ id, flowId }: { id: string; flowId: string }) => {
+export const Process = ({
+  id,
+  flowId,
+}: {
+  id: string;
+  flowId: string | undefined;
+}) => {
   const [active, setActive] = useState<string | undefined>();
 
   const [guardPublicKey, setGuardPublicKey] = useState<string>('');

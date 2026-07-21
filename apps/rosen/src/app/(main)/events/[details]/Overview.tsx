@@ -36,8 +36,8 @@ export const Overview = ({
   onFlowIdChange,
 }: {
   id: string;
-  flowId: string;
-  onFlowIdChange: (flowId: string) => void;
+  flowId: string | undefined;
+  onFlowIdChange: (flowId: string | undefined) => void;
 }) => {
   const {
     error,
@@ -48,13 +48,15 @@ export const Overview = ({
 
   useEffect(() => {
     if (events?.length) {
-      onFlowIdChange(events.at(0)?.txId || '');
+      onFlowIdChange(events.at(0)?.txId);
     }
   }, [events, onFlowIdChange]);
 
   const data = events?.find((event) => event.txId === flowId);
 
   const multipleFLow = events && events.length > 1;
+
+  const identifierStyle = { width: isLoading ? '100%' : 'auto' };
 
   const labelOrientation = useResponsive({
     mobile: 'horizontal',
@@ -76,7 +78,7 @@ export const Overview = ({
       <Columns count={multipleFLow ? 3 : 1} width="320px" gap="24px">
         <Label label="Event Id" orientation={labelOrientation}>
           <Identifier
-            style={{ width: isLoading ? '100%' : 'auto' }}
+            style={identifierStyle}
             loading={isLoading}
             value={data?.eventId}
             copyable
@@ -176,7 +178,7 @@ export const Overview = ({
       <Columns count={3} width="320px" gap="24px">
         <Label label="From Address" orientation={labelOrientation}>
           <Identifier
-            style={{ width: isLoading ? '100%' : 'auto' }}
+            style={identifierStyle}
             loading={isLoading}
             value={data?.fromAddress}
             href={getAddressUrl(data?.fromChain, data?.fromAddress)}
@@ -185,7 +187,7 @@ export const Overview = ({
         </Label>
         <Label label="To Address" orientation={labelOrientation}>
           <Identifier
-            style={{ width: isLoading ? '100%' : 'auto' }}
+            style={identifierStyle}
             loading={isLoading}
             value={data?.toAddress}
             href={getAddressUrl(data?.toChain, data?.toAddress)}
@@ -194,10 +196,7 @@ export const Overview = ({
         </Label>
         {multipleFLow && (
           <Label label="Number of Flows" orientation={labelOrientation}>
-            <Typography
-              style={{ width: isLoading ? '100%' : 'auto' }}
-              loading={isLoading}
-            >
+            <Typography style={identifierStyle} loading={isLoading}>
               {events?.length}
             </Typography>
           </Label>

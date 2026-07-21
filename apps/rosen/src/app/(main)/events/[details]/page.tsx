@@ -12,11 +12,9 @@ import { TransactionsAndFees } from './TransactionsAndFees';
 import { Watchers } from './Watchers';
 
 const Page = () => {
-  const { details } = useParams();
+  const { details: id } = useParams<{ details: string }>();
 
-  const [flowId, setFlowId] = useState('');
-
-  const id = details as string;
+  const [flowId, setFlowId] = useState<string | undefined>();
 
   return (
     <Stack spacing={2} direction="column">
