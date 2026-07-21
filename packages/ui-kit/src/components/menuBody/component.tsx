@@ -68,9 +68,7 @@ export const MenuBody = (props: MenuBodyProps) => {
         side={side}
         sideOffset={sideOffset}
       >
-        <MenuBaseUI.Popup {...rest}>
-          <MenuBaseUI.Viewport>{children}</MenuBaseUI.Viewport>
-        </MenuBaseUI.Popup>
+        <MenuBaseUI.Popup {...rest}>{children}</MenuBaseUI.Popup>
       </MenuBaseUI.Positioner>
     </MenuBaseUI.Portal>
   );
