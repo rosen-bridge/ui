@@ -1,5 +1,11 @@
 # @rosen-bridge/rosen-service
 
+## 4.3.7
+
+### Patch Changes
+
+- Fix cardano scanner and extractor to prevent events with failed transactions
+
 ## 4.3.6
 
 ### Patch Changes
