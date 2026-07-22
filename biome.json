@@ -73,7 +73,7 @@
               ["next", "next/**"],
               ":BLANK_LINE:",
 
-              [":PACKAGE:", "!@rosen-*/**"],
+              [":PACKAGE:", "!@rosen*/**"],
               ":BLANK_LINE:",
 
               "@rosen*/**",
