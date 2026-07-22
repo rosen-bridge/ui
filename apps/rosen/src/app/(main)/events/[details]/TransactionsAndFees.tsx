@@ -26,7 +26,7 @@ export const TransactionsAndFees = ({
   flowId,
 }: {
   id: string;
-  flowId: string;
+  flowId: string | undefined;
 }) => {
   const {
     error,
