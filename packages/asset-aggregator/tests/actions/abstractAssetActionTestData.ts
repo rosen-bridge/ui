@@ -14,6 +14,8 @@ export class AbstractAssetTestData {
       significantDecimal: 18,
       isNative: false,
       chain: 'ergo',
+      isResident: true,
+      ergoSideTokenId: 'test-token-1',
     },
     {
       id: 'test-token-2',
@@ -22,6 +24,8 @@ export class AbstractAssetTestData {
       significantDecimal: 18,
       isNative: false,
       chain: 'ethereum',
+      isResident: false,
+      ergoSideTokenId: 'test-token-2',
     },
     {
       id: 'test-token-3',
@@ -30,6 +34,8 @@ export class AbstractAssetTestData {
       significantDecimal: 18,
       isNative: false,
       chain: 'bitcoin',
+      isResident: false,
+      ergoSideTokenId: 'test-token-3',
     },
   ];
 
@@ -49,7 +55,6 @@ export class AbstractAssetTestData {
 
     // Apply overrides
     Object.assign(asset, overrides);
-
     return asset;
   }
 

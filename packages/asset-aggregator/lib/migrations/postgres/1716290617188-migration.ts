@@ -3,29 +3,12 @@ import {
   QueryRunner,
 } from '@rosen-bridge/extended-typeorm';
 
-export class Migration1761566611685 implements MigrationInterface {
-  name = 'Migration1761566611685';
+export class Migration1716290617188 implements MigrationInterface {
+  name = 'Migration1716290617188';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
-            CREATE TABLE "token_entity" (
-                "id" character varying NOT NULL,
-                "name" character varying NOT NULL,
-                "decimal" integer NOT NULL,
-                "significantDecimal" integer NOT NULL,
-                "isNative" boolean NOT NULL,
-                "chain" character varying NOT NULL,
-                CONSTRAINT "PK_687443f2a51af49b5472e2c5ddc" PRIMARY KEY ("id")
-            )
-        `);
-    await queryRunner.query(`
-            CREATE TABLE "bridged_asset_entity" (
-                "amount" bigint NOT NULL,
-                "chain" character varying NOT NULL,
-                "tokenId" character varying NOT NULL,
-                "bridgedTokenId" character varying NOT NULL,
-                CONSTRAINT "PK_bcf5000d95a1a89d72b583ca3c5" PRIMARY KEY ("chain", "tokenId")
-            )
+            ALTER TABLE "bridged_asset_entity" DROP CONSTRAINT "FK_941e620c721dbd2ec1a03bdef36"
         `);
     await queryRunner.query(`
             CREATE TABLE "locked_asset_entity" (
@@ -56,10 +39,8 @@ export class Migration1761566611685 implements MigrationInterface {
             DROP TABLE "locked_asset_entity"
         `);
     await queryRunner.query(`
-            DROP TABLE "bridged_asset_entity"
-        `);
-    await queryRunner.query(`
-            DROP TABLE "token_entity"
+            ALTER TABLE "bridged_asset_entity"
+            ADD CONSTRAINT "FK_941e620c721dbd2ec1a03bdef36" FOREIGN KEY ("tokenId") REFERENCES "token_entity"("id") ON DELETE NO ACTION ON UPDATE NO ACTION
         `);
   }
 }

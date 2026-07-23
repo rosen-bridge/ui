@@ -115,6 +115,8 @@ export const SAMPLE_TOKEN_ENTITY_DATA = [
     isNative: true,
     name: 'erg',
     significantDecimal: 6,
+    isResident: true,
+    ergoSideTokenId: 'erg',
   },
   {
     chain: 'ergo',
@@ -123,6 +125,9 @@ export const SAMPLE_TOKEN_ENTITY_DATA = [
     isNative: false,
     name: 'RSN-Pandora',
     significantDecimal: 3,
+    isResident: true,
+    ergoSideTokenId:
+      'e752bede1a85891fff344604431fd6dc30ba685b382f2e0fe15da8141d36e300',
   },
   {
     chain: 'ergo',
@@ -131,6 +136,9 @@ export const SAMPLE_TOKEN_ENTITY_DATA = [
     isNative: false,
     name: 'rpnBNB',
     significantDecimal: 9,
+    isResident: false,
+    ergoSideTokenId:
+      '92f7cec6d682e8a0d965e6d93de66ec18933f72181c59a5d85802f0fe2afc900',
   },
   {
     chain: 'binance',
@@ -139,6 +147,8 @@ export const SAMPLE_TOKEN_ENTITY_DATA = [
     isNative: false,
     name: 'rpnErg',
     significantDecimal: 6,
+    isResident: false,
+    ergoSideTokenId: 'erg',
   },
   {
     chain: 'binance',
@@ -147,6 +157,9 @@ export const SAMPLE_TOKEN_ENTITY_DATA = [
     isNative: false,
     name: 'rpnRSN',
     significantDecimal: 3,
+    isResident: false,
+    ergoSideTokenId:
+      'e752bede1a85891fff344604431fd6dc30ba685b382f2e0fe15da8141d36e300',
   },
   {
     chain: 'binance',
@@ -155,6 +168,9 @@ export const SAMPLE_TOKEN_ENTITY_DATA = [
     isNative: true,
     name: 'BNB',
     significantDecimal: 9,
+    isResident: true,
+    ergoSideTokenId:
+      '92f7cec6d682e8a0d965e6d93de66ec18933f72181c59a5d85802f0fe2afc900',
   },
   {
     chain: 'ethereum',
@@ -163,6 +179,9 @@ export const SAMPLE_TOKEN_ENTITY_DATA = [
     isNative: false,
     name: 'rpnRSN',
     significantDecimal: 3,
+    isResident: false,
+    ergoSideTokenId:
+      'e752bede1a85891fff344604431fd6dc30ba685b382f2e0fe15da8141d36e300',
   },
   {
     chain: 'ethereum',
@@ -171,6 +190,9 @@ export const SAMPLE_TOKEN_ENTITY_DATA = [
     isNative: false,
     name: 'rpnBNB',
     significantDecimal: 9,
+    isResident: false,
+    ergoSideTokenId:
+      '92f7cec6d682e8a0d965e6d93de66ec18933f72181c59a5d85802f0fe2afc900',
   },
   {
     chain: 'cardano',
@@ -179,6 +201,9 @@ export const SAMPLE_TOKEN_ENTITY_DATA = [
     isNative: false,
     name: 'rpnRSN',
     significantDecimal: 3,
+    isResident: false,
+    ergoSideTokenId:
+      'e752bede1a85891fff344604431fd6dc30ba685b382f2e0fe15da8141d36e300',
   },
   {
     chain: 'cardano',
@@ -187,6 +212,9 @@ export const SAMPLE_TOKEN_ENTITY_DATA = [
     isNative: false,
     name: 'rpnBNB',
     significantDecimal: 9,
+    isResident: false,
+    ergoSideTokenId:
+      '92f7cec6d682e8a0d965e6d93de66ec18933f72181c59a5d85802f0fe2afc900',
   },
 ];
 
