@@ -244,8 +244,8 @@ export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
     let newData = await adapter.fetch();
 
     if (
-      adapter.chain == NETWORKS.ethereum.key ||
-      adapter.chain == NETWORKS.binance.key
+      adapter.chain === NETWORKS.ethereum.key ||
+      adapter.chain === NETWORKS.binance.key
     ) {
       // preventing of overriding old chunks of data
       const oldData =
