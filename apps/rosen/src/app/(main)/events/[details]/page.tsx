@@ -1,6 +1,7 @@
 'use client';
 
 import { useParams } from 'next/navigation';
+import { useState } from 'react';
 
 import { Stack } from '@rosen-bridge/ui-kit';
 
@@ -11,15 +12,15 @@ import { TransactionsAndFees } from './TransactionsAndFees';
 import { Watchers } from './Watchers';
 
 const Page = () => {
-  const { details } = useParams();
+  const { details: id } = useParams<{ details: string }>();
 
-  const id = details as string;
+  const [flowId, setFlowId] = useState<string | undefined>();
 
   return (
     <Stack spacing={2} direction="column">
-      <Overview id={id} />
-      <TransactionsAndFees id={id} />
-      <Process id={id} />
+      <Overview id={id} flowId={flowId} onFlowIdChange={setFlowId} />
+      <TransactionsAndFees id={id} flowId={flowId} />
+      <Process id={id} flowId={flowId} />
       <Watchers />
       <SourceTx />
     </Stack>
