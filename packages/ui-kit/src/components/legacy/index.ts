@@ -17,6 +17,5 @@ export * from './Pagination';
 export * from './AppInfo';
 export * from './SortField';
 export * from './Chip';
-export * from './EmptyState';
 export * from './Illustrations';
 export * from './Divider';

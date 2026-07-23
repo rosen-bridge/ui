@@ -113,7 +113,9 @@ const Revenues = () => {
       pagination={renderPagination()}
       view={null}
     >
-      {!isLoading && !items.length && <EmptyState style={{ height: '100%' }} />}
+      {!isLoading && !items.length && (
+        <EmptyState style={{ height: 'calc(100vh - 288px)' }} />
+      )}
       {!!items.length && (
         <TableGrid variant="separated">
           <TableGridHeader>

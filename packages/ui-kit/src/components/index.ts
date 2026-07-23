@@ -35,6 +35,7 @@ export * from './eventCard';
 export * from './eventDetails';
 export * from './eventProcesses';
 export * from './eventStatus';
+export * from './emptyState';
 export * from './gridContainer';
 export * from './icon';
 export * from './iconButton';

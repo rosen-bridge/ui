@@ -74,6 +74,7 @@ import {
   TypographyProps,
   ViewToggleProps,
   VirtualScrollProps,
+  EmptyStateProps,
 } from '@/components';
 
 export type Components = {
@@ -109,6 +110,7 @@ export type Components = {
   EventDetails: EventDetailsProps;
   EventProcesses: EventProcessesProps;
   EventStatus: EventStatusProps;
+  EmptyState: EmptyStateProps;
   GridContainer: GridContainerProps;
   Icon: IconProps;
   IconButton: IconButtonProps;

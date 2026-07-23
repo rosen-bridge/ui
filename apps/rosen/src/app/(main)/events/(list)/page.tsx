@@ -134,7 +134,7 @@ const Page = () => {
       pagination={renderPagination()}
     >
       {!isLoading && !items.length ? (
-        <EmptyState style={{ height: 'calc(100vh - 288px)' }} />
+        <EmptyState showSubtitle style={{ height: 'calc(100vh - 288px)' }} />
       ) : (
         <GridContainer gap={1} minWidth="242px">
           {isLoading
