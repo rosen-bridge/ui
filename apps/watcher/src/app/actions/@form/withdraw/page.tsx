@@ -47,12 +47,39 @@ interface Form extends TokenAmountCompatibleFormSchema {
   tokenId: string;
 }
 
+const WITHDRAW_ASSETS_PAGE_SIZE = 100;
+
+const fetchAddressAssets = async (): Promise<ApiAddressAssetsResponse> => {
+  const items: ApiAddressAssetsResponse['items'] = [];
+  let total = 0;
+
+  do {
+    const page: ApiAddressAssetsResponse = await fetcher([
+      '/address/assets',
+      {
+        offset: items.length,
+        limit: WITHDRAW_ASSETS_PAGE_SIZE,
+      },
+    ]);
+
+    total = page.total;
+    items.push(...page.items);
+
+    if (!page.items.length) break;
+  } while (items.length < total);
+
+  return {
+    total,
+    items,
+  };
+};
+
 const WithdrawForm = () => {
   const { confirm } = useConfirm();
   const toast = useToast();
 
   const { data, isLoading: isTokensListLoading } =
-    useSWR<ApiAddressAssetsResponse>('/address/assets', fetcher, {});
+    useSWR<ApiAddressAssetsResponse>('/address/assets', fetchAddressAssets);
 
   const { token: ergToken, isLoading: isErgTokenLoading } = useToken('erg');
   const { apiKey } = useApiKey();
