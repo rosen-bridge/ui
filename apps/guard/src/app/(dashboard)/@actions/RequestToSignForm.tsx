@@ -142,7 +142,7 @@ export const RequestToSignForm = () => {
               fullWidth
             >
               {NETWORKS_KEYS.map((key) => (
-                <MenuItemMui key={key} id={key}>
+                <MenuItemMui key={key} value={key}>
                   {NETWORKS[key].label}
                 </MenuItemMui>
               ))}

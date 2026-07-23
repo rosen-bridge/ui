@@ -1,5 +1,12 @@
 # @rosen-bridge/icons
 
+## 3.7.0
+
+### Minor Changes
+
+- Add the `Firo` network icon
+- Add `Edit` and `CircleFill` icons
+
 ## 3.6.0
 
 ### Minor Changes

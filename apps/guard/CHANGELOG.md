@@ -1,5 +1,16 @@
 # @rosen-bridge/guard-app
 
+## 4.4.1
+
+### Patch Changes
+
+- Fix value display issue in the manual transaction submission form
+- Update dependencies
+  - @rosen-bridge/icons@3.7.0
+  - @rosen-bridge/ui-kit@5.8.0
+  - @rosen-ui/constants@1.1.0
+  - @rosen-ui/utils@1.0.4
+
 ## 4.4.0
 
 ### Minor Changes
