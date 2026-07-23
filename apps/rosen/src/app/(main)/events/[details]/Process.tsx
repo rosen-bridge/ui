@@ -357,21 +357,25 @@ const toItems = (
   });
 };
 
-export const Process = ({ id }: { id: string }) => {
+export const Process = ({
+  id,
+  flowId,
+}: {
+  id: string;
+  flowId: string | undefined;
+}) => {
   const [active, setActive] = useState<string | undefined>();
 
-  const [guardPublicKey, setGuardPublicKey] = useState<string>('');
+  const [guardPublicKey, setGuardPublicKey] = useState<string | undefined>();
 
   const [open, setOpen] = useState(false);
 
-  const { data: eventData } = useSWR(`/v1/events/${id}`, fetcher);
-
   const url = guardPublicKey
-    ? `/v1/events/${id}/status?triggerTxId=${eventData?.txId}&guardPublicKey=${guardPublicKey}`
-    : `/v1/events/${id}/status?triggerTxId=${eventData?.txId}`;
+    ? `/v1/events/${id}/status?triggerTxId=${flowId}&guardPublicKey=${guardPublicKey}`
+    : `/v1/events/${id}/status?triggerTxId=${flowId}`;
 
   const { data, error, isLoading, mutate } = useSWR<EventStatusType>(
-    open && eventData ? url : null,
+    open && flowId ? url : null,
     fetcher,
   );
 
