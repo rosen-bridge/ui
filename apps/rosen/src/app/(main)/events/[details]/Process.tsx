@@ -6,6 +6,7 @@ import {
   Color,
   EventProcesses,
   EventProcessesProps,
+  formatDateTime,
   IconProps,
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
@@ -399,7 +400,7 @@ export const Process = ({ id }: { id: string }) => {
 
     if (info[2]?.key === 'PAID') {
       if (data.timestamps['PAID_CONFIRMED_AT_EXPERIMENTAL']) {
-        info[2].description += ` at "${new Date(data.timestamps['PAID_CONFIRMED_AT_EXPERIMENTAL'] * 1000).toString()}"`;
+        info[2].description += ` at "${formatDateTime(data.timestamps['PAID_CONFIRMED_AT_EXPERIMENTAL'] * 1000)}"`;
       }
     }
 
