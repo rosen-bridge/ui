@@ -51,7 +51,7 @@
     "@rosen-bridge/winston-logger": "^3.1.0",
     "@rosen-clients/rate-limited-axios": "^2.0.1",
     "@rosen-ui/asset-calculator": "^2.3.3",
-    "@rosen-ui/constants": "^1.0.0",
+    "@rosen-ui/constants": "^1.1.0",
     "@rosen-ui/data-source": "^0.2.6",
     "config": "^3.3.12",
     "ethers": "6.16.0",

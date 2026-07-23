@@ -1,6 +1,6 @@
 {
   "name": "@rosen-ui/types",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "private": true,
   "description": "This is a private package utilized within Rosen UI apps",
   "repository": {
@@ -20,7 +20,7 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@rosen-ui/constants": "^1.0.0"
+    "@rosen-ui/constants": "^1.1.0"
   },
   "peerDependencies": {
     "react": "^19.2.6"

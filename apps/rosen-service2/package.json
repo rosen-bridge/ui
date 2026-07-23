@@ -59,7 +59,7 @@
     "@rosen-clients/ergo-explorer": "^2.1.3",
     "@rosen-ui/asset-aggregator": "^0.1.0",
     "@rosen-ui/asset-data-adapter": "0.2.0",
-    "@rosen-ui/constants": "^1.0.0",
+    "@rosen-ui/constants": "^1.1.0",
     "@rosen-ui/rosen-statistics": "^0.0.0",
     "@vercel/kv": "^3.0.0",
     "ergo-lib-wasm-nodejs": "^0.24.1",
