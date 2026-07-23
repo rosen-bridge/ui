@@ -28,7 +28,7 @@ export const EnhancedDialogTitle = ({
   onClose,
 }: EnhancedDialogTitleProps) => {
   return (
-    <DialogTitle display="flex" alignItems="center" flexDirection="row" gap={2}>
+    <DialogTitle display="flex" alignItems="center" flexDirection="row" gap={1}>
       {icon && (
         <IconContainer>
           <Icon name={icon} />
