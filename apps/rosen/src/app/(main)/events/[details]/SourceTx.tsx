@@ -4,7 +4,7 @@ import {
   Center,
   Stack,
   Typography,
-  UnderDevelopSection,
+  UnderDevelopmentSection,
 } from '@rosen-bridge/ui-kit';
 
 import { Section } from './Section';
@@ -14,7 +14,7 @@ export const SourceTx = () => {
     <Section collapsible title="Source Tx Metadata">
       <Center>
         <Stack align="center" spacing={1}>
-          <UnderDevelopSection />
+          <UnderDevelopmentSection />
           <Typography align="center" variant="body1">
             This section is under development!
           </Typography>
