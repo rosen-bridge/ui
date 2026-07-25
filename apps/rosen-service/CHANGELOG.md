@@ -1,5 +1,32 @@
 # @rosen-bridge/rosen-service
 
+## 4.4.0
+
+### Minor Changes
+
+- Add format, serviceName, createSymlink and symlinkName options for log in config, file type
+- Update the winston-logger from 3.0.1 to 3.1.0
+- Integrate Firo into rosen-service.
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-bridge/abstract-scanner@2.0.3
+  - @rosen-bridge/bitcoin-observation-extractor@8.0.5
+  - @rosen-bridge/bitcoin-runes-observation-extractor@3.0.6
+  - @rosen-bridge/bitcoin-scanner@1.1.3
+  - @rosen-bridge/cardano-observation-extractor@3.0.5
+  - @rosen-bridge/cardano-scanner@2.1.3
+  - @rosen-bridge/ergo-observation-extractor@2.0.5
+  - @rosen-bridge/ergo-scanner@1.1.3
+  - @rosen-bridge/evm-observation-extractor@7.0.5
+  - @rosen-bridge/evm-scanner@1.1.3
+  - @rosen-bridge/firo-observation-extractor@1.1.3
+  - @rosen-bridge/firo-scanner@0.2.3
+  - @rosen-bridge/watcher-data-extractor@13.0.10
+  - @rosen-ui/asset-calculator@2.4.0
+  - @rosen-ui/data-source@0.2.7
+
 ## 4.3.6
 
 ### Patch Changes

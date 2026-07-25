@@ -1,5 +1,32 @@
 # @rosen-bridge/rosen-app
 
+## 5.5.0
+
+### Minor Changes
+
+- Register the Firo network module and wallet, and add the corresponding env variable entry
+- Add build optimizations and improve `Bridge Form` hooks for better performance and cleaner structure
+- Support selecting between multiple flows on the event details page
+- Use trigger tx id for tracking public status records
+- Implement the event status service, API endpoints, and the process section of the event details page
+- Fix missing See Details button visibility on mobile Event List page
+
+### Patch Changes
+
+- Standardize error response payloads to `{ message: string }` format
+- Fix UI overlap issue in Bridge Form
+- Use `separated` variant for `TableGrid` in assets view
+- Update dependencies
+  - @rosen-bridge/abstract-observation-extractor@1.0.10
+  - @rosen-bridge/abstract-scanner@2.0.3
+  - @rosen-bridge/token-price-entity@0.2.2
+  - @rosen-bridge/watcher-data-extractor@13.0.10
+  - @rosen-ui/asset-calculator@2.4.0
+  - @rosen-ui/data-source@0.2.7
+  - @rosen-ui/firo-wallet@0.1.0
+  - @rosen-ui/public-status@0.2.0
+  - @rosen-network/firo@0.1.0
+
 ## 5.4.0
 
 ### Minor Changes
