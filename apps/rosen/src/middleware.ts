@@ -1,5 +1,6 @@
 import { NextResponse, NextRequest } from 'next/server';
 
+import * as Sentry from '@sentry/nextjs';
 import { Ratelimit } from '@upstash/ratelimit';
 import { ipAddress } from '@vercel/functions';
 import { kv } from '@vercel/kv';
@@ -39,6 +40,32 @@ const getCORSHeaders = (origin: string) => {
   return responseHeaders;
 };
 
+const logApiRequestBody = async (request: NextRequest) => {
+  const isApiRoute = request.nextUrl.pathname.startsWith('/api');
+
+  if (!isApiRoute) return;
+
+  if (request.method === 'GET' || request.method === 'HEAD') return;
+
+  const contentType = request.headers.get('content-type') ?? '';
+
+  if (!contentType.includes('application/json')) return;
+
+  let body: unknown = null;
+
+  try {
+    body = await request.clone().json();
+  } catch {
+    body = 'Cannot parse body';
+  }
+
+  Sentry.logger.info('api.request', {
+    method: request.method,
+    path: request.nextUrl.pathname,
+    body: body,
+  });
+};
+
 export async function middleware(request: NextRequest) {
   const ip = ipAddress(request) ?? '127.0.0.1';
 
@@ -47,6 +74,8 @@ export async function middleware(request: NextRequest) {
   if (!success) {
     return Response.json('Too many requests', { status: 429 });
   }
+
+  await logApiRequestBody(request);
 
   const origin = request.headers.get('Origin');
   if (request.url.includes('/api') && origin && isOriginAllowed(origin)) {
