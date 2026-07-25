@@ -17,6 +17,5 @@ export * from './Illustrations';
 export * from './Mui';
 export * from './navigationBar';
 export * from './Pagination';
-export * from './QrCodeModal';
 export * from './SortField';
 export * from './smartSearch';

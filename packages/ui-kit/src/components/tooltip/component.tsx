@@ -44,7 +44,7 @@ export const Tooltip = (props: TooltipProps) => {
   if (!title) return children;
 
   return (
-    <TooltipBaseUI.Provider>
+    <TooltipBaseUI.Provider delay={250}>
       <TooltipBaseUI.Root>
         <TooltipBaseUI.Trigger
           render={(props) =>

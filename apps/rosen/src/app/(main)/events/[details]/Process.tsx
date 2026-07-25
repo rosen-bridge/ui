@@ -8,6 +8,7 @@ import {
   type Color,
   EventProcesses,
   type EventProcessesProps,
+  formatDateTime,
   type IconProps,
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
@@ -370,7 +371,7 @@ export const Process = ({
 }) => {
   const [active, setActive] = useState<string | undefined>();
 
-  const [guardPublicKey, setGuardPublicKey] = useState<string>('');
+  const [guardPublicKey, setGuardPublicKey] = useState<string | undefined>();
 
   const [open, setOpen] = useState(false);
 
@@ -407,7 +408,7 @@ export const Process = ({
 
     if (info[2]?.key === 'PAID') {
       if (data.timestamps.PAID_CONFIRMED_AT_EXPERIMENTAL) {
-        info[2].description += ` at "${new Date(data.timestamps.PAID_CONFIRMED_AT_EXPERIMENTAL * 1000).toString()}"`;
+        info[2].description += ` at "${formatDateTime(data.timestamps.PAID_CONFIRMED_AT_EXPERIMENTAL * 1000)}"`;
       }
     }
 

@@ -1,5 +1,22 @@
 # @rosen-bridge/ui-kit
 
+## 5.8.0
+
+### Minor Changes
+
+- Implement `Menu` component
+- Move MUI-dependent components to the legacy folder
+- Implement the `EventProcesses` component
+- Implement `useConfirm` hook, `ApiKeyDialogProtectedAction` component, and add `TableGrid` variant property
+- Add useMemo to `useCollection` to stabilize output and reduce unnecessary re-renders
+- Remove unused `QrCodeModal` component
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-bridge/icons@3.7.0
+  - @rosen-ui/utils@1.0.4
+
 ## 5.7.0
 
 ### Minor Changes

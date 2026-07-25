@@ -47,9 +47,7 @@ export const Overview = ({
   } = useSWR<EventDetailsType[]>(`/v1/events/${id}`, fetcher);
 
   useEffect(() => {
-    if (events?.length) {
-      onFlowIdChange(events.at(0)?.txId);
-    }
+    onFlowIdChange(events?.at(0)?.txId);
   }, [events, onFlowIdChange]);
 
   const data = events?.find((event) => event.txId === flowId);

@@ -14,7 +14,7 @@ const guards = [
 
 type ProcessSelectProps = {
   disabled?: boolean;
-  value: string;
+  value?: string;
   onChange: (value: string) => void;
 };
 

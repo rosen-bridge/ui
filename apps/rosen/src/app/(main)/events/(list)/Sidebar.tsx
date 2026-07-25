@@ -16,6 +16,7 @@ import {
   EventDetails,
   type EventDetailsProps,
   Icon,
+  Stack,
   Typography,
   useBreakpoint,
   useStickyBox,
@@ -95,7 +96,21 @@ const Drawer = ({ value, onClose }: SidebarProps) => {
   return (
     <EnhancedDialog open={!!value} stickOn="laptop" onClose={onClose}>
       <EnhancedDialogTitle icon="Exchange" onClose={onClose}>
-        Event Details
+        <Stack style={{ width: '100%' }} direction="row" justify="between">
+          Event
+          {value && (
+            <Button
+              variant="text"
+              size="small"
+              target="_blank"
+              href={`/events/${value.eventId}`}
+              startIcon={<Icon name="Eye" />}
+              style={{ marginLeft: 'auto' }}
+            >
+              SEE DETAILS
+            </Button>
+          )}
+        </Stack>
       </EnhancedDialogTitle>
       <EnhancedDialogContent>
         <Content value={value} />
