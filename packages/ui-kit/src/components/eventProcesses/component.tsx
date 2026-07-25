@@ -9,7 +9,6 @@ import { Step, type StepProps } from './steps';
 
 import './styles.css';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface EventProcessesOverrides {}
 
 export type EventProcessesOwnProps = {
