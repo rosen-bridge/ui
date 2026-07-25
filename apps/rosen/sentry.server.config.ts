@@ -5,4 +5,7 @@ Sentry.init({
   tracesSampleRate: 1,
   enableLogs: true,
   sendDefaultPii: true,
+  dataCollection: {
+    httpBodies: ['incomingRequest'],
+  },
 });
