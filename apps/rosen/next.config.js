@@ -72,4 +72,4 @@ const sentryOptions = {
   },
 };
 
-module.exports = nextConfig;
+module.exports = withSentryConfig(nextConfig, sentryOptions);
