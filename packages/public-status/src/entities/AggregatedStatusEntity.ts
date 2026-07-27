@@ -12,6 +12,9 @@ import { TxEntity } from './TxEntity';
 @Entity('aggregated_status_entity')
 export class AggregatedStatusEntity {
   @PrimaryColumn('varchar')
+  triggerTxId: string;
+
+  @Column('varchar')
   eventId: string;
 
   @Column('integer')

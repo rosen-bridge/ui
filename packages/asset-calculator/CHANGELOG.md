@@ -1,5 +1,11 @@
 # @rosen-ui/asset-calculator
 
+## 2.4.0
+
+### Minor Changes
+
+- Add FiroCalculator that reads locked amounts from the Firo insight-api (`/insight-api-zcoin/addr/{address}/balance`)
+
 ## 2.3.3
 
 ### Patch Changes

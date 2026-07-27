@@ -1,53 +1,21 @@
-import {
-  PropsWithChildren,
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-  useTransition,
-} from 'react';
+import { use } from 'react';
 
 import { TokenMap } from '@rosen-bridge/tokens';
 
 import { getTokenMap } from '@/tokenMap/getClientTokenMap';
 
-/**
- * return TokenMap instance
- */
-export const useTokenMap = () => {
-  const context = useContext(TokenMapContext);
+let tokenMapPromise: Promise<TokenMap> | null = null;
 
-  if (!context) {
-    throw new Error('useTokenMap must be used within TokenMapProvider');
-  }
-
-  return context;
-};
-
-export type TokenMapContextType = TokenMap;
-
-export const TokenMapContext = createContext<TokenMap | null>(null);
-
-export const TokenMapProvider = ({ children }: PropsWithChildren) => {
-  const [tokenMap, setTokenMap] = useState(new TokenMap());
-
-  const [, startTransition] = useTransition();
-
-  useEffect(() => {
-    startTransition(async () => {
-      try {
-        setTokenMap(await getTokenMap());
-      } catch (error) {
-        throw new Error('Failed to fetch TokenMap, reload the page.', {
-          cause: error,
-        });
-      }
+const getTokenMapPromise = () => {
+  if (!tokenMapPromise) {
+    tokenMapPromise = getTokenMap().catch((error) => {
+      tokenMapPromise = null;
+      throw new Error('Failed to fetch TokenMap, reload the page.', {
+        cause: error,
+      });
     });
-  }, []);
-
-  return (
-    <TokenMapContext.Provider value={tokenMap}>
-      {children}
-    </TokenMapContext.Provider>
-  );
+  }
+  return tokenMapPromise;
 };
+
+export const useTokenMap = () => use(getTokenMapPromise());

@@ -24,6 +24,8 @@ export { default as CheckCircle } from './icons/check-circle.svg?react';
 
 export { default as Check } from './icons/check.svg?react';
 
+export { default as CircleFill } from './icons/circle-fill.svg?react';
+
 export { default as ClipboardNotes } from './icons/clipboard-notes.svg?react';
 
 export { default as ClockThree } from './icons/clock-three.svg?react';
@@ -39,6 +41,8 @@ export { default as CommentAltExclamation } from './icons/comment-alt-exclamatio
 export { default as Copy } from './icons/copy.svg?react';
 
 export { default as Dashboard } from './icons/dashboard.svg?react';
+
+export { default as Edit } from './icons/edit.svg?react';
 
 export { default as Estate } from './icons/estate.svg?react';
 
@@ -163,6 +167,8 @@ export { default as Doge } from './networks/doge.svg?react';
 export { default as Ergo } from './networks/ergo.svg?react';
 
 export { default as Ethereum } from './networks/ethereum.svg?react';
+
+export { default as Firo } from './networks/firo.svg?react';
 
 export const TOKENS = {
   'fcfca7654fb0da57ecf9a3f489bcbeb1d43b56dce7e73b352f7bc6f2561d2a1b': new URL(

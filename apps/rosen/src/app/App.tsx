@@ -11,7 +11,6 @@ import {
   ToastProvider,
 } from '@rosen-bridge/ui-kit';
 
-import { TokenMapProvider } from '@/hooks';
 import { theme } from '@/theme/theme';
 import { UIKitProvider } from '@/uiKitProvider';
 
@@ -32,13 +31,11 @@ export const App = ({ children }: PropsWithChildren) => {
             router.push(href as unknown as Route, { scroll: false }),
         }}
       >
-        <TokenMapProvider>
-          <UIKitProvider>
-            <ThemeProvider theme={theme}>
-              <ToastProvider>{children}</ToastProvider>
-            </ThemeProvider>
-          </UIKitProvider>
-        </TokenMapProvider>
+        <UIKitProvider>
+          <ThemeProvider theme={theme}>
+            <ToastProvider>{children}</ToastProvider>
+          </ThemeProvider>
+        </UIKitProvider>
       </FrameworkProvider>
     </NoSsr>
   );

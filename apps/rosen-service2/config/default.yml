@@ -1,3 +1,11 @@
+logs:
+  - type: console
+    level: info
+  - type: file
+    level: info
+    path: ./logs/
+    maxSize: 20m
+    maxFiles: 14d
 db:
   host: localhost
   port: 5432
@@ -19,13 +27,13 @@ tokenMap:
   onChainTokenMapEnabled: true
   path: config/tokensMap.json
 statistics:
-  userEventsMetric:
-    interval: 86400
   lockedAssetsMetrics:
     interval: 86400
   generalMetrics:
     interval: 86400
   eventCountMetrics:
+    interval: 86400
+  userEventsMetric:
     interval: 86400
 chains:
   ergo:

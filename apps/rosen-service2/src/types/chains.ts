@@ -1,5 +1,3 @@
-import { NETWORKS_KEYS } from '@rosen-ui/constants';
-
 import { configs } from '../configs';
 import {
   ERGO_BLOCK_TIME,
@@ -10,9 +8,8 @@ import {
   ETHEREUM_BLOCK_TIME,
 } from '../constants';
 
-export type ChainChoices = (typeof NETWORKS_KEYS)[number];
-
 export type ChainsKeys = keyof (typeof configs)['chains'];
+export type ChainChoices = ChainsKeys;
 export type ChainsWithScanner = Exclude<ChainsKeys, 'bitcoin-runes'>;
 
 export interface ChainConfigs {

@@ -7,6 +7,11 @@ export const id0 =
 export const id1 =
   '0000000000000000000000000000000000000000000000000000000000000001';
 
+export const triggerId0 =
+  '1000000000000000000000000000000000000000000000000000000000000000';
+export const triggerId1 =
+  '1000000000000000000000000000000000000000000000000000000000000001';
+
 export const guardPk0 =
   '0308b553ecd6c7fa3098c9d129150de25eff1bb52e25223980c9e304c566f5a8e1';
 export const guardPk1 =
@@ -29,6 +34,7 @@ export const mockTx0: TxEntity = {
 export const mockGuardStatusRecords: Omit<GuardStatusEntity, 'id'>[] = [
   {
     eventId: id1,
+    triggerTxId: triggerId1,
     guardPk: guardPk0,
     updatedAt: 1010,
     status: EventStatus.pendingPayment,
@@ -37,6 +43,7 @@ export const mockGuardStatusRecords: Omit<GuardStatusEntity, 'id'>[] = [
   },
   {
     eventId: id0,
+    triggerTxId: triggerId0,
     guardPk: guardPk0,
     updatedAt: 1005,
     status: EventStatus.inPayment,
@@ -45,6 +52,7 @@ export const mockGuardStatusRecords: Omit<GuardStatusEntity, 'id'>[] = [
   },
   {
     eventId: id0,
+    triggerTxId: triggerId0,
     guardPk: guardPk1,
     updatedAt: 1001,
     status: EventStatus.timeout,

@@ -47,7 +47,10 @@ export const withValidation =
         value = result;
       }
     } catch (error) {
-      return Response.json((error as any).message, { status: 400 });
+      return Response.json(
+        { message: (error as any).message },
+        { status: 400 },
+      );
     }
 
     try {
@@ -55,10 +58,10 @@ export const withValidation =
       return Response.json(response);
     } catch (error) {
       if (error instanceof ReferenceError) {
-        return Response.json(error.message, { status: 404 });
+        return Response.json({ message: error.message }, { status: 404 });
       }
       if (error instanceof AccessDeniedError) {
-        return Response.json({ error: error.message }, { status: 403 });
+        return Response.json({ message: error.message }, { status: 403 });
       }
 
       Sentry.withScope((scope) => {
@@ -77,7 +80,7 @@ export const withValidation =
       });
 
       if (error instanceof Error) {
-        return Response.json(error.message, { status: 500 });
+        return Response.json({ message: error.message }, { status: 500 });
       }
       return Response.json(JSON.stringify(error), { status: 500 });
     }

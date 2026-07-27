@@ -18,6 +18,10 @@ interface DogeCalculatorInterface extends CalculatorInterface {
   blockcypherUrl: string;
 }
 
+interface FiroCalculatorInterface extends CalculatorInterface {
+  explorerUrl?: string;
+}
+
 interface EvmCalculatorInterface extends CalculatorInterface {
   rpcUrl: string;
   authToken?: string;
@@ -34,4 +38,5 @@ export {
   BitcoinRunesCalculatorInterface,
   EvmCalculatorInterface,
   DogeCalculatorInterface,
+  FiroCalculatorInterface,
 };

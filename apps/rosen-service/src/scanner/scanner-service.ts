@@ -6,6 +6,7 @@ import {
 import { CardanoKoiosScanner } from '@rosen-bridge/cardano-scanner';
 import { ErgoScanner } from '@rosen-bridge/ergo-scanner';
 import { EvmRpcScanner } from '@rosen-bridge/evm-scanner';
+import { FiroElectrumXScanner } from '@rosen-bridge/firo-scanner';
 
 import { handleError } from '../utils';
 import { startBinanceScanner } from './chains/binance';
@@ -14,6 +15,7 @@ import { startCardanoScanner } from './chains/cardano';
 import { startDogeScanner } from './chains/doge';
 import { startErgoScanner } from './chains/ergo';
 import { startEthereumScanner } from './chains/ethereum';
+import { startFiroScanner } from './chains/firo';
 
 const logger = DefaultLogger.getInstance().child(import.meta.url);
 
@@ -24,6 +26,7 @@ let bitcoinScanner: BitcoinRpcScanner;
 let ethereumScanner: EvmRpcScanner;
 let binanceScanner: EvmRpcScanner;
 let dogeScanner: DogeRpcScanner;
+let firoScanner: FiroElectrumXScanner;
 
 /**
  * start all scanners and register their extractors
@@ -37,6 +40,7 @@ const start = async () => {
       ethereumScanner,
       binanceScanner,
       dogeScanner,
+      firoScanner,
     ] = await Promise.all([
       startErgoScanner(),
       startCardanoScanner(),
@@ -44,6 +48,7 @@ const start = async () => {
       startEthereumScanner(),
       startBinanceScanner(),
       startDogeScanner(),
+      startFiroScanner(),
     ]);
 
     logger.debug('all scanners started and their extractors registered', {
@@ -54,6 +59,7 @@ const start = async () => {
         ethereumScanner.name(),
         binanceScanner.name(),
         dogeScanner.name(),
+        firoScanner.name(),
       ],
     });
   } catch (error) {
@@ -70,6 +76,7 @@ const scannerService = {
   getEthereumScanner: () => ethereumScanner,
   getBinanceScanner: () => binanceScanner,
   getDogeScanner: () => dogeScanner,
+  getFiroScanner: () => firoScanner,
 };
 
 export default scannerService;

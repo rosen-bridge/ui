@@ -20,11 +20,11 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@rosen-bridge/icons": "^3.6.0",
+    "@rosen-bridge/icons": "^3.7.0",
     "@rosen-bridge/tokens": "^6.0.2",
     "@rosen-network/base": "^0.5.4",
     "@rosen-network/evm": "^0.3.8",
-    "@rosen-ui/constants": "^1.0.0"
+    "@rosen-ui/constants": "^1.1.0"
   },
   "engines": {
     "node": ">=22.18.0",

@@ -7,6 +7,7 @@ import { PropsWithChildren } from 'react';
 import {
   App as AppBase,
   ApiKeyProvider,
+  ConfirmProvider,
   FrameworkProvider,
   ThemeProvider,
   ToastProvider,
@@ -42,21 +43,23 @@ export const App = ({ children }: PropsWithChildren) => {
         <UIKitProvider>
           <ApiKeyProvider>
             <ThemeProvider theme={theme}>
-              <ToastProvider>
-                <AppBase sidebar={<Sidebar />}>
-                  <Favicon />
-                  <SWRConfig
-                    value={{
-                      use:
-                        process.env.NEXT_PUBLIC_USE_MOCKED_APIS === 'true'
-                          ? [mockMiddlewareFactory(mockedData)]
-                          : [],
-                    }}
-                  >
-                    {children}
-                  </SWRConfig>
-                </AppBase>
-              </ToastProvider>
+              <ConfirmProvider>
+                <ToastProvider>
+                  <AppBase sidebar={<Sidebar />}>
+                    <Favicon />
+                    <SWRConfig
+                      value={{
+                        use:
+                          process.env.NEXT_PUBLIC_USE_MOCKED_APIS === 'true'
+                            ? [mockMiddlewareFactory(mockedData)]
+                            : [],
+                      }}
+                    >
+                      {children}
+                    </SWRConfig>
+                  </AppBase>
+                </ToastProvider>
+              </ConfirmProvider>
             </ThemeProvider>
           </ApiKeyProvider>
         </UIKitProvider>

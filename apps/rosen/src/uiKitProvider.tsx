@@ -34,7 +34,7 @@ declare module '@rosen-bridge/ui-kit' {
   }
 }
 
-export const getUiKitConfig: (tokenMap: TokenMap) => ConfigContextType = (
+const getUiKitConfig: (tokenMap: TokenMap) => ConfigContextType = (
   tokenMap,
 ) => ({
   components: {

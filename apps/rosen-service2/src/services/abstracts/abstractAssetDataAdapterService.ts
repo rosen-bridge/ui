@@ -8,7 +8,7 @@ export abstract class AbstractAssetDataAdapterService extends PeriodicTaskServic
   protected adapters: { [key: string]: ChainsAdapters } = {};
 
   /**
-   * return the singleton instance of AbstractAssetDataAdapterService
+   * Returns the singleton instance of AbstractAssetDataAdapterService
    *
    * @static
    * @return {AbstractAssetDataAdapterService}
@@ -19,7 +19,7 @@ export abstract class AbstractAssetDataAdapterService extends PeriodicTaskServic
   };
 
   /**
-   * calculate total supply of the wrapped-tokens
+   * Calculates total supply of the wrapped-tokens
    *
    * @returns { {[chain: string]: TotalSupply[]} }
    */

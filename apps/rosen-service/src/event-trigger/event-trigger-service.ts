@@ -29,6 +29,9 @@ const binanceEventTriggerExtractorLogger = logger.child(
 const dogeEventTriggerExtractorLogger = logger.child(
   'dogeEventTriggerExtractor',
 );
+const firoEventTriggerExtractorLogger = logger.child(
+  'firoEventTriggerExtractor',
+);
 
 /**
  * register event trigger extractors for all chains
@@ -113,6 +116,17 @@ export const registerExtractors = async (scanner: ErgoScanner) => {
       configs.binance.addresses.fraud,
       binanceEventTriggerExtractorLogger,
     );
+    const firoEventTriggerExtractor = new EventTriggerExtractor(
+      'firo-extractor',
+      dataSource,
+      ErgoNetworkType.Explorer,
+      configs.ergo.explorerUrl,
+      configs.firo.addresses.eventTrigger,
+      configs.firo.tokens.rwt,
+      configs.firo.addresses.permit,
+      configs.firo.addresses.fraud,
+      firoEventTriggerExtractorLogger,
+    );
     await scanner.registerExtractor(ergoEventTriggerExtractor);
     await scanner.registerExtractor(cardanoEventTriggerExtractor);
     await scanner.registerExtractor(bitcoinEventTriggerExtractor);
@@ -120,6 +134,7 @@ export const registerExtractors = async (scanner: ErgoScanner) => {
     await scanner.registerExtractor(dogeEventTriggerExtractor);
     await scanner.registerExtractor(ethereumEventTriggerExtractor);
     await scanner.registerExtractor(binanceEventTriggerExtractor);
+    await scanner.registerExtractor(firoEventTriggerExtractor);
 
     logger.debug('event trigger extractors registered', {
       scannerName: scanner.name(),
@@ -131,6 +146,7 @@ export const registerExtractors = async (scanner: ErgoScanner) => {
         dogeEventTriggerExtractor.getId(),
         ethereumEventTriggerExtractor.getId(),
         binanceEventTriggerExtractor.getId(),
+        firoEventTriggerExtractor.getId(),
       ],
     });
   } catch (error) {

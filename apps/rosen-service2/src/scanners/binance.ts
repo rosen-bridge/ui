@@ -14,13 +14,14 @@ import { configs } from '../configs';
 const logger = DefaultLogger.getInstance().child(import.meta.url);
 
 /**
- * Initializes and configures a Binance Smart Chain scanner instance.
+ * Creates and configures a Binance Smart Chain scanner instance.
  *
  * @param dataSource - TypeORM DataSource for DB connection
+ * @param tokenMap
  * @returns Configured and ready-to-use BinanceScanner instance
  * @throws Error if observation extractor creation or registration fails
  */
-export const buildBinanceRpcScannerWithExtractors = async (
+export const getBinanceScanner = async (
   dataSource: DataSource,
   tokenMap: TokenMap,
 ) => {

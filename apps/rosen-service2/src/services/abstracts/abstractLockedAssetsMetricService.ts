@@ -5,7 +5,7 @@ export abstract class AbstractLockedAssetsMetricService extends PeriodicTaskServ
   static name = 'LockedAssetsMetric';
 
   /**
-   * return the singleton instance of AbstractLockedAssetsMetricService
+   * Returns the singleton instance of AbstractLockedAssetsMetricService
    *
    * @static
    * @return {AbstractLockedAssetsMetricService}

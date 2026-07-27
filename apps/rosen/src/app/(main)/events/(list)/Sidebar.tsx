@@ -14,6 +14,7 @@ import {
   EventDetails,
   EventDetailsProps,
   Icon,
+  Stack,
   Typography,
   useBreakpoint,
   useStickyBox,
@@ -30,10 +31,12 @@ const Content = ({ value }: SidebarProps) => {
     return !!value && !!value.eventId && value.status !== 'multipleFlows';
   }, [value]);
 
-  const { data, isLoading } = useSWR<EventItem>(
+  const { data: events, isLoading } = useSWR<EventItem[]>(
     shouldLoad && `/v1/events/${value?.eventId}`,
     fetcher,
   );
+
+  const data = events?.at(0);
 
   const eventData = useMemo(() => {
     const result: EventDetailsProps['value'] = {
@@ -92,7 +95,21 @@ const Drawer = ({ value, onClose }: SidebarProps) => {
   return (
     <EnhancedDialog open={!!value} stickOn="laptop" onClose={onClose}>
       <EnhancedDialogTitle icon="Exchange" onClose={onClose}>
-        Event Details
+        <Stack style={{ width: '100%' }} direction="row" justify="between">
+          Event
+          {value && (
+            <Button
+              variant="text"
+              size="small"
+              target="_blank"
+              href={`/events/${value.eventId}`}
+              startIcon={<Icon name="Eye" />}
+              style={{ marginLeft: 'auto' }}
+            >
+              SEE DETAILS
+            </Button>
+          )}
+        </Stack>
       </EnhancedDialogTitle>
       <EnhancedDialogContent>
         <Content value={value} />

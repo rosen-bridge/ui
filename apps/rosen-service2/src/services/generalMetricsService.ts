@@ -102,10 +102,7 @@ export class GeneralMetricsService extends AbstractGeneralMetricsService {
    * @protected
    * @returns {Promise<void>}
    */
-  protected preStart = async (): Promise<void> => {
-    this.setStatus(ServiceStatus.started);
-    this.logger.info('GeneralMetricsService started successfully');
-  };
+  protected preStart = async (): Promise<void> => {};
 
   /**
    * Post-stop hook for cleanup
@@ -113,9 +110,7 @@ export class GeneralMetricsService extends AbstractGeneralMetricsService {
    * @protected
    * @returns {Promise<void>}
    */
-  protected postStop = async (): Promise<void> => {
-    this.logger.info('GeneralMetricsService stopped');
-  };
+  protected postStop = async (): Promise<void> => {};
 
   /**
    * Builds a list of asynchronous tasks for all metric jobs.

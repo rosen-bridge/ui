@@ -25,6 +25,7 @@ class TxAction {
 
   /**
    * inserts a TxEntity into database or throw if it exists
+   * @param repository
    * @param txId
    * @param chain
    * @param eventId

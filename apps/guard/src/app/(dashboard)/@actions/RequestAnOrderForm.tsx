@@ -6,7 +6,6 @@ import {
   AlertProps,
   ApiKeyDialogWarning,
   Card,
-  MenuItem,
   SubmitButton,
   TextField,
   useApiKey,
@@ -14,6 +13,7 @@ import {
   CardTitle,
   CardBody,
   Stack,
+  MenuItemMui,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS, NETWORKS_KEYS } from '@rosen-ui/constants';
 import { mutatorWithHeaders } from '@rosen-ui/swr-helpers';
@@ -124,9 +124,9 @@ export const RequestAnOrderForm = () => {
 
             <TextField select label="Chain" {...register('chain')} fullWidth>
               {NETWORKS_KEYS.map((key) => (
-                <MenuItem key={key} value={key}>
+                <MenuItemMui key={key} value={key}>
                   {NETWORKS[key].label}
-                </MenuItem>
+                </MenuItemMui>
               ))}
             </TextField>
 

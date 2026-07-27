@@ -36,7 +36,7 @@ describe('PublicStatusAction', () => {
 
     /**
      * @target PublicStatusAction.insertStatus should update aggregated status and
-     * guard status when no guard statuses exist for this eventId, tx info not provided
+     * guard status when no guard statuses exist for this triggerTxId, tx info not provided
      * @scenario
      * - call insertStatus
      * - get all records of GuardStatusChanged, GuardStatus, AggregatedStatusChanged, AggregatedStatus, Tx from database
@@ -47,11 +47,12 @@ describe('PublicStatusAction', () => {
      * - database should have contained a AggregatedStatusChanged record
      * - database should have contained no Tx records
      */
-    it('should update aggregated status and guard status when no guard statuses exist for this eventId, tx info not provided', async () => {
+    it('should update aggregated status and guard status when no guard statuses exist for this triggerTxId, tx info not provided', async () => {
       // arrange
       // act
       await PublicStatusAction.getInstance().insertStatus(
         mockNewGuardStatus.eventId,
+        mockNewGuardStatus.triggerTxId,
         mockNewGuardStatus.guardPk,
         mockNewGuardStatus.updatedAt,
         mockNewGuardStatus.status,
@@ -89,7 +90,7 @@ describe('PublicStatusAction', () => {
 
     /**
      * @target PublicStatusAction.insertStatus should update aggregated status and
-     * guard status when no guard statuses exist for this eventId, tx info provided
+     * guard status when no guard statuses exist for this triggerTxId, tx info provided
      * @scenario
      * - call insertStatus
      * @expected
@@ -99,11 +100,12 @@ describe('PublicStatusAction', () => {
      * - database should have contained a AggregatedStatusChanged record
      * - database should have contained a Tx record
      */
-    it('should update aggregated status and guard status when no guard statuses exist for this eventId, tx info provided', async () => {
+    it('should update aggregated status and guard status when no guard statuses exist for this triggerTxId, tx info provided', async () => {
       // arrange
       // act
       await PublicStatusAction.getInstance().insertStatus(
         mockNewGuardStatus.eventId,
+        mockNewGuardStatus.triggerTxId,
         mockNewGuardStatus.guardPk,
         mockNewGuardStatus.updatedAt,
         mockNewGuardStatus.status,
@@ -179,6 +181,7 @@ describe('PublicStatusAction', () => {
       // act
       await PublicStatusAction.getInstance().insertStatus(
         mockNewGuardStatus.eventId,
+        mockNewGuardStatus.triggerTxId,
         mockNewGuardStatus.guardPk,
         mockNewGuardStatus.updatedAt,
         mockNewGuardStatus.status,
@@ -251,6 +254,7 @@ describe('PublicStatusAction', () => {
       // act
       await PublicStatusAction.getInstance().insertStatus(
         mockNewGuardStatusAggregateChange.eventId,
+        mockNewGuardStatusAggregateChange.triggerTxId,
         mockNewGuardStatusAggregateChange.guardPk,
         mockNewGuardStatusAggregateChange.updatedAt,
         mockNewGuardStatusAggregateChange.status,
@@ -328,6 +332,7 @@ describe('PublicStatusAction', () => {
       // act
       await PublicStatusAction.getInstance().insertStatus(
         mockNewGuardStatus.eventId,
+        mockNewGuardStatus.triggerTxId,
         mockNewGuardStatus.guardPk,
         mockNewGuardStatus.updatedAt,
         mockNewGuardStatus.status,
@@ -406,6 +411,7 @@ describe('PublicStatusAction', () => {
       // act
       await PublicStatusAction.getInstance().insertStatus(
         mockNewGuardStatusAggregateChange.eventId,
+        mockNewGuardStatusAggregateChange.triggerTxId,
         mockNewGuardStatusAggregateChange.guardPk,
         mockNewGuardStatusAggregateChange.updatedAt,
         mockNewGuardStatusAggregateChange.status,

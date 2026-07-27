@@ -5,7 +5,7 @@ export abstract class AbstractEventCountMetricService extends PeriodicTaskServic
   static name = 'EventCountMetric';
 
   /**
-   * return the singleton instance of AbstractEventCountMetricService
+   * Returns the singleton instance of AbstractEventCountMetricService
    *
    * @static
    * @return {AbstractEventCountMetricService}

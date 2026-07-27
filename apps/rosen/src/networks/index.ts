@@ -5,3 +5,4 @@ export * from './cardano';
 export * from './doge';
 export * from './ergo';
 export * from './ethereum';
+export * from './firo';

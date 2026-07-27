@@ -289,27 +289,52 @@ export const useCollection = (options?: Options) => {
 
   useEffect(scrollIntoView, [scrollIntoView]);
 
-  return {
-    query,
+  return useMemo(
+    () => ({
+      query,
 
-    scrollIntoView,
+      scrollIntoView,
 
-    fields,
-    setFields: handleFieldsChange,
+      fields,
+      setFields: handleFieldsChange,
 
-    fragment,
-    setFragment,
+      fragment,
+      setFragment,
 
-    pageIndex,
-    setPageIndex,
+      pageIndex,
+      setPageIndex,
 
-    pageSize,
-    setPageSize: handlePageSizeChange,
+      pageSize,
+      setPageSize: handlePageSizeChange,
 
-    sort,
-    setSort,
+      sort,
+      setSort,
 
-    view,
-    setView,
-  };
+      view,
+      setView,
+    }),
+    [
+      query,
+
+      scrollIntoView,
+
+      fields,
+      handleFieldsChange,
+
+      fragment,
+      setFragment,
+
+      pageIndex,
+      setPageIndex,
+
+      pageSize,
+      handlePageSizeChange,
+
+      sort,
+      setSort,
+
+      view,
+      setView,
+    ],
+  );
 };

@@ -3,6 +3,7 @@ import {
   AlertProps,
   ApiKeyDialogProps,
   ApiKeyDialogButtonProps,
+  ApiKeyDialogProtectedActionProps,
   ApiKeyDialogWarningProps,
   AppProps,
   AppBarProps,
@@ -28,6 +29,7 @@ import {
   DurationProps,
   EventCardProps,
   EventDetailsProps,
+  EventProcessesProps,
   EventStatusProps,
   GridContainerProps,
   IconProps,
@@ -39,6 +41,12 @@ import {
   LabelGroupProps,
   LayoutListProps,
   LinkProps,
+  MenuProps,
+  MenuBodyProps,
+  MenuGroupProps,
+  MenuGroupLabelProps,
+  MenuItemProps,
+  MenuTriggerProps,
   NetworkProps,
   PageHeadingProps,
   QrCodeDialogProps,
@@ -73,6 +81,7 @@ export type Components = {
   Alert: AlertProps;
   ApiKeyDialog: ApiKeyDialogProps;
   ApiKeyDialogButton: ApiKeyDialogButtonProps;
+  ApiKeyDialogProtectedAction: ApiKeyDialogProtectedActionProps;
   ApiKeyDialogWarning: ApiKeyDialogWarningProps;
   App: AppProps;
   AppBar: AppBarProps;
@@ -98,6 +107,7 @@ export type Components = {
   Duration: DurationProps;
   EventCard: EventCardProps;
   EventDetails: EventDetailsProps;
+  EventProcesses: EventProcessesProps;
   EventStatus: EventStatusProps;
   GridContainer: GridContainerProps;
   Icon: IconProps;
@@ -109,6 +119,12 @@ export type Components = {
   LabelGroup: LabelGroupProps;
   LayoutList: LayoutListProps;
   Link: LinkProps;
+  Menu: MenuProps;
+  MenuBody: MenuBodyProps;
+  MenuGroup: MenuGroupProps;
+  MenuGroupLabel: MenuGroupLabelProps;
+  MenuItem: MenuItemProps;
+  MenuTrigger: MenuTriggerProps;
   Network: NetworkProps;
   PageHeading: PageHeadingProps;
   QrCodeDialog: QrCodeDialogProps;

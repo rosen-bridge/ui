@@ -1,0 +1,8 @@
+.RosenMenuTrigger {
+  outline: none;
+  border: none;
+  background: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}

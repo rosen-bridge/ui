@@ -19,24 +19,31 @@ import {
 } from '@rosen-bridge/ui-kit';
 
 export type SectionProps = {
+  action?: ReactNode;
   children?: ReactNode;
   collapsible?: boolean;
   error?: unknown;
   load?: () => void;
   title?: string;
+  onOpenChange?: (open: boolean) => void;
 };
 
 export const Section = ({
+  action,
   children,
   collapsible,
   error,
   load,
   title,
+  onOpenChange,
 }: SectionProps) => {
   const disclosure = useDisclosure({
-    onOpen: () => {
+    onClose: async () => {
+      onOpenChange?.(false);
+    },
+    onOpen: async () => {
+      onOpenChange?.(true);
       load?.();
-      return Promise.resolve();
     },
   });
 
@@ -46,11 +53,10 @@ export const Section = ({
         <CardTitle variant="h2" color="text-secondary">
           {title}
         </CardTitle>
-        {collapsible && (
-          <CardAction>
-            <DisclosureButton disclosure={disclosure} />
-          </CardAction>
-        )}
+        <CardAction>
+          {disclosure.state !== 'close' && action}
+          {collapsible && <DisclosureButton disclosure={disclosure} />}
+        </CardAction>
       </CardHeader>
       <Collapsible open={!collapsible || disclosure.state == 'open' || !!error}>
         <CardBody>

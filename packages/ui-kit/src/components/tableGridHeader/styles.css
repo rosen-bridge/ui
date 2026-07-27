@@ -4,5 +4,8 @@
   grid-template-columns: subgrid;
   padding: var(--rosen-spacing) 0;
   background-color: var(--rosen-palette-secondary-light);
+}
+
+.RosenTableGrid[data-variant='separated'] .RosenTableGridHeader {
   border-radius: var(--rosen-shape-borderRadius);
 }

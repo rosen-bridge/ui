@@ -17,6 +17,9 @@ export class AggregatedStatusChangedEntity {
 
   @Column('varchar')
   @Index()
+  triggerTxId: string;
+
+  @Column('varchar')
   eventId: string;
 
   @Column('integer')

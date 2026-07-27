@@ -30,36 +30,38 @@ class AggregatedStatusAction {
   };
 
   /**
-   * retrieves one AggregatedStatusEntity matching the specified eventId
+   * retrieves one AggregatedStatusEntity
    * @param repository
-   * @param eventId
+   * @param triggerTxId
    * @returns a promise that resolves to an AggregatedStatusEntity or null if no matching entity is found
    */
   getOne = async (
     repository: Repository<AggregatedStatusEntity>,
-    eventId: string,
+    triggerTxId: string,
   ): Promise<AggregatedStatusEntity | null> => {
     return repository.findOne({
-      where: { eventId },
+      where: { triggerTxId },
       relations: ['tx'],
     });
   };
 
   /**
-   * retrieves multiple AggregatedStatusEntity objects for the given eventIds array
-   * note: no need for pagination since output.length == eventIds.length
+   * retrieves multiple AggregatedStatusEntity
+   * note: no need for pagination since output.length == triggerTxIds.length
    * @param repository
-   * @param eventIds
+   * @param triggerTxIds
    * @returns a promise that resolves to an array of AggregatedStatusEntity objects
    */
   getMany = async (
     repository: Repository<AggregatedStatusEntity>,
-    eventIds: string[],
+    triggerTxIds: string[],
   ): Promise<AggregatedStatusEntity[]> => {
     return repository.find({
-      where: { eventId: In(eventIds) },
+      where: {
+        triggerTxId: In(triggerTxIds),
+      },
       relations: ['tx'],
-      order: { eventId: 'ASC' },
+      order: { triggerTxId: 'ASC' },
     });
   };
 
@@ -67,6 +69,7 @@ class AggregatedStatusAction {
    * upserts an AggregatedStatusEntity into database if it differs from its stored value
    * @param repository
    * @param eventId
+   * @param triggerTxId
    * @param updatedAt
    * @param status
    * @param txStatus
@@ -76,6 +79,7 @@ class AggregatedStatusAction {
   upsertOne = async (
     repository: Repository<AggregatedStatusEntity>,
     eventId: string,
+    triggerTxId: string,
     updatedAt: number,
     status: AggregateEventStatus,
     txStatus?: AggregateTxStatus,
@@ -84,7 +88,7 @@ class AggregatedStatusAction {
       chain: string;
     },
   ): Promise<void> => {
-    const storedValue = await this.getOne(repository, eventId);
+    const storedValue = await this.getOne(repository, triggerTxId);
 
     if (
       storedValue &&
@@ -100,13 +104,14 @@ class AggregatedStatusAction {
       [
         {
           eventId,
+          triggerTxId,
           updatedAt,
           status,
           txStatus: txStatus ?? null,
           tx: tx ? { txId: tx.txId, chain: tx.chain } : null,
         },
       ],
-      ['eventId'],
+      ['triggerTxId'],
     );
   };
 }

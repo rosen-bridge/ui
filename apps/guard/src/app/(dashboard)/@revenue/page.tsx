@@ -10,6 +10,12 @@ import {
   CardBody,
   Skeleton,
   CardAction,
+  Menu,
+  MenuTrigger,
+  Button,
+  Icon,
+  MenuBody,
+  MenuItem,
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import { ChartPeriod } from '@rosen-ui/types';
@@ -17,7 +23,7 @@ import useSWR from 'swr';
 
 import { ApiRevenueChartResponse } from '@/types/api';
 
-import { PeriodSelect } from './PeriodSelect';
+const periodOptions = ['week', 'month', 'year'] as const;
 
 const Loading = () => <Skeleton height={255} width="100%" variant="rounded" />;
 
@@ -44,7 +50,26 @@ const Revenue = () => {
           Revenue
         </CardTitle>
         <CardAction>
-          <PeriodSelect period={period} setPeriod={setPeriod} />
+          <Menu>
+            <MenuTrigger
+              as={Button}
+              size="small"
+              endIcon={<Icon name="AngleDown" size="small" />}
+            >
+              {period}
+            </MenuTrigger>
+            <MenuBody offset={[0, 4]} placement="bottom-end">
+              {periodOptions.map((periodOption) => (
+                <MenuItem
+                  key={periodOption}
+                  selected={periodOption === period}
+                  onClick={() => setPeriod(periodOption)}
+                >
+                  {periodOption}
+                </MenuItem>
+              ))}
+            </MenuBody>
+          </Menu>
         </CardAction>
       </CardHeader>
       <CardBody>

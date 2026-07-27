@@ -5,7 +5,7 @@ export abstract class AbstractGeneralMetricsService extends PeriodicTaskService 
   static name = 'GeneralMetrics';
 
   /**
-   * return the singleton instance of AbstractGeneralMetricsService
+   * Returns the singleton instance of AbstractGeneralMetricsService
    *
    * @static
    * @return {AbstractGeneralMetricsService}

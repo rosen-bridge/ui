@@ -7,8 +7,6 @@ import { NETWORKS } from '@rosen-ui/constants';
 import { RosenAmountValue } from '@rosen-ui/types';
 
 import {
-  BalanceProvider,
-  MaxTransferProvider,
   NetworkProvider,
   TransactionFeesProvider,
   WalletProvider,
@@ -45,52 +43,48 @@ const RosenBridge = () => {
       <FormProvider {...methods}>
         <NetworkProvider>
           <WalletProvider>
-            <BalanceProvider>
-              <MaxTransferProvider>
-                <TransactionFeesProvider>
-                  <div className="rosen-bridge-page-main">
-                    <div className="rosen-bridge-page-form">
-                      <BridgeForm />
-                    </div>
-                    <div className="rosen-bridge-page-info">
-                      <WalletInfo />
-                      <TransactionInfo />
-                    </div>
-                    {/*
-                    TODO: Add a condition that activates this alert specifically when MetaMask is selected
-                    local:ergo/rosen-bridge/ui#486
-                    */}
+            <TransactionFeesProvider>
+              <div className="rosen-bridge-page-main">
+                <div className="rosen-bridge-page-form">
+                  <BridgeForm />
+                </div>
+                <div className="rosen-bridge-page-info">
+                  <WalletInfo />
+                  <TransactionInfo />
+                </div>
+                {/*
+                TODO: Add a condition that activates this alert specifically when MetaMask is selected
+                local:ergo/rosen-bridge/ui#486
+                */}
 
-                    {(methods.getValues().source == NETWORKS.binance.key ||
-                      methods.getValues().source == NETWORKS.ethereum.key) && (
-                      <div className="rosen-bridge-page-alert">
-                        <Alert
-                          severity="warning"
-                          style={{
-                            textAlign: 'justify',
-                          }}
-                        >
-                          If you are using Ledger, you may need to enable
-                          &apos;Blind signing&apos; and &apos;Debug data&apos;
-                          in the Ledger (Ethereum &gt; Settings) due to{' '}
-                          <Link
-                            color="primary"
-                            target="_blank"
-                            href="https://github.com/LedgerHQ/app-ethereum/issues/311"
-                          >
-                            a known issue in Ledger and MetaMask interaction
-                          </Link>
-                          .
-                        </Alert>
-                      </div>
-                    )}
-                    <div className="rosen-bridge-page-action">
-                      <SubmitButton />
-                    </div>
+                {(methods.getValues().source == NETWORKS.binance.key ||
+                  methods.getValues().source == NETWORKS.ethereum.key) && (
+                  <div className="rosen-bridge-page-alert">
+                    <Alert
+                      severity="warning"
+                      style={{
+                        textAlign: 'justify',
+                      }}
+                    >
+                      If you are using Ledger, you may need to enable
+                      &apos;Blind signing&apos; and &apos;Debug data&apos; in
+                      the Ledger (Ethereum &gt; Settings) due to{' '}
+                      <Link
+                        color="primary"
+                        target="_blank"
+                        href="https://github.com/LedgerHQ/app-ethereum/issues/311"
+                      >
+                        a known issue in Ledger and MetaMask interaction
+                      </Link>
+                      .
+                    </Alert>
                   </div>
-                </TransactionFeesProvider>
-              </MaxTransferProvider>
-            </BalanceProvider>
+                )}
+                <div className="rosen-bridge-page-action">
+                  <SubmitButton />
+                </div>
+              </div>
+            </TransactionFeesProvider>
           </WalletProvider>
         </NetworkProvider>
       </FormProvider>

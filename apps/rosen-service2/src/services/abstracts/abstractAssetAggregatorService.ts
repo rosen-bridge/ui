@@ -5,7 +5,7 @@ export abstract class AbstractAssetAggregatorService extends PeriodicTaskService
   protected static instance: AbstractAssetAggregatorService;
 
   /**
-   * return the singleton instance of AbstractAssetAggregator
+   * Returns the singleton instance of AbstractAssetAggregator
    *
    * @static
    * @return {AbstractAssetAggregator}

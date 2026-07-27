@@ -41,6 +41,7 @@ const handler = async (params: Params) => {
 
   await PublicStatusAction.getInstance().insertStatus(
     params.eventId,
+    params.triggerTxId,
     params.pk,
     nowSeconds,
     params.status,

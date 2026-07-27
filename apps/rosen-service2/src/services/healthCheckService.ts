@@ -136,7 +136,7 @@ export class HealthService extends AbstractHealthService {
   };
 
   /**
-   * initializes the singleton instance of HealthService
+   * Initializes the singleton instance of HealthService
    *
    * @static
    * @memberof HealthService
@@ -184,6 +184,29 @@ export class HealthService extends AbstractHealthService {
   };
 
   /**
+   * Updates the health check status and exports the results to a JSON file.
+   *
+   */
+  protected updateAndExportHealthStatus = async () => {
+    this.logger.info('Starting the update healthCheck status');
+    await this.healthCheck.update();
+    this.logger.debug('periodic health check update done');
+    const healthStatus = Object.fromEntries(
+      this.healthCheck.getHealthStatus().map((p) => [p.id, p.status]),
+    );
+    const healthReportPath = path.isAbsolute(configs.paths.healthReport)
+      ? configs.paths.healthReport
+      : path.resolve(process.cwd(), configs.paths.healthReport);
+
+    this.logger.debug(`Health-check status is ${JSON.stringify(healthStatus)}`);
+    fs.writeFileSync(
+      healthReportPath,
+      JSON.stringify(healthStatus, null, 2),
+      'utf8',
+    );
+  };
+
+  /**
    * Builds a list of asynchronous tasks for health-check scanner.
    *
    * @returns {Task[]}
@@ -191,54 +214,23 @@ export class HealthService extends AbstractHealthService {
   protected getTasks = () => {
     return [
       {
-        fn: async () => {
-          this.logger.info('Starting the update healthCheck status');
-          try {
-            await this.healthCheck.update();
-            this.logger.debug('periodic health check update done');
-            const healthStatus = Object.fromEntries(
-              this.healthCheck.getHealthStatus().map((p) => [p.id, p.status]),
-            );
-            const healthReportPath = path.isAbsolute(configs.paths.healthReport)
-              ? configs.paths.healthReport
-              : path.resolve(process.cwd(), configs.paths.healthReport);
-
-            this.logger.debug(
-              `Health-check status is ${JSON.stringify(healthStatus)}`,
-            );
-            fs.writeFileSync(
-              healthReportPath,
-              JSON.stringify(healthStatus, null, 2),
-              'utf8',
-            );
-          } catch (error) {
-            this.logger.error(`failed to update health-check: ${error}`);
-            if (error instanceof Error && error.stack)
-              this.logger.debug(error.stack);
-          }
-        },
+        fn: this.updateAndExportHealthStatus,
         interval: configs.healthCheck.updateInterval * 1000,
       },
     ];
   };
 
   /**
-   * post-stop action of service.
+   * Post-stop action of service.
    *
    * @protected
    * @return {Promise<boolean>} true if service stopped successfully
    * @memberof HealthService
    */
   protected postStop = async () => {
-    for (const param of this.params)
-      try {
-        this.healthCheck.unregister(param.getId());
-        this.logger.debug(`${param.getId()} health param unregistered`);
-      } catch (err) {
-        this.logger.error(
-          `Unregistering healthCheck ${param.getId()} parameter failed: ${err}`,
-        );
-        if (err instanceof Error && err.stack) this.logger.debug(err.stack);
-      }
+    for (const param of this.params) {
+      this.healthCheck.unregister(param.getId());
+      this.logger.debug(`${param.getId()} health param unregistered`);
+    }
   };
 }
