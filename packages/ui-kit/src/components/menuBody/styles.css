@@ -1,6 +1,4 @@
 .RosenMenuBody {
-  position: relative;
-  z-index: 1000;
   background: var(--rosen-palette-background-paper);
   padding: var(--rosen-spacing) 0;
   border-radius: calc(var(--rosen-spacing) * 2);
@@ -14,4 +12,7 @@
 .RosenMenuBody[data-ending-style] {
   opacity: 0;
   transform: scale(0.9);
+}
+.RosenMenuBody-positioner {
+  z-index: 1000;
 }

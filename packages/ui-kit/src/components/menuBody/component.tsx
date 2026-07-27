@@ -62,6 +62,7 @@ export const MenuBody = (props: MenuBodyProps) => {
   return (
     <MenuBaseUI.Portal>
       <MenuBaseUI.Positioner
+        className="RosenMenuBody-positioner"
         anchor={anchor}
         align={align}
         alignOffset={alignOffset}
