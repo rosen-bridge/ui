@@ -7,13 +7,13 @@ export const filters: Filter[] = [
     label: 'Network',
     unique: true,
     operators: [OPERATOR_IS],
-    input: () => ({
+    input: {
       type: 'select',
       options: NETWORKS_KEYS.map((key) => ({
         label: NETWORKS[key].label,
         value: key,
       })),
-    }),
+    },
   },
   {
     name: 'name',
