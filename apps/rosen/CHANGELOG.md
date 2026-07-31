@@ -1,5 +1,13 @@
 # @rosen-bridge/rosen-app
 
+## 5.5.1
+
+### Patch Changes
+
+- Prevent SQL injection in the `Assets` and `Events` public APIs by using parameterized TypeORM queries
+- Update dependencies
+  - @rosen-bridge/ui-kit@5.8.1
+
 ## 5.5.0
 
 ### Minor Changes
