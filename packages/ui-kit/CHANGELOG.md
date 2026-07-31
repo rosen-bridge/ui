@@ -1,5 +1,11 @@
 # @rosen-bridge/ui-kit
 
+## 5.8.1
+
+### Patch Changes
+
+- Remove the unused `server.ts` file from the `SmartSearch` component
+
 ## 5.8.0
 
 ### Minor Changes
