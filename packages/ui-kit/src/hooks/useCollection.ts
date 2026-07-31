@@ -21,8 +21,8 @@ const getInitialState = (search: string, options?: Options) => {
   const offsetRaw = searchParams.get('offset');
   searchParams.delete('offset');
 
-  const sortRaw = searchParams.get('sort');
-  searchParams.delete('sort');
+  const sortRaw = searchParams.get('sorts');
+  searchParams.delete('sorts');
 
   const limit = limitRaw === null ? options?.defaultPageSize : Number(limitRaw);
   const offset = offsetRaw === null ? undefined : Number(offsetRaw);
@@ -155,7 +155,7 @@ export const useCollection = (options?: Options) => {
     }
 
     if (sort?.key) {
-      params['sort'] = sort.order ? `${sort.key}-${sort.order}` : sort.key;
+      params['sorts'] = sort.order ? `${sort.key}-${sort.order}` : sort.key;
     }
 
     if (!Object.keys(params).length) return;

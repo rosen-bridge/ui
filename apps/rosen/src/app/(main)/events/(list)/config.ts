@@ -15,8 +15,8 @@ export const getFilters = (tokenMap: TokenMap): Filter[] => [
     label: 'Token',
     unique: true,
     operators: OPERATORS_EQUALITY,
-    input: (context) => ({
-      type: context.operator.endsWith('one-of') ? 'multiple' : 'select',
+    input: {
+      type: 'select',
       options: tokenMap
         .getConfig()
         .map((item) => Object.values(item))
@@ -26,7 +26,7 @@ export const getFilters = (tokenMap: TokenMap): Filter[] => [
           label: item.name,
           value: item.tokenId,
         })),
-    }),
+    },
   },
   {
     name: 'eventId',
@@ -42,26 +42,26 @@ export const getFilters = (tokenMap: TokenMap): Filter[] => [
     label: 'From Chain',
     unique: true,
     operators: OPERATORS_EQUALITY,
-    input: (context) => ({
-      type: context.operator.endsWith('one-of') ? 'multiple' : 'select',
+    input: {
+      type: 'select',
       options: NETWORKS_KEYS.map((key) => ({
         label: NETWORKS[key].label,
         value: key,
       })),
-    }),
+    },
   },
   {
     name: 'toChain',
     label: 'To Chain',
     unique: true,
     operators: OPERATORS_EQUALITY,
-    input: (context) => ({
-      type: context.operator.endsWith('one-of') ? 'multiple' : 'select',
+    input: {
+      type: 'select',
       options: NETWORKS_KEYS.map((key) => ({
         label: NETWORKS[key].label,
         value: key,
       })),
-    }),
+    },
   },
   {
     name: 'fromAddress',
