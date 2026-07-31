@@ -1,11 +1,8 @@
 import { ObservationEntity } from '@rosen-bridge/abstract-observation-extractor';
 import { BlockEntity } from '@rosen-bridge/abstract-scanner';
-import { In } from '@rosen-bridge/extended-typeorm';
+import { ArrayContains, In, Not } from '@rosen-bridge/extended-typeorm';
+import { Filter, StringArrayFilterField } from '@rosen-bridge/query-params';
 import { TokenPriceAction } from '@rosen-bridge/token-price-entity';
-import {
-  Filters,
-  filtersToTypeorm,
-} from '@rosen-bridge/ui-kit/dist/components/legacy/smartSearch/server';
 import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
 import { TokenEntity } from '@rosen-ui/asset-calculator';
 import { NETWORKS } from '@rosen-ui/constants';
@@ -18,6 +15,8 @@ import {
   GuardStatusEntity,
 } from '@rosen-ui/public-status';
 import { Network } from '@rosen-ui/types';
+
+import { filtersToTypeorm } from '@/filters';
 
 import { dataSource } from '../dataSource';
 import '../initialize-datasource-if-needed';
@@ -97,27 +96,21 @@ export type EventStatusType = {
  * @param offset
  * @param limit
  */
-export const getEvents = async (filters: Filters) => {
-  filters.sort = Object.assign(
-    {
-      key: 'timestamp',
-      order: 'DESC',
-    },
-    filters.sort,
-  );
-
-  if (filters.search) {
-    filters.search.in ||= [];
-  }
-
+export const getEvents = async (filters: Filter) => {
   await (async () => {
-    const field = filters.fields?.find(
+    if (!filters.fields) return;
+
+    const fieldIndex = filters.fields.findIndex(
       (field) => field.key == 'originalTokenId',
     );
 
+    if (fieldIndex === -1) return;
+
+    const field = filters.fields.at(fieldIndex);
+
     if (!field) return;
 
-    field.key = 'sourceChainTokenId';
+    if (field.operator !== 'equal' && field.operator !== 'notEqual') return;
 
     const originalTokenIds = [field.value].flat();
 
@@ -140,7 +133,14 @@ export const getEvents = async (filters: Filters) => {
 
     const ergoSideTokenIds = ergoSideTokens.map((token) => token.id);
 
-    field.value = ergoSideTokenIds;
+    const filter: StringArrayFilterField = {
+      key: 'sourceChainTokenId',
+      type: 'stringArray',
+      operator: field.operator === 'equal' ? 'includes' : 'excludes',
+      values: ergoSideTokenIds,
+    };
+
+    filters.fields.splice(fieldIndex, 1, filter);
   })();
 
   const statusIndex =
@@ -149,19 +149,26 @@ export const getEvents = async (filters: Filters) => {
   const status =
     statusIndex > -1 ? filters.fields?.splice(statusIndex, 1)[0] : undefined;
 
-  let { pagination, query, sort } = filtersToTypeorm(filters, (key) => {
+  let { pagination, sorts, where } = filtersToTypeorm(filters, (key) => {
     switch (key) {
       case 'amount':
       case 'bridgeFee':
       case 'networkFee':
-        return `sub."${key}Normalized"`;
+        return `"${key}Normalized"`;
       default:
-        return `sub."${key}"`;
+        return `"${key}"`;
     }
   });
 
   if (status) {
-    query = `${query ? `${query} AND ` : ''}(${status.operator == '!=' ? 'NOT ' : ''}('${status.value}' = ANY(sub."statuses")))`;
+    switch (status.operator) {
+      case 'equal':
+        where.statuses = ArrayContains([status.value]);
+        break;
+      case 'notEqual':
+        where.statuses = Not(ArrayContains([status.value]));
+        break;
+    }
   }
 
   const subquery = observationRepository
@@ -217,15 +224,11 @@ export const getEvents = async (filters: Filters) => {
     .from(`(${subquery.getQuery()})`, 'sub')
     .setParameters(subquery.getParameters());
 
-  if (query) {
-    queryBuilder = queryBuilder.where(query);
-  }
+  queryBuilder = queryBuilder.where(where);
 
   queryBuilder = queryBuilder.distinct(true);
 
-  if (sort) {
-    queryBuilder = queryBuilder.orderBy(sort.key, sort.order);
-  }
+  sorts?.forEach((sort) => queryBuilder.addOrderBy(sort.key, sort.order));
 
   if (pagination?.offset) {
     queryBuilder = queryBuilder.offset(pagination.offset);

@@ -1,13 +1,12 @@
-import {
-  Filters,
-  filtersToTypeorm,
-} from '@rosen-bridge/ui-kit/dist/components/legacy/smartSearch/server';
+import { Filter } from '@rosen-bridge/query-params';
 import {
   BridgedAssetEntity,
   LockedAssetEntity,
   TokenEntity,
 } from '@rosen-ui/asset-calculator';
 import { Network } from '@rosen-ui/types';
+
+import { filtersToTypeorm } from '@/filters';
 
 import { dataSource } from '../dataSource';
 import '../initialize-datasource-if-needed';
@@ -70,24 +69,13 @@ export const getAsset = async (id: string) => {
  * get paginated list of assets
  * @param filters
  */
-export const getAllAssets = async (filters: Filters) => {
-  if (!filters.sort) {
-    filters.sort = {
-      key: 'name',
-      order: 'ASC',
-    };
-  }
-
-  if (filters.search) {
-    filters.search.in ||= [];
-  }
-
-  let { pagination, query, sort } = filtersToTypeorm(filters, (key) => {
+export const getAllAssets = async (filters: Filter) => {
+  let { pagination, sorts, where } = filtersToTypeorm(filters, (key) => {
     switch (key) {
       case 'bridged':
-        return `sub."${key}Normalized"`;
+        return `"${key}Normalized"`;
       default:
-        return `sub."${key}"`;
+        return `"${key}"`;
     }
   });
 
@@ -134,13 +122,9 @@ export const getAllAssets = async (filters: Filters) => {
     .from(`(${subquery.getQuery()})`, 'sub')
     .setParameters(subquery.getParameters());
 
-  if (query) {
-    queryBuilder = queryBuilder.where(query);
-  }
+  queryBuilder = queryBuilder.where(where);
 
-  if (sort) {
-    queryBuilder = queryBuilder.orderBy(sort.key, sort.order);
-  }
+  sorts?.forEach((sort) => queryBuilder.addOrderBy(sort.key, sort.order));
 
   if (pagination?.offset) {
     queryBuilder = queryBuilder.offset(pagination.offset);
