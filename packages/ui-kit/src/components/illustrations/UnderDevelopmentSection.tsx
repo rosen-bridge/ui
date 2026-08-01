@@ -1,6 +1,6 @@
 import { useId } from 'react';
 
-export const UnderDevelopSection = () => {
+export const UnderDevelopmentSection = () => {
   const id = useId();
 
   const clip0 = `clip0-${id}`;
