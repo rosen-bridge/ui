@@ -13,7 +13,6 @@ export * from './EnhancedDialogTitle';
 export * from './EnhancedTable';
 export * from './EnhancedTableCell';
 export * from './HealthParamCard';
-export * from './Illustrations';
 export * from './Mui';
 export * from './navigationBar';
 export * from './Pagination';
