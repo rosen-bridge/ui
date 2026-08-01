@@ -104,7 +104,7 @@ const getUiKitConfig: (tokenMap: TokenMap) => ConfigContextType = (
               {
                 label: token.name,
                 logo: AllIcons.TOKENS[
-                  tokens.ergo.tokenId as keyof (typeof AllIcons)['TOKENS']
+                  tokens.ergo.tokenId as keyof typeof AllIcons.TOKENS
                 ],
               },
             ]),

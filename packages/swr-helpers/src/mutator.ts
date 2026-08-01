@@ -7,7 +7,7 @@ import JSONBigInt from 'json-bigint';
  * @param params
  */
 /**
- * TODO: remove the inline ESLint comment
+ * TODO: remove the inline Biome comment
  * local:ergo/rosen-bridge/ui#441
  */
 // biome-ignore lint/suspicious/noExplicitAny: Use a better type

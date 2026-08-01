@@ -13,7 +13,7 @@ axios.defaults.baseURL = process.env.API_BASE_URL || '/api';
  */
 const fetcher = async (
   /**
-   * TODO: remove the inline ESLint comment
+   * TODO: remove the inline Biome comment
    * local:ergo/rosen-bridge/ui#441
    */
   key: // biome-ignore lint/suspicious/noExplicitAny: Use a better type

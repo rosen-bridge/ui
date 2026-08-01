@@ -1,5 +1,5 @@
 /**
- * TODO: remove the inline ESLint comment
+ * TODO: remove the inline Biome comment
  * local:ergo/rosen-bridge/ui#441
  */
 /** biome-ignore-all lint/suspicious/noExplicitAny: Use a better type */
