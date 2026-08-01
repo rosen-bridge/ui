@@ -1,5 +1,4 @@
 ---
-'@rosen-ui/asset-data-adapter': patch
 '@rosen-ui/asset-aggregator': patch
 '@rosen-ui/rosen-statistics': patch
 ---

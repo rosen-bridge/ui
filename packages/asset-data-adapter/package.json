@@ -1,6 +1,6 @@
 {
   "name": "@rosen-ui/asset-data-adapter",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "A data adapter for fetching and normalizing asset information across multiple blockchains.",
   "repository": {
     "type": "git",
