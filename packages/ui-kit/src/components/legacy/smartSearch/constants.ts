@@ -1,4 +1,4 @@
-import { Input, Operator } from './types';
+import type { Input, Operator } from './types';
 
 export const OPERATOR_IS: Operator = {
   value: 'is',
@@ -77,7 +77,9 @@ export const OPERATORS_COMPARATIVE: Operator[] = [
   OPERATOR_GREATER_THAN_OR_EQUAL,
 ];
 
-export const OPERATORS_EQUALITY: Operator[] = [
+export const OPERATORS_EQUALITY: Operator[] = [OPERATOR_IS, OPERATOR_NOT];
+
+export const OPERATORS_EQUALITY_COLLECTION: Operator[] = [
   OPERATOR_IS,
   OPERATOR_NOT,
   OPERATOR_IS_ONE_OF,

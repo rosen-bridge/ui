@@ -1,4 +1,4 @@
-import { NETWORKS } from '@rosen-ui/constants';
+import type { NETWORKS } from '@rosen-ui/constants';
 
 export type ChartPeriod = 'week' | 'month' | 'year';
 

@@ -1,4 +1,4 @@
-import { Repository } from '@rosen-bridge/extended-typeorm';
+import type { Repository } from '@rosen-bridge/extended-typeorm';
 import { testDataSource } from '@rosen-ui/data-source';
 import {
   AggregatedStatusChangedEntity,
@@ -10,7 +10,6 @@ import AggregatedStatusChangedAction from '@/backend/status/AggregatedStatusChan
 import { DataSourceMock } from '../../mocked/DataSource.mock';
 import {
   mockAggregatedStatusChangedRecords,
-  id0,
   mockPaginationTestData,
   triggerId0,
 } from './testData';

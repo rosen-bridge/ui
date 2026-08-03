@@ -1,27 +1,28 @@
 'use client';
 
-import dynamic from 'next/dynamic';
 import { useState } from 'react';
+import dynamic from 'next/dynamic';
 
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardBody,
-  Skeleton,
-  CardAction,
-  Menu,
-  MenuTrigger,
-  Button,
-  Icon,
-  MenuBody,
-  MenuItem,
-} from '@rosen-bridge/ui-kit';
-import { fetcher } from '@rosen-ui/swr-helpers';
-import { ChartPeriod } from '@rosen-ui/types';
 import useSWR from 'swr';
 
-import { ApiRevenueChartResponse } from '@/types/api';
+import {
+  Button,
+  Card,
+  CardAction,
+  CardBody,
+  CardHeader,
+  CardTitle,
+  Icon,
+  Menu,
+  MenuBody,
+  MenuItem,
+  MenuTrigger,
+  Skeleton,
+} from '@rosen-bridge/ui-kit';
+import { fetcher } from '@rosen-ui/swr-helpers';
+import type { ChartPeriod } from '@rosen-ui/types';
+
+import type { ApiRevenueChartResponse } from '@/types/api';
 
 const periodOptions = ['week', 'month', 'year'] as const;
 
@@ -33,7 +34,10 @@ const Loading = () => <Skeleton height={255} width="100%" variant="rounded" />;
  */
 const RevenueChart = dynamic(
   () => import('./RevenueChart').then((mod) => mod.RevenueChart),
-  { ssr: false, loading: () => <Loading /> },
+  {
+    ssr: false,
+    loading: () => <Loading />,
+  },
 );
 
 const Revenue = () => {

@@ -13,18 +13,16 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc --build",
-    "lint": "eslint --fix . && npm run prettify",
-    "lint:check": "eslint . && npm run prettify:check",
-    "prettify": "prettier --write . --ignore-path ../../.gitignore",
-    "prettify:check": "prettier --check . --ignore-path ../../.gitignore",
+    "lint": "biome check --write",
+    "lint:check": "biome check",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@rosen-bridge/icons": "^3.6.0",
+    "@rosen-bridge/icons": "^3.7.0",
     "@rosen-bridge/tokens": "^6.0.2",
     "@rosen-network/base": "^0.5.4",
     "@rosen-network/evm": "^0.3.8",
-    "@rosen-ui/constants": "^1.0.0"
+    "@rosen-ui/constants": "^1.1.0"
   },
   "engines": {
     "node": ">=22.18.0",

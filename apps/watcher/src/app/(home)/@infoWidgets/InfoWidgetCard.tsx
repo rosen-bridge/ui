@@ -1,15 +1,15 @@
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
 import {
-  Tooltip,
-  Typography,
-  Stack,
   Card,
   CardBody,
-  Truncate,
   CircularProgress,
   Icon,
-  IconProps,
+  type IconProps,
+  Stack,
+  Tooltip,
+  Truncate,
+  Typography,
 } from '@rosen-bridge/ui-kit';
 
 export type InfoWidgetCardProps = {

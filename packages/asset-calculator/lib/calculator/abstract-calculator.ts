@@ -1,6 +1,9 @@
-import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
-import { RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
-import { Network } from '@rosen-ui/types';
+import {
+  type AbstractLogger,
+  DummyLogger,
+} from '@rosen-bridge/abstract-logger';
+import type { RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
+import type { Network } from '@rosen-ui/types';
 
 export default abstract class AbstractCalculator {
   abstract readonly chain: Network;

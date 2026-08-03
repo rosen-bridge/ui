@@ -1,6 +1,5 @@
 ---
 '@rosen-bridge/rosen-service2': minor
-'@rosen-bridge/rosen-service': minor
 ---
 
 add format, serviceName, createSymlink and symlinkName options for log in config, file type

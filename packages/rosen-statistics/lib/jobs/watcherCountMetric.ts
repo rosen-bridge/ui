@@ -1,13 +1,16 @@
-import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
-import { DataSource } from '@rosen-bridge/extended-typeorm';
 import {
-  MetricAction,
+  type AbstractLogger,
+  DummyLogger,
+} from '@rosen-bridge/abstract-logger';
+import type { DataSource } from '@rosen-bridge/extended-typeorm';
+import {
   METRIC_KEYS,
+  MetricAction,
   WatcherCountMetricAction,
 } from '@rosen-ui/rosen-statistics-entity';
 
 import { NodeBoxFetcher } from '../fetchers';
-import { WatcherCountConfig } from '../types';
+import type { WatcherCountConfig } from '../types';
 import { calculateWatcherCounts } from '../utils';
 
 /**

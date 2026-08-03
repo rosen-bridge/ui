@@ -2,7 +2,7 @@ import { BlockEntity } from '@rosen-bridge/abstract-scanner';
 
 import { dataSource } from '../dataSource';
 import '../initialize-datasource-if-needed';
-import { NetworkHeight } from './services';
+import type { NetworkHeight } from './services';
 
 export const getScannersHeights = async (): Promise<NetworkHeight[]> => {
   const rawData = await dataSource

@@ -1,11 +1,18 @@
-import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
-import { DataSource } from '@rosen-bridge/extended-typeorm';
-import { NATIVE_RESIDENCY, NATIVE_TOKEN, TokenMap } from '@rosen-bridge/tokens';
+import {
+  type AbstractLogger,
+  DummyLogger,
+} from '@rosen-bridge/abstract-logger';
+import type { DataSource } from '@rosen-bridge/extended-typeorm';
+import {
+  NATIVE_RESIDENCY,
+  NATIVE_TOKEN,
+  type TokenMap,
+} from '@rosen-bridge/tokens';
 import { NETWORKS } from '@rosen-ui/constants';
 
 import { BridgedAssetAction, LockedAssetAction, TokenAction } from './actions';
 import { TokensAnalyzer } from './tokensAnalyzer';
-import { AssetBalance, NetworkItem, TotalSupply } from './types';
+import type { AssetBalance, NetworkItem, TotalSupply } from './types';
 
 export class AssetAggregator {
   lockedAssetAction: LockedAssetAction;

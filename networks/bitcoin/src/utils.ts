@@ -1,13 +1,14 @@
+import Axios from 'axios';
+import { address, Psbt } from 'bitcoinjs-lib';
+
 import { encodeAddress } from '@rosen-bridge/address-codec';
 import {
-  CalculateFee,
+  type CalculateFee,
   calculateFeeCreator,
   getMinTransferCreator as getMinTransferCreatorBase,
 } from '@rosen-network/base';
 import { NETWORKS } from '@rosen-ui/constants';
-import { Network } from '@rosen-ui/types';
-import Axios from 'axios';
-import { Psbt, address } from 'bitcoinjs-lib';
+import type { Network } from '@rosen-ui/types';
 
 import {
   CONFIRMATION_TARGET,

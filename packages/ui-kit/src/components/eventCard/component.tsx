@@ -1,26 +1,25 @@
 import {
   Amount,
-  AmountProps,
+  type AmountProps,
   Card,
   CardBody,
   Connector,
   EventStatus,
-  EventStatusProps,
+  type EventStatusProps,
   Identifier,
-  IdentifierProps,
+  type IdentifierProps,
   Network,
-  NetworkProps,
+  type NetworkProps,
   RelativeTime,
-  RelativeTimeProps,
+  type RelativeTimeProps,
   Token,
-  TokenProps,
+  type TokenProps,
 } from '@/components';
 import { useConfig } from '@/hooks';
-import { ElementBaseProps, OverridableType } from '@/types';
+import type { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.css';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface EventCardOverrides {}
 
 export type EventCardOwnProps = {

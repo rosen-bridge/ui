@@ -1,9 +1,9 @@
-import { ReactNode, createContext, useMemo, useState } from 'react';
+import { createContext, type ReactNode, useMemo, useState } from 'react';
 
-import { CssBaseline, Theme, useMediaQuery } from '@mui/material';
+import { CssBaseline, type Theme, useMediaQuery } from '@mui/material';
 import {
-  ThemeProvider as MuiThemeProvider,
   createTheme,
+  ThemeProvider as MuiThemeProvider,
 } from '@mui/material/styles';
 
 export const ThemeTogglerContext = createContext({

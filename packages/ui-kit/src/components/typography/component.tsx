@@ -1,14 +1,13 @@
 import {
   Typography as TypographyMUI,
-  TypographyProps as TypographyPropsMUI,
+  type TypographyProps as TypographyPropsMUI,
 } from '@mui/material';
 
 import { Skeleton } from '@/components';
 import { useConfig } from '@/hooks';
-import { Color, ElementBaseProps, OverridableType } from '@/types';
+import type { Color, ElementBaseProps, OverridableType } from '@/types';
 import { toCSSColor } from '@/utils';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface TypographyOverrides {}
 
 export type TypographyOwnProps = TypographyPropsMUI & {

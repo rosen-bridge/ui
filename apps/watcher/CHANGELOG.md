@@ -1,5 +1,11 @@
 # @rosen-bridge/watcher-app
 
+## 4.4.1
+
+### Patch Changes
+
+- Replace `ConfirmationModal` with `useConfirm` hook and `ApiKeyDialogProtectedAction` wrapper in lock/unlock/withdraw forms
+
 ## 4.4.0
 
 ### Minor Changes

@@ -1,5 +1,7 @@
 import { useMemo } from 'react';
 
+import useSWR from 'swr';
+
 import {
   Amount,
   Box,
@@ -11,11 +13,10 @@ import {
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import { getTokenUrl } from '@rosen-ui/utils';
-import useSWR from 'swr';
 
-import { ApiAssetResponse } from '@/types';
+import type { ApiAssetResponse } from '@/types';
 
-import { AssetsFullData } from './getFullAssetData';
+import type { AssetsFullData } from './getFullAssetData';
 
 export interface BridgedListProps {
   value: AssetsFullData;

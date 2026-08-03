@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 
 import {
+  Divider,
   Pagination as PaginationMui,
   SvgIcon,
-  Divider,
   Typography,
 } from '@mui/material';
-import { CaretDown, AlignCenter } from '@rosen-bridge/icons';
+
+import { AlignCenter, CaretDown } from '@rosen-bridge/icons';
 
 import {
   Button,
@@ -74,14 +75,14 @@ export const Pagination = ({
   };
 
   useEffect(() => {
-    if (typeof defaultPageIndex != 'number') return;
-    if (typeof pageIndex == 'number') return;
+    if (typeof defaultPageIndex !== 'number') return;
+    if (typeof pageIndex === 'number') return;
     onPageIndexChange?.(defaultPageIndex);
   }, [defaultPageIndex, pageIndex, onPageIndexChange]);
 
   useEffect(() => {
-    if (typeof defaultPageSize != 'number') return;
-    if (typeof pageSize == 'number') return;
+    if (typeof defaultPageSize !== 'number') return;
+    if (typeof pageSize === 'number') return;
     onPageSizeChange?.(defaultPageSize);
   }, [defaultPageSize, pageSize, onPageSizeChange]);
 

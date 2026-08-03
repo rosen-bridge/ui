@@ -1,7 +1,9 @@
 import { DefaultLogger } from '@rosen-bridge/abstract-logger';
-import { BitcoinRunesRpcObservationExtractor } from '@rosen-bridge/bitcoin-runes-observation-extractor';
-import { UnisatRunesProtocolNetwork } from '@rosen-bridge/bitcoin-runes-observation-extractor';
-import { BitcoinRpcScanner } from '@rosen-bridge/bitcoin-scanner';
+import {
+  BitcoinRunesRpcObservationExtractor,
+  UnisatRunesProtocolNetwork,
+} from '@rosen-bridge/bitcoin-runes-observation-extractor';
+import type { BitcoinRpcScanner } from '@rosen-bridge/bitcoin-scanner';
 import { RateLimitedAxiosConfig } from '@rosen-clients/rate-limited-axios';
 
 import config from '../../configs';

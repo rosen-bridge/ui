@@ -1,6 +1,9 @@
 import { Ethereum as EthereumIcon } from '@rosen-bridge/icons';
-import { Network, NetworkConfig } from '@rosen-network/base';
-import { generateLockData, generateTxParameters } from '@rosen-network/evm';
+import type { Network, NetworkConfig } from '@rosen-network/base';
+import type {
+  generateLockData,
+  generateTxParameters,
+} from '@rosen-network/evm';
 import { NETWORKS } from '@rosen-ui/constants';
 
 type EthereumNetworkConfig = NetworkConfig & {

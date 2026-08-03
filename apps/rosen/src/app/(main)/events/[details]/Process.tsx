@@ -2,16 +2,21 @@
 
 import { useEffect, useMemo, useState } from 'react';
 
-import {
-  Color,
-  EventProcesses,
-  EventProcessesProps,
-  IconProps,
-} from '@rosen-bridge/ui-kit';
-import { fetcher } from '@rosen-ui/swr-helpers';
 import useSWR from 'swr';
 
-import { EventDetailsType, EventStatusType } from '@/backend/events/repository';
+import {
+  type Color,
+  EventProcesses,
+  type EventProcessesProps,
+  formatDateTime,
+  type IconProps,
+} from '@rosen-bridge/ui-kit';
+import { fetcher } from '@rosen-ui/swr-helpers';
+
+import type {
+  EventDetailsType,
+  EventStatusType,
+} from '@/backend/events/repository';
 
 import { ProcessSelect } from './ProcessSelect';
 import { Section } from './Section';
@@ -357,21 +362,25 @@ const toItems = (
   });
 };
 
-export const Process = ({ id }: { id: string }) => {
+export const Process = ({
+  id,
+  flowId,
+}: {
+  id: string;
+  flowId: string | undefined;
+}) => {
   const [active, setActive] = useState<string | undefined>();
 
-  const [guardPublicKey, setGuardPublicKey] = useState<string>('');
+  const [guardPublicKey, setGuardPublicKey] = useState<string | undefined>();
 
   const [open, setOpen] = useState(false);
 
-  const { data: eventData } = useSWR(`/v1/events/${id}`, fetcher);
-
   const url = guardPublicKey
-    ? `/v1/events/${id}/status?triggerTxId=${eventData?.txId}&guardPublicKey=${guardPublicKey}`
-    : `/v1/events/${id}/status?triggerTxId=${eventData?.txId}`;
+    ? `/v1/events/${id}/status?triggerTxId=${flowId}&guardPublicKey=${guardPublicKey}`
+    : `/v1/events/${id}/status?triggerTxId=${flowId}`;
 
   const { data, error, isLoading, mutate } = useSWR<EventStatusType>(
-    open && eventData ? url : null,
+    open && flowId ? url : null,
     fetcher,
   );
 
@@ -398,8 +407,8 @@ export const Process = ({ id }: { id: string }) => {
     }
 
     if (info[2]?.key === 'PAID') {
-      if (data.timestamps['PAID_CONFIRMED_AT_EXPERIMENTAL']) {
-        info[2].description += ` at "${new Date(data.timestamps['PAID_CONFIRMED_AT_EXPERIMENTAL'] * 1000).toString()}"`;
+      if (data.timestamps.PAID_CONFIRMED_AT_EXPERIMENTAL) {
+        info[2].description += ` at "${formatDateTime(data.timestamps.PAID_CONFIRMED_AT_EXPERIMENTAL * 1000)}"`;
       }
     }
 

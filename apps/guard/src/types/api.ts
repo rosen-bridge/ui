@@ -1,11 +1,11 @@
-import {
+import type {
   HealthParamInfo,
-  TokenChartData,
-  TokenInfo,
-  Paginated,
-  TokenInfoWithColdAmount,
   MutationRequestBodyWithHeaders,
   Network,
+  Paginated,
+  TokenChartData,
+  TokenInfo,
+  TokenInfoWithColdAmount,
 } from '@rosen-ui/types';
 
 export interface TokenInfoWithAddress {

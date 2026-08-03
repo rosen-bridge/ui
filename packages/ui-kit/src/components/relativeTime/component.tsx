@@ -2,12 +2,11 @@ import { useMemo } from 'react';
 
 import { Skeleton, Typography } from '@/components';
 import { useConfig } from '@/hooks';
-import { ElementBaseProps, OverridableType } from '@/types';
+import type { ElementBaseProps, OverridableType } from '@/types';
 import { calculateRelativeTime } from '@/utils';
 
 import './styles.css';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface RelativeTimeOverrides {}
 
 export type RelativeTimeOwnProps = {

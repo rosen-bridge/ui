@@ -1,35 +1,36 @@
 'use client';
 
+import { useEffect, useMemo } from 'react';
 import Link from 'next/link';
-import { useMemo, useEffect } from 'react';
-import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 
-import {
-  SubmitButton,
-  useApiKey,
-  ApiKeyDialogWarning,
-  Stack,
-  useToast,
-  useConfirm,
-  ApiKeyDialogProtectedAction,
-} from '@rosen-bridge/ui-kit';
-import { NETWORKS } from '@rosen-ui/constants';
-import { fetcher, mutatorWithHeaders } from '@rosen-ui/swr-helpers';
-import { TokenInfo } from '@rosen-ui/types';
-import { getNonDecimalString, getTxURL } from '@rosen-ui/utils';
+import { FormProvider, type SubmitHandler, useForm } from 'react-hook-form';
 import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
 
-import { useRsnToken } from '@/hooks';
 import {
+  ApiKeyDialogProtectedAction,
+  ApiKeyDialogWarning,
+  Stack,
+  SubmitButton,
+  useApiKey,
+  useConfirm,
+  useToast,
+} from '@rosen-bridge/ui-kit';
+import { NETWORKS } from '@rosen-ui/constants';
+import { fetcher, mutatorWithHeaders } from '@rosen-ui/swr-helpers';
+import type { TokenInfo } from '@rosen-ui/types';
+import { getNonDecimalString, getTxURL } from '@rosen-ui/utils';
+
+import { useRsnToken } from '@/hooks';
+import type {
   ApiInfoResponse,
   ApiPermitReturnRequestBody,
   ApiPermitReturnResponse,
 } from '@/types/api';
 
 import {
+  type TokenAmountCompatibleFormSchema,
   TokenAmountTextField,
-  TokenAmountCompatibleFormSchema,
 } from '../../TokenAmountTextField';
 
 const UnlockForm = () => {
@@ -60,7 +61,11 @@ const UnlockForm = () => {
 
   const { trigger, isMutating: isUnlockPending } = useSWRMutation<
     ApiPermitReturnResponse,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    /**
+     * TODO: remove the inline Biome comment
+     * local:ergo/rosen-bridge/ui#441
+     */
+    // biome-ignore lint/suspicious/noExplicitAny: Use a better type
     any,
     '/permit/return',
     ApiPermitReturnRequestBody
@@ -96,6 +101,7 @@ const UnlockForm = () => {
     info?.permitCount.active,
     info?.permitCount.total,
     rwtPartialToken,
+    toast.add,
   ]);
 
   useEffect(() => {
@@ -107,7 +113,7 @@ const UnlockForm = () => {
         timeout: 0,
       });
     }
-  }, [isInfoLoading, rwtPartialToken?.amount]);
+  }, [isInfoLoading, rwtPartialToken?.amount, toast.add]);
 
   const submit = async () => {
     try {
@@ -143,7 +149,11 @@ const UnlockForm = () => {
           'Server responded but the response message was unexpected',
         );
       }
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      /**
+       * TODO: remove the inline Biome comment
+       * local:ergo/rosen-bridge/ui#441
+       */
+      // biome-ignore lint/suspicious/noExplicitAny: Use a better type
     } catch (error: any) {
       if (error?.response?.status === 403) {
         toast.add({

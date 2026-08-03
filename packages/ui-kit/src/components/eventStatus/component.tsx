@@ -1,12 +1,11 @@
 import { useMemo } from 'react';
 
-import { IconProps, Chip, ChipProps } from '@/components';
+import { Chip, type ChipProps, type IconProps } from '@/components';
 import { useConfig } from '@/hooks';
-import { ElementBaseProps, OverridableType } from '@/types';
+import type { ElementBaseProps, OverridableType } from '@/types';
 
 import { STATUS_MAP } from './constants';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface EventStatusOverrides {}
 
 export type EventStatusMeta = {

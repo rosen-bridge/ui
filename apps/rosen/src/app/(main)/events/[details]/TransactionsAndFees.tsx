@@ -1,6 +1,8 @@
 'use client';
 
-import { CSSProperties, useMemo } from 'react';
+import { type CSSProperties, useMemo } from 'react';
+
+import useSWR from 'swr';
 
 import {
   Amount,
@@ -15,15 +17,26 @@ import {
 import { NETWORKS } from '@rosen-ui/constants';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import { getTxURL } from '@rosen-ui/utils';
-import useSWR from 'swr';
+
+import type { EventDetailsType } from '@/backend/events/repository';
 
 import { Section } from './Section';
 
-export const TransactionsAndFees = ({ id }: { id: string }) => {
-  const { error, data, isLoading, mutate } = useSWR(
-    `/v1/events/${id}`,
-    fetcher,
-  );
+export const TransactionsAndFees = ({
+  id,
+  flowId,
+}: {
+  id: string;
+  flowId: string | undefined;
+}) => {
+  const {
+    error,
+    data: events,
+    isLoading,
+    mutate,
+  } = useSWR<EventDetailsType[]>(`/v1/events/${id}`, fetcher);
+
+  const data = events?.find((event) => event.txId === flowId);
 
   const txIds = useMemo(() => {
     const allTxs = [
@@ -37,13 +50,13 @@ export const TransactionsAndFees = ({ id }: { id: string }) => {
         type: 'payment',
         label: 'Payment Tx',
         chain: data?.toChain,
-        txId: data?.paymentTxId,
+        txId: data?.paymentTxId || undefined,
       },
       {
         type: 'reward',
         label: 'Reward Tx',
         chain: NETWORKS.ergo.key,
-        txId: data?.spendTxId,
+        txId: data?.spendTxId || undefined,
       },
       {
         type: 'trigger',
@@ -53,7 +66,7 @@ export const TransactionsAndFees = ({ id }: { id: string }) => {
       },
     ] as const;
 
-    if (data?.status === 'fraud') {
+    if (data?.status === 'FRAUD') {
       return allTxs.filter(
         (tx) => tx.type !== 'payment' && tx.type !== 'reward',
       );

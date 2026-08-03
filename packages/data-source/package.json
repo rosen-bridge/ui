@@ -1,6 +1,6 @@
 {
   "name": "@rosen-ui/data-source",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "description": "DataSource implementation to be used across ui apps",
   "repository": {
     "type": "git",
@@ -13,10 +13,8 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc --build tsconfig.build.json",
-    "lint": "eslint --fix . && npm run prettify",
-    "lint:check": "eslint . && npm run prettify:check",
-    "prettify": "prettier --write . --ignore-path ../../.gitignore",
-    "prettify:check": "prettier --check . --ignore-path ../../.gitignore",
+    "lint": "biome check --write",
+    "lint:check": "biome check",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
@@ -25,9 +23,9 @@
     "@rosen-bridge/extended-typeorm": "^1.1.0",
     "@rosen-bridge/token-price-entity": "^0.2.2",
     "@rosen-bridge/watcher-data-extractor": "^13.0.10",
-    "@rosen-ui/asset-calculator": "^2.3.3",
-    "@rosen-ui/public-status": "^0.1.2",
-    "@rosen-ui/rosen-statistics-entity": "^0.4.1"
+    "@rosen-ui/asset-calculator": "^2.4.0",
+    "@rosen-ui/public-status": "^0.2.0",
+    "@rosen-ui/rosen-statistics-entity": "^0.4.2"
   },
   "engines": {
     "node": ">=22.18.0",

@@ -4,25 +4,25 @@ import {
   NetworkConnectorManager,
 } from '@rosen-bridge/abstract-scanner';
 import {
-  BitcoinRpcObservationExtractor,
   BitcoinEsploraObservationExtractor,
+  BitcoinRpcObservationExtractor,
 } from '@rosen-bridge/bitcoin-observation-extractor';
 import {
-  AbstractRunesProtocolNetwork,
+  type AbstractRunesProtocolNetwork,
   BitcoinRunesEsploraObservationExtractor,
   BitcoinRunesRpcObservationExtractor,
   UnisatRunesProtocolNetwork,
 } from '@rosen-bridge/bitcoin-runes-observation-extractor';
 import {
+  BitcoinEsploraScanner,
+  type BitcoinEsploraTransaction,
   BitcoinRpcNetwork,
   BitcoinRpcScanner,
-  BitcoinEsploraScanner,
+  type BitcoinRpcTransaction,
   EsploraNetwork,
-  BitcoinRpcTransaction,
-  BitcoinEsploraTransaction,
 } from '@rosen-bridge/bitcoin-scanner';
-import { TokenMap } from '@rosen-bridge/extended-tokens';
-import { DataSource } from '@rosen-bridge/extended-typeorm';
+import type { TokenMap } from '@rosen-bridge/extended-tokens';
+import type { DataSource } from '@rosen-bridge/extended-typeorm';
 
 import { configs } from '../configs';
 import { BITCOIN_METHOD_ESPLORA, BITCOIN_METHOD_RPC } from '../constants';

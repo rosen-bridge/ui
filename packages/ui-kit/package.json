@@ -1,6 +1,6 @@
 {
   "name": "@rosen-bridge/ui-kit",
-  "version": "5.7.0",
+  "version": "5.8.1",
   "private": true,
   "description": "ui kit for Rosen projects",
   "repository": {
@@ -12,8 +12,7 @@
   "type": "module",
   "exports": {
     ".": "./dist/index.js",
-    "./style.css": "./dist/style.css",
-    "./dist/components/legacy/smartSearch/server": "./dist/components/legacy/smartSearch/server.js"
+    "./style.css": "./dist/style.css"
   },
   "main": "./dist/index.js",
   "files": [
@@ -22,10 +21,8 @@
   "scripts": {
     "build": "tsdown",
     "build:watch": "tsdown --watch",
-    "lint": "eslint --fix . && npm run prettify",
-    "lint:check": "eslint . && npm run prettify:check",
-    "prettify": "prettier --write . --ignore-path ../../.gitignore",
-    "prettify:check": "prettier --check . --ignore-path ../../.gitignore",
+    "lint": "biome check --write",
+    "lint:check": "biome check",
     "release": "npm run build && npm publish --access public",
     "test": "NODE_OPTIONS='--import tsx' vitest",
     "type-check": "tsc"
@@ -34,17 +31,16 @@
     "@base-ui/react": "^1.5.0",
     "@mui/material": "^7.3.9",
     "@radix-ui/react-slot": "^1.2.4",
-    "@rosen-bridge/icons": "^3.6.0",
+    "@rosen-bridge/icons": "^3.7.0",
     "@rosen-ui/swr-helpers": "^0.2.2",
-    "@rosen-ui/utils": "^1.0.3",
+    "@rosen-ui/utils": "^1.0.4",
     "embla-carousel-react": "^8.5.2",
-    "joi": "^17.11.0",
     "qrcode.react": "^4.2.0",
     "react-hook-form": "^7.71.2",
     "react-sticky-box": "^2.0.5"
   },
   "devDependencies": {
-    "@rosen-ui/types": "^0.5.0",
+    "@rosen-ui/types": "^0.5.1",
     "@tsdown/css": "^0.22.0",
     "autoprefixer": "^10.5.0",
     "tsdown": "^0.22.0"

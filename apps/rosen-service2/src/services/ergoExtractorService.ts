@@ -1,25 +1,28 @@
-import { AbstractExtractor } from '@rosen-bridge/abstract-extractor';
-import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
-import { ErgoObservationExtractor } from '@rosen-bridge/ergo-observation-extractor';
-import { ErgoScanner } from '@rosen-bridge/ergo-scanner';
-import { TokenMap } from '@rosen-bridge/extended-tokens';
-import { DataSource, ObjectLiteral } from '@rosen-bridge/extended-typeorm';
-import { Transaction } from '@rosen-bridge/scanner-interfaces';
+import type { AbstractExtractor } from '@rosen-bridge/abstract-extractor';
 import {
-  Dependency,
+  type AbstractLogger,
+  DummyLogger,
+} from '@rosen-bridge/abstract-logger';
+import { ErgoObservationExtractor } from '@rosen-bridge/ergo-observation-extractor';
+import type { ErgoScanner } from '@rosen-bridge/ergo-scanner';
+import type { TokenMap } from '@rosen-bridge/extended-tokens';
+import type { DataSource, ObjectLiteral } from '@rosen-bridge/extended-typeorm';
+import type { Transaction } from '@rosen-bridge/scanner-interfaces';
+import {
+  type Dependency,
   ServiceAction,
   ServiceStatus,
 } from '@rosen-bridge/service-manager';
 import { NETWORKS } from '@rosen-ui/constants';
 
 import { configs } from '../configs';
-import { ChainChoices, ChainConfigs } from '../types';
+import type { ChainChoices, ChainConfigs } from '../types';
 import { createEventTrigger, resolveErgoNetworkConfig } from '../utils';
 import {
+  AbstractDBService,
   AbstractErgoExtractorsService,
   AbstractErgoScannerService,
   AbstractTokenMapService,
-  AbstractDBService,
 } from './abstracts';
 
 export class ErgoExtractorService extends AbstractErgoExtractorsService {

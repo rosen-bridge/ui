@@ -1,4 +1,4 @@
-const path = require('path');
+const path = require('node:path');
 const { withSentryConfig } = require('@sentry/nextjs');
 
 /** @type {import('next').NextConfig} */
@@ -22,7 +22,7 @@ const nextConfig = {
       },
     ];
   },
-  webpack: function (config, options) {
+  webpack: (config, options) => {
     /**
      * This configuration should be applied as recommended in:
      * https://docs.reown.com/appkit/next/core/installation#extra-configuration
@@ -72,4 +72,4 @@ const sentryOptions = {
   },
 };
 
-module.exports = nextConfig;
+module.exports = withSentryConfig(nextConfig, sentryOptions);

@@ -4,7 +4,7 @@ export {
   getDecimalString,
   getNonDecimalString,
   getNumberOfDecimals,
-  scientificToString,
   multiplyByPowerOfTen,
+  scientificToString,
 } from './decimals';
 export { getRegisterValue } from './getRegisterValue';

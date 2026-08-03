@@ -1,9 +1,9 @@
 import { testDataSource } from '@rosen-ui/data-source';
 import {
-  GuardStatusEntity,
   AggregatedStatusChangedEntity,
   AggregatedStatusEntity,
   GuardStatusChangedEntity,
+  GuardStatusEntity,
   TxEntity,
 } from '@rosen-ui/public-status';
 

@@ -1,6 +1,6 @@
 import { Icon, Typography } from '@/components';
 
-import { StepProps } from './steps';
+import type { StepProps } from './steps';
 
 export const StepExtra = ({ label, icon, color }: StepProps) => {
   return (

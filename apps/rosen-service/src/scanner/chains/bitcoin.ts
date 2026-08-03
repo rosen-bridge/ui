@@ -6,7 +6,7 @@ import {
 import {
   BitcoinRpcNetwork,
   BitcoinRpcScanner,
-  BitcoinRpcTransaction,
+  type BitcoinRpcTransaction,
 } from '@rosen-bridge/bitcoin-scanner';
 
 import config from '../../configs';

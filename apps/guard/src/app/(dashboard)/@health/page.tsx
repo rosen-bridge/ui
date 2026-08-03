@@ -2,20 +2,21 @@
 
 import { useMemo } from 'react';
 
+import useSWR from 'swr';
+
 import {
   Card,
   CardBody,
   Icon,
-  IconProps,
+  type IconProps,
   Stack,
   Tooltip,
   Typography,
   useBreakpoint,
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
-import useSWR from 'swr';
 
-import { ApiInfoResponse } from '@/types/api';
+import type { ApiInfoResponse } from '@/types/api';
 
 const VARIANTS: Record<
   ApiInfoResponse['health']['status'],

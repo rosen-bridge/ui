@@ -1,11 +1,11 @@
 import { ObservationEntity } from '@rosen-bridge/abstract-observation-extractor';
 import { BlockEntity } from '@rosen-bridge/abstract-scanner';
-import { In } from '@rosen-bridge/extended-typeorm';
+import { ArrayContains, In, Not } from '@rosen-bridge/extended-typeorm';
+import type {
+  Filter,
+  StringArrayFilterField,
+} from '@rosen-bridge/query-params';
 import { TokenPriceAction } from '@rosen-bridge/token-price-entity';
-import {
-  Filters,
-  filtersToTypeorm,
-} from '@rosen-bridge/ui-kit/dist/components/legacy/smartSearch/server';
 import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
 import { TokenEntity } from '@rosen-ui/asset-calculator';
 import { NETWORKS } from '@rosen-ui/constants';
@@ -17,7 +17,9 @@ import {
   GuardStatusChangedEntity,
   GuardStatusEntity,
 } from '@rosen-ui/public-status';
-import { Network } from '@rosen-ui/types';
+import type { Network } from '@rosen-ui/types';
+
+import { filtersToTypeorm } from '@/filters';
 
 import { dataSource } from '../dataSource';
 import '../initialize-datasource-if-needed';
@@ -78,6 +80,8 @@ export type EventDetailsType = Omit<EventWithTotal, 'status' | 'total'> & {
     | 'TRIGGERED'
     | 'UNKNOWN';
   timestamps: Partial<Record<EventDetailsType['status'], number>>;
+  price?: number;
+  totalFee: string;
 };
 
 export type EventStatusType = {
@@ -95,27 +99,21 @@ export type EventStatusType = {
  * @param offset
  * @param limit
  */
-export const getEvents = async (filters: Filters) => {
-  filters.sort = Object.assign(
-    {
-      key: 'timestamp',
-      order: 'DESC',
-    },
-    filters.sort,
-  );
-
-  if (filters.search) {
-    filters.search.in ||= [];
-  }
-
+export const getEvents = async (filters: Filter) => {
   await (async () => {
-    const field = filters.fields?.find(
-      (field) => field.key == 'originalTokenId',
+    if (!filters.fields) return;
+
+    const fieldIndex = filters.fields.findIndex(
+      (field) => field.key === 'originalTokenId',
     );
+
+    if (fieldIndex === -1) return;
+
+    const field = filters.fields.at(fieldIndex);
 
     if (!field) return;
 
-    field.key = 'sourceChainTokenId';
+    if (field.operator !== 'equal' && field.operator !== 'notEqual') return;
 
     const originalTokenIds = [field.value].flat();
 
@@ -138,28 +136,42 @@ export const getEvents = async (filters: Filters) => {
 
     const ergoSideTokenIds = ergoSideTokens.map((token) => token.id);
 
-    field.value = ergoSideTokenIds;
+    const filter: StringArrayFilterField = {
+      key: 'sourceChainTokenId',
+      type: 'stringArray',
+      operator: field.operator === 'equal' ? 'includes' : 'excludes',
+      values: ergoSideTokenIds,
+    };
+
+    filters.fields.splice(fieldIndex, 1, filter);
   })();
 
   const statusIndex =
-    filters.fields?.findIndex((field) => field.key == 'status') ?? -1;
+    filters.fields?.findIndex((field) => field.key === 'status') ?? -1;
 
   const status =
     statusIndex > -1 ? filters.fields?.splice(statusIndex, 1)[0] : undefined;
 
-  let { pagination, query, sort } = filtersToTypeorm(filters, (key) => {
+  const { pagination, sorts, where } = filtersToTypeorm(filters, (key) => {
     switch (key) {
       case 'amount':
       case 'bridgeFee':
       case 'networkFee':
-        return `sub."${key}Normalized"`;
+        return `"${key}Normalized"`;
       default:
-        return `sub."${key}"`;
+        return `"${key}"`;
     }
   });
 
   if (status) {
-    query = `${query ? `${query} AND ` : ''}(${status.operator == '!=' ? 'NOT ' : ''}('${status.value}' = ANY(sub."statuses")))`;
+    switch (status.operator) {
+      case 'equal':
+        where.statuses = ArrayContains([status.value]);
+        break;
+      case 'notEqual':
+        where.statuses = Not(ArrayContains([status.value]));
+        break;
+    }
   }
 
   const subquery = observationRepository
@@ -215,15 +227,11 @@ export const getEvents = async (filters: Filters) => {
     .from(`(${subquery.getQuery()})`, 'sub')
     .setParameters(subquery.getParameters());
 
-  if (query) {
-    queryBuilder = queryBuilder.where(query);
-  }
+  queryBuilder = queryBuilder.where(where);
 
   queryBuilder = queryBuilder.distinct(true);
 
-  if (sort) {
-    queryBuilder = queryBuilder.orderBy(sort.key, sort.order);
-  }
+  sorts?.forEach((sort) => queryBuilder.addOrderBy(sort.key, sort.order));
 
   if (pagination?.offset) {
     queryBuilder = queryBuilder.offset(pagination.offset);
@@ -239,7 +247,6 @@ export const getEvents = async (filters: Filters) => {
    */
   const rawItems = await queryBuilder.getRawMany<EventWithTotal>();
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const items = rawItems.map(({ total, ...item }) => item);
 
   return {
@@ -252,7 +259,7 @@ export const getEvents = async (filters: Filters) => {
 };
 
 export const getEvent = async (id: string) => {
-  const event = await dataSource
+  const events = await dataSource
     .getRepository(ObservationEntity)
     .createQueryBuilder('oe')
     .leftJoin(BlockEntity, 'be', 'be.hash = oe.block')
@@ -279,32 +286,39 @@ export const getEvent = async (id: string) => {
       'to_jsonb(te) AS "lockToken"',
     ])
     .where('oe.requestId = :id', { id })
-    .getRawOne<EventDetailsType>();
+    .getRawMany<EventDetailsType>();
 
-  if (!event || !event.lockToken) throw new Error(`Not found`);
+  if (!events.length) throw new Error(`Not found`);
 
-  const token = await tokenRepository.findOne({
-    where: {
-      isResident: true,
-      ergoSideTokenId: event.lockToken.ergoSideTokenId,
-    },
+  const result = events.map(async (event) => {
+    if (!event.lockToken) throw new Error(`Not found`);
+
+    const token = await tokenRepository.findOne({
+      where: {
+        isResident: true,
+        ergoSideTokenId: event.lockToken.ergoSideTokenId,
+      },
+    });
+
+    if (!token) throw new Error(`Not found`);
+
+    const price = await tokenPriceAction.getLatestTokenPrice(
+      token.id,
+      event.timestamp,
+    );
+
+    const { status, timestamps } = await getEventStatus(id, event.txId);
+    event.status = status;
+    event.timestamps = timestamps;
+
+    return {
+      ...event,
+      price,
+      totalFee: (+event.bridgeFee + +event.networkFee).toString(),
+    };
   });
 
-  if (!token) throw new Error(`Not found`);
-
-  const price = await tokenPriceAction.getLatestTokenPrice(
-    token.id,
-    event.timestamp,
-  );
-
-  const { status, timestamps } = await getEventStatus(id, event.txId);
-  event.status = status;
-  event.timestamps = timestamps;
-
-  return {
-    ...event,
-    price,
-  };
+  return await Promise.all(result);
 };
 
 export const getEventStatus = async (
@@ -360,7 +374,7 @@ export const getEventStatus = async (
   const block = blocks[0];
 
   result.status = 'CREATED';
-  result.timestamps['CREATED'] = block.timestamp;
+  result.timestamps.CREATED = block.timestamp;
 
   if (!triggerTxId) return result;
 
@@ -384,7 +398,7 @@ export const getEventStatus = async (
   if (eventTrigger.result === 'fraud') {
     result.status = 'FRAUD';
     if (eventTrigger.spendBlock) {
-      result.timestamps['FRAUD'] = (
+      result.timestamps.FRAUD = (
         await blockRepository.findOneBy({ hash: eventTrigger.spendBlock })
       )?.timestamp;
     }
@@ -393,13 +407,13 @@ export const getEventStatus = async (
   if (eventTrigger.result === 'successful') {
     result.status = 'COMPLETED';
     if (eventTrigger.spendBlock) {
-      result.timestamps['COMPLETED'] = (
+      result.timestamps.COMPLETED = (
         await blockRepository.findOneBy({ hash: eventTrigger.spendBlock })
       )?.timestamp;
     }
   }
 
-  result.timestamps['TRIGGERED'] = (
+  result.timestamps.TRIGGERED = (
     await blockRepository.findOneBy({ hash: eventTrigger.block })
   )?.timestamp;
 
@@ -571,7 +585,7 @@ export const getEventStatus = async (
 
     const block = blocks[0];
 
-    result.timestamps['REWARDED'] = block?.timestamp;
+    result.timestamps.REWARDED = block?.timestamp;
   }
 
   if (observation.toChain === NETWORKS.ergo.key) {
@@ -594,14 +608,13 @@ export const getEventStatus = async (
       );
     }
 
-    result.timestamps['PAID_CONFIRMED_AT_EXPERIMENTAL'] =
-      items.at(0)?.insertedAt;
+    result.timestamps.PAID_CONFIRMED_AT_EXPERIMENTAL = items.at(0)?.insertedAt;
   } else {
     const item = aggregatedStatusChangedItems
       .sort((a, b) => a.insertedAt - b.insertedAt)
       .find((item) => item.status === AggregateEventStatus.pendingReward);
 
-    result.timestamps['PAID_CONFIRMED_AT_EXPERIMENTAL'] = item?.insertedAt;
+    result.timestamps.PAID_CONFIRMED_AT_EXPERIMENTAL = item?.insertedAt;
   }
 
   return result;

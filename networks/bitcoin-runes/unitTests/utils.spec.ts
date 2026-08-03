@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { describe, expect, it, vi, Mock, beforeEach } from 'vitest';
+import { beforeEach, describe, expect, it, type Mock, vi } from 'vitest';
 
 import {
   getAddressAllBtcUtxos,

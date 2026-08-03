@@ -1,12 +1,10 @@
 import { useConfig } from '@/hooks';
-import { ElementBaseProps, OverridableType } from '@/types';
+import type { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.css';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface DialogFooterOverrides {}
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export type DialogFooterOwnProps = {};
 
 export type DialogFooterBaseProps = ElementBaseProps<

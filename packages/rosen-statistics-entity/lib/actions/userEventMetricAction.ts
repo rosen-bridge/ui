@@ -1,10 +1,13 @@
-import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
-import { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
+import {
+  type AbstractLogger,
+  DummyLogger,
+} from '@rosen-bridge/abstract-logger';
+import type { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
 import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
 
 import { METRIC_KEYS } from '../constants';
 import { MetricEntity, UserEventEntity } from '../entities';
-import { AggregatedUserEvents } from '../types';
+import type { AggregatedUserEvents } from '../types';
 
 export class UserEventMetricAction {
   private readonly eventTriggerRepo: Repository<EventTriggerEntity>;

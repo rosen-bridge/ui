@@ -1,5 +1,11 @@
 # @rosen-ui/constants
 
+## 1.1.0
+
+### Minor Changes
+
+- Register the Firo network in `NETWORKS` / `NETWORKS_KEYS`.
+
 ## 1.0.0
 
 ### Major Changes

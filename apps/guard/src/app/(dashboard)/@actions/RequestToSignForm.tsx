@@ -1,9 +1,11 @@
 import { useState } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
+
+import { type SubmitHandler, useForm } from 'react-hook-form';
+import useSWRMutation from 'swr/mutation';
 
 import {
   Alert,
-  AlertProps,
+  type AlertProps,
   ApiKeyDialogWarning,
   Card,
   CardBody,
@@ -19,10 +21,9 @@ import {
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS, NETWORKS_KEYS } from '@rosen-ui/constants';
 import { mutatorWithHeaders } from '@rosen-ui/swr-helpers';
-import { Network } from '@rosen-ui/types';
-import useSWRMutation from 'swr/mutation';
+import type { Network } from '@rosen-ui/types';
 
-import { ApiSignRequestBody, ApiSignResponse } from '@/types/api';
+import type { ApiSignRequestBody, ApiSignResponse } from '@/types/api';
 
 interface Form {
   chain: Network;
@@ -41,7 +42,11 @@ export const RequestToSignForm = () => {
     trigger,
     isMutating: isSignPending,
     error,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    /**
+     * TODO: remove the inline Biome comment
+     * local:ergo/rosen-bridge/ui#441
+     */
+    // biome-ignore lint/suspicious/noExplicitAny: Use a better type
   } = useSWRMutation<ApiSignResponse, any, '/sign', ApiSignRequestBody>(
     '/sign',
     mutatorWithHeaders,
@@ -89,7 +94,11 @@ export const RequestToSignForm = () => {
           'Server responded but the response message was unexpected',
         );
       }
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      /**
+       * TODO: remove the inline Biome comment
+       * local:ergo/rosen-bridge/ui#441
+       */
+      // biome-ignore lint/suspicious/noExplicitAny: Use a better type
     } catch (error: any) {
       if (error?.response?.status === 403) {
         setAlertData({
@@ -142,7 +151,7 @@ export const RequestToSignForm = () => {
               fullWidth
             >
               {NETWORKS_KEYS.map((key) => (
-                <MenuItemMui key={key} id={key}>
+                <MenuItemMui key={key} value={key}>
                   {NETWORKS[key].label}
                 </MenuItemMui>
               ))}

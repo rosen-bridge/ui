@@ -1,11 +1,11 @@
-import { TokenMap } from '@rosen-bridge/tokens';
+import type { TokenMap } from '@rosen-bridge/tokens';
 import {
-  OPERATORS_COMPARATIVE,
-  OPERATORS_EQUALITY,
-  Filter,
+  type Filter,
   OPERATOR_CONTAINS,
   OPERATOR_IS,
   OPERATOR_NOT,
+  OPERATORS_COMPARATIVE,
+  OPERATORS_EQUALITY,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS, NETWORKS_KEYS } from '@rosen-ui/constants';
 
@@ -15,18 +15,17 @@ export const getFilters = (tokenMap: TokenMap): Filter[] => [
     label: 'Token',
     unique: true,
     operators: OPERATORS_EQUALITY,
-    input: (context) => ({
-      type: context.operator.endsWith('one-of') ? 'multiple' : 'select',
+    input: {
+      type: 'select',
       options: tokenMap
         .getConfig()
-        .map((item) => Object.values(item))
-        .flat()
-        .filter((item) => item.residency == 'native')
+        .flatMap((item) => Object.values(item))
+        .filter((item) => item.residency === 'native')
         .map((item) => ({
           label: item.name,
           value: item.tokenId,
         })),
-    }),
+    },
   },
   {
     name: 'eventId',
@@ -42,26 +41,26 @@ export const getFilters = (tokenMap: TokenMap): Filter[] => [
     label: 'From Chain',
     unique: true,
     operators: OPERATORS_EQUALITY,
-    input: (context) => ({
-      type: context.operator.endsWith('one-of') ? 'multiple' : 'select',
+    input: {
+      type: 'select',
       options: NETWORKS_KEYS.map((key) => ({
         label: NETWORKS[key].label,
         value: key,
       })),
-    }),
+    },
   },
   {
     name: 'toChain',
     label: 'To Chain',
     unique: true,
     operators: OPERATORS_EQUALITY,
-    input: (context) => ({
-      type: context.operator.endsWith('one-of') ? 'multiple' : 'select',
+    input: {
+      type: 'select',
       options: NETWORKS_KEYS.map((key) => ({
         label: NETWORKS[key].label,
         value: key,
       })),
-    }),
+    },
   },
   {
     name: 'fromAddress',

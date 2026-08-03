@@ -1,4 +1,7 @@
-import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
+import {
+  type AbstractLogger,
+  DummyLogger,
+} from '@rosen-bridge/abstract-logger';
 import {
   FailoverStrategy,
   NetworkConnectorManager,
@@ -8,22 +11,22 @@ import {
   ErgoNodeNetwork,
   ErgoScanner,
 } from '@rosen-bridge/ergo-scanner';
-import { DataSource } from '@rosen-bridge/extended-typeorm';
-import { Transaction } from '@rosen-bridge/scanner-interfaces';
+import type { DataSource } from '@rosen-bridge/extended-typeorm';
+import type { Transaction } from '@rosen-bridge/scanner-interfaces';
 import {
-  Dependency,
+  type Dependency,
   ServiceAction,
   ServiceStatus,
-  Task,
+  type Task,
 } from '@rosen-bridge/service-manager';
 
 import { configs } from '../configs';
 import { ERGO_METHOD_EXPLORER } from '../constants';
 import {
+  AbstractDBService,
   AbstractErgoExtractorsService,
   AbstractErgoScannerService,
   AbstractTokenMapService,
-  AbstractDBService,
 } from './abstracts';
 
 export class ErgoScannerService extends AbstractErgoScannerService {

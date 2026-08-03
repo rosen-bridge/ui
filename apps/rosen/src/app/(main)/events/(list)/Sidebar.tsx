@@ -1,5 +1,7 @@
 import { useMemo } from 'react';
 
+import useSWR from 'swr';
+
 import {
   Button,
   Card,
@@ -12,8 +14,9 @@ import {
   EnhancedDialogContent,
   EnhancedDialogTitle,
   EventDetails,
-  EventDetailsProps,
+  type EventDetailsProps,
   Icon,
+  Stack,
   Typography,
   useBreakpoint,
   useStickyBox,
@@ -21,19 +24,20 @@ import {
 import { NETWORKS } from '@rosen-ui/constants';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import { getAddressUrl, getTxURL } from '@rosen-ui/utils';
-import useSWR from 'swr';
 
-import { ApiEventResponse, EventItem } from '@/types';
+import type { ApiEventResponse, EventItem } from '@/types';
 
 const Content = ({ value }: SidebarProps) => {
   const shouldLoad = useMemo(() => {
     return !!value && !!value.eventId && value.status !== 'multipleFlows';
   }, [value]);
 
-  const { data, isLoading } = useSWR<EventItem>(
+  const { data: events, isLoading } = useSWR<EventItem[]>(
     shouldLoad && `/v1/events/${value?.eventId}`,
     fetcher,
   );
+
+  const data = events?.at(0);
 
   const eventData = useMemo(() => {
     const result: EventDetailsProps['value'] = {
@@ -92,7 +96,21 @@ const Drawer = ({ value, onClose }: SidebarProps) => {
   return (
     <EnhancedDialog open={!!value} stickOn="laptop" onClose={onClose}>
       <EnhancedDialogTitle icon="Exchange" onClose={onClose}>
-        Event Details
+        <Stack style={{ width: '100%' }} direction="row" justify="between">
+          Event
+          {value && (
+            <Button
+              variant="text"
+              size="small"
+              target="_blank"
+              href={`/events/${value.eventId}`}
+              startIcon={<Icon name="Eye" />}
+              style={{ marginLeft: 'auto' }}
+            >
+              SEE DETAILS
+            </Button>
+          )}
+        </Stack>
       </EnhancedDialogTitle>
       <EnhancedDialogContent>
         <Content value={value} />

@@ -1,6 +1,6 @@
-import { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
+import { DataSource, type Repository } from '@rosen-bridge/extended-typeorm';
 
-import { TokenEntity, LockedAssetEntity } from '../../../lib';
+import { LockedAssetEntity, TokenEntity } from '../../../lib';
 import { BridgedAssetEntity } from '../../../lib/database/bridgedAsset/BridgedAssetEntity';
 import migrations from '../../../lib/database/migrations';
 import { tokens } from '../test-data';
@@ -14,7 +14,7 @@ const initDatabase = async (): Promise<DataSource> => {
     type: 'sqlite',
     database: ':memory:',
     entities: [BridgedAssetEntity, TokenEntity, LockedAssetEntity],
-    migrations: migrations['sqlite'],
+    migrations: migrations.sqlite,
     synchronize: false,
     logging: false,
   });
@@ -41,4 +41,4 @@ const insertAssetRecords = async (assets: BridgedAssetEntity[]) => {
   return assetRepository.insert(assets);
 };
 
-export { initDatabase, allAssetRecords, insertAssetRecords };
+export { allAssetRecords, initDatabase, insertAssetRecords };

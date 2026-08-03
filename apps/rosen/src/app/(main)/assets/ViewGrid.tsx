@@ -11,7 +11,7 @@ import {
   Token,
 } from '@rosen-bridge/ui-kit';
 
-import { AssetsFullData } from './getFullAssetData';
+import type { AssetsFullData } from './getFullAssetData';
 
 export type ViewGridProps = {
   current?: AssetsFullData;

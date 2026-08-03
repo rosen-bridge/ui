@@ -1,6 +1,9 @@
-import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
+import {
+  type AbstractLogger,
+  DummyLogger,
+} from '@rosen-bridge/abstract-logger';
 import ergoNodeClientFactory, {
-  IndexedErgoBox,
+  type IndexedErgoBox,
 } from '@rosen-clients/ergo-node';
 
 export class NodeBoxFetcher {

@@ -13,17 +13,15 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc --build",
-    "lint": "eslint --fix . && npm run prettify",
-    "lint:check": "eslint . && npm run prettify:check",
-    "prettify": "prettier --write . --ignore-path ../../.gitignore",
-    "prettify:check": "prettier --check . --ignore-path ../../.gitignore",
+    "lint": "biome check --write",
+    "lint:check": "biome check",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "@rosen-bridge/tokens": "^6.0.2",
     "@rosen-network/ergo": "^2.5.7",
-    "@rosen-ui/constants": "^1.0.0",
-    "@rosen-ui/types": "^0.5.0",
+    "@rosen-ui/constants": "^1.1.0",
+    "@rosen-ui/types": "^0.5.1",
     "@rosen-ui/wallet-api": "^3.2.1"
   },
   "engines": {

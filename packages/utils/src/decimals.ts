@@ -64,11 +64,10 @@ export const getNonDecimalString = (value: string, decimals: number) => {
   return `${value.slice(0, decimalPointIndex)}${value.slice(
     decimalPointIndex + 1,
     decimalPointIndex + 1 + decimals,
-  )}${
-    fractionalPartLength <= decimals
-      ? '0'.repeat(decimals - fractionalPartLength)
-      : ''
-  }`.replace(/^0+(\d+)/, '$1');
+  )}${fractionalPartLength <= decimals ? '0'.repeat(decimals - fractionalPartLength) : ''}`.replace(
+    /^0+(\d+)/,
+    '$1',
+  );
 };
 
 /**
@@ -82,7 +81,7 @@ export const getNonDecimalString = (value: string, decimals: number) => {
  * roundToPrecision(1.126, 2) === 1.13 // true
  */
 export const roundToPrecision = (value: number, precision: number) => {
-  return Math.round(value * Math.pow(10, precision)) / Math.pow(10, precision);
+  return Math.round(value * 10 ** precision) / 10 ** precision;
 };
 
 /**

@@ -6,7 +6,7 @@ import {
   useTransition,
 } from 'react';
 
-import { RosenAmountValue } from '@rosen-ui/types';
+import type { RosenAmountValue } from '@rosen-ui/types';
 import { getDecimalString } from '@rosen-ui/utils';
 
 import { useBridgeForm } from './useBridgeForm';

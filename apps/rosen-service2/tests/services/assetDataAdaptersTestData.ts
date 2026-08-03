@@ -1,4 +1,4 @@
-import { RosenTokens } from '@rosen-bridge/extended-tokens';
+import type { RosenTokens } from '@rosen-bridge/extended-tokens';
 
 export const sampleTokenMapConfig: RosenTokens = [
   {

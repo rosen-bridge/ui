@@ -12,6 +12,7 @@ import {
 
 import { RequestAnOrderForm } from './RequestAnOrderForm';
 import { RequestToSignForm } from './RequestToSignForm';
+
 import './style.css';
 
 const Actions = () => {
@@ -38,8 +39,12 @@ const Actions = () => {
       gap={2}
       value={tab}
       orientation={tabsOrientation}
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      onChange={(value) => setTab(value as any)}
+      /**
+       * TODO: remove the inline Biome comment
+       * local:ergo/rosen-bridge/ui#441
+       */
+      // biome-ignore lint/suspicious/noExplicitAny: Use a better type
+      onChange={(value: any) => setTab(value as any)}
     >
       <TabsList align="center" grow={tabsListGrow}>
         <TabsTab

@@ -1,4 +1,8 @@
-import { Filter, OPERATOR_CONTAINS, OPERATOR_IS } from '@rosen-bridge/ui-kit';
+import {
+  type Filter,
+  OPERATOR_CONTAINS,
+  OPERATOR_IS,
+} from '@rosen-bridge/ui-kit';
 import { NETWORKS, NETWORKS_KEYS } from '@rosen-ui/constants';
 
 export const filters: Filter[] = [
@@ -7,13 +11,13 @@ export const filters: Filter[] = [
     label: 'Network',
     unique: true,
     operators: [OPERATOR_IS],
-    input: () => ({
+    input: {
       type: 'select',
       options: NETWORKS_KEYS.map((key) => ({
         label: NETWORKS[key].label,
         value: key,
       })),
-    }),
+    },
   },
   {
     name: 'name',

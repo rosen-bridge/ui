@@ -1,5 +1,14 @@
 # @rosen-ui/rosen-statistics-entity
 
+## 0.4.2
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-bridge/abstract-scanner@2.0.3
+  - @rosen-bridge/watcher-data-extractor@13.0.10
+  - @rosen-ui/asset-calculator@2.4.0
+
 ## 0.4.1
 
 ### Patch Changes

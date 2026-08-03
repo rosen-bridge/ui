@@ -1,8 +1,11 @@
-import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
-import { DataSource } from '@rosen-bridge/extended-typeorm';
+import {
+  type AbstractLogger,
+  DummyLogger,
+} from '@rosen-bridge/abstract-logger';
+import type { DataSource } from '@rosen-bridge/extended-typeorm';
 import { TokenPriceAction } from '@rosen-bridge/token-price-entity';
-import { ERGO_CHAIN, TokenMap } from '@rosen-bridge/tokens';
-import { MetricAction, METRIC_KEYS } from '@rosen-ui/rosen-statistics-entity';
+import { ERGO_CHAIN, type TokenMap } from '@rosen-bridge/tokens';
+import { METRIC_KEYS, MetricAction } from '@rosen-ui/rosen-statistics-entity';
 
 /**
  * Calculate and persist general system metrics.
