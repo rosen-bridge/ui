@@ -1,25 +1,24 @@
 import {
   Amount,
-  AmountProps,
+  type AmountProps,
   Columns,
   EventStatus,
-  EventStatusProps,
+  type EventStatusProps,
   Identifier,
-  IdentifierProps,
+  type IdentifierProps,
   Label,
   LabelGroup,
   Network,
-  NetworkProps,
+  type NetworkProps,
   RelativeTime,
-  RelativeTimeProps,
+  type RelativeTimeProps,
   Token,
-  TokenProps,
+  type TokenProps,
   Typography,
 } from '@/components';
 import { useConfig } from '@/hooks';
-import { ElementBaseProps, OverridableType } from '@/types';
+import type { ElementBaseProps, OverridableType } from '@/types';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface EventDetailsOverrides {}
 
 export type EventDetailsOwnProps = {

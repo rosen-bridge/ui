@@ -1,10 +1,10 @@
-import { Filter } from '@rosen-bridge/query-params';
+import type { Filter } from '@rosen-bridge/query-params';
 import {
   BridgedAssetEntity,
   LockedAssetEntity,
   TokenEntity,
 } from '@rosen-ui/asset-calculator';
-import { Network } from '@rosen-ui/types';
+import type { Network } from '@rosen-ui/types';
 
 import { filtersToTypeorm } from '@/filters';
 
@@ -70,7 +70,7 @@ export const getAsset = async (id: string) => {
  * @param filters
  */
 export const getAllAssets = async (filters: Filter) => {
-  let { pagination, sorts, where } = filtersToTypeorm(filters, (key) => {
+  const { pagination, sorts, where } = filtersToTypeorm(filters, (key) => {
     switch (key) {
       case 'bridged':
         return `"${key}Normalized"`;
@@ -136,7 +136,6 @@ export const getAllAssets = async (filters: Filter) => {
 
   const rawItems = await queryBuilder.getRawMany<AssetWithTotal>();
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const items = rawItems.map(({ total, ...item }) => item);
 
   return {

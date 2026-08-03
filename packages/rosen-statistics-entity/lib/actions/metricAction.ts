@@ -1,7 +1,10 @@
-import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
-import { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
+import {
+  type AbstractLogger,
+  DummyLogger,
+} from '@rosen-bridge/abstract-logger';
+import type { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
 
-import { MetricKey } from '../constants';
+import type { MetricKey } from '../constants';
 import { MetricEntity } from '../entities';
 
 export class MetricAction {

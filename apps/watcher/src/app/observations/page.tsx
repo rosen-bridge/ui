@@ -1,16 +1,16 @@
 'use client';
 
-import { ChangeEvent, MouseEvent, useCallback, useMemo } from 'react';
+import { type ChangeEvent, type MouseEvent, useCallback, useMemo } from 'react';
 
 import {
   EnhancedTable,
-  TablePaginationProps,
+  type TablePaginationProps,
   useTableDataPagination,
 } from '@rosen-bridge/ui-kit';
 
-import { ApiObservationResponse, Observation } from '@/types/api';
+import type { ApiObservationResponse, Observation } from '@/types/api';
 
-import { MobileRow, TabletRow, mobileHeader, tabletHeader } from './TableRow';
+import { MobileRow, mobileHeader, TabletRow, tabletHeader } from './TableRow';
 import { TableSkeleton } from './TableSkeleton';
 
 const getKey = (offset: number, limit: number) => {
@@ -31,7 +31,7 @@ const Observations = () => {
   } = useTableDataPagination<ApiObservationResponse>(getKey);
 
   const handleChangePage = useCallback(
-    (event: MouseEvent<HTMLButtonElement> | null, newPage: number) => {
+    (_event: MouseEvent<HTMLButtonElement> | null, newPage: number) => {
       setPageIndex(newPage);
     },
     [setPageIndex],

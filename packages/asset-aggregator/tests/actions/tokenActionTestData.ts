@@ -1,4 +1,4 @@
-import { Network } from '@rosen-ui/types';
+import type { Network } from '@rosen-ui/types';
 
 import { TokenEntity } from '../../lib/entities/tokenEntity';
 

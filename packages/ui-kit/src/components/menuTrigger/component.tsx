@@ -1,13 +1,12 @@
-import { ElementType } from 'react';
+import type { ElementType } from 'react';
 
 import { Menu as MenuBaseUI } from '@base-ui/react/menu';
 
 import { useConfig } from '@/hooks';
-import { ElementBaseProps, OverridableType } from '@/types';
+import type { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.css';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface MenuTriggerOverrides {}
 
 export type MenuTriggerOwnProps<T extends ElementType = 'button'> = {
@@ -39,7 +38,11 @@ export const MenuTrigger = <T extends ElementType = 'button'>(
     handle,
     openOnHover,
     ...rest
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    /**
+     * TODO: remove the inline Biome comment
+     * local:ergo/rosen-bridge/ui#441
+     */
+    // biome-ignore lint/suspicious/noExplicitAny: Use a better type
   } = useConfig('MenuTrigger', props as any);
 
   const isNativeButton =

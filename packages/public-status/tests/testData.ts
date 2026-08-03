@@ -1,6 +1,6 @@
-import { TxType, TxStatus, EventStatus } from '../src/constants';
-import { GuardStatusEntity } from '../src/entities/GuardStatusEntity';
-import { TxEntity } from '../src/entities/TxEntity';
+import { EventStatus, TxStatus, TxType } from '../src/constants';
+import type { GuardStatusEntity } from '../src/entities/GuardStatusEntity';
+import type { TxEntity } from '../src/entities/TxEntity';
 
 export const id0 =
   '0000000000000000000000000000000000000000000000000000000000000000';

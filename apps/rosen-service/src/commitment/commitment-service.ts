@@ -1,5 +1,5 @@
 import { DefaultLogger } from '@rosen-bridge/abstract-logger';
-import { ErgoScanner } from '@rosen-bridge/ergo-scanner';
+import type { ErgoScanner } from '@rosen-bridge/ergo-scanner';
 import { CommitmentExtractor } from '@rosen-bridge/watcher-data-extractor';
 import { NETWORKS, NETWORKS_KEYS } from '@rosen-ui/constants';
 
@@ -16,9 +16,9 @@ const logger = DefaultLogger.getInstance().child(import.meta.url);
  */
 export const registerExtractors = async (scanner: ErgoScanner) => {
   try {
-    for (let key of NETWORKS_KEYS) {
+    for (const key of NETWORKS_KEYS) {
       const chain =
-        key == NETWORKS['bitcoin-runes'].key ? BITCOIN_RUNES_CONFIG_KEY : key;
+        key === NETWORKS['bitcoin-runes'].key ? BITCOIN_RUNES_CONFIG_KEY : key;
       const chainConfig = configs[chain];
 
       const commitmentExtractor = new CommitmentExtractor(

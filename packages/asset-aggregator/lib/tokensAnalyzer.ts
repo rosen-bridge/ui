@@ -1,9 +1,16 @@
-import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
-import { NATIVE_TOKEN, RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
+import {
+  type AbstractLogger,
+  DummyLogger,
+} from '@rosen-bridge/abstract-logger';
+import {
+  NATIVE_TOKEN,
+  type RosenChainToken,
+  type TokenMap,
+} from '@rosen-bridge/tokens';
 import { NETWORKS_KEYS } from '@rosen-ui/constants';
 
-import { BridgedAssetEntity, LockedAssetEntity } from './entities';
-import { AssetBalance, NetworkItem, TotalSupply } from './types';
+import type { BridgedAssetEntity, LockedAssetEntity } from './entities';
+import type { AssetBalance, NetworkItem, TotalSupply } from './types';
 
 export class TokensAnalyzer {
   protected lockedTokens: Omit<LockedAssetEntity, 'token'>[];
@@ -58,7 +65,7 @@ export class TokensAnalyzer {
     if (!tokenSet)
       throw new Error(`Can't find token-set for token by [${tokenId}] id`);
     return Object.entries(tokenSet).filter(
-      ([, token]) => token.residency == NATIVE_TOKEN,
+      ([, token]) => token.residency === NATIVE_TOKEN,
     )[0][1].tokenId;
   };
 
@@ -87,7 +94,7 @@ export class TokensAnalyzer {
       );
 
       const addressBalances = chainAssets[token.tokenId];
-      if (token.residency == NATIVE_TOKEN) {
+      if (token.residency === NATIVE_TOKEN) {
         addressBalances.forEach((addressBalance) => {
           this.lockedTokens.push({
             amount: addressBalance.balance,
@@ -123,7 +130,7 @@ export class TokensAnalyzer {
     );
 
     const assetTotalSupply = this.totalSupply[chain]
-      ?.filter((t) => t.assetId == token.tokenId)
+      ?.filter((t) => t.assetId === token.tokenId)
       .at(0);
 
     if (!assetTotalSupply) {

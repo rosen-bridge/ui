@@ -1,45 +1,46 @@
 'use client';
 
 import { useEffect, useMemo } from 'react';
+
 import {
   FormProvider,
-  SubmitHandler,
+  type SubmitHandler,
   useController,
   useForm,
 } from 'react-hook-form';
+import useSWR from 'swr';
+import useSWRMutation from 'swr/mutation';
 
 import {
+  ApiKeyDialogProtectedAction,
+  ApiKeyDialogWarning,
   CircularProgress,
   Identifier,
   InputAdornment,
+  Link,
+  MenuItemMui,
+  Stack,
   SubmitButton,
   TextField,
   useApiKey,
-  ApiKeyDialogWarning,
-  Link,
-  Stack,
+  useConfirm,
   useResponsive,
   useToast,
-  useConfirm,
-  ApiKeyDialogProtectedAction,
-  MenuItemMui,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS, TOKEN_NAME_PLACEHOLDER } from '@rosen-ui/constants';
 import { fetcher, mutatorWithHeaders } from '@rosen-ui/swr-helpers';
 import { getNonDecimalString, getTxURL } from '@rosen-ui/utils';
-import useSWR from 'swr';
-import useSWRMutation from 'swr/mutation';
 
 import { useInfo, useToken } from '@/hooks';
-import {
+import type {
   ApiAddressAssetsResponse,
   ApiWithdrawRequestBody,
   ApiWithdrawResponse,
 } from '@/types/api';
 
 import {
+  type TokenAmountCompatibleFormSchema,
   TokenAmountTextField,
-  TokenAmountCompatibleFormSchema,
 } from '../../TokenAmountTextField';
 
 interface Form extends TokenAmountCompatibleFormSchema {
@@ -66,7 +67,11 @@ const WithdrawForm = () => {
 
   const { trigger, isMutating: isWithdrawPending } = useSWRMutation<
     ApiWithdrawResponse,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    /**
+     * TODO: remove the inline Biome comment
+     * local:ergo/rosen-bridge/ui#441
+     */
+    // biome-ignore lint/suspicious/noExplicitAny: Use a better type
     any,
     '/withdraw',
     ApiWithdrawRequestBody
@@ -81,7 +86,7 @@ const WithdrawForm = () => {
         timeout: 0,
       });
     }
-  }, [isErgTokenLoading, ergToken]);
+  }, [isErgTokenLoading, ergToken, toast.add]);
 
   const formMethods = useForm({
     mode: 'onChange',
@@ -157,7 +162,11 @@ const WithdrawForm = () => {
           'Server responded but the response message was unexpected',
         );
       }
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      /**
+       * TODO: remove the inline Biome comment
+       * local:ergo/rosen-bridge/ui#441
+       */
+      // biome-ignore lint/suspicious/noExplicitAny: Use a better type
     } catch (error: any) {
       if (error?.response?.status === 403) {
         toast.add({

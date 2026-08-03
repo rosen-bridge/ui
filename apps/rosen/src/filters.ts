@@ -4,9 +4,9 @@ import {
   LessThanOrEqual,
   MoreThanOrEqual,
   Not,
-  ObjectLiteral,
+  type ObjectLiteral,
 } from '@rosen-bridge/extended-typeorm';
-import { Filter } from '@rosen-bridge/query-params';
+import type { Filter } from '@rosen-bridge/query-params';
 
 /**
  * Converts a {@link Filter} object from `@rosen-bridge/query-params` into

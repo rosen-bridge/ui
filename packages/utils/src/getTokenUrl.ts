@@ -1,5 +1,5 @@
 import { NETWORKS } from '@rosen-ui/constants';
-import { Network } from '@rosen-ui/types';
+import type { Network } from '@rosen-ui/types';
 
 const baseTokenURLs: { [key in Network]: string } = {
   [NETWORKS.binance.key]: 'https://bscscan.com/token',

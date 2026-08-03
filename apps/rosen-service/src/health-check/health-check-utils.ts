@@ -1,5 +1,5 @@
 import { BlockEntity, PROCEED } from '@rosen-bridge/abstract-scanner';
-import { LastSavedBlock } from '@rosen-bridge/scanner-sync-check';
+import type { LastSavedBlock } from '@rosen-bridge/scanner-sync-check';
 
 import dataSource from '../data-source';
 

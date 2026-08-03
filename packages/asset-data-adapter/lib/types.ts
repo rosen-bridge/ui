@@ -1,12 +1,12 @@
-import { Network } from '@rosen-ui/types';
+import type { Network } from '@rosen-ui/types';
 
-import { BinanceEvmRpcDataAdapter } from './binanceEvmRpcDataAdapter';
-import { BitcoinEsploraDataAdapter } from './bitcoinEsploraDataAdapter';
-import { BitcoinRunesDataAdapter } from './bitcoinRunsDataAdapter';
-import { CardanoKoiosDataAdapter } from './cardanoKoiosDataAdapter';
-import { DogeBlockCypherDataAdapter } from './dogeBlockCypherDataAdapter';
-import { ErgoExplorerDataAdapter } from './ergoExplorerDataAdapter';
-import { EthereumEvmRpcDataAdapter } from './ethereumEvmRpcDataAdapter';
+import type { BinanceEvmRpcDataAdapter } from './binanceEvmRpcDataAdapter';
+import type { BitcoinEsploraDataAdapter } from './bitcoinEsploraDataAdapter';
+import type { BitcoinRunesDataAdapter } from './bitcoinRunsDataAdapter';
+import type { CardanoKoiosDataAdapter } from './cardanoKoiosDataAdapter';
+import type { DogeBlockCypherDataAdapter } from './dogeBlockCypherDataAdapter';
+import type { ErgoExplorerDataAdapter } from './ergoExplorerDataAdapter';
+import type { EthereumEvmRpcDataAdapter } from './ethereumEvmRpcDataAdapter';
 
 export type AssetBalance = { [assetId: string]: AddressBalance[] };
 

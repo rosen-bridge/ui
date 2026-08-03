@@ -3,8 +3,8 @@ import {
   FailoverStrategy,
   NetworkConnectorManager,
 } from '@rosen-bridge/abstract-scanner';
-import { ErgoScanner, ErgoExplorerNetwork } from '@rosen-bridge/ergo-scanner';
-import { Transaction } from '@rosen-bridge/scanner-interfaces';
+import { ErgoExplorerNetwork, ErgoScanner } from '@rosen-bridge/ergo-scanner';
+import type { Transaction } from '@rosen-bridge/scanner-interfaces';
 
 import commitmentService from '../../commitment/commitment-service';
 import config from '../../configs';

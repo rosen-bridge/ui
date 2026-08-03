@@ -1,7 +1,13 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+/**
+ * TODO: remove the inline Biome comment
+ * local:ergo/rosen-bridge/ui#441
+ */
+/** biome-ignore-all lint/suspicious/noExplicitAny: Use a better type */
+
+import { beforeEach, describe, expect, it, vitest } from 'vitest';
+
 import { TokenMap } from '@rosen-bridge/tokens';
 import cardanoKoiosClientFactory from '@rosen-clients/cardano-koios';
-import { beforeEach, describe, expect, it, vitest } from 'vitest';
 
 import { CardanoCalculator } from '../../../lib/calculator/chains/cardano-calculator';
 import { tokenMapData } from '../../test-data';

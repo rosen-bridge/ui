@@ -2,30 +2,31 @@
 
 import { useEffect } from 'react';
 
+import useSWR from 'swr';
+
 import {
   Amount,
   Columns,
   Connector,
-  Identifier,
-  Label,
-  Network,
-  Token,
   DateTime,
   EventStatus,
-  useResponsive,
-  Typography,
-  Menu,
-  MenuItem,
   Icon,
-  MenuTrigger,
+  Identifier,
+  Label,
+  Menu,
   MenuBody,
+  MenuItem,
+  MenuTrigger,
+  Network,
+  Token,
+  Typography,
+  useResponsive,
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
-import { Network as NetworkType } from '@rosen-ui/types';
+import type { Network as NetworkType } from '@rosen-ui/types';
 import { getAddressUrl } from '@rosen-ui/utils';
-import useSWR from 'swr';
 
-import { EventDetailsType } from '@/backend/events/repository';
+import type { EventDetailsType } from '@/backend/events/repository';
 
 import { Section } from './Section';
 
@@ -47,7 +48,7 @@ export const Overview = ({
 
   useEffect(() => {
     onFlowIdChange(events?.at(0)?.txId);
-  }, [events]);
+  }, [events, onFlowIdChange]);
 
   const data = events?.find((event) => event.txId === flowId);
 

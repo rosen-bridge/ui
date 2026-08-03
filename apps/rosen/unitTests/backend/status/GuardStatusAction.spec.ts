@@ -1,13 +1,12 @@
-import { Repository } from '@rosen-bridge/extended-typeorm';
+import type { Repository } from '@rosen-bridge/extended-typeorm';
 import { testDataSource } from '@rosen-ui/data-source';
-import { GuardStatusEntity, EventStatus } from '@rosen-ui/public-status';
+import { EventStatus, GuardStatusEntity } from '@rosen-ui/public-status';
 
 import GuardStatusAction from '@/backend/status/GuardStatusAction';
 
 import { DataSourceMock } from '../../mocked/DataSource.mock';
 import {
   mockGuardStatusRecords,
-  id0,
   mockPaginationTestData,
   triggerId0,
 } from './testData';

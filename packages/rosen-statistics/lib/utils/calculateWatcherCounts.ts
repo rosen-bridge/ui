@@ -1,9 +1,9 @@
-import { AbstractLogger } from '@rosen-bridge/abstract-logger';
-import { IndexedErgoBox } from '@rosen-clients/ergo-node';
-import { WatcherCountType } from '@rosen-ui/rosen-statistics-entity';
+import type { AbstractLogger } from '@rosen-bridge/abstract-logger';
+import type { IndexedErgoBox } from '@rosen-clients/ergo-node';
+import type { WatcherCountType } from '@rosen-ui/rosen-statistics-entity';
 
 import { WATCHER_COUNT_REGISTER } from '../constants';
-import { WatcherCountConfig, WatcherCountResult } from '../types';
+import type { WatcherCountConfig, WatcherCountResult } from '../types';
 import { getRegisterValue } from './getRegisterValue';
 
 /**

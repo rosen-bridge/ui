@@ -1,5 +1,5 @@
-import { Repository } from '@rosen-bridge/extended-typeorm';
-import { TxEntity, TxType } from '@rosen-ui/public-status';
+import type { Repository } from '@rosen-bridge/extended-typeorm';
+import type { TxEntity, TxType } from '@rosen-ui/public-status';
 
 class TxAction {
   private static instance?: TxAction;

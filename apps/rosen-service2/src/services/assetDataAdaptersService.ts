@@ -1,11 +1,11 @@
-import { AbstractLogger } from '@rosen-bridge/abstract-logger';
+import type { AbstractLogger } from '@rosen-bridge/abstract-logger';
 import {
-  Dependency,
+  type Dependency,
   ServiceAction,
   ServiceStatus,
 } from '@rosen-bridge/service-manager';
 import ergoExplorerClientFactory from '@rosen-clients/ergo-explorer';
-import { TotalSupply } from '@rosen-ui/asset-aggregator';
+import type { TotalSupply } from '@rosen-ui/asset-aggregator';
 import {
   BinanceEvmRpcDataAdapter,
   BitcoinEsploraDataAdapter,
@@ -15,7 +15,7 @@ import {
   ErgoExplorerDataAdapter,
   EthereumEvmRpcDataAdapter,
 } from '@rosen-ui/asset-data-adapter';
-import {
+import type {
   AssetBalance,
   ChainsAdapters,
 } from '@rosen-ui/asset-data-adapter/dist/types';
@@ -23,7 +23,7 @@ import { NETWORKS, NETWORKS_KEYS } from '@rosen-ui/constants';
 
 import { configs } from '../configs';
 import { TOTAL_SUPPLY_REDIS_KEY } from '../constants';
-import { ChainChoices } from '../types';
+import type { ChainChoices } from '../types';
 import { stringSerializer } from '../utils';
 import {
   AbstractAssetDataAdapterService,
@@ -244,8 +244,8 @@ export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
     let newData = await adapter.fetch();
 
     if (
-      adapter.chain == NETWORKS.ethereum.key ||
-      adapter.chain == NETWORKS.binance.key
+      adapter.chain === NETWORKS.ethereum.key ||
+      adapter.chain === NETWORKS.binance.key
     ) {
       // preventing of overriding old chunks of data
       const oldData =

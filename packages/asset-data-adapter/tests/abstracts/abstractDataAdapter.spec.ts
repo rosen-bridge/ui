@@ -1,11 +1,11 @@
 import { TokenMap } from '@rosen-bridge/tokens';
 
-import { AssetBalance } from '../../lib/types';
+import type { AssetBalance } from '../../lib/types';
 import {
   sampleTokenMapConfig,
   sampleTokenMapConfigWithDuplicateTokenId,
+  TestAdapter,
 } from '../mocked';
-import { TestAdapter } from '../mocked';
 
 describe('AbstractDataAdapter', () => {
   describe('fetch', () => {

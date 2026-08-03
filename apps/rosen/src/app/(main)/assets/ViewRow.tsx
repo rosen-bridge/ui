@@ -19,7 +19,7 @@ import {
 } from '@rosen-bridge/ui-kit';
 
 import { BridgedList } from './BridgedList';
-import { AssetsFullData } from './getFullAssetData';
+import type { AssetsFullData } from './getFullAssetData';
 
 export type ViewRowProps = {
   current?: AssetsFullData;

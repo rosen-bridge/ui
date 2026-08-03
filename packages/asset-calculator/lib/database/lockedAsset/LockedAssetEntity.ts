@@ -1,5 +1,5 @@
-import { BigIntValueTransformer } from '@rosen-bridge/extended-typeorm';
 import {
+  BigIntValueTransformer,
   Column,
   Entity,
   ManyToOne,

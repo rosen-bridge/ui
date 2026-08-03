@@ -1,8 +1,12 @@
-/* eslint-disable */
-import { NextRequest } from 'next/server';
+/**
+ * TODO: remove the inline Biome comment
+ * local:ergo/rosen-bridge/ui#441
+ */
+/* biome-ignore-all lint/suspicious/noExplicitAny: Use a better type */
+import type { NextRequest } from 'next/server';
 
 import * as Sentry from '@sentry/nextjs';
-import { ValidationResult } from 'joi';
+import type { ValidationResult } from 'joi';
 
 export class AccessDeniedError extends Error {
   constructor(message: string) {

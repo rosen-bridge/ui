@@ -1,10 +1,10 @@
-import { configs } from '../configs';
+import type { configs } from '../configs';
 import {
-  ERGO_BLOCK_TIME,
-  DOGE_BLOCK_TIME,
-  CARDANO_BLOCK_TIME,
   BINANCE_BLOCK_TIME,
   BITCOIN_BLOCK_TIME,
+  CARDANO_BLOCK_TIME,
+  DOGE_BLOCK_TIME,
+  ERGO_BLOCK_TIME,
   ETHEREUM_BLOCK_TIME,
 } from '../constants';
 

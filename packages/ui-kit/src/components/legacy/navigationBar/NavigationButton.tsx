@@ -2,8 +2,8 @@ import { alpha, Button, styled } from '@mui/material';
 
 import { Badge } from '@/components';
 
-import { useFramework, useBreakpoint } from '../../../hooks';
-import { Icon, IconProps } from '../../icon';
+import { useBreakpoint, useFramework } from '../../../hooks';
+import { Icon, type IconProps } from '../../icon';
 import { Link } from '../../link';
 
 const NavigationButtonBase = styled(Button)(({ theme }) => ({
@@ -72,7 +72,7 @@ const NavigationButtonBase = styled(Button)(({ theme }) => ({
 const NavigationButtonIndicator = styled('div', {
   name: 'RosenNavigationButton',
   slot: 'indicator',
-  overridesResolver: (props, styles) => styles.root,
+  overridesResolver: (_props, styles) => styles.root,
 })(({ theme }) => ({
   height: theme.spacing(1),
   width: theme.spacing(3),

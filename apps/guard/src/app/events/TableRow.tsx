@@ -1,18 +1,18 @@
-import { useState, FC, useMemo } from 'react';
+import { type FC, useMemo, useState } from 'react';
 
 import { AngleDown, AngleUp } from '@rosen-bridge/icons';
 import {
-  Button,
-  EnhancedTableCell,
-  TableRow,
-  Identifier,
-  Connector,
   Amount,
+  Button,
+  Connector,
+  EnhancedTableCell,
+  Identifier,
+  TableRow,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 import { getTxURL } from '@rosen-ui/utils';
 
-import { OngoingEvent } from '@/types/api';
+import type { OngoingEvent } from '@/types/api';
 
 interface RowProps extends OngoingEvent {
   isLoading?: boolean;

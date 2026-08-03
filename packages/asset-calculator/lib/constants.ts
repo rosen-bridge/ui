@@ -1,4 +1,4 @@
-import { InterfaceAbi } from 'ethers';
+import type { InterfaceAbi } from 'ethers';
 
 export const ERG_TOTAL_SUPPLY = 97739924500000000n;
 export const PartialERC20ABI: InterfaceAbi = [

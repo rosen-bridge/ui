@@ -1,5 +1,5 @@
 import { Cardano as CardanoIcon } from '@rosen-bridge/icons';
-import { Network, NetworkConfig } from '@rosen-network/base';
+import type { Network, NetworkConfig } from '@rosen-network/base';
 import { NETWORKS } from '@rosen-ui/constants';
 
 import type { generateUnsignedTx } from './generateUnsignedTx';

@@ -5,21 +5,21 @@ import { PublicStatusAction } from '@/backend/status/PublicStatusAction';
 
 import { DataSourceMock } from '../../mocked/DataSource.mock';
 import {
-  mockExistingGuardStatus,
-  mockTxDTO,
-  mockNewGuardStatus,
   mockEventStatusThresholds,
-  mockTxStatusThresholds,
-  mockNewGuardStatusChanged,
-  mockNewAggregatedStatusChanged,
-  mockNewAggregatedStatus,
-  mockExistingAggregatedStatusChanged,
   mockExistingAggregatedStatus,
-  mockNewTx,
+  mockExistingAggregatedStatusChanged,
+  mockExistingGuardStatus,
   mockExistingGuardStatusChanged,
   mockGuardStatusTx,
+  mockNewAggregatedStatus,
+  mockNewAggregatedStatusChanged,
+  mockNewGuardStatus,
   mockNewGuardStatusAggregateChange,
+  mockNewGuardStatusChanged,
   mockNewGuardStatusChangedAggregateChange,
+  mockNewTx,
+  mockTxDTO,
+  mockTxStatusThresholds,
 } from './PublicStatusAction.testData';
 
 describe('PublicStatusAction', () => {

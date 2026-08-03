@@ -12,8 +12,8 @@ export const formatDateTime = (timestamp?: number): string => {
   if (
     timestamp === undefined ||
     timestamp === null ||
-    isNaN(timestamp) ||
-    !isFinite(timestamp)
+    Number.isNaN(timestamp) ||
+    !Number.isFinite(timestamp)
   ) {
     return 'Invalid DateTime';
   }

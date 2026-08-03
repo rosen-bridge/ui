@@ -1,4 +1,9 @@
-import { PropsWithChildren, useCallback, useEffect, useState } from 'react';
+import {
+  type PropsWithChildren,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 
 import useEmblaCarousel from 'embla-carousel-react';
 

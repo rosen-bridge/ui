@@ -1,6 +1,7 @@
-import { NETWORKS } from '@rosen-ui/constants';
-import { Network } from '@rosen-ui/types';
 import { describe, expect, it } from 'vitest';
+
+import { NETWORKS } from '@rosen-ui/constants';
+import type { Network } from '@rosen-ui/types';
 
 import { generateOpReturnData } from '../../src';
 

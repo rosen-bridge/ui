@@ -1,11 +1,11 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import {
   getDecimalString,
   getNonDecimalString,
   getNumberOfDecimals,
-  scientificToString,
   multiplyByPowerOfTen,
+  scientificToString,
 } from '../../lib/utils';
 
 describe('getDecimalString', () => {
@@ -429,6 +429,6 @@ describe('multiplyByPowerOfTen', () => {
    */
   it('should handle very large powers', () => {
     const result = multiplyByPowerOfTen('1', 50);
-    expect(result).toBe('1' + '0'.repeat(50));
+    expect(result).toBe(`1${'0'.repeat(50)}`);
   });
 });

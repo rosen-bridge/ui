@@ -1,9 +1,9 @@
-import { HTMLAttributes, MouseEventHandler, ReactNode } from 'react';
+import type { HTMLAttributes, MouseEventHandler, ReactNode } from 'react';
 
 import { styled } from '@mui/material';
 
 import { CloseButton } from '../closeButton';
-import { Icon, IconProps } from '../icon';
+import { Icon, type IconProps } from '../icon';
 import { DialogTitle } from './Mui';
 
 const IconContainer = styled('div')(({ theme }) => ({

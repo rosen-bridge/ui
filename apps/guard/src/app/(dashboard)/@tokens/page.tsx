@@ -13,7 +13,7 @@ import {
   Typography,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
-import { Network } from '@rosen-ui/types';
+import type { Network } from '@rosen-ui/types';
 
 import { useBalance } from '@/hooks';
 

@@ -1,11 +1,17 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+/**
+ * TODO: remove the inline Biome comment
+ * local:ergo/rosen-bridge/ui#441
+ */
+/** biome-ignore-all lint/suspicious/noExplicitAny: Use a better type */
+
+import type { VercelKV } from '@vercel/kv';
+import { beforeEach, describe, expect, it, type Mock, vi } from 'vitest';
+
 import { DummyLogger } from '@rosen-bridge/abstract-logger';
 import { TokenMap } from '@rosen-bridge/extended-tokens';
 import { DataSource } from '@rosen-bridge/extended-typeorm';
 import { TokenEntity } from '@rosen-ui/asset-aggregator';
 import { NETWORKS } from '@rosen-ui/constants';
-import { VercelKV } from '@vercel/kv';
-import { describe, it, beforeEach, expect, vi, Mock } from 'vitest';
 
 import {
   AbstractAssetDataAdapterService,
@@ -28,7 +34,7 @@ interface TestContext {
   mockExplorer: { v1: { [k: string]: Mock } };
 }
 
-let mockExplorer = {
+const mockExplorer = {
   v1: {
     getApiV1AddressesP1BalanceConfirmed: vi.fn(),
     getApiV1TokensP1: vi.fn(),

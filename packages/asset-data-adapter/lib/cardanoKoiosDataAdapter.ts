@@ -1,10 +1,13 @@
-import { AbstractLogger } from '@rosen-bridge/abstract-logger';
-import { RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
+import type { AbstractLogger } from '@rosen-bridge/abstract-logger';
+import type { RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
 import cardanoKoiosClientFactory from '@rosen-clients/cardano-koios';
 import { NETWORKS } from '@rosen-ui/constants';
 
 import { AbstractDataAdapter } from './abstracts';
-import { CardanoKoiosDataAdapterAuthParams, ChainAssetBalance } from './types';
+import type {
+  CardanoKoiosDataAdapterAuthParams,
+  ChainAssetBalance,
+} from './types';
 
 export class CardanoKoiosDataAdapter extends AbstractDataAdapter {
   chain = NETWORKS.cardano.key;

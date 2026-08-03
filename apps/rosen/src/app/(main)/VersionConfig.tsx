@@ -1,4 +1,4 @@
-import { AppInfo, IconProps } from '@rosen-bridge/ui-kit';
+import { AppInfo, type IconProps } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 
 import { CONTRACT_VERSION } from '../../../configs';

@@ -1,4 +1,4 @@
-import { AggregateEventStatus, AggregateTxStatus } from './constants';
+import type { AggregateEventStatus, AggregateTxStatus } from './constants';
 
 /**
  * used for defining aggregated status thresholds of both event and tx

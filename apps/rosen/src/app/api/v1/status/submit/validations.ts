@@ -1,14 +1,15 @@
-import { NextRequest } from 'next/server';
+import type { NextRequest } from 'next/server';
+
+import Joi from 'joi';
 
 import {
-  EventStatus,
+  type EventStatus,
   eventStatuses,
-  TxType,
-  TxStatus,
+  type TxStatus,
+  type TxType,
   txStatuses,
   txTypes,
 } from '@rosen-ui/public-status';
-import Joi from 'joi';
 
 export interface TxParams {
   txId: string;

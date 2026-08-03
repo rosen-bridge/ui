@@ -9,7 +9,7 @@ import {
 
 const guards = [
   { key: '', label: 'Overall' },
-  ...JSON.parse(process.env['NEXT_PUBLIC_ALLOWED_PKS'] ?? '[]'),
+  ...JSON.parse(process.env.NEXT_PUBLIC_ALLOWED_PKS ?? '[]'),
 ] as Array<{ key: string; label: string }>;
 
 type ProcessSelectProps = {

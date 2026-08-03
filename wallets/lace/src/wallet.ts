@@ -1,7 +1,7 @@
-import { RosenChainToken } from '@rosen-bridge/tokens';
+import type { RosenChainToken } from '@rosen-bridge/tokens';
 import { CardanoNetwork } from '@rosen-network/cardano/dist/client';
 import { NETWORKS } from '@rosen-ui/constants';
-import { Network } from '@rosen-ui/types';
+import type { Network } from '@rosen-ui/types';
 import { hexToCbor } from '@rosen-ui/utils';
 import {
   SubmitTransactionError,
@@ -9,11 +9,11 @@ import {
   UserDeniedTransactionSignatureError,
   UtxoFetchError,
   Wallet,
-  WalletTransferParams,
+  type WalletTransferParams,
 } from '@rosen-ui/wallet-api';
 
 import { ICON } from './icon';
-import { LaceWalletConfig } from './types';
+import type { LaceWalletConfig } from './types';
 
 export class LaceWallet extends Wallet<LaceWalletConfig> {
   icon = ICON;

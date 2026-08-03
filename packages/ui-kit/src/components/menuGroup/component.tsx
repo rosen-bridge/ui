@@ -1,12 +1,10 @@
 import { Menu as MenuBaseUI } from '@base-ui/react/menu';
 
 import { useConfig } from '@/hooks';
-import { ElementBaseProps, OverridableType } from '@/types';
+import type { ElementBaseProps, OverridableType } from '@/types';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface MenuGroupOverrides {}
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export type MenuGroupOwnProps = {};
 
 export type MenuGroupBaseProps = ElementBaseProps<'div', MenuGroupOwnProps>;

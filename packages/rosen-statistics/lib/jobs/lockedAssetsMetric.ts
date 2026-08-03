@@ -1,11 +1,14 @@
-import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
-import { DataSource } from '@rosen-bridge/extended-typeorm';
+import {
+  type AbstractLogger,
+  DummyLogger,
+} from '@rosen-bridge/abstract-logger';
+import type { DataSource } from '@rosen-bridge/extended-typeorm';
 import { TokenPriceAction } from '@rosen-bridge/token-price-entity';
 import {
   LockedAssetsMetricAction,
+  type LockedAssetsType,
   METRIC_KEYS,
   MetricAction,
-  LockedAssetsType,
 } from '@rosen-ui/rosen-statistics-entity';
 
 import {

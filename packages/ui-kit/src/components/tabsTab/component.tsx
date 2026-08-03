@@ -1,12 +1,11 @@
 import { Tabs } from '@base-ui/react/tabs';
 
-import { Action, Icon, IconProps } from '@/components';
+import { Action, Icon, type IconProps } from '@/components';
 import { useConfig } from '@/hooks';
-import { ElementBaseProps, OverridableType } from '@/types';
+import type { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.css';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface TabsTabOverrides {}
 
 export type TabsTabOwnProps = {
@@ -39,10 +38,18 @@ export const TabsTab = (props: TabsTabProps) => {
     props,
   );
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  /**
+   * TODO: remove the inline Biome comment
+   * local:ergo/rosen-bridge/ui#441
+   */
+  // biome-ignore lint/suspicious/noExplicitAny: Use a better type
   const Component = Tabs.Tab as any;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  /**
+   * TODO: remove the inline Biome comment
+   * local:ergo/rosen-bridge/ui#441
+   */
+  // biome-ignore lint/suspicious/noExplicitAny: Use a better type
   const value = (rest as any).value;
 
   return (
@@ -51,7 +58,6 @@ export const TabsTab = (props: TabsTabProps) => {
       nativeButton={!rest.href}
       {...rest}
       value={rest.href ?? value}
-      // eslint-disable-next-line @typescript-eslint/no-empty-object-type
       render={(props: {}) => (
         <Action {...props} {...rest}>
           {icon && <Icon name={icon} size="small" {...slots?.icon} />}

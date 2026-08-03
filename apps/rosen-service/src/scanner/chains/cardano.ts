@@ -6,7 +6,7 @@ import {
 import {
   CardanoKoiosScanner,
   KoiosNetwork,
-  KoiosTransaction,
+  type KoiosTransaction,
 } from '@rosen-bridge/cardano-scanner';
 
 import config from '../../configs';
