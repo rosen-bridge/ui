@@ -1,6 +1,6 @@
 import {
-  Toolbar,
   ThemeToggleButton,
+  Toolbar,
   useBreakpoint,
 } from '@rosen-bridge/ui-kit';
 

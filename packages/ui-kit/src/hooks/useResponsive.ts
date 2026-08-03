@@ -1,6 +1,6 @@
 import { useMediaQuery, useTheme } from '@mui/material';
 
-import { Breakpoint } from '@/types';
+import type { Breakpoint } from '@/types';
 
 const BREAKPOINT_ORDER: Breakpoint[] = [
   'mobile',

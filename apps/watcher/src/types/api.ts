@@ -1,10 +1,10 @@
-import {
+import type {
   HealthParamInfo,
+  MutationRequestBodyWithHeaders,
+  Network,
   Paginated,
   TokenChartData,
   TokenInfo,
-  MutationRequestBodyWithHeaders,
-  Network,
 } from '@rosen-ui/types';
 
 export interface ApiInfoResponse {

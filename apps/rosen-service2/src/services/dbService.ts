@@ -1,9 +1,9 @@
-import { AbstractLogger } from '@rosen-bridge/abstract-logger';
+import type { AbstractLogger } from '@rosen-bridge/abstract-logger';
 import { BlockEntity, PROCEED } from '@rosen-bridge/abstract-scanner';
 import { BoxEntity } from '@rosen-bridge/address-extractor';
-import { DataSource, IsNull } from '@rosen-bridge/extended-typeorm';
-import { LastSavedBlock } from '@rosen-bridge/scanner-sync-check';
-import { Dependency, ServiceStatus } from '@rosen-bridge/service-manager';
+import { type DataSource, IsNull } from '@rosen-bridge/extended-typeorm';
+import type { LastSavedBlock } from '@rosen-bridge/scanner-sync-check';
+import { type Dependency, ServiceStatus } from '@rosen-bridge/service-manager';
 
 import { TOKEN_MAP_EXTRACTOR_ID } from '../constants';
 import { AbstractDBService } from './abstracts';

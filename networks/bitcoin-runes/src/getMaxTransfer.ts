@@ -1,4 +1,4 @@
-import { Network, RosenAmountValue } from '@rosen-ui/types';
+import type { Network, RosenAmountValue } from '@rosen-ui/types';
 
 export const getMaxTransferCreator =
   () =>

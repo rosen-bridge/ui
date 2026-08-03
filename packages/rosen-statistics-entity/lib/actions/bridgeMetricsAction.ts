@@ -1,6 +1,9 @@
-import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
+import {
+  type AbstractLogger,
+  DummyLogger,
+} from '@rosen-bridge/abstract-logger';
 import { BlockEntity } from '@rosen-bridge/abstract-scanner';
-import { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
+import type { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
 import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
 import { TokenEntity } from '@rosen-ui/asset-calculator';
 
@@ -10,7 +13,7 @@ import {
   BridgeFeeEntity,
   MetricEntity,
 } from '../entities';
-import { BridgeEventData, BridgeMetricRecord } from '../types';
+import type { BridgeEventData, BridgeMetricRecord } from '../types';
 
 export class BridgeMetricsAction {
   private readonly eventTriggerRepo: Repository<EventTriggerEntity>;
@@ -101,7 +104,9 @@ export class BridgeMetricsAction {
         BlockEntity,
         'b',
         'b.hash = et.spendBlock AND b.scanner = :scanner',
-        { scanner: 'ergo' },
+        {
+          scanner: 'ergo',
+        },
       )
       .orderBy('b.timestamp', 'ASC')
       .getRawOne<{ timestamp: number; id: number }>();

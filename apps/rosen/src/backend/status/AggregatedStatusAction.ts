@@ -1,8 +1,8 @@
-import { In, Repository } from '@rosen-bridge/extended-typeorm';
-import {
+import { In, type Repository } from '@rosen-bridge/extended-typeorm';
+import type {
+  AggregatedStatusEntity,
   AggregateEventStatus,
   AggregateTxStatus,
-  AggregatedStatusEntity,
 } from '@rosen-ui/public-status';
 
 class AggregatedStatusAction {

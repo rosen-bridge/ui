@@ -1,4 +1,4 @@
-import { useState, FC, useMemo } from 'react';
+import { type FC, useMemo, useState } from 'react';
 
 import { AngleDown, AngleUp } from '@rosen-bridge/icons';
 import {
@@ -12,7 +12,7 @@ import { NETWORKS } from '@rosen-ui/constants';
 import { getDecimalString, getTxURL } from '@rosen-ui/utils';
 
 import { useInfo } from '@/hooks';
-import { ApiInfoResponse, Revenue } from '@/types/api';
+import type { ApiInfoResponse, Revenue } from '@/types/api';
 
 const getEmissionAmount = (
   info: ApiInfoResponse | undefined,

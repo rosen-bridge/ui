@@ -2,17 +2,21 @@
 
 import { useEffect, useMemo, useState } from 'react';
 
-import {
-  Color,
-  EventProcesses,
-  EventProcessesProps,
-  formatDateTime,
-  IconProps,
-} from '@rosen-bridge/ui-kit';
-import { fetcher } from '@rosen-ui/swr-helpers';
 import useSWR from 'swr';
 
-import { EventDetailsType, EventStatusType } from '@/backend/events/repository';
+import {
+  type Color,
+  EventProcesses,
+  type EventProcessesProps,
+  formatDateTime,
+  type IconProps,
+} from '@rosen-bridge/ui-kit';
+import { fetcher } from '@rosen-ui/swr-helpers';
+
+import type {
+  EventDetailsType,
+  EventStatusType,
+} from '@/backend/events/repository';
 
 import { ProcessSelect } from './ProcessSelect';
 import { Section } from './Section';
@@ -403,8 +407,8 @@ export const Process = ({
     }
 
     if (info[2]?.key === 'PAID') {
-      if (data.timestamps['PAID_CONFIRMED_AT_EXPERIMENTAL']) {
-        info[2].description += ` at "${formatDateTime(data.timestamps['PAID_CONFIRMED_AT_EXPERIMENTAL'] * 1000)}"`;
+      if (data.timestamps.PAID_CONFIRMED_AT_EXPERIMENTAL) {
+        info[2].description += ` at "${formatDateTime(data.timestamps.PAID_CONFIRMED_AT_EXPERIMENTAL * 1000)}"`;
       }
     }
 

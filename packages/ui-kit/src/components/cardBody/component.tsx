@@ -1,12 +1,10 @@
 import { useConfig } from '@/hooks';
-import { ElementBaseProps, OverridableType } from '@/types';
+import type { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.css';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface CardBodyOverrides {}
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export type CardBodyOwnProps = {};
 
 export type CardBodyBaseProps = ElementBaseProps<'div', CardBodyOwnProps>;

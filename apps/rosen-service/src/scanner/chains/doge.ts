@@ -1,12 +1,12 @@
 import { DefaultLogger } from '@rosen-bridge/abstract-logger';
 import {
-  RoundRobinStrategy,
   NetworkConnectorManager,
+  RoundRobinStrategy,
 } from '@rosen-bridge/abstract-scanner';
 import {
   DogeRpcNetwork,
   DogeRpcScanner,
-  DogeRpcTransaction,
+  type DogeRpcTransaction,
 } from '@rosen-bridge/bitcoin-scanner';
 
 import config from '../../configs';

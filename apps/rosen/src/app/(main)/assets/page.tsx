@@ -6,26 +6,27 @@
  */
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
+import { serializeError } from 'serialize-error';
+import useSWR from 'swr';
+
 import {
+  EmptyState,
   LayoutList,
   Pagination,
   SmartSearch,
   SortField,
   useBreakpoint,
   useCollection,
-  ViewToggle,
-  EmptyState,
   useToast,
-  ViewToggleType,
+  ViewToggle,
+  type ViewToggleType,
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
-import { serializeError } from 'serialize-error';
-import useSWR from 'swr';
 
-import { ApiAssetsResponse } from '@/types/api';
+import type { ApiAssetsResponse } from '@/types/api';
 
 import { filters, sorts } from './config';
-import { AssetsFullData, getFullAssetData } from './getFullAssetData';
+import { type AssetsFullData, getFullAssetData } from './getFullAssetData';
 import { ViewGrid } from './ViewGrid';
 import { ViewGridSidebar } from './ViewGridSidebar';
 import { ViewRow } from './ViewRow';
@@ -149,6 +150,10 @@ const Assets = () => {
   }, [collection.setFragment, current?.id]);
 
   useEffect(() => {
+    void collection.sort;
+    void collection.fields;
+    void collection.pageIndex;
+
     setCurrent(undefined);
   }, [collection.sort, collection.fields, collection.pageIndex]);
 

@@ -1,4 +1,4 @@
-import { ErgoScanner } from '@rosen-bridge/ergo-scanner';
+import type { ErgoScanner } from '@rosen-bridge/ergo-scanner';
 import { PeriodicTaskService } from '@rosen-bridge/service-manager';
 
 export abstract class AbstractErgoScannerService extends PeriodicTaskService {

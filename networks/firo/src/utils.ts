@@ -1,11 +1,11 @@
 import { encodeAddress } from '@rosen-bridge/address-codec';
 import {
-  CalculateFee,
+  type CalculateFee,
   calculateFeeCreator,
   getMinTransferCreator as getMinTransferCreatorBase,
 } from '@rosen-network/base';
 import { NETWORKS } from '@rosen-ui/constants';
-import { Network } from '@rosen-ui/types';
+import type { Network } from '@rosen-ui/types';
 
 /**
  * builds a firo: payment URI with amount and op_return metadata

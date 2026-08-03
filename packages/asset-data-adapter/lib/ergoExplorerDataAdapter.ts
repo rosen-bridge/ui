@@ -1,10 +1,13 @@
-import { AbstractLogger } from '@rosen-bridge/abstract-logger';
-import { RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
+import type { AbstractLogger } from '@rosen-bridge/abstract-logger';
+import type { RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
 import ergoExplorerClientFactory from '@rosen-clients/ergo-explorer';
 import { NETWORKS } from '@rosen-ui/constants';
 
 import { AbstractDataAdapter } from './abstracts';
-import { ChainAssetBalance, ErgoExplorerDataAdapterAuthParams } from './types';
+import type {
+  ChainAssetBalance,
+  ErgoExplorerDataAdapterAuthParams,
+} from './types';
 
 export class ErgoExplorerDataAdapter extends AbstractDataAdapter {
   chain = NETWORKS.ergo.key;

@@ -101,7 +101,7 @@ export const scientificToString = (value?: number | string): string => {
   const isNegative = base.startsWith('-');
   const absBase = isNegative ? base.slice(1) : base;
 
-  let [intPart, fracPart = ''] = absBase.split('.');
+  const [intPart, fracPart = ''] = absBase.split('.');
   const digits = intPart + fracPart;
   const decimalIndex = intPart.length;
 

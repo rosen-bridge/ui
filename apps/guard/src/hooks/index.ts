@@ -1,3 +1,3 @@
-export * from './useInfo';
-export * from './useBalance';
 export * from './useAddresses';
+export * from './useBalance';
+export * from './useInfo';

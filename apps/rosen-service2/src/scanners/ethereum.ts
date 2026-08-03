@@ -1,3 +1,5 @@
+import type { TransactionResponse } from 'ethers';
+
 import { DefaultLogger } from '@rosen-bridge/abstract-logger';
 import {
   FailoverStrategy,
@@ -5,9 +7,8 @@ import {
 } from '@rosen-bridge/abstract-scanner';
 import { EthereumRpcObservationExtractor } from '@rosen-bridge/evm-observation-extractor';
 import { EvmRpcNetwork, EvmRpcScanner } from '@rosen-bridge/evm-scanner';
-import { TokenMap } from '@rosen-bridge/extended-tokens';
-import { DataSource } from '@rosen-bridge/extended-typeorm';
-import { TransactionResponse } from 'ethers';
+import type { TokenMap } from '@rosen-bridge/extended-tokens';
+import type { DataSource } from '@rosen-bridge/extended-typeorm';
 
 import { configs } from '../configs';
 

@@ -4,11 +4,11 @@ import { NETWORKS } from '@rosen-ui/constants';
 import { TokensAnalyzer } from '../lib/tokensAnalyzer';
 import {
   NATIVE_TOKEN_CHAIN_BALANCE_INFO,
-  WRAPPED_TOKEN_CHAIN_BALANCE_INFO,
-  WRAPPED_TOKEN_TOTAL_SUPPLY,
-  SAMPLE_TOKEN_MAP,
   SAMPLE_ANALYZER_BRIDGED_TOKEN,
   SAMPLE_ANALYZER_BRIDGED_TOKEN_2,
+  SAMPLE_TOKEN_MAP,
+  WRAPPED_TOKEN_CHAIN_BALANCE_INFO,
+  WRAPPED_TOKEN_TOTAL_SUPPLY,
 } from './tokensAnalyzerTestData';
 
 interface AnalyzerTestContext {

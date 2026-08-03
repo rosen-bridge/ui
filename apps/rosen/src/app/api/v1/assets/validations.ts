@@ -1,4 +1,4 @@
-import { NextRequest } from 'next/server';
+import type { NextRequest } from 'next/server';
 
 import { FilterParser } from '@rosen-bridge/query-params';
 import { NETWORKS_KEYS } from '@rosen-ui/constants';

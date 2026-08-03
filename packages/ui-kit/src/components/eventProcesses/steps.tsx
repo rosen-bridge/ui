@@ -1,15 +1,15 @@
-import { CSSProperties, useMemo } from 'react';
+import { type CSSProperties, useMemo } from 'react';
 
 import {
   Collapsible,
   DateTime,
   Icon,
   IconButton,
-  IconProps,
+  type IconProps,
   Tooltip,
   Typography,
 } from '@/components';
-import { Color } from '@/types';
+import type { Color } from '@/types';
 import { toCSSColor } from '@/utils';
 
 import { Line } from './line';
@@ -85,7 +85,7 @@ export const Step = (props: StepProps) => {
                 <Line />
                 <div data-level="sub" className="sub">
                   {sub?.map((item, index) => (
-                    <Step key={index} {...item} />
+                    <Step key={index.toString()} {...item} />
                   ))}
                 </div>
               </div>

@@ -1,11 +1,11 @@
-import { AbstractLogger } from '@rosen-bridge/abstract-logger';
-import { TokenPriceAction } from '@rosen-bridge/token-price-entity';
-import { BridgeMetricRecord } from '@rosen-ui/rosen-statistics-entity';
+import type { AbstractLogger } from '@rosen-bridge/abstract-logger';
+import type { TokenPriceAction } from '@rosen-bridge/token-price-entity';
+import type { BridgeMetricRecord } from '@rosen-ui/rosen-statistics-entity';
 
 import { WEEK_IN_SECONDS } from '../constants';
-import {
-  BridgeDataCalculationResult,
+import type {
   AggregatedBridgeData,
+  BridgeDataCalculationResult,
   MappedBridgeEventData,
 } from '../types';
 import {

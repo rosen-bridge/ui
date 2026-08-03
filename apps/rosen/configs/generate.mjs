@@ -1,7 +1,8 @@
-import { NETWORKS_KEYS } from '@rosen-ui/constants';
 import fs from 'node:fs';
 import path from 'node:path';
 import * as url from 'node:url';
+
+import { NETWORKS_KEYS } from '@rosen-ui/constants';
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
@@ -34,7 +35,7 @@ const content = [
     (network) =>
       `  '${network}': '${contracts[network]?.addresses?.lock || ''}',`,
   ),
-  `} as any;`,
+  `};`,
   '',
   `export const TOKENS: RosenTokens = ${JSON.stringify(tokensMap.tokens, null, 2)};`,
 ];

@@ -1,10 +1,9 @@
 import { Icon, IconButton } from '@/components';
 import { useConfig } from '@/hooks';
-import { ElementBaseProps, OverridableType } from '@/types';
+import type { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.css';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface ViewToggleOverrides {}
 
 export type ViewToggleType = 'grid' | 'row';

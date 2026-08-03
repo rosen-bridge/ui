@@ -1,6 +1,7 @@
-import * as glob from 'glob';
 import fs from 'node:fs';
 import path from 'node:path';
+
+import * as glob from 'glob';
 
 const lines = [];
 

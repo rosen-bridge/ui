@@ -1,5 +1,7 @@
 import { useMemo } from 'react';
 
+import useSWR from 'swr';
+
 import {
   Button,
   Card,
@@ -12,7 +14,7 @@ import {
   EnhancedDialogContent,
   EnhancedDialogTitle,
   EventDetails,
-  EventDetailsProps,
+  type EventDetailsProps,
   Icon,
   Stack,
   Typography,
@@ -22,9 +24,8 @@ import {
 import { NETWORKS } from '@rosen-ui/constants';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import { getAddressUrl, getTxURL } from '@rosen-ui/utils';
-import useSWR from 'swr';
 
-import { ApiEventResponse, EventItem } from '@/types';
+import type { ApiEventResponse, EventItem } from '@/types';
 
 const Content = ({ value }: SidebarProps) => {
   const shouldLoad = useMemo(() => {

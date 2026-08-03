@@ -12,7 +12,7 @@ interface TestContext {
   mockTokenMap: TokenMap;
 }
 
-let mockClient = {
+const mockClient = {
   get: vi.fn().mockReturnValue(blockCypherClientDogeReturnValue),
 };
 

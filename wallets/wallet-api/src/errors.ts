@@ -1,4 +1,4 @@
-import { Network } from '@rosen-ui/types';
+import type { Network } from '@rosen-ui/types';
 
 export class WalletError extends Error {
   constructor(message: string, options?: { cause?: unknown }) {

@@ -4,21 +4,21 @@ import {
   NetworkConnectorManager,
 } from '@rosen-bridge/abstract-scanner';
 import {
-  CardanoKoiosObservationExtractor,
   CardanoBlockFrostObservationExtractor,
+  CardanoKoiosObservationExtractor,
   CardanoOgmiosObservationExtractor,
 } from '@rosen-bridge/cardano-observation-extractor';
 import {
   BlockFrostNetwork,
-  BlockFrostTransaction,
+  type BlockFrostTransaction,
   CardanoBlockFrostScanner,
   CardanoKoiosScanner,
   CardanoOgmiosScanner,
   KoiosNetwork,
-  KoiosTransaction,
+  type KoiosTransaction,
 } from '@rosen-bridge/cardano-scanner';
-import { TokenMap } from '@rosen-bridge/extended-tokens';
-import { DataSource } from '@rosen-bridge/extended-typeorm';
+import type { TokenMap } from '@rosen-bridge/extended-tokens';
+import type { DataSource } from '@rosen-bridge/extended-typeorm';
 
 import { configs } from '../configs';
 import {

@@ -1,6 +1,6 @@
 import { DefaultLogger } from '@rosen-bridge/abstract-logger';
 import { FiroObservationExtractor } from '@rosen-bridge/firo-observation-extractor';
-import { FiroElectrumXScanner } from '@rosen-bridge/firo-scanner';
+import type { FiroElectrumXScanner } from '@rosen-bridge/firo-scanner';
 
 import config from '../../configs';
 import dataSource from '../../data-source';

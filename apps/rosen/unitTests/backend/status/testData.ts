@@ -1,14 +1,14 @@
 import {
-  TxType,
-  TxStatus,
-  EventStatus,
+  type AggregatedStatusChangedEntity,
+  type AggregatedStatusEntity,
   AggregateEventStatus,
   AggregateTxStatus,
-  AggregatedStatusChangedEntity,
-  AggregatedStatusEntity,
-  GuardStatusChangedEntity,
-  GuardStatusEntity,
-  TxEntity,
+  EventStatus,
+  type GuardStatusChangedEntity,
+  type GuardStatusEntity,
+  type TxEntity,
+  TxStatus,
+  TxType,
 } from '@rosen-ui/public-status';
 
 export const id0 =

@@ -1,8 +1,8 @@
-import { In, Repository } from '@rosen-bridge/extended-typeorm';
-import {
+import { In, type Repository } from '@rosen-bridge/extended-typeorm';
+import type {
   EventStatus,
-  TxStatus,
   GuardStatusEntity,
+  TxStatus,
 } from '@rosen-ui/public-status';
 
 class GuardStatusAction {

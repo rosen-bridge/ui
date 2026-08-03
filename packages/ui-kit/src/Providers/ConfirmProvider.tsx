@@ -1,7 +1,7 @@
 import {
   createContext,
-  PropsWithChildren,
-  ReactNode,
+  type PropsWithChildren,
+  type ReactNode,
   useCallback,
   useState,
 } from 'react';

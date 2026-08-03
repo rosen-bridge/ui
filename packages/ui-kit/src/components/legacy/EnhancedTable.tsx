@@ -1,29 +1,29 @@
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
 import {
+  Box,
   Table as MuiTable,
-  TableContainer,
-  TableHead,
-  TableRow,
-  TableRowProps,
+  type TablePaginationProps as MuiTablePaginationProps,
   TableBody,
   TableCell,
-  TablePagination,
-  TablePaginationProps as MuiTablePaginationProps,
-  Box,
+  type TableCellProps,
+  TableContainer,
   TableFooter,
-  TableCellProps,
+  TableHead,
+  TablePagination,
+  TableRow,
+  type TableRowProps,
 } from '@mui/material';
 
 import { useResponsive } from '../../hooks';
 import type { Breakpoint, ResponsiveValueOptionsBase } from '../../types';
 
 export {
+  type MuiTablePaginationProps as TablePaginationProps,
   TableCell,
   type TableCellProps,
   TableRow,
   type TableRowProps,
-  type MuiTablePaginationProps as TablePaginationProps,
 };
 
 export interface TableHeadItem {

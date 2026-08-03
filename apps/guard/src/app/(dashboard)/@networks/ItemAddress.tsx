@@ -1,10 +1,10 @@
 'use client';
 
 import { Amount, Identifier, Stack, Typography } from '@rosen-bridge/ui-kit';
-import { Network as NetworkType } from '@rosen-ui/types';
+import type { Network as NetworkType } from '@rosen-ui/types';
 import { getAddressUrl } from '@rosen-ui/utils';
 
-import { TokenInfoWithAddress } from '@/types/api';
+import type { TokenInfoWithAddress } from '@/types/api';
 
 export type ItemAddressProps = {
   loading?: boolean;

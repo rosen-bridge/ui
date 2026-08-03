@@ -1,13 +1,12 @@
-import { RefObject } from 'react';
+import type { RefObject } from 'react';
 
 import { Menu as MenuBaseUI } from '@base-ui/react/menu';
 
 import { useConfig } from '@/hooks';
-import { ElementBaseProps, OverridableType } from '@/types';
+import type { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.css';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface MenuBodyOverrides {}
 
 export type MenuBodyOwnProps = {

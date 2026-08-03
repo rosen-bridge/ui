@@ -1,4 +1,4 @@
-import { useState, FC, useMemo } from 'react';
+import { type FC, useMemo, useState } from 'react';
 
 import { AngleDown, AngleUp } from '@rosen-bridge/icons';
 import {
@@ -12,7 +12,7 @@ import { NETWORKS } from '@rosen-ui/constants';
 import { getAddressUrl, getTokenUrl } from '@rosen-ui/utils';
 
 import { useAddresses } from '@/hooks';
-import { GuardTokenInfo } from '@/types/api';
+import type { GuardTokenInfo } from '@/types/api';
 
 interface RowProps extends GuardTokenInfo {
   isLoading?: boolean;
@@ -138,7 +138,7 @@ export const TabletRow: FC<RowProps> = (props) => {
 
   const tokenUrl = getTokenUrl(
     row.chain,
-    row.chain == NETWORKS.cardano.key
+    row.chain === NETWORKS.cardano.key
       ? row.tokenId.replace('.', '')
       : row.tokenId,
   );

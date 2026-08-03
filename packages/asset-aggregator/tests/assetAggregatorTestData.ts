@@ -1,6 +1,6 @@
-import { RosenTokens } from '@rosen-bridge/tokens';
+import type { RosenTokens } from '@rosen-bridge/tokens';
 
-import { AssetBalance, TotalSupply } from '../lib/types';
+import type { AssetBalance, TotalSupply } from '../lib/types';
 
 /**
  * sample mapping of tokens across multiple chains

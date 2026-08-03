@@ -1,4 +1,4 @@
-import { getEvent, getEvents, getEventStatus } from './repository';
+import { getEvent, getEventStatus, getEvents } from './repository';
 
 /**
  * return events with full token data
