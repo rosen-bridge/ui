@@ -24,19 +24,55 @@
       },
       "complexity": {
         "noImportantStyles": "off",
-        "noStaticOnlyClass": "off"
+        "noStaticOnlyClass": "off",
+        "noUselessCatch": "error",
+        "noUselessCatchBinding": "error",
+        "noUselessFragments": "error",
+        "noUselessRename": "error",
+        "noUselessStringConcat": "error",
+        "noUselessSwitchCase": "error",
+        "noUselessTernary": "error",
+        "noUselessUndefinedInitialization": "error",
+        "useArrayFind": "off",
+        "useArrowFunction": "error",
+        "useOptionalChain": "error"
       },
       "correctness": {
+        "noNestedComponentDefinitions": "error",
+        "noNextAsyncClientComponent": "error",
+        "noReactPropAssignments": "error",
+        "noUnusedFunctionParameters": "error",
         "noUnusedImports": "error",
         "noUnusedVariables": "error"
       },
+      "performance": {
+        "noDelete": "error",
+        "noImgElement": "error"
+      },
       "style": {
+        "useCollapsedElseIf": "error",
+        "useConst": "error",
+        "useExponentiationOperator": "error",
+        "useExportType": "error",
+        "useForOf": "error",
+        "useGroupedAccessorPairs": "error",
+        "useImportType": "error",
+        "useLiteralEnumMembers": "off",
+        "useReactFunctionComponents": "error",
+        "useShorthandAssign": "error",
+        "useShorthandFunctionType": "error",
+        "useTemplate": "error",
         "noDescendingSpecificity": "off",
-        "noNonNullAssertion": "off",
-        "useLiteralEnumMembers": "off"
+        "noNonNullAssertion": "off"
       },
       "suspicious": {
+        "noAlert": "error",
+        "noCatchAssign": "error",
+        "noEqualsToNull": "error",
         "noExplicitAny": "error",
+        "noIrregularWhitespace": "error",
+        "noVar": "error",
+        "useIsArray": "error",
         "useIterableCallbackReturn": "off"
       }
     }
