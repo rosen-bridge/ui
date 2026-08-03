@@ -1,11 +1,6 @@
 'use client';
 
-import {
-  Center,
-  Stack,
-  Typography,
-  UnderDevelopmentSection,
-} from '@rosen-bridge/ui-kit';
+import { Center, Stack, Typography, UnderDevelopmentSection } from '@rosen-bridge/ui-kit';
 
 import { Section } from './Section';
 

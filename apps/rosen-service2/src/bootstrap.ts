@@ -8,9 +8,7 @@ import WinstonLogger from '@rosen-bridge/winston-logger';
 
 import { configs, getLogOptions } from './configs';
 
-DefaultLogger.init(
-  new CallbackLogger(WinstonLogger.createLogger(getLogOptions(configs.logs))),
-);
+DefaultLogger.init(new CallbackLogger(WinstonLogger.createLogger(getLogOptions(configs.logs))));
 
 AddressManager.init(
   chainValidators,

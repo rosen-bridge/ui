@@ -20,25 +20,11 @@ export type MenuItemOwnProps = {
 
 export type MenuItemBaseProps = ElementBaseProps<'div', MenuItemOwnProps>;
 
-export type MenuItemProps = OverridableType<
-  MenuItemBaseProps,
-  MenuItemOverrides,
-  never
->;
+export type MenuItemProps = OverridableType<MenuItemBaseProps, MenuItemOverrides, never>;
 
 export const MenuItem = (props: MenuItemProps) => {
-  const {
-    closeOnClick = true,
-    selected,
-    ...rest
-  } = useConfig('MenuItem', props);
-  return (
-    <MenuBaseUI.Item
-      data-selected={selected}
-      closeOnClick={closeOnClick}
-      {...rest}
-    />
-  );
+  const { closeOnClick = true, selected, ...rest } = useConfig('MenuItem', props);
+  return <MenuBaseUI.Item data-selected={selected} closeOnClick={closeOnClick} {...rest} />;
 };
 
 MenuItem.displayName = 'MenuItem';

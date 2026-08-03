@@ -1,11 +1,7 @@
 import { DataSource } from '@rosen-bridge/extended-typeorm';
 
 import { migrations } from '../lib';
-import {
-  BridgedAssetEntity,
-  LockedAssetEntity,
-  TokenEntity,
-} from '../lib/entities';
+import { BridgedAssetEntity, LockedAssetEntity, TokenEntity } from '../lib/entities';
 
 /**
  * generate dataSource and related database for tests

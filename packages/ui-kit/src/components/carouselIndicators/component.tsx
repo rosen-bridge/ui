@@ -10,10 +10,7 @@ export interface CarouselIndicatorsOverrides {}
 
 export type CarouselIndicatorsOwnProps = {};
 
-export type CarouselIndicatorsBaseProps = ElementBaseProps<
-  'div',
-  CarouselIndicatorsOwnProps
->;
+export type CarouselIndicatorsBaseProps = ElementBaseProps<'div', CarouselIndicatorsOwnProps>;
 
 export type CarouselIndicatorsProps = OverridableType<
   CarouselIndicatorsBaseProps,

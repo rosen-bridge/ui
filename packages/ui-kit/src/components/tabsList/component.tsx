@@ -14,11 +14,7 @@ export type TabsListOwnProps = {
 
 export type TabsListBaseProps = ElementBaseProps<'div', TabsListOwnProps>;
 
-export type TabsListProps = OverridableType<
-  TabsListBaseProps,
-  TabsListOverrides,
-  never
->;
+export type TabsListProps = OverridableType<TabsListBaseProps, TabsListOverrides, never>;
 
 export const TabsList = (props: TabsListProps) => {
   const { align, children, grow, ...rest } = useConfig('TabsList', props);

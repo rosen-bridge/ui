@@ -9,11 +9,7 @@ export type LabelGroupOwnProps = {};
 
 export type LabelGroupBaseProps = ElementBaseProps<'div', LabelGroupOwnProps>;
 
-export type LabelGroupProps = OverridableType<
-  LabelGroupBaseProps,
-  LabelGroupOverrides,
-  never
->;
+export type LabelGroupProps = OverridableType<LabelGroupBaseProps, LabelGroupOverrides, never>;
 
 export const LabelGroup = (props: LabelGroupProps) => {
   const { ...rest } = useConfig('LabelGroup', props);

@@ -1,10 +1,4 @@
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-  useTransition,
-} from 'react';
+import { useCallback, useEffect, useMemo, useState, useTransition } from 'react';
 
 import type { RosenAmountValue } from '@rosen-ui/types';
 import { getDecimalString } from '@rosen-ui/utils';
@@ -40,10 +34,7 @@ export const useBalance = (): BalanceState => {
 
   const raw = useMemo(() => {
     if (!token) return '0';
-    return getDecimalString(
-      amount,
-      tokenMap.getSignificantDecimals(token.tokenId),
-    );
+    return getDecimalString(amount, tokenMap.getSignificantDecimals(token.tokenId));
   }, [amount, tokenMap, token]);
 
   const load = useCallback(() => {

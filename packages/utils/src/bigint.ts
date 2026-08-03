@@ -4,5 +4,4 @@
  * @param inputNumber
  */
 
-export const convertNumberToBigint = (inputNumber: number) =>
-  BigInt(Math.trunc(inputNumber));
+export const convertNumberToBigint = (inputNumber: number) => BigInt(Math.trunc(inputNumber));

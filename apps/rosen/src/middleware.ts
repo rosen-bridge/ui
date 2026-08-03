@@ -23,8 +23,7 @@ const rateLimit =
  * @param origin
  */
 const isOriginAllowed = (origin: string) =>
-  process.env.ALLOWED_ORIGINS?.includes('*') ||
-  process.env.ALLOWED_ORIGINS?.includes(origin);
+  process.env.ALLOWED_ORIGINS?.includes('*') || process.env.ALLOWED_ORIGINS?.includes(origin);
 
 /**
  * get a headers object through which CORS can be enabled

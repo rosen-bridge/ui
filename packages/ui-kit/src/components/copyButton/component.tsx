@@ -24,16 +24,9 @@ export type CopyButtonOwnProps = {
   value?: string | (() => string | undefined);
 };
 
-export type CopyButtonBaseProps = ElementBaseProps<
-  typeof IconButton,
-  CopyButtonOwnProps
->;
+export type CopyButtonBaseProps = ElementBaseProps<typeof IconButton, CopyButtonOwnProps>;
 
-export type CopyButtonProps = OverridableType<
-  CopyButtonBaseProps,
-  CopyButtonOverrides,
-  never
->;
+export type CopyButtonProps = OverridableType<CopyButtonBaseProps, CopyButtonOverrides, never>;
 
 /**
  * A button that copies text to the clipboard and shows the status with an icon.

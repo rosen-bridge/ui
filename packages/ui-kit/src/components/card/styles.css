@@ -30,9 +30,6 @@
 }
 
 .RosenCard:not([data-variant='separated']) > .RosenCardHeader + .RosenCardBody,
-.RosenCard:not([data-variant='separated'])
-  > .RosenCardHeader
-  + *
-  .RosenCardBody {
+.RosenCard:not([data-variant='separated']) > .RosenCardHeader + * .RosenCardBody {
   padding-top: 0;
 }

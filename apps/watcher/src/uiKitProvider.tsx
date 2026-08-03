@@ -3,11 +3,7 @@ import type { Route } from 'next';
 import NextLink from 'next/link';
 
 import * as AllIcons from '@rosen-bridge/icons';
-import {
-  type ConfigContextType,
-  ConfigProvider,
-  type DefaultColor,
-} from '@rosen-bridge/ui-kit';
+import { type ConfigContextType, ConfigProvider, type DefaultColor } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 import type { Network } from '@rosen-ui/types';
 
@@ -55,9 +51,7 @@ const getUiKitConfig: () => ConfigContextType = () => ({
     },
     Icon: {
       defaultProps: {
-        icons: Object.fromEntries(
-          Object.entries(AllIcons).filter(([key]) => key !== 'TOKENS'),
-        ),
+        icons: Object.fromEntries(Object.entries(AllIcons).filter(([key]) => key !== 'TOKENS')),
       },
     },
     Link: {

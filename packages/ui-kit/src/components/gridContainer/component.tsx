@@ -25,10 +25,7 @@ export type GridContainerOwnProps = {
   minWidth?: Width;
 };
 
-export type GridContainerBaseProps = ElementBaseProps<
-  'div',
-  GridContainerOwnProps
->;
+export type GridContainerBaseProps = ElementBaseProps<'div', GridContainerOwnProps>;
 
 export type GridContainerProps = OverridableType<
   GridContainerBaseProps,

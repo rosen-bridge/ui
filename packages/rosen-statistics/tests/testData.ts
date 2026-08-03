@@ -16,9 +16,7 @@ import type { WatcherCountConfig } from '../lib';
 /**
  * Helper function to create a TokenEntity for tests
  */
-export const createToken = (
-  overrides: Partial<TokenEntity> = {},
-): DeepPartial<TokenEntity> => {
+export const createToken = (overrides: Partial<TokenEntity> = {}): DeepPartial<TokenEntity> => {
   return {
     id: 'token-1',
     name: 'Token 1',
@@ -50,8 +48,7 @@ export const createTokenPrice = (
 export const tokenMapData: RosenTokens = [
   {
     ergo: {
-      tokenId:
-        '1111111111111111111111111111111111111111111111111111111111111111',
+      tokenId: '1111111111111111111111111111111111111111111111111111111111111111',
       extra: {},
       name: 'test token1',
       decimals: 0,
@@ -72,8 +69,7 @@ export const tokenMapData: RosenTokens = [
   },
   {
     ergo: {
-      tokenId:
-        '2222222222222222222222222222222222222222222222222222222222222222',
+      tokenId: '2222222222222222222222222222222222222222222222222222222222222222',
       extra: {},
       name: 'test token2',
       decimals: 0,
@@ -263,9 +259,7 @@ export const lockedAssetsTestData = {
         isResident: true,
       },
     ],
-    lockedAssetRepo: [
-      { address: 'addr1', tokenId: 'token-zero', amount: BigInt(0) },
-    ],
+    lockedAssetRepo: [{ address: 'addr1', tokenId: 'token-zero', amount: BigInt(0) }],
     tokenPriceRepo: [
       {
         tokenId: 'token-zero',
@@ -380,9 +374,7 @@ export const lockedAssetsTestData = {
         isResident: true,
       },
     ],
-    lockedAssetRepo: [
-      { address: 'addr1', tokenId: 'token-time', amount: BigInt(7529654) },
-    ],
+    lockedAssetRepo: [{ address: 'addr1', tokenId: 'token-time', amount: BigInt(7529654) }],
     tokenPriceRepo: [
       { tokenId: 'token-time', price: 5, timestamp: 1_000 }, // Old price
       { tokenId: 'token-time', price: 1, timestamp: 2_000 }, // New price (should be used)
@@ -404,9 +396,7 @@ export const lockedAssetsTestData = {
         isResident: true,
       },
     ],
-    lockedAssetRepo: [
-      { address: 'addr1', tokenId: 'token-sci', amount: BigInt(2504567) },
-    ],
+    lockedAssetRepo: [{ address: 'addr1', tokenId: 'token-sci', amount: BigInt(2504567) }],
     tokenPriceRepo: [{ tokenId: 'token-sci', price: 2.1e-8, timestamp: 2_000 }],
     expectedTotalUsd: '0.000052595907',
   },
@@ -482,9 +472,7 @@ const createEventTrigger = (
 /**
  * Helper function to create minimal BlockEntity for testing
  */
-const createBlock = (
-  overrides: Partial<BlockEntity>,
-): DeepPartial<BlockEntity> => ({
+const createBlock = (overrides: Partial<BlockEntity>): DeepPartial<BlockEntity> => ({
   id: Math.floor(Math.random() * 10000),
   height: 100,
   hash: 'block1',

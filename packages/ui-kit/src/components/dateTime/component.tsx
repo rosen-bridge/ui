@@ -25,11 +25,7 @@ export type DateTimeOwnProps = {
 
 export type DateTimeBaseProps = ElementBaseProps<'div', DateTimeOwnProps>;
 
-export type DateTimeProps = OverridableType<
-  DateTimeBaseProps,
-  DateTimeOverrides,
-  never
->;
+export type DateTimeProps = OverridableType<DateTimeBaseProps, DateTimeOverrides, never>;
 
 /**
  * A component to display a formatted date and time string.

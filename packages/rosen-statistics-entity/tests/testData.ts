@@ -49,9 +49,7 @@ const createEventTrigger = (
 /**
  * Helper function to create minimal BlockEntity for testing
  */
-const createBlock = (
-  overrides: Partial<BlockEntity>,
-): DeepPartial<BlockEntity> => ({
+const createBlock = (overrides: Partial<BlockEntity>): DeepPartial<BlockEntity> => ({
   id: Math.floor(Math.random() * 10000),
   height: 100,
   hash: 'block1',
@@ -1125,10 +1123,7 @@ export const upsertWatcherCountScenarios = {
   },
 
   insertMultipleDifferentNetworks: {
-    initialData: [
-      watcherCountTestData.ergoNetwork,
-      watcherCountTestData.cardanoNetwork,
-    ],
+    initialData: [watcherCountTestData.ergoNetwork, watcherCountTestData.cardanoNetwork],
     upsertData: [
       {
         network: 'ethereum',

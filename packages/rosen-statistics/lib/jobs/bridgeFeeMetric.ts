@@ -1,15 +1,8 @@
-import {
-  type AbstractLogger,
-  DummyLogger,
-} from '@rosen-bridge/abstract-logger';
+import { type AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
 import { BlockDbAction } from '@rosen-bridge/abstract-scanner';
 import type { DataSource } from '@rosen-bridge/extended-typeorm';
 import { TokenPriceAction } from '@rosen-bridge/token-price-entity';
-import {
-  BridgeMetricsAction,
-  METRIC_KEYS,
-  MetricAction,
-} from '@rosen-ui/rosen-statistics-entity';
+import { BridgeMetricsAction, METRIC_KEYS, MetricAction } from '@rosen-ui/rosen-statistics-entity';
 
 import { DAY_IN_SECONDS } from '../constants';
 import type { MappedBridgeEventData } from '../types';
@@ -33,23 +26,10 @@ export const bridgeFeeMetric = async (
 ): Promise<void> => {
   logger.debug('Starting bridge fee metric calculation job');
 
-  const bridgeFeeAction = new BridgeMetricsAction(
-    dataSource,
-    logger.child('bridgeMetricsAction'),
-  );
-  const metricAction = new MetricAction(
-    dataSource,
-    logger.child('metricAction'),
-  );
-  const tokenPriceAction = new TokenPriceAction(
-    dataSource,
-    logger.child('tokenPriceAction'),
-  );
-  const blockDbAction = new BlockDbAction(
-    dataSource,
-    'ergo',
-    logger.child('blockDbAction'),
-  );
+  const bridgeFeeAction = new BridgeMetricsAction(dataSource, logger.child('bridgeMetricsAction'));
+  const metricAction = new MetricAction(dataSource, logger.child('metricAction'));
+  const tokenPriceAction = new TokenPriceAction(dataSource, logger.child('tokenPriceAction'));
+  const blockDbAction = new BlockDbAction(dataSource, 'ergo', logger.child('blockDbAction'));
 
   try {
     const lastBlock = await blockDbAction.getLastSavedBlock();
@@ -58,36 +38,25 @@ export const bridgeFeeMetric = async (
       return;
     }
     const lastProcessedRecord = await bridgeFeeAction.getLastBridgeFeeRecord();
-    const lastTotalUsd = await metricAction.getMetricByKey(
-      METRIC_KEYS.TOTAL_BRIDGE_FEES_USD,
-    );
+    const lastTotalUsd = await metricAction.getMetricByKey(METRIC_KEYS.TOTAL_BRIDGE_FEES_USD);
 
     // Load existing total USD value as raw BigInt with its decimals
     const lastTotalUsdValue = lastTotalUsd ? lastTotalUsd.value : '0';
     const lastTotalUsdDecimals = getNumberOfDecimals(lastTotalUsdValue);
-    const lastTotalUsdRaw = BigInt(
-      getNonDecimalString(lastTotalUsdValue, lastTotalUsdDecimals),
-    );
+    const lastTotalUsdRaw = BigInt(getNonDecimalString(lastTotalUsdValue, lastTotalUsdDecimals));
 
     let startTs: number;
     if (!lastProcessedRecord) {
-      logger.debug(
-        'No previous bridge fee records found, starting from first event timestamp',
-      );
+      logger.debug('No previous bridge fee records found, starting from first event timestamp');
       const firstEventTs = await bridgeFeeAction.getFirstEventTimestamp();
       if (!firstEventTs) {
-        logger.debug(
-          'No events found in database, skipping bridge fee metric calculation',
-        );
+        logger.debug('No events found in database, skipping bridge fee metric calculation');
         return;
       }
       const startDate = new Date(firstEventTs * 1000);
       startTs = Math.floor(
-        new Date(
-          startDate.getFullYear(),
-          startDate.getMonth(),
-          startDate.getDate(),
-        ).getTime() / 1000,
+        new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate()).getTime() /
+          1000,
       );
     } else {
       startTs =
@@ -101,10 +70,8 @@ export const bridgeFeeMetric = async (
     }
 
     const yesterdayTs =
-      Math.floor(
-        new Date(lastBlock.year, lastBlock.month - 1, lastBlock.day).getTime() /
-          1000,
-      ) - DAY_IN_SECONDS;
+      Math.floor(new Date(lastBlock.year, lastBlock.month - 1, lastBlock.day).getTime() / 1000) -
+      DAY_IN_SECONDS;
 
     let processedDays = 0;
     let totalEventsProcessed = 0;
@@ -142,34 +109,22 @@ export const bridgeFeeMetric = async (
         if (result.dayMaxDecimals > currentMaxDecimals) {
           // New value has higher precision: scale up existing total
           currentTotalRaw = BigInt(
-            multiplyByPowerOfTen(
-              currentTotalRaw,
-              result.dayMaxDecimals - currentMaxDecimals,
-            ),
+            multiplyByPowerOfTen(currentTotalRaw, result.dayMaxDecimals - currentMaxDecimals),
           );
           currentMaxDecimals = result.dayMaxDecimals;
           currentTotalRaw += result.dayTotalRaw;
         } else {
           // Existing total has higher or equal precision: scale down new value
           const normalizedDayTotal = BigInt(
-            multiplyByPowerOfTen(
-              result.dayTotalRaw,
-              currentMaxDecimals - result.dayMaxDecimals,
-            ),
+            multiplyByPowerOfTen(result.dayTotalRaw, currentMaxDecimals - result.dayMaxDecimals),
           );
           currentTotalRaw += normalizedDayTotal;
         }
       }
 
-      const newTotalUsdString = getDecimalString(
-        currentTotalRaw,
-        currentMaxDecimals,
-      );
+      const newTotalUsdString = getDecimalString(currentTotalRaw, currentMaxDecimals);
 
-      await bridgeFeeAction.saveBridgeFees(
-        result.bridgeMetricRecords,
-        newTotalUsdString,
-      );
+      await bridgeFeeAction.saveBridgeFees(result.bridgeMetricRecords, newTotalUsdString);
 
       logger.debug(`Day processed`, {
         startTs: startTs,

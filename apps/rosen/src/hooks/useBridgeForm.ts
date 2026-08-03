@@ -18,8 +18,7 @@ import { WalletContext } from './useWallet';
  */
 
 export const useBridgeForm = () => {
-  const { control, resetField, reset, setValue, formState, setFocus } =
-    useTransactionFormData();
+  const { control, resetField, reset, setValue, formState, setFocus } = useTransactionFormData();
 
   const tokenMap = useTokenMap();
 
@@ -54,18 +53,13 @@ export const useBridgeForm = () => {
           if (isValueInvalid) return 'The amount is not valid';
 
           if (!tokenMap) return 'Token map config is unavailable';
-          const decimals =
-            tokenMap.getSignificantDecimals(tokenField.value.tokenId) || 0;
+          const decimals = tokenMap.getSignificantDecimals(tokenField.value.tokenId) || 0;
 
           // prevent user from entering more decimals than token decimals
-          const isDecimalsLarge =
-            (match?.groups?.floatingDigits?.length || 0) > decimals;
-          if (isDecimalsLarge)
-            return `The current token only supports ${decimals} decimals`;
+          const isDecimalsLarge = (match?.groups?.floatingDigits?.length || 0) > decimals;
+          if (isDecimalsLarge) return `The current token only supports ${decimals} decimals`;
 
-          const wrappedAmount = BigInt(
-            getNonDecimalString(value, decimals),
-          ) as RosenAmountValue;
+          const wrappedAmount = BigInt(getNonDecimalString(value, decimals)) as RosenAmountValue;
 
           if (walletGlobalContext?.selected) {
             // prevent user from entering more than token amount
@@ -74,13 +68,10 @@ export const useBridgeForm = () => {
               (wallet) => wallet.name === sourceField.value,
             );
 
-            if (!selectedNetwork)
-              return 'Could not find the selected source network';
+            if (!selectedNetwork) return 'Could not find the selected source network';
 
             const maxTransfer = await selectedNetwork.getMaxTransfer({
-              balance: await walletGlobalContext.selected.getBalance(
-                tokenField.value,
-              ),
+              balance: await walletGlobalContext.selected.getBalance(tokenField.value),
               isNative: tokenField.value.type === 'native',
               eventData: {
                 fromAddress: await walletGlobalContext.selected.getAddress(),
@@ -129,9 +120,7 @@ export const useBridgeForm = () => {
 
           if (!network) return;
 
-          const isValid = await network.validateAddress(
-            network.toSafeAddress(value),
-          );
+          const isValid = await network.validateAddress(network.toSafeAddress(value));
 
           if (isValid) return;
 

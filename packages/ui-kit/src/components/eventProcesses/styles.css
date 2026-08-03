@@ -78,17 +78,12 @@
       }
     }
 
-    .RosenStep:has(+ .RosenStep-extra)
-      .RosenStep-header
-      .RosenStep-line:last-child::before {
+    .RosenStep:has(+ .RosenStep-extra) .RosenStep-header .RosenStep-line:last-child::before {
       width: calc(100% - 15px);
       margin-right: auto;
     }
 
-    .RosenStep-extra
-      + .RosenStep
-      .RosenStep-header
-      .RosenStep-line:first-child::before {
+    .RosenStep-extra + .RosenStep .RosenStep-header .RosenStep-line:first-child::before {
       width: calc(100% - 15px);
       margin-left: auto;
     }
@@ -144,10 +139,7 @@
   visibility: hidden;
 }
 
-.sub
-  > .RosenStep:first-child
-  > .RosenStep-header
-  > .RosenStep-line:first-child {
+.sub > .RosenStep:first-child > .RosenStep-header > .RosenStep-line:first-child {
   visibility: hidden;
 }
 

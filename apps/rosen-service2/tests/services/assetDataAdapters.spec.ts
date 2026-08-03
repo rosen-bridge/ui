@@ -65,9 +65,7 @@ describe('AssetDataAdapterService', () => {
       });
       await RedisService.init();
       await TokenMapService.init();
-      AbstractTokenMapService.getInstance().getTokenMap = vi
-        .fn()
-        .mockReturnValue(ctx.mockTokenMap);
+      AbstractTokenMapService.getInstance().getTokenMap = vi.fn().mockReturnValue(ctx.mockTokenMap);
 
       const dataSource = new DataSource({
         type: 'sqlite',

@@ -1,16 +1,6 @@
-import {
-  type AbstractLogger,
-  DummyLogger,
-} from '@rosen-bridge/abstract-logger';
-import {
-  FailoverStrategy,
-  NetworkConnectorManager,
-} from '@rosen-bridge/abstract-scanner';
-import {
-  ErgoExplorerNetwork,
-  ErgoNodeNetwork,
-  ErgoScanner,
-} from '@rosen-bridge/ergo-scanner';
+import { type AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
+import { FailoverStrategy, NetworkConnectorManager } from '@rosen-bridge/abstract-scanner';
+import { ErgoExplorerNetwork, ErgoNodeNetwork, ErgoScanner } from '@rosen-bridge/ergo-scanner';
 import type { DataSource } from '@rosen-bridge/extended-typeorm';
 import type { Transaction } from '@rosen-bridge/scanner-interfaces';
 import {
@@ -35,11 +25,7 @@ export class ErgoScannerService extends AbstractErgoScannerService {
   protected dependencies: Dependency[] = [
     {
       serviceName: AbstractDBService.name,
-      allowedStatuses: [
-        ServiceStatus.running,
-        ServiceStatus.started,
-        ServiceStatus.dormant,
-      ],
+      allowedStatuses: [ServiceStatus.running, ServiceStatus.started, ServiceStatus.dormant],
       action: ServiceAction.assemble,
     },
     {
@@ -87,9 +73,7 @@ export class ErgoScannerService extends AbstractErgoScannerService {
    * @returns {Promise<boolean>} Resolves to `true` when the assembly is successfully completed.
    */
   protected assemble = async (): Promise<boolean> => {
-    this.ergoScanner = this.createErgoScanner(
-      AbstractDBService.getInstance().getDataSource(),
-    );
+    this.ergoScanner = this.createErgoScanner(AbstractDBService.getInstance().getDataSource());
     this.setStatus(ServiceStatus.dormant);
     return true;
   };
@@ -137,9 +121,7 @@ export class ErgoScannerService extends AbstractErgoScannerService {
     );
     if (configs.chains.ergo.method == ERGO_METHOD_EXPLORER) {
       configs.chains.ergo.explorer.connections.forEach((explorer) => {
-        networkConnectorManager.addConnector(
-          new ErgoExplorerNetwork(explorer.url),
-        );
+        networkConnectorManager.addConnector(new ErgoExplorerNetwork(explorer.url));
       });
     } else {
       configs.chains.ergo.node.connections.forEach((node) => {

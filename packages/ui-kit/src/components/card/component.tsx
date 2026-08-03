@@ -33,11 +33,7 @@ export type CardOwnProps = {
 
 export type CardBaseProps = ElementBaseProps<'div', CardOwnProps>;
 
-export type CardProps = OverridableType<
-  CardBaseProps,
-  CardOverrides,
-  'backgroundColor'
->;
+export type CardProps = OverridableType<CardBaseProps, CardOverrides, 'backgroundColor'>;
 
 export const Card = (props: CardProps) => {
   const {

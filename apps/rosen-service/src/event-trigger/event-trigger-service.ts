@@ -8,30 +8,14 @@ import dataSource from '../data-source';
 import AppError from '../errors/AppError';
 
 const logger = DefaultLogger.getInstance().child(import.meta.url);
-const ergoEventTriggerExtractorLogger = logger.child(
-  'ergoEventTriggerExtractor',
-);
-const cardanoEventTriggerExtractorLogger = logger.child(
-  'cardanoEventTriggerExtractor',
-);
-const bitcoinEventTriggerExtractorLogger = logger.child(
-  'bitcoinEventTriggerExtractor',
-);
-const bitcoinRunesEventTriggerExtractorLogger = logger.child(
-  'bitcoinRunesEventTriggerExtractor',
-);
-const ethereumEventTriggerExtractorLogger = logger.child(
-  'ethereumEventTriggerExtractor',
-);
-const binanceEventTriggerExtractorLogger = logger.child(
-  'binanceEventTriggerExtractor',
-);
-const dogeEventTriggerExtractorLogger = logger.child(
-  'dogeEventTriggerExtractor',
-);
-const firoEventTriggerExtractorLogger = logger.child(
-  'firoEventTriggerExtractor',
-);
+const ergoEventTriggerExtractorLogger = logger.child('ergoEventTriggerExtractor');
+const cardanoEventTriggerExtractorLogger = logger.child('cardanoEventTriggerExtractor');
+const bitcoinEventTriggerExtractorLogger = logger.child('bitcoinEventTriggerExtractor');
+const bitcoinRunesEventTriggerExtractorLogger = logger.child('bitcoinRunesEventTriggerExtractor');
+const ethereumEventTriggerExtractorLogger = logger.child('ethereumEventTriggerExtractor');
+const binanceEventTriggerExtractorLogger = logger.child('binanceEventTriggerExtractor');
+const dogeEventTriggerExtractorLogger = logger.child('dogeEventTriggerExtractor');
+const firoEventTriggerExtractorLogger = logger.child('firoEventTriggerExtractor');
 
 /**
  * register event trigger extractors for all chains

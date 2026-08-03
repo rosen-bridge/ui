@@ -21,10 +21,7 @@ export type RelativeTimeOwnProps = {
   value?: Date | number;
 };
 
-export type RelativeTimeBaseProps = ElementBaseProps<
-  'div',
-  RelativeTimeOwnProps
->;
+export type RelativeTimeBaseProps = ElementBaseProps<'div', RelativeTimeOwnProps>;
 
 export type RelativeTimeProps = OverridableType<
   RelativeTimeBaseProps,

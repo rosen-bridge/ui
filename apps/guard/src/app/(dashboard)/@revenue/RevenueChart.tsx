@@ -125,9 +125,7 @@ export const RevenueChart = ({ period, data }: RevenueChartProps) => {
       ...baseChartOptions,
       xaxis: {
         ...baseChartOptions.xaxis,
-        categories:
-          slots.map((slot) => moment(+slot).format(getDateFormat(period))) ??
-          [],
+        categories: slots.map((slot) => moment(+slot).format(getDateFormat(period))) ?? [],
       },
       theme: {
         mode: theme.palette.mode,
@@ -159,21 +157,12 @@ export const RevenueChart = ({ period, data }: RevenueChartProps) => {
       data.map((token) => ({
         name: token.title.name,
         data: slots.map((slot) => {
-          const amount = token.data.find(
-            (item) => item.label === slot.toString(),
-          )?.amount;
+          const amount = token.data.find((item) => item.label === slot.toString())?.amount;
           return +getDecimalString(amount, token.title.decimals);
         }),
       })),
     [data, slots],
   );
 
-  return (
-    <Chart
-      type="bar"
-      options={apexChartOptions}
-      series={apexChartSeries}
-      height={240}
-    />
-  );
+  return <Chart type="bar" options={apexChartOptions} series={apexChartSeries} height={240} />;
 };

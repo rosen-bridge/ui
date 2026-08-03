@@ -44,9 +44,7 @@ export const Popup = ({ anchorEl, children, open, onFocusOut }: PopupProps) => {
     const handleClick = (event: MouseEvent) => {
       if (time + 250 > Date.now()) return;
 
-      const has = event
-        .composedPath()
-        .find((element) => element === ref.current);
+      const has = event.composedPath().find((element) => element === ref.current);
 
       if (has) return;
 

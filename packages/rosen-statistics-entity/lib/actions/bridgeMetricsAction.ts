@@ -1,18 +1,11 @@
-import {
-  type AbstractLogger,
-  DummyLogger,
-} from '@rosen-bridge/abstract-logger';
+import { type AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
 import { BlockEntity } from '@rosen-bridge/abstract-scanner';
 import type { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
 import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
 import { TokenEntity } from '@rosen-ui/asset-calculator';
 
 import { METRIC_KEYS } from '../constants';
-import {
-  BridgedAmountEntity,
-  BridgeFeeEntity,
-  MetricEntity,
-} from '../entities';
+import { BridgedAmountEntity, BridgeFeeEntity, MetricEntity } from '../entities';
 import type { BridgeEventData, BridgeMetricRecord } from '../types';
 
 export class BridgeMetricsAction {
@@ -43,15 +36,7 @@ export class BridgeMetricsAction {
   getLastBridgeFeeRecord = async (): Promise<BridgeFeeEntity | undefined> => {
     this.logger.debug('Fetching last processed record');
     const res = await this.bridgeFeeRepo.find({
-      select: [
-        'fromChain',
-        'amount',
-        'day',
-        'week',
-        'month',
-        'year',
-        'lastProcessedHeight',
-      ],
+      select: ['fromChain', 'amount', 'day', 'week', 'month', 'year', 'lastProcessedHeight'],
       order: { lastProcessedHeight: 'DESC' },
       take: 1,
     });
@@ -66,20 +51,10 @@ export class BridgeMetricsAction {
    *
    * @returns Promise resolving to the last processed record, or undefined if no records exist
    */
-  getLastBridgeAmountRecord = async (): Promise<
-    BridgedAmountEntity | undefined
-  > => {
+  getLastBridgeAmountRecord = async (): Promise<BridgedAmountEntity | undefined> => {
     this.logger.debug('Fetching last processed record');
     const res = await this.bridgeAmountRepo.find({
-      select: [
-        'fromChain',
-        'amount',
-        'day',
-        'week',
-        'month',
-        'year',
-        'lastProcessedHeight',
-      ],
+      select: ['fromChain', 'amount', 'day', 'week', 'month', 'year', 'lastProcessedHeight'],
       order: { lastProcessedHeight: 'DESC' },
       take: 1,
     });
@@ -100,27 +75,18 @@ export class BridgeMetricsAction {
       .createQueryBuilder('et')
       .select('b.timestamp', 'timestamp')
       .addSelect('b.id', 'id')
-      .innerJoin(
-        BlockEntity,
-        'b',
-        'b.hash = et.spendBlock AND b.scanner = :scanner',
-        {
-          scanner: 'ergo',
-        },
-      )
+      .innerJoin(BlockEntity, 'b', 'b.hash = et.spendBlock AND b.scanner = :scanner', {
+        scanner: 'ergo',
+      })
       .orderBy('b.timestamp', 'ASC')
       .getRawOne<{ timestamp: number; id: number }>();
 
     const timestamp = firstEvent?.timestamp;
     const id = firstEvent?.id;
     if (timestamp && id) {
-      this.logger.debug(
-        `First event found - ID: ${id}, Timestamp: ${timestamp}`,
-      );
+      this.logger.debug(`First event found - ID: ${id}, Timestamp: ${timestamp}`);
     } else {
-      this.logger.debug(
-        'No events found - first event timestamp is not available',
-      );
+      this.logger.debug('No events found - first event timestamp is not available');
     }
     return timestamp;
   };
@@ -132,20 +98,11 @@ export class BridgeMetricsAction {
    * @param endTs - End timestamp (exclusive)
    * @returns Promise resolving to aggregated bridge statistics
    */
-  getEventsInRange = async (
-    startTs: number,
-    endTs: number,
-  ): Promise<BridgeEventData[]> => {
-    this.logger.debug(
-      `Fetching events in timestamp range: ${startTs} to ${endTs}`,
-    );
+  getEventsInRange = async (startTs: number, endTs: number): Promise<BridgeEventData[]> => {
+    this.logger.debug(`Fetching events in timestamp range: ${startTs} to ${endTs}`);
     const events = await this.eventTriggerRepo
       .createQueryBuilder('et')
-      .innerJoin(
-        BlockEntity,
-        'be',
-        `be.hash = et.spendBlock and be.scanner = 'ergo'`,
-      )
+      .innerJoin(BlockEntity, 'be', `be.hash = et.spendBlock and be.scanner = 'ergo'`)
       .innerJoin(TokenEntity, 'te', `te.id = et.sourceChainTokenId`)
       .select([
         'et.fromChain as "fromChain"',
@@ -181,8 +138,7 @@ export class BridgeMetricsAction {
     aggregatedBridgeFees: BridgeMetricRecord[],
     totalCount: string,
   ): Promise<void> => {
-    const queryRunner =
-      this.bridgeFeeRepo.manager.connection.createQueryRunner();
+    const queryRunner = this.bridgeFeeRepo.manager.connection.createQueryRunner();
     try {
       await queryRunner.startTransaction();
 
@@ -221,13 +177,11 @@ export class BridgeMetricsAction {
     aggregatedBridgeAmount: BridgeMetricRecord[],
     totalCount: string,
   ): Promise<void> => {
-    const queryRunner =
-      this.bridgeAmountRepo.manager.connection.createQueryRunner();
+    const queryRunner = this.bridgeAmountRepo.manager.connection.createQueryRunner();
     try {
       await queryRunner.startTransaction();
 
-      const bridgeAmountRepo =
-        queryRunner.manager.getRepository(BridgedAmountEntity);
+      const bridgeAmountRepo = queryRunner.manager.getRepository(BridgedAmountEntity);
       const metricRepo = queryRunner.manager.getRepository(MetricEntity);
 
       await bridgeAmountRepo.insert(aggregatedBridgeAmount);

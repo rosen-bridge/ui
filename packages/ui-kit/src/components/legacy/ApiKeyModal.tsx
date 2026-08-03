@@ -66,12 +66,7 @@ export const ApiKeyModal = ({ children }: ApiKeyModalProps) => {
           <Icon name="KeySkeleton" />
         </IconButton>
       )}
-      <Dialog
-        open={isOpen}
-        onClose={handleCloseModal}
-        maxWidth="tablet"
-        fullWidth
-      >
+      <Dialog open={isOpen} onClose={handleCloseModal} maxWidth="tablet" fullWidth>
         <DialogTitle>Authorization</DialogTitle>
         <form onSubmit={onSubmit}>
           <DialogContent dividers>

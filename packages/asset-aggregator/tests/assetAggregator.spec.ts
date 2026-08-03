@@ -2,10 +2,7 @@ import type { DataSource } from '@rosen-bridge/extended-typeorm';
 import { TokenMap } from '@rosen-bridge/tokens';
 
 import { AssetAggregator } from '../lib';
-import {
-  SAMPLE_TOKEN_ENTITY_DATA,
-  SAMPLE_TOKEN_MAP,
-} from './assetAggregatorTestData';
+import { SAMPLE_TOKEN_ENTITY_DATA, SAMPLE_TOKEN_MAP } from './assetAggregatorTestData';
 
 interface BridgedAssetTestContext {
   assetAggregator: AssetAggregator;
@@ -70,9 +67,7 @@ describe('AssetAggregator', () => {
       getLockedTokensMock.mockReturnValue([SAMPLE_TOKEN_MAP[0].ergo]);
       getBridgedTokensMock.mockReturnValue([]);
       await assetAggregator.update({}, {});
-      expect(assetAggregator.lockedAssetAction.store).toBeCalledWith([
-        SAMPLE_TOKEN_MAP[0].ergo,
-      ]);
+      expect(assetAggregator.lockedAssetAction.store).toBeCalledWith([SAMPLE_TOKEN_MAP[0].ergo]);
       expect(assetAggregator.lockedAssetAction.keepOnly).toBeCalledWith([
         SAMPLE_TOKEN_MAP[0].ergo.tokenId,
       ]);
@@ -121,14 +116,8 @@ describe('AssetAggregator', () => {
     it<BridgedAssetTestContext>('should handle both native and wrapped tokens in same chain', async ({
       assetAggregator,
     }) => {
-      getLockedTokensMock.mockReturnValue([
-        SAMPLE_TOKEN_MAP[0].ergo,
-        SAMPLE_TOKEN_MAP[2].binance,
-      ]);
-      getBridgedTokensMock.mockReturnValue([
-        SAMPLE_TOKEN_MAP[2].ergo,
-        SAMPLE_TOKEN_MAP[0].binance,
-      ]);
+      getLockedTokensMock.mockReturnValue([SAMPLE_TOKEN_MAP[0].ergo, SAMPLE_TOKEN_MAP[2].binance]);
+      getBridgedTokensMock.mockReturnValue([SAMPLE_TOKEN_MAP[2].ergo, SAMPLE_TOKEN_MAP[0].binance]);
 
       await assetAggregator.update({}, {});
       expect(assetAggregator.bridgedAssetAction.store).toBeCalledWith([
@@ -176,15 +165,11 @@ describe('AssetAggregator', () => {
      * @expected
      * - tokenAction.store should be called with token entity data from token map
      */
-    it<BridgedAssetTestContext>('should collect tokens correctly', async ({
-      assetAggregator,
-    }) => {
+    it<BridgedAssetTestContext>('should collect tokens correctly', async ({ assetAggregator }) => {
       await assetAggregator.updateTokens();
 
       // fetch list of tokenIds from database
-      expect(assetAggregator.tokenAction.store).toBeCalledWith(
-        SAMPLE_TOKEN_ENTITY_DATA,
-      );
+      expect(assetAggregator.tokenAction.store).toBeCalledWith(SAMPLE_TOKEN_ENTITY_DATA);
     });
   });
 });

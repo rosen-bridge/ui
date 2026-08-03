@@ -24,10 +24,7 @@ export type TabsProps = OverridableType<TabsBaseProps, TabsOverrides, 'gap'>;
 export const Tabs = (props: TabsProps) => {
   const { gap, style, value, onChange, ...rest } = useConfig('Tabs', props);
 
-  const styles = useMemo(
-    () => ({ gap: toCSSUnit('gap', gap), ...style }),
-    [gap, style],
-  );
+  const styles = useMemo(() => ({ gap: toCSSUnit('gap', gap), ...style }), [gap, style]);
 
   return (
     <TabsBaseUI.Root

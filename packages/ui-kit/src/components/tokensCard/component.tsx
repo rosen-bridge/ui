@@ -25,21 +25,14 @@ export type TokensCardOwnProps = {
 
 export type TokensCardBaseProps = ElementBaseProps<'div', TokensCardOwnProps>;
 
-export type TokensCardProps = OverridableType<
-  TokensCardBaseProps,
-  TokensCardOverrides,
-  never
->;
+export type TokensCardProps = OverridableType<TokensCardBaseProps, TokensCardOverrides, never>;
 
 /**
  * a wrapper for `TokensList` which also renders a title and a "See All" action
  * button
  */
 export const TokensCard = (props: TokensCardProps) => {
-  const { chain, href, loading, title, tokens, ...rest } = useConfig(
-    'TokensCard',
-    props,
-  );
+  const { chain, href, loading, title, tokens, ...rest } = useConfig('TokensCard', props);
 
   return (
     <Card style={{ height: '100%' }} {...rest}>

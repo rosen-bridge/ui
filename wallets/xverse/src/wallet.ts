@@ -36,10 +36,7 @@ export class XverseWallet extends Wallet<XverseWalletConfig> {
 
   currentChain: Network = NETWORKS.bitcoin.key;
 
-  supportedChains: Network[] = [
-    NETWORKS.bitcoin.key,
-    NETWORKS['bitcoin-runes'].key,
-  ];
+  supportedChains: Network[] = [NETWORKS.bitcoin.key, NETWORKS['bitcoin-runes'].key];
 
   get purposes() {
     switch (this.currentChain) {
@@ -71,16 +68,10 @@ export class XverseWallet extends Wallet<XverseWalletConfig> {
   fetchAddress = async (): Promise<string | undefined> => {
     switch (this.currentChain) {
       case 'bitcoin':
-        return await this.findAddress(AddressPurpose.Payment).then(
-          (address) => address?.address,
-        );
+        return await this.findAddress(AddressPurpose.Payment).then((address) => address?.address);
       case 'bitcoin-runes':
-        await this.findAddress(AddressPurpose.Payment).then(
-          (address) => address?.address,
-        );
-        return await this.findAddress(AddressPurpose.Ordinals).then(
-          (address) => address?.address,
-        );
+        await this.findAddress(AddressPurpose.Payment).then((address) => address?.address);
+        return await this.findAddress(AddressPurpose.Ordinals).then((address) => address?.address);
     }
   };
 
@@ -91,9 +82,7 @@ export class XverseWallet extends Wallet<XverseWalletConfig> {
 
     if (response.status === 'error') throw response.error;
 
-    const address = response.result.addresses.find(
-      (address) => address.purpose === purpose,
-    );
+    const address = response.result.addresses.find((address) => address.purpose === purpose);
 
     switch (purpose) {
       case AddressPurpose.Ordinals: {
@@ -106,9 +95,7 @@ export class XverseWallet extends Wallet<XverseWalletConfig> {
         break;
       }
       case AddressPurpose.Payment: {
-        const isNonNativeSegWit = !address?.address
-          .toLowerCase()
-          .startsWith('bc1q');
+        const isNonNativeSegWit = !address?.address.toLowerCase().startsWith('bc1q');
 
         if (isNonNativeSegWit) {
           throw new NonNativeSegWitAddressError(this.name);
@@ -129,9 +116,7 @@ export class XverseWallet extends Wallet<XverseWalletConfig> {
       const response = await request('runes_getBalance', undefined);
 
       if (response.status === 'success') {
-        const runeBalance = response.result.balances.find(
-          (rune) => rune.runeName === token?.name,
-        );
+        const runeBalance = response.result.balances.find((rune) => rune.runeName === token?.name);
         return runeBalance?.spendableBalance ?? '0';
       }
 
@@ -146,9 +131,7 @@ export class XverseWallet extends Wallet<XverseWalletConfig> {
   };
 
   isAvailable = (): boolean => {
-    return (
-      typeof window !== 'undefined' && !!window.XverseProviders?.BitcoinProvider
-    );
+    return typeof window !== 'undefined' && !!window.XverseProviders?.BitcoinProvider;
   };
 
   hasConnection = async (): Promise<boolean> => {
@@ -182,12 +165,8 @@ export class XverseWallet extends Wallet<XverseWalletConfig> {
     let signedPsbtBase64: string;
 
     if (this.currentNetwork instanceof BitcoinRunesNetwork) {
-      const { publicKey: userPublicKey } = (await this.findAddress(
-        AddressPurpose.Ordinals,
-      ))!;
-      const { address: userPaymentAddress } = (await this.findAddress(
-        AddressPurpose.Payment,
-      ))!;
+      const { publicKey: userPublicKey } = (await this.findAddress(AddressPurpose.Ordinals))!;
+      const { address: userPaymentAddress } = (await this.findAddress(AddressPurpose.Payment))!;
 
       const { psbt, signInputs } = await this.currentNetwork.generateUnsignedTx(
         params.lockAddress,
@@ -241,10 +220,7 @@ export class XverseWallet extends Wallet<XverseWalletConfig> {
     }
 
     try {
-      return await this.currentNetwork.submitTransaction(
-        signedPsbtBase64,
-        'base64',
-      );
+      return await this.currentNetwork.submitTransaction(signedPsbtBase64, 'base64');
     } catch (error) {
       throw new SubmitTransactionError(this.name, error);
     }

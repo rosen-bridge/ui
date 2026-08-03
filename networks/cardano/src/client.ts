@@ -3,11 +3,7 @@ import type { Network, NetworkConfig } from '@rosen-network/base';
 import { NETWORKS } from '@rosen-ui/constants';
 
 import type { generateUnsignedTx } from './generateUnsignedTx';
-import type {
-  decodeWasmValue,
-  generateLockAuxiliaryData,
-  setTxWitnessSet,
-} from './utils';
+import type { decodeWasmValue, generateLockAuxiliaryData, setTxWitnessSet } from './utils';
 
 type CardanoNetworkConfig = NetworkConfig & {
   decodeWasmValue: typeof decodeWasmValue;
@@ -36,20 +32,17 @@ export class CardanoNetwork implements Network {
     return this.config.calculateFee(...args);
   };
 
-  public decodeWasmValue: CardanoNetworkConfig['decodeWasmValue'] = (
-    ...args
-  ) => {
+  public decodeWasmValue: CardanoNetworkConfig['decodeWasmValue'] = (...args) => {
     return this.config.decodeWasmValue(...args);
   };
 
-  public generateLockAuxiliaryData: CardanoNetworkConfig['generateLockAuxiliaryData'] =
-    (...args) => {
-      return this.config.generateLockAuxiliaryData(...args);
-    };
-
-  public generateUnsignedTx: CardanoNetworkConfig['generateUnsignedTx'] = (
+  public generateLockAuxiliaryData: CardanoNetworkConfig['generateLockAuxiliaryData'] = (
     ...args
   ) => {
+    return this.config.generateLockAuxiliaryData(...args);
+  };
+
+  public generateUnsignedTx: CardanoNetworkConfig['generateUnsignedTx'] = (...args) => {
     return this.config.generateUnsignedTx(...args);
   };
 
@@ -61,9 +54,7 @@ export class CardanoNetwork implements Network {
     return this.config.getMinTransfer(...args);
   };
 
-  public setTxWitnessSet: CardanoNetworkConfig['setTxWitnessSet'] = (
-    ...args
-  ) => {
+  public setTxWitnessSet: CardanoNetworkConfig['setTxWitnessSet'] = (...args) => {
     return this.config.setTxWitnessSet(...args);
   };
 

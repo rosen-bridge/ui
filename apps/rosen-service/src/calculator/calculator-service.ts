@@ -11,10 +11,7 @@ import { getTokenMap, handleError, runAndSetInterval } from '../utils';
  * @param calculator
  * @param updateInterval
  */
-const startUpdateJob = async (
-  calculator: AssetCalculator,
-  updateInterval: number,
-) => {
+const startUpdateJob = async (calculator: AssetCalculator, updateInterval: number) => {
   const logger = DefaultLogger.getInstance().child(import.meta.url);
 
   const tryUpdating = async () => {
