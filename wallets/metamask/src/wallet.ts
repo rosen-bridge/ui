@@ -164,6 +164,10 @@ export class MetaMaskWallet extends Wallet<MetaMaskWalletConfig> {
         params: [{ chainId }],
       });
     } catch (error) {
+      /**
+       * TODO: remove the inline Biome comment
+       * local:ergo/rosen-bridge/ui#441
+       */
       // biome-ignore lint/suspicious/noExplicitAny: Use a better type
       switch ((error as any)?.code) {
         case 4001:

@@ -42,6 +42,10 @@ export const RequestToSignForm = () => {
     trigger,
     isMutating: isSignPending,
     error,
+    /**
+     * TODO: remove the inline Biome comment
+     * local:ergo/rosen-bridge/ui#441
+     */
     // biome-ignore lint/suspicious/noExplicitAny: Use a better type
   } = useSWRMutation<ApiSignResponse, any, '/sign', ApiSignRequestBody>(
     '/sign',
@@ -90,6 +94,10 @@ export const RequestToSignForm = () => {
           'Server responded but the response message was unexpected',
         );
       }
+      /**
+       * TODO: remove the inline Biome comment
+       * local:ergo/rosen-bridge/ui#441
+       */
       // biome-ignore lint/suspicious/noExplicitAny: Use a better type
     } catch (error: any) {
       if (error?.response?.status === 403) {

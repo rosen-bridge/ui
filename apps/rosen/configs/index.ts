@@ -10,6 +10,10 @@ export const CONTRACT_VERSION = '';
 export const FEE_CONFIG_TOKEN_ID = '';
 
 export const LOCK_ADDRESSES: { [key in keyof typeof NETWORKS]: string } = {
+  /**
+   * TODO: remove the inline Biome comment
+   * local:ergo/rosen-bridge/ui#441
+   */
   // biome-ignore lint/suspicious/noExplicitAny: Use a better type
 } as any;
 

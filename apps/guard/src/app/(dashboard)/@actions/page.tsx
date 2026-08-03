@@ -39,6 +39,10 @@ const Actions = () => {
       gap={2}
       value={tab}
       orientation={tabsOrientation}
+      /**
+       * TODO: remove the inline Biome comment
+       * local:ergo/rosen-bridge/ui#441
+       */
       // biome-ignore lint/suspicious/noExplicitAny: Use a better type
       onChange={(value: any) => setTab(value as any)}
     >

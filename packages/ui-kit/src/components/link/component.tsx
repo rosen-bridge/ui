@@ -9,6 +9,10 @@ import './styles.css';
 export interface LinkOverrides {}
 
 export type LinkOwnProps = {
+  /**
+   * TODO: remove the inline Biome comment
+   * local:ergo/rosen-bridge/ui#441
+   */
   // biome-ignore lint/suspicious/noExplicitAny: Use a better type
   as?: any;
   color?: Color;

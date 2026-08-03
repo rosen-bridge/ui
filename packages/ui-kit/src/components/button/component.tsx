@@ -51,6 +51,10 @@ export const Button = (props: ButtonProps) => {
     <ButtonMUI
       LinkComponent={(props) => <Link underline="none" {...props} />}
       data-block={!!block}
+      /**
+       * TODO: remove the inline Biome comment
+       * local:ergo/rosen-bridge/ui#441
+       */
       // biome-ignore lint/suspicious/noExplicitAny: Use a better type
       color={color as any}
       loading={loading}

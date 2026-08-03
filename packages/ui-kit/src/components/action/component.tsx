@@ -29,9 +29,17 @@ export const Action = (props: ActionProps) => {
 
   const isLink = 'href' in rest;
 
+  /**
+   * TODO: remove the inline Biome comment
+   * local:ergo/rosen-bridge/ui#441
+   */
   // biome-ignore lint/suspicious/noExplicitAny: Use a better type
   const Component = (isLink ? Link : 'button') as any;
 
+  /**
+   * TODO: remove the inline Biome comment
+   * local:ergo/rosen-bridge/ui#441
+   */
   // biome-ignore lint/suspicious/noExplicitAny: Use a better type
   const next = { ...rest } as any;
 

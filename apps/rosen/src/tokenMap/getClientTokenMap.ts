@@ -1,3 +1,7 @@
+/**
+ * TODO: remove the inline Biome comment
+ * local:ergo/rosen-bridge/ui#441
+ */
 // biome-ignore lint/style/useNodejsImportProtocol: Replace with a browser-compatible package
 import crypto from 'crypto';
 

@@ -98,7 +98,11 @@ export const TransactionInfo = () => {
         {!!error && (
           <Alert severity="error">
             <Truncate lines={1} style={{ whiteSpace: 'nowrap' }}>
-              {/* biome-ignore lint/suspicious/noExplicitAny: Use a better type */}
+              {/**
+               * TODO: remove the inline Biome comment
+               * local:ergo/rosen-bridge/ui#441
+               */
+              /* biome-ignore lint/suspicious/noExplicitAny: Use a better type */}
               {(error as any)?.message}
             </Truncate>
           </Alert>

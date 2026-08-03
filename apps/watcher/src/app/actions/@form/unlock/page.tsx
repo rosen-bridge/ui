@@ -61,6 +61,10 @@ const UnlockForm = () => {
 
   const { trigger, isMutating: isUnlockPending } = useSWRMutation<
     ApiPermitReturnResponse,
+    /**
+     * TODO: remove the inline Biome comment
+     * local:ergo/rosen-bridge/ui#441
+     */
     // biome-ignore lint/suspicious/noExplicitAny: Use a better type
     any,
     '/permit/return',
@@ -145,6 +149,10 @@ const UnlockForm = () => {
           'Server responded but the response message was unexpected',
         );
       }
+      /**
+       * TODO: remove the inline Biome comment
+       * local:ergo/rosen-bridge/ui#441
+       */
       // biome-ignore lint/suspicious/noExplicitAny: Use a better type
     } catch (error: any) {
       if (error?.response?.status === 403) {

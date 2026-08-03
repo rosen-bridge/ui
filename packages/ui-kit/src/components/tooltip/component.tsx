@@ -34,6 +34,10 @@ export const Tooltip = (props: TooltipProps) => {
   const { children, disabled, title, ...rest } = useConfig('Tooltip', props);
 
   const child = useMemo(
+    /**
+     * TODO: remove the inline Biome comment
+     * local:ergo/rosen-bridge/ui#441
+     */
     // biome-ignore lint/suspicious/noExplicitAny: Use a better type
     () => Children.only(children) as ReactElement<any, any>,
     [children],

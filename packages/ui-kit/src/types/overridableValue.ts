@@ -1,3 +1,7 @@
+/**
+ * TODO: remove the inline Biome comment
+ * local:ergo/rosen-bridge/ui#441
+ */
 /** biome-ignore-all lint/suspicious/noExplicitAny: Use a better type */
 
 type Listed<T> = T extends string | number

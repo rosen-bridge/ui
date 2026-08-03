@@ -67,6 +67,10 @@ const WithdrawForm = () => {
 
   const { trigger, isMutating: isWithdrawPending } = useSWRMutation<
     ApiWithdrawResponse,
+    /**
+     * TODO: remove the inline Biome comment
+     * local:ergo/rosen-bridge/ui#441
+     */
     // biome-ignore lint/suspicious/noExplicitAny: Use a better type
     any,
     '/withdraw',
@@ -158,6 +162,10 @@ const WithdrawForm = () => {
           'Server responded but the response message was unexpected',
         );
       }
+      /**
+       * TODO: remove the inline Biome comment
+       * local:ergo/rosen-bridge/ui#441
+       */
       // biome-ignore lint/suspicious/noExplicitAny: Use a better type
     } catch (error: any) {
       if (error?.response?.status === 403) {

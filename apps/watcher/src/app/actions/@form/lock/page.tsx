@@ -65,6 +65,10 @@ const LockForm = () => {
   const {
     trigger,
     isMutating: isLockPending,
+    /**
+     * TODO: remove the inline Biome comment
+     * local:ergo/rosen-bridge/ui#441
+     */
     // biome-ignore lint/suspicious/noExplicitAny: Use a better type
   } = useSWRMutation<ApiPermitResponse, any, '/permit', ApiPermitRequestBody>(
     '/permit',
@@ -126,6 +130,10 @@ const LockForm = () => {
           'Server responded but the response message was unexpected',
         );
       }
+      /**
+       * TODO: remove the inline Biome comment
+       * local:ergo/rosen-bridge/ui#441
+       */
       // biome-ignore lint/suspicious/noExplicitAny: Use a better type
     } catch (error: any) {
       if (error?.response?.status === 403) {

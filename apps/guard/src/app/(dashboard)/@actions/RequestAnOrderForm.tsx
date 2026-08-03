@@ -35,6 +35,10 @@ export const RequestAnOrderForm = () => {
   const {
     trigger,
     isMutating: isOrderPending,
+    /**
+     * TODO: remove the inline Biome comment
+     * local:ergo/rosen-bridge/ui#441
+     */
     // biome-ignore lint/suspicious/noExplicitAny: Use a better type
   } = useSWRMutation<ApiOrderResponse, any, '/order', ApiOrderRequestBody>(
     '/order',
@@ -76,6 +80,10 @@ export const RequestAnOrderForm = () => {
           'Server responded but the response message was unexpected',
         );
       }
+      /**
+       * TODO: remove the inline Biome comment
+       * local:ergo/rosen-bridge/ui#441
+       */
       // biome-ignore lint/suspicious/noExplicitAny: Use a better type
     } catch (error: any) {
       if (error?.response?.status === 403) {

@@ -76,6 +76,10 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
         await wallet.switchChain(selectedSource.name);
 
         await wallet.getAddress();
+        /**
+         * TODO: remove the inline Biome comment
+         * local:ergo/rosen-bridge/ui#441
+         */
         // biome-ignore lint/suspicious/noExplicitAny: Use a better type
       } catch (error: any) {
         setState('DISCONNECTED');

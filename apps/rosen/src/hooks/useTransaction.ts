@@ -107,7 +107,10 @@ export const useTransaction = () => {
           ' to see more details.',
         ]),
       });
-
+      /**
+       * TODO: remove the inline Biome comment
+       * local:ergo/rosen-bridge/ui#441
+       */
       // biome-ignore lint/suspicious/noExplicitAny: Use a better type
     } catch (error: any) {
       toast.add({

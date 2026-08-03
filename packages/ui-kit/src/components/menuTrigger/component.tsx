@@ -38,6 +38,10 @@ export const MenuTrigger = <T extends ElementType = 'button'>(
     handle,
     openOnHover,
     ...rest
+    /**
+     * TODO: remove the inline Biome comment
+     * local:ergo/rosen-bridge/ui#441
+     */
     // biome-ignore lint/suspicious/noExplicitAny: Use a better type
   } = useConfig('MenuTrigger', props as any);
 

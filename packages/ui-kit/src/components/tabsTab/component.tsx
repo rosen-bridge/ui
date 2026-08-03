@@ -38,9 +38,17 @@ export const TabsTab = (props: TabsTabProps) => {
     props,
   );
 
+  /**
+   * TODO: remove the inline Biome comment
+   * local:ergo/rosen-bridge/ui#441
+   */
   // biome-ignore lint/suspicious/noExplicitAny: Use a better type
   const Component = Tabs.Tab as any;
 
+  /**
+   * TODO: remove the inline Biome comment
+   * local:ergo/rosen-bridge/ui#441
+   */
   // biome-ignore lint/suspicious/noExplicitAny: Use a better type
   const value = (rest as any).value;
 

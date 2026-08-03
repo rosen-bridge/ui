@@ -13,6 +13,10 @@ const RealNode = Services.NodeBoxFetcher;
  *
  * @param returnValue mocked response for `fetchUnspentBoxesByTokenId`
  */
+/**
+ * TODO: remove the inline Biome comment
+ * local:ergo/rosen-bridge/ui#441
+ */
 // biome-ignore lint/suspicious/noExplicitAny: Use a better type
 export const setupNodeMock = (returnValue: any) => {
   if (returnValue instanceof Error) {
