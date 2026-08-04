@@ -1,5 +1,12 @@
 # @rosen-bridge/ui-kit
 
+## 5.8.2
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-bridge/icons@3.7.1
+
 ## 5.8.1
 
 ### Patch Changes
