@@ -1,5 +1,12 @@
 # @rosen-ui/okx-wallet
 
+## 2.2.4
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-network/bitcoin@2.4.7
+
 ## 2.2.3
 
 ### Patch Changes
