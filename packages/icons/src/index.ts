@@ -292,6 +292,10 @@ export const TOKENS = {
     /* @vite-ignore */ 'tokens/59ee24951ce668f0ed32bdb2e2e5731b6c36128748a3b23c28407c5f8ccbf0f6.png',
     import.meta.url,
   ).href,
+  '581d7df25808881b2b8b9b4e03e2f637c46a94f74a69a5da36434125bacb4e08': new URL(
+    /* @vite-ignore */ 'tokens/581d7df25808881b2b8b9b4e03e2f637c46a94f74a69a5da36434125bacb4e08.svg',
+    import.meta.url,
+  ).href,
   '567486ce7a1a9aef42362e3c65f7ae6cfc7d0ce5626234f1948bc321dc16fcde': new URL(
     /* @vite-ignore */ 'tokens/567486ce7a1a9aef42362e3c65f7ae6cfc7d0ce5626234f1948bc321dc16fcde.png',
     import.meta.url,
