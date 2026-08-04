@@ -1,5 +1,11 @@
 # @rosen-bridge/icons
 
+## 3.7.1
+
+### Patch Changes
+
+- Add Firo token icon
+
 ## 3.7.0
 
 ### Minor Changes
