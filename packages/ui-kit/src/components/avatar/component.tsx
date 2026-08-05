@@ -33,10 +33,7 @@ export type AvatarProps = OverridableType<
 
 /** Theme-aware Avatar component with customizable colors and size. */
 export const Avatar = (props: AvatarProps) => {
-  const { background, color, loading, size, style, ...rest } = useConfig(
-    'Avatar',
-    props,
-  );
+  const { background, color, loading, size, style, ...rest } = useConfig('Avatar', props);
 
   const sx = useMemo<SxProps<Theme>>(() => {
     return {
@@ -48,9 +45,7 @@ export const Avatar = (props: AvatarProps) => {
   }, [color, size, background]);
 
   if (loading) {
-    return (
-      <Skeleton style={style} width={size} height={size} variant="circular" />
-    );
+    return <Skeleton style={style} width={size} height={size} variant="circular" />;
   }
 
   return <AvatarMUI style={style} sx={sx} {...rest} />;

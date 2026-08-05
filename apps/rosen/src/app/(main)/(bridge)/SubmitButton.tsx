@@ -63,8 +63,7 @@ export const SubmitButton = () => {
 
   const { selected: selectedWallet } = useWallet();
 
-  const { startTransaction, isSubmitting: isTransactionSubmitting } =
-    useTransaction();
+  const { startTransaction, isSubmitting: isTransactionSubmitting } = useTransaction();
 
   const close = () => {
     setOpen(false);
@@ -88,13 +87,9 @@ export const SubmitButton = () => {
 
   const { availableSources } = useNetwork();
 
-  const source = availableSources.find(
-    (availableNetwork) => availableNetwork.name === sourceValue,
-  );
+  const source = availableSources.find((availableNetwork) => availableNetwork.name === sourceValue);
 
-  const target = availableSources.find(
-    (availableNetwork) => availableNetwork.name === targetValue,
-  );
+  const target = availableSources.find((availableNetwork) => availableNetwork.name === targetValue);
 
   const tokenInfo = tokenValue as RosenChainToken;
 
@@ -104,8 +99,7 @@ export const SubmitButton = () => {
     tokenMap.search(sourceValue, {
       tokenId: tokenValue.tokenId,
     });
-  const targetTokenInfo =
-    targetValue && targetTokenSearchResults?.[0]?.[targetValue];
+  const targetTokenInfo = targetValue && targetTokenSearchResults?.[0]?.[targetValue];
 
   const disabled =
     !selectedWallet ||
@@ -132,12 +126,7 @@ export const SubmitButton = () => {
       >
         SUBMIT
       </Button>
-      <EnhancedDialog
-        open={open}
-        maxWidth="tablet"
-        stickOn="mobile"
-        onClose={() => close()}
-      >
+      <EnhancedDialog open={open} maxWidth="tablet" stickOn="mobile" onClose={() => close()}>
         {qrCode ? (
           <>
             <EnhancedDialogTitle icon="QrcodeScan" onClose={() => close()}>
@@ -146,8 +135,8 @@ export const SubmitButton = () => {
             <EnhancedDialogContent>
               <Stack spacing={2}>
                 <DialogContentText>
-                  Scan this QR code or copy the transaction data below and
-                  submit it using a compatible wallet or application.
+                  Scan this QR code or copy the transaction data below and submit it using a
+                  compatible wallet or application.
                 </DialogContentText>
                 <Center>
                   <QRCodeCanvas
@@ -158,9 +147,8 @@ export const SubmitButton = () => {
                   />
                 </Center>
                 <Alert severity="warning">
-                  This transaction data is time-sensitive. If too much time
-                  passes before submission, network or bridge fees may change
-                  and the transaction may fail.
+                  This transaction data is time-sensitive. If too much time passes before
+                  submission, network or bridge fees may change and the transaction may fail.
                 </Alert>
               </Stack>
             </EnhancedDialogContent>
@@ -186,10 +174,7 @@ export const SubmitButton = () => {
           </>
         ) : (
           <>
-            <EnhancedDialogTitle
-              icon="CommentAltExclamation"
-              onClose={() => close()}
-            >
+            <EnhancedDialogTitle icon="CommentAltExclamation" onClose={() => close()}>
               Confirm Transaction
             </EnhancedDialogTitle>
             <EnhancedDialogContent
@@ -203,10 +188,7 @@ export const SubmitButton = () => {
                   <Stack spacing={2}>
                     <Stack align="center" spacing={2}>
                       <Typography variant="subtitle1">
-                        <Amount
-                          value={amountValue || 0}
-                          unit={tokenInfo?.name}
-                        />
+                        <Amount value={amountValue || 0} unit={tokenInfo?.name} />
                       </Typography>
                       {source && target && (
                         <Connector
@@ -224,10 +206,7 @@ export const SubmitButton = () => {
                         <Amount value={bridgeFeeRaw} unit={tokenInfo?.name} />
                       </Label>
                       <Label label="Receiving Amount">
-                        <Amount
-                          value={receivingAmountRaw}
-                          unit={targetTokenInfo?.name}
-                        />
+                        <Amount value={receivingAmountRaw} unit={targetTokenInfo?.name} />
                       </Label>
                     </div>
                     <Divider />
@@ -250,9 +229,7 @@ export const SubmitButton = () => {
               <Button
                 variant="contained"
                 style={{ flexGrow: 5 }}
-                loading={
-                  isFormSubmitting || isTransactionSubmitting || isLoadingFees
-                }
+                loading={isFormSubmitting || isTransactionSubmitting || isLoadingFees}
                 onClick={handleFormSubmit}
               >
                 Confirm

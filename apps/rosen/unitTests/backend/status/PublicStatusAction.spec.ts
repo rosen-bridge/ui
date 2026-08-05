@@ -62,12 +62,9 @@ describe('PublicStatusAction', () => {
       );
 
       const guardStatusRecords = await DataSourceMock.listGuardStatus();
-      const guardStatusChangedRecords =
-        await DataSourceMock.listGuardStatusChanged();
-      const aggregatedStatusRecords =
-        await DataSourceMock.listAggregatedStatus();
-      const aggregatedStatusChangedRecords =
-        await DataSourceMock.listAggregatedStatusChanged();
+      const guardStatusChangedRecords = await DataSourceMock.listGuardStatusChanged();
+      const aggregatedStatusRecords = await DataSourceMock.listAggregatedStatus();
+      const aggregatedStatusChangedRecords = await DataSourceMock.listAggregatedStatusChanged();
       const txRecords = await DataSourceMock.listTx();
 
       // assert
@@ -115,12 +112,9 @@ describe('PublicStatusAction', () => {
       );
 
       const guardStatusRecords = await DataSourceMock.listGuardStatus();
-      const guardStatusChangedRecords =
-        await DataSourceMock.listGuardStatusChanged();
-      const aggregatedStatusRecords =
-        await DataSourceMock.listAggregatedStatus();
-      const aggregatedStatusChangedRecords =
-        await DataSourceMock.listAggregatedStatusChanged();
+      const guardStatusChangedRecords = await DataSourceMock.listGuardStatusChanged();
+      const aggregatedStatusRecords = await DataSourceMock.listAggregatedStatus();
+      const aggregatedStatusChangedRecords = await DataSourceMock.listAggregatedStatusChanged();
       const txRecords = await DataSourceMock.listTx();
 
       // assert
@@ -168,15 +162,9 @@ describe('PublicStatusAction', () => {
     it('should only update guard status and not aggregated status when guard statuses exist and aggregated status is not changed, tx info not provided', async () => {
       // arrange
       await DataSourceMock.populateGuardStatus([mockExistingGuardStatus]);
-      await DataSourceMock.populateGuardStatusChanged([
-        mockExistingGuardStatusChanged,
-      ]);
-      await DataSourceMock.populateAggregatedStatus([
-        mockExistingAggregatedStatus,
-      ]);
-      await DataSourceMock.populateAggregatedStatusChanged([
-        mockExistingAggregatedStatusChanged,
-      ]);
+      await DataSourceMock.populateGuardStatusChanged([mockExistingGuardStatusChanged]);
+      await DataSourceMock.populateAggregatedStatus([mockExistingAggregatedStatus]);
+      await DataSourceMock.populateAggregatedStatusChanged([mockExistingAggregatedStatusChanged]);
 
       // act
       await PublicStatusAction.getInstance().insertStatus(
@@ -191,12 +179,9 @@ describe('PublicStatusAction', () => {
       );
 
       const guardStatusRecords = await DataSourceMock.listGuardStatus();
-      const guardStatusChangedRecords =
-        await DataSourceMock.listGuardStatusChanged();
-      const aggregatedStatusRecords =
-        await DataSourceMock.listAggregatedStatus();
-      const aggregatedStatusChangedRecords =
-        await DataSourceMock.listAggregatedStatusChanged();
+      const guardStatusChangedRecords = await DataSourceMock.listGuardStatusChanged();
+      const aggregatedStatusRecords = await DataSourceMock.listAggregatedStatus();
+      const aggregatedStatusChangedRecords = await DataSourceMock.listAggregatedStatusChanged();
       const txRecords = await DataSourceMock.listTx();
 
       // assert
@@ -205,9 +190,7 @@ describe('PublicStatusAction', () => {
       expect(guardStatusRecords[0]).toEqual(mockExistingGuardStatus);
       expect(guardStatusChangedRecords).toHaveLength(2);
       expect(guardStatusChangedRecords[1]).toEqual(mockNewGuardStatusChanged);
-      expect(guardStatusChangedRecords[0]).toEqual(
-        mockExistingGuardStatusChanged,
-      );
+      expect(guardStatusChangedRecords[0]).toEqual(mockExistingGuardStatusChanged);
       expect(aggregatedStatusRecords).toHaveLength(1);
       expect(aggregatedStatusRecords[0]).toEqual({
         ...mockExistingAggregatedStatus,
@@ -241,15 +224,9 @@ describe('PublicStatusAction', () => {
     it('should update guard status and aggregated status when guard statuses exist and aggregated status is changed, tx info not provided', async () => {
       // arrange
       await DataSourceMock.populateGuardStatus([mockExistingGuardStatus]);
-      await DataSourceMock.populateGuardStatusChanged([
-        mockExistingGuardStatusChanged,
-      ]);
-      await DataSourceMock.populateAggregatedStatus([
-        mockExistingAggregatedStatus,
-      ]);
-      await DataSourceMock.populateAggregatedStatusChanged([
-        mockExistingAggregatedStatusChanged,
-      ]);
+      await DataSourceMock.populateGuardStatusChanged([mockExistingGuardStatusChanged]);
+      await DataSourceMock.populateAggregatedStatus([mockExistingAggregatedStatus]);
+      await DataSourceMock.populateAggregatedStatusChanged([mockExistingAggregatedStatusChanged]);
 
       // act
       await PublicStatusAction.getInstance().insertStatus(
@@ -264,12 +241,9 @@ describe('PublicStatusAction', () => {
       );
 
       const guardStatusRecords = await DataSourceMock.listGuardStatus();
-      const guardStatusChangedRecords =
-        await DataSourceMock.listGuardStatusChanged();
-      const aggregatedStatusRecords =
-        await DataSourceMock.listAggregatedStatus();
-      const aggregatedStatusChangedRecords =
-        await DataSourceMock.listAggregatedStatusChanged();
+      const guardStatusChangedRecords = await DataSourceMock.listGuardStatusChanged();
+      const aggregatedStatusRecords = await DataSourceMock.listAggregatedStatus();
+      const aggregatedStatusChangedRecords = await DataSourceMock.listAggregatedStatusChanged();
       const txRecords = await DataSourceMock.listTx();
 
       // assert
@@ -278,23 +252,15 @@ describe('PublicStatusAction', () => {
       expect(guardStatusRecords[0]).toEqual(mockExistingGuardStatus);
 
       expect(guardStatusChangedRecords).toHaveLength(2);
-      expect(guardStatusChangedRecords[1]).toEqual(
-        mockNewGuardStatusChangedAggregateChange,
-      );
-      expect(guardStatusChangedRecords[0]).toEqual(
-        mockExistingGuardStatusChanged,
-      );
+      expect(guardStatusChangedRecords[1]).toEqual(mockNewGuardStatusChangedAggregateChange);
+      expect(guardStatusChangedRecords[0]).toEqual(mockExistingGuardStatusChanged);
 
       expect(aggregatedStatusRecords).toHaveLength(1);
       expect(aggregatedStatusRecords[0]).toEqual(mockNewAggregatedStatus);
 
       expect(aggregatedStatusChangedRecords).toHaveLength(2);
-      expect(aggregatedStatusChangedRecords[1]).toEqual(
-        mockNewAggregatedStatusChanged,
-      );
-      expect(aggregatedStatusChangedRecords[0]).toEqual(
-        mockExistingAggregatedStatusChanged,
-      );
+      expect(aggregatedStatusChangedRecords[1]).toEqual(mockNewAggregatedStatusChanged);
+      expect(aggregatedStatusChangedRecords[0]).toEqual(mockExistingAggregatedStatusChanged);
 
       expect(txRecords).toHaveLength(0);
     });
@@ -319,15 +285,9 @@ describe('PublicStatusAction', () => {
     it('should only update guard status and not aggregated status when guard statuses exist and aggregated status is not changed, tx info provided', async () => {
       // arrange
       await DataSourceMock.populateGuardStatus([mockExistingGuardStatus]);
-      await DataSourceMock.populateGuardStatusChanged([
-        mockExistingGuardStatusChanged,
-      ]);
-      await DataSourceMock.populateAggregatedStatus([
-        mockExistingAggregatedStatus,
-      ]);
-      await DataSourceMock.populateAggregatedStatusChanged([
-        mockExistingAggregatedStatusChanged,
-      ]);
+      await DataSourceMock.populateGuardStatusChanged([mockExistingGuardStatusChanged]);
+      await DataSourceMock.populateAggregatedStatus([mockExistingAggregatedStatus]);
+      await DataSourceMock.populateAggregatedStatusChanged([mockExistingAggregatedStatusChanged]);
 
       // act
       await PublicStatusAction.getInstance().insertStatus(
@@ -342,12 +302,9 @@ describe('PublicStatusAction', () => {
       );
 
       const guardStatusRecords = await DataSourceMock.listGuardStatus();
-      const guardStatusChangedRecords =
-        await DataSourceMock.listGuardStatusChanged();
-      const aggregatedStatusRecords =
-        await DataSourceMock.listAggregatedStatus();
-      const aggregatedStatusChangedRecords =
-        await DataSourceMock.listAggregatedStatusChanged();
+      const guardStatusChangedRecords = await DataSourceMock.listGuardStatusChanged();
+      const aggregatedStatusRecords = await DataSourceMock.listAggregatedStatus();
+      const aggregatedStatusChangedRecords = await DataSourceMock.listAggregatedStatusChanged();
       const txRecords = await DataSourceMock.listTx();
 
       // assert
@@ -363,17 +320,13 @@ describe('PublicStatusAction', () => {
         ...mockNewGuardStatusChanged,
         ...mockGuardStatusTx,
       });
-      expect(guardStatusChangedRecords[0]).toEqual(
-        mockExistingGuardStatusChanged,
-      );
+      expect(guardStatusChangedRecords[0]).toEqual(mockExistingGuardStatusChanged);
 
       expect(aggregatedStatusRecords).toHaveLength(1);
       expect(aggregatedStatusRecords[0]).toEqual(mockExistingAggregatedStatus);
 
       expect(aggregatedStatusChangedRecords).toHaveLength(1);
-      expect(aggregatedStatusChangedRecords[0]).toEqual(
-        mockExistingAggregatedStatusChanged,
-      );
+      expect(aggregatedStatusChangedRecords[0]).toEqual(mockExistingAggregatedStatusChanged);
 
       expect(txRecords).toHaveLength(1);
       expect(txRecords[0]).toEqual(mockNewTx);
@@ -398,15 +351,9 @@ describe('PublicStatusAction', () => {
     it('should update guard status and aggregated status when guard statuses exist and aggregated status is changed, tx info provided', async () => {
       // arrange
       await DataSourceMock.populateGuardStatus([mockExistingGuardStatus]);
-      await DataSourceMock.populateGuardStatusChanged([
-        mockExistingGuardStatusChanged,
-      ]);
-      await DataSourceMock.populateAggregatedStatus([
-        mockExistingAggregatedStatus,
-      ]);
-      await DataSourceMock.populateAggregatedStatusChanged([
-        mockExistingAggregatedStatusChanged,
-      ]);
+      await DataSourceMock.populateGuardStatusChanged([mockExistingGuardStatusChanged]);
+      await DataSourceMock.populateAggregatedStatus([mockExistingAggregatedStatus]);
+      await DataSourceMock.populateAggregatedStatusChanged([mockExistingAggregatedStatusChanged]);
 
       // act
       await PublicStatusAction.getInstance().insertStatus(
@@ -421,12 +368,9 @@ describe('PublicStatusAction', () => {
       );
 
       const guardStatusRecords = await DataSourceMock.listGuardStatus();
-      const guardStatusChangedRecords =
-        await DataSourceMock.listGuardStatusChanged();
-      const aggregatedStatusRecords =
-        await DataSourceMock.listAggregatedStatus();
-      const aggregatedStatusChangedRecords =
-        await DataSourceMock.listAggregatedStatusChanged();
+      const guardStatusChangedRecords = await DataSourceMock.listGuardStatusChanged();
+      const aggregatedStatusRecords = await DataSourceMock.listAggregatedStatus();
+      const aggregatedStatusChangedRecords = await DataSourceMock.listAggregatedStatusChanged();
       const txRecords = await DataSourceMock.listTx();
 
       // assert
@@ -442,20 +386,14 @@ describe('PublicStatusAction', () => {
         ...mockNewGuardStatusChangedAggregateChange,
         ...mockGuardStatusTx,
       });
-      expect(guardStatusChangedRecords[0]).toEqual(
-        mockExistingGuardStatusChanged,
-      );
+      expect(guardStatusChangedRecords[0]).toEqual(mockExistingGuardStatusChanged);
 
       expect(aggregatedStatusRecords).toHaveLength(1);
       expect(aggregatedStatusRecords[0]).toEqual(mockNewAggregatedStatus);
 
       expect(aggregatedStatusChangedRecords).toHaveLength(2);
-      expect(aggregatedStatusChangedRecords[1]).toEqual(
-        mockNewAggregatedStatusChanged,
-      );
-      expect(aggregatedStatusChangedRecords[0]).toEqual(
-        mockExistingAggregatedStatusChanged,
-      );
+      expect(aggregatedStatusChangedRecords[1]).toEqual(mockNewAggregatedStatusChanged);
+      expect(aggregatedStatusChangedRecords[0]).toEqual(mockExistingAggregatedStatusChanged);
 
       expect(txRecords).toHaveLength(1);
       expect(txRecords[0]).toEqual(mockNewTx);

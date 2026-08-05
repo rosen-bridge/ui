@@ -11,10 +11,7 @@ export type CarouselItemOwnProps = {
   size?: string;
 };
 
-export type CarouselItemBaseProps = ElementBaseProps<
-  'div',
-  CarouselItemOwnProps
->;
+export type CarouselItemBaseProps = ElementBaseProps<'div', CarouselItemOwnProps>;
 
 export type CarouselItemProps = OverridableType<
   CarouselItemBaseProps,

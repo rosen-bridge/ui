@@ -22,13 +22,7 @@ import type { EventDetailsType } from '@/backend/events/repository';
 
 import { Section } from './Section';
 
-export const TransactionsAndFees = ({
-  id,
-  flowId,
-}: {
-  id: string;
-  flowId: string | undefined;
-}) => {
+export const TransactionsAndFees = ({ id, flowId }: { id: string; flowId: string | undefined }) => {
   const {
     error,
     data: events,
@@ -67,9 +61,7 @@ export const TransactionsAndFees = ({
     ] as const;
 
     if (data?.status === 'FRAUD') {
-      return allTxs.filter(
-        (tx) => tx.type !== 'payment' && tx.type !== 'reward',
-      );
+      return allTxs.filter((tx) => tx.type !== 'payment' && tx.type !== 'reward');
     }
 
     return allTxs;
@@ -99,45 +91,24 @@ export const TransactionsAndFees = ({
             <Duration fallback="-" loading={isLoading} />
           </Label>
           <Label label="Total Emission">
-            <Amount
-              style={{ height: '20px' }}
-              loading={isLoading}
-              fallback="-"
-            />
+            <Amount style={{ height: '20px' }} loading={isLoading} fallback="-" />
           </Label>
           <Label label="Guards" inset>
-            <Amount
-              style={{ height: '20px' }}
-              loading={isLoading}
-              fallback="-"
-            />
+            <Amount style={{ height: '20px' }} loading={isLoading} fallback="-" />
           </Label>
           <Label label="Watchers" inset>
-            <Amount
-              style={{ height: '20px' }}
-              loading={isLoading}
-              fallback="-"
-            />
+            <Amount style={{ height: '20px' }} loading={isLoading} fallback="-" />
           </Label>
           <Label
             label="RSN Ratio"
             info="The number of RSN tokens that correspond to one unit of this token."
           >
-            <Amount
-              style={{ height: '20px' }}
-              loading={isLoading}
-              fallback="-"
-            />
+            <Amount style={{ height: '20px' }} loading={isLoading} fallback="-" />
           </Label>
         </div>
         <div>
           <Label label="Token Price">
-            <Amount
-              style={{ height: '20px' }}
-              loading={isLoading}
-              value={data?.price}
-              unit="$"
-            />
+            <Amount style={{ height: '20px' }} loading={isLoading} value={data?.price} unit="$" />
           </Label>
           <Label label="Fee Sum">
             <Amount

@@ -16,10 +16,7 @@ export type TabsTabOwnProps = {
   };
 };
 
-type TabsTabAsAnchor = ElementBaseProps<
-  'a',
-  TabsTabOwnProps & { href: string | undefined }
->;
+type TabsTabAsAnchor = ElementBaseProps<'a', TabsTabOwnProps & { href: string | undefined }>;
 
 type TabsTabAsButton = ElementBaseProps<
   'button',
@@ -33,10 +30,7 @@ export type TabsTabProps =
   | OverridableType<TabsTabAsButton, TabsTabOverrides, never>;
 
 export const TabsTab = (props: TabsTabProps) => {
-  const { children, icon, iconPosition, slots, ...rest } = useConfig(
-    'TabsTab',
-    props,
-  );
+  const { children, icon, iconPosition, slots, ...rest } = useConfig('TabsTab', props);
 
   /**
    * TODO: remove the inline Biome comment

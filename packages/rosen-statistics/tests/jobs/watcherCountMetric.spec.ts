@@ -1,15 +1,8 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 
-import {
-  type AbstractLogger,
-  DummyLogger,
-} from '@rosen-bridge/abstract-logger';
+import { type AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
 import type { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
-import {
-  METRIC_KEYS,
-  MetricEntity,
-  WatcherCountEntity,
-} from '@rosen-ui/rosen-statistics-entity';
+import { METRIC_KEYS, MetricEntity, WatcherCountEntity } from '@rosen-ui/rosen-statistics-entity';
 
 import { watcherCountMetric } from '../../lib';
 import { resetMocks, setupNodeMock } from '../mocked/boxFetcher.mock';
@@ -58,9 +51,7 @@ describe('watcherCountMetric', () => {
     const watcherCounts = await watcherCountRepo.find({
       select: ['network', 'count'],
     });
-    expect(watcherCounts).toHaveLength(
-      testData.expectedResults.watcherCounts.length,
-    );
+    expect(watcherCounts).toHaveLength(testData.expectedResults.watcherCounts.length);
     expect(watcherCounts).toEqual(testData.expectedResults.watcherCounts);
 
     const metric = await metricRepo.findOne({
@@ -96,9 +87,7 @@ describe('watcherCountMetric', () => {
       select: ['network', 'count'],
     });
 
-    expect(watcherCounts).toHaveLength(
-      testData.expectedResults.watcherCounts.length,
-    );
+    expect(watcherCounts).toHaveLength(testData.expectedResults.watcherCounts.length);
     expect(watcherCounts).toEqual(testData.expectedResults.watcherCounts);
 
     const metric = await metricRepo.findOne({
@@ -165,9 +154,7 @@ describe('watcherCountMetric', () => {
       select: ['network', 'count'],
     });
 
-    expect(watcherCounts).toHaveLength(
-      testData.expectedResults.watcherCounts.length,
-    );
+    expect(watcherCounts).toHaveLength(testData.expectedResults.watcherCounts.length);
     expect(watcherCounts).toEqual(testData.expectedResults.watcherCounts);
 
     const metric = await metricRepo.findOne({
@@ -206,9 +193,7 @@ describe('watcherCountMetric', () => {
     const watcherCounts = await watcherCountRepo.find({
       select: ['network', 'count'],
     });
-    expect(watcherCounts).toHaveLength(
-      testData.expectedResults.watcherCounts.length,
-    );
+    expect(watcherCounts).toHaveLength(testData.expectedResults.watcherCounts.length);
     expect(watcherCounts).toEqual(testData.expectedResults.watcherCounts);
 
     const metric = await metricRepo.findOne({

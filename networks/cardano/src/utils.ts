@@ -17,48 +17,41 @@ import type { Network } from '@rosen-ui/types';
 import { decodeHex, encodeHex } from '@rosen-ui/utils';
 
 import { AdaAssetName, AdaAssetNameHex, AdaPolicyId } from './constants';
-import type {
-  AssetEntry,
-  CardanoProtocolParams,
-  Lovelace,
-  PolicyId,
-  Value,
-} from './types';
+import type { AssetEntry, CardanoProtocolParams, Lovelace, PolicyId, Value } from './types';
 
 /**
  * gets Cardano protocol params
  * @returns
  */
-export const getCardanoProtocolParams =
-  async (): Promise<CardanoProtocolParams> => {
-    const cardanoKoiosClient = cardanoKoiosClientFactory(
-      process.env.CARDANO_KOIOS_API!, // TODO
-    );
-    return await cardanoKoiosClient.epochParams().then((epochParams) => {
-      const params = epochParams[0];
-      if (
-        !params.min_fee_a ||
-        !params.min_fee_b ||
-        !params.pool_deposit ||
-        !params.key_deposit ||
-        !params.max_val_size ||
-        !params.max_tx_size ||
-        !params.coins_per_utxo_size
-      )
-        throw Error(
-          `Some required Cardano protocol params fetched from koios are undefined or null `,
-        );
-      return {
-        min_fee_a: params.min_fee_a,
-        min_fee_b: params.min_fee_b,
-        pool_deposit: params.pool_deposit,
-        key_deposit: params.key_deposit,
-        max_value_size: params.max_val_size,
-        max_tx_size: params.max_tx_size,
-        coins_per_utxo_size: params.coins_per_utxo_size,
-      };
-    });
-  };
+export const getCardanoProtocolParams = async (): Promise<CardanoProtocolParams> => {
+  const cardanoKoiosClient = cardanoKoiosClientFactory(
+    process.env.CARDANO_KOIOS_API!, // TODO
+  );
+  return await cardanoKoiosClient.epochParams().then((epochParams) => {
+    const params = epochParams[0];
+    if (
+      !params.min_fee_a ||
+      !params.min_fee_b ||
+      !params.pool_deposit ||
+      !params.key_deposit ||
+      !params.max_val_size ||
+      !params.max_tx_size ||
+      !params.coins_per_utxo_size
+    )
+      throw Error(
+        `Some required Cardano protocol params fetched from koios are undefined or null `,
+      );
+    return {
+      min_fee_a: params.min_fee_a,
+      min_fee_b: params.min_fee_b,
+      pool_deposit: params.pool_deposit,
+      key_deposit: params.key_deposit,
+      max_value_size: params.max_val_size,
+      max_tx_size: params.max_tx_size,
+      coins_per_utxo_size: params.coins_per_utxo_size,
+    };
+  });
+};
 
 /**
  * generates transaction builder config using protocol params
@@ -114,18 +107,14 @@ export const generateLockAuxiliaryData = async (
   for (const key in metadataJson) {
     map.insert(
       wasm.TransactionMetadatum.new_text(key),
-      wasm.TransactionMetadatum.new_text(
-        metadataJson[key as keyof typeof metadataJson],
-      ),
+      wasm.TransactionMetadatum.new_text(metadataJson[key as keyof typeof metadataJson]),
     );
   }
 
   const fromAddressList = wasm.MetadataList.new();
   let i = 0;
   while (i < fromAddress.length) {
-    fromAddressList.add(
-      wasm.TransactionMetadatum.new_text(fromAddress.substring(i, i + 64)),
-    );
+    fromAddressList.add(wasm.TransactionMetadatum.new_text(fromAddress.substring(i, i + 64)));
     i += 64;
   }
 
@@ -134,10 +123,7 @@ export const generateLockAuxiliaryData = async (
     wasm.TransactionMetadatum.new_list(fromAddressList),
   );
   const generalTxMetadata = wasm.GeneralTransactionMetadata.new();
-  generalTxMetadata.insert(
-    wasm.BigNum.from_str('0'),
-    wasm.TransactionMetadatum.new_map(map),
-  );
+  generalTxMetadata.insert(wasm.BigNum.from_str('0'), wasm.TransactionMetadatum.new_map(map));
   const aux = wasm.AuxiliaryData.new();
   aux.set_metadata(generalTxMetadata);
   return aux.to_hex();
@@ -150,9 +136,7 @@ export const generateLockAuxiliaryData = async (
  *
  * @param serializedUtxo serialized hex string of TransactionUnspentOutput
  */
-export const walletUtxoToCardanoUtxo = (
-  serializedUtxo: string,
-): CardanoUtxo => {
+export const walletUtxoToCardanoUtxo = (serializedUtxo: string): CardanoUtxo => {
   const utxo = wasm.TransactionUnspentOutput.from_hex(serializedUtxo);
   const assets: Array<CardanoAsset> = [];
 
@@ -191,10 +175,7 @@ export const walletUtxoToCardanoUtxo = (
  * @param b second AssetBalance object
  * @returns aggregated AssetBalance
  */
-export const sumAssetBalance = (
-  a: AssetBalance,
-  b: AssetBalance,
-): AssetBalance => {
+export const sumAssetBalance = (a: AssetBalance, b: AssetBalance): AssetBalance => {
   // sum native token
   const nativeToken = a.nativeToken + b.nativeToken;
   const tokens: Array<TokenInfo> = [];
@@ -271,8 +252,7 @@ export const subtractAssetBalance = (
             index
           ].value.toString()}] is less than [${token.value.toString()}]`,
         );
-    } else
-      throw new Error(`Cannot reduce token [${token.id}]: Token not found`);
+    } else throw new Error(`Cannot reduce token [${token.id}]: Token not found`);
   });
 
   return {
@@ -301,11 +281,7 @@ export const generateOutputBox = (
     const assetUnit = token.id.split('.');
     const policyId = wasm.ScriptHash.from_hex(assetUnit[0]);
     const assetName = wasm.AssetName.new(Buffer.from(assetUnit[1], 'hex'));
-    multiAsset.set_asset(
-      policyId,
-      assetName,
-      wasm.BigNum.from_str(token.value.toString()),
-    );
+    multiAsset.set_asset(policyId, assetName, wasm.BigNum.from_str(token.value.toString()));
   });
 
   return balance.nativeToken
@@ -320,9 +296,7 @@ export const generateOutputBox = (
     : changeBoxBuilder
         .with_asset_and_min_required_coin_by_utxo_cost(
           multiAsset,
-          wasm.DataCost.new_coins_per_byte(
-            wasm.BigNum.from_str(coinsPerUtxoByte),
-          ),
+          wasm.DataCost.new_coins_per_byte(wasm.BigNum.from_str(coinsPerUtxoByte)),
         )
         .build();
 };
@@ -339,16 +313,10 @@ export const setTxWitnessSet = async (
 ): Promise<string> => {
   const witnessSet = wasm.TransactionWitnessSet.new();
   const tx = wasm.Transaction.from_hex(transactionHex);
-  const vKeys = wasm.TransactionWitnessSet.from_bytes(
-    Buffer.from(witnessSetHex, 'hex'),
-  ).vkeys();
+  const vKeys = wasm.TransactionWitnessSet.from_bytes(Buffer.from(witnessSetHex, 'hex')).vkeys();
   if (vKeys) witnessSet.set_vkeys(vKeys);
 
-  const signedTx = wasm.Transaction.new(
-    tx.body(),
-    witnessSet,
-    tx.auxiliary_data(),
-  );
+  const signedTx = wasm.Transaction.new(tx.body(), witnessSet, tx.auxiliary_data());
 
   return signedTx.to_hex();
 };
@@ -399,21 +367,13 @@ export function fromWasmValue(value: wasm.Value): Value {
 }
 
 export const getHeight = async (): Promise<number> => {
-  const cardanoKoiosClient = cardanoKoiosClientFactory(
-    process.env.CARDANO_KOIOS_API!,
-  );
+  const cardanoKoiosClient = cardanoKoiosClientFactory(process.env.CARDANO_KOIOS_API!);
 
   const height = (await cardanoKoiosClient.tip())[0].block_no!;
 
   return height;
 };
 
-export const calculateFee: CalculateFee = calculateFeeCreator(
-  NETWORKS.cardano.key,
-  getHeight,
-);
+export const calculateFee: CalculateFee = calculateFeeCreator(NETWORKS.cardano.key, getHeight);
 
-export const getMinTransferCreator = getMinTransferCreatorBase(
-  NETWORKS.cardano.key,
-  calculateFee,
-);
+export const getMinTransferCreator = getMinTransferCreatorBase(NETWORKS.cardano.key, calculateFee);

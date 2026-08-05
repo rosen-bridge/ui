@@ -78,8 +78,7 @@ const Content = ({ value }: SidebarProps) => {
         <Typography variant="body1" color="text-secondary">
           {value ? (
             <>
-              This event has multiple flows. Click <b>See Details</b> for more
-              information.
+              This event has multiple flows. Click <b>See Details</b> for more information.
             </>
           ) : (
             <>Select an event to see its details.</>

@@ -1,10 +1,4 @@
-import {
-  Children,
-  cloneElement,
-  type ReactElement,
-  type ReactNode,
-  useMemo,
-} from 'react';
+import { Children, cloneElement, type ReactElement, type ReactNode, useMemo } from 'react';
 
 import { mergeProps } from '@base-ui/react/merge-props';
 import { Tooltip as TooltipBaseUI } from '@base-ui/react/tooltip';
@@ -24,11 +18,7 @@ export type TooltipOwnProps = {
 
 export type TooltipBaseProps = ElementBaseProps<'div', TooltipOwnProps>;
 
-export type TooltipProps = OverridableType<
-  TooltipBaseProps,
-  TooltipOverrides,
-  never
->;
+export type TooltipProps = OverridableType<TooltipBaseProps, TooltipOverrides, never>;
 
 export const Tooltip = (props: TooltipProps) => {
   const { children, disabled, title, ...rest } = useConfig('Tooltip', props);
@@ -51,9 +41,7 @@ export const Tooltip = (props: TooltipProps) => {
     <TooltipBaseUI.Provider delay={250}>
       <TooltipBaseUI.Root>
         <TooltipBaseUI.Trigger
-          render={(props) =>
-            cloneElement(children, mergeProps(props, child.props))
-          }
+          render={(props) => cloneElement(children, mergeProps(props, child.props))}
         />
         <TooltipBaseUI.Portal>
           <TooltipBaseUI.Positioner

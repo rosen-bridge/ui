@@ -26,13 +26,9 @@ export const useTableDataPagination = <T extends Paginated<unknown>>(
     setPageIndex(0);
   }, []);
 
-  const { data, isLoading } = useSWR<T>(
-    getKey(pageIndex * pageSize, pageSize),
-    fetcher,
-    {
-      keepPreviousData: true,
-    },
-  );
+  const { data, isLoading } = useSWR<T>(getKey(pageIndex * pageSize, pageSize), fetcher, {
+    keepPreviousData: true,
+  });
 
   return {
     isLoading,

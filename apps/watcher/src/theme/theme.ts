@@ -1,9 +1,4 @@
-import {
-  createTheme,
-  darkThemeOptions,
-  lightThemeOptions,
-  type Theme,
-} from '@rosen-bridge/ui-kit';
+import { createTheme, darkThemeOptions, lightThemeOptions, type Theme } from '@rosen-bridge/ui-kit';
 
 export const base = {
   components: {
@@ -14,10 +9,7 @@ export const base = {
           'borderRadius': theme.shape.borderRadius,
           'backgroundColor': theme.palette.background.default,
           'minHeight': theme.spacing(7),
-          'transition': theme.transitions.create([
-            'background-color',
-            'box-shadow',
-          ]),
+          'transition': theme.transitions.create(['background-color', 'box-shadow']),
           '&:hover': {
             backgroundColor: theme.palette.background.default,
           },

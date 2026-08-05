@@ -1,16 +1,9 @@
 import { In, type Repository } from '@rosen-bridge/extended-typeorm';
-import {
-  type AggregatedStatusEntity,
-  AggregateEventStatus,
-} from '@rosen-ui/public-status';
+import { type AggregatedStatusEntity, AggregateEventStatus } from '@rosen-ui/public-status';
 
 import AggregatedStatusAction from '@/backend/status/AggregatedStatusAction';
 
-import {
-  mockAggregatedStatusRecords,
-  triggerId0,
-  triggerId1,
-} from './testData';
+import { mockAggregatedStatusRecords, triggerId0, triggerId1 } from './testData';
 
 describe('AggregatedStatusAction', () => {
   beforeAll(() => {

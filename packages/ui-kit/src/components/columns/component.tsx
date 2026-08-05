@@ -36,11 +36,7 @@ export type ColumnsOwnProps = {
 
 export type ColumnsBaseProps = ElementBaseProps<'div', ColumnsOwnProps>;
 
-export type ColumnsProps = OverridableType<
-  ColumnsBaseProps,
-  ColumnsOverrides,
-  'gap' | 'width'
->;
+export type ColumnsProps = OverridableType<ColumnsBaseProps, ColumnsOverrides, 'gap' | 'width'>;
 
 /**
  * `Columns` is a simple utility component for creating a multi-column layout.
@@ -48,10 +44,7 @@ export type ColumnsProps = OverridableType<
  * with configurable column width, gap, and an optional dividing rule.
  */
 export const Columns = (props: ColumnsProps) => {
-  const { count, gap, rule, style, width, ...rest } = useConfig(
-    'Columns',
-    props,
-  );
+  const { count, gap, rule, style, width, ...rest } = useConfig('Columns', props);
 
   const styles = useMemo(
     () => ({

@@ -1,8 +1,4 @@
-import type {
-  DataSource,
-  QueryRunner,
-  Repository,
-} from '@rosen-bridge/extended-typeorm';
+import type { DataSource, QueryRunner, Repository } from '@rosen-bridge/extended-typeorm';
 
 import { BridgedAssetEntity, TokenEntity } from '../../lib';
 import { AbstractAssetAction } from '../../lib/actions/abstractAssetAction';
@@ -30,10 +26,8 @@ describe('AbstractAssetAction', () => {
   beforeEach<AbstractAssetTestContext>(async (context) => {
     context.dataSource = await createDatabase();
     context.queryRunner = context.dataSource.createQueryRunner();
-    context.repository =
-      context.queryRunner.manager.getRepository(BridgedAssetEntity);
-    context.tokenRepository =
-      context.queryRunner.manager.getRepository(TokenEntity);
+    context.repository = context.queryRunner.manager.getRepository(BridgedAssetEntity);
+    context.tokenRepository = context.queryRunner.manager.getRepository(TokenEntity);
     context.action = new TestAssetAction(context.dataSource);
   });
 
@@ -111,8 +105,7 @@ describe('AbstractAssetAction', () => {
     }) => {
       await tokenRepository.insert(AbstractAssetTestData.SAMPLE_TOKENS);
       const tokens = await tokenRepository.find();
-      const entities =
-        AbstractAssetTestData.generateTestDataBridgedEntity(tokens);
+      const entities = AbstractAssetTestData.generateTestDataBridgedEntity(tokens);
       await repository.insert(entities);
       const remaining = await repository.find();
       await action.keepOnly(remaining[0].tokenId);

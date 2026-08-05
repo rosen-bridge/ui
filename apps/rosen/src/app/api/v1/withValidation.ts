@@ -37,11 +37,7 @@ export const withValidation =
     try {
       const result = await validator(request, context);
 
-      if (
-        result &&
-        typeof result === 'object' &&
-        ('error' in result || 'value' in result)
-      ) {
+      if (result && typeof result === 'object' && ('error' in result || 'value' in result)) {
         const { error, value: data } = result as ValidationResult<TSchema>;
 
         if (error) throw error;
@@ -51,10 +47,7 @@ export const withValidation =
         value = result;
       }
     } catch (error) {
-      return Response.json(
-        { message: (error as any).message },
-        { status: 400 },
-      );
+      return Response.json({ message: (error as any).message }, { status: 400 });
     }
 
     try {

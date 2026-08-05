@@ -2,12 +2,7 @@ import type { ReactNode } from 'react';
 
 import { Dialog as DialogBaseUI } from '@base-ui/react/dialog';
 
-import {
-  CloseButton,
-  type CloseButtonProps,
-  Icon,
-  type IconProps,
-} from '@/components';
+import { CloseButton, type CloseButtonProps, Icon, type IconProps } from '@/components';
 import { useConfig } from '@/hooks';
 import type { ElementBaseProps, OverridableType } from '@/types';
 
@@ -21,10 +16,7 @@ export type DialogHeaderOwnProps = {
   icon?: IconProps['name'];
 };
 
-export type DialogHeaderBaseProps = ElementBaseProps<
-  'div',
-  DialogHeaderOwnProps
->;
+export type DialogHeaderBaseProps = ElementBaseProps<'div', DialogHeaderOwnProps>;
 
 export type DialogHeaderProps = OverridableType<
   DialogHeaderBaseProps,
@@ -33,10 +25,7 @@ export type DialogHeaderProps = OverridableType<
 >;
 
 export const DialogHeader = (props: DialogHeaderProps) => {
-  const { actions, closeable, children, icon, ...rest } = useConfig(
-    'DialogHeader',
-    props,
-  );
+  const { actions, closeable, children, icon, ...rest } = useConfig('DialogHeader', props);
 
   return (
     <div {...rest}>
@@ -46,9 +35,7 @@ export const DialogHeader = (props: DialogHeaderProps) => {
       {actions}
       {closeable && (
         <DialogBaseUI.Close
-          render={(props) => (
-            <CloseButton {...(props as unknown as CloseButtonProps)} />
-          )}
+          render={(props) => <CloseButton {...(props as unknown as CloseButtonProps)} />}
         />
       )}
     </div>

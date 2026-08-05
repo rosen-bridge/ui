@@ -6,9 +6,6 @@ export type EnhancedDialogContentProps = {
   children?: ReactNode;
 } & HTMLAttributes<HTMLDivElement>;
 
-export const EnhancedDialogContent = ({
-  children,
-  ...rest
-}: EnhancedDialogContentProps) => {
+export const EnhancedDialogContent = ({ children, ...rest }: EnhancedDialogContentProps) => {
   return <DialogContent {...rest}>{children}</DialogContent>;
 };

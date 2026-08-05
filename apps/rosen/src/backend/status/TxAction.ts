@@ -18,8 +18,7 @@ class TxAction {
    * @returns TxAction instance
    */
   static getInstance = () => {
-    if (!TxAction.instance)
-      throw Error(`TxAction should have been initialized before getInstance`);
+    if (!TxAction.instance) throw Error(`TxAction should have been initialized before getInstance`);
     return TxAction.instance;
   };
 

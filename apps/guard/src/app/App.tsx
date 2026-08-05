@@ -35,8 +35,7 @@ export const App = ({ children }: PropsWithChildren) => {
         router={{
           pathname,
           search: searchParams.toString(),
-          push: (href) =>
-            router.push(href as unknown as Route, { scroll: false }),
+          push: (href) => router.push(href as unknown as Route, { scroll: false }),
         }}
       >
         <UIKitProvider>

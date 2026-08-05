@@ -4,10 +4,7 @@ import { Axios } from '@rosen-clients/rate-limited-axios';
 import { NETWORKS } from '@rosen-ui/constants';
 
 import { AbstractDataAdapter } from './abstracts';
-import type {
-  BitcoinEsploraDataAdapterAuthParams,
-  ChainAssetBalance,
-} from './types';
+import type { BitcoinEsploraDataAdapterAuthParams, ChainAssetBalance } from './types';
 
 export class BitcoinEsploraDataAdapter extends AbstractDataAdapter {
   chain = NETWORKS.bitcoin.key;

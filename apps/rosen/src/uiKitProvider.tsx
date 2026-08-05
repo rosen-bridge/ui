@@ -5,11 +5,7 @@ import NextLink from 'next/link';
 
 import * as AllIcons from '@rosen-bridge/icons';
 import type { TokenMap } from '@rosen-bridge/tokens';
-import {
-  type ConfigContextType,
-  ConfigProvider,
-  type DefaultColor,
-} from '@rosen-bridge/ui-kit';
+import { type ConfigContextType, ConfigProvider, type DefaultColor } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 import type { Network } from '@rosen-ui/types';
 
@@ -34,9 +30,7 @@ declare module '@rosen-bridge/ui-kit' {
   }
 }
 
-const getUiKitConfig: (tokenMap: TokenMap) => ConfigContextType = (
-  tokenMap,
-) => ({
+const getUiKitConfig: (tokenMap: TokenMap) => ConfigContextType = (tokenMap) => ({
   components: {
     Connector: {
       defaultProps: {
@@ -55,9 +49,7 @@ const getUiKitConfig: (tokenMap: TokenMap) => ConfigContextType = (
     },
     Icon: {
       defaultProps: {
-        icons: Object.fromEntries(
-          Object.entries(AllIcons).filter(([key]) => key !== 'TOKENS'),
-        ),
+        icons: Object.fromEntries(Object.entries(AllIcons).filter(([key]) => key !== 'TOKENS')),
       },
     },
     Image: {
@@ -103,9 +95,7 @@ const getUiKitConfig: (tokenMap: TokenMap) => ConfigContextType = (
               token.tokenId,
               {
                 label: token.name,
-                logo: AllIcons.TOKENS[
-                  tokens.ergo.tokenId as keyof typeof AllIcons.TOKENS
-                ],
+                logo: AllIcons.TOKENS[tokens.ergo.tokenId as keyof typeof AllIcons.TOKENS],
               },
             ]),
           ),

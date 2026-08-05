@@ -136,15 +136,8 @@ export const HealthParamCard = ({
             {value.details}
           </Alert>
         )}
-        <Stack
-          align="center"
-          direction="row"
-          justify="between"
-          style={{ marginTop: 'auto' }}
-        >
-          <Typography variant="body2">
-            Last check: {formattedLastCheck}
-          </Typography>
+        <Stack align="center" direction="row" justify="between" style={{ marginTop: 'auto' }}>
+          <Typography variant="body2">Last check: {formattedLastCheck}</Typography>
           {/* Note that "Check now" feature only works with a real watcher instance and its functionality cannot be mocked now */}
           <Button
             loading={checking}

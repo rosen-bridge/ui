@@ -16,13 +16,7 @@ import { Icon } from '../../icon';
 import { IconButton } from '../../iconButton';
 import { Truncate } from '../../truncate';
 import { Divider } from '../Divider';
-import {
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemText,
-  ListSubheader,
-} from '../Mui';
+import { List, ListItem, ListItemButton, ListItemText, ListSubheader } from '../Mui';
 import { Popup } from './Popup';
 import type { Filter, Selected } from './types';
 import { parseFilter } from './utils';
@@ -65,24 +59,16 @@ export const History = forwardRef<HistoryRef, HistoryProps>(
 
     const [items, setItems] = useState<Item[]>([]);
 
-    const bookmarks = useMemo(
-      () => items.filter((item) => item.bookmark),
-      [items],
-    );
+    const bookmarks = useMemo(() => items.filter((item) => item.bookmark), [items]);
 
-    const recent = useMemo(
-      () => items.filter((item) => !item.bookmark),
-      [items],
-    );
+    const recent = useMemo(() => items.filter((item) => !item.bookmark), [items]);
 
     const getKey = useCallback((selected: Selected[]) => {
       return JSON.stringify(selected);
     }, []);
 
     const load = useCallback(() => {
-      const raw = window.localStorage.getItem(
-        `rosen:searchable-filter:${namespace}`,
-      );
+      const raw = window.localStorage.getItem(`rosen:searchable-filter:${namespace}`);
 
       const json = trim(JSON.parse(raw || '[]'));
 
@@ -92,10 +78,7 @@ export const History = forwardRef<HistoryRef, HistoryProps>(
     const save = useCallback(
       (items: Item[]) => {
         const raw = JSON.stringify(items);
-        window.localStorage.setItem(
-          `rosen:searchable-filter:${namespace}`,
-          raw,
-        );
+        window.localStorage.setItem(`rosen:searchable-filter:${namespace}`, raw);
       },
       [namespace],
     );
@@ -182,11 +165,7 @@ export const History = forwardRef<HistoryRef, HistoryProps>(
     return (
       <ClickAwayListener onClickAway={() => setOpen(false)}>
         <div>
-          <IconButton
-            disabled={disabled}
-            ref={$anchor}
-            onClick={() => setOpen(!open)}
-          >
+          <IconButton disabled={disabled} ref={$anchor} onClick={() => setOpen(!open)}>
             <Icon name="History" />
           </IconButton>
           <Popup anchorEl={$anchor.current} open={open}>
@@ -215,11 +194,7 @@ export const History = forwardRef<HistoryRef, HistoryProps>(
                         onClick={() => handleClick(item)}
                       >
                         <ListItemButton>
-                          <ListItemText
-                            primary={
-                              <Truncate lines={1}>{getTitle(item)}</Truncate>
-                            }
-                          />
+                          <ListItemText primary={<Truncate lines={1}>{getTitle(item)}</Truncate>} />
                         </ListItemButton>
                       </ListItem>
                     ))}
@@ -251,11 +226,7 @@ export const History = forwardRef<HistoryRef, HistoryProps>(
                     onClick={() => handleClick(item)}
                   >
                     <ListItemButton>
-                      <ListItemText
-                        primary={
-                          <Truncate lines={1}>{getTitle(item)}</Truncate>
-                        }
-                      />
+                      <ListItemText primary={<Truncate lines={1}>{getTitle(item)}</Truncate>} />
                     </ListItemButton>
                   </ListItem>
                 ))}

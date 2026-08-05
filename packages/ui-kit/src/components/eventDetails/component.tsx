@@ -50,10 +50,7 @@ export type EventDetailsOwnProps = {
   };
 };
 
-export type EventDetailsBaseProps = ElementBaseProps<
-  typeof Columns,
-  EventDetailsOwnProps
->;
+export type EventDetailsBaseProps = ElementBaseProps<typeof Columns, EventDetailsOwnProps>;
 
 export type EventDetailsProps = OverridableType<
   EventDetailsBaseProps,
@@ -96,25 +93,15 @@ export const EventDetails = (props: EventDetailsProps) => {
           <Label label="Chain" />
           <LabelGroup>
             <Label label="From" inset>
-              <Network
-                value={value.fromChain}
-                variant="reverse"
-                loading={loading}
-              />
+              <Network value={value.fromChain} variant="reverse" loading={loading} />
             </Label>
             <Label label="To" inset>
-              <Network
-                value={value.toChain}
-                variant="reverse"
-                loading={loading}
-              />
+              <Network value={value.toChain} variant="reverse" loading={loading} />
             </Label>
           </LabelGroup>
         </div>
       )}
-      {('sourceTxId' in value ||
-        'paymentTxId' in value ||
-        'spendTxId' in value) && (
+      {('sourceTxId' in value || 'paymentTxId' in value || 'spendTxId' in value) && (
         <div>
           <Label label="Tx ID" />
           <LabelGroup>

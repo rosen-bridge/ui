@@ -12,10 +12,7 @@ export type TableGridCellOwnProps = {
   width?: Width;
 };
 
-export type TableGridCellBaseProps = ElementBaseProps<
-  'div',
-  TableGridCellOwnProps
->;
+export type TableGridCellBaseProps = ElementBaseProps<'div', TableGridCellOwnProps>;
 
 export type TableGridCellProps = OverridableType<
   TableGridCellBaseProps,

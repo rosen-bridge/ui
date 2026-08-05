@@ -12,16 +12,9 @@ export type IconButtonOwnProps = {
   target?: HTMLAttributeAnchorTarget;
 };
 
-export type IconButtonBaseProps = ElementBaseProps<
-  typeof IconButtonMUI,
-  IconButtonOwnProps
->;
+export type IconButtonBaseProps = ElementBaseProps<typeof IconButtonMUI, IconButtonOwnProps>;
 
-export type IconButtonProps = OverridableType<
-  IconButtonBaseProps,
-  IconButtonOverrides,
-  never
->;
+export type IconButtonProps = OverridableType<IconButtonBaseProps, IconButtonOverrides, never>;
 
 export const IconButton = (props: IconButtonProps) => {
   const { ...rest } = useConfig('IconButton', props);

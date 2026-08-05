@@ -9,10 +9,7 @@ export interface CubeNetBackgroundOverrides {}
 
 export type CubeNetBackgroundOwnProps = {};
 
-export type CubeNetBackgroundBaseProps = ElementBaseProps<
-  'div',
-  CubeNetBackgroundOwnProps
->;
+export type CubeNetBackgroundBaseProps = ElementBaseProps<'div', CubeNetBackgroundOwnProps>;
 
 export type CubeNetBackgroundProps = OverridableType<
   CubeNetBackgroundBaseProps,

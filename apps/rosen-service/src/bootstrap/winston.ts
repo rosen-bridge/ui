@@ -6,9 +6,7 @@ import config from '../configs';
 import AppError from '../errors/AppError';
 
 try {
-  DefaultLogger.init(
-    new CallbackLogger(WinstonLogger.createLogger(config.logs)),
-  );
+  DefaultLogger.init(new CallbackLogger(WinstonLogger.createLogger(config.logs)));
 } catch (error) {
   throw new AppError(
     `Cannot initialize logger due to error: ${error}`,

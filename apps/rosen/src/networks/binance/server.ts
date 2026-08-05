@@ -23,12 +23,9 @@ export const generateLockData = wrap(generateLockDataCore, {
   traceKey: 'binance:generateLockData',
 });
 
-export const generateTxParameters = wrap(
-  generateTxParametersCore(getTokenMap),
-  {
-    traceKey: 'binance:generateTxParameters',
-  },
-);
+export const generateTxParameters = wrap(generateTxParametersCore(getTokenMap), {
+  traceKey: 'binance:generateTxParameters',
+});
 
 export const getMaxTransfer = wrap(getMaxTransferCore(getTokenMap), {
   traceKey: 'binance:getMaxTransfer',

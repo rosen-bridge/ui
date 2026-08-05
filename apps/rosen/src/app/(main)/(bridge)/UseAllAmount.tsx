@@ -21,10 +21,7 @@ export const UseAllAmount = ({
 }: UseAllAmountProps) => {
   return (
     <Stack direction="row" align="center" justify="between" spacing={1.5}>
-      <Divider
-        orientation="vertical"
-        style={{ alignSelf: 'stretch', height: 'auto' }}
-      />
+      <Divider orientation="vertical" style={{ alignSelf: 'stretch', height: 'auto' }} />
       {!error && (
         <Button disabled={disabled} loading={loading} onClick={onClick}>
           <span style={{ whiteSpace: 'nowrap' }}>

@@ -58,9 +58,7 @@ export const Section = ({
           {collapsible && <DisclosureButton disclosure={disclosure} />}
         </CardAction>
       </CardHeader>
-      <Collapsible
-        open={!collapsible || disclosure.state === 'open' || !!error}
-      >
+      <Collapsible open={!collapsible || disclosure.state === 'open' || !!error}>
         <CardBody>
           {!error && children}
           {!!error && (

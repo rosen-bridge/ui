@@ -7,5 +7,4 @@ import type { ApiInfoResponse } from '@/types/api';
 /**
  * wrap useSWR for fetching info api
  */
-export const useInfo = () =>
-  useSWR<ApiInfoResponse>('/info', fetcher, { dedupingInterval: 25000 });
+export const useInfo = () => useSWR<ApiInfoResponse>('/info', fetcher, { dedupingInterval: 25000 });
