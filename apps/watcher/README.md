@@ -16,8 +16,8 @@ Follow these steps to set up and run your local version of Watcher App:
 3. **Install Dependencies and Build Packages**
    ```bash
    npm install
-   ./build.sh
    cd apps/watcher
+   npm run bootstrap
    ```
 4. **Launch the App**
    ```bash

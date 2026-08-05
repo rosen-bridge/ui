@@ -12,6 +12,7 @@
   "main": "dist/main.js",
   "types": "dist/main.d.ts",
   "scripts": {
+    "bootstrap": "turbo build --filter=@rosen-bridge/rosen-service^...",
     "get-config": "npx @rosen-bridge/cli download-assets --chain-type public-launch --out config",
     "lint": "biome check --write",
     "lint:check": "biome check",

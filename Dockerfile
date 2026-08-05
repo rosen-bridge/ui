@@ -32,7 +32,7 @@ RUN npm i -g npm@11.6.2
 WORKDIR /app
 COPY --chown=ergo:ergo . .
 RUN --mount=type=cache,target=/root/.npm npm ci
-RUN ./build.sh rosen-service
+RUN npm run bootstrap --workspace=@rosen-bridge/rosen-service
 USER ergo
 WORKDIR  /app/apps/rosen-service/
 ENTRYPOINT ["npm", "run", "start"]

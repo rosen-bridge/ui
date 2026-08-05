@@ -52,7 +52,7 @@ jobs:
             TARGET_FIELD='"target": "production",'
           fi
 
-          curl -fsS -X POST "https://api.vercel.com/v13/deployments?teamId=$VERCEL_ORG_ID" \
+          RESPONSE=$(curl -fsS -X POST "https://api.vercel.com/v13/deployments?teamId=$VERCEL_ORG_ID" \
             -H "Authorization: Bearer $VERCEL_TOKEN" \
             -H "Content-Type: application/json" \
             -d "{
@@ -65,4 +65,58 @@ jobs:
                 \"ref\": \"$REF\",
                 \"sha\": \"$SHA\"
               }
-            }"
+            }")
+
+          echo "VERCEL_URL=https://$(echo "$RESPONSE" | jq -r '.url')" >> $GITHUB_ENV
+
+      - name: Notify Discord
+        if: env.VERCEL_URL != ''
+        env:
+          APP: ${{ matrix.app }}
+          DISCORD_NOTIFICATION_WEBHOOK_URL: ${{ secrets.DISCORD_NOTIFICATION_WEBHOOK_URL }}
+        run: |
+          JSON_PAYLOAD=$(cat <<EOF
+          {
+            "embeds": [
+              {
+                "title": "🚀 New Deployment Notification",
+                "color": 3447003,
+                "description": "A new deployment has been triggered on **Vercel**.",
+                "fields": [
+                  {
+                    "name": "📱 App",
+                    "value": "$APP",
+                    "inline": false
+                  },
+                  {
+                    "name": "🌍 Branch URL",
+                    "value": "[$VERCEL_URL](https://$VERCEL_URL)",
+                    "inline": false
+                  },     
+                  {
+                    "name": "📜 Commit Message",
+                    "value": "${{ github.event.head_commit.message }}",
+                    "inline": false
+                  },
+                  {
+                    "name": "🌿 Branch",
+                    "value": "${{ github.ref_name }}",
+                    "inline": false
+                  }, 
+                  {
+                    "name": "👤 Author",
+                    "value": "${{ github.actor }}",
+                    "inline": false
+                  }
+                ],
+                "timestamp": "$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+              }
+            ]
+          }
+          EOF
+          )
+
+          curl -fsS -X POST \
+            -H "Content-Type: application/json" \
+            -d "$JSON_PAYLOAD" \
+            "$DISCORD_NOTIFICATION_WEBHOOK_URL"

@@ -42,7 +42,7 @@ jobs:
       - name: Build dependencies
         run: |
           npm ci 
-          ./build.sh ${{ matrix.apps }}
+          npm run bootstrap --workspace=@rosen-bridge/${{ matrix.apps }}-app
 
       - name: Move Config Files
         run: |
