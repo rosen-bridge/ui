@@ -1,0 +1,60 @@
+.RosenEmptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--rosen-spacing);
+}
+.RosenEmptyState-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 88px;
+  height: 88px;
+  background-color: var(--rosen-palette-primary-light);
+  border-radius: 50%;
+  opacity: 0.5;
+}
+.RosenEmptyState-circle {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  & > svg {
+    width: 40px;
+    height: 40px;
+    color: var(--rosen-palette-primary-main);
+  }
+}
+.RosenEmptyState-count {
+  position: absolute;
+  top: -10px;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 23px;
+  height: 23px;
+  font-size: 14px;
+  line-height: 1;
+  color: var(--rosen-palette-background-paper);
+  background-color: var(--rosen-palette-primary-main);
+  border-radius: 50%;
+  cursor: default;
+  border: 2px solid var(--rosen-palette-info-light);
+}
+.RosenEmptyState-title {
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: inherit;
+}
+.RosenEmptyState-subtitle {
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.43;
+  color: inherit;
+  opacity: 0.7;
+}
