@@ -1,10 +1,5 @@
-import {
-  type AbstractLogger,
-  DummyLogger,
-} from '@rosen-bridge/abstract-logger';
-import ergoNodeClientFactory, {
-  type IndexedErgoBox,
-} from '@rosen-clients/ergo-node';
+import { type AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
+import ergoNodeClientFactory, { type IndexedErgoBox } from '@rosen-clients/ergo-node';
 
 export class NodeBoxFetcher {
   private readonly PAGE_SIZE = 100;
@@ -23,9 +18,7 @@ export class NodeBoxFetcher {
    * @param tokenId - Token ID to fetch boxes for
    * @returns Array of IndexedErgoBox objects representing unspent boxes
    */
-  fetchUnspentBoxesByTokenId = async (
-    tokenId: string,
-  ): Promise<IndexedErgoBox[]> => {
+  fetchUnspentBoxesByTokenId = async (tokenId: string): Promise<IndexedErgoBox[]> => {
     const boxes: IndexedErgoBox[] = [];
     let currentPage = 0;
 

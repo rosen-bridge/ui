@@ -9,11 +9,7 @@ export type CardHeaderOwnProps = {};
 
 export type CardHeaderBaseProps = ElementBaseProps<'div', CardHeaderOwnProps>;
 
-export type CardHeaderProps = OverridableType<
-  CardHeaderBaseProps,
-  CardHeaderOverrides,
-  never
->;
+export type CardHeaderProps = OverridableType<CardHeaderBaseProps, CardHeaderOverrides, never>;
 
 export const CardHeader = (props: CardHeaderProps) => {
   const { ...rest } = useConfig('CardHeader', props);

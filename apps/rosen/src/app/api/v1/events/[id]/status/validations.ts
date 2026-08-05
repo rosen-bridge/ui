@@ -19,10 +19,6 @@ export const validateGet = async (
   context: { params: Promise<GetEventStatusParams> },
 ) => {
   return ParamsSchema.validate(
-    Object.assign(
-      {},
-      await context.params,
-      Object.fromEntries(request.nextUrl.searchParams),
-    ),
+    Object.assign({}, await context.params, Object.fromEntries(request.nextUrl.searchParams)),
   );
 };

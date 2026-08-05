@@ -1,8 +1,4 @@
-import {
-  createTheme,
-  darkThemeOptions,
-  lightThemeOptions,
-} from '@rosen-bridge/ui-kit';
+import { createTheme, darkThemeOptions, lightThemeOptions } from '@rosen-bridge/ui-kit';
 
 const customLightThemeOptions = {
   palette: {

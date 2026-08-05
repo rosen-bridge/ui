@@ -12,10 +12,7 @@ export type CarouselButtonOwnProps = {
   type: 'next' | 'prev';
 };
 
-export type CarouselButtonBaseProps = ElementBaseProps<
-  typeof IconButton,
-  CarouselButtonOwnProps
->;
+export type CarouselButtonBaseProps = ElementBaseProps<typeof IconButton, CarouselButtonOwnProps>;
 
 export type CarouselButtonProps = OverridableType<
   CarouselButtonBaseProps,

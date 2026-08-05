@@ -49,23 +49,13 @@ export const InfoWidgetCard = ({
           />
           <Stack direction="column" style={{ flexGrow: 1, minWidth: 0 }}>
             <Stack direction="row" align="center" justify="between">
-              <Typography
-                variant="h6"
-                color="primary-contrastText"
-                lineHeight="normal"
-              >
+              <Typography variant="h6" color="primary-contrastText" lineHeight="normal">
                 {isLoading && <CircularProgress size={16} color="inherit" />}
                 {!isLoading && <Truncate lines={1}>{value}</Truncate>}
               </Typography>
               {warning && (
-                <Tooltip
-                  title={<div style={{ whiteSpace: 'pre' }}>{warning}</div>}
-                >
-                  <Icon
-                    color="primary-contrastText"
-                    name="ExclamationTriangleFill"
-                    size="small"
-                  />
+                <Tooltip title={<div style={{ whiteSpace: 'pre' }}>{warning}</div>}>
+                  <Icon color="primary-contrastText" name="ExclamationTriangleFill" size="small" />
                 </Tooltip>
               )}
             </Stack>

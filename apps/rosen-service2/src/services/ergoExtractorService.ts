@@ -1,18 +1,11 @@
 import type { AbstractExtractor } from '@rosen-bridge/abstract-extractor';
-import {
-  type AbstractLogger,
-  DummyLogger,
-} from '@rosen-bridge/abstract-logger';
+import { type AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
 import { ErgoObservationExtractor } from '@rosen-bridge/ergo-observation-extractor';
 import type { ErgoScanner } from '@rosen-bridge/ergo-scanner';
 import type { TokenMap } from '@rosen-bridge/extended-tokens';
 import type { DataSource, ObjectLiteral } from '@rosen-bridge/extended-typeorm';
 import type { Transaction } from '@rosen-bridge/scanner-interfaces';
-import {
-  type Dependency,
-  ServiceAction,
-  ServiceStatus,
-} from '@rosen-bridge/service-manager';
+import { type Dependency, ServiceAction, ServiceStatus } from '@rosen-bridge/service-manager';
 import { NETWORKS } from '@rosen-ui/constants';
 
 import { configs } from '../configs';
@@ -34,29 +27,17 @@ export class ErgoExtractorService extends AbstractErgoExtractorsService {
   protected dependencies: Dependency[] = [
     {
       serviceName: AbstractErgoScannerService.name,
-      allowedStatuses: [
-        ServiceStatus.started,
-        ServiceStatus.running,
-        ServiceStatus.dormant,
-      ],
+      allowedStatuses: [ServiceStatus.started, ServiceStatus.running, ServiceStatus.dormant],
       action: ServiceAction.assemble,
     },
     {
       serviceName: AbstractTokenMapService.name,
-      allowedStatuses: [
-        ServiceStatus.started,
-        ServiceStatus.running,
-        ServiceStatus.dormant,
-      ],
+      allowedStatuses: [ServiceStatus.started, ServiceStatus.running, ServiceStatus.dormant],
       action: ServiceAction.assemble,
     },
     {
       serviceName: AbstractDBService.name,
-      allowedStatuses: [
-        ServiceStatus.started,
-        ServiceStatus.running,
-        ServiceStatus.dormant,
-      ],
+      allowedStatuses: [ServiceStatus.started, ServiceStatus.running, ServiceStatus.dormant],
       action: ServiceAction.assemble,
     },
   ];
@@ -67,8 +48,7 @@ export class ErgoExtractorService extends AbstractErgoExtractorsService {
    * @returns {Promise<boolean>} Resolves to `true` when the assembly is successfully completed.
    */
   protected assemble = async (): Promise<boolean> => {
-    this.ergoScanner =
-      AbstractErgoScannerService.getInstance().getErgoScanner();
+    this.ergoScanner = AbstractErgoScannerService.getInstance().getErgoScanner();
     this.dataSource = AbstractDBService.getInstance().getDataSource();
     this.tokenMap = AbstractTokenMapService.getInstance().getTokenMap();
     const { networkType, url } = resolveErgoNetworkConfig();
@@ -94,18 +74,9 @@ export class ErgoExtractorService extends AbstractErgoExtractorsService {
       const chainConfig = configs.chains[chain as ChainChoices];
       if ('active' in chainConfig && chainConfig.active) {
         const network = NETWORKS[chain as keyof typeof NETWORKS];
-        const contract = configs.contracts[
-          chain as keyof typeof configs.contracts
-        ] as ChainConfigs;
+        const contract = configs.contracts[chain as keyof typeof configs.contracts] as ChainConfigs;
         this.extractors.push(
-          createEventTrigger(
-            network.key,
-            networkType,
-            url,
-            this.dataSource,
-            contract,
-            this.logger,
-          ),
+          createEventTrigger(network.key, networkType, url, this.dataSource, contract, this.logger),
         );
       }
     });

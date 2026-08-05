@@ -1,9 +1,6 @@
 import { Ethereum as EthereumIcon } from '@rosen-bridge/icons';
 import type { Network, NetworkConfig } from '@rosen-network/base';
-import type {
-  generateLockData,
-  generateTxParameters,
-} from '@rosen-network/evm';
+import type { generateLockData, generateTxParameters } from '@rosen-network/evm';
 import { NETWORKS } from '@rosen-ui/constants';
 
 type EthereumNetworkConfig = NetworkConfig & {
@@ -31,27 +28,19 @@ export class EthereumNetwork implements Network {
     return this.config.calculateFee(...args);
   };
 
-  public generateLockData: EthereumNetworkConfig['generateLockData'] = (
-    ...args
-  ) => {
+  public generateLockData: EthereumNetworkConfig['generateLockData'] = (...args) => {
     return this.config.generateLockData(...args);
   };
 
-  public generateTxParameters: EthereumNetworkConfig['generateTxParameters'] = (
-    ...args
-  ) => {
+  public generateTxParameters: EthereumNetworkConfig['generateTxParameters'] = (...args) => {
     return this.config.generateTxParameters(...args);
   };
 
-  public getMaxTransfer: EthereumNetworkConfig['getMaxTransfer'] = (
-    ...args
-  ) => {
+  public getMaxTransfer: EthereumNetworkConfig['getMaxTransfer'] = (...args) => {
     return this.config.getMaxTransfer(...args);
   };
 
-  public getMinTransfer: EthereumNetworkConfig['getMinTransfer'] = (
-    ...args
-  ) => {
+  public getMinTransfer: EthereumNetworkConfig['getMinTransfer'] = (...args) => {
     return this.config.getMinTransfer(...args);
   };
 

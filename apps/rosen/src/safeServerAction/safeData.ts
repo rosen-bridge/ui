@@ -16,10 +16,7 @@ type ToSafeData = <Func extends AsyncFunction>(
   func: Func,
 ) => (...args: Parameters<Func>) => Promise<Awaited<ReturnType<Func>>>;
 
-const processDataType = (
-  input: any,
-  convertor: (value: any, type: string) => any,
-): any => {
+const processDataType = (input: any, convertor: (value: any, type: string) => any): any => {
   const type = typeof input;
 
   if (type !== 'object') return convertor(input, type);

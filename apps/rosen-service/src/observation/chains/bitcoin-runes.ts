@@ -17,9 +17,7 @@ const logger = DefaultLogger.getInstance().child(import.meta.url);
  * register an observation extractor for the provided scanner
  * @param scanner
  */
-export const registerBitcoinRunesExtractor = async (
-  scanner: BitcoinRpcScanner,
-) => {
+export const registerBitcoinRunesExtractor = async (scanner: BitcoinRpcScanner) => {
   try {
     // TODO: Ordiscan should also be added as an observation network in rosen-service2
     const observationNetwork = new UnisatRunesProtocolNetwork(

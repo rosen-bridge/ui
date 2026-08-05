@@ -9,11 +9,7 @@ export const CubeNetSvg = ({ className, color }: CubeNetSvgProps) => {
   const theme = useTheme();
   const _color = theme.palette.mode === 'light' ? color : 'primary';
   return (
-    <svg
-      viewBox="0 0 1074 278.5"
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-    >
+    <svg viewBox="0 0 1074 278.5" xmlns="http://www.w3.org/2000/svg" className={className}>
       <defs>
         <linearGradient
           id="primaryFadeGradient"
@@ -23,16 +19,8 @@ export const CubeNetSvg = ({ className, color }: CubeNetSvgProps) => {
           y1="0"
           y2="100%"
         >
-          <stop
-            offset="0%"
-            stopColor={theme.palette.primary.main}
-            stopOpacity="0.4"
-          />
-          <stop
-            offset="100%"
-            stopColor={theme.palette.background.default}
-            stopOpacity="0"
-          />
+          <stop offset="0%" stopColor={theme.palette.primary.main} stopOpacity="0.4" />
+          <stop offset="100%" stopColor={theme.palette.background.default} stopOpacity="0" />
         </linearGradient>
         <linearGradient
           id="secondaryFadeGradient"
@@ -42,22 +30,11 @@ export const CubeNetSvg = ({ className, color }: CubeNetSvgProps) => {
           y1="0"
           y2="100%"
         >
-          <stop
-            offset="0%"
-            stopColor={theme.palette.secondary.main}
-            stopOpacity="0.4"
-          />
-          <stop
-            offset="100%"
-            stopColor={theme.palette.background.default}
-            stopOpacity="0"
-          />
+          <stop offset="0%" stopColor={theme.palette.secondary.main} stopOpacity="0.4" />
+          <stop offset="100%" stopColor={theme.palette.background.default} stopOpacity="0" />
         </linearGradient>
       </defs>
-      <g
-        fill={`url(#${_color}FadeGradient)`}
-        stroke={`url(#${_color}FadeGradient)`}
-      >
+      <g fill={`url(#${_color}FadeGradient)`} stroke={`url(#${_color}FadeGradient)`}>
         <g opacity=".3">
           <path d="M899.5 122l174-100M968.5 82l35 20M1038.5 3l-35 20M1072.5 62l-69-39M1003.5 102l69-40M1038.5 120V3M968.5 161V82M934.5 143v-40M795.5 22l173 100M865.5 142l-1-120M830.5 122V3M1003.5 102V23M865.5 102l-35 20M865.5 102l34 20M795.5 142V22M795.5 62l35 20M796.5 103l34-21M796.5 103l-105-60M760.5 123V3M691.5 161l69-38M760.5 123l35 19M899.5 122V82M830.5 3l-381 220M415.5 201l69 41M484.5 242l69-41M483.5 277l1-155M553.5 278V81M588.5 262V101M726.5 181v-80M553.5 2l173 99M657.5 63l103-60M691.5 161V42M726.5 142l-35-20M587.5 181l104-59M657.5 181v-80M622.5 199v-38M554.5 162l33 19M588.5 222l-35 19M518.5 222l35 19M518.5 23v199M415.5 201l138-79M483.5 83l70 39M483.5 202l-208-120M345.5 202V3M345.5 83l34 19M242.5 182l172-100M379.5 222v-80M414.5 243v-81M379.5 182l35-20M345.5 162l34 20M449.5 222l-1-160M310.5 222l1-80M310.5 63l68-40M206.5 42l69-39M206.5 3v39M33.5 3l2 58M.5 82l102-60M34.5 22l68 40M67.5 2l-33 20M67.5 122V2M172.5 182l-105-60M67.5 82l69-40M67.5 122l70-40M101.5 142l1-80M137.5 122l-36 20M137.5 161v-39M242.5 182l-140-80M172.5 222V21M172.5 182l138-80M311.5 182l-174-100M172.5 141l103-59M311.5 142l-209-120M275.5 122V3M242.5 182v-40M206.5 122v40M483.5 83l70-42M587.5 61l1-58M691.5 161l-69-40M518.5 21l-34-18" />
           <g>

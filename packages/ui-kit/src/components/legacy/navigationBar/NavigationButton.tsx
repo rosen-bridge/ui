@@ -34,18 +34,14 @@ const NavigationButtonBase = styled(Button)(({ theme }) => ({
   '&.active': {
     'opacity': 1,
     'color':
-      theme.palette.mode === 'light'
-        ? theme.palette.common.white
-        : theme.palette.primary.main,
+      theme.palette.mode === 'light' ? theme.palette.common.white : theme.palette.primary.main,
     '& .MuiButton-startIcon': {
       color:
         theme.palette.mode === 'light'
           ? alpha(theme.palette.common.black, 0.8)
           : theme.palette.primary.contrastText,
       backgroundColor:
-        theme.palette.mode === 'light'
-          ? theme.palette.common.white
-          : theme.palette.primary.main,
+        theme.palette.mode === 'light' ? theme.palette.common.white : theme.palette.primary.main,
     },
   },
   [theme.breakpoints.down('tablet')]: {
@@ -97,13 +93,7 @@ export type NavigationButtonProps = {
  * @property {boolean} isActive - if true the component will be rendered in active state
  * @property {boolean} disabled - if true the component will be rendered in disabled state
  */
-export const NavigationButton = ({
-  badge,
-  label,
-  icon,
-  path,
-  disabled,
-}: NavigationButtonProps) => {
+export const NavigationButton = ({ badge, label, icon, path, disabled }: NavigationButtonProps) => {
   const { router } = useFramework();
 
   const isActive = router.pathname === path;

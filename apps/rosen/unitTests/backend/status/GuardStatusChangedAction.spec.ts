@@ -5,11 +5,7 @@ import { EventStatus, GuardStatusChangedEntity } from '@rosen-ui/public-status';
 import GuardStatusChangedAction from '@/backend/status/GuardStatusChangedAction';
 
 import { DataSourceMock } from '../../mocked/DataSource.mock';
-import {
-  mockGuardStatusChangedRecords,
-  mockPaginationTestData,
-  triggerId0,
-} from './testData';
+import { mockGuardStatusChangedRecords, mockPaginationTestData, triggerId0 } from './testData';
 
 describe('GuardStatusChangedAction', () => {
   beforeAll(() => {
@@ -62,14 +58,13 @@ describe('GuardStatusChangedAction', () => {
      */
     it('should call repository.find with DESC ordering on insertedAt field', async () => {
       // act
-      const { total, items } =
-        await GuardStatusChangedAction.getInstance().getMany(
-          testDataSource.getRepository(GuardStatusChangedEntity),
-          triggerId0,
-          ['pk'],
-          0,
-          100,
-        );
+      const { total, items } = await GuardStatusChangedAction.getInstance().getMany(
+        testDataSource.getRepository(GuardStatusChangedEntity),
+        triggerId0,
+        ['pk'],
+        0,
+        100,
+      );
 
       // assert
       expect(total).toBe(0);
@@ -93,43 +88,35 @@ describe('GuardStatusChangedAction', () => {
      */
     it('should respond with respect to pagination params', async () => {
       // arrange
-      await DataSourceMock.populateGuardStatusChanged(
-        mockPaginationTestData.guardStatusChanged,
-      );
+      await DataSourceMock.populateGuardStatusChanged(mockPaginationTestData.guardStatusChanged);
 
       // act
-      const { total, items } =
-        await GuardStatusChangedAction.getInstance().getMany(
-          testDataSource.getRepository(GuardStatusChangedEntity),
-          triggerId0,
-          [],
-          0,
-          6,
-        );
+      const { total, items } = await GuardStatusChangedAction.getInstance().getMany(
+        testDataSource.getRepository(GuardStatusChangedEntity),
+        triggerId0,
+        [],
+        0,
+        6,
+      );
 
       // assert
       expect(total).toBe(10);
       expect(items).toHaveLength(6);
-      expect(items).toEqual(
-        mockPaginationTestData.guardStatusChanged.toReversed().slice(0, 6),
-      );
+      expect(items).toEqual(mockPaginationTestData.guardStatusChanged.toReversed().slice(0, 6));
 
       // act
-      const { total: total2, items: items2 } =
-        await GuardStatusChangedAction.getInstance().getMany(
-          testDataSource.getRepository(GuardStatusChangedEntity),
-          triggerId0,
-          [],
-          5,
-          10,
-        );
+      const { total: total2, items: items2 } = await GuardStatusChangedAction.getInstance().getMany(
+        testDataSource.getRepository(GuardStatusChangedEntity),
+        triggerId0,
+        [],
+        5,
+        10,
+      );
 
       // assert
       expect(total2).toBe(10);
       expect(items2).toHaveLength(5);
-      expect(items2).toEqual(
-        mockPaginationTestData.guardStatusChanged.toReversed().slice(5),
-      );
+      expect(items2).toEqual(mockPaginationTestData.guardStatusChanged.toReversed().slice(5));
     });
   });
 

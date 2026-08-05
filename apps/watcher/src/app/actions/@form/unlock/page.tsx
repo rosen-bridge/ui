@@ -37,17 +37,12 @@ const UnlockForm = () => {
   const { confirm } = useConfirm();
   const toast = useToast();
 
-  const { data: info, isLoading: isInfoLoading } = useSWR<ApiInfoResponse>(
-    '/info',
-    fetcher,
-  );
+  const { data: info, isLoading: isInfoLoading } = useSWR<ApiInfoResponse>('/info', fetcher);
 
   const { rsnToken, isLoading: isRsnTokenLoading } = useRsnToken();
   const { apiKey } = useApiKey();
 
-  const rwtPartialToken = useMemo<
-    Pick<TokenInfo, 'amount' | 'decimals'> | undefined
-  >(
+  const rwtPartialToken = useMemo<Pick<TokenInfo, 'amount' | 'decimals'> | undefined>(
     () =>
       info?.permitCount.active
         ? {
@@ -117,10 +112,7 @@ const UnlockForm = () => {
 
   const submit = async () => {
     try {
-      const count = getNonDecimalString(
-        formData.amount,
-        rsnToken?.decimals ?? 0,
-      );
+      const count = getNonDecimalString(formData.amount, rsnToken?.decimals ?? 0);
       const response = await trigger({
         data: { count },
         headers: {
@@ -134,10 +126,7 @@ const UnlockForm = () => {
           description: (
             <>
               Unlock operation is in progress. Wait for tx [
-              <Link
-                target="_blank"
-                href={getTxURL(NETWORKS.ergo.key, response.txId) ?? '/'}
-              >
+              <Link target="_blank" href={getTxURL(NETWORKS.ergo.key, response.txId) ?? '/'}>
                 {response.txId}
               </Link>
               ] to be confirmed by some blocks.
@@ -145,9 +134,7 @@ const UnlockForm = () => {
           ),
         });
       } else {
-        throw new Error(
-          'Server responded but the response message was unexpected',
-        );
+        throw new Error('Server responded but the response message was unexpected');
       }
       /**
        * TODO: remove the inline Biome comment
@@ -186,8 +173,7 @@ const UnlockForm = () => {
     });
   };
 
-  const disabled =
-    isInfoLoading || isRsnTokenLoading || !rwtPartialToken?.amount;
+  const disabled = isInfoLoading || isRsnTokenLoading || !rwtPartialToken?.amount;
 
   const renderTokenAmountTextField = () => (
     <TokenAmountTextField
@@ -205,10 +191,7 @@ const UnlockForm = () => {
           <ApiKeyDialogWarning />
           {renderTokenAmountTextField()}
           <ApiKeyDialogProtectedAction>
-            <SubmitButton
-              loading={isUnlockPending}
-              disabled={!formState.isValid || disabled}
-            >
+            <SubmitButton loading={isUnlockPending} disabled={!formState.isValid || disabled}>
               Unlock
             </SubmitButton>
           </ApiKeyDialogProtectedAction>

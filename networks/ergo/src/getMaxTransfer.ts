@@ -6,13 +6,7 @@ import { fee as ergoFee, minBoxValue as ergoMinBoxValue } from './constants';
 
 export const getMaxTransferCreator =
   (getTokenMap: () => Promise<TokenMap>) =>
-  async ({
-    balance,
-    isNative,
-  }: {
-    balance: RosenAmountValue;
-    isNative: boolean;
-  }) => {
+  async ({ balance, isNative }: { balance: RosenAmountValue; isNative: boolean }) => {
     const tokenMap = await getTokenMap();
     const feeAndMinBoxValueWrapped = tokenMap.wrapAmount(
       NETWORKS.ergo.nativeToken,

@@ -11,11 +11,7 @@ export type CarouselOwnProps = {};
 
 export type CarouselBaseProps = ElementBaseProps<'div', CarouselOwnProps>;
 
-export type CarouselProps = OverridableType<
-  CarouselBaseProps,
-  CarouselOverrides,
-  never
->;
+export type CarouselProps = OverridableType<CarouselBaseProps, CarouselOverrides, never>;
 
 export const Carousel = (props: CarouselProps) => {
   const { children, ...rest } = useConfig('Carousel', props);

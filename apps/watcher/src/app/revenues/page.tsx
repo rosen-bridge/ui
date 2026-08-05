@@ -60,12 +60,8 @@ const Revenues = () => {
   const getRSNIncome = (item?: Revenue) => {
     if (!item?.revenues) return;
 
-    const rsnTokenInfo = item.revenues.find(
-      (token) => token.tokenId === rsnToken?.tokenId,
-    );
-    const eRsnTokenInfo = item.revenues.find(
-      (token) => token.tokenId === eRsnToken?.tokenId,
-    );
+    const rsnTokenInfo = item.revenues.find((token) => token.tokenId === rsnToken?.tokenId);
+    const eRsnTokenInfo = item.revenues.find((token) => token.tokenId === eRsnToken?.tokenId);
 
     const amount = [rsnTokenInfo, eRsnTokenInfo]
       .map((info) => getDecimalString(info?.amount, info?.decimals))
@@ -78,9 +74,7 @@ const Revenues = () => {
   const getTokenIncome = (item?: Revenue) => {
     if (!item?.revenues) return [];
     return item.revenues.filter(
-      (token) =>
-        token.tokenId !== rsnToken?.tokenId &&
-        token.tokenId !== eRsnToken?.tokenId,
+      (token) => token.tokenId !== rsnToken?.tokenId && token.tokenId !== eRsnToken?.tokenId,
     );
   };
 
@@ -162,24 +156,15 @@ const Revenues = () => {
                         disabled={isLoading}
                         size="small"
                         onClick={() => {
-                          setCurrent(
-                            current?.id === item.id ? undefined : item,
-                          );
+                          setCurrent(current?.id === item.id ? undefined : item);
                         }}
                       >
-                        <Icon
-                          name={
-                            current?.id === item.id ? 'AngleUp' : 'AngleDown'
-                          }
-                        />
+                        <Icon name={current?.id === item.id ? 'AngleUp' : 'AngleDown'} />
                       </IconButton>
                     </TableGridCell>
                     <TableGridBodyDetails open={current?.id === item.id}>
                       <Label label="Income" orientation="horizontal">
-                        <Amount
-                          loading={isLoading}
-                          value={getRSNIncome(item)}
-                        />
+                        <Amount loading={isLoading} value={getRSNIncome(item)} />
                       </Label>
                       <Label label="Token Income" orientation="horizontal">
                         {getTokenIncome(item).map((token) => (

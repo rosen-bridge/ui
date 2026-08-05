@@ -26,11 +26,7 @@ export type TruncateOwnProps = {
 
 export type TruncateBaseProps = ElementBaseProps<'div', TruncateOwnProps>;
 
-export type TruncateProps = OverridableType<
-  TruncateBaseProps,
-  TruncateOverrides,
-  never
->;
+export type TruncateProps = OverridableType<TruncateBaseProps, TruncateOverrides, never>;
 
 /**
  * `Truncate` is a simple utility component that limits text to a specific number of lines.

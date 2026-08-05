@@ -23,8 +23,7 @@ const info: ApiInfoResponse = {
     status: 'Unstable',
     trialErrors: [],
   },
-  rsnTokenId:
-    '85baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90gg',
+  rsnTokenId: '85baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90gg',
   emissionTokenId: '',
   versions: {
     app: '',
@@ -115,8 +114,7 @@ const revenueChartWeekly: ApiRevenueChartResponse = [
       amount: 12345,
       decimals: 3,
       isNativeToken: false,
-      tokenId:
-        '6c1526b2a5ef010edb622719d9d7fbde8437a39543547c3effbe72ad33504cf1',
+      tokenId: '6c1526b2a5ef010edb622719d9d7fbde8437a39543547c3effbe72ad33504cf1',
     },
     data: Array(10)
       .fill(null)
@@ -136,8 +134,7 @@ const revenueChartMonthly: ApiRevenueChartResponse = [
       amount: 12345,
       decimals: 3,
       isNativeToken: false,
-      tokenId:
-        '6c1526b2a5ef010edb622719d9d7fbde8437a39543547c3effbe72ad33504cf1',
+      tokenId: '6c1526b2a5ef010edb622719d9d7fbde8437a39543547c3effbe72ad33504cf1',
     },
     data: Array(10)
       .fill(null)
@@ -155,8 +152,7 @@ const revenueChartMonthly: ApiRevenueChartResponse = [
       amount: 12345,
       decimals: 3,
       isNativeToken: false,
-      tokenId:
-        '6c1526b2a5ef010edb622719d9d7fbde8437a39543547c3effbe72ad33504cf1',
+      tokenId: '6c1526b2a5ef010edb622719d9d7fbde8437a39543547c3effbe72ad33504cf1',
     },
     data: Array(10)
       .fill(null)
@@ -176,8 +172,7 @@ const revenueChartYearly: ApiRevenueChartResponse = [
       amount: 12345,
       decimals: 3,
       isNativeToken: false,
-      tokenId:
-        '6c1526b2a5ef010edb622719d9d7fbde8437a39543547c3effbe72ad33504cf1',
+      tokenId: '6c1526b2a5ef010edb622719d9d7fbde8437a39543547c3effbe72ad33504cf1',
     },
     data: Array(10)
       .fill(null)
@@ -195,8 +190,7 @@ const revenueChartYearly: ApiRevenueChartResponse = [
       amount: 12345,
       decimals: 3,
       isNativeToken: false,
-      tokenId:
-        '6c1526b2a5ef010edb622719d9d7fbde8437a39543547c3effbe72ad33504cf1',
+      tokenId: '6c1526b2a5ef010edb622719d9d7fbde8437a39543547c3effbe72ad33504cf1',
     },
     data: Array(10)
       .fill(null)
@@ -301,9 +295,7 @@ const healthStatus: ApiHealthStatusResponse = [
   },
 ];
 
-const generateHistoryEventRecords = (
-  numberOfRecords: number,
-): HistoryEvent[] => {
+const generateHistoryEventRecords = (numberOfRecords: number): HistoryEvent[] => {
   return new Array(numberOfRecords).fill(null).map(() => ({
     eventId: `${Math.floor(Date.now() * Math.random())}`,
     txId: `${Math.floor(Date.now() * Math.random())}`,
@@ -327,9 +319,7 @@ const generateHistoryEventRecords = (
   }));
 };
 
-const generateOngoingEventRecords = (
-  numberOfRecords: number,
-): OngoingEvent[] => {
+const generateOngoingEventRecords = (numberOfRecords: number): OngoingEvent[] => {
   return new Array(numberOfRecords).fill(null).map(() => ({
     eventId: `${Math.floor(Date.now() * Math.random())}`,
     txId: `${Math.floor(Date.now() * Math.random())}`,
@@ -354,10 +344,8 @@ const generateOngoingEventRecords = (
 const generateRevenueRecords = (numberOfRecords: number) => {
   return new Array(numberOfRecords).fill(null).map((_data, index) => ({
     id: index,
-    rewardTxId:
-      '95baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90f7',
-    lockTxId:
-      '85baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90f7',
+    rewardTxId: '95baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90f7',
+    lockTxId: '85baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90f7',
     eventId: '85baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90f7',
     lockHeight: 100,
     fromChain: NETWORKS.ergo.key,
@@ -368,15 +356,13 @@ const generateRevenueRecords = (numberOfRecords: number) => {
     bridgeFee: '0.002',
     networkFee: '0.003',
     lockToken: {
-      tokenId:
-        '15baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90f7',
+      tokenId: '15baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90f7',
       amount: 10000,
       decimals: 3,
       name: 'hello',
       isNativeToken: false,
     },
-    ergoSideTokenId:
-      '85baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90gg',
+    ergoSideTokenId: '85baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90gg',
     height: 100,
     timestamp: Date.now(),
     status: 'Done',
@@ -413,9 +399,7 @@ export const mockedData: FakeData = {
     },
 
     '/assets': ({ chain }): ApiAddressAssetsResponse => {
-      const filteredData = chain
-        ? assets.filter((asset) => asset.chain === chain)
-        : assets;
+      const filteredData = chain ? assets.filter((asset) => asset.chain === chain) : assets;
 
       const pageData = filteredData;
 

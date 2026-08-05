@@ -60,11 +60,7 @@ export type TokenOwnProps = {
 
 export type TokenBaseProps = ElementBaseProps<'div', TokenOwnProps>;
 
-export type TokenProps = OverridableType<
-  TokenBaseProps,
-  TokenOverrides,
-  'value'
->;
+export type TokenProps = OverridableType<TokenBaseProps, TokenOverrides, 'value'>;
 
 const DEFAULT_NETWORK: TokenMeta = {
   label: 'Unsupported token',

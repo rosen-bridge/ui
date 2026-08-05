@@ -1,12 +1,5 @@
-import {
-  type AbstractLogger,
-  DummyLogger,
-} from '@rosen-bridge/abstract-logger';
-import {
-  NATIVE_RESIDENCY,
-  type RosenChainToken,
-  type TokenMap,
-} from '@rosen-bridge/tokens';
+import { type AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
+import { NATIVE_RESIDENCY, type RosenChainToken, type TokenMap } from '@rosen-bridge/tokens';
 import type { Network } from '@rosen-ui/types';
 
 import type { AssetBalance, ChainAssetBalance, TotalSupply } from '../types';
@@ -40,11 +33,7 @@ export abstract class AbstractDataAdapter {
           chainAssets[asset.assetId] = chainAssets[asset.assetId] ?? [];
           chainAssets[asset.assetId].push({
             address: address,
-            balance: this.tokenMap.wrapAmount(
-              asset.assetId,
-              asset.balance,
-              this.chain,
-            ).amount,
+            balance: this.tokenMap.wrapAmount(asset.assetId, asset.balance, this.chain).amount,
           });
         }
       }

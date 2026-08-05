@@ -14,9 +14,7 @@ import type { ChainConfigs, ErgoNetworkConfig } from './types';
  * @returns string
  */
 export const stringSerializer = (data: unknown): string =>
-  JsonBigInt.stringify(data, (_, value) =>
-    typeof value === 'bigint' ? value.toString() : value,
-  );
+  JsonBigInt.stringify(data, (_, value) => (typeof value === 'bigint' ? value.toString() : value));
 
 /**
  * Resolves Ergo network type and connection URL based on configuration.
@@ -39,10 +37,7 @@ export const resolveErgoNetworkConfig = (): ErgoNetworkConfig => {
 /**
  * Converts chain key to camelCase or PascalCase.
  */
-export const formatChainName = (
-  chain: string,
-  mode: 'camel' | 'pascal' = 'camel',
-): string => {
+export const formatChainName = (chain: string, mode: 'camel' | 'pascal' = 'camel'): string => {
   const parts = chain.split('-');
 
   return parts

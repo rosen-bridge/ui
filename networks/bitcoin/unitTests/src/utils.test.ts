@@ -26,12 +26,7 @@ describe('generateOpReturnData', () => {
     const bridgeFee = '1968503938';
     const networkFee = '9842520';
 
-    const result = await generateOpReturnData(
-      toChain,
-      toAddress,
-      networkFee,
-      bridgeFee,
-    );
+    const result = await generateOpReturnData(toChain, toAddress, networkFee, bridgeFee);
     // result in hex: 00000000007554fc820000000000962f582103f999da8e6e42660e4464d17d29e63bc006734a6710a24eb489b466323d3a9339
 
     expect(result.slice(0, 2)).toEqual('00');

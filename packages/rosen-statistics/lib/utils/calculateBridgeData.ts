@@ -50,10 +50,7 @@ export const calculateBridgeData = async (
 
     const tokenUsdPriceString = scientificToString(tokenUsdPrice);
     const tokenUsdPriceDecimals = getNumberOfDecimals(tokenUsdPriceString);
-    const tokenUsdPriceRaw = getNonDecimalString(
-      tokenUsdPriceString,
-      tokenUsdPriceDecimals,
-    );
+    const tokenUsdPriceRaw = getNonDecimalString(tokenUsdPriceString, tokenUsdPriceDecimals);
 
     // Calculate USD value: amount (token decimals) * tokenPrice (price decimals)
     const rawUsdValue = BigInt(e.amount) * BigInt(tokenUsdPriceRaw);
@@ -66,20 +63,14 @@ export const calculateBridgeData = async (
       if (usdValueDecimals > current.decimals) {
         // Scale up current value to new higher precision
         const normalizedCurrent = BigInt(
-          multiplyByPowerOfTen(
-            current.rawUsd,
-            usdValueDecimals - current.decimals,
-          ),
+          multiplyByPowerOfTen(current.rawUsd, usdValueDecimals - current.decimals),
         );
         current.rawUsd = normalizedCurrent + rawUsdValue;
         current.decimals = usdValueDecimals;
       } else if (usdValueDecimals < current.decimals) {
         // Scale down new value to match current precision
         const normalizedNew = BigInt(
-          multiplyByPowerOfTen(
-            rawUsdValue,
-            current.decimals - usdValueDecimals,
-          ),
+          multiplyByPowerOfTen(rawUsdValue, current.decimals - usdValueDecimals),
         );
         current.rawUsd += normalizedNew;
       } else {
@@ -110,9 +101,7 @@ export const calculateBridgeData = async (
     let normalizedRawUsd = data.rawUsd;
     if (data.decimals < dayMaxDecimals) {
       // Scale up to highest precision
-      normalizedRawUsd = BigInt(
-        multiplyByPowerOfTen(data.rawUsd, dayMaxDecimals - data.decimals),
-      );
+      normalizedRawUsd = BigInt(multiplyByPowerOfTen(data.rawUsd, dayMaxDecimals - data.decimals));
     }
     dayTotalRaw += normalizedRawUsd;
 
@@ -128,9 +117,7 @@ export const calculateBridgeData = async (
       lastProcessedHeight: data.maxHeight,
     });
 
-    logger.debug(
-      `Processed bridge data for chain ${fromChain}: ${usdAmountString} USD`,
-    );
+    logger.debug(`Processed bridge data for chain ${fromChain}: ${usdAmountString} USD`);
   }
 
   return {

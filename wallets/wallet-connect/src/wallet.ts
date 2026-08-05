@@ -82,9 +82,7 @@ const createModal = async (projectId: string) => {
   });
 };
 
-export class WalletConnect<
-  Config extends WalletConnectConfig,
-> extends Wallet<Config> {
+export class WalletConnect<Config extends WalletConnectConfig> extends Wallet<Config> {
   icon = ICON;
 
   name = 'WalletConnect';
@@ -157,9 +155,7 @@ export class WalletConnect<
     return this.modal.getAddress();
   };
 
-  fetchBalance = async (
-    token: RosenChainToken,
-  ): Promise<string | undefined> => {
+  fetchBalance = async (token: RosenChainToken): Promise<string | undefined> => {
     await this.ensureCorrectChain();
 
     const address = await this.getAddress();
@@ -240,16 +236,15 @@ export class WalletConnect<
       params.bridgeFee.toString(),
     );
 
-    const transactionParameters =
-      await this.currentNetwork.generateTxParameters(
-        params.token.tokenId,
-        params.lockAddress,
-        address,
-        params.amount,
-        rosenData,
-        params.token,
-        params.fromChain,
-      );
+    const transactionParameters = await this.currentNetwork.generateTxParameters(
+      params.token.tokenId,
+      params.lockAddress,
+      address,
+      params.amount,
+      rosenData,
+      params.token,
+      params.fromChain,
+    );
 
     try {
       return await this.provider.request({

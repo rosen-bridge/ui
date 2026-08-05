@@ -23,12 +23,9 @@ export const generateLockData = wrap(generateLockDataCore, {
   traceKey: 'ethereum:generateLockData',
 });
 
-export const generateTxParameters = wrap(
-  generateTxParametersCore(getTokenMap),
-  {
-    traceKey: 'ethereum:generateTxParameters',
-  },
-);
+export const generateTxParameters = wrap(generateTxParametersCore(getTokenMap), {
+  traceKey: 'ethereum:generateTxParameters',
+});
 
 export const getMaxTransfer = wrap(getMaxTransferCore(getTokenMap), {
   traceKey: 'ethereum:getMaxTransfer',

@@ -1,9 +1,4 @@
-import {
-  Column,
-  Entity,
-  PrimaryGeneratedColumn,
-  Unique,
-} from '@rosen-bridge/extended-typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, Unique } from '@rosen-bridge/extended-typeorm';
 
 @Unique(['fromAddress', 'toAddress', 'fromChain', 'toChain'])
 @Entity('user_event_entity')

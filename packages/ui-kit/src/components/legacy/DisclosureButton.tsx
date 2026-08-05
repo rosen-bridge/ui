@@ -74,9 +74,7 @@ export const DisclosureButton = ({
       {disclosure.state === 'loading' ? (
         <CircularProgress size={24} />
       ) : (
-        <Icon
-          name={disclosure.state === 'error' ? 'SyncExclamation' : 'AngleDown'}
-        />
+        <Icon name={disclosure.state === 'error' ? 'SyncExclamation' : 'AngleDown'} />
       )}
     </IconButton>
   );

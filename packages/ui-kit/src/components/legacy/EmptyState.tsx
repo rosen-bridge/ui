@@ -73,11 +73,7 @@ export const EmptyState = (props: EmptyStateProps) => {
         <SearchCircle>
           <Icon name="Search" />
           <CountBadge>
-            <Typography
-              typography="span"
-              variant="body2"
-              color={'background-paper'}
-            >
+            <Typography typography="span" variant="body2" color={'background-paper'}>
               0
             </Typography>
           </CountBadge>

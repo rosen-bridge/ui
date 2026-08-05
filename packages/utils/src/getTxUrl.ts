@@ -21,10 +21,7 @@ const baseTxURLs: { [key in Network]: HttpsURL } = {
   [NETWORKS.firo.key]: 'https://explorer.firo.org/tx',
 };
 
-export const getTxURL = (
-  network?: Network,
-  tx?: string,
-): HttpsURL | undefined => {
+export const getTxURL = (network?: Network, tx?: string): HttpsURL | undefined => {
   if (!network || !tx) return;
 
   const baseURL = baseTxURLs[network as keyof typeof baseTxURLs];

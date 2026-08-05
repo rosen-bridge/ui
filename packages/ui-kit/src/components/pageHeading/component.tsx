@@ -15,11 +15,7 @@ export type PageHeadingOwnProps = {
 
 export type PageHeadingBaseProps = ElementBaseProps<'div', PageHeadingOwnProps>;
 
-export type PageHeadingProps = OverridableType<
-  PageHeadingBaseProps,
-  PageHeadingOverrides,
-  never
->;
+export type PageHeadingProps = OverridableType<PageHeadingBaseProps, PageHeadingOverrides, never>;
 
 export const PageHeading = (props: PageHeadingProps) => {
   const { actions, title, ...rest } = useConfig('PageHeading', props);

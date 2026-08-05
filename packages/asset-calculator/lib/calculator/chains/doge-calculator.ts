@@ -1,11 +1,7 @@
 import { zipWith } from 'lodash-es';
 
 import type { AbstractLogger } from '@rosen-bridge/abstract-logger';
-import {
-  NATIVE_TOKEN,
-  type RosenChainToken,
-  type TokenMap,
-} from '@rosen-bridge/tokens';
+import { NATIVE_TOKEN, type RosenChainToken, type TokenMap } from '@rosen-bridge/tokens';
 import axios, { type Axios } from '@rosen-clients/rate-limited-axios';
 import { NETWORKS } from '@rosen-ui/constants';
 import type { Network } from '@rosen-ui/types';

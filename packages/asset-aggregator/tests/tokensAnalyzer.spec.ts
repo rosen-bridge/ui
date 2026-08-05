@@ -38,9 +38,7 @@ describe('TokensAnalyzer', () => {
      * @expected
      * - lockedTokens should contain addresses with balances
      */
-    it<AnalyzerTestContext>('should store native token as locked asset', async ({
-      tokenMap,
-    }) => {
+    it<AnalyzerTestContext>('should store native token as locked asset', async ({ tokenMap }) => {
       const analyzer = new TokensAnalyzer(
         NATIVE_TOKEN_CHAIN_BALANCE_INFO,
         WRAPPED_TOKEN_TOTAL_SUPPLY,
@@ -48,9 +46,7 @@ describe('TokensAnalyzer', () => {
       );
       await analyzer.analyze();
 
-      expect(analyzer['lockedTokens'].map((l) => l.tokenId)).toContain(
-        NETWORKS.ergo.nativeToken,
-      );
+      expect(analyzer['lockedTokens'].map((l) => l.tokenId)).toContain(NETWORKS.ergo.nativeToken);
       expect(analyzer['bridgedTokens'][0].amount).toBeTypeOf('bigint');
       expect(analyzer['bridgedTokens']).toEqual([
         ...SAMPLE_ANALYZER_BRIDGED_TOKEN_2,
@@ -77,9 +73,7 @@ describe('TokensAnalyzer', () => {
       await analyzer.analyze();
 
       expect(analyzer['bridgedTokens'][0].amount).toBeTypeOf('bigint');
-      expect(analyzer['bridgedTokens']).toEqual([
-        SAMPLE_ANALYZER_BRIDGED_TOKEN[0],
-      ]);
+      expect(analyzer['bridgedTokens']).toEqual([SAMPLE_ANALYZER_BRIDGED_TOKEN[0]]);
     });
   });
 
@@ -120,9 +114,7 @@ describe('TokensAnalyzer', () => {
 
       const token = bridged[0];
 
-      const totalSupply = BigInt(
-        WRAPPED_TOKEN_TOTAL_SUPPLY.ergo[0].totalSupply,
-      );
+      const totalSupply = BigInt(WRAPPED_TOKEN_TOTAL_SUPPLY.ergo[0].totalSupply);
 
       const lockedAmount = BigInt(
         WRAPPED_TOKEN_CHAIN_BALANCE_INFO.ergo[SAMPLE_TOKEN_MAP[2].ergo.tokenId]

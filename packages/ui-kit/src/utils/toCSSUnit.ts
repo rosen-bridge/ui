@@ -6,18 +6,12 @@ const isCSSUnit = (input: string): boolean => {
   return option.style.width !== '';
 };
 
-export const toCSSUnit = (
-  key: string,
-  input?: number | string,
-): string | undefined => {
+export const toCSSUnit = (key: string, input?: number | string): string | undefined => {
   if (typeof input === 'string' && isCSSUnit(input)) {
     return input;
   }
 
-  if (
-    typeof input === 'number' ||
-    (typeof input === 'string' && !Number.isNaN(Number(input)))
-  ) {
+  if (typeof input === 'number' || (typeof input === 'string' && !Number.isNaN(Number(input)))) {
     return `calc(var(--rosen-spacing, 1px) * ${input})`;
   }
 

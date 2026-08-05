@@ -28,17 +28,7 @@ export type StepProps = {
 };
 
 export const Step = (props: StepProps) => {
-  const {
-    active,
-    color,
-    description,
-    icon,
-    label,
-    setActive,
-    sub,
-    timestamp,
-    value,
-  } = props;
+  const { active, color, description, icon, label, setActive, sub, timestamp, value } = props;
 
   const open = active === value;
 
@@ -59,9 +49,7 @@ export const Step = (props: StepProps) => {
           title={
             <div>
               {timestamp && <DateTime color="inherit" timestamp={timestamp} />}
-              {description && (
-                <Typography variant="caption">{description}</Typography>
-              )}
+              {description && <Typography variant="caption">{description}</Typography>}
             </div>
           }
         >

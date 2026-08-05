@@ -78,12 +78,8 @@ describe('getDecimalString', () => {
    * - Correctly formats large numbers without precision loss
    */
   it('should handle edge cases with very large numbers', () => {
-    expect(getDecimalString('12345678901234567890', 8)).toBe(
-      '123456789012.3456789',
-    );
-    expect(getDecimalString(12345678901234567890n, 18)).toBe(
-      '12.34567890123456789',
-    );
+    expect(getDecimalString('12345678901234567890', 8)).toBe('123456789012.3456789');
+    expect(getDecimalString(12345678901234567890n, 18)).toBe('12.34567890123456789');
   });
 });
 

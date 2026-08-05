@@ -1,21 +1,9 @@
 'use client';
 
 import type { RosenChainToken } from '@rosen-bridge/tokens';
-import {
-  Alert,
-  Amount,
-  Card,
-  CardBody,
-  Divider,
-  Label,
-  Truncate,
-} from '@rosen-bridge/ui-kit';
+import { Alert, Amount, Card, CardBody, Divider, Label, Truncate } from '@rosen-bridge/ui-kit';
 
-import {
-  useTokenMap,
-  useTransactionFees,
-  useTransactionFormData,
-} from '@/hooks';
+import { useTokenMap, useTransactionFees, useTransactionFormData } from '@/hooks';
 
 /**
  * shows fees to the user and handles wallet transaction
@@ -43,8 +31,7 @@ export const TransactionInfo = () => {
     tokenMap.search(sourceValue, {
       tokenId: tokenValue.tokenId,
     });
-  const targetTokenInfo =
-    targetValue && targetTokenSearchResults?.[0]?.[targetValue];
+  const targetTokenInfo = targetValue && targetTokenSearchResults?.[0]?.[targetValue];
 
   const isPending = isLoadingFees && sourceValue && targetValue && tokenValue;
 
@@ -59,11 +46,7 @@ export const TransactionInfo = () => {
       <CardBody>
         <Label label="You Will Receive" color="text-primary" dense>
           <Amount
-            value={
-              !tokenValue || receivingAmountRaw === '0'
-                ? undefined
-                : receivingAmountRaw
-            }
+            value={!tokenValue || receivingAmountRaw === '0' ? undefined : receivingAmountRaw}
             unit={targetTokenInfo?.name}
             fallback="0"
             loading={isPending}

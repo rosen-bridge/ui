@@ -28,9 +28,7 @@ export class ErgoNetwork implements Network {
     return this.config.calculateFee(...args);
   };
 
-  public generateUnsignedTx: ErgoNetworkConfig['generateUnsignedTx'] = (
-    ...args
-  ) => {
+  public generateUnsignedTx: ErgoNetworkConfig['generateUnsignedTx'] = (...args) => {
     return this.config.generateUnsignedTx(...args);
   };
 

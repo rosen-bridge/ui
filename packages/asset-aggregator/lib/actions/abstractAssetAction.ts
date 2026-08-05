@@ -1,13 +1,5 @@
-import {
-  type AbstractLogger,
-  DummyLogger,
-} from '@rosen-bridge/abstract-logger';
-import {
-  type DataSource,
-  In,
-  Not,
-  type Repository,
-} from '@rosen-bridge/extended-typeorm';
+import { type AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
+import { type DataSource, In, Not, type Repository } from '@rosen-bridge/extended-typeorm';
 import JsonBigInt from '@rosen-bridge/json-bigint';
 
 import { DELETE_CHUNK_SIZE } from '../constants';
@@ -29,9 +21,7 @@ export abstract class AbstractAssetAction<Entity extends AbstractAssetEntity> {
   store = async (assets: Omit<Entity, 'token'>[] | Omit<Entity, 'token'>) => {
     if (!Array.isArray(assets)) assets = [assets];
     await this.repository.save(assets);
-    this.logger.debug(
-      `Assets [${JsonBigInt.stringify(assets)}] stored in database`,
-    );
+    this.logger.debug(`Assets [${JsonBigInt.stringify(assets)}] stored in database`);
   };
 
   /**
@@ -45,8 +35,7 @@ export abstract class AbstractAssetAction<Entity extends AbstractAssetEntity> {
       await this.repository.delete({ tokenId: In(chunk) });
       offset += DELETE_CHUNK_SIZE;
     }
-    if (tokenIds.length)
-      this.logger.debug(`Deleted tokens ${tokenIds} from the database`);
+    if (tokenIds.length) this.logger.debug(`Deleted tokens ${tokenIds} from the database`);
   }
 
   /**

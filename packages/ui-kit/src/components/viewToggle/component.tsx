@@ -16,11 +16,7 @@ export type ViewToggleOwnProps = {
 
 export type ViewToggleBaseProps = ElementBaseProps<'div', ViewToggleOwnProps>;
 
-export type ViewToggleProps = OverridableType<
-  ViewToggleBaseProps,
-  ViewToggleOverrides,
-  never
->;
+export type ViewToggleProps = OverridableType<ViewToggleBaseProps, ViewToggleOverrides, never>;
 
 /**
  * A simple toggle component for switching between 'grid' and 'row' view modes.

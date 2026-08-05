@@ -1,9 +1,5 @@
 import type { Filter } from '@rosen-bridge/query-params';
-import {
-  BridgedAssetEntity,
-  LockedAssetEntity,
-  TokenEntity,
-} from '@rosen-ui/asset-calculator';
+import { BridgedAssetEntity, LockedAssetEntity, TokenEntity } from '@rosen-ui/asset-calculator';
 import type { Network } from '@rosen-ui/types';
 
 import { filtersToTypeorm } from '@/filters';
@@ -44,19 +40,16 @@ export const getAsset = async (id: string) => {
     throw new ReferenceError(`Token with id [${id}] not found`);
   }
 
-  const bridged: Pick<
-    BridgedAssetEntity,
-    'amount' | 'chain' | 'bridgedTokenId'
-  >[] = await bridgedAssetRepository.find({
-    where: { tokenId: id },
-    select: ['amount', 'chain', 'bridgedTokenId'],
-  });
-
-  const locked: Pick<LockedAssetEntity, 'amount' | 'address'>[] =
-    await lockedAssetRepository.find({
+  const bridged: Pick<BridgedAssetEntity, 'amount' | 'chain' | 'bridgedTokenId'>[] =
+    await bridgedAssetRepository.find({
       where: { tokenId: id },
-      select: ['amount', 'address'],
+      select: ['amount', 'chain', 'bridgedTokenId'],
     });
+
+  const locked: Pick<LockedAssetEntity, 'amount' | 'address'>[] = await lockedAssetRepository.find({
+    where: { tokenId: id },
+    select: ['amount', 'address'],
+  });
 
   return {
     token,

@@ -17,11 +17,7 @@ export const Actions = ({ children }: ActionsProps) => {
   return (
     <Tabs className="actions" value={pathname}>
       <TabsList grow>
-        <TabsTab
-          href="/actions/withdraw"
-          icon="MoneyWithdrawal"
-          iconPosition="top"
-        >
+        <TabsTab href="/actions/withdraw" icon="MoneyWithdrawal" iconPosition="top">
           Withdraw
         </TabsTab>
         <TabsTab disabled icon="Pause" iconPosition="top" value="">

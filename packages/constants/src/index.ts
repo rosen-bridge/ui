@@ -69,6 +69,4 @@ export const NETWORKS = {
   },
 } as const;
 
-export const NETWORKS_KEYS = Object.values(NETWORKS).map(
-  (network) => network.key,
-);
+export const NETWORKS_KEYS = Object.values(NETWORKS).map((network) => network.key);

@@ -13,9 +13,7 @@ const logger = DefaultLogger.getInstance().child(import.meta.url);
  * register an observation extractor for the provided scanner
  * @param scanner
  */
-export const registerCardanoExtractor = async (
-  scanner: CardanoKoiosScanner,
-) => {
+export const registerCardanoExtractor = async (scanner: CardanoKoiosScanner) => {
   try {
     const observationExtractor = new CardanoKoiosObservationExtractor(
       config.cardano.addresses.lock,

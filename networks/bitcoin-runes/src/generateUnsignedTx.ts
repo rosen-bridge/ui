@@ -44,27 +44,20 @@ export const generateUnsignedTx =
     const tokenMap = await getTokenMap();
 
     const lockDataChunks = lockData.match(/.{1,40}/g);
-    if (!lockDataChunks)
-      throw Error(`Failed to split lock data [${lockData}] into chunks`);
+    if (!lockDataChunks) throw Error(`Failed to split lock data [${lockData}] into chunks`);
 
     // each data utxo has 1 additional satoshi (294, 295, 296, ...)
     const requiredSatoshiForLockData =
       MINIMUM_BTC_FOR_NATIVE_SEGWIT_OUTPUT * BigInt(lockDataChunks.length) +
-      BigInt(
-        Math.ceil((lockDataChunks.length * (lockDataChunks.length - 1)) / 2),
-      );
+      BigInt(Math.ceil((lockDataChunks.length * (lockDataChunks.length - 1)) / 2));
 
     const requiredAssets: AssetBalance = {
-      nativeToken:
-        MINIMUM_BTC_FOR_NATIVE_SEGWIT_OUTPUT + requiredSatoshiForLockData,
+      nativeToken: MINIMUM_BTC_FOR_NATIVE_SEGWIT_OUTPUT + requiredSatoshiForLockData,
       tokens: [
         {
           id: token.tokenId,
-          value: tokenMap.unwrapAmount(
-            token.tokenId,
-            wrappedAmount,
-            NETWORKS['bitcoin-runes'].key,
-          ).amount,
+          value: tokenMap.unwrapAmount(token.tokenId, wrappedAmount, NETWORKS['bitcoin-runes'].key)
+            .amount,
         },
       ],
     };
@@ -184,16 +177,12 @@ export const generateUnsignedTx =
       });
 
       signInputs[fromAddress].push(
-        ...getNumberRange(
-          selectedBoxesCount + additionalBoxes.boxes.length,
-          selectedBoxesCount,
-        ),
+        ...getNumberRange(selectedBoxesCount + additionalBoxes.boxes.length, selectedBoxesCount),
       );
       selectedBoxesCount += additionalBoxes.boxes.length;
 
       // the fee and additional BTC are only based on the additional assets of the 2nd selection
-      additionalAssets.nativeToken =
-        additionalBoxes.additionalAssets.aggregated.nativeToken;
+      additionalAssets.nativeToken = additionalBoxes.additionalAssets.aggregated.nativeToken;
       estimatedFee = additionalBoxes.additionalAssets.fee;
     }
 
@@ -227,16 +216,12 @@ export const generateUnsignedTx =
       });
 
       signInputs[fromPaymentAddress].push(
-        ...getNumberRange(
-          selectedBoxesCount + additionalBoxes.boxes.length,
-          selectedBoxesCount,
-        ),
+        ...getNumberRange(selectedBoxesCount + additionalBoxes.boxes.length, selectedBoxesCount),
       );
       selectedBoxesCount += additionalBoxes.boxes.length;
 
       // the fee and additional BTC are only based on the additional assets of the 2nd selection
-      additionalAssets.nativeToken =
-        additionalBoxes.additionalAssets.aggregated.nativeToken;
+      additionalAssets.nativeToken = additionalBoxes.additionalAssets.aggregated.nativeToken;
       estimatedFee = additionalBoxes.additionalAssets.fee;
     }
 
@@ -258,9 +243,7 @@ export const generateUnsignedTx =
       );
 
       if (!additionalBoxes.covered) {
-        throw new Error(
-          `Boxes didn't cover required BTC. Required BTC: ${requiredBtc}`,
-        );
+        throw new Error(`Boxes didn't cover required BTC. Required BTC: ${requiredBtc}`);
       }
 
       // add selected boxes
@@ -278,15 +261,11 @@ export const generateUnsignedTx =
       });
 
       signInputs[fromAddress].push(
-        ...getNumberRange(
-          selectedBoxesCount + additionalBoxes.boxes.length,
-          selectedBoxesCount,
-        ),
+        ...getNumberRange(selectedBoxesCount + additionalBoxes.boxes.length, selectedBoxesCount),
       );
 
       // the fee and additional BTC are only based on the additional assets of the 2nd selection
-      additionalAssets.nativeToken =
-        additionalBoxes.additionalAssets.aggregated.nativeToken;
+      additionalAssets.nativeToken = additionalBoxes.additionalAssets.aggregated.nativeToken;
       estimatedFee = additionalBoxes.additionalAssets.fee;
     }
 

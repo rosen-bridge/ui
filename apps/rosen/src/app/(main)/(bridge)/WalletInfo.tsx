@@ -33,9 +33,7 @@ export const WalletInfo = () => {
           </Typography>
         )}
         {wallet.state === 'CONNECTING' && (
-          <Typography color="text-secondary">
-            Connecting to wallet...
-          </Typography>
+          <Typography color="text-secondary">Connecting to wallet...</Typography>
         )}
         {wallet.state === 'DISCONNECTING' && (
           <Typography color="text-secondary">Disconnecting...</Typography>
@@ -54,9 +52,7 @@ export const WalletInfo = () => {
           <>
             <Button
               color="inherit"
-              startIcon={
-                wallet.selected && <Icon as={wallet.selected.iconReact} />
-              }
+              startIcon={wallet.selected && <Icon as={wallet.selected.iconReact} />}
               style={{ marginLeft: '-8px', textTransform: 'none' }}
               onClick={() => setOpen(true)}
             >

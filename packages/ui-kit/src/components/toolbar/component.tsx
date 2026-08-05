@@ -9,11 +9,7 @@ export type ToolbarOwnProps = {};
 
 export type ToolbarBaseProps = ElementBaseProps<'div', ToolbarOwnProps>;
 
-export type ToolbarProps = OverridableType<
-  ToolbarBaseProps,
-  ToolbarOverrides,
-  never
->;
+export type ToolbarProps = OverridableType<ToolbarBaseProps, ToolbarOverrides, never>;
 
 export const Toolbar = (props: ToolbarProps) => {
   const { ...rest } = useConfig('Toolbar', props);

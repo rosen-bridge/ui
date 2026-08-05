@@ -115,12 +115,7 @@ export const SortField = ({
           }}
         >
           <Stack align="start">
-            <Typography
-              hidden={dense}
-              variant="caption"
-              color="text-secondary"
-              lineHeight="12px"
-            >
+            <Typography hidden={dense} variant="caption" color="text-secondary" lineHeight="12px">
               Sort by
             </Typography>
             <Typography variant="body1" lineHeight="24px">
@@ -152,10 +147,7 @@ export const SortField = ({
                 <Icon
                   name="Check"
                   style={{
-                    display:
-                      dense && current && item.value === current.value
-                        ? 'flex'
-                        : 'none',
+                    display: dense && current && item.value === current.value ? 'flex' : 'none',
                   }}
                 />
               </MenuItem>
@@ -167,9 +159,7 @@ export const SortField = ({
         <Divider orientation="vertical" />
       </div>
       <IconButton disabled={disabled} onClick={handleSortOrderChange}>
-        <Icon
-          name={value?.order === 'ASC' ? 'SortAmountDown' : 'SortAmountUp'}
-        />
+        <Icon name={value?.order === 'ASC' ? 'SortAmountDown' : 'SortAmountUp'} />
       </IconButton>
     </Root>
   );

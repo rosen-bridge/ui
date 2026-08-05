@@ -3,11 +3,7 @@ import { expect } from 'vitest';
 
 import { LockedAssetModel } from '../../../lib/database/lockedAsset/LockedAssetModel';
 import { lockedAssets } from '../test-data';
-import {
-  allAssetRecords,
-  initDatabase,
-  insertAssetRecords,
-} from './LockedAssetModel.mock';
+import { allAssetRecords, initDatabase, insertAssetRecords } from './LockedAssetModel.mock';
 
 describe('LockedAssetModel', () => {
   let assetModel: LockedAssetModel;
@@ -31,9 +27,7 @@ describe('LockedAssetModel', () => {
       await insertAssetRecords(lockedAssets);
       const savedAssets = await assetModel.getAllStoredAssets();
       expect(savedAssets.length).toEqual(2);
-      expect(
-        savedAssets.sort((a, b) => a.tokenId.localeCompare(b.tokenId)),
-      ).toEqual(
+      expect(savedAssets.sort((a, b) => a.tokenId.localeCompare(b.tokenId))).toEqual(
         [
           {
             address: lockedAssets[0].address,

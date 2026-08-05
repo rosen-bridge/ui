@@ -36,10 +36,8 @@ const info: ApiInfoResponse = {
     active: 20,
     total: 100,
   },
-  rsnTokenId:
-    '6c1526b2a5ef010edb622719d9d7fbde8437a39543547c3effbe72ad33504cf1',
-  eRsnTokenId:
-    '6c1526b2a5ef010edb622719d9d7fbde8437a39543547c3effbe72ad33504cf2',
+  rsnTokenId: '6c1526b2a5ef010edb622719d9d7fbde8437a39543547c3effbe72ad33504cf1',
+  eRsnTokenId: '6c1526b2a5ef010edb622719d9d7fbde8437a39543547c3effbe72ad33504cf2',
   versions: {
     app: '',
     contract: '',
@@ -51,31 +49,27 @@ const addressAssets: ApiAddressAssetsResponse = {
   items: [
     {
       name: 'awesome token',
-      tokenId:
-        '2162efc108a0aeba2c040a3a29b1e8573dc6b6d746d33e5fe9cf9ccc1796f630',
+      tokenId: '2162efc108a0aeba2c040a3a29b1e8573dc6b6d746d33e5fe9cf9ccc1796f630',
       amount: 10000,
       decimals: 2,
       isNativeToken: false,
     },
     {
-      tokenId:
-        '91e9086194cd9144a1661c5820dd53869afd1711d4c5a305b568a452e86f81b1',
+      tokenId: '91e9086194cd9144a1661c5820dd53869afd1711d4c5a305b568a452e86f81b1',
       amount: 2,
       decimals: 0,
       isNativeToken: false,
     },
     {
       name: 'another awesome token',
-      tokenId:
-        'c6cce2d65182c2e4343d942000263b75d103e6d56fea08ded6dfc25548c2d34d',
+      tokenId: 'c6cce2d65182c2e4343d942000263b75d103e6d56fea08ded6dfc25548c2d34d',
       amount: 200,
       decimals: 1,
       isNativeToken: false,
     },
     {
       name: 'fakeRSN',
-      tokenId:
-        '6c1526b2a5ef010edb622719d9d7fbde8437a39543547c3effbe72ad33504cf1',
+      tokenId: '6c1526b2a5ef010edb622719d9d7fbde8437a39543547c3effbe72ad33504cf1',
       amount: 20,
       decimals: 5,
       isNativeToken: false,
@@ -327,8 +321,7 @@ const generateEventRecords = (numberOfRecords: number): Event[] => {
 const generateRevenueRecords = (numberOfRecords: number) => {
   return new Array(numberOfRecords).fill(null).map((_data, index) => ({
     id: index,
-    permitTxId:
-      '95baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90f7',
+    permitTxId: '95baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90f7',
     eventId: '85baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90f7',
     lockHeight: 100,
     fromChain: NETWORKS.ergo.key,
@@ -339,30 +332,26 @@ const generateRevenueRecords = (numberOfRecords: number) => {
     bridgeFee: '0.002',
     networkFee: '0.003',
     lockToken: {
-      tokenId:
-        '15baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90f7',
+      tokenId: '15baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90f7',
       name: 'ERG',
       decimals: 9,
       amount: 0,
       isNativeToken: true,
     },
-    lockTxId:
-      '15baefff2eb9e45b04f8b4e6265e8663773db6db5f9e8e30ce2cae1aa263b90f8',
+    lockTxId: '15baefff2eb9e45b04f8b4e6265e8663773db6db5f9e8e30ce2cae1aa263b90f8',
     height: 100,
     timestamp: Date.now(),
     status: 'Done',
     revenues: [
       {
-        tokenId:
-          '6c1526b2a5ef010edb622719d9d7fbde8437a39543547c3effbe72ad33504cf1',
+        tokenId: '6c1526b2a5ef010edb622719d9d7fbde8437a39543547c3effbe72ad33504cf1',
         amount: 1000,
         name: 'fakeRSN',
         decimals: 0,
         isNativeToken: false,
       },
       {
-        tokenId:
-          '6c1526b2a5ef010edb622719d9d7fbde8437a39543547c3effbe72ad33504cf2',
+        tokenId: '6c1526b2a5ef010edb622719d9d7fbde8437a39543547c3effbe72ad33504cf2',
         amount: 100,
         name: 'awesome token',
         decimals: 2,
@@ -404,9 +393,7 @@ export const mockedData: FakeData = {
     '/address/assets': ({ tokenId }: { tokenId: string }) =>
       tokenId
         ? {
-            items: addressAssets.items.filter(
-              (asset) => asset.tokenId === tokenId,
-            ),
+            items: addressAssets.items.filter((asset) => asset.tokenId === tokenId),
             total: 1,
           }
         : addressAssets,

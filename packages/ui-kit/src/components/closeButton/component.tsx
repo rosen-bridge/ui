@@ -10,16 +10,9 @@ export type CloseButtonOwnProps = {
   };
 };
 
-export type CloseButtonBaseProps = ElementBaseProps<
-  typeof IconButton,
-  CloseButtonOwnProps
->;
+export type CloseButtonBaseProps = ElementBaseProps<typeof IconButton, CloseButtonOwnProps>;
 
-export type CloseButtonProps = OverridableType<
-  CloseButtonBaseProps,
-  CloseButtonOverrides,
-  never
->;
+export type CloseButtonProps = OverridableType<CloseButtonBaseProps, CloseButtonOverrides, never>;
 
 export const CloseButton = (props: CloseButtonProps) => {
   const { slots, ...rest } = useConfig('CloseButton', props);

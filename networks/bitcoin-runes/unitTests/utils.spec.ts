@@ -53,11 +53,7 @@ describe('utils', () => {
         });
 
       // act
-      const utxoIterator = getAddressAvailableBtcUtxos(
-        testData.lockAddress,
-        0,
-        2,
-      );
+      const utxoIterator = getAddressAvailableBtcUtxos(testData.lockAddress, 0, 2);
 
       const results = [];
       for await (const utxo of utxoIterator) {
@@ -155,12 +151,7 @@ describe('utils', () => {
         });
 
       // act
-      const utxoIterator = getAddressRunesUtxos(
-        testData.lockAddress,
-        'ROSENPOCRUNE',
-        0,
-        2,
-      );
+      const utxoIterator = getAddressRunesUtxos(testData.lockAddress, 'ROSENPOCRUNE', 0, 2);
 
       const results = [];
       for await (const utxo of utxoIterator) {
