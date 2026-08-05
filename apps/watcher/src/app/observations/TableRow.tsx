@@ -1,13 +1,7 @@
 import { type FC, useMemo, useState } from 'react';
 
 import { AngleDown, AngleUp } from '@rosen-bridge/icons';
-import {
-  Amount,
-  Button,
-  EnhancedTableCell,
-  Identifier,
-  TableRow,
-} from '@rosen-bridge/ui-kit';
+import { Amount, Button, EnhancedTableCell, Identifier, TableRow } from '@rosen-bridge/ui-kit';
 import { getTxURL } from '@rosen-ui/utils';
 
 import type { Observation } from '@/types/api';
@@ -101,10 +95,7 @@ export const MobileRow: FC<RowProps> = (props) => {
   const { isLoading, ...row } = props;
   const [expand, setExpand] = useState(false);
 
-  const rowStyles = useMemo(
-    () => (isLoading ? { opacity: 0.3 } : {}),
-    [isLoading],
-  );
+  const rowStyles = useMemo(() => (isLoading ? { opacity: 0.3 } : {}), [isLoading]);
 
   const toggleExpand = () => {
     setExpand((prevState) => !prevState);
@@ -190,10 +181,7 @@ export const MobileRow: FC<RowProps> = (props) => {
 export const TabletRow: FC<RowProps> = (props) => {
   const { isLoading, ...row } = props;
 
-  const rowStyles = useMemo(
-    () => (isLoading ? { opacity: 0.3 } : {}),
-    [isLoading],
-  );
+  const rowStyles = useMemo(() => (isLoading ? { opacity: 0.3 } : {}), [isLoading]);
 
   return (
     <TableRow className="divider" style={rowStyles}>

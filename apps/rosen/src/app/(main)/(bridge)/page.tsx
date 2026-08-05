@@ -6,11 +6,7 @@ import { Alert, Link } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 import type { RosenAmountValue } from '@rosen-ui/types';
 
-import {
-  NetworkProvider,
-  TransactionFeesProvider,
-  WalletProvider,
-} from '@/hooks';
+import { NetworkProvider, TransactionFeesProvider, WalletProvider } from '@/hooks';
 
 import { BridgeForm as BridgeFormComponent } from './BridgeForm';
 import { SubmitButton } from './SubmitButton';
@@ -67,9 +63,8 @@ const RosenBridge = () => {
                         textAlign: 'justify',
                       }}
                     >
-                      If you are using Ledger, you may need to enable
-                      &apos;Blind signing&apos; and &apos;Debug data&apos; in
-                      the Ledger (Ethereum &gt; Settings) due to{' '}
+                      If you are using Ledger, you may need to enable &apos;Blind signing&apos; and
+                      &apos;Debug data&apos; in the Ledger (Ethereum &gt; Settings) due to{' '}
                       <Link
                         color="primary"
                         target="_blank"

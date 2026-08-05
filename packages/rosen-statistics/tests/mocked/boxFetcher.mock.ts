@@ -28,9 +28,7 @@ export const setupNodeMock = (returnValue: any) => {
     (...args: ConstructorParameters<typeof RealNode>) => {
       const instance = new RealNode(...args);
 
-      vi.spyOn(instance, 'fetchUnspentBoxesByTokenId').mockImplementation(
-        mockFetchUnspentBoxes,
-      );
+      vi.spyOn(instance, 'fetchUnspentBoxesByTokenId').mockImplementation(mockFetchUnspentBoxes);
 
       return instance;
     },

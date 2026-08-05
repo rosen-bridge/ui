@@ -7,18 +7,15 @@ import type {
   UnisatResponse,
 } from '../src/types';
 
-export const fromAddress =
-  'bc1px0ad45qrfwc20yfd9wljeytrvfa6tmrcxv6pgxze2svvx00tp7mstj5rpk';
+export const fromAddress = 'bc1px0ad45qrfwc20yfd9wljeytrvfa6tmrcxv6pgxze2svvx00tp7mstj5rpk';
 
 export const fromPaymentAddress = 'bc1qwu6zk52mz9wyy62ktdahuxqzmqd8xzxa92gk73';
 
-export const lockAddress =
-  'bc1pvpyum6lxgrfr675wz8v9jxk2jmqvm9nzdly9p2cmvhnawhl0tvtsz73adv';
+export const lockAddress = 'bc1pvpyum6lxgrfr675wz8v9jxk2jmqvm9nzdly9p2cmvhnawhl0tvtsz73adv';
 
 export const lockData = crypto.randomBytes(80).toString('hex');
 
-export const internalPubkey =
-  '49273bdf5b4d4594ef73377e249166579adf6f4bf18f9b23db309416ad1ee4f5';
+export const internalPubkey = '49273bdf5b4d4594ef73377e249166579adf6f4bf18f9b23db309416ad1ee4f5';
 
 export const paymentInternalPubkey =
   '0335014025b2d9428be3a717619b9830b6ba953f49cd8994b34c2a53c85944898f';
@@ -43,11 +40,9 @@ export const runesBoxes: UnisatResponse<UnisatAddressRunesUtxos>[] = [
         {
           height: 918905,
           confirmations: 315,
-          address:
-            'bc1px0ad45qrfwc20yfd9wljeytrvfa6tmrcxv6pgxze2svvx00tp7mstj5rpk',
+          address: 'bc1px0ad45qrfwc20yfd9wljeytrvfa6tmrcxv6pgxze2svvx00tp7mstj5rpk',
           satoshi: 532,
-          scriptPk:
-            '512033fadad0034bb0a7912d2bbf2c9163627ba5ec7833341418595418c33deb0fb7',
+          scriptPk: '512033fadad0034bb0a7912d2bbf2c9163627ba5ec7833341418595418c33deb0fb7',
           txid: 'tx1',
           vout: 0,
           runes: [
@@ -72,11 +67,9 @@ export const runesBoxes: UnisatResponse<UnisatAddressRunesUtxos>[] = [
         {
           height: 904746,
           confirmations: 14474,
-          address:
-            'bc1px0ad45qrfwc20yfd9wljeytrvfa6tmrcxv6pgxze2svvx00tp7mstj5rpk',
+          address: 'bc1px0ad45qrfwc20yfd9wljeytrvfa6tmrcxv6pgxze2svvx00tp7mstj5rpk',
           satoshi: 2682,
-          scriptPk:
-            '512033fadad0034bb0a7912d2bbf2c9163627ba5ec7833341418595418c33deb0fb7',
+          scriptPk: '512033fadad0034bb0a7912d2bbf2c9163627ba5ec7833341418595418c33deb0fb7',
           txid: 'tx2',
           vout: 1,
           runes: [
@@ -103,11 +96,9 @@ export const runesBoxes: UnisatResponse<UnisatAddressRunesUtxos>[] = [
         {
           height: 918905,
           confirmations: 315,
-          address:
-            'bc1px0ad45qrfwc20yfd9wljeytrvfa6tmrcxv6pgxze2svvx00tp7mstj5rpk',
+          address: 'bc1px0ad45qrfwc20yfd9wljeytrvfa6tmrcxv6pgxze2svvx00tp7mstj5rpk',
           satoshi: 532,
-          scriptPk:
-            '512033fadad0034bb0a7912d2bbf2c9163627ba5ec7833341418595418c33deb0fb7',
+          scriptPk: '512033fadad0034bb0a7912d2bbf2c9163627ba5ec7833341418595418c33deb0fb7',
           txid: 'tx3',
           vout: 1,
           runes: [
@@ -124,11 +115,9 @@ export const runesBoxes: UnisatResponse<UnisatAddressRunesUtxos>[] = [
         {
           height: 904746,
           confirmations: 14474,
-          address:
-            'bc1px0ad45qrfwc20yfd9wljeytrvfa6tmrcxv6pgxze2svvx00tp7mstj5rpk',
+          address: 'bc1px0ad45qrfwc20yfd9wljeytrvfa6tmrcxv6pgxze2svvx00tp7mstj5rpk',
           satoshi: 2682,
-          scriptPk:
-            '512033fadad0034bb0a7912d2bbf2c9163627ba5ec7833341418595418c33deb0fb7',
+          scriptPk: '512033fadad0034bb0a7912d2bbf2c9163627ba5ec7833341418595418c33deb0fb7',
           txid: 'tx4',
           vout: 1,
           runes: [
@@ -156,110 +145,101 @@ export const runesBoxes: UnisatResponse<UnisatAddressRunesUtxos>[] = [
   },
 ];
 
-export const availableBtcBoxes: UnisatResponse<UnisatAddressAvailableBtcUtxos>[] =
-  [
-    {
-      code: 0,
-      msg: 'ok',
-      data: {
-        cursor: 0,
-        total: 4,
-        utxo: [
-          {
-            confirmations: 10,
-            txid: 'tx1',
-            vout: 0,
-            satoshi: 55133,
-            scriptType: '5120',
-            scriptPk:
-              '512033fadad0034bb0a7912d2bbf2c9163627ba5ec7833341418595418c33deb0fb7',
-            codeType: 9,
-            address:
-              'bc1pjxzw9tm6qatyapu3c409dg8k23p4hjlk4ehwwlsum3emjqsaetrqppyu2z',
-            height: 915891,
-            idx: 669,
-            isOpInRBF: false,
-            isSpent: false,
-            inscriptionsCount: 1,
-            inscriptions: [],
-          },
-          {
-            confirmations: 10,
-            txid: 'tx2',
-            vout: 0,
-            satoshi: 55133,
-            scriptType: '5120',
-            scriptPk:
-              '512033fadad0034bb0a7912d2bbf2c9163627ba5ec7833341418595418c33deb0fb7',
-            codeType: 9,
-            address:
-              'bc1pjxzw9tm6qatyapu3c409dg8k23p4hjlk4ehwwlsum3emjqsaetrqppyu2z',
-            height: 915891,
-            idx: 669,
-            isOpInRBF: false,
-            isSpent: false,
-            inscriptionsCount: 1,
-            inscriptions: [],
-          },
-        ],
-      },
+export const availableBtcBoxes: UnisatResponse<UnisatAddressAvailableBtcUtxos>[] = [
+  {
+    code: 0,
+    msg: 'ok',
+    data: {
+      cursor: 0,
+      total: 4,
+      utxo: [
+        {
+          confirmations: 10,
+          txid: 'tx1',
+          vout: 0,
+          satoshi: 55133,
+          scriptType: '5120',
+          scriptPk: '512033fadad0034bb0a7912d2bbf2c9163627ba5ec7833341418595418c33deb0fb7',
+          codeType: 9,
+          address: 'bc1pjxzw9tm6qatyapu3c409dg8k23p4hjlk4ehwwlsum3emjqsaetrqppyu2z',
+          height: 915891,
+          idx: 669,
+          isOpInRBF: false,
+          isSpent: false,
+          inscriptionsCount: 1,
+          inscriptions: [],
+        },
+        {
+          confirmations: 10,
+          txid: 'tx2',
+          vout: 0,
+          satoshi: 55133,
+          scriptType: '5120',
+          scriptPk: '512033fadad0034bb0a7912d2bbf2c9163627ba5ec7833341418595418c33deb0fb7',
+          codeType: 9,
+          address: 'bc1pjxzw9tm6qatyapu3c409dg8k23p4hjlk4ehwwlsum3emjqsaetrqppyu2z',
+          height: 915891,
+          idx: 669,
+          isOpInRBF: false,
+          isSpent: false,
+          inscriptionsCount: 1,
+          inscriptions: [],
+        },
+      ],
     },
-    {
-      code: 0,
-      msg: 'ok',
-      data: {
-        cursor: 2,
-        total: 4,
-        utxo: [
-          {
-            confirmations: 10,
-            txid: 'tx3',
-            vout: 0,
-            satoshi: 55133,
-            scriptType: '5120',
-            scriptPk:
-              '512033fadad0034bb0a7912d2bbf2c9163627ba5ec7833341418595418c33deb0fb7',
-            codeType: 9,
-            address:
-              'bc1pjxzw9tm6qatyapu3c409dg8k23p4hjlk4ehwwlsum3emjqsaetrqppyu2z',
-            height: 915891,
-            idx: 669,
-            isOpInRBF: false,
-            isSpent: false,
-            inscriptionsCount: 1,
-            inscriptions: [],
-          },
-          {
-            confirmations: 10,
-            txid: 'tx4',
-            vout: 0,
-            satoshi: 55133,
-            scriptType: '5120',
-            scriptPk:
-              '512033fadad0034bb0a7912d2bbf2c9163627ba5ec7833341418595418c33deb0fb7',
-            codeType: 9,
-            address:
-              'bc1pjxzw9tm6qatyapu3c409dg8k23p4hjlk4ehwwlsum3emjqsaetrqppyu2z',
-            height: 915891,
-            idx: 669,
-            isOpInRBF: false,
-            isSpent: false,
-            inscriptionsCount: 1,
-            inscriptions: [],
-          },
-        ],
-      },
+  },
+  {
+    code: 0,
+    msg: 'ok',
+    data: {
+      cursor: 2,
+      total: 4,
+      utxo: [
+        {
+          confirmations: 10,
+          txid: 'tx3',
+          vout: 0,
+          satoshi: 55133,
+          scriptType: '5120',
+          scriptPk: '512033fadad0034bb0a7912d2bbf2c9163627ba5ec7833341418595418c33deb0fb7',
+          codeType: 9,
+          address: 'bc1pjxzw9tm6qatyapu3c409dg8k23p4hjlk4ehwwlsum3emjqsaetrqppyu2z',
+          height: 915891,
+          idx: 669,
+          isOpInRBF: false,
+          isSpent: false,
+          inscriptionsCount: 1,
+          inscriptions: [],
+        },
+        {
+          confirmations: 10,
+          txid: 'tx4',
+          vout: 0,
+          satoshi: 55133,
+          scriptType: '5120',
+          scriptPk: '512033fadad0034bb0a7912d2bbf2c9163627ba5ec7833341418595418c33deb0fb7',
+          codeType: 9,
+          address: 'bc1pjxzw9tm6qatyapu3c409dg8k23p4hjlk4ehwwlsum3emjqsaetrqppyu2z',
+          height: 915891,
+          idx: 669,
+          isOpInRBF: false,
+          isSpent: false,
+          inscriptionsCount: 1,
+          inscriptions: [],
+        },
+      ],
     },
-    {
-      code: 0,
-      msg: 'ok',
-      data: {
-        cursor: 4,
-        total: 4,
-        utxo: [],
-      },
+  },
+  {
+    code: 0,
+    msg: 'ok',
+    data: {
+      cursor: 4,
+      total: 4,
+      utxo: [],
     },
-  ];
+  },
+];
 
 export const allBtcBoxes: UnisatResponse<UnisatAddressBtcUtxos>[] = [
   {
@@ -277,11 +257,9 @@ export const allBtcBoxes: UnisatResponse<UnisatAddressBtcUtxos>[] = [
           vout: 0,
           satoshi: 55133,
           scriptType: '5120',
-          scriptPk:
-            '512033fadad0034bb0a7912d2bbf2c9163627ba5ec7833341418595418c33deb0fb7',
+          scriptPk: '512033fadad0034bb0a7912d2bbf2c9163627ba5ec7833341418595418c33deb0fb7',
           codeType: 9,
-          address:
-            'bc1pjxzw9tm6qatyapu3c409dg8k23p4hjlk4ehwwlsum3emjqsaetrqppyu2z',
+          address: 'bc1pjxzw9tm6qatyapu3c409dg8k23p4hjlk4ehwwlsum3emjqsaetrqppyu2z',
           height: 915891,
           idx: 669,
           isOpInRBF: false,
@@ -294,11 +272,9 @@ export const allBtcBoxes: UnisatResponse<UnisatAddressBtcUtxos>[] = [
           vout: 1,
           satoshi: 500,
           scriptType: '5120',
-          scriptPk:
-            '512033fadad0034bb0a7912d2bbf2c9163627ba5ec7833341418595418c33deb0fb7',
+          scriptPk: '512033fadad0034bb0a7912d2bbf2c9163627ba5ec7833341418595418c33deb0fb7',
           codeType: 9,
-          address:
-            'bc1pjxzw9tm6qatyapu3c409dg8k23p4hjlk4ehwwlsum3emjqsaetrqppyu2z',
+          address: 'bc1pjxzw9tm6qatyapu3c409dg8k23p4hjlk4ehwwlsum3emjqsaetrqppyu2z',
           height: 904746,
           idx: 1071,
           isOpInRBF: false,
@@ -324,11 +300,9 @@ export const allBtcBoxes: UnisatResponse<UnisatAddressBtcUtxos>[] = [
           vout: 0,
           satoshi: 500,
           scriptType: '5120',
-          scriptPk:
-            '512033fadad0034bb0a7912d2bbf2c9163627ba5ec7833341418595418c33deb0fb7',
+          scriptPk: '512033fadad0034bb0a7912d2bbf2c9163627ba5ec7833341418595418c33deb0fb7',
           codeType: 9,
-          address:
-            'bc1pjxzw9tm6qatyapu3c409dg8k23p4hjlk4ehwwlsum3emjqsaetrqppyu2z',
+          address: 'bc1pjxzw9tm6qatyapu3c409dg8k23p4hjlk4ehwwlsum3emjqsaetrqppyu2z',
           height: 915580,
           idx: 1029,
           isOpInRBF: false,
@@ -341,11 +315,9 @@ export const allBtcBoxes: UnisatResponse<UnisatAddressBtcUtxos>[] = [
           vout: 1,
           satoshi: 546,
           scriptType: '5120',
-          scriptPk:
-            '512033fadad0034bb0a7912d2bbf2c9163627ba5ec7833341418595418c33deb0fb7',
+          scriptPk: '512033fadad0034bb0a7912d2bbf2c9163627ba5ec7833341418595418c33deb0fb7',
           codeType: 9,
-          address:
-            'bc1pjxzw9tm6qatyapu3c409dg8k23p4hjlk4ehwwlsum3emjqsaetrqppyu2z',
+          address: 'bc1pjxzw9tm6qatyapu3c409dg8k23p4hjlk4ehwwlsum3emjqsaetrqppyu2z',
           height: 913922,
           idx: 1206,
           isOpInRBF: false,

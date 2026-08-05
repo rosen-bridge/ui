@@ -7,10 +7,7 @@ export interface TableGridRowOverrides {}
 
 export type TableGridRowOwnProps = {};
 
-export type TableGridRowBaseProps = ElementBaseProps<
-  'div',
-  TableGridRowOwnProps
->;
+export type TableGridRowBaseProps = ElementBaseProps<'div', TableGridRowOwnProps>;
 
 export type TableGridRowProps = OverridableType<
   TableGridRowBaseProps,

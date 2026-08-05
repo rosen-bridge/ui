@@ -65,9 +65,7 @@ export const NetworkProvider = ({ children }: { children: ReactNode }) => {
         .map((raw) => raw.trim())
         .filter(Boolean)
         .map((raw) => {
-          const [fromChain, toChain, tokenName] = raw
-            .split(',')
-            .map((value) => value.trim());
+          const [fromChain, toChain, tokenName] = raw.split(',').map((value) => value.trim());
           return {
             fromChain,
             toChain,
@@ -78,9 +76,7 @@ export const NetworkProvider = ({ children }: { children: ReactNode }) => {
   );
 
   const getNetwork = useCallback((name: NetworkKey) => {
-    return Object.values<Network>(networks).find(
-      (wallet) => wallet.name === name,
-    );
+    return Object.values<Network>(networks).find((wallet) => wallet.name === name);
   }, []);
 
   /**
@@ -177,7 +173,5 @@ export const NetworkProvider = ({ children }: { children: ReactNode }) => {
     availableTokens,
   };
 
-  return (
-    <NetworkContext.Provider value={state}>{children}</NetworkContext.Provider>
-  );
+  return <NetworkContext.Provider value={state}>{children}</NetworkContext.Provider>;
 };

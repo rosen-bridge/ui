@@ -1,13 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { Icon } from '../../icon';
-import {
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-} from '../Mui';
+import { List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '../Mui';
 import { Popup } from './Popup';
 import type { Input, Selected, SelectOption } from './types';
 
@@ -20,21 +14,12 @@ export type PickerProps = {
   onSelect?: (value: Selected['value']) => void;
 };
 
-export const Picker = ({
-  anchorEl,
-  open,
-  query,
-  value,
-  onClose,
-  onSelect,
-}: PickerProps) => {
+export const Picker = ({ anchorEl, open, query, value, onClose, onSelect }: PickerProps) => {
   const lastMoveRef = useRef(0);
 
   const [indexSelected, setIndexSelected] = useState(-1);
 
-  const [items, setItems] = useState(
-    new Set<string | number | boolean | null>(),
-  );
+  const [items, setItems] = useState(new Set<string | number | boolean | null>());
 
   const itemRefs = useRef<Array<HTMLDivElement | null>>([]);
 
@@ -121,16 +106,12 @@ export const Picker = ({
         }
         case 'ArrowDown:multiple':
         case 'ArrowDown:select': {
-          setIndexSelected(
-            options.length > indexSelected + 1 ? indexSelected + 1 : 0,
-          );
+          setIndexSelected(options.length > indexSelected + 1 ? indexSelected + 1 : 0);
           break;
         }
         case 'ArrowUp:multiple':
         case 'ArrowUp:select': {
-          setIndexSelected(
-            0 < indexSelected ? indexSelected - 1 : options.length - 1,
-          );
+          setIndexSelected(0 < indexSelected ? indexSelected - 1 : options.length - 1);
           break;
         }
         case 'Enter:multiple':
@@ -212,11 +193,7 @@ export const Picker = ({
             })();
 
             return (
-              <ListItem
-                key={`${option.value}`}
-                disablePadding
-                secondaryAction={post}
-              >
+              <ListItem key={`${option.value}`} disablePadding secondaryAction={post}>
                 <ListItemButton
                   ref={setItemRef(index)}
                   selected={indexSelected === index}

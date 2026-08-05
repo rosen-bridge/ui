@@ -1,9 +1,4 @@
-import {
-  Column,
-  Entity,
-  PrimaryGeneratedColumn,
-  Unique,
-} from '@rosen-bridge/extended-typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, Unique } from '@rosen-bridge/extended-typeorm';
 
 @Unique(['status', 'fromChain', 'toChain'])
 @Entity('event_count_entity')

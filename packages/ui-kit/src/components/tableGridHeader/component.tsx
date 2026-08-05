@@ -9,10 +9,7 @@ export interface TableGridHeaderOverrides {}
 
 export type TableGridHeaderOwnProps = {};
 
-export type TableGridHeaderBaseProps = ElementBaseProps<
-  'div',
-  TableGridHeaderOwnProps
->;
+export type TableGridHeaderBaseProps = ElementBaseProps<'div', TableGridHeaderOwnProps>;
 
 export type TableGridHeaderProps = OverridableType<
   TableGridHeaderBaseProps,

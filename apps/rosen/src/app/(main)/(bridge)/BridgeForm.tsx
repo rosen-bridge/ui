@@ -51,8 +51,7 @@ export const BridgeForm = () => {
     formState: { isValidating },
   } = useTransactionFormData();
 
-  const { sources, availableSources, availableTargets, availableTokens } =
-    useNetwork();
+  const { sources, availableSources, availableTargets, availableTokens } = useNetwork();
 
   const { isLoading, raw: balanceRaw, amount: balanceAmount } = useBalance();
 
@@ -67,9 +66,7 @@ export const BridgeForm = () => {
 
   const renderSelectedNetwork = (value: unknown) => {
     const network = sources.find((network) => network.name === value);
-    return (
-      <Network value={network?.name} slots={{ logo: { size: 'medium' } }} />
-    );
+    return <Network value={network?.name} slots={{ logo: { size: 'medium' } }} />;
   };
 
   const handleTokenChange = useCallback(
@@ -149,10 +146,7 @@ export const BridgeForm = () => {
         >
           {availableSources.map((network) => (
             <MenuItemMui key={network.name} value={network.name}>
-              <Network
-                value={network.name}
-                slots={{ logo: { size: 'medium' } }}
-              />
+              <Network value={network.name} slots={{ logo: { size: 'medium' } }} />
             </MenuItemMui>
           ))}
         </TextField>
@@ -174,10 +168,7 @@ export const BridgeForm = () => {
         >
           {availableTargets.map((network) => (
             <MenuItemMui key={network.name} value={network.name}>
-              <Network
-                value={network.name}
-                slots={{ logo: { size: 'medium' } }}
-              />
+              <Network value={network.name} slots={{ logo: { size: 'medium' } }} />
             </MenuItemMui>
           ))}
         </TextField>
@@ -210,11 +201,7 @@ export const BridgeForm = () => {
         variant="filled"
         error={!!errors?.walletAddress}
         helperText={
-          isValidating ? (
-            <CircularProgress size={10} />
-          ) : (
-            errors.walletAddress?.message?.toString()
-          )
+          isValidating ? <CircularProgress size={10} /> : errors.walletAddress?.message?.toString()
         }
         disabled={!targetField.value}
         autoComplete="off"
@@ -244,14 +231,9 @@ export const BridgeForm = () => {
         value={tokenField.value}
         getOptionLabel={(option) => option.name || ''}
         isOptionEqualToValue={(option, value) => {
-          return (
-            (option as RosenChainToken)?.tokenId ===
-            (value as RosenChainToken)?.tokenId
-          );
+          return (option as RosenChainToken)?.tokenId === (value as RosenChainToken)?.tokenId;
         }}
-        renderInput={(params) => (
-          <TextField {...params} label="Token" name={tokenField.name} />
-        )}
+        renderInput={(params) => <TextField {...params} label="Token" name={tokenField.name} />}
         onChange={handleTokenChange}
       />
       <TextField
@@ -263,19 +245,17 @@ export const BridgeForm = () => {
         helperText={errors.amount?.message?.toString()}
         InputProps={{
           disableUnderline: true,
-          endAdornment: tokenField.value &&
-            selectedWallet &&
-            balanceAmount >= 0n && (
-              <UseAllAmount
-                disabled={!addressField.value || !!errors?.walletAddress}
-                error={!!error}
-                loading={isLoading || isMaxLoading}
-                value={balanceRaw}
-                unit={(tokenValue as RosenChainToken)?.name}
-                onClick={handleSelectMax}
-                onRetry={load}
-              />
-            ),
+          endAdornment: tokenField.value && selectedWallet && balanceAmount >= 0n && (
+            <UseAllAmount
+              disabled={!addressField.value || !!errors?.walletAddress}
+              error={!!error}
+              loading={isLoading || isMaxLoading}
+              value={balanceRaw}
+              unit={(tokenValue as RosenChainToken)?.name}
+              onClick={handleSelectMax}
+              onRetry={load}
+            />
+          ),
         }}
         inputProps={{
           'style': { fontSize: '2rem' },

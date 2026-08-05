@@ -35,10 +35,7 @@ export const getDecimalString = (
  * @param decimals - Number of decimal places
  * @returns Integer string without decimal point
  */
-export const getNonDecimalString = (
-  value: bigint | string | number,
-  decimals: number,
-): string => {
+export const getNonDecimalString = (value: bigint | string | number, decimals: number): string => {
   if (!decimals || !value) return value?.toString() || '0';
 
   const valueString = value.toString();
@@ -113,10 +110,7 @@ export const scientificToString = (value?: number | string): string => {
   } else if (newIndex >= digits.length) {
     result = `${digits}${'0'.repeat(newIndex - digits.length)}`;
   } else {
-    result = `${digits.slice(0, newIndex)}.${digits.slice(newIndex)}`.replace(
-      /\.?0+$/,
-      '',
-    );
+    result = `${digits.slice(0, newIndex)}.${digits.slice(newIndex)}`.replace(/\.?0+$/, '');
   }
   return isNegative ? `-${result}` : result;
 };
@@ -129,10 +123,7 @@ export const scientificToString = (value?: number | string): string => {
  * @param power - Exponent of 10
  * @returns Normalized numeric string
  */
-export const multiplyByPowerOfTen = (
-  value: string | bigint,
-  power: number,
-): string => {
+export const multiplyByPowerOfTen = (value: string | bigint, power: number): string => {
   if (!value) return '0';
 
   const base = value.toString();

@@ -1,8 +1,5 @@
 import { DefaultLogger } from '@rosen-bridge/abstract-logger';
-import {
-  FailoverStrategy,
-  NetworkConnectorManager,
-} from '@rosen-bridge/abstract-scanner';
+import { FailoverStrategy, NetworkConnectorManager } from '@rosen-bridge/abstract-scanner';
 import {
   FiroElectrumXNetwork,
   FiroElectrumXScanner,
@@ -27,11 +24,10 @@ const scannerLogger = logger.child(FIRO_SCANNER_LOGGER_NAME);
  * Creates and configures a NetworkConnectorManager instance for firo scanner
  */
 export const createFiroNetworkConnectorManager = () => {
-  const networkConnectorManager =
-    new NetworkConnectorManager<FiroRpcTransaction>(
-      new FailoverStrategy(),
-      scannerLogger,
-    );
+  const networkConnectorManager = new NetworkConnectorManager<FiroRpcTransaction>(
+    new FailoverStrategy(),
+    scannerLogger,
+  );
 
   const network = new FiroElectrumXNetwork(
     config.firo.electrumxHost,

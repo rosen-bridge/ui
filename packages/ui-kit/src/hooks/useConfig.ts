@@ -14,13 +14,10 @@ export const useConfig = <C extends string, P extends WithClassName>(
 
   const baseClass = `Rosen${componentName}`;
 
-  const className = props.className
-    ? `${baseClass} ${props.className}`
-    : baseClass;
+  const className = props.className ? `${baseClass} ${props.className}` : baseClass;
 
   const global =
-    config?.components?.[componentName as keyof typeof config.components]
-      ?.defaultProps;
+    config?.components?.[componentName as keyof typeof config.components]?.defaultProps;
 
   return {
     ...global,

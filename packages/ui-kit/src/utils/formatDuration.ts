@@ -27,9 +27,7 @@ const UNITS = [
  * - `0` → `error: false`, `parts: [{ value: 0, unit: "second" }]`
  * - Positive values producing valid parts → `error: false`
  */
-export const formatDuration = (
-  value?: number,
-): { parts?: DurationPart[]; error: boolean } => {
+export const formatDuration = (value?: number): { parts?: DurationPart[]; error: boolean } => {
   if (value === undefined) return { parts: undefined, error: false };
 
   if (Number.isNaN(value) || !Number.isFinite(value) || value < 0) {

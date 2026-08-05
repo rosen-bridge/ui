@@ -74,16 +74,8 @@ export const AppInfo = ({ children, resolver }: AppInfoProps) => {
 
   return (
     <div>
-      <EnhancedDialog
-        maxWidth="tablet"
-        open={open}
-        stickOn="tablet"
-        onClose={() => setOpen(false)}
-      >
-        <EnhancedDialogTitle
-          icon="ExclamationCircle"
-          onClose={() => setOpen(false)}
-        >
+      <EnhancedDialog maxWidth="tablet" open={open} stickOn="tablet" onClose={() => setOpen(false)}>
+        <EnhancedDialogTitle icon="ExclamationCircle" onClose={() => setOpen(false)}>
           <Typography variant="h2" fontWeight="bold">
             About Rosen Bridge
           </Typography>
@@ -129,12 +121,7 @@ export const AppInfo = ({ children, resolver }: AppInfoProps) => {
         </EnhancedDialogContent>
       </EnhancedDialog>
 
-      <IconButton
-        color="inherit"
-        disabled={loading}
-        loading={loading}
-        onClick={handleClick}
-      >
+      <IconButton color="inherit" disabled={loading} loading={loading} onClick={handleClick}>
         <Icon name="InfoCircle" />
       </IconButton>
     </div>

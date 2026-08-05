@@ -57,10 +57,7 @@ export const validator = async (request: NextRequest) => {
   return ParamsSchema.validate(await request.json());
 };
 
-export const paramsToSignMessage = (
-  params: Params,
-  timestampSeconds: number,
-): string => {
+export const paramsToSignMessage = (params: Params, timestampSeconds: number): string => {
   const txData = params.tx
     ? `${params.tx.txId}${params.tx.chain}${params.tx.txType}${params.tx.txStatus}`
     : '';

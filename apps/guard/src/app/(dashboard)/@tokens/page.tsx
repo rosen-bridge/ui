@@ -50,12 +50,7 @@ const Token = ({ chain }: { chain: Network }) => {
   }, [chain, data]);
 
   return (
-    <TokensCard
-      chain={chain}
-      loading={isLoading}
-      title={NETWORKS[chain].label}
-      tokens={tokens}
-    />
+    <TokensCard chain={chain} loading={isLoading} title={NETWORKS[chain].label} tokens={tokens} />
   );
 };
 
@@ -78,10 +73,7 @@ const Tokens = () => {
             .filter((network) => network.hasTokenSupport)
             .sort((a, b) => a.index - b.index)
             .map((network) => (
-              <CarouselItem
-                key={network.key}
-                size="clamp(400px, calc(50% - 0.75rem), 600px)"
-              >
+              <CarouselItem key={network.key} size="clamp(400px, calc(50% - 0.75rem), 600px)">
                 <Token chain={network.key} />
               </CarouselItem>
             ))}

@@ -69,11 +69,7 @@ export const generateUnsignedTx =
         value: unwrappedAmount,
       });
     }
-    const lockBox = generateOutputBox(
-      lockAssets,
-      lockAddress,
-      protocolParams.coins_per_utxo_size,
-    );
+    const lockBox = generateOutputBox(lockAssets, lockAddress, protocolParams.coins_per_utxo_size);
 
     // calculate required assets to get input boxes
     lockAssets.nativeToken = BigInt(lockBox.amount().coin().to_str());
@@ -93,11 +89,7 @@ export const generateUnsignedTx =
       () => 0n,
     );
     if (!inputs.covered) {
-      handleUncoveredAssets(
-        tokenMap,
-        NETWORKS.cardano.key,
-        inputs.uncoveredAssets,
-      );
+      handleUncoveredAssets(tokenMap, NETWORKS.cardano.key, inputs.uncoveredAssets);
     }
 
     return generateTx(
@@ -140,16 +132,10 @@ const generateTx = (
   fee?: bigint,
 ): string => {
   const auxiliaryData = wasm.AuxiliaryData.from_hex(auxiliaryDataHex);
-  const txBuilder = wasm.TransactionBuilder.new(
-    getTxBuilderConfig(protocolParams),
-  );
+  const txBuilder = wasm.TransactionBuilder.new(getTxBuilderConfig(protocolParams));
 
   // generate lock box
-  const lockBox = generateOutputBox(
-    lockAssets,
-    lockAddress,
-    protocolParams.coins_per_utxo_size,
-  );
+  const lockBox = generateOutputBox(lockAssets, lockAddress, protocolParams.coins_per_utxo_size);
 
   // add lock box to tx and calculate required assets to get input boxes
   lockAssets.nativeToken = BigInt(lockBox.amount().coin().to_str());
@@ -173,10 +159,7 @@ const generateTx = (
     }
     txBuilder.add_regular_input(
       wasm.Address.from_bech32(utxo.address),
-      wasm.TransactionInput.new(
-        wasm.TransactionHash.from_hex(utxo.txId),
-        utxo.index,
-      ),
+      wasm.TransactionInput.new(wasm.TransactionHash.from_hex(utxo.txId), utxo.index),
       lockBox.amount(),
     );
   });

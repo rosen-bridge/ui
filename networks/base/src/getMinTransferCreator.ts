@@ -20,12 +20,7 @@ export const getMinTransferCreator =
     const ergoTokenId = tokens[0].ergo.tokenId;
 
     try {
-      const { fees } = await calculateFee(
-        targetChain,
-        ergoTokenId,
-        0,
-        minimumFeeNFT,
-      );
+      const { fees } = await calculateFee(targetChain, ergoTokenId, 0, minimumFeeNFT);
 
       const networkFee = fees?.networkFee ?? 0n;
       const bridgeFee = fees?.bridgeFee ?? 0n;

@@ -91,12 +91,7 @@ const Page = () => {
   );
 
   const renderSidebar = useCallback(
-    () => (
-      <Sidebar
-        value={current}
-        onClose={() => collection.setFragment(undefined)}
-      />
-    ),
+    () => <Sidebar value={current} onClose={() => collection.setFragment(undefined)} />,
     [current, collection.setFragment],
   );
 

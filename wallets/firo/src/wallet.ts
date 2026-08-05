@@ -3,11 +3,7 @@ import { FiroNetwork } from '@rosen-network/firo/dist/client';
 import { NETWORKS } from '@rosen-ui/constants';
 import type { Network } from '@rosen-ui/types';
 import { getDecimalString } from '@rosen-ui/utils';
-import {
-  UnsupportedChainError,
-  Wallet,
-  type WalletTransferParams,
-} from '@rosen-ui/wallet-api';
+import { UnsupportedChainError, Wallet, type WalletTransferParams } from '@rosen-ui/wallet-api';
 
 import { ICON } from './icon';
 import type { FiroWalletConfig } from './types';

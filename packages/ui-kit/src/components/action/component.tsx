@@ -13,10 +13,7 @@ type ActionAsAnchor = ElementBaseProps<
   ActionOwnProps & { href: string | undefined; disabled?: boolean }
 >;
 
-type ActionAsButton = ElementBaseProps<
-  'button',
-  ActionOwnProps & { href?: never }
->;
+type ActionAsButton = ElementBaseProps<'button', ActionOwnProps & { href?: never }>;
 
 export type ActionBaseProps = ActionAsAnchor | ActionAsButton;
 

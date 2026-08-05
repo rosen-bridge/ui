@@ -1,9 +1,4 @@
-import {
-  AggregateEventStatus,
-  AggregateTxStatus,
-  EventStatus,
-  TxStatus,
-} from './constants';
+import { AggregateEventStatus, AggregateTxStatus, EventStatus, TxStatus } from './constants';
 import type { GuardStatusEntity } from './entities/GuardStatusEntity';
 import type { AggregatedStatus, Threshold } from './types';
 
@@ -14,10 +9,7 @@ export class Utils {
    * @param s2
    * @returns boolean
    */
-  static aggregatedStatusesMatch = (
-    s1: AggregatedStatus,
-    s2: AggregatedStatus,
-  ): boolean => {
+  static aggregatedStatusesMatch = (s1: AggregatedStatus, s2: AggregatedStatus): boolean => {
     return (
       s1.status === s2.status &&
       s1.txStatus === s2.txStatus &&
@@ -40,9 +32,7 @@ export class Utils {
    * @param guardStatus
    * @returns tx status as string or undefined if tx is not available
    */
-  static encodeTxStatus = (
-    guardStatus: GuardStatusEntity,
-  ): string | undefined => {
+  static encodeTxStatus = (guardStatus: GuardStatusEntity): string | undefined => {
     if (!guardStatus.tx) return undefined;
     const txKey = JSON.stringify({
       txId: guardStatus.tx.txId,
@@ -110,9 +100,7 @@ export class Utils {
     guardStatuses: GuardStatusEntity[],
     txStatusThresholds: Threshold<AggregateTxStatus>[],
   ) => {
-    const statuses = guardStatuses
-      .map(this.encodeTxStatus)
-      .filter((v) => !!v) as string[];
+    const statuses = guardStatuses.map(this.encodeTxStatus).filter((v) => !!v) as string[];
     const counts = this.countSimilar(statuses);
     for (const threshold of txStatusThresholds) {
       for (const encodedStatus of Object.keys(counts)) {
@@ -147,10 +135,7 @@ export class Utils {
       return aggregatedStatus;
     }
 
-    const aggregatedEventStatus = this.getAggregatedEventStatus(
-      statuses,
-      eventStatusThresholds,
-    );
+    const aggregatedEventStatus = this.getAggregatedEventStatus(statuses, eventStatusThresholds);
     if (!aggregatedEventStatus) {
       return aggregatedStatus;
     }
@@ -165,9 +150,7 @@ export class Utils {
     }
 
     const aggregatedTxStatus = this.getAggregatedTxStatus(
-      statuses.filter(
-        (status) => this.encodeEventStatus(status) === aggregatedEventStatus,
-      ),
+      statuses.filter((status) => this.encodeEventStatus(status) === aggregatedEventStatus),
       txStatusThresholds,
     );
     if (!aggregatedTxStatus) {
@@ -182,9 +165,7 @@ export class Utils {
    * @param status
    * @returns AggregateEventStatus
    */
-  static eventStatusToAggregate = (
-    status: EventStatus,
-  ): AggregateEventStatus => {
+  static eventStatusToAggregate = (status: EventStatus): AggregateEventStatus => {
     switch (status) {
       case EventStatus.inPayment:
         return AggregateEventStatus.inPayment;

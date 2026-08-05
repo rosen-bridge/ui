@@ -1,10 +1,6 @@
 import type { AbstractLogger } from '@rosen-bridge/abstract-logger';
 import type { DataSource } from '@rosen-bridge/extended-typeorm';
-import {
-  type Dependency,
-  ServiceAction,
-  ServiceStatus,
-} from '@rosen-bridge/service-manager';
+import { type Dependency, ServiceAction, ServiceStatus } from '@rosen-bridge/service-manager';
 import { lockedAssetsMetric } from '@rosen-ui/rosen-statistics';
 
 import { configs } from '../configs';
@@ -20,11 +16,7 @@ export class LockedAssetsMetricService extends AbstractLockedAssetsMetricService
   protected dependencies: Dependency[] = [
     {
       serviceName: AbstractDBService.name,
-      allowedStatuses: [
-        ServiceStatus.running,
-        ServiceStatus.started,
-        ServiceStatus.dormant,
-      ],
+      allowedStatuses: [ServiceStatus.running, ServiceStatus.started, ServiceStatus.dormant],
       action: ServiceAction.assemble,
     },
     {
@@ -64,9 +56,7 @@ export class LockedAssetsMetricService extends AbstractLockedAssetsMetricService
     if (AbstractLockedAssetsMetricService.instance != undefined) {
       return;
     }
-    AbstractLockedAssetsMetricService.instance = new LockedAssetsMetricService(
-      logger,
-    );
+    AbstractLockedAssetsMetricService.instance = new LockedAssetsMetricService(logger);
   };
 
   /**
@@ -77,10 +67,7 @@ export class LockedAssetsMetricService extends AbstractLockedAssetsMetricService
    */
   private lockedAssetsCalculation = async (): Promise<void> => {
     try {
-      await lockedAssetsMetric(
-        this.dataSource,
-        this.logger.child('lockedAssetsMetric'),
-      );
+      await lockedAssetsMetric(this.dataSource, this.logger.child('lockedAssetsMetric'));
 
       this.logger.info('Locked assets calculation job completed successfully');
     } catch (error) {

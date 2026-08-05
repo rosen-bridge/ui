@@ -1,8 +1,5 @@
 import { DefaultLogger } from '@rosen-bridge/abstract-logger';
-import {
-  FailoverStrategy,
-  NetworkConnectorManager,
-} from '@rosen-bridge/abstract-scanner';
+import { FailoverStrategy, NetworkConnectorManager } from '@rosen-bridge/abstract-scanner';
 import {
   CardanoKoiosScanner,
   KoiosNetwork,

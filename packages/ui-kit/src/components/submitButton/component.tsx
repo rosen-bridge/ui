@@ -8,10 +8,7 @@ export interface SubmitButtonOverrides {}
 
 export type SubmitButtonOwnProps = {};
 
-export type SubmitButtonBaseProps = ElementBaseProps<
-  typeof Button,
-  SubmitButtonOwnProps
->;
+export type SubmitButtonBaseProps = ElementBaseProps<typeof Button, SubmitButtonOwnProps>;
 
 export type SubmitButtonProps = OverridableType<
   SubmitButtonBaseProps,

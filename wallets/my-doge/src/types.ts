@@ -15,11 +15,7 @@ declare global {
         publicKey: string;
       }>;
       disconnect: () => Promise<{ disconnected: true }>;
-      requestPsbt: (params: {
-        rawTx: string;
-        indexes: number[];
-        signOnly: boolean;
-      }) => Promise<{
+      requestPsbt: (params: { rawTx: string; indexes: number[]; signOnly: boolean }) => Promise<{
         txId: string;
       }>;
       getBalance: () => Promise<{

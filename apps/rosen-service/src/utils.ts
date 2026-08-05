@@ -40,10 +40,7 @@ export const handleError = (
 ) => {
   if (!(error instanceof AppError) || !error.canBeHandled) {
     logger.error('an error occurred that cannot be handled');
-    logger.error(
-      `${error}`,
-      error instanceof AppError ? error.context : undefined,
-    );
+    logger.error(`${error}`, error instanceof AppError ? error.context : undefined);
     error instanceof Error && error.stack && logger.error(error.stack);
     logger.error('shutting down service');
     process.exit(1);
@@ -60,10 +57,7 @@ export const handleError = (
  * @param job
  * @param interval
  */
-export const runAndSetInterval = async (
-  job: () => unknown,
-  interval: number,
-) => {
+export const runAndSetInterval = async (job: () => unknown, interval: number) => {
   await job();
 
   setTimeout(() => {

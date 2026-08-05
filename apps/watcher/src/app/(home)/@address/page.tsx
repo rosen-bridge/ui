@@ -2,13 +2,7 @@
 
 import useSWR from 'swr';
 
-import {
-  Card,
-  CardBody,
-  CardHeader,
-  CardTitle,
-  Identifier,
-} from '@rosen-bridge/ui-kit';
+import { Card, CardBody, CardHeader, CardTitle, Identifier } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 
 import type { ApiInfoResponse } from '@/types/api';

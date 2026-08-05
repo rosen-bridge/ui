@@ -1,12 +1,5 @@
-import {
-  type AbstractLogger,
-  DummyLogger,
-} from '@rosen-bridge/abstract-logger';
-import {
-  type DataSource,
-  In,
-  type Repository,
-} from '@rosen-bridge/extended-typeorm';
+import { type AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
+import { type DataSource, In, type Repository } from '@rosen-bridge/extended-typeorm';
 import JsonBigInt from '@rosen-bridge/json-bigint';
 
 import { TokenEntity } from './TokenEntity';
@@ -27,9 +20,7 @@ class TokenModel {
    */
   insertToken = async (token: TokenEntity) => {
     await this.tokenRepository.save(token);
-    this.logger.debug(
-      `Token [${JsonBigInt.stringify(token)}] inserted into database`,
-    );
+    this.logger.debug(`Token [${JsonBigInt.stringify(token)}] inserted into database`);
     return token;
   };
 
@@ -37,9 +28,7 @@ class TokenModel {
    * Return all stored token ids
    */
   getAllStoredTokens = async (): Promise<string[]> => {
-    return (await this.tokenRepository.find({ select: ['id'] })).map(
-      (token) => token.id,
-    );
+    return (await this.tokenRepository.find({ select: ['id'] })).map((token) => token.id);
   };
 
   /**
@@ -48,8 +37,7 @@ class TokenModel {
    */
   removeTokens = async (tokenIds: string[]) => {
     await this.tokenRepository.delete({ id: In(tokenIds) });
-    tokenIds.length &&
-      this.logger.debug(`Deleted tokens ${tokenIds} from the database`);
+    tokenIds.length && this.logger.debug(`Deleted tokens ${tokenIds} from the database`);
   };
 }
 

@@ -1,10 +1,7 @@
 import type { TransactionResponse } from 'ethers';
 
 import { DefaultLogger } from '@rosen-bridge/abstract-logger';
-import {
-  FailoverStrategy,
-  NetworkConnectorManager,
-} from '@rosen-bridge/abstract-scanner';
+import { FailoverStrategy, NetworkConnectorManager } from '@rosen-bridge/abstract-scanner';
 import { EvmRpcNetwork, EvmRpcScanner } from '@rosen-bridge/evm-scanner';
 
 import config from '../../configs';
@@ -25,11 +22,10 @@ const scannerLogger = logger.child(BINANCE_SCANNER_LOGGER_NAME);
  * Creates and configures a NetworkConnectorManager instance for binance scanner
  */
 export const createBinanceNetworkConnectorManager = () => {
-  const networkConnectorManager =
-    new NetworkConnectorManager<TransactionResponse>(
-      new FailoverStrategy(),
-      scannerLogger,
-    );
+  const networkConnectorManager = new NetworkConnectorManager<TransactionResponse>(
+    new FailoverStrategy(),
+    scannerLogger,
+  );
 
   networkConnectorManager.addConnector(
     new EvmRpcNetwork(

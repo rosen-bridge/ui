@@ -12,9 +12,7 @@ import {
 const NotFound = () => {
   return (
     <Fragment>
-      <CubeNetBackground
-        style={{ position: 'absolute', inset: 0, zIndex: -1 }}
-      />
+      <CubeNetBackground style={{ position: 'absolute', inset: 0, zIndex: -1 }} />
       <Stack
         align="center"
         direction="column"

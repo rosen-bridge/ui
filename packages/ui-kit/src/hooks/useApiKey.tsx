@@ -1,9 +1,4 @@
-import {
-  createContext,
-  type PropsWithChildren,
-  useContext,
-  useState,
-} from 'react';
+import { createContext, type PropsWithChildren, useContext, useState } from 'react';
 
 /**
  * access api key to set on the the server request and mutations
@@ -30,7 +25,5 @@ export const ApiKeyProvider = ({ children }: PropsWithChildren) => {
 
   const state = { apiKey, setApiKey };
 
-  return (
-    <ApiKeyContext.Provider value={state}>{children}</ApiKeyContext.Provider>
-  );
+  return <ApiKeyContext.Provider value={state}>{children}</ApiKeyContext.Provider>;
 };

@@ -38,16 +38,9 @@ export type EventCardOwnProps = {
   };
 };
 
-export type EventCardBaseProps = ElementBaseProps<
-  typeof Card,
-  EventCardOwnProps
->;
+export type EventCardBaseProps = ElementBaseProps<typeof Card, EventCardOwnProps>;
 
-export type EventCardProps = OverridableType<
-  EventCardBaseProps,
-  EventCardOverrides,
-  never
->;
+export type EventCardProps = OverridableType<EventCardBaseProps, EventCardOverrides, never>;
 
 export const EventCard = (props: EventCardProps) => {
   const { loading, value, ...rest } = useConfig('EventCard', props);
@@ -80,20 +73,8 @@ export const EventCard = (props: EventCardProps) => {
         <div className="RosenEventCard-footer">
           <Connector
             variant="filled"
-            start={
-              <Network
-                loading={loading}
-                value={value?.fromChain}
-                variant="logo"
-              />
-            }
-            end={
-              <Network
-                loading={loading}
-                value={value?.toChain}
-                variant="logo"
-              />
-            }
+            start={<Network loading={loading} value={value?.fromChain} variant="logo" />}
+            end={<Network loading={loading} value={value?.toChain} variant="logo" />}
           />
           <EventStatus loading={loading} value={value?.status} />
         </div>

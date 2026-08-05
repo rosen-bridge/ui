@@ -1,24 +1,14 @@
 import { address, Psbt, payments } from 'bitcoinjs-lib';
 
-import {
-  BitcoinBoxSelection,
-  generateFeeEstimator,
-} from '@rosen-bridge/bitcoin-utxo-selection';
+import { BitcoinBoxSelection, generateFeeEstimator } from '@rosen-bridge/bitcoin-utxo-selection';
 import type { RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
 import { handleUncoveredAssets } from '@rosen-network/base';
 import { NETWORKS } from '@rosen-ui/constants';
 import type { RosenAmountValue } from '@rosen-ui/types';
 
-import {
-  SEGWIT_INPUT_WEIGHT_UNIT,
-  SEGWIT_OUTPUT_WEIGHT_UNIT,
-} from './constants';
+import { SEGWIT_INPUT_WEIGHT_UNIT, SEGWIT_OUTPUT_WEIGHT_UNIT } from './constants';
 import type { BitcoinUtxo, UnsignedPsbtData } from './types';
-import {
-  getAddressUtxos,
-  getFeeRatio,
-  getMinimumMeaningfulSatoshi,
-} from './utils';
+import { getAddressUtxos, getFeeRatio, getMinimumMeaningfulSatoshi } from './utils';
 
 const selector = new BitcoinBoxSelection();
 
@@ -94,11 +84,7 @@ export const generateUnsignedTx =
       estimateFee,
     );
     if (!coveredBoxes.covered) {
-      handleUncoveredAssets(
-        tokenMap,
-        NETWORKS.bitcoin.key,
-        coveredBoxes.uncoveredAssets,
-      );
+      handleUncoveredAssets(tokenMap, NETWORKS.bitcoin.key, coveredBoxes.uncoveredAssets);
     }
 
     // add inputs

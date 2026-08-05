@@ -9,10 +9,7 @@ export interface MenuGroupLabelOverrides {}
 
 export type MenuGroupLabelOwnProps = {};
 
-export type MenuGroupLabelBaseProps = ElementBaseProps<
-  'div',
-  MenuGroupLabelOwnProps
->;
+export type MenuGroupLabelBaseProps = ElementBaseProps<'div', MenuGroupLabelOwnProps>;
 
 export type MenuGroupLabelProps = OverridableType<
   MenuGroupLabelBaseProps,

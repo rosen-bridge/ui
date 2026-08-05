@@ -60,18 +60,16 @@ export const WalletModal = ({ open, onClose }: WalletModalProps) => {
       </EnhancedDialogTitle>
       <DialogContent>
         <DialogContentText>
-          Please choose any of the supported wallets for{' '}
-          {network.selectedSource?.name} chain.
+          Please choose any of the supported wallets for {network.selectedSource?.name} chain.
         </DialogContentText>
         <Stack spacing={2} style={{ margin: '1rem 0' }}>
           <Alert severity="warning">
-            It may be necessary to reload this page after the following
-            extensions have been installed in order to connect to them.
+            It may be necessary to reload this page after the following extensions have been
+            installed in order to connect to them.
           </Alert>
           {transactionFormData.sourceValue === NETWORKS.bitcoin.key && (
             <Alert severity="warning">
-              We only support native SegWit addresses (P2WPKH or P2WSH) for the
-              source address.
+              We only support native SegWit addresses (P2WPKH or P2WSH) for the source address.
             </Alert>
           )}
         </Stack>

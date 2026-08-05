@@ -10,22 +10,14 @@ import { NETWORKS } from '@rosen-ui/constants';
 import type { Network } from '@rosen-ui/types';
 
 import { minBoxValue } from './constants';
-import type {
-  AssetBalance,
-  BoxInfo,
-  CoveringBoxes,
-  ErgoBoxProxy,
-  TokenInfo,
-} from './types';
+import type { AssetBalance, BoxInfo, CoveringBoxes, ErgoBoxProxy, TokenInfo } from './types';
 
 /**
  * gets Ergo current block height
  * @returns
  */
 export const getHeight = async (): Promise<number> => {
-  const explorerClient = ergoExplorerClientFactory(
-    'https://api.ergoplatform.com',
-  );
+  const explorerClient = ergoExplorerClientFactory('https://api.ergoplatform.com');
   return Number((await explorerClient.v1.getApiV1Networkstate()).height);
 };
 
@@ -156,9 +148,7 @@ export const getCoveringBoxes = async (
   boxIterator: Iterator<ErgoBoxProxy, undefined>,
 ): Promise<CoveringBoxes> => {
   let uncoveredNativeToken = requiredAssets.nativeToken;
-  const uncoveredTokens = requiredAssets.tokens.filter(
-    (info) => info.value > 0n,
-  );
+  const uncoveredTokens = requiredAssets.tokens.filter((info) => info.value > 0n);
 
   const isRequirementRemaining = () => {
     return uncoveredTokens.length > 0 || uncoveredNativeToken > 0n;
@@ -230,10 +220,7 @@ export const getCoveringBoxes = async (
  * @param b second AssetBalance object
  * @returns aggregated AssetBalance
  */
-export const sumAssetBalance = (
-  a: AssetBalance,
-  b: AssetBalance,
-): AssetBalance => {
+export const sumAssetBalance = (a: AssetBalance, b: AssetBalance): AssetBalance => {
   // sum native token
   const nativeToken = a.nativeToken + b.nativeToken;
   const tokens: Array<TokenInfo> = [];
@@ -292,8 +279,7 @@ export const subtractAssetBalance = (
             index
           ].value.toString()}] is less than [${token.value.toString()}]`,
         );
-    } else
-      throw new Error(`Cannot reduce token [${token.id}]: Token not found`);
+    } else throw new Error(`Cannot reduce token [${token.id}]: Token not found`);
   });
 
   return {
@@ -320,12 +306,6 @@ export const getBoxAssets = (box: ErgoBoxProxy): AssetBalance => {
   };
 };
 
-export const calculateFee: CalculateFee = calculateFeeCreator(
-  NETWORKS.ergo.key,
-  getHeight,
-);
+export const calculateFee: CalculateFee = calculateFeeCreator(NETWORKS.ergo.key, getHeight);
 
-export const getMinTransferCreator = getMinTransferCreatorBase(
-  NETWORKS.ergo.key,
-  calculateFee,
-);
+export const getMinTransferCreator = getMinTransferCreatorBase(NETWORKS.ergo.key, calculateFee);

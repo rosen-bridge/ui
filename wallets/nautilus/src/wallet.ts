@@ -67,18 +67,13 @@ export class NautilusWallet extends Wallet<NautilusWalletConfig> {
      * The following condition is required because nautilus only accepts
      * uppercase ERG as tokenId for the erg native token
      */
-    const amount = await wallet.get_balance(
-      token.tokenId === 'erg' ? 'ERG' : token.tokenId,
-    );
+    const amount = await wallet.get_balance(token.tokenId === 'erg' ? 'ERG' : token.tokenId);
 
     return amount;
   };
 
   isAvailable = (): boolean => {
-    return (
-      typeof window.ergoConnector !== 'undefined' &&
-      !!window.ergoConnector.nautilus
-    );
+    return typeof window.ergoConnector !== 'undefined' && !!window.ergoConnector.nautilus;
   };
 
   hasConnection = async (): Promise<boolean> => {

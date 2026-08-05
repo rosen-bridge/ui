@@ -1,7 +1,4 @@
-import {
-  type AbstractLogger,
-  DummyLogger,
-} from '@rosen-bridge/abstract-logger';
+import { type AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
 import type { DataSource } from '@rosen-bridge/extended-typeorm';
 import { NATIVE_TOKEN, type TokenMap } from '@rosen-bridge/tokens';
 
@@ -35,13 +32,9 @@ export class AssetAggregator {
       // get all supported tokens by passing same chain as source and destination parameters
       const chainTokens = this.tokenMap.getTokens(chain, chain);
       for (const token of chainTokens) {
-        const significantDecimal = this.tokenMap.getSignificantDecimals(
-          token.tokenId,
-        );
+        const significantDecimal = this.tokenMap.getSignificantDecimals(token.tokenId);
         if (!significantDecimal) {
-          this.logger.error(
-            `Significant-decimal of token [${token.tokenId}] is undefined`,
-          );
+          this.logger.error(`Significant-decimal of token [${token.tokenId}] is undefined`);
           continue;
         }
         tokens.push({

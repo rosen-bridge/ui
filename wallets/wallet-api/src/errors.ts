@@ -40,12 +40,9 @@ export class UnsupportedChainError extends WalletError {
     public chain: Network,
     public cause?: unknown,
   ) {
-    super(
-      `The chain [${chain}] is not supported for switching in the [${wallet}] wallet`,
-      {
-        cause,
-      },
-    );
+    super(`The chain [${chain}] is not supported for switching in the [${wallet}] wallet`, {
+      cause,
+    });
   }
 }
 
@@ -127,12 +124,9 @@ export class UserDeniedTransactionSignatureError extends WalletError {
     public wallet: string,
     public cause?: unknown,
   ) {
-    super(
-      `Transaction signature denied by the user for the [${wallet}] wallet`,
-      {
-        cause,
-      },
-    );
+    super(`Transaction signature denied by the user for the [${wallet}] wallet`, {
+      cause,
+    });
   }
 }
 
@@ -210,11 +204,8 @@ export class NonTaprootAddressError extends WalletError {
     public wallet: string,
     public cause?: unknown,
   ) {
-    super(
-      `The source address of the selected [${wallet}] wallet is not Taproot.`,
-      {
-        cause,
-      },
-    );
+    super(`The source address of the selected [${wallet}] wallet is not Taproot.`, {
+      cause,
+    });
   }
 }

@@ -5,11 +5,7 @@ import { EventStatus, GuardStatusEntity } from '@rosen-ui/public-status';
 import GuardStatusAction from '@/backend/status/GuardStatusAction';
 
 import { DataSourceMock } from '../../mocked/DataSource.mock';
-import {
-  mockGuardStatusRecords,
-  mockPaginationTestData,
-  triggerId0,
-} from './testData';
+import { mockGuardStatusRecords, mockPaginationTestData, triggerId0 } from './testData';
 
 describe('GuardStatusAction', () => {
   beforeAll(() => {
@@ -91,9 +87,7 @@ describe('GuardStatusAction', () => {
      */
     it('should respond with respect to pagination params', async () => {
       // arrange
-      await DataSourceMock.populateGuardStatus(
-        mockPaginationTestData.guardStatus,
-      );
+      await DataSourceMock.populateGuardStatus(mockPaginationTestData.guardStatus);
 
       // act
       const { total, items } = await GuardStatusAction.getInstance().getMany(
@@ -110,14 +104,13 @@ describe('GuardStatusAction', () => {
       expect(items).toEqual(mockPaginationTestData.guardStatus.slice(0, 6));
 
       // act
-      const { total: total2, items: items2 } =
-        await GuardStatusAction.getInstance().getMany(
-          testDataSource.getRepository(GuardStatusEntity),
-          triggerId0,
-          [],
-          5,
-          10,
-        );
+      const { total: total2, items: items2 } = await GuardStatusAction.getInstance().getMany(
+        testDataSource.getRepository(GuardStatusEntity),
+        triggerId0,
+        [],
+        5,
+        10,
+      );
 
       // assert
       expect(total2).toBe(10);

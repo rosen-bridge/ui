@@ -113,9 +113,7 @@ const Assets = () => {
 
   const renderSidebar = useCallback(() => {
     if (collection.view !== 'grid') return null;
-    return (
-      <ViewGridSidebar value={current} onClose={() => setCurrent(undefined)} />
-    );
+    return <ViewGridSidebar value={current} onClose={() => setCurrent(undefined)} />;
   }, [current, collection.view]);
 
   const renderView = useCallback(
@@ -175,24 +173,12 @@ const Assets = () => {
       pagination={renderPagination()}
       view={renderView()}
     >
-      {!isLoading && !items.length && (
-        <EmptyState style={{ height: 'calc(100vh - 288px)' }} />
-      )}
+      {!isLoading && !items.length && <EmptyState style={{ height: 'calc(100vh - 288px)' }} />}
       {collection.view === 'grid' && !!items.length && (
-        <ViewGrid
-          current={current}
-          items={items}
-          isLoading={isLoading}
-          setCurrent={setCurrent}
-        />
+        <ViewGrid current={current} items={items} isLoading={isLoading} setCurrent={setCurrent} />
       )}
       {collection.view === 'row' && !!items.length && (
-        <ViewRow
-          current={current}
-          items={items}
-          isLoading={isLoading}
-          setCurrent={setCurrent}
-        />
+        <ViewRow current={current} items={items} isLoading={isLoading} setCurrent={setCurrent} />
       )}
     </LayoutList>
   );

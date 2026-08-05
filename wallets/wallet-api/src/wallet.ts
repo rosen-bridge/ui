@@ -97,9 +97,7 @@ export abstract class Wallet<Config extends WalletConfig = WalletConfig> {
   performSwitchChain?: (chain: Network, silent?: boolean) => Promise<void>;
 
   get currentNetwork() {
-    return this.config.networks.find(
-      (network) => network.name === this.currentChain,
-    );
+    return this.config.networks.find((network) => network.name === this.currentChain);
   }
 
   connect = async (): Promise<void> => {
@@ -162,11 +160,7 @@ export abstract class Wallet<Config extends WalletConfig = WalletConfig> {
 
     const tokenMap = await this.config.getTokenMap();
 
-    const wrappedAmount = tokenMap.wrapAmount(
-      token.tokenId,
-      amount,
-      this.currentChain,
-    ).amount;
+    const wrappedAmount = tokenMap.wrapAmount(token.tokenId, amount, this.currentChain).amount;
 
     return wrappedAmount;
   };

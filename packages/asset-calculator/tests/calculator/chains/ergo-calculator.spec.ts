@@ -72,10 +72,7 @@ describe('ErgoCalculator', () => {
       vitest.mocked(ergoExplorerClientFactory).mockReturnValue({
         v1: {
           getApiV1AddressesP1BalanceConfirmed: async (address: string) => ({
-            tokens:
-              address === 'hotAddress'
-                ? [{ tokenId: 'tokenId', amount: 1200n }]
-                : [],
+            tokens: address === 'hotAddress' ? [{ tokenId: 'tokenId', amount: 1200n }] : [],
             nanoErgs: 120000n,
           }),
         },

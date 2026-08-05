@@ -260,10 +260,7 @@ export const lightThemeOptions: ThemeOptions = {
             'borderRadius': theme.spacing(2),
             'backgroundColor': alpha(theme.palette.background.paper, 0.75),
             'minHeight': theme.spacing(7),
-            'transition': theme.transitions.create([
-              'background-color',
-              'box-shadow',
-            ]),
+            'transition': theme.transitions.create(['background-color', 'box-shadow']),
             '&:hover': {
               backgroundColor: alpha(theme.palette.background.paper, 1.0),
             },
@@ -287,10 +284,7 @@ export const lightThemeOptions: ThemeOptions = {
           'borderRadius': theme.shape.borderRadius,
           'backgroundColor': alpha(theme.palette.background.paper, 0.75),
           'minHeight': theme.spacing(7),
-          'transition': theme.transitions.create([
-            'background-color',
-            'box-shadow',
-          ]),
+          'transition': theme.transitions.create(['background-color', 'box-shadow']),
           '&:hover': {
             backgroundColor: alpha(theme.palette.background.paper, 1.0),
           },
