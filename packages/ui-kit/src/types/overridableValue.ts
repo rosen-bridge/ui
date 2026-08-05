@@ -4,11 +4,7 @@
  */
 /** biome-ignore-all lint/suspicious/noExplicitAny: Use a better type */
 
-type Listed<T> = T extends string | number
-  ? T extends `${infer _}` | number
-    ? T
-    : never
-  : never;
+type Listed<T> = T extends string | number ? (T extends `${infer _}` | number ? T : never) : never;
 
 type Unlisted<T> = Exclude<T, Listed<T>>;
 

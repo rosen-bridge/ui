@@ -49,16 +49,13 @@ const RELATIVE_TIME_UNITS: UnitConfig[] = [
  * calculateRelativeTime(new Date(Date.now() + 60000));
  * // { prefix: "in", number: "1", unit: "minute", suffix: "", displayText: undefined }
  */
-export const calculateRelativeTime = (
-  timestamp?: Date | number,
-): RelativeTimeResult => {
+export const calculateRelativeTime = (timestamp?: Date | number): RelativeTimeResult => {
   if (!timestamp) {
     return { displayText: 'invalid' };
   }
   const now = Date.now();
 
-  const target =
-    timestamp instanceof Date ? timestamp.getTime() : timestamp * 1000;
+  const target = timestamp instanceof Date ? timestamp.getTime() : timestamp * 1000;
 
   const diff = target - now;
   const abs = Math.abs(diff);
@@ -78,9 +75,7 @@ export const calculateRelativeTime = (
     };
   }
 
-  const unit =
-    RELATIVE_TIME_UNITS.find((u) => abs >= u.value) ??
-    RELATIVE_TIME_UNITS.at(-1)!;
+  const unit = RELATIVE_TIME_UNITS.find((u) => abs >= u.value) ?? RELATIVE_TIME_UNITS.at(-1)!;
 
   const value = Math.round(abs / unit.value) || 1;
   const unitName = value > 1 ? `${unit.name}s` : unit.name;

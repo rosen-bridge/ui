@@ -1,18 +1,10 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 
-import {
-  type AbstractLogger,
-  DummyLogger,
-} from '@rosen-bridge/abstract-logger';
+import { type AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
 import type { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
 import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
 
-import {
-  METRIC_KEYS,
-  MetricEntity,
-  UserEventEntity,
-  UserEventMetricAction,
-} from '../../lib';
+import { METRIC_KEYS, MetricEntity, UserEventEntity, UserEventMetricAction } from '../../lib';
 import { userEventMetricActionTestData } from '../testData';
 import { createDatabase } from '../utils';
 
@@ -51,8 +43,7 @@ describe('UserEventMetricAction', () => {
      * - Returns 0 (default value when no records exist)
      */
     it('should return 0 when no records exist', async () => {
-      const testData =
-        userEventMetricActionTestData.getLastProcessedHeightNoRecords;
+      const testData = userEventMetricActionTestData.getLastProcessedHeightNoRecords;
 
       const height = await action.getLastProcessedHeight();
 
@@ -74,8 +65,7 @@ describe('UserEventMetricAction', () => {
      * - Returns the maximum lastProcessedHeight value (150)
      */
     it('should return the highest lastProcessedHeight from existing records', async () => {
-      const testData =
-        userEventMetricActionTestData.getLastProcessedHeightMultipleRecords;
+      const testData = userEventMetricActionTestData.getLastProcessedHeightMultipleRecords;
 
       await userEventRepo.insert(testData.userEventRepo);
 
@@ -106,8 +96,7 @@ describe('UserEventMetricAction', () => {
      *   - addr3→addr4: count=1 (event at 112), lastProcessedHeight=112
      */
     it('should aggregate successful events by address pairs', async () => {
-      const testData =
-        userEventMetricActionTestData.getAggregatedEventsMultipleAddresses;
+      const testData = userEventMetricActionTestData.getAggregatedEventsMultipleAddresses;
 
       await eventTriggerRepo.insert(testData.eventTriggerRepo);
 
@@ -134,8 +123,7 @@ describe('UserEventMetricAction', () => {
      *   - lastProcessedHeight = 120 (max height)
      */
     it('should aggregate multiple events for same address pair into single record', async () => {
-      const testData =
-        userEventMetricActionTestData.getAggregatedEventsSameAddress;
+      const testData = userEventMetricActionTestData.getAggregatedEventsSameAddress;
 
       await eventTriggerRepo.insert(testData.eventTriggerRepo);
 
@@ -163,8 +151,7 @@ describe('UserEventMetricAction', () => {
      * - Returns empty array (no events in valid range)
      */
     it('should return empty array when no events since last height', async () => {
-      const testData =
-        userEventMetricActionTestData.getAggregatedEventsNoNewEvents;
+      const testData = userEventMetricActionTestData.getAggregatedEventsNoNewEvents;
 
       await eventTriggerRepo.insert(testData.eventTriggerRepo);
 
@@ -194,8 +181,7 @@ describe('UserEventMetricAction', () => {
      *   - lastProcessedHeight = 110
      */
     it('should exclude events with spendHeight at or above untilProcessedHeight', async () => {
-      const testData =
-        userEventMetricActionTestData.getAggregatedEventsExcludeByHeight;
+      const testData = userEventMetricActionTestData.getAggregatedEventsExcludeByHeight;
 
       await eventTriggerRepo.insert(testData.eventTriggerRepo);
 
@@ -249,8 +235,7 @@ describe('UserEventMetricAction', () => {
      * - Returns 0 (default for non-existent records)
      */
     it('should return 0 when record does not exist', async () => {
-      const testData =
-        userEventMetricActionTestData.getExistingUserEventNotExists;
+      const testData = userEventMetricActionTestData.getExistingUserEventNotExists;
 
       await userEventRepo.insert(testData.userEventRepo);
 
@@ -323,8 +308,7 @@ describe('UserEventMetricAction', () => {
      * - Updates MetricEntity to '1'(total unique groups after upsert remains 1)
      */
     it('should replace existing user event records with new values', async () => {
-      const testData =
-        userEventMetricActionTestData.upsertEventsCountUpdateExisting;
+      const testData = userEventMetricActionTestData.upsertEventsCountUpdateExisting;
 
       await userEventRepo.insert(testData.existingUserEvents);
       await metricRepo.insert(testData.existingMetric);
@@ -370,8 +354,7 @@ describe('UserEventMetricAction', () => {
      * - Updates total metric to '2' (total unique groups after upsert)
      */
     it('should handle both new and existing groups in same transaction', async () => {
-      const testData =
-        userEventMetricActionTestData.upsertEventsCountMixedGroups;
+      const testData = userEventMetricActionTestData.upsertEventsCountMixedGroups;
 
       await userEventRepo.insert(testData.existingUserEvents);
       await metricRepo.insert(testData.existingMetric);

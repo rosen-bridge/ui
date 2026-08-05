@@ -47,9 +47,7 @@ export const generateOpReturnData = async (
 
   // parse toAddress
   const addressHex = encodeAddress(toChain, toAddress);
-  const addressLengthCode = (addressHex.length / 2)
-    .toString(16)
-    .padStart(2, '0');
+  const addressLengthCode = (addressHex.length / 2).toString(16).padStart(2, '0');
 
   return Promise.resolve(
     toChainHex + bridgeFeeHex + networkFeeHex + addressLengthCode + addressHex,
@@ -61,9 +59,7 @@ export const generateOpReturnData = async (
  * @param address
  * @returns
  */
-export const getAddressUtxos = async (
-  address: string,
-): Promise<Array<DogeUtxo>> => {
+export const getAddressUtxos = async (address: string): Promise<Array<DogeUtxo>> => {
   const blockcypherUrl = `${process.env.DOGE_BLOCKCYPHER_API}`;
   const GET_ADDRESS = `${blockcypherUrl}/v1/doge/main/addrs/${address}?unspentOnly=true&limit=500`;
   const res = await Axios.get<BlockCypherAddress>(GET_ADDRESS);
@@ -154,9 +150,7 @@ export const submitTransaction = async (
   const POST_TX = `${blockcypherUrl}/v1/doge/main/txs/push`;
 
   const psbt =
-    encoding === 'base64'
-      ? Psbt.fromBase64(serializedPsbt)
-      : Psbt.fromHex(serializedPsbt);
+    encoding === 'base64' ? Psbt.fromBase64(serializedPsbt) : Psbt.fromHex(serializedPsbt);
   psbt.finalizeAllInputs();
   const txHex = psbt.extractTransaction().toHex();
 
@@ -177,9 +171,7 @@ export const isValidAddress = (addr: string) => {
 };
 
 export const getHeight = async (): Promise<number> => {
-  const response = await fetch(
-    `${process.env.DOGE_BLOCKCYPHER_API}/v1/doge/main`,
-  );
+  const response = await fetch(`${process.env.DOGE_BLOCKCYPHER_API}/v1/doge/main`);
 
   const data = await response.json();
 
@@ -188,12 +180,6 @@ export const getHeight = async (): Promise<number> => {
   return height;
 };
 
-export const calculateFee: CalculateFee = calculateFeeCreator(
-  NETWORKS.doge.key,
-  getHeight,
-);
+export const calculateFee: CalculateFee = calculateFeeCreator(NETWORKS.doge.key, getHeight);
 
-export const getMinTransferCreator = getMinTransferCreatorBase(
-  NETWORKS.doge.key,
-  calculateFee,
-);
+export const getMinTransferCreator = getMinTransferCreatorBase(NETWORKS.doge.key, calculateFee);

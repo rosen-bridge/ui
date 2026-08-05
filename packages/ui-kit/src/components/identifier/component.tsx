@@ -53,11 +53,7 @@ export type IdentifierOwnProps = {
 
 export type IdentifierBaseProps = ElementBaseProps<'div', IdentifierOwnProps>;
 
-export type IdentifierProps = OverridableType<
-  IdentifierBaseProps,
-  IdentifierOverrides,
-  never
->;
+export type IdentifierProps = OverridableType<IdentifierBaseProps, IdentifierOverrides, never>;
 
 /**
  * Identifier component displays a formatted string with optional helper actions.
@@ -95,16 +91,11 @@ export const Identifier = (props: IdentifierProps) => {
 
   const hasFallback = !hasValue && Boolean(fallback);
 
-  const hasActions =
-    (hasValue || hasFallback) &&
-    Boolean(copyable || href || qrcode) &&
-    !loading;
+  const hasActions = (hasValue || hasFallback) && Boolean(copyable || href || qrcode) && !loading;
 
   const disableActions = hasFallback || !hasValue || loading;
 
-  const leading = hasFallback
-    ? fallback
-    : (value ?? '').slice(0, -trailingLength);
+  const leading = hasFallback ? fallback : (value ?? '').slice(0, -trailingLength);
 
   const trailing = (value ?? '').slice(-trailingLength);
 
@@ -179,12 +170,7 @@ export const Identifier = (props: IdentifierProps) => {
       {hasActions && (
         <div className="RosenIdentifier-actions">
           {href && (
-            <IconButton
-              disabled={disableActions}
-              href={href}
-              size="small"
-              target="_blank"
-            >
+            <IconButton disabled={disableActions} href={href} size="small" target="_blank">
               <Icon name="ExternalLinkAlt" size="small" />
             </IconButton>
           )}
@@ -198,18 +184,10 @@ export const Identifier = (props: IdentifierProps) => {
           )}
           {qrcode && (
             <>
-              <IconButton
-                disabled={disableActions}
-                size="small"
-                onClick={() => setOpen(true)}
-              >
+              <IconButton disabled={disableActions} size="small" onClick={() => setOpen(true)}>
                 <Icon name="Qrcode" size="small" />
               </IconButton>
-              <QrCodeDialog
-                open={open}
-                value={value}
-                onClose={() => setOpen(false)}
-              />
+              <QrCodeDialog open={open} value={value} onClose={() => setOpen(false)} />
             </>
           )}
         </div>

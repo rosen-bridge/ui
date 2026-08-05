@@ -1,9 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 
-import {
-  type AbstractLogger,
-  DummyLogger,
-} from '@rosen-bridge/abstract-logger';
+import { type AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
 import { BlockEntity } from '@rosen-bridge/abstract-scanner';
 import type { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
 import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
@@ -77,8 +74,7 @@ describe('BridgeMetricsAction', () => {
      * - Returns the record with the highest lastProcessedHeight
      */
     it('should return the record with the highest lastProcessedHeight', async () => {
-      const testData =
-        bridgeMetricsActionTestData.getLastProcessedHeightMultipleRecords;
+      const testData = bridgeMetricsActionTestData.getLastProcessedHeightMultipleRecords;
 
       await bridgeFeeRepo.insert(testData.bridgeFeeRepo);
 
@@ -116,8 +112,7 @@ describe('BridgeMetricsAction', () => {
      * - Returns the record with the highest lastProcessedHeight
      */
     it('should return the record with the highest lastProcessedHeight', async () => {
-      const testData =
-        bridgeMetricsActionTestData.getLastBridgeAmountWithMultipleRecords;
+      const testData = bridgeMetricsActionTestData.getLastBridgeAmountWithMultipleRecords;
 
       await bridgeAmountRepo.insert(testData.bridgeAmountRepo);
 
@@ -154,8 +149,7 @@ describe('BridgeMetricsAction', () => {
      * - Returns the earliest timestamp
      */
     it('should return the earliest event timestamp', async () => {
-      const testData =
-        bridgeMetricsActionTestData.getFirstEventTimestampMultipleEvents;
+      const testData = bridgeMetricsActionTestData.getFirstEventTimestampMultipleEvents;
 
       await blockRepo.insert(testData.blockRepo);
       await eventTriggerRepo.insert(testData.eventTriggerRepo);
@@ -181,17 +175,13 @@ describe('BridgeMetricsAction', () => {
      * - Does not include events with non-successful status
      */
     it('should fetch bridge amount and bridge fee with block timestamps and token decimals', async () => {
-      const testData =
-        bridgeMetricsActionTestData.getEventsInRangeMultipleEvents;
+      const testData = bridgeMetricsActionTestData.getEventsInRangeMultipleEvents;
 
       await blockRepo.insert(testData.blockRepo);
       await eventTriggerRepo.insert(testData.eventTriggerRepo);
       await tokenRepo.insert(testData.tokenRepo);
 
-      const events = await action.getEventsInRange(
-        testData.startTs,
-        testData.endTs,
-      );
+      const events = await action.getEventsInRange(testData.startTs, testData.endTs);
 
       expect(events).toEqual(testData.expectedEvents);
     });
@@ -208,17 +198,13 @@ describe('BridgeMetricsAction', () => {
      * - Returns events with available data
      */
     it('should handle missing block data gracefully', async () => {
-      const testData =
-        bridgeMetricsActionTestData.getEventsInRangeMissingBlocks;
+      const testData = bridgeMetricsActionTestData.getEventsInRangeMissingBlocks;
 
       await blockRepo.insert(testData.blockRepo);
       await eventTriggerRepo.insert(testData.eventTriggerRepo);
       await tokenRepo.insert(testData.tokenRepo);
 
-      const events = await action.getEventsInRange(
-        testData.startTs,
-        testData.endTs,
-      );
+      const events = await action.getEventsInRange(testData.startTs, testData.endTs);
 
       expect(events).toEqual(testData.expectedEvents);
     });
@@ -239,10 +225,7 @@ describe('BridgeMetricsAction', () => {
       await blockRepo.insert(testData.blockRepo);
       await eventTriggerRepo.insert(testData.eventTriggerRepo);
 
-      const events = await action.getEventsInRange(
-        testData.startTs,
-        testData.endTs,
-      );
+      const events = await action.getEventsInRange(testData.startTs, testData.endTs);
 
       expect(events).toHaveLength(0);
     });
@@ -264,21 +247,10 @@ describe('BridgeMetricsAction', () => {
     it('should create new bridge fee records and update total metric', async () => {
       const testData = bridgeMetricsActionTestData.saveBridgeFeesNewGroups;
 
-      await action.saveBridgeFees(
-        testData.aggregatedBridgeFees,
-        testData.totalCount,
-      );
+      await action.saveBridgeFees(testData.aggregatedBridgeFees, testData.totalCount);
 
       const bridgeFees = await bridgeFeeRepo.find({
-        select: [
-          'fromChain',
-          'amount',
-          'day',
-          'week',
-          'month',
-          'year',
-          'lastProcessedHeight',
-        ],
+        select: ['fromChain', 'amount', 'day', 'week', 'month', 'year', 'lastProcessedHeight'],
       });
 
       expect(bridgeFees).toHaveLength(testData.expectedBridgeFees.length);
@@ -309,21 +281,10 @@ describe('BridgeMetricsAction', () => {
       await bridgeFeeRepo.insert(testData.existingBridgeFees);
       await metricRepo.insert(testData.existingMetric);
 
-      await action.saveBridgeFees(
-        testData.aggregatedBridgeFees,
-        testData.totalCount,
-      );
+      await action.saveBridgeFees(testData.aggregatedBridgeFees, testData.totalCount);
 
       const bridgeFees = await bridgeFeeRepo.find({
-        select: [
-          'fromChain',
-          'amount',
-          'day',
-          'week',
-          'month',
-          'year',
-          'lastProcessedHeight',
-        ],
+        select: ['fromChain', 'amount', 'day', 'week', 'month', 'year', 'lastProcessedHeight'],
       });
 
       expect(bridgeFees).toHaveLength(testData.expectedBridgeFees.length);
@@ -347,21 +308,10 @@ describe('BridgeMetricsAction', () => {
     it('should handle multiple groups with different dates', async () => {
       const testData = bridgeMetricsActionTestData.saveBridgeFeesDifferentDates;
 
-      await action.saveBridgeFees(
-        testData.aggregatedBridgeFees,
-        testData.totalCount,
-      );
+      await action.saveBridgeFees(testData.aggregatedBridgeFees, testData.totalCount);
 
       const bridgeFees = await bridgeFeeRepo.find({
-        select: [
-          'fromChain',
-          'amount',
-          'day',
-          'week',
-          'month',
-          'year',
-          'lastProcessedHeight',
-        ],
+        select: ['fromChain', 'amount', 'day', 'week', 'month', 'year', 'lastProcessedHeight'],
       });
 
       expect(bridgeFees).toHaveLength(testData.expectedBridgeFees.length);
@@ -385,21 +335,10 @@ describe('BridgeMetricsAction', () => {
     it('should create new bridge amount records and update total metric', async () => {
       const testData = bridgeMetricsActionTestData.saveBridgeAmountNewGroups;
 
-      await action.saveBridgeAmount(
-        testData.aggregatedBridgeAmount,
-        testData.totalCount,
-      );
+      await action.saveBridgeAmount(testData.aggregatedBridgeAmount, testData.totalCount);
 
       const bridgeAmount = await bridgeAmountRepo.find({
-        select: [
-          'fromChain',
-          'amount',
-          'day',
-          'week',
-          'month',
-          'year',
-          'lastProcessedHeight',
-        ],
+        select: ['fromChain', 'amount', 'day', 'week', 'month', 'year', 'lastProcessedHeight'],
       });
 
       expect(bridgeAmount).toHaveLength(testData.expectedBridgeAmount.length);
@@ -425,27 +364,15 @@ describe('BridgeMetricsAction', () => {
      * - MetricEntity is updated to '25.25'
      */
     it('should replace existing bridge amount records with new values', async () => {
-      const testData =
-        bridgeMetricsActionTestData.saveBridgeAmountUpdateExisting;
+      const testData = bridgeMetricsActionTestData.saveBridgeAmountUpdateExisting;
 
       await bridgeAmountRepo.insert(testData.existingBridgeAmount);
       await metricRepo.insert(testData.existingMetric);
 
-      await action.saveBridgeAmount(
-        testData.aggregatedBridgeAmount,
-        testData.totalCount,
-      );
+      await action.saveBridgeAmount(testData.aggregatedBridgeAmount, testData.totalCount);
 
       const bridgeAmount = await bridgeAmountRepo.find({
-        select: [
-          'fromChain',
-          'amount',
-          'day',
-          'week',
-          'month',
-          'year',
-          'lastProcessedHeight',
-        ],
+        select: ['fromChain', 'amount', 'day', 'week', 'month', 'year', 'lastProcessedHeight'],
       });
 
       expect(bridgeAmount).toHaveLength(testData.expectedBridgeAmount.length);
@@ -467,24 +394,12 @@ describe('BridgeMetricsAction', () => {
      * - All groups are created correctly with their respective date components
      */
     it('should handle multiple groups with different dates', async () => {
-      const testData =
-        bridgeMetricsActionTestData.saveBridgeAmountDifferentDates;
+      const testData = bridgeMetricsActionTestData.saveBridgeAmountDifferentDates;
 
-      await action.saveBridgeAmount(
-        testData.aggregatedBridgeAmount,
-        testData.totalCount,
-      );
+      await action.saveBridgeAmount(testData.aggregatedBridgeAmount, testData.totalCount);
 
       const bridgeAmount = await bridgeAmountRepo.find({
-        select: [
-          'fromChain',
-          'amount',
-          'day',
-          'week',
-          'month',
-          'year',
-          'lastProcessedHeight',
-        ],
+        select: ['fromChain', 'amount', 'day', 'week', 'month', 'year', 'lastProcessedHeight'],
       });
 
       expect(bridgeAmount).toHaveLength(testData.expectedBridgeAmount.length);

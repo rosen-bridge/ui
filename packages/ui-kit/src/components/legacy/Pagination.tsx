@@ -1,11 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
-import {
-  Divider,
-  Pagination as PaginationMui,
-  SvgIcon,
-  Typography,
-} from '@mui/material';
+import { Divider, Pagination as PaginationMui, SvgIcon, Typography } from '@mui/material';
 
 import { AlignCenter, CaretDown } from '@rosen-bridge/icons';
 
@@ -183,12 +178,7 @@ export const Pagination = ({
                 size="small"
                 style={{ padding: 1, textTransform: 'none' }}
               >
-                <Stack
-                  direction="row"
-                  justify="center"
-                  align="center"
-                  spacing={1}
-                >
+                <Stack direction="row" justify="center" align="center" spacing={1}>
                   <Typography
                     color="text.secondary"
                     variant="body2"
@@ -231,11 +221,7 @@ export const Pagination = ({
                   </SvgIcon>
                 </Stack>
               </MenuTrigger>
-              <MenuBody
-                offset={[-50, -40]}
-                placement="top-start"
-                style={{ width: 204 }}
-              >
+              <MenuBody offset={[-50, -40]} placement="top-start" style={{ width: 204 }}>
                 <MenuGroup>
                   {isTablet && (
                     <MenuGroupLabel>

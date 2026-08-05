@@ -24,15 +24,18 @@ export type MenuTriggerOwnProps<T extends ElementType = 'button'> = {
   openOnHover?: boolean;
 };
 
-export type MenuTriggerBaseProps<T extends ElementType = 'button'> =
-  ElementBaseProps<T, MenuTriggerOwnProps<T>>;
+export type MenuTriggerBaseProps<T extends ElementType = 'button'> = ElementBaseProps<
+  T,
+  MenuTriggerOwnProps<T>
+>;
 
-export type MenuTriggerProps<T extends ElementType = 'button'> =
-  OverridableType<MenuTriggerBaseProps<T>, MenuTriggerOverrides, never>;
+export type MenuTriggerProps<T extends ElementType = 'button'> = OverridableType<
+  MenuTriggerBaseProps<T>,
+  MenuTriggerOverrides,
+  never
+>;
 
-export const MenuTrigger = <T extends ElementType = 'button'>(
-  props: MenuTriggerProps<T>,
-) => {
+export const MenuTrigger = <T extends ElementType = 'button'>(props: MenuTriggerProps<T>) => {
   const {
     as: Component = 'button',
     handle,
@@ -47,8 +50,7 @@ export const MenuTrigger = <T extends ElementType = 'button'>(
 
   const isNativeButton =
     Component === 'button' ||
-    (typeof Component === 'function' &&
-      Component.name?.toLowerCase().includes('button'));
+    (typeof Component === 'function' && Component.name?.toLowerCase().includes('button'));
 
   return (
     <MenuBaseUI.Trigger

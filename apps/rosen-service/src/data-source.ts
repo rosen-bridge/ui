@@ -5,11 +5,7 @@ import AppError from './errors/AppError';
 
 const dataSource = (() => {
   try {
-    return getDataSource(
-      config.postgres.url,
-      config.postgres.useSSL,
-      config.postgres.logging,
-    );
+    return getDataSource(config.postgres.url, config.postgres.useSSL, config.postgres.logging);
   } catch (error) {
     throw new AppError(
       `cannot create data source due to error: ${error}`,

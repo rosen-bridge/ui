@@ -81,17 +81,16 @@ export const mockNewGuardStatusChanged: GuardStatusChangedEntity = {
   tx: null,
   txStatus: null,
 };
-export const mockNewGuardStatusChangedAggregateChange: GuardStatusChangedEntity =
-  {
-    id: 1,
-    eventId: id0,
-    triggerTxId: triggerId0,
-    guardPk: guardPk0,
-    insertedAt: 20,
-    status: EventStatus.completed,
-    tx: null,
-    txStatus: null,
-  };
+export const mockNewGuardStatusChangedAggregateChange: GuardStatusChangedEntity = {
+  id: 1,
+  eventId: id0,
+  triggerTxId: triggerId0,
+  guardPk: guardPk0,
+  insertedAt: 20,
+  status: EventStatus.completed,
+  tx: null,
+  txStatus: null,
+};
 export const mockExistingGuardStatusChanged: GuardStatusChangedEntity = {
   id: 0,
   eventId: id0,
@@ -129,16 +128,15 @@ export const mockExistingAggregatedStatus: AggregatedStatusEntity = {
   txStatus: null,
   tx: null,
 };
-export const mockExistingAggregatedStatusChanged: AggregatedStatusChangedEntity =
-  {
-    id: 0,
-    eventId: id0,
-    triggerTxId: triggerId0,
-    insertedAt: 10,
-    status: AggregateEventStatus.waitingForConfirmation,
-    txStatus: null,
-    tx: null,
-  };
+export const mockExistingAggregatedStatusChanged: AggregatedStatusChangedEntity = {
+  id: 0,
+  eventId: id0,
+  triggerTxId: triggerId0,
+  insertedAt: 10,
+  status: AggregateEventStatus.waitingForConfirmation,
+  txStatus: null,
+  tx: null,
+};
 
 export const mockEventStatusThresholds: Threshold<AggregateEventStatus>[] = [
   { key: AggregateEventStatus.finished, count: 1 },

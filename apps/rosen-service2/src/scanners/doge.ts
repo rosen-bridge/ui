@@ -1,8 +1,5 @@
 import { DefaultLogger } from '@rosen-bridge/abstract-logger';
-import {
-  NetworkConnectorManager,
-  RoundRobinStrategy,
-} from '@rosen-bridge/abstract-scanner';
+import { NetworkConnectorManager, RoundRobinStrategy } from '@rosen-bridge/abstract-scanner';
 import {
   DogeEsploraObservationExtractor,
   DogeRpcObservationExtractor,
@@ -31,18 +28,14 @@ const logger = DefaultLogger.getInstance().child(import.meta.url);
  * @returns Configured and ready-to-use DogeScanner instance
  * @throws Error if observation extractor creation or registration fails
  */
-const buildDogeRpcScannerWithExtractors = async (
-  dataSource: DataSource,
-  tokenMap: TokenMap,
-) => {
+const buildDogeRpcScannerWithExtractors = async (dataSource: DataSource, tokenMap: TokenMap) => {
   logger.info('Starting Doge scanner initialization...');
 
   // Create Doge scanner with RPC network settings
-  const networkConnectorManager =
-    new NetworkConnectorManager<DogeRpcTransaction>(
-      new RoundRobinStrategy(),
-      logger.child('dogeRpcObservationExtractor'),
-    );
+  const networkConnectorManager = new NetworkConnectorManager<DogeRpcTransaction>(
+    new RoundRobinStrategy(),
+    logger.child('dogeRpcObservationExtractor'),
+  );
   configs.chains.doge.rpc.connections.forEach((rpc) => {
     networkConnectorManager.addConnector(
       new DogeRpcNetwork(
@@ -105,18 +98,13 @@ const buildDogeEsploraScannerWithExtractors = async (
   logger.info('Starting Doge scanner initialization...');
 
   // Create Doge scanner with Esplora network settings
-  const networkConnectorManager =
-    new NetworkConnectorManager<BitcoinEsploraTransaction>(
-      new RoundRobinStrategy(),
-      logger.child('dogeEsploraScannerLogger'),
-    );
+  const networkConnectorManager = new NetworkConnectorManager<BitcoinEsploraTransaction>(
+    new RoundRobinStrategy(),
+    logger.child('dogeEsploraScannerLogger'),
+  );
   configs.chains.doge.esplora.connections.forEach((esplora) => {
     networkConnectorManager.addConnector(
-      new EsploraNetwork(
-        esplora.url!,
-        esplora.timeout! * 1000,
-        esplora.apiPrefix,
-      ),
+      new EsploraNetwork(esplora.url!, esplora.timeout! * 1000, esplora.apiPrefix),
     );
   });
   const dogeScanner = new DogeEsploraScanner({

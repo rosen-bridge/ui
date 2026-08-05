@@ -1,8 +1,5 @@
 import { DefaultLogger } from '@rosen-bridge/abstract-logger';
-import {
-  NetworkConnectorManager,
-  RoundRobinStrategy,
-} from '@rosen-bridge/abstract-scanner';
+import { NetworkConnectorManager, RoundRobinStrategy } from '@rosen-bridge/abstract-scanner';
 import {
   DogeRpcNetwork,
   DogeRpcScanner,
@@ -27,11 +24,10 @@ const scannerLogger = logger.child(DOGE_SCANNER_LOGGER_NAME);
  * Creates and configures a NetworkConnectorManager instance for Doge RPC scanner
  */
 export const createDogeRpcNetworkConnectorManager = () => {
-  const networkConnectorManager =
-    new NetworkConnectorManager<DogeRpcTransaction>(
-      new RoundRobinStrategy(),
-      scannerLogger,
-    );
+  const networkConnectorManager = new NetworkConnectorManager<DogeRpcTransaction>(
+    new RoundRobinStrategy(),
+    scannerLogger,
+  );
   config.doge.rpcConnections.forEach((rpcConfig) => {
     networkConnectorManager.addConnector(
       new DogeRpcNetwork(

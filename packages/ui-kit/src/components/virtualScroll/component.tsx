@@ -8,10 +8,7 @@ export interface VirtualScrollOverrides {}
 
 export type VirtualScrollOwnProps = {};
 
-export type VirtualScrollBaseProps = ElementBaseProps<
-  'div',
-  VirtualScrollOwnProps
->;
+export type VirtualScrollBaseProps = ElementBaseProps<'div', VirtualScrollOwnProps>;
 
 export type VirtualScrollProps = OverridableType<
   VirtualScrollBaseProps,

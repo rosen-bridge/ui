@@ -38,9 +38,7 @@ export class AbstractAssetTestData {
    * @param overrides - Optional properties to override default values
    * @returns BridgedAssetEntity instance
    */
-  static createSingleAsset(
-    overrides: Partial<BridgedAssetEntity> = {},
-  ): BridgedAssetEntity {
+  static createSingleAsset(overrides: Partial<BridgedAssetEntity> = {}): BridgedAssetEntity {
     const asset = new BridgedAssetEntity();
     asset.chain = 'ergo';
     asset.tokenId = 'test-token-1';
@@ -108,10 +106,7 @@ export class AbstractAssetTestData {
    *
    * @returns Not saved LockedTokenEntities
    */
-  static generateTestDataBridgedEntity = (
-    tokens: TokenEntity[],
-    amount: bigint = 1000n,
-  ) => {
+  static generateTestDataBridgedEntity = (tokens: TokenEntity[], amount: bigint = 1000n) => {
     const lockedTokens = [];
     for (const token of tokens)
       lockedTokens.push({

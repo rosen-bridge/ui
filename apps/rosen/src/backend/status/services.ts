@@ -1,8 +1,4 @@
-import {
-  AggregateEventStatus,
-  AggregateTxStatus,
-  type Threshold,
-} from '@rosen-ui/public-status';
+import { AggregateEventStatus, AggregateTxStatus, type Threshold } from '@rosen-ui/public-status';
 
 /**
  * reads the environment variable with the given key and converts it to a Threshold type
@@ -11,9 +7,7 @@ import {
  * @returns the parsed Threshold value or undefined if the environment variable is not defined
  * @throws will throw an error if the JSON is invalid, or if the parsed value does not match the Threshold type
  */
-export const getThresholdFromEnv = <T>(
-  envKey: string,
-): Threshold<T>[] | undefined => {
+export const getThresholdFromEnv = <T>(envKey: string): Threshold<T>[] | undefined => {
   const envValue = process.env[envKey];
 
   if (!envValue) {
@@ -24,9 +18,7 @@ export const getThresholdFromEnv = <T>(
   try {
     parsed = JSON.parse(envValue);
   } catch (err) {
-    throw new Error(
-      `Failed to parse JSON from environment variable ${envKey}: ${err}`,
-    );
+    throw new Error(`Failed to parse JSON from environment variable ${envKey}: ${err}`);
   }
 
   // Validate that `parsed` matches the Threshold type.
@@ -66,19 +58,11 @@ const thresholdsMapping = {
   vetoNumber: getNumber('VETO_NUMBER') ?? 5,
 };
 
-const customEventThresholds = getThresholdFromEnv<AggregateEventStatus>(
-  'EVENT_STATUS_THRESHOLDS',
-);
-const customTxThresholds = getThresholdFromEnv<AggregateTxStatus>(
-  'TX_STATUS_THRESHOLDS',
-);
+const customEventThresholds = getThresholdFromEnv<AggregateEventStatus>('EVENT_STATUS_THRESHOLDS');
+const customTxThresholds = getThresholdFromEnv<AggregateTxStatus>('TX_STATUS_THRESHOLDS');
 
-const customEventThresholdMap = new Map(
-  customEventThresholds?.map((t) => [t.key, t.count]) ?? [],
-);
-const customTxThresholdMap = new Map(
-  customTxThresholds?.map((t) => [t.key, t.count]) ?? [],
-);
+const customEventThresholdMap = new Map(customEventThresholds?.map((t) => [t.key, t.count]) ?? []);
+const customTxThresholdMap = new Map(customTxThresholds?.map((t) => [t.key, t.count]) ?? []);
 
 const defaultEventStatusMapping: Threshold<AggregateEventStatus>[] = [
   {

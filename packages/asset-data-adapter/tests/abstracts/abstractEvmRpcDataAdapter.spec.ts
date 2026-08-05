@@ -4,11 +4,7 @@ import { TokenMap } from '@rosen-bridge/tokens';
 
 import type { AbstractDataAdapter } from '../../lib';
 import type { ChainAssetBalance } from '../../lib/types';
-import {
-  expectedGetAddressAssetsResult,
-  sampleTokenMapConfig,
-  TestEvmRpcAdapter,
-} from '../mocked';
+import { expectedGetAddressAssetsResult, sampleTokenMapConfig, TestEvmRpcAdapter } from '../mocked';
 
 interface TestContext {
   adapter: AbstractDataAdapter;
@@ -29,9 +25,7 @@ describe('AbstractEvmRpcDataAdapter', () => {
         balanceOf,
         totalSupply: mockedTotalSupplyMock,
       }));
-      const JsonRpcProvider = vi
-        .fn()
-        .mockImplementation(() => ({ getBalance }));
+      const JsonRpcProvider = vi.fn().mockImplementation(() => ({ getBalance }));
 
       return {
         ethers: { Contract },
@@ -61,15 +55,11 @@ describe('AbstractEvmRpcDataAdapter', () => {
      * - result should include both tokens with their correct balances
      *   and ignore third token not exists on the token map
      */
-    it<TestContext>('should fetch balances for native and ERC20 tokens', async ({
-      adapter,
-    }) => {
+    it<TestContext>('should fetch balances for native and ERC20 tokens', async ({ adapter }) => {
       const assets = await adapter.getAddressAssets('0xAddress');
 
       expect(assets).toEqual(expectedGetAddressAssetsResult);
-      expect(assets.map((a: ChainAssetBalance) => a.assetId)).not.toContain(
-        '0xUnknown',
-      );
+      expect(assets.map((a: ChainAssetBalance) => a.assetId)).not.toContain('0xUnknown');
     });
 
     /**
@@ -98,12 +88,10 @@ describe('AbstractEvmRpcDataAdapter', () => {
 
       const totalAssets = await adapter.getAddressAssets('0xAddress');
 
-      let assets1 =
-        await adapterByFetchParameters.getAddressAssets('0xAddress1');
+      let assets1 = await adapterByFetchParameters.getAddressAssets('0xAddress1');
       expect(assets1).toEqual([totalAssets[0]]);
 
-      let assets2 =
-        await adapterByFetchParameters.getAddressAssets('0xAddress2');
+      let assets2 = await adapterByFetchParameters.getAddressAssets('0xAddress2');
       expect(assets2).toEqual([totalAssets[0]]);
 
       assets1 = await adapterByFetchParameters.getAddressAssets('0xAddress1');

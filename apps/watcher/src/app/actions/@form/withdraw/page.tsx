@@ -2,12 +2,7 @@
 
 import { useEffect, useMemo } from 'react';
 
-import {
-  FormProvider,
-  type SubmitHandler,
-  useController,
-  useForm,
-} from 'react-hook-form';
+import { FormProvider, type SubmitHandler, useController, useForm } from 'react-hook-form';
 import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
 
@@ -52,16 +47,16 @@ const WithdrawForm = () => {
   const { confirm } = useConfirm();
   const toast = useToast();
 
-  const { data, isLoading: isTokensListLoading } =
-    useSWR<ApiAddressAssetsResponse>('/address/assets', fetcher, {});
+  const { data, isLoading: isTokensListLoading } = useSWR<ApiAddressAssetsResponse>(
+    '/address/assets',
+    fetcher,
+    {},
+  );
 
   const { token: ergToken, isLoading: isErgTokenLoading } = useToken('erg');
   const { apiKey } = useApiKey();
 
-  const tokens = useMemo(
-    () => data?.items.filter((token) => !!token.amount),
-    [data],
-  );
+  const tokens = useMemo(() => data?.items.filter((token) => !!token.amount), [data]);
 
   const info = useInfo();
 
@@ -96,8 +91,7 @@ const WithdrawForm = () => {
       amount: '',
     },
   });
-  const { handleSubmit, control, resetField, register, watch, formState } =
-    formMethods;
+  const { handleSubmit, control, resetField, register, watch, formState } = formMethods;
 
   const formData = watch();
 
@@ -131,9 +125,7 @@ const WithdrawForm = () => {
           tokens: [
             {
               tokenId: formData.tokenId,
-              amount: BigInt(
-                getNonDecimalString(formData.amount, selectedToken!.decimals),
-              ),
+              amount: BigInt(getNonDecimalString(formData.amount, selectedToken!.decimals)),
             },
           ],
         },
@@ -147,10 +139,7 @@ const WithdrawForm = () => {
           description: (
             <>
               Withdrawal is successful. Wait for tx [
-              <Link
-                target="_blank"
-                href={getTxURL(NETWORKS.ergo.key, response.txId) ?? '/'}
-              >
+              <Link target="_blank" href={getTxURL(NETWORKS.ergo.key, response.txId) ?? '/'}>
                 {response.txId}
               </Link>
               ] to be confirmed.
@@ -158,9 +147,7 @@ const WithdrawForm = () => {
           ),
         });
       } else {
-        throw new Error(
-          'Server responded but the response message was unexpected',
-        );
+        throw new Error('Server responded but the response message was unexpected');
       }
       /**
        * TODO: remove the inline Biome comment
@@ -194,8 +181,7 @@ const WithdrawForm = () => {
     });
   };
 
-  const disabled =
-    isTokensListLoading || isErgTokenLoading || !ergToken?.amount;
+  const disabled = isTokensListLoading || isErgTokenLoading || !ergToken?.amount;
 
   const renderAddressTextField = () => (
     <TextField
@@ -281,10 +267,7 @@ const WithdrawForm = () => {
             {renderTokenAmountTextField()}
           </Stack>
           <ApiKeyDialogProtectedAction>
-            <SubmitButton
-              disabled={!formState.isValid || disabled}
-              loading={isWithdrawPending}
-            >
+            <SubmitButton disabled={!formState.isValid || disabled} loading={isWithdrawPending}>
               Withdraw
             </SubmitButton>
           </ApiKeyDialogProtectedAction>

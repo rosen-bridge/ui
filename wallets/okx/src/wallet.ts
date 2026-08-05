@@ -60,9 +60,7 @@ export class OKXWallet extends Wallet<OKXWalletConfig> {
   };
 
   isAvailable = (): boolean => {
-    return (
-      typeof window.okxwallet !== 'undefined' && !!window.okxwallet.bitcoin
-    );
+    return typeof window.okxwallet !== 'undefined' && !!window.okxwallet.bitcoin;
   };
 
   hasConnection = async (): Promise<boolean> => {
@@ -96,12 +94,10 @@ export class OKXWallet extends Wallet<OKXWalletConfig> {
     try {
       signedPsbtHex = await this.api.signPsbt(psbtData.psbt.hex, {
         autoFinalized: false,
-        toSignInputs: Array.from(Array(psbtData.inputSize).keys()).map(
-          (index) => ({
-            address: userAddress,
-            index: index,
-          }),
-        ),
+        toSignInputs: Array.from(Array(psbtData.inputSize).keys()).map((index) => ({
+          address: userAddress,
+          index: index,
+        })),
       });
     } catch (error) {
       throw new UserDeniedTransactionSignatureError(this.name, error);

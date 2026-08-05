@@ -80,9 +80,7 @@ describe('generateUnsignedTx', () => {
 
     expect(psbt.inputCount).toEqual(1);
     const mockedInput = testData.mockedUtxos[0];
-    expect(psbt.txInputs[0].hash.reverse().toString('hex')).toEqual(
-      mockedInput.txId,
-    );
+    expect(psbt.txInputs[0].hash.reverse().toString('hex')).toEqual(mockedInput.txId);
     expect(psbt.txInputs[0].index).toEqual(mockedInput.index);
 
     expect(psbt.txOutputs.length).toEqual(3);
@@ -99,9 +97,7 @@ describe('generateUnsignedTx', () => {
     const changeUtxo = psbt.txOutputs[2];
     expect(changeUtxo.address).toEqual(fromAddress);
     const expectedFee = 226000n;
-    expect(changeUtxo.value).toEqual(
-      Number(mockedInput.value - amount - expectedFee),
-    );
+    expect(changeUtxo.value).toEqual(Number(mockedInput.value - amount - expectedFee));
   });
 
   /**
@@ -150,9 +146,7 @@ describe('generateUnsignedTx', () => {
 
     expect(psbt.inputCount).toEqual(1);
     const mockedInput = testData.mockedUtxos[0];
-    expect(psbt.txInputs[0].hash.reverse().toString('hex')).toEqual(
-      mockedInput.txId,
-    );
+    expect(psbt.txInputs[0].hash.reverse().toString('hex')).toEqual(mockedInput.txId);
     expect(psbt.txInputs[0].index).toEqual(mockedInput.index);
 
     expect(psbt.txOutputs.length).toEqual(3);
@@ -169,9 +163,7 @@ describe('generateUnsignedTx', () => {
     const changeUtxo = psbt.txOutputs[2];
     expect(changeUtxo.address).toEqual(fromAddress);
     const expectedFee = 226000n;
-    expect(changeUtxo.value).toEqual(
-      Number(mockedInput.value - unwrappedAmount - expectedFee),
-    );
+    expect(changeUtxo.value).toEqual(Number(mockedInput.value - unwrappedAmount - expectedFee));
   });
 
   /**

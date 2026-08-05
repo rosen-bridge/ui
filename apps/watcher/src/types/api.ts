@@ -48,8 +48,7 @@ export interface ApiWithdrawRequestBodyData {
   }[];
 }
 
-export type ApiWithdrawRequestBody =
-  MutationRequestBodyWithHeaders<ApiWithdrawRequestBodyData>;
+export type ApiWithdrawRequestBody = MutationRequestBodyWithHeaders<ApiWithdrawRequestBodyData>;
 
 export interface ApiWithdrawResponse {
   txId: string;
@@ -60,8 +59,7 @@ export interface ApiPermitRequestBodyData {
   count: string;
 }
 
-export type ApiPermitRequestBody =
-  MutationRequestBodyWithHeaders<ApiPermitRequestBodyData>;
+export type ApiPermitRequestBody = MutationRequestBodyWithHeaders<ApiPermitRequestBodyData>;
 
 export interface ApiPermitResponse {
   txId: string;

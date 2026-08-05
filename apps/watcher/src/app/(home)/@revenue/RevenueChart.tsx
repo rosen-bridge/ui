@@ -130,12 +130,5 @@ export const RevenueChart = ({ period, data }: RevenueChartProps) => {
     [reversedData],
   );
 
-  return (
-    <Chart
-      type="bar"
-      options={apexChartOptions}
-      series={apexChartSeries}
-      height={240}
-    />
-  );
+  return <Chart type="bar" options={apexChartOptions} series={apexChartSeries} height={240} />;
 };

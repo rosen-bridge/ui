@@ -129,9 +129,7 @@ export const SmartSearch = ({
           type: 'select',
           options: filtersInput
             .filter(
-              (flow) =>
-                !flow.unique ||
-                !selectedValidated.find((item) => item.flow === flow.name),
+              (flow) => !flow.unique || !selectedValidated.find((item) => item.flow === flow.name),
             )
             .map((flow) => ({
               label: flow.label,
@@ -156,20 +154,16 @@ export const SmartSearch = ({
           operator: current!.operator!,
         };
 
-        const input =
-          typeof flow.input === 'function' ? flow.input(context) : flow.input;
+        const input = typeof flow.input === 'function' ? flow.input(context) : flow.input;
 
         return input;
       }
     }
   }, [current, filtersInput, selectedValidated, state]);
 
-  const handleInputChange = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => {
-      setQuery(event.target.value);
-    },
-    [],
-  );
+  const handleInputChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    setQuery(event.target.value);
+  }, []);
 
   const handleInputFocus = useCallback(() => {
     clearTimeout(timeout.current);
@@ -210,8 +204,8 @@ export const SmartSearch = ({
             }
             case 'value': {
               const moreTwoSteps =
-                (filtersInput.find((flow) => flow.name === current!.flow)
-                  ?.operators.length || 0) > 1;
+                (filtersInput.find((flow) => flow.name === current!.flow)?.operators.length || 0) >
+                1;
 
               if (moreTwoSteps) {
                 setCurrent({ flow: current!.flow });
@@ -232,15 +226,7 @@ export const SmartSearch = ({
         }
       }
     },
-    [
-      current,
-      filtersInput,
-      query,
-      selected,
-      selectedValidated,
-      state,
-      onChange,
-    ],
+    [current, filtersInput, query, selected, selectedValidated, state, onChange],
   );
 
   const handlePickerSelect = useCallback(
@@ -291,10 +277,7 @@ export const SmartSearch = ({
     onChange([]);
   }, [onChange]);
 
-  const hasFilters = useMemo(
-    () => selectedValidated.length > 0,
-    [selectedValidated],
-  );
+  const hasFilters = useMemo(() => selectedValidated.length > 0, [selectedValidated]);
 
   return (
     <Root>
@@ -308,10 +291,7 @@ export const SmartSearch = ({
           onChange(selected);
         }}
       />
-      <Divider
-        orientation="vertical"
-        style={{ alignSelf: 'stretch', height: 'auto' }}
-      />
+      <Divider orientation="vertical" style={{ alignSelf: 'stretch', height: 'auto' }} />
       <VirtualScroll>
         <Container>
           <Chips
@@ -351,14 +331,8 @@ export const SmartSearch = ({
           />
         </Container>
       </VirtualScroll>
-      {hasFilters && (
-        <CloseButton disabled={disabled} onClick={handleClearAll} />
-      )}
-      <IconButton
-        disabled={disabled}
-        ref={$search}
-        onClick={() => onChange(selected)}
-      >
+      {hasFilters && <CloseButton disabled={disabled} onClick={handleClearAll} />}
+      <IconButton disabled={disabled} ref={$search} onClick={() => onChange(selected)}>
         <Icon name="Search" />
       </IconButton>
     </Root>

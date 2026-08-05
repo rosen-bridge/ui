@@ -17,8 +17,7 @@ const logger = DefaultLogger.getInstance().child(import.meta.url);
 export const registerExtractors = async (scanner: ErgoScanner) => {
   try {
     for (const key of NETWORKS_KEYS) {
-      const chain =
-        key === NETWORKS['bitcoin-runes'].key ? BITCOIN_RUNES_CONFIG_KEY : key;
+      const chain = key === NETWORKS['bitcoin-runes'].key ? BITCOIN_RUNES_CONFIG_KEY : key;
       const chainConfig = configs[chain];
 
       const commitmentExtractor = new CommitmentExtractor(

@@ -1,9 +1,5 @@
 import { In, type Repository } from '@rosen-bridge/extended-typeorm';
-import type {
-  EventStatus,
-  GuardStatusChangedEntity,
-  TxStatus,
-} from '@rosen-ui/public-status';
+import type { EventStatus, GuardStatusChangedEntity, TxStatus } from '@rosen-ui/public-status';
 
 class GuardStatusChangedAction {
   private static instance?: GuardStatusChangedAction;
@@ -23,9 +19,7 @@ class GuardStatusChangedAction {
    */
   static getInstance = () => {
     if (!GuardStatusChangedAction.instance)
-      throw Error(
-        `GuardStatusChangedAction should have been initialized before getInstance`,
-      );
+      throw Error(`GuardStatusChangedAction should have been initialized before getInstance`);
     return GuardStatusChangedAction.instance;
   };
 
@@ -66,9 +60,7 @@ class GuardStatusChangedAction {
     limit?: number,
   ): Promise<{ total: number; items: GuardStatusChangedEntity[] }> => {
     const whereClause =
-      guardPks.length > 0
-        ? { triggerTxId, guardPk: In(guardPks) }
-        : { triggerTxId };
+      guardPks.length > 0 ? { triggerTxId, guardPk: In(guardPks) } : { triggerTxId };
 
     const [items, total] = await repository.findAndCount({
       where: whereClause,

@@ -1,9 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 
-import {
-  type AbstractLogger,
-  DummyLogger,
-} from '@rosen-bridge/abstract-logger';
+import { type AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
 import type { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
 import { LockedAssetEntity, TokenEntity } from '@rosen-ui/asset-calculator';
 
@@ -59,8 +56,7 @@ describe('LockedAssetsMetricAction', () => {
      * - Returns array with correct tokenIds, amounts, and significantDecimals from TokenEntity
      */
     it('should return correct locked assets tokenIds, amounts, and significantDecimals', async () => {
-      const testData =
-        lockedAssetsMetricActionTestData.getLockedAssetsMultipleTokens;
+      const testData = lockedAssetsMetricActionTestData.getLockedAssetsMultipleTokens;
 
       await tokenRepo.insert(testData.tokens);
       await lockedAssetRepo.insert(testData.lockedAssets);

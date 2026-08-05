@@ -24,11 +24,7 @@ export type ButtonOwnProps = {
 
 export type ButtonBaseProps = ElementBaseProps<'button', ButtonOwnProps>;
 
-export type ButtonProps = OverridableType<
-  ButtonBaseProps,
-  ButtonOverrides,
-  'color'
->;
+export type ButtonProps = OverridableType<ButtonBaseProps, ButtonOverrides, 'color'>;
 
 export const Button = (props: ButtonProps) => {
   const {

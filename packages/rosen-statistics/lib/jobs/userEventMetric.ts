@@ -1,7 +1,4 @@
-import {
-  type AbstractLogger,
-  DummyLogger,
-} from '@rosen-bridge/abstract-logger';
+import { type AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
 import { BlockDbAction } from '@rosen-bridge/abstract-scanner';
 import type { DataSource } from '@rosen-bridge/extended-typeorm';
 import {
@@ -24,11 +21,7 @@ export const userEventMetric = async (
     dataSource,
     logger.child('userEventMetricAction'),
   );
-  const blockDbAction = new BlockDbAction(
-    dataSource,
-    'ergo',
-    logger.child('blockDbAction'),
-  );
+  const blockDbAction = new BlockDbAction(dataSource, 'ergo', logger.child('blockDbAction'));
 
   try {
     const lastBlock = await blockDbAction.getLastSavedBlock();
@@ -69,9 +62,7 @@ export const userEventMetric = async (
 
     await userEventAction.upsertUserEventsCount(aggregatedUsersEvents);
 
-    logger.debug(
-      'User event count metric calculation job completed successfully',
-    );
+    logger.debug('User event count metric calculation job completed successfully');
   } catch (error) {
     logger.error(`User event count metric calculation job failed: ${error}`, {
       message: error instanceof Error ? error.message : '',

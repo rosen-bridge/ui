@@ -22,10 +22,7 @@ const Assets = () => {
       ...data.hot.items.map((item) => ({ ...item, type: 'hot' })),
     ];
 
-    const all = Object.groupBy(
-      items,
-      (item) => `${item.chain}:${item.balance.tokenId}`,
-    );
+    const all = Object.groupBy(items, (item) => `${item.chain}:${item.balance.tokenId}`);
 
     return Object.values(all)
       .filter((items) => !!items)

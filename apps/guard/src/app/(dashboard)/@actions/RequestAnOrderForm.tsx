@@ -76,9 +76,7 @@ export const RequestAnOrderForm = () => {
         });
         reset();
       } else {
-        throw new Error(
-          'Server responded but the response message was unexpected',
-        );
+        throw new Error('Server responded but the response message was unexpected');
       }
       /**
        * TODO: remove the inline Biome comment
@@ -139,12 +137,7 @@ export const RequestAnOrderForm = () => {
               ))}
             </TextField>
 
-            <TextField
-              label="Order"
-              multiline
-              rows={5}
-              {...register('orderJson')}
-            />
+            <TextField label="Order" multiline rows={5} {...register('orderJson')} />
 
             <SubmitButton loading={isOrderPending} disabled={!apiKey}>
               Send

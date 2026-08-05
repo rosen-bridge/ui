@@ -37,21 +37,17 @@ const getNotifySetup = () => {
     return { notify: undefined, notificationConfig: undefined };
   }
 
-  const discordNotification = new DiscordNotification(
-    config.notification.discordWebHookUrl,
-  );
+  const discordNotification = new DiscordNotification(config.notification.discordWebHookUrl);
   const notificationConfig = {
     historyConfig: {
       cleanupThreshold: config.notification.historyCleanupTimeout,
     },
     notificationCheckConfig: {
       hasBeenUnstableForAWhile: {
-        windowDuration:
-          config.notification.hasBeenUnstableForAWhileWindowDuration,
+        windowDuration: config.notification.hasBeenUnstableForAWhileWindowDuration,
       },
       hasBeenUnknownForAWhile: {
-        windowDuration:
-          config.notification.hasBeenUnknownForAWhileWindowDuration,
+        windowDuration: config.notification.hasBeenUnknownForAWhileWindowDuration,
       },
     },
   };
@@ -77,8 +73,7 @@ const registerAllHealthChecks = (healthCheck: HealthCheck) => {
     {
       instance: new ScannerSyncHealthCheckParam(
         scannerService.getCardanoScanner().name(),
-        async () =>
-          getLastSavedBlock(scannerService.getCardanoScanner().name()),
+        async () => getLastSavedBlock(scannerService.getCardanoScanner().name()),
         config.healthCheck.cardanoScannerWarnDiff,
         config.healthCheck.cardanoScannerCriticalDiff,
         CARDANO_BLOCK_TIME,
@@ -89,8 +84,7 @@ const registerAllHealthChecks = (healthCheck: HealthCheck) => {
     {
       instance: new ScannerSyncHealthCheckParam(
         scannerService.getBitcoinScanner().name(),
-        async () =>
-          getLastSavedBlock(scannerService.getBitcoinScanner().name()),
+        async () => getLastSavedBlock(scannerService.getBitcoinScanner().name()),
         config.healthCheck.bitcoinScannerWarnDiff,
         config.healthCheck.bitcoinScannerCriticalDiff,
         BITCOIN_BLOCK_TIME,
@@ -112,8 +106,7 @@ const registerAllHealthChecks = (healthCheck: HealthCheck) => {
     {
       instance: new ScannerSyncHealthCheckParam(
         scannerService.getEthereumScanner().name(),
-        async () =>
-          getLastSavedBlock(scannerService.getEthereumScanner().name()),
+        async () => getLastSavedBlock(scannerService.getEthereumScanner().name()),
         config.healthCheck.ethereumScannerWarnDiff,
         config.healthCheck.ethereumScannerCriticalDiff,
         ETHEREUM_BLOCK_TIME,
@@ -124,8 +117,7 @@ const registerAllHealthChecks = (healthCheck: HealthCheck) => {
     {
       instance: new ScannerSyncHealthCheckParam(
         scannerService.getBinanceScanner().name(),
-        async () =>
-          getLastSavedBlock(scannerService.getBinanceScanner().name()),
+        async () => getLastSavedBlock(scannerService.getBinanceScanner().name()),
         config.healthCheck.binanceScannerWarnDiff,
         config.healthCheck.binanceScannerCriticalDiff,
         BINANCE_BLOCK_TIME,
@@ -191,17 +183,11 @@ const start = async () => {
           ? config.healthCheck.reportPath
           : path.resolve(process.cwd(), config.healthCheck.reportPath);
 
-        fs.writeFileSync(
-          healthReportPath,
-          JSON.stringify(healthStatus, null, 2),
-          'utf8',
-        );
+        fs.writeFileSync(healthReportPath, JSON.stringify(healthStatus, null, 2), 'utf8');
         logger.debug('periodic health check update done');
       } catch (e) {
         if (e instanceof AggregateError) {
-          logger.warn(
-            `Health check update job failed: ${e.errors.map((error) => error.message)}`,
-          );
+          logger.warn(`Health check update job failed: ${e.errors.map((error) => error.message)}`);
         } else logger.warn(`Health check update job failed: ${e}`);
       }
     }, interval);

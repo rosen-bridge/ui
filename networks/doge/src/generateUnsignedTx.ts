@@ -1,27 +1,14 @@
 import { address, Psbt, payments } from 'bitcoinjs-lib';
 
-import {
-  BitcoinBoxSelection,
-  generateFeeEstimator,
-} from '@rosen-bridge/bitcoin-utxo-selection';
+import { BitcoinBoxSelection, generateFeeEstimator } from '@rosen-bridge/bitcoin-utxo-selection';
 import type { RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
 import { handleUncoveredAssets } from '@rosen-network/base';
 import { NETWORKS } from '@rosen-ui/constants';
 import type { RosenAmountValue } from '@rosen-ui/types';
 
-import {
-  DOGE_INPUT_SIZE,
-  DOGE_NETWORK,
-  DOGE_OUTPUT_SIZE,
-  DOGE_TX_BASE_SIZE,
-} from './constants';
+import { DOGE_INPUT_SIZE, DOGE_NETWORK, DOGE_OUTPUT_SIZE, DOGE_TX_BASE_SIZE } from './constants';
 import type { DogeUtxo, UnsignedPsbtData } from './types';
-import {
-  getAddressUtxos,
-  getFeeRatio,
-  getMinimumMeaningfulDoge,
-  getTxHex,
-} from './utils';
+import { getAddressUtxos, getFeeRatio, getMinimumMeaningfulDoge, getTxHex } from './utils';
 
 const selector = new BitcoinBoxSelection();
 
@@ -93,11 +80,7 @@ export const generateUnsignedTx =
       estimateFee,
     );
     if (!coveredBoxes.covered) {
-      handleUncoveredAssets(
-        tokenMap,
-        NETWORKS.doge.key,
-        coveredBoxes.uncoveredAssets,
-      );
+      handleUncoveredAssets(tokenMap, NETWORKS.doge.key, coveredBoxes.uncoveredAssets);
     }
 
     // add inputs

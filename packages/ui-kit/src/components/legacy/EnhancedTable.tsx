@@ -31,16 +31,11 @@ export interface TableHeadItem {
   title?: string;
 }
 
-export type TableResponsiveHead<
-  MandatoryBreakpoint extends Breakpoint = 'mobile',
-> = {
+export type TableResponsiveHead<MandatoryBreakpoint extends Breakpoint = 'mobile'> = {
   [Key in MandatoryBreakpoint]: TableHeadItem[];
 } & ResponsiveValueOptionsBase<TableHeadItem[]>;
 
-export type TableRowRenderProp<
-  T,
-  MandatoryBreakpoint extends Breakpoint = 'mobile',
-> = {
+export type TableRowRenderProp<T, MandatoryBreakpoint extends Breakpoint = 'mobile'> = {
   [Key in MandatoryBreakpoint]: (rowData: T) => ReactNode;
 } & ResponsiveValueOptionsBase<(rowData: T) => ReactNode>;
 
@@ -139,11 +134,7 @@ export const EnhancedTable = <Row,>(props: EnhancedTableProps<Row>) => {
     paginated ? (
       <TableFooter>
         <TableRow>
-          <TableCell
-            variant="footer"
-            colSpan={tableHead?.length}
-            padding="none"
-          >
+          <TableCell variant="footer" colSpan={tableHead?.length} padding="none">
             <Box py={1}>
               <TablePagination
                 rowsPerPageOptions={DEFAULT_ROWS_PER_PAGE_OPTIONS}

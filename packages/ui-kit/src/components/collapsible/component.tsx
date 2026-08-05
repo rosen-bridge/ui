@@ -13,11 +13,7 @@ export type CollapsibleOwnProps = {
 
 export type CollapsibleBaseProps = ElementBaseProps<'div', CollapsibleOwnProps>;
 
-export type CollapsibleProps = OverridableType<
-  CollapsibleBaseProps,
-  CollapsibleOverrides,
-  never
->;
+export type CollapsibleProps = OverridableType<CollapsibleBaseProps, CollapsibleOverrides, never>;
 
 export const Collapsible = (props: CollapsibleProps) => {
   const { children, ...rest } = useConfig('Collapsible', props);

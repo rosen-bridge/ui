@@ -3,11 +3,7 @@ import { expect } from 'vitest';
 
 import { TokenModel } from '../../../lib/database/token/TokenModel';
 import { tokens } from '../test-data';
-import {
-  allTokenRecords,
-  initDatabase,
-  insertTokenRecords,
-} from './TokenModel.mock';
+import { allTokenRecords, initDatabase, insertTokenRecords } from './TokenModel.mock';
 
 describe('TokenModel', () => {
   let tokenModel: TokenModel;

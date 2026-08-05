@@ -1,11 +1,6 @@
 import { type FC, type SVGAttributes, useMemo } from 'react';
 
-import {
-  Icon,
-  type IconProps,
-  Typography,
-  type TypographyProps,
-} from '@/components';
+import { Icon, type IconProps, Typography, type TypographyProps } from '@/components';
 import { useConfig } from '@/hooks';
 import type { ElementBaseProps, OverridableType } from '@/types';
 
@@ -44,11 +39,7 @@ export type NetworkOwnProps = {
 
 export type NetworkBaseProps = ElementBaseProps<'div', NetworkOwnProps>;
 
-export type NetworkProps = OverridableType<
-  NetworkBaseProps,
-  NetworkOverrides,
-  'value'
->;
+export type NetworkProps = OverridableType<NetworkBaseProps, NetworkOverrides, 'value'>;
 
 const DEFAULT_NETWORK: NetworkMeta = {
   label: 'Unsupported',

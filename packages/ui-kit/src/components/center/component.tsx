@@ -11,11 +11,7 @@ export type CenterOwnProps = {
 
 export type CenterBaseProps = ElementBaseProps<'div', CenterOwnProps>;
 
-export type CenterProps = OverridableType<
-  CenterBaseProps,
-  CenterOverrides,
-  never
->;
+export type CenterProps = OverridableType<CenterBaseProps, CenterOverrides, never>;
 
 export const Center = (props: CenterProps) => {
   const { inline, ...rest } = useConfig('Center', props);

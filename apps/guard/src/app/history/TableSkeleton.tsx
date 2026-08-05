@@ -1,11 +1,6 @@
 import { type FC, useCallback, useMemo } from 'react';
 
-import {
-  EnhancedTable,
-  Skeleton,
-  TableCell,
-  TableRow,
-} from '@rosen-bridge/ui-kit';
+import { EnhancedTable, Skeleton, TableCell, TableRow } from '@rosen-bridge/ui-kit';
 
 import { mobileHeader, tabletHeader } from './TableRow';
 

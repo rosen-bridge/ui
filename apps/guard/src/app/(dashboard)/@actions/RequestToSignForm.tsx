@@ -90,9 +90,7 @@ export const RequestToSignForm = () => {
         });
         reset();
       } else {
-        throw new Error(
-          'Server responded but the response message was unexpected',
-        );
+        throw new Error('Server responded but the response message was unexpected');
       }
       /**
        * TODO: remove the inline Biome comment
@@ -157,12 +155,7 @@ export const RequestToSignForm = () => {
               ))}
             </TextField>
 
-            <TextField
-              label="Transaction"
-              multiline
-              rows={5}
-              {...register('txJson')}
-            />
+            <TextField label="Transaction" multiline rows={5} {...register('txJson')} />
 
             <TextField label="Required Signs" {...register('requiredSign')} />
 

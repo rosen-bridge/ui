@@ -9,11 +9,7 @@ export type MenuGroupOwnProps = {};
 
 export type MenuGroupBaseProps = ElementBaseProps<'div', MenuGroupOwnProps>;
 
-export type MenuGroupProps = OverridableType<
-  MenuGroupBaseProps,
-  MenuGroupOverrides,
-  never
->;
+export type MenuGroupProps = OverridableType<MenuGroupBaseProps, MenuGroupOverrides, never>;
 
 export const MenuGroup = (props: MenuGroupProps) => {
   const { ...rest } = useConfig('MenuGroup', props);

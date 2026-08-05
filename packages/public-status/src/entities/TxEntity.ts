@@ -1,9 +1,4 @@
-import {
-  Column,
-  Entity,
-  OneToMany,
-  PrimaryColumn,
-} from '@rosen-bridge/extended-typeorm';
+import { Column, Entity, OneToMany, PrimaryColumn } from '@rosen-bridge/extended-typeorm';
 
 import type { TxType } from '../constants';
 import { AggregatedStatusChangedEntity } from './AggregatedStatusChangedEntity';

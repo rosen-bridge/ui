@@ -4,14 +4,7 @@ import { useMemo } from 'react';
 
 import useSWR from 'swr';
 
-import {
-  Card,
-  CardBody,
-  Divider,
-  Icon,
-  Network,
-  Stack,
-} from '@rosen-bridge/ui-kit';
+import { Card, CardBody, Divider, Icon, Network, Stack } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import type { Network as NetworkType } from '@rosen-ui/types';
@@ -69,12 +62,7 @@ export const Item = ({ network }: ItemProps) => {
             transform: 'translate(-50%, -50%)',
           }}
         >
-          <Icon
-            color="warning-dark"
-            name="ExclamationTriangle"
-            opacity="0.075"
-            size="184px"
-          />
+          <Icon color="warning-dark" name="ExclamationTriangle" opacity="0.075" size="184px" />
         </div>
       )}
     </Card>

@@ -1,14 +1,6 @@
 import type { AbstractLogger } from '@rosen-bridge/abstract-logger';
-import {
-  type Dependency,
-  ServiceAction,
-  ServiceStatus,
-} from '@rosen-bridge/service-manager';
-import {
-  AssetAggregator,
-  type NetworkItem,
-  type TotalSupply,
-} from '@rosen-ui/asset-aggregator';
+import { type Dependency, ServiceAction, ServiceStatus } from '@rosen-bridge/service-manager';
+import { AssetAggregator, type NetworkItem, type TotalSupply } from '@rosen-ui/asset-aggregator';
 import type { AssetBalance } from '@rosen-ui/asset-data-adapter';
 import { NETWORKS } from '@rosen-ui/constants';
 
@@ -35,11 +27,7 @@ export class AssetAggregatorService extends AbstractAssetAggregatorService {
     },
     {
       serviceName: AbstractTokenMapService.name,
-      allowedStatuses: [
-        ServiceStatus.running,
-        ServiceStatus.started,
-        ServiceStatus.dormant,
-      ],
+      allowedStatuses: [ServiceStatus.running, ServiceStatus.started, ServiceStatus.dormant],
       action: ServiceAction.assemble,
     },
     {
@@ -49,11 +37,7 @@ export class AssetAggregatorService extends AbstractAssetAggregatorService {
     },
     {
       serviceName: AbstractDBService.name,
-      allowedStatuses: [
-        ServiceStatus.running,
-        ServiceStatus.started,
-        ServiceStatus.dormant,
-      ],
+      allowedStatuses: [ServiceStatus.running, ServiceStatus.started, ServiceStatus.dormant],
       action: ServiceAction.assemble,
     },
   ];
@@ -92,9 +76,7 @@ export class AssetAggregatorService extends AbstractAssetAggregatorService {
     if (AbstractAssetAggregatorService.instance != undefined) {
       return;
     }
-    AbstractAssetAggregatorService.instance = new AssetAggregatorService(
-      logger,
-    );
+    AbstractAssetAggregatorService.instance = new AssetAggregatorService(logger);
   };
 
   /**
@@ -118,9 +100,7 @@ export class AssetAggregatorService extends AbstractAssetAggregatorService {
         const chain = chainKey as ChainsKeys;
         if (chain === NETWORKS.ergo.key || configs.chains[chain].active) {
           const data =
-            await AbstractRedisService.getInstance().getFromRedis<AssetBalance>(
-              chainKey,
-            );
+            await AbstractRedisService.getInstance().getFromRedis<AssetBalance>(chainKey);
           if (data) {
             assetBalances[chain as ChainChoices] = data;
           }

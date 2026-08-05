@@ -19,9 +19,7 @@ export type ApiKeyDialogProtectedActionProps = OverridableType<
   never
 >;
 
-export const ApiKeyDialogProtectedAction = (
-  props: ApiKeyDialogProtectedActionProps,
-) => {
+export const ApiKeyDialogProtectedAction = (props: ApiKeyDialogProtectedActionProps) => {
   const { children, ...rest } = useConfig('ApiKeyDialogProtectedAction', props);
 
   const { apiKey } = useApiKey();
