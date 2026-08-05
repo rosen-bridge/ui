@@ -33,7 +33,7 @@ jobs:
         run: npm ci
 
       - name: Build
-        run: npm run build:mono-packages
+        run: npm run bootstrap
 
       - name: Knip
         run: npx knip --dependencies

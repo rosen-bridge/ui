@@ -21,6 +21,7 @@ jobs:
       ROSEN_PROJECT_ID: ${{ secrets.ROSEN_PROJECT_ID }}
       GUARD_PROJECT_ID: ${{ secrets.GUARD_PROJECT_ID }}
       WATCHER_PROJECT_ID: ${{ secrets.WATCHER_PROJECT_ID }}
+      DISCORD_NOTIFICATION_WEBHOOK_URL: ${{ secrets.DISCORD_NOTIFICATION_WEBHOOK_URL }}
 
     strategy:
       matrix:
@@ -52,7 +53,7 @@ jobs:
             TARGET_FIELD='"target": "production",'
           fi
 
-          curl -fsS -X POST "https://api.vercel.com/v13/deployments?teamId=$VERCEL_ORG_ID" \
+          RESPONSE=$(curl -fsS -X POST "https://api.vercel.com/v13/deployments?teamId=$VERCEL_ORG_ID" \
             -H "Authorization: Bearer $VERCEL_TOKEN" \
             -H "Content-Type: application/json" \
             -d "{
@@ -65,4 +66,32 @@ jobs:
                 \"ref\": \"$REF\",
                 \"sha\": \"$SHA\"
               }
-            }"
+            }")
+
+          DOMAIN=$(echo "$RESPONSE" | jq -r '.alias[0] // empty')
+
+          if [ -n "$DOMAIN" ] && [ "$DOMAIN" != "null" ]; then
+            echo "VERCEL_URL=https://$DOMAIN" >> $GITHUB_ENV
+          fi
+
+      - name: Notify Discord
+        if: env.VERCEL_URL != '' && env.DISCORD_NOTIFICATION_WEBHOOK_URL != ''
+        run: |
+          JSON_PAYLOAD=$(jq -n '{
+            embeds: [{
+              color: 3447003,
+              title: "🚀 New Deployment Notification",
+              description: "A new deployment has been triggered on **Vercel**.",
+              fields: [
+                { name: "📱 App",            inline: false, value: "${{ matrix.app }}"                       },
+                { name: "🌍 Branch URL",     inline: false, value: "${{ env.VERCEL_URL }}"                   },
+                { name: "📜 Commit Message", inline: false, value: "${{ github.event.head_commit.message }}" },
+                { name: "🌿 Branch",         inline: false, value: "${{ github.ref_name }}"                  }
+              ]
+            }]
+          }')
+
+          curl -fsS -X POST \
+            -H "Content-Type: application/json" \
+            -d "$JSON_PAYLOAD" \
+            "$DISCORD_NOTIFICATION_WEBHOOK_URL"

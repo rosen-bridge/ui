@@ -11,6 +11,7 @@
   "type": "module",
   "main": "./src/index.ts",
   "scripts": {
+    "bootstrap": "turbo build --filter=@rosen-bridge/rosen-service2^...",
     "coverage": "npm run test -- --run --coverage",
     "gen-config-defaults": "NODE_OPTIONS='--import tsx' npx @rosen-bridge/config generate-default --schema ./config/schema.json --output ./config/default.yml --format yaml",
     "gen-config-types": "NODE_OPTIONS='--import tsx' npx @rosen-bridge/config generate-ts-types --schema ./config/schema.json --output ./src/types/configs.ts --root-type RosenService2BaseConfig",
