@@ -420,6 +420,7 @@ export const Process = ({ id, flowId }: { id: string; flowId: string | undefined
       collapsible
       error={error}
       load={mutate}
+      badge="New"
       title="Progress"
       onOpenChange={setOpen}
     >

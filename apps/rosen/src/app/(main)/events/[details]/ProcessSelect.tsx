@@ -20,7 +20,7 @@ export const ProcessSelect = ({ disabled, value, onChange }: ProcessSelectProps)
         endIcon={<Icon name="AngleDown" size="20px" />}
         size="small"
       >
-        {guards.find((guard) => guard.key === value)?.label}
+        {guards.find((guard) => guard.key === (value || ''))?.label}
       </MenuTrigger>
       <MenuBody offset={[0, 4]} placement="bottom-start">
         {guards.map((guard) => (

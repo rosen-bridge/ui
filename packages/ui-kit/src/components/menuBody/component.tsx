@@ -57,6 +57,7 @@ export const MenuBody = (props: MenuBodyProps) => {
         anchor={anchor}
         align={align}
         alignOffset={alignOffset}
+        className="RosenMenuBody-positioner"
         side={side}
         sideOffset={sideOffset}
       >
