@@ -22,16 +22,20 @@ export const stringSerializer = (data: unknown): string =>
  * @returns {{ networkType: ErgoNetworkType; url: string }} Network type and URL
  */
 export const resolveErgoNetworkConfig = (): ErgoNetworkConfig => {
-  if (configs.chains.ergo.method === ERGO_METHOD_EXPLORER) {
+  if (configs.chains.ergo.explorer.connections[0].url) {
+    if (configs.chains.ergo.method === ERGO_METHOD_EXPLORER) {
+      return {
+        networkType: ErgoNetworkType.Explorer,
+        url: configs.chains.ergo.explorer.connections[0].url!,
+      };
+    }
     return {
-      networkType: ErgoNetworkType.Explorer,
-      url: configs.chains.ergo.explorer.connections[0].url!,
+      networkType: ErgoNetworkType.Node,
+      url: configs.chains.ergo.node.connections[0].url!,
     };
+  } else {
+    throw new Error('Ergo network URL is not configured.');
   }
-  return {
-    networkType: ErgoNetworkType.Node,
-    url: configs.chains.ergo.node.connections[0].url!,
-  };
 };
 
 /**

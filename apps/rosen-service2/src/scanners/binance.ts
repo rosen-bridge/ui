@@ -28,9 +28,11 @@ export const getBinanceScanner = async (dataSource: DataSource, tokenMap: TokenM
     logger.child('binanceScannerLogger'),
   );
   configs.chains.binance.rpc.connections.forEach((rpc) => {
-    networkConnectorManager.addConnector(
-      new EvmRpcNetwork(rpc.url!, rpc.timeout! * 1000, rpc.authToken),
-    );
+    if (rpc.url && rpc.timeout) {
+      networkConnectorManager.addConnector(
+        new EvmRpcNetwork(rpc.url, rpc.timeout * 1000, rpc.authToken),
+      );
+    }
   });
   const binanceScanner = new EvmRpcScanner('binance', {
     dataSource: dataSource,

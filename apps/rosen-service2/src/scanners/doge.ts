@@ -37,18 +37,20 @@ const buildDogeRpcScannerWithExtractors = async (dataSource: DataSource, tokenMa
     logger.child('dogeRpcObservationExtractor'),
   );
   configs.chains.doge.rpc.connections.forEach((rpc) => {
-    networkConnectorManager.addConnector(
-      new DogeRpcNetwork(
-        rpc.url!,
-        rpc.timeout! * 1000,
-        rpc.username && rpc.password
-          ? {
-              username: rpc.username,
-              password: rpc.password,
-            }
-          : undefined,
-      ),
-    );
+    if (rpc.url && rpc.timeout) {
+      networkConnectorManager.addConnector(
+        new DogeRpcNetwork(
+          rpc.url,
+          rpc.timeout * 1000,
+          rpc.username && rpc.password
+            ? {
+                username: rpc.username,
+                password: rpc.password,
+              }
+            : undefined,
+        ),
+      );
+    }
   });
   const dogeScanner = new DogeRpcScanner({
     dataSource: dataSource,
@@ -103,9 +105,11 @@ const buildDogeEsploraScannerWithExtractors = async (
     logger.child('dogeEsploraScannerLogger'),
   );
   configs.chains.doge.esplora.connections.forEach((esplora) => {
-    networkConnectorManager.addConnector(
-      new EsploraNetwork(esplora.url!, esplora.timeout! * 1000, esplora.apiPrefix),
-    );
+    if (esplora.url && esplora.timeout) {
+      networkConnectorManager.addConnector(
+        new EsploraNetwork(esplora.url, esplora.timeout * 1000, esplora.apiPrefix),
+      );
+    }
   });
   const dogeScanner = new DogeEsploraScanner({
     dataSource: dataSource,

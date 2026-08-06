@@ -43,18 +43,20 @@ const buildBitcoinRpcScannerWithExtractors = async (dataSource: DataSource, toke
     logger.child('bitcoinRpcScannerLogger'),
   );
   configs.chains.bitcoin.rpc.connections.forEach((rpc) => {
-    networkConnectorManager.addConnector(
-      new BitcoinRpcNetwork(
-        rpc.url!,
-        rpc.timeout! * 1000,
-        rpc.username && rpc.password
-          ? {
-              username: rpc.username,
-              password: rpc.password,
-            }
-          : undefined,
-      ),
-    );
+    if (rpc.url && rpc.timeout) {
+      networkConnectorManager.addConnector(
+        new BitcoinRpcNetwork(
+          rpc.url,
+          rpc.timeout * 1000,
+          rpc.username && rpc.password
+            ? {
+                username: rpc.username,
+                password: rpc.password,
+              }
+            : undefined,
+        ),
+      );
+    }
   });
   const bitcoinScanner = new BitcoinRpcScanner({
     dataSource: dataSource,
@@ -78,10 +80,14 @@ const buildBitcoinRpcScannerWithExtractors = async (dataSource: DataSource, toke
       await bitcoinScanner.registerExtractor(observationExtractor);
       logger.info('Bitcoin observation extractor registered successfully');
     }
-    if (configs.chains['bitcoin-runes'].active) {
+    if (
+      configs.chains['bitcoin-runes'].active &&
+      configs.chains['bitcoin-runes'].unisatUrl &&
+      configs.chains['bitcoin-runes'].unisatApiKey
+    ) {
       const runesClient: AbstractRunesProtocolNetwork = new UnisatRunesProtocolNetwork(
-        configs.chains['bitcoin-runes'].unisatUrl!,
-        configs.chains['bitcoin-runes'].unisatApiKey!,
+        configs.chains['bitcoin-runes'].unisatUrl,
+        configs.chains['bitcoin-runes'].unisatApiKey,
         logger.child('runesClient'),
       );
       logger.debug('Creating Bitcoin Runes RPC observation extractor...');
@@ -128,9 +134,11 @@ const buildBitcoinEsploraScannerWithExtractors = async (
     logger.child('bitcoinEsploraScannerLogger'),
   );
   configs.chains.bitcoin.esplora.connections.forEach((esplora) => {
-    networkConnectorManager.addConnector(
-      new EsploraNetwork(esplora.url!, esplora.timeout! * 1000, esplora.apiPrefix),
-    );
+    if (esplora.url && esplora.timeout) {
+      networkConnectorManager.addConnector(
+        new EsploraNetwork(esplora.url, esplora.timeout * 1000, esplora.apiPrefix),
+      );
+    }
   });
   const bitcoinScanner = new BitcoinEsploraScanner({
     dataSource: dataSource,
@@ -154,10 +162,14 @@ const buildBitcoinEsploraScannerWithExtractors = async (
       await bitcoinScanner.registerExtractor(observationExtractor);
       logger.info('Bitcoin observation extractor registered successfully');
     }
-    if (configs.chains['bitcoin-runes'].active) {
+    if (
+      configs.chains['bitcoin-runes'].active &&
+      configs.chains['bitcoin-runes'].unisatUrl &&
+      configs.chains['bitcoin-runes'].unisatApiKey
+    ) {
       const runesClient: AbstractRunesProtocolNetwork = new UnisatRunesProtocolNetwork(
-        configs.chains['bitcoin-runes'].unisatUrl!,
-        configs.chains['bitcoin-runes'].unisatApiKey!,
+        configs.chains['bitcoin-runes'].unisatUrl,
+        configs.chains['bitcoin-runes'].unisatApiKey,
         logger.child('runesClient'),
       );
       logger.debug('Creating Bitcoin Runes Esplora observation extractor...');

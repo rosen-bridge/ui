@@ -1,6 +1,7 @@
 import { type AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
 import type { DataSource } from '@rosen-bridge/extended-typeorm';
-import { NATIVE_TOKEN, type TokenMap } from '@rosen-bridge/tokens';
+import { NATIVE_RESIDENCY, NATIVE_TOKEN, type TokenMap } from '@rosen-bridge/tokens';
+import { NETWORKS } from '@rosen-ui/constants';
 
 import { BridgedAssetAction, LockedAssetAction, TokenAction } from './actions';
 import { TokensAnalyzer } from './tokensAnalyzer';
@@ -37,6 +38,13 @@ export class AssetAggregator {
           this.logger.error(`Significant-decimal of token [${token.tokenId}] is undefined`);
           continue;
         }
+        const tokenSet = this.tokenMap.getTokenSet(token.tokenId);
+        if (!tokenSet) {
+          this.logger.debug(`ImpossibleBehavior: Token set not found for token ${token.tokenId}`);
+          continue;
+        }
+        const ergoSideTokenId = this.tokenMap.getID(tokenSet, NETWORKS.ergo.key);
+
         tokens.push({
           id: token.tokenId,
           decimal: token.decimals,
@@ -44,6 +52,8 @@ export class AssetAggregator {
           name: token.name,
           chain: chain,
           isNative: token.type === NATIVE_TOKEN,
+          isResident: token.residency === NATIVE_RESIDENCY,
+          ergoSideTokenId: ergoSideTokenId,
         });
       }
     }

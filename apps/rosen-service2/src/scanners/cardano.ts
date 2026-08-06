@@ -46,13 +46,15 @@ const buildCardanoKoiosScannerWithExtractors = async (
     logger.child('cardanoKoiosScannerLogger'),
   );
   configs.chains.cardano.koios.connections.forEach((koios) => {
-    networkConnectorManager.addConnector(
-      new KoiosNetwork(koios.url!, koios.timeout! * 1000, koios.authToken),
-    );
+    if (koios.url && koios.timeout) {
+      networkConnectorManager.addConnector(
+        new KoiosNetwork(koios.url, koios.timeout * 1000, koios.authToken),
+      );
+    }
   });
   const cardanoScanner = new CardanoKoiosScanner({
     dataSource: dataSource,
-    initialHeight: configs.chains.cardano.initialHeight!,
+    initialHeight: configs.chains.cardano.initialHeight || 0,
     network: networkConnectorManager,
     blockRetrieveGap: configs.chains.cardano.blockRetrieveGap,
     logger: logger.child('cardanoKoiosScannerLogger'),
@@ -103,13 +105,15 @@ const buildCardanoBlockFrostScannerWithExtractors = async (
     logger.child('cardanoBlockFrostScannerLogger'),
   );
   configs.chains.cardano.blockfrost.connections.forEach((blockfrost) => {
-    networkConnectorManager.addConnector(
-      new BlockFrostNetwork(blockfrost.projectId!, blockfrost.url),
-    );
+    if (blockfrost.projectId) {
+      networkConnectorManager.addConnector(
+        new BlockFrostNetwork(blockfrost.projectId, blockfrost.url),
+      );
+    }
   });
   const cardanoScanner = new CardanoBlockFrostScanner({
     dataSource: dataSource,
-    initialHeight: configs.chains.cardano.initialHeight!,
+    initialHeight: configs.chains.cardano.initialHeight || 0,
     network: networkConnectorManager,
     blockRetrieveGap: configs.chains.cardano.blockRetrieveGap,
     logger: logger.child('cardanoBlockFrostScannerLogger'),
@@ -159,10 +163,10 @@ const buildCardanoOgmiosScannerWithExtractors = async (
   const cardanoScanner = new CardanoOgmiosScanner(
     {
       dataSource: dataSource,
-      nodeHostOrIp: configs.chains.cardano.ogmios.connection.address!,
-      nodePort: configs.chains.cardano.ogmios.connection.port!,
-      initialSlot: configs.chains.cardano.ogmios.connection.initialSlot!,
-      initialHash: configs.chains.cardano.ogmios.connection.initialHash!,
+      nodeHostOrIp: configs.chains.cardano.ogmios.connection.address || '',
+      nodePort: configs.chains.cardano.ogmios.connection.port || 0,
+      initialSlot: configs.chains.cardano.ogmios.connection.initialSlot || 0,
+      initialHash: configs.chains.cardano.ogmios.connection.initialHash || '',
     },
     logger.child('cardanoOgmiosScannerLogger'),
   );

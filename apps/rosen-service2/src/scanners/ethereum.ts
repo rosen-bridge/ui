@@ -27,9 +27,11 @@ export const getEthereumScanner = async (dataSource: DataSource, tokenMap: Token
     logger.child('ethereumScannerLogger'),
   );
   configs.chains.ethereum.rpc.connections.forEach((rpc) => {
-    networkConnectorManager.addConnector(
-      new EvmRpcNetwork(rpc.url!, rpc.timeout! * 1000, rpc.authToken),
-    );
+    if (rpc.url && rpc.timeout) {
+      networkConnectorManager.addConnector(
+        new EvmRpcNetwork(rpc.url, rpc.timeout * 1000, rpc.authToken),
+      );
+    }
   });
   const ethereumScanner = new EvmRpcScanner('ethereum', {
     dataSource: dataSource,

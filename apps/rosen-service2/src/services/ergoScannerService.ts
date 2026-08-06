@@ -119,13 +119,15 @@ export class ErgoScannerService extends AbstractErgoScannerService {
       new FailoverStrategy(),
       this.logger.child('networkConnectorManager'),
     );
-    if (configs.chains.ergo.method == ERGO_METHOD_EXPLORER) {
+    if (configs.chains.ergo.method === ERGO_METHOD_EXPLORER) {
       configs.chains.ergo.explorer.connections.forEach((explorer) => {
         networkConnectorManager.addConnector(new ErgoExplorerNetwork(explorer.url));
       });
     } else {
       configs.chains.ergo.node.connections.forEach((node) => {
-        networkConnectorManager.addConnector(new ErgoNodeNetwork(node.url!));
+        if (node.url) {
+          networkConnectorManager.addConnector(new ErgoNodeNetwork(node.url));
+        }
       });
     }
     return new ErgoScanner({
