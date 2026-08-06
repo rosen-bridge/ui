@@ -4,11 +4,7 @@
  */
 /** biome-ignore-all lint/suspicious/noExplicitAny: Use a better type */
 import type { Schema } from 'joi';
-import {
-  addKnownErrorConstructor,
-  deserializeError,
-  serializeError,
-} from 'serialize-error';
+import { addKnownErrorConstructor, deserializeError, serializeError } from 'serialize-error';
 
 import { fromSafeData, toSafeData } from './safeData';
 
@@ -127,8 +123,7 @@ export const createSafeAction = (config: CreateSafeActionConfig) => {
 
       const isInitiated = caches[key]?.initiated;
 
-      const isExpired =
-        Date.now() >= (caches[key]?.timestamp || 0) + (caches[key]?.cache || 0);
+      const isExpired = Date.now() >= (caches[key]?.timestamp || 0) + (caches[key]?.cache || 0);
 
       if (!isInCache || (isInitiated && isExpired)) {
         caches[key] = Object.assign({}, caches[key], {

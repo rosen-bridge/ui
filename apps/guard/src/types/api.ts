@@ -61,11 +61,9 @@ export interface ApiOrderRequestBodyData {
   orderJson: string;
 }
 
-export type ApiSignRequestBody =
-  MutationRequestBodyWithHeaders<ApiSignRequestBodyData>;
+export type ApiSignRequestBody = MutationRequestBodyWithHeaders<ApiSignRequestBodyData>;
 
-export type ApiOrderRequestBody =
-  MutationRequestBodyWithHeaders<ApiOrderRequestBodyData>;
+export type ApiOrderRequestBody = MutationRequestBodyWithHeaders<ApiOrderRequestBodyData>;
 
 export type ApiSignResponse = {
   message: string;

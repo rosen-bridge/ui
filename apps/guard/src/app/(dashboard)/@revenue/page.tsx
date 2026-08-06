@@ -32,13 +32,10 @@ const Loading = () => <Skeleton height={255} width="100%" variant="rounded" />;
  * This is required because revenue chart cannot be pre-rendered in next and
  * throws an error
  */
-const RevenueChart = dynamic(
-  () => import('./RevenueChart').then((mod) => mod.RevenueChart),
-  {
-    ssr: false,
-    loading: () => <Loading />,
-  },
-);
+const RevenueChart = dynamic(() => import('./RevenueChart').then((mod) => mod.RevenueChart), {
+  ssr: false,
+  loading: () => <Loading />,
+});
 
 const Revenue = () => {
   const [period, setPeriod] = useState<ChartPeriod>('week');
@@ -55,11 +52,7 @@ const Revenue = () => {
         </CardTitle>
         <CardAction>
           <Menu>
-            <MenuTrigger
-              as={Button}
-              size="small"
-              endIcon={<Icon name="AngleDown" size="small" />}
-            >
+            <MenuTrigger as={Button} size="small" endIcon={<Icon name="AngleDown" size="small" />}>
               {period}
             </MenuTrigger>
             <MenuBody offset={[0, 4]} placement="bottom-end">

@@ -7,10 +7,7 @@ export interface DialogContentOverrides {}
 
 export type DialogContentOwnProps = {};
 
-export type DialogContentBaseProps = ElementBaseProps<
-  'div',
-  DialogContentOwnProps
->;
+export type DialogContentBaseProps = ElementBaseProps<'div', DialogContentOwnProps>;
 
 export type DialogContentProps = OverridableType<
   DialogContentBaseProps,

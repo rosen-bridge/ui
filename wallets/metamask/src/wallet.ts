@@ -103,9 +103,7 @@ export class MetaMaskWallet extends Wallet<MetaMaskWalletConfig> {
     return accounts?.at(0);
   };
 
-  fetchBalance = async (
-    token: RosenChainToken,
-  ): Promise<string | undefined | null> => {
+  fetchBalance = async (token: RosenChainToken): Promise<string | undefined | null> => {
     const { BrowserProvider, Contract } = await import('ethers');
 
     const address = await this.getAddress();
@@ -120,11 +118,7 @@ export class MetaMaskWallet extends Wallet<MetaMaskWalletConfig> {
     } else {
       const browserProvider = new BrowserProvider(window.ethereum!);
 
-      const contract = new Contract(
-        token.tokenId,
-        tokenABI,
-        await browserProvider.getSigner(),
-      );
+      const contract = new Contract(token.tokenId, tokenABI, await browserProvider.getSigner());
 
       amount = await contract.balanceOf(address);
     }
@@ -140,19 +134,14 @@ export class MetaMaskWallet extends Wallet<MetaMaskWalletConfig> {
     return !!(await this.permissions()).length;
   };
 
-  performSwitchChain = async (
-    chain: Network,
-    silent?: boolean,
-  ): Promise<void> => {
+  performSwitchChain = async (chain: Network, silent?: boolean): Promise<void> => {
     const chainId = NETWORKS[chain].id;
 
     if (silent) {
       const has = (await this.permissions())
         .flatMap((permission) => permission.caveats)
         .some(
-          (caveat) =>
-            caveat.type === 'restrictNetworkSwitching' &&
-            caveat.value.includes(chainId),
+          (caveat) => caveat.type === 'restrictNetworkSwitching' && caveat.value.includes(chainId),
         );
 
       if (!has) throw new Error();
@@ -197,16 +186,15 @@ export class MetaMaskWallet extends Wallet<MetaMaskWalletConfig> {
       params.bridgeFee.toString(),
     );
 
-    const transactionParameters =
-      await this.currentNetwork.generateTxParameters(
-        params.token.tokenId,
-        params.lockAddress,
-        address,
-        params.amount,
-        rosenData,
-        params.token,
-        params.fromChain,
-      );
+    const transactionParameters = await this.currentNetwork.generateTxParameters(
+      params.token.tokenId,
+      params.lockAddress,
+      address,
+      params.amount,
+      rosenData,
+      params.token,
+      params.fromChain,
+    );
 
     try {
       return (await this.provider.request<string>({

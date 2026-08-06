@@ -25,10 +25,7 @@ export interface ApiKeyDialogOverrides {}
 
 export type ApiKeyDialogOwnProps = {};
 
-export type ApiKeyDialogBaseProps = ElementBaseProps<
-  typeof Dialog,
-  ApiKeyDialogOwnProps
->;
+export type ApiKeyDialogBaseProps = ElementBaseProps<typeof Dialog, ApiKeyDialogOwnProps>;
 
 export type ApiKeyDialogProps = OverridableType<
   ApiKeyDialogBaseProps,

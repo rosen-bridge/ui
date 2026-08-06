@@ -23,9 +23,7 @@ class AggregatedStatusAction {
    */
   static getInstance = () => {
     if (!AggregatedStatusAction.instance)
-      throw Error(
-        `AggregatedStatusAction should have been initialized before getInstance`,
-      );
+      throw Error(`AggregatedStatusAction should have been initialized before getInstance`);
     return AggregatedStatusAction.instance;
   };
 

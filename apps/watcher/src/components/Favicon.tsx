@@ -44,9 +44,7 @@ export const Favicon = () => {
   return (
     <Icon
       ref={ref}
-      name={
-        upperFirst(data?.network || 'ExclamationTriangle') as IconProps['name']
-      }
+      name={upperFirst(data?.network || 'ExclamationTriangle') as IconProps['name']}
       style={{ display: 'contents' }}
     />
   );

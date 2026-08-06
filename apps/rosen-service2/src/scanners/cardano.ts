@@ -1,8 +1,5 @@
 import { DefaultLogger } from '@rosen-bridge/abstract-logger';
-import {
-  FailoverStrategy,
-  NetworkConnectorManager,
-} from '@rosen-bridge/abstract-scanner';
+import { FailoverStrategy, NetworkConnectorManager } from '@rosen-bridge/abstract-scanner';
 import {
   CardanoBlockFrostObservationExtractor,
   CardanoKoiosObservationExtractor,
@@ -101,11 +98,10 @@ const buildCardanoBlockFrostScannerWithExtractors = async (
   logger.info('Starting Cardano scanner initialization...');
 
   // Create Cardano scanner with BlockFrost network settings
-  const networkConnectorManager =
-    new NetworkConnectorManager<BlockFrostTransaction>(
-      new FailoverStrategy(),
-      logger.child('cardanoBlockFrostScannerLogger'),
-    );
+  const networkConnectorManager = new NetworkConnectorManager<BlockFrostTransaction>(
+    new FailoverStrategy(),
+    logger.child('cardanoBlockFrostScannerLogger'),
+  );
   configs.chains.cardano.blockfrost.connections.forEach((blockfrost) => {
     networkConnectorManager.addConnector(
       new BlockFrostNetwork(blockfrost.projectId!, blockfrost.url),
@@ -208,20 +204,12 @@ const buildCardanoOgmiosScannerWithExtractors = async (
 export const getCardanoScanner = async (
   dataSource: DataSource,
   tokenMap: TokenMap,
-): Promise<
-  CardanoKoiosScanner | CardanoBlockFrostScanner | CardanoOgmiosScanner
-> => {
+): Promise<CardanoKoiosScanner | CardanoBlockFrostScanner | CardanoOgmiosScanner> => {
   switch (configs.chains.cardano.method) {
     case CARDANO_METHOD_BLOCKFROST:
-      return await buildCardanoBlockFrostScannerWithExtractors(
-        dataSource,
-        tokenMap,
-      );
+      return await buildCardanoBlockFrostScannerWithExtractors(dataSource, tokenMap);
     case CARDANO_METHOD_OGMIOS:
-      return await buildCardanoOgmiosScannerWithExtractors(
-        dataSource,
-        tokenMap,
-      );
+      return await buildCardanoOgmiosScannerWithExtractors(dataSource, tokenMap);
     case CARDANO_METHOD_KOIOS:
       return await buildCardanoKoiosScannerWithExtractors(dataSource, tokenMap);
     default:

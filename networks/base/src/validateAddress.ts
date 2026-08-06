@@ -6,10 +6,7 @@ import type { Network } from '@rosen-ui/types';
  * @param walletAddress - wallet address to verify
  * @returns the validation results for the passed address
  */
-export const validateAddress = async (
-  chain: Network,
-  walletAddress: string,
-) => {
+export const validateAddress = async (chain: Network, walletAddress: string) => {
   try {
     validate(chain, walletAddress);
     return true;

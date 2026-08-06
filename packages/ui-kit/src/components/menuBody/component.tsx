@@ -32,11 +32,7 @@ export type MenuBodyOwnProps = {
 
 export type MenuBodyBaseProps = ElementBaseProps<'div', MenuBodyOwnProps>;
 
-export type MenuBodyProps = OverridableType<
-  MenuBodyBaseProps,
-  MenuBodyOverrides,
-  never
->;
+export type MenuBodyProps = OverridableType<MenuBodyBaseProps, MenuBodyOverrides, never>;
 
 const parsePlacement = (placement?: MenuBodyOwnProps['placement']) => {
   if (!placement) {
@@ -50,10 +46,7 @@ const parsePlacement = (placement?: MenuBodyOwnProps['placement']) => {
 };
 
 export const MenuBody = (props: MenuBodyProps) => {
-  const { anchor, children, offset, placement, ...rest } = useConfig(
-    'MenuBody',
-    props,
-  );
+  const { anchor, children, offset, placement, ...rest } = useConfig('MenuBody', props);
 
   const { side, align } = parsePlacement(placement);
   const [alignOffset, sideOffset] = offset ?? [];
@@ -64,6 +57,7 @@ export const MenuBody = (props: MenuBodyProps) => {
         anchor={anchor}
         align={align}
         alignOffset={alignOffset}
+        className="RosenMenuBody-positioner"
         side={side}
         sideOffset={sideOffset}
       >

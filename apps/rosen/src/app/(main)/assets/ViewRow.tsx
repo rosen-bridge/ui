@@ -28,12 +28,7 @@ export type ViewRowProps = {
   setCurrent: (current?: AssetsFullData) => void;
 };
 
-export const ViewRow = ({
-  current,
-  items,
-  isLoading,
-  setCurrent,
-}: ViewRowProps) => {
+export const ViewRow = ({ current, items, isLoading, setCurrent }: ViewRowProps) => {
   const isTabletUp = useBreakpoint('tablet-up');
   const isDesktopUp = useBreakpoint('desktop-up');
   const isLaptopUp = useBreakpoint('laptop-up');
@@ -51,13 +46,7 @@ export const ViewRow = ({
       <TableGridBody>
         {items.map((item, index) => (
           <Fragment key={item.id || index}>
-            {isLoading && (
-              <Skeleton
-                variant="rounded"
-                height={50}
-                style={{ gridColumn: '1/-1' }}
-              />
-            )}
+            {isLoading && <Skeleton variant="rounded" height={50} style={{ gridColumn: '1/-1' }} />}
             {!isLoading && (
               <TableGridRow id={item.id}>
                 <TableGridCell>
@@ -93,9 +82,7 @@ export const ViewRow = ({
                       setCurrent(current?.id === item.id ? undefined : item);
                     }}
                   >
-                    <Icon
-                      name={current?.id === item.id ? 'AngleUp' : 'AngleDown'}
-                    />
+                    <Icon name={current?.id === item.id ? 'AngleUp' : 'AngleDown'} />
                   </IconButton>
                 </TableGridCell>
                 <TableGridBodyDetails open={current?.id === item.id}>

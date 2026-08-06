@@ -6,16 +6,9 @@ export interface DialogTitleOverrides {}
 
 export type DialogTitleOwnProps = TypographyProps & {};
 
-export type DialogTitleBaseProps = ElementBaseProps<
-  typeof Typography,
-  DialogTitleOwnProps
->;
+export type DialogTitleBaseProps = ElementBaseProps<typeof Typography, DialogTitleOwnProps>;
 
-export type DialogTitleProps = OverridableType<
-  DialogTitleBaseProps,
-  DialogTitleOverrides,
-  never
->;
+export type DialogTitleProps = OverridableType<DialogTitleBaseProps, DialogTitleOverrides, never>;
 
 export const DialogTitle = (props: DialogTitleProps) => {
   const { ...rest } = useConfig('DialogTitle', props);

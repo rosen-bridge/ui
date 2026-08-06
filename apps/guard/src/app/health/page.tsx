@@ -4,12 +4,7 @@ import { useCallback, useState } from 'react';
 
 import useSWR from 'swr';
 
-import {
-  GridContainer,
-  HealthParamCard,
-  useResponsive,
-  useToast,
-} from '@rosen-bridge/ui-kit';
+import { GridContainer, HealthParamCard, useResponsive, useToast } from '@rosen-bridge/ui-kit';
 import { HEALTH_DATA_REFRESH_INTERVAL } from '@rosen-ui/constants';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import type { HealthParamInfo } from '@rosen-ui/types';
@@ -19,13 +14,9 @@ import type { ApiHealthStatusResponse } from '@/types/api';
 const Health = () => {
   const [checking, setChecking] = useState<string[]>([]);
 
-  const { data, isLoading, mutate } = useSWR<ApiHealthStatusResponse>(
-    '/health/status',
-    fetcher,
-    {
-      refreshInterval: HEALTH_DATA_REFRESH_INTERVAL,
-    },
-  );
+  const { data, isLoading, mutate } = useSWR<ApiHealthStatusResponse>('/health/status', fetcher, {
+    refreshInterval: HEALTH_DATA_REFRESH_INTERVAL,
+  });
 
   const toast = useToast();
 
@@ -51,8 +42,7 @@ const Health = () => {
 
         if (
           currentHealthParamInfo.lastCheck === newHealthParamInfo.lastCheck &&
-          currentHealthParamInfo.lastTrialErrorTime ===
-            newHealthParamInfo.lastTrialErrorTime
+          currentHealthParamInfo.lastTrialErrorTime === newHealthParamInfo.lastTrialErrorTime
         ) {
           return void setTimeout(trying, 1000);
         }
@@ -61,9 +51,7 @@ const Health = () => {
 
         if (!data) return;
 
-        const healthParamIndex = data.findIndex(
-          (healthParam) => healthParam.id === paramId,
-        );
+        const healthParamIndex = data.findIndex((healthParam) => healthParam.id === paramId);
 
         toast.add({
           type: 'info',

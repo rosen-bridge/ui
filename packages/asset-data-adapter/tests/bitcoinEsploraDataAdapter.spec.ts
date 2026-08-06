@@ -37,9 +37,7 @@ describe('BitcoinEsploraDataAdapter', () => {
      * @expected
      * - result includes native bitcoin balance
      */
-    it<TestContext>('should fetch balances for native asset', async ({
-      adapter,
-    }) => {
+    it<TestContext>('should fetch balances for native asset', async ({ adapter }) => {
       const result = await adapter.getAddressAssets('addr1');
 
       expect(result).toEqual(expectedBitcoinGetAddressAssetsResult);

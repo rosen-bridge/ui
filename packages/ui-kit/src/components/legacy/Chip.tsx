@@ -1,9 +1,4 @@
-import {
-  type ComponentProps,
-  forwardRef,
-  type HtmlHTMLAttributes,
-  useMemo,
-} from 'react';
+import { type ComponentProps, forwardRef, type HtmlHTMLAttributes, useMemo } from 'react';
 
 import { styled } from '@mui/material';
 
@@ -32,40 +27,31 @@ import { Typography } from '../typography';
 type ChipBaseProps = HtmlHTMLAttributes<HTMLDivElement> & {
   label?: string;
   icon?: IconProps['name'];
-  color?:
-    | 'primary'
-    | 'secondary'
-    | 'success'
-    | 'warning'
-    | 'error'
-    | 'neutral'
-    | 'info';
+  color?: 'primary' | 'secondary' | 'success' | 'warning' | 'error' | 'neutral' | 'info';
   loading?: boolean;
 };
 
-const ChipWrapper = styled('div')<ChipBaseProps>(
-  ({ theme, color = 'primary' }) => {
-    const palette = theme.palette || theme;
-    const colors = palette[color] || palette.primary;
+const ChipWrapper = styled('div')<ChipBaseProps>(({ theme, color = 'primary' }) => {
+  const palette = theme.palette || theme;
+  const colors = palette[color] || palette.primary;
 
-    return {
-      'display': 'inline-flex',
-      'alignItems': 'center',
-      'padding': theme.spacing(0.5, 1),
-      'borderRadius': '16px',
-      'backgroundColor': colors.light,
-      'color': colors.dark,
-      'border': 'none',
-      'cursor': 'default',
-      '& svg': {
-        fill: colors.dark,
-      },
-      '& p': {
-        color: colors.dark,
-      },
-    };
-  },
-);
+  return {
+    'display': 'inline-flex',
+    'alignItems': 'center',
+    'padding': theme.spacing(0.5, 1),
+    'borderRadius': '16px',
+    'backgroundColor': colors.light,
+    'color': colors.dark,
+    'border': 'none',
+    'cursor': 'default',
+    '& svg': {
+      fill: colors.dark,
+    },
+    '& p': {
+      color: colors.dark,
+    },
+  };
+});
 
 /**
  * A small, pill-shaped UI component that displays a label

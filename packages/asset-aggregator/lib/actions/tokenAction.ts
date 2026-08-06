@@ -1,7 +1,4 @@
-import {
-  type AbstractLogger,
-  DummyLogger,
-} from '@rosen-bridge/abstract-logger';
+import { type AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
 import type { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
 import JsonBigInt from '@rosen-bridge/json-bigint';
 
@@ -26,9 +23,7 @@ export class TokenAction {
   store = async (tokens: TokenEntity[] | TokenEntity) => {
     if (!Array.isArray(tokens)) tokens = [tokens];
     await this.repository.save(tokens);
-    this.logger.debug(
-      `Token [${JsonBigInt.stringify(tokens)}] inserted into database`,
-    );
+    this.logger.debug(`Token [${JsonBigInt.stringify(tokens)}] inserted into database`);
     return tokens;
   };
 }

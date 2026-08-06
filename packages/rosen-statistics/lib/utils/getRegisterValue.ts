@@ -1,9 +1,6 @@
 import { Constant } from 'ergo-lib-wasm-nodejs';
 
-import {
-  type AbstractLogger,
-  DummyLogger,
-} from '@rosen-bridge/abstract-logger';
+import { type AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
 import type { IndexedErgoBox } from '@rosen-clients/ergo-node';
 
 /**

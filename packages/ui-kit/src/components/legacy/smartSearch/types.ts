@@ -49,12 +49,7 @@ export type Filter = {
 export type Selected = {
   flow: string;
   operator: string;
-  value:
-    | boolean
-    | null
-    | number
-    | string
-    | Array<boolean | null | number | string>;
+  value: boolean | null | number | string | Array<boolean | null | number | string>;
 };
 
 export type Search = {

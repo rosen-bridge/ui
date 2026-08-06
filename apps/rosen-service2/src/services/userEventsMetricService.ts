@@ -1,10 +1,6 @@
 import type { AbstractLogger } from '@rosen-bridge/abstract-logger';
 import type { DataSource } from '@rosen-bridge/extended-typeorm';
-import {
-  type Dependency,
-  ServiceAction,
-  ServiceStatus,
-} from '@rosen-bridge/service-manager';
+import { type Dependency, ServiceAction, ServiceStatus } from '@rosen-bridge/service-manager';
 import { userEventMetric } from '@rosen-ui/rosen-statistics';
 
 import { configs } from '../configs';
@@ -20,11 +16,7 @@ export class UserEventsMetricService extends AbstractUserEventsMetricService {
   protected dependencies: Dependency[] = [
     {
       serviceName: AbstractDBService.name,
-      allowedStatuses: [
-        ServiceStatus.running,
-        ServiceStatus.started,
-        ServiceStatus.dormant,
-      ],
+      allowedStatuses: [ServiceStatus.running, ServiceStatus.started, ServiceStatus.dormant],
       action: ServiceAction.assemble,
     },
     {
@@ -64,9 +56,7 @@ export class UserEventsMetricService extends AbstractUserEventsMetricService {
     if (AbstractUserEventsMetricService.instance != undefined) {
       return;
     }
-    AbstractUserEventsMetricService.instance = new UserEventsMetricService(
-      logger,
-    );
+    AbstractUserEventsMetricService.instance = new UserEventsMetricService(logger);
   };
 
   /**
@@ -77,10 +67,7 @@ export class UserEventsMetricService extends AbstractUserEventsMetricService {
    */
   private userEventsCalculation = async (): Promise<void> => {
     try {
-      await userEventMetric(
-        this.dataSource,
-        this.logger.child('userEventMetric'),
-      );
+      await userEventMetric(this.dataSource, this.logger.child('userEventMetric'));
 
       this.logger.info('User events calculation job completed successfully');
     } catch (error) {

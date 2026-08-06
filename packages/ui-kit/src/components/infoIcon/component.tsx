@@ -15,11 +15,7 @@ export type InfoIconOwnProps = {
 
 export type InfoIconBaseProps = ElementBaseProps<typeof Icon, InfoIconOwnProps>;
 
-export type InfoIconProps = OverridableType<
-  InfoIconBaseProps,
-  InfoIconOverrides,
-  never
->;
+export type InfoIconProps = OverridableType<InfoIconBaseProps, InfoIconOverrides, never>;
 
 export const InfoIcon = (props: InfoIconProps) => {
   const { info, slots, ...rest } = useConfig('InfoIcon', props);

@@ -15,11 +15,7 @@ export type AppBarOwnProps = {
 
 export type AppBarBaseProps = ElementBaseProps<'div', AppBarOwnProps>;
 
-export type AppBarProps = OverridableType<
-  AppBarBaseProps,
-  AppBarOverrides,
-  never
->;
+export type AppBarProps = OverridableType<AppBarBaseProps, AppBarOverrides, never>;
 
 /**
  * renders a appBar wrapper

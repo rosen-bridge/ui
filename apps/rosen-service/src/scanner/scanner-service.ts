@@ -1,8 +1,5 @@
 import { DefaultLogger } from '@rosen-bridge/abstract-logger';
-import type {
-  BitcoinRpcScanner,
-  DogeRpcScanner,
-} from '@rosen-bridge/bitcoin-scanner';
+import type { BitcoinRpcScanner, DogeRpcScanner } from '@rosen-bridge/bitcoin-scanner';
 import type { CardanoKoiosScanner } from '@rosen-bridge/cardano-scanner';
 import type { ErgoScanner } from '@rosen-bridge/ergo-scanner';
 import type { EvmRpcScanner } from '@rosen-bridge/evm-scanner';

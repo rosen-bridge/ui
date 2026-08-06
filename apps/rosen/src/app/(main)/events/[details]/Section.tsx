@@ -3,6 +3,7 @@
 import type { ReactNode } from 'react';
 
 import {
+  Badge,
   Button,
   Card,
   CardAction,
@@ -20,6 +21,7 @@ import {
 
 export type SectionProps = {
   action?: ReactNode;
+  badge?: string;
   children?: ReactNode;
   collapsible?: boolean;
   error?: unknown;
@@ -30,6 +32,7 @@ export type SectionProps = {
 
 export const Section = ({
   action,
+  badge,
   children,
   collapsible,
   error,
@@ -51,16 +54,14 @@ export const Section = ({
     <Card variant="section">
       <CardHeader>
         <CardTitle variant="h2" color="text-secondary">
-          {title}
+          {badge ? <Badge content={badge}>{title}</Badge> : title}
         </CardTitle>
         <CardAction>
           {disclosure.state !== 'close' && action}
           {collapsible && <DisclosureButton disclosure={disclosure} />}
         </CardAction>
       </CardHeader>
-      <Collapsible
-        open={!collapsible || disclosure.state === 'open' || !!error}
-      >
+      <Collapsible open={!collapsible || disclosure.state === 'open' || !!error}>
         <CardBody>
           {!error && children}
           {!!error && (

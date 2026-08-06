@@ -94,11 +94,7 @@ export const generateUnsignedTx =
       () => fee,
     );
     if (!inputs.covered) {
-      handleUncoveredAssets(
-        tokenMap,
-        NETWORKS.ergo.key,
-        inputs.uncoveredAssets,
-      );
+      handleUncoveredAssets(tokenMap, NETWORKS.ergo.key, inputs.uncoveredAssets);
     }
     // add input boxes to transaction
     const unsignedInputs = new wasm.UnsignedInputs();
@@ -107,9 +103,7 @@ export const generateUnsignedTx =
     });
 
     const feeBox = wasm.ErgoBoxCandidate.new_miner_fee_box(
-      wasm.BoxValue.from_i64(
-        wasm.I64.from_str(inputs.additionalAssets.fee.toString()),
-      ),
+      wasm.BoxValue.from_i64(wasm.I64.from_str(inputs.additionalAssets.fee.toString())),
       height,
     );
 

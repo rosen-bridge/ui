@@ -13,10 +13,7 @@ import {
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 
-import type {
-  EventDetailsType,
-  EventStatusType,
-} from '@/backend/events/repository';
+import type { EventDetailsType, EventStatusType } from '@/backend/events/repository';
 
 import { ProcessSelect } from './ProcessSelect';
 import { Section } from './Section';
@@ -30,9 +27,7 @@ type Step = {
   line?: boolean;
 };
 
-type StepCandidates = Array<
-  Omit<Step, 'subs'> & { subs?: Omit<Step, 'subs'>[][] }
->;
+type StepCandidates = Array<Omit<Step, 'subs'> & { subs?: Omit<Step, 'subs'>[][] }>;
 
 const steps: StepCandidates[] = [
   [
@@ -51,8 +46,7 @@ const steps: StepCandidates[] = [
       key: 'TRIGGERED',
       label: 'Triggered',
       status: 'DONE',
-      description:
-        'The event has been reported by a sufficient number of watchers',
+      description: 'The event has been reported by a sufficient number of watchers',
     },
   ],
   [
@@ -250,10 +244,7 @@ const steps: StepCandidates[] = [
   ],
 ];
 
-const findPath = (
-  items?: StepCandidates[],
-  key?: string,
-): number[] | undefined => {
+const findPath = (items?: StepCandidates[], key?: string): number[] | undefined => {
   if (!items || !key) return;
 
   for (let i = 0; i < items.length; i++) {
@@ -275,15 +266,10 @@ const findPath = (
 
 const pick = (items: StepCandidates[], path: number[] = [-1]): Step[] => {
   return items.map((row, index) => {
-    const state =
-      index < path[0] ? 'past' : index === path[0] ? 'current' : 'future';
+    const state = index < path[0] ? 'past' : index === path[0] ? 'current' : 'future';
 
     const item =
-      state === 'past'
-        ? row[row.length - 1]
-        : state === 'current'
-          ? row[path[1]]
-          : row[0];
+      state === 'past' ? row[row.length - 1] : state === 'current' ? row[path[1]] : row[0];
 
     const { subs, ...rest } = item;
 
@@ -317,8 +303,7 @@ const toItems = (
 
     const timestampRaw = timestamps[step.key as keyof typeof timestamps];
 
-    const timestamp =
-      typeof timestampRaw === 'number' ? timestampRaw * 1000 : undefined;
+    const timestamp = typeof timestampRaw === 'number' ? timestampRaw * 1000 : undefined;
 
     const value = crypto.randomUUID();
 
@@ -362,13 +347,7 @@ const toItems = (
   });
 };
 
-export const Process = ({
-  id,
-  flowId,
-}: {
-  id: string;
-  flowId: string | undefined;
-}) => {
+export const Process = ({ id, flowId }: { id: string; flowId: string | undefined }) => {
   const [active, setActive] = useState<string | undefined>();
 
   const [guardPublicKey, setGuardPublicKey] = useState<string | undefined>();
@@ -436,15 +415,12 @@ export const Process = ({
   return (
     <Section
       action={
-        <ProcessSelect
-          disabled={isLoading}
-          value={guardPublicKey}
-          onChange={setGuardPublicKey}
-        />
+        <ProcessSelect disabled={isLoading} value={guardPublicKey} onChange={setGuardPublicKey} />
       }
       collapsible
       error={error}
       load={mutate}
+      badge="New"
       title="Progress"
       onOpenChange={setOpen}
     >

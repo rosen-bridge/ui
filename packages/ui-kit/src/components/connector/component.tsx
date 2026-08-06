@@ -31,23 +31,13 @@ export type ConnectorOwnProps = {
 
 export type ConnectorBaseProps = ElementBaseProps<'div', ConnectorOwnProps>;
 
-export type ConnectorProps = OverridableType<
-  ConnectorBaseProps,
-  ConnectorOverrides,
-  never
->;
+export type ConnectorProps = OverridableType<ConnectorBaseProps, ConnectorOverrides, never>;
 
 /**
  * Connector component: visually connects two elements with an arrow.
  */
 export const Connector = (props: ConnectorProps) => {
-  const {
-    end,
-    slots,
-    start,
-    variant = 'standard',
-    ...rest
-  } = useConfig('Connector', props);
+  const { end, slots, start, variant = 'standard', ...rest } = useConfig('Connector', props);
 
   return (
     <div data-variant={variant} {...rest}>

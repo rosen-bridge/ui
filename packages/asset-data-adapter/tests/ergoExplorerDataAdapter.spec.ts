@@ -79,9 +79,7 @@ describe('ErgoExplorerDataAdapter', () => {
 
       const result = await adapter.getRawTotalSupply(token);
       expect(result).toBe(1000n);
-      expect(mockExplorer.v1.getApiV1TokensP1).toHaveBeenCalledWith(
-        token.tokenId,
-      );
+      expect(mockExplorer.v1.getApiV1TokensP1).toHaveBeenCalledWith(token.tokenId);
     });
 
     /**

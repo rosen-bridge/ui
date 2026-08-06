@@ -7,10 +7,7 @@ export interface DialogFooterOverrides {}
 
 export type DialogFooterOwnProps = {};
 
-export type DialogFooterBaseProps = ElementBaseProps<
-  'div',
-  DialogFooterOwnProps
->;
+export type DialogFooterBaseProps = ElementBaseProps<'div', DialogFooterOwnProps>;
 
 export type DialogFooterProps = OverridableType<
   DialogFooterBaseProps,

@@ -1,8 +1,4 @@
-import {
-  type Filter,
-  OPERATOR_CONTAINS,
-  OPERATOR_IS,
-} from '@rosen-bridge/ui-kit';
+import { type Filter, OPERATOR_CONTAINS, OPERATOR_IS } from '@rosen-bridge/ui-kit';
 import { NETWORKS, NETWORKS_KEYS } from '@rosen-ui/constants';
 
 export const filters: Filter[] = [

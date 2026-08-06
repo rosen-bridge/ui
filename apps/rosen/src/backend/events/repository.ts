@@ -1,10 +1,7 @@
 import { ObservationEntity } from '@rosen-bridge/abstract-observation-extractor';
 import { BlockEntity } from '@rosen-bridge/abstract-scanner';
 import { ArrayContains, In, Not } from '@rosen-bridge/extended-typeorm';
-import type {
-  Filter,
-  StringArrayFilterField,
-} from '@rosen-bridge/query-params';
+import type { Filter, StringArrayFilterField } from '@rosen-bridge/query-params';
 import { TokenPriceAction } from '@rosen-bridge/token-price-entity';
 import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
 import { TokenEntity } from '@rosen-ui/asset-calculator';
@@ -30,16 +27,10 @@ const blockRepository = dataSource.getRepository(BlockEntity);
 const eventTriggerRepository = dataSource.getRepository(EventTriggerEntity);
 const observationRepository = dataSource.getRepository(ObservationEntity);
 const tokenRepository = dataSource.getRepository(TokenEntity);
-const aggregatedStatusRepository = dataSource.getRepository(
-  AggregatedStatusEntity,
-);
-const aggregatedStatusChangedRepository = dataSource.getRepository(
-  AggregatedStatusChangedEntity,
-);
+const aggregatedStatusRepository = dataSource.getRepository(AggregatedStatusEntity);
+const aggregatedStatusChangedRepository = dataSource.getRepository(AggregatedStatusChangedEntity);
 const guardStatusRepository = dataSource.getRepository(GuardStatusEntity);
-const guardStatusChangedRepository = dataSource.getRepository(
-  GuardStatusChangedEntity,
-);
+const guardStatusChangedRepository = dataSource.getRepository(GuardStatusChangedEntity);
 
 interface EventWithTotal
   extends Omit<ObservationEntity, 'requestId'>,
@@ -87,10 +78,7 @@ export type EventDetailsType = Omit<EventWithTotal, 'status' | 'total'> & {
 export type EventStatusType = {
   status: EventDetailsType['status'];
   timestamps: Partial<
-    Record<
-      EventDetailsType['status'] | 'PAID_CONFIRMED_AT_EXPERIMENTAL',
-      number
-    >
+    Record<EventDetailsType['status'] | 'PAID_CONFIRMED_AT_EXPERIMENTAL', number>
   >;
 };
 
@@ -103,9 +91,7 @@ export const getEvents = async (filters: Filter) => {
   await (async () => {
     if (!filters.fields) return;
 
-    const fieldIndex = filters.fields.findIndex(
-      (field) => field.key === 'originalTokenId',
-    );
+    const fieldIndex = filters.fields.findIndex((field) => field.key === 'originalTokenId');
 
     if (fieldIndex === -1) return;
 
@@ -123,9 +109,7 @@ export const getEvents = async (filters: Filter) => {
       },
     });
 
-    const originalErgoSideTokenIds = originalTokens.map(
-      (token) => token.ergoSideTokenId,
-    );
+    const originalErgoSideTokenIds = originalTokens.map((token) => token.ergoSideTokenId);
 
     const ergoSideTokens = await tokenRepository.find({
       select: ['id'],
@@ -146,11 +130,9 @@ export const getEvents = async (filters: Filter) => {
     filters.fields.splice(fieldIndex, 1, filter);
   })();
 
-  const statusIndex =
-    filters.fields?.findIndex((field) => field.key === 'status') ?? -1;
+  const statusIndex = filters.fields?.findIndex((field) => field.key === 'status') ?? -1;
 
-  const status =
-    statusIndex > -1 ? filters.fields?.splice(statusIndex, 1)[0] : undefined;
+  const status = statusIndex > -1 ? filters.fields?.splice(statusIndex, 1)[0] : undefined;
 
   const { pagination, sorts, where } = filtersToTypeorm(filters, (key) => {
     switch (key) {
@@ -177,16 +159,8 @@ export const getEvents = async (filters: Filter) => {
   const subquery = observationRepository
     .createQueryBuilder('oe')
     .leftJoin(blockRepository.metadata.tableName, 'be', 'be.hash = oe.block')
-    .leftJoin(
-      eventTriggerRepository.metadata.tableName,
-      'ete',
-      'ete.eventId = oe.requestId',
-    )
-    .leftJoin(
-      tokenRepository.metadata.tableName,
-      'te',
-      'te.id = oe.sourceChainTokenId',
-    )
+    .leftJoin(eventTriggerRepository.metadata.tableName, 'ete', 'ete.eventId = oe.requestId')
+    .leftJoin(tokenRepository.metadata.tableName, 'te', 'te.id = oe.sourceChainTokenId')
     .select([
       'oe.id AS "id"',
       'oe.fromChain AS "fromChain"',
@@ -302,10 +276,7 @@ export const getEvent = async (id: string) => {
 
     if (!token) throw new Error(`Not found`);
 
-    const price = await tokenPriceAction.getLatestTokenPrice(
-      token.id,
-      event.timestamp,
-    );
+    const price = await tokenPriceAction.getLatestTokenPrice(token.id, event.timestamp);
 
     const { status, timestamps } = await getEventStatus(id, event.txId);
     event.status = status;
@@ -340,17 +311,14 @@ export const getEventStatus = async (
   }
 
   if (observations.length > 1) {
-    throw new Error(
-      `ImpossibleBehavior: found more than 1 observation records`,
-      {
-        cause: {
-          eventId,
-          triggerTxId,
-          guardPublicKey,
-          observationCount: observations.length,
-        },
+    throw new Error(`ImpossibleBehavior: found more than 1 observation records`, {
+      cause: {
+        eventId,
+        triggerTxId,
+        guardPublicKey,
+        observationCount: observations.length,
       },
-    );
+    });
   }
 
   const observation = observations[0];
@@ -417,9 +385,7 @@ export const getEventStatus = async (
     await blockRepository.findOneBy({ hash: eventTrigger.block })
   )?.timestamp;
 
-  let aggregatedStatusChangedItems:
-    | AggregatedStatusChangedEntity[]
-    | GuardStatusChangedEntity[];
+  let aggregatedStatusChangedItems: AggregatedStatusChangedEntity[] | GuardStatusChangedEntity[];
 
   if (guardPublicKey) {
     aggregatedStatusChangedItems = await guardStatusChangedRepository.find({
@@ -427,12 +393,10 @@ export const getEventStatus = async (
       order: { insertedAt: 'DESC' },
     });
   } else {
-    aggregatedStatusChangedItems = await aggregatedStatusChangedRepository.find(
-      {
-        where: { triggerTxId: triggerTxId },
-        order: { insertedAt: 'DESC' },
-      },
-    );
+    aggregatedStatusChangedItems = await aggregatedStatusChangedRepository.find({
+      where: { triggerTxId: triggerTxId },
+      order: { insertedAt: 'DESC' },
+    });
   }
 
   if (eventTrigger.result === null) {
@@ -531,15 +495,9 @@ export const getEventStatus = async (
   }
 
   const TIMESTAMP_EXTRACTION_MAP: {
-    [key in EventDetailsType['status']]?: [
-      AggregateEventStatus,
-      AggregateTxStatus | undefined,
-    ];
+    [key in EventDetailsType['status']]?: [AggregateEventStatus, AggregateTxStatus | undefined];
   } = {
-    PAYMENT_APPROVED: [
-      AggregateEventStatus.inPayment,
-      AggregateTxStatus.inSign,
-    ],
+    PAYMENT_APPROVED: [AggregateEventStatus.inPayment, AggregateTxStatus.inSign],
     PAYMENT_SIGNED: [AggregateEventStatus.inPayment, AggregateTxStatus.signed],
     PAYMENT_SENT: [AggregateEventStatus.inPayment, AggregateTxStatus.sent],
     PAID: [AggregateEventStatus.inPayment, AggregateTxStatus.sent],
@@ -557,9 +515,7 @@ export const getEventStatus = async (
     const [status, txStatus] = TIMESTAMP_EXTRACTION_MAP[key] || [];
 
     result.timestamps[key] = aggregatedStatusChangedItems.find(
-      (item) =>
-        item.status === status &&
-        (txStatus ? item.txStatus === txStatus : true),
+      (item) => item.status === status && (txStatus ? item.txStatus === txStatus : true),
     )?.insertedAt;
   });
 
@@ -569,18 +525,15 @@ export const getEventStatus = async (
     });
 
     if (blocks.length !== 1) {
-      throw new Error(
-        `ImpossibleBehavior: found more than 1 spend block records`,
-        {
-          cause: {
-            eventId,
-            triggerTxId,
-            guardPublicKey,
-            spendBlock: eventTrigger.spendBlock,
-            blockCount: blocks.length,
-          },
+      throw new Error(`ImpossibleBehavior: found more than 1 spend block records`, {
+        cause: {
+          eventId,
+          triggerTxId,
+          guardPublicKey,
+          spendBlock: eventTrigger.spendBlock,
+          blockCount: blocks.length,
         },
-      );
+      });
     }
 
     const block = blocks[0];
@@ -594,18 +547,15 @@ export const getEventStatus = async (
     );
 
     if (items.length > 1) {
-      throw new Error(
-        `ImpossibleBehavior: found more than 1 finished state records`,
-        {
-          cause: {
-            eventId,
-            triggerTxId,
-            guardPublicKey,
-            observation,
-            aggregatedStatusChangedItemsCount: items.length,
-          },
+      throw new Error(`ImpossibleBehavior: found more than 1 finished state records`, {
+        cause: {
+          eventId,
+          triggerTxId,
+          guardPublicKey,
+          observation,
+          aggregatedStatusChangedItemsCount: items.length,
         },
-      );
+      });
     }
 
     result.timestamps.PAID_CONFIRMED_AT_EXPERIMENTAL = items.at(0)?.insertedAt;

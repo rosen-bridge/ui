@@ -46,8 +46,7 @@ export const TokenAmountTextField = ({
   minBoxValue,
   setMinValue,
 }: TokenAmountTextFieldProps) => {
-  const { control, setValue } =
-    useFormContext<TokenAmountCompatibleFormSchema>();
+  const { control, setValue } = useFormContext<TokenAmountCompatibleFormSchema>();
 
   const { field: amountField, fieldState } = useController({
     control: control,
@@ -65,14 +64,11 @@ export const TokenAmountTextField = ({
         if (!match) return 'Invalid amount';
 
         // prevent user from entering more decimals than token decimals
-        const isDecimalsLarge =
-          (match?.groups?.floatingDigits?.length ?? 0) > token.decimals;
+        const isDecimalsLarge = (match?.groups?.floatingDigits?.length ?? 0) > token.decimals;
         if (isDecimalsLarge)
           return `The current token only supports ${token.decimals} ${token.decimals <= 1 ? 'decimal' : 'decimals'}`;
 
-        const newValueBigInt = BigInt(
-          getNonDecimalString(newValue, token.decimals),
-        );
+        const newValueBigInt = BigInt(getNonDecimalString(newValue, token.decimals));
 
         // prevent user from entering more than token amount
         if (newValueBigInt > token.amount) return `Insufficient balance`;
@@ -126,10 +122,7 @@ export const TokenAmountTextField = ({
         disableUnderline: true,
         endAdornment: token && (
           <Stack direction="row" align="center" justify="between" spacing={1.5}>
-            <Divider
-              orientation="vertical"
-              style={{ alignSelf: 'stretch', height: 'auto' }}
-            />
+            <Divider orientation="vertical" style={{ alignSelf: 'stretch', height: 'auto' }} />
             <Button
               disabled={disabled}
               loading={loading}

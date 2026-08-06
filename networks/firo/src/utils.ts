@@ -13,11 +13,7 @@ import type { Network } from '@rosen-ui/types';
  * @param amount - amount in FIRO (decimal string)
  * @param opReturnData - hex-encoded OP_RETURN data
  */
-export const buildPaymentUri = (
-  address: string,
-  amount: string,
-  opReturnData: string,
-): string => {
+export const buildPaymentUri = (address: string, amount: string, opReturnData: string): string => {
   return `firo:${address}?amount=${amount}&op_return=${opReturnData}`;
 };
 
@@ -48,9 +44,7 @@ export const generateOpReturnData = async (
 
   // parse toAddress
   const addressHex = encodeAddress(toChain, toAddress);
-  const addressLengthCode = (addressHex.length / 2)
-    .toString(16)
-    .padStart(2, '0');
+  const addressLengthCode = (addressHex.length / 2).toString(16).padStart(2, '0');
 
   return Promise.resolve(
     toChainHex + bridgeFeeHex + networkFeeHex + addressLengthCode + addressHex,
@@ -59,9 +53,7 @@ export const generateOpReturnData = async (
 
 const getHeight = async (): Promise<number> => {
   const firoExplorerUrl = `${process.env.FIRO_EXPLORER_API}`;
-  const response = await fetch(
-    `${firoExplorerUrl}/insight-api-zcoin/status?q=getInfo`,
-  );
+  const response = await fetch(`${firoExplorerUrl}/insight-api-zcoin/status?q=getInfo`);
   if (!response.ok) {
     throw Error(
       `Cannot fetch Firo height from explorer: ${response.status} ${response.statusText}`,
@@ -77,12 +69,6 @@ const getHeight = async (): Promise<number> => {
   return height;
 };
 
-export const calculateFee: CalculateFee = calculateFeeCreator(
-  NETWORKS.firo.key,
-  getHeight,
-);
+export const calculateFee: CalculateFee = calculateFeeCreator(NETWORKS.firo.key, getHeight);
 
-export const getMinTransferCreator = getMinTransferCreatorBase(
-  NETWORKS.firo.key,
-  calculateFee,
-);
+export const getMinTransferCreator = getMinTransferCreatorBase(NETWORKS.firo.key, calculateFee);

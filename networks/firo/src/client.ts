@@ -37,9 +37,7 @@ export class FiroNetwork implements Network {
     return this.config.buildPaymentUri(...args);
   };
 
-  public generateOpReturnData: FiroNetworkConfig['generateOpReturnData'] = (
-    ...args
-  ) => {
+  public generateOpReturnData: FiroNetworkConfig['generateOpReturnData'] = (...args) => {
     return this.config.generateOpReturnData(...args);
   };
 

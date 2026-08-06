@@ -21,11 +21,7 @@ export type LinkOwnProps = {
 
 export type LinkBaseProps = ElementBaseProps<'a', LinkOwnProps>;
 
-export type LinkProps = OverridableType<
-  LinkBaseProps,
-  LinkOverrides,
-  'color' | 'href'
->;
+export type LinkProps = OverridableType<LinkBaseProps, LinkOverrides, 'color' | 'href'>;
 
 export const Link = (props: LinkProps) => {
   const {

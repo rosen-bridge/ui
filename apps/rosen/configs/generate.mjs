@@ -6,15 +6,11 @@ import { NETWORKS_KEYS } from '@rosen-ui/constants';
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
-const contracts = JSON.parse(
-  fs.readFileSync(path.join(__dirname, 'contracts.json')),
-);
+const contracts = JSON.parse(fs.readFileSync(path.join(__dirname, 'contracts.json')));
 
 fs.rmSync(path.join(__dirname, 'contracts.json'));
 
-const tokensMap = JSON.parse(
-  fs.readFileSync(path.join(__dirname, 'tokensMap.json')),
-);
+const tokensMap = JSON.parse(fs.readFileSync(path.join(__dirname, 'tokensMap.json')));
 
 fs.rmSync(path.join(__dirname, 'tokensMap.json'));
 
@@ -32,8 +28,7 @@ const content = [
   '',
   `export const LOCK_ADDRESSES: { [key in keyof typeof NETWORKS]: string } = {`,
   ...NETWORKS_KEYS.map(
-    (network) =>
-      `  '${network}': '${contracts[network]?.addresses?.lock || ''}',`,
+    (network) => `  '${network}': '${contracts[network]?.addresses?.lock || ''}',`,
   ),
   `};`,
   '',

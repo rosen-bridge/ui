@@ -55,17 +55,10 @@ export type EncodedAmount = HexString;
 export type RawUnsignedTx = HexString;
 
 export interface CipWalletApi {
-  getUtxos(
-    amount?: EncodedAmount,
-    paginate?: Paging,
-  ): Promise<EncodedTxOut[] | undefined>;
-  getCollateral(params?: {
-    amount?: EncodedAmount;
-  }): Promise<EncodedTxOut[] | undefined>;
+  getUtxos(amount?: EncodedAmount, paginate?: Paging): Promise<EncodedTxOut[] | undefined>;
+  getCollateral(params?: { amount?: EncodedAmount }): Promise<EncodedTxOut[] | undefined>;
   experimental: {
-    getCollateral(params: {
-      amount?: EncodedAmount;
-    }): Promise<EncodedTxOut[] | undefined>;
+    getCollateral(params: { amount?: EncodedAmount }): Promise<EncodedTxOut[] | undefined>;
   };
   getChangeAddress(): Promise<EncodedAddress>;
   getBalance(): Promise<EncodedBalance>;

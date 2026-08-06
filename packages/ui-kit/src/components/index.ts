@@ -31,6 +31,7 @@ export * from './copyButton';
 export * from './cubeNetBackground';
 export * from './dateTime';
 export * from './duration';
+export * from './emptyState';
 export * from './eventCard';
 export * from './eventDetails';
 export * from './eventProcesses';

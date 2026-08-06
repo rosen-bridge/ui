@@ -102,10 +102,7 @@ export const getNumberOfDecimals = (inputNumber: number) => {
  * @param {number} allowedDecimals - The maximum number of decimal places allowed.
  * @throws {Error} If the number of decimal places in `inputNumber` exceeds `allowedDecimals`.
  */
-export const validateDecimalPlaces = (
-  inputNumber: number,
-  allowedDecimals: number,
-) => {
+export const validateDecimalPlaces = (inputNumber: number, allowedDecimals: number) => {
   const currentDecimals = getNumberOfDecimals(inputNumber);
 
   if (currentDecimals > allowedDecimals) {

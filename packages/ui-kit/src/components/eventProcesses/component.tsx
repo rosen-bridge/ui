@@ -19,10 +19,7 @@ export type EventProcessesOwnProps = {
   onChange?: (value?: string) => void;
 };
 
-export type EventProcessesBaseProps = ElementBaseProps<
-  'div',
-  EventProcessesOwnProps
->;
+export type EventProcessesBaseProps = ElementBaseProps<'div', EventProcessesOwnProps>;
 
 export type EventProcessesProps = OverridableType<
   EventProcessesBaseProps,
@@ -66,14 +63,7 @@ export const EventProcesses = (props: EventProcessesProps) => {
       {items?.map((item, index) => {
         if (item.line) return <StepExtra {...item} key={index.toString()} />;
 
-        return (
-          <Step
-            key={index.toString()}
-            active={value}
-            setActive={onChange}
-            {...item}
-          />
-        );
+        return <Step key={index.toString()} active={value} setActive={onChange} {...item} />;
       })}
       {loading && <Skeleton attached variant="rounded" />}
     </div>

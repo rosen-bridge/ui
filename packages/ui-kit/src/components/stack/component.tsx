@@ -45,11 +45,7 @@ export type StackOwnProps = {
 
 export type StackBaseProps = ElementBaseProps<'div', StackOwnProps>;
 
-export type StackProps = OverridableType<
-  StackBaseProps,
-  StackOverrides,
-  'spacing'
->;
+export type StackProps = OverridableType<StackBaseProps, StackOverrides, 'spacing'>;
 
 /**
  * A flexible layout component based on CSS flexbox.

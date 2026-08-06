@@ -29,12 +29,7 @@ export const useWallet = () => {
   return context;
 };
 
-type WalletState =
-  | 'IDLE'
-  | 'DISCONNECTING'
-  | 'DISCONNECTED'
-  | 'CONNECTING'
-  | 'CONNECTED';
+type WalletState = 'IDLE' | 'DISCONNECTING' | 'DISCONNECTED' | 'CONNECTING' | 'CONNECTED';
 
 export type WalletContextType = {
   select: (wallet: Wallet) => Promise<void>;
@@ -130,9 +125,7 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
 
       if (!name) return;
 
-      const wallet = Object.values(wallets).find(
-        (wallet) => wallet.name === name,
-      );
+      const wallet = Object.values(wallets).find((wallet) => wallet.name === name);
 
       if (!wallet) return;
 
@@ -176,7 +169,5 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
     [select, selected, state, filtered, disconnect],
   );
 
-  return (
-    <WalletContext.Provider value={value}>{children}</WalletContext.Provider>
-  );
+  return <WalletContext.Provider value={value}>{children}</WalletContext.Provider>;
 };

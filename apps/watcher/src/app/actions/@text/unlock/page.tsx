@@ -8,23 +8,20 @@ import { fetcher } from '@rosen-ui/swr-helpers';
 import type { ApiInfoResponse } from '@/types/api';
 
 const LockText = () => {
-  const { data: info, isLoading: isInfoLoading } = useSWR<ApiInfoResponse>(
-    '/info',
-    fetcher,
-  );
+  const { data: info, isLoading: isInfoLoading } = useSWR<ApiInfoResponse>('/info', fetcher);
 
   return (
     <>
       <Typography gutterBottom>
-        You can redeem your permits and unlock your RSN tokens. If you redeem
-        all of your permits, your collateral will be redeemed automatically.
+        You can redeem your permits and unlock your RSN tokens. If you redeem all of your permits,
+        your collateral will be redeemed automatically.
       </Typography>
       <Typography fontWeight="bold" sx={{ mt: 2 }}>
         Caution
       </Typography>
       <Typography>
-        You can only return your in-wallet permits. To redeem your collateral,
-        wait for reported events to be settled.
+        You can only return your in-wallet permits. To redeem your collateral, wait for reported
+        events to be settled.
         {!isInfoLoading &&
           info &&
           info?.permitCount.active !== info?.permitCount.total &&

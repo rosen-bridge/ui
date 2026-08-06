@@ -15,22 +15,12 @@ export type TypographyOwnProps = TypographyPropsMUI & {
   loading?: boolean;
 };
 
-export type TypographyBaseProps = ElementBaseProps<
-  typeof TypographyMUI,
-  TypographyOwnProps
->;
+export type TypographyBaseProps = ElementBaseProps<typeof TypographyMUI, TypographyOwnProps>;
 
-export type TypographyProps = OverridableType<
-  TypographyBaseProps,
-  TypographyOverrides,
-  'color'
->;
+export type TypographyProps = OverridableType<TypographyBaseProps, TypographyOverrides, 'color'>;
 
 export const Typography = (props: TypographyProps) => {
-  const { children, color, loading, style, ...rest } = useConfig(
-    'Typography',
-    props,
-  );
+  const { children, color, loading, style, ...rest } = useConfig('Typography', props);
 
   return (
     <TypographyMUI style={{ color: toCSSColor(color), ...style }} {...rest}>

@@ -1,9 +1,5 @@
 import type { AbstractLogger } from '@rosen-bridge/abstract-logger';
-import {
-  NATIVE_TOKEN,
-  type RosenChainToken,
-  type TokenMap,
-} from '@rosen-bridge/tokens';
+import { NATIVE_TOKEN, type RosenChainToken, type TokenMap } from '@rosen-bridge/tokens';
 import cardanoKoiosClientFactory from '@rosen-clients/cardano-koios';
 import { NETWORKS } from '@rosen-ui/constants';
 import type { Network } from '@rosen-ui/types';
@@ -32,9 +28,7 @@ export class CardanoCalculator extends AbstractCalculator {
    */
   totalRawSupply = async (token: RosenChainToken): Promise<bigint> => {
     const assetSummary = await this.koiosApi.assetInfo({
-      _asset_list: [
-        [token.extra.policyId as string, token.extra.assetName as string],
-      ],
+      _asset_list: [[token.extra.policyId as string, token.extra.assetName as string]],
     });
     if (assetSummary.length && assetSummary[0].total_supply) {
       this.logger.debug(

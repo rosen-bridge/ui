@@ -38,9 +38,7 @@ const getConfig = () => {
       cardano: {
         addresses: {
           lock: nodeConfig.get<string>('cardano.addresses.lock'),
-          eventTrigger: nodeConfig.get<string>(
-            'cardano.addresses.eventTrigger',
-          ),
+          eventTrigger: nodeConfig.get<string>('cardano.addresses.eventTrigger'),
           permit: nodeConfig.get<string>('cardano.addresses.permit'),
           fraud: nodeConfig.get<string>('cardano.addresses.fraud'),
           commitment: nodeConfig.get<string>('cardano.addresses.commitment'),
@@ -55,9 +53,7 @@ const getConfig = () => {
       bitcoin: {
         addresses: {
           lock: nodeConfig.get<string>('bitcoin.addresses.lock'),
-          eventTrigger: nodeConfig.get<string>(
-            'bitcoin.addresses.eventTrigger',
-          ),
+          eventTrigger: nodeConfig.get<string>('bitcoin.addresses.eventTrigger'),
           permit: nodeConfig.get<string>('bitcoin.addresses.permit'),
           fraud: nodeConfig.get<string>('bitcoin.addresses.fraud'),
           commitment: nodeConfig.get<string>('bitcoin.addresses.commitment'),
@@ -74,14 +70,10 @@ const getConfig = () => {
       bitcoinRunes: {
         addresses: {
           lock: nodeConfig.get<string>('bitcoin-runes.addresses.lock'),
-          eventTrigger: nodeConfig.get<string>(
-            'bitcoin-runes.addresses.eventTrigger',
-          ),
+          eventTrigger: nodeConfig.get<string>('bitcoin-runes.addresses.eventTrigger'),
           permit: nodeConfig.get<string>('bitcoin-runes.addresses.permit'),
           fraud: nodeConfig.get<string>('bitcoin-runes.addresses.fraud'),
-          commitment: nodeConfig.get<string>(
-            'bitcoin-runes.addresses.commitment',
-          ),
+          commitment: nodeConfig.get<string>('bitcoin-runes.addresses.commitment'),
         },
         initialHeight: nodeConfig.get<number>('bitcoin-runes.initialHeight'),
         tokens: {
@@ -93,9 +85,7 @@ const getConfig = () => {
       ethereum: {
         addresses: {
           lock: nodeConfig.get<string>('ethereum.addresses.lock'),
-          eventTrigger: nodeConfig.get<string>(
-            'ethereum.addresses.eventTrigger',
-          ),
+          eventTrigger: nodeConfig.get<string>('ethereum.addresses.eventTrigger'),
           permit: nodeConfig.get<string>('ethereum.addresses.permit'),
           fraud: nodeConfig.get<string>('ethereum.addresses.fraud'),
           commitment: nodeConfig.get<string>('ethereum.addresses.commitment'),
@@ -110,9 +100,7 @@ const getConfig = () => {
       binance: {
         addresses: {
           lock: nodeConfig.get<string>('binance.addresses.lock'),
-          eventTrigger: nodeConfig.get<string>(
-            'binance.addresses.eventTrigger',
-          ),
+          eventTrigger: nodeConfig.get<string>('binance.addresses.eventTrigger'),
           permit: nodeConfig.get<string>('binance.addresses.permit'),
           fraud: nodeConfig.get<string>('binance.addresses.fraud'),
           commitment: nodeConfig.get<string>('binance.addresses.commitment'),
@@ -137,13 +125,14 @@ const getConfig = () => {
           rwt: nodeConfig.get<string>('doge.tokens.rwt'),
         },
         blockcypherUrl: nodeConfig.get<string>('doge.blockcypherUrl'),
-        rpcConnections: nodeConfig.get<
-          Array<{
-            url: string;
-            username?: string;
-            password?: string;
-          }>
-        >('doge.rpcConnections'),
+        rpcConnections:
+          nodeConfig.get<
+            Array<{
+              url: string;
+              username?: string;
+              password?: string;
+            }>
+          >('doge.rpcConnections'),
       },
       firo: {
         addresses: {
@@ -160,9 +149,7 @@ const getConfig = () => {
         explorerUrl: nodeConfig.get<string>('firo.explorerUrl'),
         electrumxHost: nodeConfig.get<string>('firo.electrumx.host'),
         electrumxPort: nodeConfig.get<number>('firo.electrumx.port'),
-        electrumxReconnectDelay: nodeConfig.get<number>(
-          'firo.electrumx.reconnectDelay',
-        ),
+        electrumxReconnectDelay: nodeConfig.get<number>('firo.electrumx.reconnectDelay'),
       },
       postgres: {
         url: nodeConfig.get<string>('postgres.url'),
@@ -174,9 +161,7 @@ const getConfig = () => {
           ergo: nodeConfig.get<string[]>('calculator.addresses.ergo'),
           cardano: nodeConfig.get<string[]>('calculator.addresses.cardano'),
           bitcoin: nodeConfig.get<string[]>('calculator.addresses.bitcoin'),
-          bitcoinRunes: nodeConfig.get<string[]>(
-            'calculator.addresses.bitcoin-runes',
-          ),
+          bitcoinRunes: nodeConfig.get<string[]>('calculator.addresses.bitcoin-runes'),
           ethereum: nodeConfig.get<string[]>('calculator.addresses.ethereum'),
           binance: nodeConfig.get<string[]>('calculator.addresses.binance'),
           doge: nodeConfig.get<string[]>('calculator.addresses.doge'),
@@ -185,65 +170,37 @@ const getConfig = () => {
         interval: nodeConfig.get<number>('calculator.interval'),
       },
       healthCheck: {
-        ergoScannerWarnDiff: nodeConfig.get<number>(
-          'healthCheck.ergoScannerWarnDiff',
-        ),
-        ergoScannerCriticalDiff: nodeConfig.get<number>(
-          'healthCheck.ergoScannerCriticalDiff',
-        ),
-        cardanoScannerWarnDiff: nodeConfig.get<number>(
-          'healthCheck.cardanoScannerWarnDiff',
-        ),
+        ergoScannerWarnDiff: nodeConfig.get<number>('healthCheck.ergoScannerWarnDiff'),
+        ergoScannerCriticalDiff: nodeConfig.get<number>('healthCheck.ergoScannerCriticalDiff'),
+        cardanoScannerWarnDiff: nodeConfig.get<number>('healthCheck.cardanoScannerWarnDiff'),
         cardanoScannerCriticalDiff: nodeConfig.get<number>(
           'healthCheck.cardanoScannerCriticalDiff',
         ),
-        bitcoinScannerWarnDiff: nodeConfig.get<number>(
-          'healthCheck.bitcoinScannerWarnDiff',
-        ),
+        bitcoinScannerWarnDiff: nodeConfig.get<number>('healthCheck.bitcoinScannerWarnDiff'),
         bitcoinScannerCriticalDiff: nodeConfig.get<number>(
           'healthCheck.bitcoinScannerCriticalDiff',
         ),
-        dogeScannerWarnDiff: nodeConfig.get<number>(
-          'healthCheck.dogeScannerWarnDiff',
-        ),
-        dogeScannerCriticalDiff: nodeConfig.get<number>(
-          'healthCheck.dogeScannerCriticalDiff',
-        ),
-        ethereumScannerWarnDiff: nodeConfig.get<number>(
-          'healthCheck.ethereumScannerWarnDiff',
-        ),
+        dogeScannerWarnDiff: nodeConfig.get<number>('healthCheck.dogeScannerWarnDiff'),
+        dogeScannerCriticalDiff: nodeConfig.get<number>('healthCheck.dogeScannerCriticalDiff'),
+        ethereumScannerWarnDiff: nodeConfig.get<number>('healthCheck.ethereumScannerWarnDiff'),
         ethereumScannerCriticalDiff: nodeConfig.get<number>(
           'healthCheck.ethereumScannerCriticalDiff',
         ),
-        binanceScannerWarnDiff: nodeConfig.get<number>(
-          'healthCheck.binanceScannerWarnDiff',
-        ),
+        binanceScannerWarnDiff: nodeConfig.get<number>('healthCheck.binanceScannerWarnDiff'),
         binanceScannerCriticalDiff: nodeConfig.get<number>(
           'healthCheck.binanceScannerCriticalDiff',
         ),
-        firoScannerWarnDiff: nodeConfig.get<number>(
-          'healthCheck.firoScannerWarnDiff',
-        ),
-        firoScannerCriticalDiff: nodeConfig.get<number>(
-          'healthCheck.firoScannerCriticalDiff',
-        ),
+        firoScannerWarnDiff: nodeConfig.get<number>('healthCheck.firoScannerWarnDiff'),
+        firoScannerCriticalDiff: nodeConfig.get<number>('healthCheck.firoScannerCriticalDiff'),
         updateInterval: nodeConfig.get<number>('healthCheck.interval'),
         logDuration: nodeConfig.get<number>('healthCheck.duration'),
-        errorLogAllowedCount: nodeConfig.get<number>(
-          'healthCheck.maxAllowedErrorCount',
-        ),
-        warnLogAllowedCount: nodeConfig.get<number>(
-          'healthCheck.maxAllowedWarnCount',
-        ),
+        errorLogAllowedCount: nodeConfig.get<number>('healthCheck.maxAllowedErrorCount'),
+        warnLogAllowedCount: nodeConfig.get<number>('healthCheck.maxAllowedWarnCount'),
         reportPath: nodeConfig.get<string>('healthCheck.reportPath'),
       },
       notification: {
-        discordWebHookUrl: nodeConfig.get<string>(
-          'notification.discordWebhookUrl',
-        ),
-        historyCleanupTimeout: getOptionalNumber(
-          'notification.historyCleanupTimeout',
-        ),
+        discordWebHookUrl: nodeConfig.get<string>('notification.discordWebhookUrl'),
+        historyCleanupTimeout: getOptionalNumber('notification.historyCleanupTimeout'),
         hasBeenUnstableForAWhileWindowDuration: getOptionalNumber(
           'notification.windowDurations.hasBeenUnstableForAWhile',
         ),

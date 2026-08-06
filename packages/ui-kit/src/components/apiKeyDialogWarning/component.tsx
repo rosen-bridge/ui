@@ -10,10 +10,7 @@ export interface ApiKeyDialogWarningOverrides {}
 
 export type ApiKeyDialogWarningOwnProps = {};
 
-export type ApiKeyDialogWarningBaseProps = ElementBaseProps<
-  'div',
-  ApiKeyDialogWarningOwnProps
->;
+export type ApiKeyDialogWarningBaseProps = ElementBaseProps<'div', ApiKeyDialogWarningOwnProps>;
 
 export type ApiKeyDialogWarningProps = OverridableType<
   ApiKeyDialogWarningBaseProps,
@@ -28,10 +25,7 @@ export const ApiKeyDialogWarning = (props: ApiKeyDialogWarningProps) => {
 
   const [isOpen, setIsOpen] = useState(false);
 
-  const styles = useMemo(
-    () => ({ containerType: 'inline-size', ...style }),
-    [style],
-  );
+  const styles = useMemo(() => ({ containerType: 'inline-size', ...style }), [style]);
 
   if (apiKey) return null;
 

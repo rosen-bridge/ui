@@ -2,11 +2,7 @@
 
 import { Fragment } from 'react';
 
-import {
-  CubeNetBackground,
-  Stack,
-  UnderDevelopment,
-} from '@rosen-bridge/ui-kit';
+import { CubeNetBackground, Stack, UnderDevelopment } from '@rosen-bridge/ui-kit';
 
 const Dashboard = () => (
   <Fragment>

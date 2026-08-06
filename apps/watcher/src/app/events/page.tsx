@@ -45,16 +45,12 @@ const Events = () => {
   );
 
   const renderMobileRow = useCallback(
-    (rowData: Event) => (
-      <MobileRow key={rowData.eventId} {...rowData} isLoading={isLoading} />
-    ),
+    (rowData: Event) => <MobileRow key={rowData.eventId} {...rowData} isLoading={isLoading} />,
     [isLoading],
   );
 
   const renderTabletRow = useCallback(
-    (rowData: Event) => (
-      <TabletRow key={rowData.eventId} {...rowData} isLoading={isLoading} />
-    ),
+    (rowData: Event) => <TabletRow key={rowData.eventId} {...rowData} isLoading={isLoading} />,
     [isLoading],
   );
 

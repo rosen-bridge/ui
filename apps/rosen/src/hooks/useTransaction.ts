@@ -30,13 +30,8 @@ export const useTransaction = () => {
 
   const { networkFee, bridgeFee } = useTransactionFees();
 
-  const {
-    sourceValue,
-    targetValue,
-    tokenValue,
-    amountValue,
-    walletAddressValue,
-  } = useTransactionFormData();
+  const { sourceValue, targetValue, tokenValue, amountValue, walletAddressValue } =
+    useTransactionFormData();
 
   const { selected: selectedWallet } = useWallet();
 

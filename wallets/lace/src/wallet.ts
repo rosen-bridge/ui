@@ -43,9 +43,7 @@ export class LaceWallet extends Wallet<LaceWalletConfig> {
     return await wallet.getChangeAddress();
   };
 
-  fetchBalance = async (
-    token: RosenChainToken,
-  ): Promise<bigint | undefined> => {
+  fetchBalance = async (token: RosenChainToken): Promise<bigint | undefined> => {
     if (!(this.currentNetwork instanceof CardanoNetwork)) {
       throw new UnsupportedChainError(this.name, this.currentChain);
     }
@@ -59,8 +57,7 @@ export class LaceWallet extends Wallet<LaceWalletConfig> {
     const amount = balances.find(
       (asset) =>
         asset.policyId === token.extra.policyId &&
-        (asset.nameHex === hexToCbor(token.extra.assetName as string) ||
-          !token.extra.policyId),
+        (asset.nameHex === hexToCbor(token.extra.assetName as string) || !token.extra.policyId),
     );
 
     return amount?.quantity;
@@ -83,14 +80,13 @@ export class LaceWallet extends Wallet<LaceWalletConfig> {
 
     const changeAddressHex = await this.getAddress();
 
-    const auxiliaryDataHex =
-      await this.currentNetwork.generateLockAuxiliaryData(
-        params.toChain,
-        params.address,
-        changeAddressHex,
-        params.networkFee.toString(),
-        params.bridgeFee.toString(),
-      );
+    const auxiliaryDataHex = await this.currentNetwork.generateLockAuxiliaryData(
+      params.toChain,
+      params.address,
+      changeAddressHex,
+      params.networkFee.toString(),
+      params.bridgeFee.toString(),
+    );
 
     const walletUtxos = await wallet.getUtxos();
 
@@ -114,10 +110,7 @@ export class LaceWallet extends Wallet<LaceWalletConfig> {
       throw new UserDeniedTransactionSignatureError(this.name, error);
     }
 
-    const signedTxHex = await this.currentNetwork.setTxWitnessSet(
-      unsignedTxHex,
-      witnessSetHex,
-    );
+    const signedTxHex = await this.currentNetwork.setTxWitnessSet(unsignedTxHex, witnessSetHex);
 
     try {
       return await wallet.submitTx(signedTxHex);

@@ -55,11 +55,7 @@ export const Alert = (props: AlertProps) => {
   }, [onClose]);
 
   useEffect(() => {
-    if (
-      typeof timeout !== 'number' ||
-      timeout <= 0 ||
-      !Number.isFinite(timeout)
-    ) {
+    if (typeof timeout !== 'number' || timeout <= 0 || !Number.isFinite(timeout)) {
       return;
     }
 
@@ -73,12 +69,7 @@ export const Alert = (props: AlertProps) => {
   void icon;
 
   return (
-    <Collapsible
-      data-severity={severity}
-      data-variant={variant}
-      open={open}
-      {...rest}
-    >
+    <Collapsible data-severity={severity} data-variant={variant} open={open} {...rest}>
       <AlertMUI
         severity={severity}
         action={
