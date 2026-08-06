@@ -15,7 +15,7 @@ export const Sidebar = () => {
       links={
         <NavigationBar>
           <NavigationButton icon="Archway" label="Bridge" path="/" />
-          <NavigationButton badge="Beta" icon="Exchange" label="Events" path="/events" />
+          <NavigationButton icon="Exchange" label="Events" path="/events" />
           <NavigationButton icon="BitcoinCircle" label="Assets" path="/assets" />
           <NavigationButton disabled={true} icon="Headphones" label="Support" path="/support" />
           <NavigationButton disabled={true} icon="Dashboard" label="Dashboard" path="/dashboard" />
