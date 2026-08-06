@@ -5,7 +5,6 @@ export * from './Chip';
 export * from './DisclosureButton';
 export * from './Divider';
 export * from './display';
-export * from './EmptyState';
 export * from './EnhancedDialog';
 export * from './EnhancedDialogActions';
 export * from './EnhancedDialogContent';

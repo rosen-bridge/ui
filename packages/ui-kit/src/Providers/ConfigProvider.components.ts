@@ -27,6 +27,7 @@ import type {
   CopyButtonProps,
   DateTimeProps,
   DurationProps,
+  EmptyStateProps,
   EventCardProps,
   EventDetailsProps,
   EventProcessesProps,
@@ -109,6 +110,7 @@ export type Components = {
   EventDetails: EventDetailsProps;
   EventProcesses: EventProcessesProps;
   EventStatus: EventStatusProps;
+  EmptyState: EmptyStateProps;
   GridContainer: GridContainerProps;
   Icon: IconProps;
   IconButton: IconButtonProps;
