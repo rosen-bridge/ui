@@ -3,7 +3,8 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": [".next/**", "build/**", "dist/**", "out/**"]
+      "envMode": "loose",
+      "outputs": ["dist/**"]
     }
   }
 }
