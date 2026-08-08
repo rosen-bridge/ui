@@ -20,6 +20,11 @@ ENV SERVICE_NAME=service
 ENV SERVICE_PORT=8080
 ENTRYPOINT ["bash", "entrypoint.sh"]
 
+FROM node:22.18 AS builder
+WORKDIR /app
+COPY . .
+RUN npx turbo prune @rosen-bridge/rosen-service --docker
+
 FROM node:22.18 AS rosen-service
 LABEL maintainer="rosen-bridge team <team@rosen.tech>"
 LABEL description="Docker image for the rosen-service owned by rosen-bridge organization."
@@ -30,8 +35,13 @@ RUN adduser --disabled-password --home /app --gecos "ErgoPlatform" ergo && \
 
 RUN npm i -g npm@11.6.2
 WORKDIR /app
-COPY --chown=ergo:ergo . .
-RUN --mount=type=cache,target=/root/.npm npm ci
+
+COPY --from=builder --chown=ergo:ergo /app/out/json/ .
+COPY --from=builder --chown=ergo:ergo /app/tsconfig.json .
+COPY --from=builder --chown=ergo:ergo /app/out/package-lock.json ./package-lock.json
+RUN --mount=type=cache,target=/root/.npm HUSKY=0 npm install
+
+COPY --from=builder --chown=ergo:ergo /app/out/full/ .
 RUN npm run bootstrap --workspace=@rosen-bridge/rosen-service
 USER ergo
 WORKDIR  /app/apps/rosen-service/
