@@ -415,6 +415,7 @@ export const getEventStatus = async (
 
     switch (aggregatedStatus?.status) {
       case null:
+      case undefined:
       case AggregateEventStatus.pendingPayment:
       case AggregateEventStatus.waitingForConfirmation:
         result.status = 'TRIGGERED';
