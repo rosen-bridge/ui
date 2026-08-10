@@ -32,10 +32,7 @@ export type CopyButtonProps = OverridableType<CopyButtonBaseProps, CopyButtonOve
  * A button that copies text to the clipboard and shows the status with an icon.
  */
 export const CopyButton = (props: CopyButtonProps) => {
-  const { icons, slots, value, disabled, ...rest } = useConfig(
-    'CopyButton',
-    props,
-  );
+  const { icons, slots, value, disabled, ...rest } = useConfig('CopyButton', props);
 
   const [status, setStatus] = useState<CopyButtonStatus>('idle');
   const timeoutRef = useRef<number | null>(null);
@@ -94,11 +91,7 @@ export const CopyButton = (props: CopyButtonProps) => {
       title="The browser does not allow access to the clipboard"
     >
       <IconButton onClick={handleCopy} disabled={isDisabled} {...rest}>
-        <Icon
-          name={icon}
-          color={status === 'failed' ? 'error' : undefined}
-          {...slots?.icon}
-        />
+        <Icon name={icon} color={status === 'failed' ? 'error' : undefined} {...slots?.icon} />
       </IconButton>
     </Tooltip>
   );
