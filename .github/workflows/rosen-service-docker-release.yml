@@ -31,7 +31,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
-        platform: ${{ fromJSON(vars.PLATFORM_LIST || '["linux/amd64"]') }}
+        platform: ${{ fromJSON(vars.ROSEN_SERVICE_PLATFORM_LIST || '["linux/amd64"]') }}
         apps: ['rosen-service']
 
     steps:
