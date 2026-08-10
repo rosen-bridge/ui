@@ -27,7 +27,7 @@ export type MenuProps = OverridableType<MenuBaseProps, MenuOverrides, never>;
 export const Menu = (props: MenuProps) => {
   const { ...rest } = useConfig('Menu', props);
 
-  return <MenuBaseUI.Root {...rest} />;
+  return <MenuBaseUI.Root modal={false} {...rest} />;
 };
 
 Menu.displayName = 'Menu';
