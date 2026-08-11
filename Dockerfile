@@ -20,6 +20,24 @@ ENV SERVICE_NAME=service
 ENV SERVICE_PORT=8080
 ENTRYPOINT ["bash", "entrypoint.sh"]
 
+FROM node:22.18 AS prepare
+WORKDIR /app
+COPY . .
+RUN --mount=type=cache,target=/root/.npm npm i -g npm@11.6.2
+RUN --mount=type=cache,target=/root/.npm npm install turbo --no-save --ignore-scripts --no-package-lock
+RUN npm exec -- turbo prune @rosen-bridge/rosen-service --docker
+
+FROM node:22.18 AS builder
+WORKDIR /app
+RUN --mount=type=cache,target=/root/.npm npm i -g npm@11.6.2
+COPY --from=prepare /app/out/json/ .
+COPY --from=prepare /app/out/package-lock.json ./package-lock.json
+RUN --mount=type=cache,target=/root/.npm npm install
+COPY --from=prepare /app/out/full/ .
+RUN npm run bootstrap --workspace=@rosen-bridge/rosen-service && \
+    mkdir -p /tmp/dist && \
+    find . -type d -name "dist" -not -path "*/node_modules/*" -exec cp --parents -r {} /tmp/dist/ \;
+
 FROM node:22.18 AS rosen-service
 LABEL maintainer="rosen-bridge team <team@rosen.tech>"
 LABEL description="Docker image for the rosen-service owned by rosen-bridge organization."
@@ -28,11 +46,14 @@ RUN adduser --disabled-password --home /app --gecos "ErgoPlatform" ergo && \
     install -m 0740 -o ergo -g ergo -d /app/apps/rosen-service/logs \
     && chown -R ergo:ergo /app/ && umask 0077
 
-RUN npm i -g npm@11.6.2
+RUN --mount=type=cache,target=/root/.npm npm i -g npm@11.6.2
 WORKDIR /app
-COPY --chown=ergo:ergo . .
-RUN --mount=type=cache,target=/root/.npm npm ci
-RUN npm run bootstrap --workspace=@rosen-bridge/rosen-service
+
+COPY --from=prepare --chown=ergo:ergo /app/out/package-lock.json ./package-lock.json
+COPY --from=prepare --chown=ergo:ergo /app/out/full/ .
+COPY --from=builder --chown=ergo:ergo /tmp/dist/ .
+RUN --mount=type=cache,target=/root/.npm HUSKY=0 npm install --omit=dev
+
 USER ergo
 WORKDIR  /app/apps/rosen-service/
 ENTRYPOINT ["npm", "run", "start"]
