@@ -54,11 +54,11 @@
     "@rosen-ui/data-source": "^0.2.7",
     "config": "^3.3.12",
     "ethers": "6.16.0",
-    "pg": "^8.11.3"
+    "pg": "^8.11.3",
+    "tsx": "^4.19.2"
   },
   "devDependencies": {
-    "@types/config": "^0.0.41",
-    "tsx": "^4.19.2"
+    "@types/config": "^0.0.41"
   },
   "engines": {
     "node": ">=22.18.0",
