@@ -4,7 +4,6 @@ logs
 .dockerignore
 .git*
 node_modules
-README.md
 *.local
 out
 dist
