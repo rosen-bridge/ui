@@ -76,20 +76,25 @@ jobs:
 
       - name: Notify Discord
         if: env.VERCEL_URL != '' && env.DISCORD_NOTIFICATION_WEBHOOK_URL != ''
+        env:
+          APP_NAME: ${{ matrix.app }}
+          COMMIT_MSG: ${{ github.event.head_commit.message }}
+          BRANCH_NAME: ${{ github.ref_name }}
         run: |
-          JSON_PAYLOAD=$(jq -n '{
-            embeds: [{
-              color: 3447003,
-              title: "🚀 New Deployment Notification",
-              description: "A new deployment has been triggered on **Vercel**.",
-              fields: [
-                { name: "📱 App",            inline: false, value: "${{ matrix.app }}"                       },
-                { name: "🌍 Branch URL",     inline: false, value: "${{ env.VERCEL_URL }}"                   },
-                { name: "📜 Commit Message", inline: false, value: "${{ github.event.head_commit.message }}" },
-                { name: "🌿 Branch",         inline: false, value: "${{ github.ref_name }}"                  }
-              ]
-            }]
-          }')
+          JSON_PAYLOAD=$(jq -n \
+            '{
+              embeds: [{
+                color: 3447003,
+                title: "🚀 New Deployment Notification",
+                description: "A new deployment has been triggered on **Vercel**.",
+                fields: [
+                  { name: "📱 App",            inline: false, value: env.APP_NAME },
+                  { name: "🌍 Branch URL",     inline: false, value: env.VERCEL_URL },
+                  { name: "📜 Commit Message", inline: false, value: env.COMMIT_MSG },
+                  { name: "🌿 Branch",         inline: false, value: env.BRANCH_NAME }
+                ]
+              }]
+            }')
 
           curl -fsS -X POST \
             -H "Content-Type: application/json" \
