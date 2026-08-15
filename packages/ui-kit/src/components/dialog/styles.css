@@ -19,7 +19,7 @@
   }
 }
 
-.RosenDialog[data-placement="center"] {
+.RosenDialog[data-placement='center'] {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -29,16 +29,21 @@
     transform: translate(-50%, -50%) scale(0.9);
   }
 }
-.RosenDialog[data-placement="bottom"] {
+
+.RosenDialog[data-placement='bottom'] {
   bottom: 0;
   left: 50%;
   transform: translate(-50%, 0);
-  border-bottom-right-radius: 0;
-  border-bottom-left-radius: 0;
 
   &[data-starting-style],
   &[data-ending-style] {
     transform: translate(-50%, 100%);
+  }
+
+  &[data-edge] {
+    margin-bottom: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
   }
 }
 

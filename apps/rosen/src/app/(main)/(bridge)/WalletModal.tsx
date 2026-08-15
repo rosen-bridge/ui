@@ -57,7 +57,7 @@ export const WalletModal = ({ open, onClose }: WalletModalProps) => {
   }, [open, wallet.wallets]);
 
   return (
-    <Dialog maxWidth="laptop" open={open} onClose={onClose}>
+    <Dialog open={open} size="large" unstick="tablet" onClose={onClose}>
       <DialogHeader>
         <DialogIcon name="Wallet" />
         <DialogTitle>Choose Wallet</DialogTitle>

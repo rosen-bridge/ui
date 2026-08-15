@@ -72,7 +72,7 @@ export const ApiKeyDialog = (props: ApiKeyDialogProps) => {
   }, [apiKey, open, setValue]);
 
   return (
-    <Dialog maxWidth="tablet" open={open} onClose={onClose} {...rest}>
+    <Dialog open={open} size="medium" unstick="tablet" onClose={onClose} {...rest}>
       <DialogHeader>
         <DialogTitle>Authorization</DialogTitle>
       </DialogHeader>

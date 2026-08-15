@@ -22,7 +22,6 @@ import {
   Icon,
   Typography,
   useBreakpoint,
-  useResponsive,
   useStickyBox,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
@@ -96,13 +95,8 @@ const Content = ({ value }: SidebarProps) => {
 };
 
 const Drawer = ({ value, onClose }: SidebarProps) => {
-  const placement = useResponsive({
-    mobile: 'bottom',
-    laptop: 'center',
-  } as const);
-
   return (
-    <Dialog open={!!value} placement={placement} onClose={onClose}>
+    <Dialog open={!!value} unstick="laptop" onClose={onClose}>
       <DialogHeader>
         <DialogIcon name="Exchange" />
         <DialogTitle>Event</DialogTitle>

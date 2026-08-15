@@ -25,7 +25,6 @@ import {
   Stack,
   Typography,
   useIsDarkMode,
-  useResponsive,
 } from '@rosen-bridge/ui-kit';
 
 import {
@@ -68,11 +67,6 @@ export const SubmitButton = () => {
   const { selected: selectedWallet } = useWallet();
 
   const { startTransaction, isSubmitting: isTransactionSubmitting } = useTransaction();
-
-  const placement = useResponsive({
-    mobile: 'bottom',
-    tablet: 'center',
-  } as const);
 
   const close = () => {
     setOpen(false);
@@ -135,7 +129,7 @@ export const SubmitButton = () => {
       >
         SUBMIT
       </Button>
-      <Dialog open={open} maxWidth="tablet" placement={placement} onClose={() => close()}>
+      <Dialog open={open} size="medium" unstick="tablet" onClose={() => close()}>
         {qrCode ? (
           <>
             <DialogHeader>
