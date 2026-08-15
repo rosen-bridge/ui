@@ -47,6 +47,7 @@ export const Dialog = (props: DialogProps) => {
           data-edge={edge || null}
           data-placement={placement}
           data-size={size}
+          data-surface="root"
           {...rest}
         />
       </DialogBaseUI.Portal>

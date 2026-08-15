@@ -12,7 +12,7 @@ export type CardHeaderProps = OverridableType<CardHeaderBaseProps, CardHeaderOve
 export const CardHeader = (props: CardHeaderProps) => {
   const { ...rest } = useConfig('CardHeader', props);
 
-  return <div {...rest} />;
+  return <div data-surface="header" {...rest} />;
 };
 
 CardHeader.displayName = 'CardHeader';

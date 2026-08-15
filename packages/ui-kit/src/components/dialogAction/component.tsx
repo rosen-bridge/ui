@@ -16,7 +16,7 @@ export type DialogActionProps = OverridableType<
 export const DialogAction = (props: DialogActionProps) => {
   const { ...rest } = useConfig('DialogAction', props);
 
-  return <div {...rest} />;
+  return <div data-surface="action" {...rest} />;
 };
 
 DialogAction.displayName = 'DialogAction';

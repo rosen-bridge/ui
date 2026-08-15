@@ -10,8 +10,7 @@
   --rosen-palette-warning: var(--rosen-palette-warning-main);
 }
 
-.RosenCard,
-.RosenDialog {
+[data-surface='root'] {
   --padding: 1.5rem;
 
   display: flex;
@@ -33,33 +32,28 @@
 
   /* Action */
 
-  .RosenCardAction,
-  .RosenDialogAction {
+  [data-surface='action'] {
     display: flex;
     align-items: center;
   }
 
   /* Body */
 
-  .RosenCardBody,
-  .RosenDialogBody {
+  [data-surface='body'] {
     padding: var(--padding);
   }
 
-  .RosenCardHeader + .RosenCardBody,
-  .RosenDialogHeader + .RosenDialogBody {
+  [data-surface='header'] + [data-surface='body'] {
     padding-top: 0;
   }
 
-  .RosenCardBody:has(+ .RosenCardFooter),
-  .RosenDialogBody:has(+ .RosenDialogFooter) {
+  [data-surface='body']:has(+ [data-surface='footer']) {
     padding-bottom: 0;
   }
 
   /* Footer */
 
-  .RosenCardFooter,
-  .RosenDialogFooter {
+  [data-surface='footer'] {
     display: flex;
     align-items: center;
     justify-content: flex-end;
@@ -67,14 +61,14 @@
     padding: var(--padding);
   }
 
-  .RosenCardHeader + .RosenCardFooter,
-  .RosenDialogHeader + .RosenDialogFooter {
+  [data-surface='header'] + [data-surface='footer'] {
     padding-top: 0;
   }
 
   /* Header */
-  .RosenCardHeader,
-  .RosenDialogHeader {
+
+
+  [data-surface='header'] {
     display: flex;
     align-items: center;
     gap: calc(var(--rosen-spacing) * 2);
@@ -82,8 +76,9 @@
   }
 
   /* Title */
-  .RosenCardTitle,
-  .RosenDialogTitle {
+
+
+  [data-surface='title'] {
     flex-grow: 1;
   }
 }

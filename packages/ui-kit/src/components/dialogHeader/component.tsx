@@ -16,7 +16,7 @@ export type DialogHeaderProps = OverridableType<
 export const DialogHeader = (props: DialogHeaderProps) => {
   const { ...rest } = useConfig('DialogHeader', props);
 
-  return <div {...rest} />;
+  return <div data-surface="header" {...rest} />;
 };
 
 DialogHeader.displayName = 'DialogHeader';

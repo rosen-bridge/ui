@@ -12,7 +12,7 @@ export type CardActionProps = OverridableType<CardActionBaseProps, CardActionOve
 export const CardAction = (props: CardActionProps) => {
   const { ...rest } = useConfig('CardAction', props);
 
-  return <div {...rest} />;
+  return <div data-surface="action" {...rest} />;
 };
 
 CardAction.displayName = 'CardAction';

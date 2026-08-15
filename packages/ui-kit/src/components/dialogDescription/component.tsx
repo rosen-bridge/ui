@@ -20,7 +20,7 @@ export type DialogDescriptionProps = OverridableType<
 export const DialogDescription = (props: DialogDescriptionProps) => {
   const { ...rest } = useConfig('DialogDescription', props);
 
-  return <Typography component="p" {...rest} />;
+  return <Typography component="p" data-surface="description" {...rest} />;
 };
 
 DialogDescription.displayName = 'DialogDescription';

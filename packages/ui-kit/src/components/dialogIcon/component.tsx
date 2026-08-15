@@ -15,7 +15,7 @@ export type DialogIconProps = OverridableType<DialogIconBaseProps, DialogIconOve
 export const DialogIcon = (props: DialogIconProps) => {
   const { ...rest } = useConfig('DialogIcon', props);
 
-  return <Icon {...rest} />;
+  return <Icon data-surface="icon" {...rest} />;
 };
 
 DialogIcon.displayName = 'DialogIcon';

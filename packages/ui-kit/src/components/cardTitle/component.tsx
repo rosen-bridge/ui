@@ -13,7 +13,7 @@ export type CardTitleProps = OverridableType<CardTitleBaseProps, CardTitleOverri
 export const CardTitle = (props: CardTitleProps) => {
   const { ...rest } = useConfig('CardTitle', props);
 
-  return <Typography {...rest} />;
+  return <Typography data-surface="title" {...rest} />;
 };
 
 CardTitle.displayName = 'CardTitle';

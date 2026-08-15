@@ -12,7 +12,7 @@ export type DialogBodyProps = OverridableType<DialogBodyBaseProps, DialogBodyOve
 export const DialogBody = (props: DialogBodyProps) => {
   const { ...rest } = useConfig('DialogBody', props);
 
-  return <div {...rest} />;
+  return <div data-surface="body" {...rest} />;
 };
 
 DialogBody.displayName = 'DialogBody';

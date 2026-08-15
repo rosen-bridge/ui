@@ -12,7 +12,7 @@ export type CardBodyProps = OverridableType<CardBodyBaseProps, CardBodyOverrides
 export const CardBody = (props: CardBodyProps) => {
   const { ...rest } = useConfig('CardBody', props);
 
-  return <div {...rest} />;
+  return <div data-surface="body" {...rest} />;
 };
 
 CardBody.displayName = 'CardBody';
