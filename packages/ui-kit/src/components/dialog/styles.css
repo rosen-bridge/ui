@@ -2,7 +2,7 @@
   --padding: 1.5rem;
 
   position: fixed;
-  width: 24rem;
+  width: 100%;
   max-width: calc(100vw - 3rem);
   transition: all 150ms;
   touch-action: none;
@@ -17,6 +17,22 @@
   &[data-ending-style] {
     opacity: 0;
   }
+}
+
+.RosenDialog[data-size='small'] {
+  max-width: min(27.75rem, calc(100vw - 3rem));
+}
+
+.RosenDialog[data-size='medium'] {
+  max-width: min(37.5rem, calc(100vw - 3rem));
+}
+
+.RosenDialog[data-size='large'] {
+  max-width: min(56.25rem, calc(100vw - 3rem));
+}
+
+.RosenDialog[data-size='full'] {
+  max-width: calc(100vw - 3rem);
 }
 
 .RosenDialog[data-placement='center'] {
@@ -41,7 +57,6 @@
   }
 
   &[data-edge] {
-    margin-bottom: 0;
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
   }
