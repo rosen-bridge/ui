@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useRef } from 'react';
 
 import useSWR from 'swr';
 
@@ -95,18 +95,31 @@ const Content = ({ value }: SidebarProps) => {
 };
 
 const Drawer = ({ value, onClose }: SidebarProps) => {
+  const previousValue = useRef(value);
+
+  if (value) {
+    previousValue.current = value;
+  }
+
+  const displayValue = value ?? previousValue.current;
+
   return (
-    <Dialog open={!!value} unstick="laptop" onClose={onClose}>
+    <Dialog
+      open={!!value}
+      unstick="laptop"
+      onClose={onClose}
+      onClosed={() => (previousValue.current = undefined)}
+    >
       <DialogHeader>
         <DialogIcon name="Exchange" />
         <DialogTitle>Event</DialogTitle>
-        {value && (
+        {displayValue && (
           <DialogAction>
             <Button
               variant="text"
               size="small"
               target="_blank"
-              href={`/events/${value.eventId}`}
+              href={`/events/${displayValue.eventId}`}
               startIcon={<Icon name="Eye" />}
               style={{ marginLeft: 'auto' }}
             >
@@ -117,7 +130,7 @@ const Drawer = ({ value, onClose }: SidebarProps) => {
         <DialogCloseButton />
       </DialogHeader>
       <DialogBody>
-        <Content value={value} />
+        <Content value={displayValue} />
       </DialogBody>
     </Dialog>
   );

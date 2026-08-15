@@ -14,6 +14,7 @@ export type DialogOwnProps = {
   unstick?: Breakpoint;
   width?: 'small' | 'medium' | 'large' | 'full';
   onClose?: () => void;
+  onClosed?: () => void;
 };
 
 export type DialogBaseProps = ElementBaseProps<'div', DialogOwnProps>;
@@ -28,6 +29,7 @@ export const Dialog = (props: DialogProps) => {
     unstick,
     width = 'medium',
     onClose,
+    onClosed,
     ...rest
   } = useConfig('Dialog', props);
 
@@ -40,7 +42,11 @@ export const Dialog = (props: DialogProps) => {
   }
 
   return (
-    <DialogBaseUI.Root open={open} onOpenChange={(open) => !open && onClose?.()}>
+    <DialogBaseUI.Root
+      open={open}
+      onOpenChange={(open) => !open && onClose?.()}
+      onOpenChangeComplete={(open) => !open && onClosed?.()}
+    >
       <DialogBaseUI.Portal>
         <DialogBaseUI.Backdrop className="RosenDialog-backdrop" />
         <DialogBaseUI.Popup

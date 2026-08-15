@@ -1,3 +1,5 @@
+import { useRef } from 'react';
+
 import {
   Amount,
   Card,
@@ -63,15 +65,28 @@ const Content = ({ value }: ViewGridSidebarProps) => {
 };
 
 const DetailsDrawer = ({ value, onClose }: ViewGridSidebarProps) => {
+  const previousValue = useRef(value);
+
+  if (value) {
+    previousValue.current = value;
+  }
+
+  const displayValue = value ?? previousValue.current;
+
   return (
-    <Dialog open={!!value} unstick="laptop" onClose={onClose}>
+    <Dialog
+      open={!!value}
+      unstick="laptop"
+      onClose={onClose}
+      onClosed={() => (previousValue.current = undefined)}
+    >
       <DialogHeader>
         <DialogIcon name="BitcoinCircle" />
         <DialogTitle>Asset Details</DialogTitle>
         <DialogCloseButton />
       </DialogHeader>
       <DialogBody>
-        <Content value={value} />
+        <Content value={displayValue} />
       </DialogBody>
     </Dialog>
   );
