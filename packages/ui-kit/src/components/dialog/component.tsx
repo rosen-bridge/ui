@@ -8,10 +8,10 @@ import './styles.css';
 export interface DialogOverrides {}
 
 export type DialogOwnProps = {
-  edge?: boolean;
+  edge?: boolean | 'stretch';
   open?: boolean;
   placement?: 'center' | 'bottom';
-  size?: 'small' | 'medium' | 'large' | 'full';
+  size?: 'small' | 'medium' | 'large';
   unstick?: Breakpoint;
   onClose?: () => void;
 };
@@ -34,9 +34,8 @@ export const Dialog = (props: DialogProps) => {
   const isUnstick = useBreakpoint(`${unstick}-up` as BreakpointQuery);
 
   if (unstick && !isUnstick) {
-    edge = true;
+    edge = 'stretch';
     placement = 'bottom';
-    size = 'full';
   }
 
   return (
