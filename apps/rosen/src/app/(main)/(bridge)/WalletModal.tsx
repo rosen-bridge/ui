@@ -6,9 +6,12 @@ import {
   Card,
   CardBody,
   Dialog,
-  DialogContent,
-  DialogContentText,
-  EnhancedDialogTitle,
+  DialogBody,
+  DialogCloseButton,
+  DialogDescription,
+  DialogHeader,
+  DialogIcon,
+  DialogTitle,
   Icon,
   Stack,
   Tooltip,
@@ -54,14 +57,16 @@ export const WalletModal = ({ open, onClose }: WalletModalProps) => {
   }, [open, wallet.wallets]);
 
   return (
-    <Dialog open={open} maxWidth="laptop" onClose={onClose}>
-      <EnhancedDialogTitle icon="Wallet" onClose={onClose}>
-        Choose Wallet
-      </EnhancedDialogTitle>
-      <DialogContent>
-        <DialogContentText>
+    <Dialog maxWidth="laptop" open={open} onClose={onClose}>
+      <DialogHeader>
+        <DialogIcon name="Wallet" />
+        <DialogTitle>Choose Wallet</DialogTitle>
+        <DialogCloseButton />
+      </DialogHeader>
+      <DialogBody>
+        <DialogDescription>
           Please choose any of the supported wallets for {network.selectedSource?.name} chain.
-        </DialogContentText>
+        </DialogDescription>
         <Stack spacing={2} style={{ margin: '1rem 0' }}>
           <Alert severity="warning">
             It may be necessary to reload this page after the following extensions have been
@@ -113,7 +118,7 @@ export const WalletModal = ({ open, onClose }: WalletModalProps) => {
             );
           })}
         </Stack>
-      </DialogContent>
+      </DialogBody>
     </Dialog>
   );
 };

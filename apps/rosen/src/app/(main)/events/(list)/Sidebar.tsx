@@ -10,13 +10,16 @@ import {
   CardHeader,
   CardTitle,
   Center,
-  EnhancedDialog,
-  EnhancedDialogContent,
-  EnhancedDialogTitle,
+  Dialog,
+  DialogAction,
+  DialogBody,
+  DialogCloseButton,
+  DialogHeader,
+  DialogIcon,
+  DialogTitle,
   EventDetails,
   type EventDetailsProps,
   Icon,
-  Stack,
   Typography,
   useBreakpoint,
   useStickyBox,
@@ -93,11 +96,12 @@ const Content = ({ value }: SidebarProps) => {
 
 const Drawer = ({ value, onClose }: SidebarProps) => {
   return (
-    <EnhancedDialog open={!!value} stickOn="laptop" onClose={onClose}>
-      <EnhancedDialogTitle icon="Exchange" onClose={onClose}>
-        <Stack style={{ width: '100%' }} direction="row" justify="between">
-          Event
-          {value && (
+    <Dialog open={!!value} stickOn="laptop-down" onClose={onClose}>
+      <DialogHeader>
+        <DialogIcon name="Exchange" />
+        <DialogTitle>Event</DialogTitle>
+        {value && (
+          <DialogAction>
             <Button
               variant="text"
               size="small"
@@ -108,13 +112,14 @@ const Drawer = ({ value, onClose }: SidebarProps) => {
             >
               SEE DETAILS
             </Button>
-          )}
-        </Stack>
-      </EnhancedDialogTitle>
-      <EnhancedDialogContent>
+          </DialogAction>
+        )}
+        <DialogCloseButton />
+      </DialogHeader>
+      <DialogBody>
         <Content value={value} />
-      </EnhancedDialogContent>
-    </EnhancedDialog>
+      </DialogBody>
+    </Dialog>
   );
 };
 

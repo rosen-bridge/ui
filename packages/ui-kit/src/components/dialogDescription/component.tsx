@@ -2,8 +2,6 @@ import { Typography, type TypographyProps } from '@/components';
 import { useConfig } from '@/hooks';
 import type { ElementBaseProps, OverridableType } from '@/types';
 
-import './styles.css';
-
 export interface DialogDescriptionOverrides {}
 
 export type DialogDescriptionOwnProps = TypographyProps & {};

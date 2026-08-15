@@ -1,8 +1,6 @@
 import { useConfig } from '@/hooks';
 import type { ElementBaseProps, OverridableType } from '@/types';
 
-import './styles.css';
-
 export interface CardHeaderOverrides {}
 
 export type CardHeaderOwnProps = {};

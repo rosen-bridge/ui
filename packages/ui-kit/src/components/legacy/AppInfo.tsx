@@ -5,6 +5,8 @@ import { Typography } from '@mui/material';
 
 import type { Network as NetworkType } from '@rosen-ui/types';
 
+import { Dialog, DialogBody, DialogHeader, DialogIcon, DialogTitle } from '@/components';
+
 import { useToast } from '../../hooks';
 import { Avatar } from '../avatar';
 import { Icon, type IconProps } from '../icon';
@@ -12,9 +14,6 @@ import { IconButton } from '../iconButton';
 import { Network } from '../network';
 import { Stack } from '../stack';
 import { Divider } from './Divider';
-import { EnhancedDialog } from './EnhancedDialog';
-import { EnhancedDialogContent } from './EnhancedDialogContent';
-import { EnhancedDialogTitle } from './EnhancedDialogTitle';
 
 type NetworkHeight = {
   network: NetworkType;
@@ -74,13 +73,14 @@ export const AppInfo = ({ children, resolver }: AppInfoProps) => {
 
   return (
     <div>
-      <EnhancedDialog maxWidth="tablet" open={open} stickOn="tablet" onClose={() => setOpen(false)}>
-        <EnhancedDialogTitle icon="ExclamationCircle" onClose={() => setOpen(false)}>
-          <Typography variant="h2" fontWeight="bold">
+      <Dialog maxWidth="tablet" open={open} stickOn="tablet-down" onClose={() => setOpen(false)}>
+        <DialogHeader>
+          <DialogIcon name="ExclamationCircle" />
+          <DialogTitle variant="h2" fontWeight="bold">
             About Rosen Bridge
-          </Typography>
-        </EnhancedDialogTitle>
-        <EnhancedDialogContent>
+          </DialogTitle>
+        </DialogHeader>
+        <DialogBody>
           <Stack spacing={1}>
             <Divider borderStyle="dashed">
               <Typography noWrap color="text-secondary" variant="body2">
@@ -118,8 +118,8 @@ export const AppInfo = ({ children, resolver }: AppInfoProps) => {
             )}
           </Stack>
           {children}
-        </EnhancedDialogContent>
-      </EnhancedDialog>
+        </DialogBody>
+      </Dialog>
 
       <IconButton color="inherit" disabled={loading} loading={loading} onClick={handleClick}>
         <Icon name="InfoCircle" />

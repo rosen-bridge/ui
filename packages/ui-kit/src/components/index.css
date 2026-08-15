@@ -9,3 +9,83 @@
   --rosen-palette-success: var(--rosen-palette-success-main);
   --rosen-palette-warning: var(--rosen-palette-warning-main);
 }
+
+.RosenCard,
+.RosenDialog {
+  --padding: 1.5rem;
+
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  border-radius: calc(var(--rosen-spacing) * 2);  
+  outline: 1px solid var(--color-gray-200);
+  background-color: var(--rosen-palette-background-paper);
+  color: var(--color-gray-900);
+
+  & > :first-child {
+    border-top-right-radius: inherit;
+    border-top-left-radius: inherit;
+  }
+  & > :last-child {
+    border-bottom-right-radius: inherit;
+    border-bottom-left-radius: inherit;
+  }
+
+  /* Action */
+
+  .RosenCardAction,
+  .RosenDialogAction {
+    display: flex;
+    align-items: center;
+  }
+
+  /* Body */
+
+  .RosenCardBody,
+  .RosenDialogBody {
+    padding: var(--padding);
+  }
+
+  .RosenCardHeader + .RosenCardBody,
+  .RosenDialogHeader + .RosenDialogBody {
+    padding-top: 0;
+  }
+
+  .RosenCardBody:has(+ .RosenCardFooter),
+  .RosenDialogBody:has(+ .RosenDialogFooter) {
+    padding-bottom: 0;
+  }
+
+  /* Footer */
+
+  .RosenCardFooter,
+  .RosenDialogFooter {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1rem;
+    padding: var(--padding);
+  }
+
+  .RosenCardHeader + .RosenCardFooter,
+  .RosenDialogHeader + .RosenDialogFooter {
+    padding-top: 0;
+  }
+
+  /* Header */
+  .RosenCardHeader,
+  .RosenDialogHeader {
+    display: flex;
+    align-items: center;
+    gap: calc(var(--rosen-spacing) * 2);
+    padding: var(--padding);
+  }
+
+  /* Title */
+  .RosenCardTitle,
+  .RosenDialogTitle {
+    flex-grow: 1;
+  }
+}
+
+ 

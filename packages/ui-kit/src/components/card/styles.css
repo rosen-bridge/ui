@@ -1,7 +1,6 @@
 .RosenCard {
   --padding: calc(var(--rosen-spacing) * 2);
 
-  border-radius: calc(var(--rosen-spacing) * 2);
   position: relative;
 
   &[data-active='true'] {
@@ -27,9 +26,4 @@
     right: calc(var(--rosen-spacing) * 2);
     border-bottom: 1px dashed var(--rosen-palette-neutral-light);
   }
-}
-
-.RosenCard:not([data-variant='separated']) > .RosenCardHeader + .RosenCardBody,
-.RosenCard:not([data-variant='separated']) > .RosenCardHeader + * .RosenCardBody {
-  padding-top: 0;
 }
