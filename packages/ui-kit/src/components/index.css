@@ -67,7 +67,6 @@
 
   /* Header */
 
-
   [data-surface='header'] {
     display: flex;
     align-items: center;
@@ -76,7 +75,6 @@
   }
 
   /* Title */
-
 
   [data-surface='title'] {
     flex-grow: 1;

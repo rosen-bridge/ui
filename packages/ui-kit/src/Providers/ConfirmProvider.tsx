@@ -69,7 +69,7 @@ export const ConfirmProvider = ({ children }: PropsWithChildren) => {
     <ConfirmContext.Provider value={{ confirm }}>
       {children}
       {options && (
-        <Dialog open size="small" unstick="tablet" onClose={handleCancel}>
+        <Dialog open unstick="tablet" width="small" onClose={handleCancel}>
           <DialogHeader>
             <DialogTitle>{options.title}</DialogTitle>
           </DialogHeader>

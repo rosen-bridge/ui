@@ -129,7 +129,7 @@ export const SubmitButton = () => {
       >
         SUBMIT
       </Button>
-      <Dialog open={open} size="small" unstick="tablet" onClose={() => close()}>
+      <Dialog open={open} unstick="tablet" width="small" onClose={() => close()}>
         {qrCode ? (
           <>
             <DialogHeader>

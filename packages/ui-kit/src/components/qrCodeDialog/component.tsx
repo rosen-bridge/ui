@@ -22,7 +22,7 @@ export const QrCodeDialog = (props: QrCodeDialogProps) => {
   const { value, onClose, ...rest } = useConfig('QrCodeDialog', props);
 
   return (
-    <Dialog size="small" unstick="tablet" onClose={onClose} {...rest}>
+    <Dialog unstick="tablet" width="small" onClose={onClose} {...rest}>
       <DialogBody>
         <Stack align="center" justify="center" spacing={2}>
           <QRCodeCanvas size={200} value={value} />

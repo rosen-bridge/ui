@@ -8,11 +8,11 @@ import './styles.css';
 export interface DialogOverrides {}
 
 export type DialogOwnProps = {
-  edge?: boolean | 'stretch';
+  edge?: boolean;
   open?: boolean;
   placement?: 'center' | 'bottom';
-  size?: 'small' | 'medium' | 'large';
   unstick?: Breakpoint;
+  width?: 'small' | 'medium' | 'large' | 'full';
   onClose?: () => void;
 };
 
@@ -25,8 +25,8 @@ export const Dialog = (props: DialogProps) => {
     edge,
     open,
     placement = 'center',
-    size = 'medium',
     unstick,
+    width = 'medium',
     onClose,
     ...rest
   } = useConfig('Dialog', props);
@@ -34,8 +34,9 @@ export const Dialog = (props: DialogProps) => {
   const isUnstick = useBreakpoint(`${unstick}-up` as BreakpointQuery);
 
   if (unstick && !isUnstick) {
-    edge = 'stretch';
+    edge = true;
     placement = 'bottom';
+    width = 'full';
   }
 
   return (
@@ -45,8 +46,8 @@ export const Dialog = (props: DialogProps) => {
         <DialogBaseUI.Popup
           data-edge={edge || null}
           data-placement={placement}
-          data-size={size}
           data-surface="root"
+          data-width={width}
           {...rest}
         />
       </DialogBaseUI.Portal>

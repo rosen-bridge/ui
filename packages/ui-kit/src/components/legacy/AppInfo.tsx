@@ -73,7 +73,7 @@ export const AppInfo = ({ children, resolver }: AppInfoProps) => {
 
   return (
     <div>
-      <Dialog open={open} size="small" unstick="tablet" onClose={() => setOpen(false)}>
+      <Dialog open={open} unstick="tablet" width="small" onClose={() => setOpen(false)}>
         <DialogHeader>
           <DialogIcon name="ExclamationCircle" />
           <DialogTitle variant="h2" fontWeight="bold">
