@@ -1,6 +1,6 @@
 import { Dialog as DialogBaseUI } from '@base-ui/react/dialog';
 
-import { type BreakpointQuery, useBreakpoint, useConfig } from '@/hooks';
+import { useConfig } from '@/hooks';
 import type { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.css';
@@ -10,7 +10,7 @@ export interface DialogOverrides {}
 export type DialogOwnProps = {
   open?: boolean;
   maxWidth?: string;
-  stickOn?: BreakpointQuery;
+  placement?: 'center' | 'bottom';
   onClose?: () => void;
 };
 
@@ -19,21 +19,15 @@ export type DialogBaseProps = ElementBaseProps<'div', DialogOwnProps>;
 export type DialogProps = OverridableType<DialogBaseProps, DialogOverrides, never>;
 
 export const Dialog = (props: DialogProps) => {
-  const { open, maxWidth, stickOn, onClose, ...rest } = useConfig('Dialog', props);
-
-  const stick = useBreakpoint(stickOn || 'mobile');
+  const { open, maxWidth, placement = 'center', onClose, ...rest } = useConfig('Dialog', props);
 
   void maxWidth;
 
   return (
-    <DialogBaseUI.Root
-      data-stick={(stickOn && stick) || null}
-      open={open}
-      onOpenChange={(open) => !open && onClose?.()}
-    >
+    <DialogBaseUI.Root open={open} onOpenChange={(open) => !open && onClose?.()}>
       <DialogBaseUI.Portal>
         <DialogBaseUI.Backdrop className="RosenDialog-backdrop" />
-        <DialogBaseUI.Popup {...rest} />
+        <DialogBaseUI.Popup data-placement={placement} {...rest} />
       </DialogBaseUI.Portal>
     </DialogBaseUI.Root>
   );

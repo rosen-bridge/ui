@@ -7,7 +7,7 @@ import type { Network as NetworkType } from '@rosen-ui/types';
 
 import { Dialog, DialogBody, DialogHeader, DialogIcon, DialogTitle } from '@/components';
 
-import { useToast } from '../../hooks';
+import { useResponsive, useToast } from '../../hooks';
 import { Avatar } from '../avatar';
 import { Icon, type IconProps } from '../icon';
 import { IconButton } from '../iconButton';
@@ -46,6 +46,11 @@ export const AppInfo = ({ children, resolver }: AppInfoProps) => {
 
   const toast = useToast();
 
+  const placement = useResponsive({
+    mobile: 'bottom',
+    tablet: 'center',
+  } as const);
+
   const handleClick = async () => {
     if (!resolver) {
       setOpen(true);
@@ -73,7 +78,7 @@ export const AppInfo = ({ children, resolver }: AppInfoProps) => {
 
   return (
     <div>
-      <Dialog maxWidth="tablet" open={open} stickOn="tablet-down" onClose={() => setOpen(false)}>
+      <Dialog maxWidth="tablet" open={open} placement={placement} onClose={() => setOpen(false)}>
         <DialogHeader>
           <DialogIcon name="ExclamationCircle" />
           <DialogTitle variant="h2" fontWeight="bold">

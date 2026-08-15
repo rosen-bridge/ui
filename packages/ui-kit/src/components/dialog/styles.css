@@ -2,12 +2,8 @@
   --padding: 1.5rem;
 
   position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   width: 24rem;
   max-width: calc(100vw - 3rem);
-  margin-top: -2rem;
   transition: all 150ms;
   touch-action: none;
 
@@ -20,7 +16,29 @@
   &[data-starting-style],
   &[data-ending-style] {
     opacity: 0;
+  }
+}
+
+.RosenDialog[data-placement="center"] {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  &[data-starting-style],
+  &[data-ending-style] {
     transform: translate(-50%, -50%) scale(0.9);
+  }
+}
+.RosenDialog[data-placement="bottom"] {
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, 0);
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+
+  &[data-starting-style],
+  &[data-ending-style] {
+    transform: translate(-50%, 100%);
   }
 }
 

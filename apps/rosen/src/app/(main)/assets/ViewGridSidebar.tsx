@@ -17,6 +17,7 @@ import {
   Token,
   Typography,
   useBreakpoint,
+  useResponsive,
   useStickyBox,
 } from '@rosen-bridge/ui-kit';
 
@@ -63,8 +64,13 @@ const Content = ({ value }: ViewGridSidebarProps) => {
 };
 
 const DetailsDrawer = ({ value, onClose }: ViewGridSidebarProps) => {
+  const placement = useResponsive({
+    mobile: 'bottom',
+    laptop: 'center',
+  } as const);
+
   return (
-    <Dialog open={!!value} stickOn="laptop-down" onClose={onClose}>
+    <Dialog open={!!value} placement={placement} onClose={onClose}>
       <DialogHeader>
         <DialogIcon name="BitcoinCircle" />
         <DialogTitle>Asset Details</DialogTitle>
