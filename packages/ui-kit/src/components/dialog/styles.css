@@ -3,9 +3,9 @@
 
   position: fixed;
   width: 100%;
-  max-width: calc(100vw - 3rem);
   transition: all 150ms;
   touch-action: none;
+  max-height: calc(100% - 64px);
 
   z-index: 4;
 
@@ -87,3 +87,4 @@
     opacity: 0;
   }
 }
+ 

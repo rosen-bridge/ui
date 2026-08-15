@@ -41,6 +41,7 @@
 
   [data-surface='body'] {
     padding: var(--padding);
+    overflow-y: auto;
   }
 
   [data-surface='header'] + [data-surface='body'] {
