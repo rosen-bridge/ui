@@ -1,0 +1,14 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "globalDependencies": ["tsconfig.json", "patches/**", "README.md", "LICENSE"],
+  "futureFlags": {
+    "pruneIncludesGlobalFiles": true
+  },
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "envMode": "loose",
+      "outputs": ["dist/**"]
+    }
+  }
+}
