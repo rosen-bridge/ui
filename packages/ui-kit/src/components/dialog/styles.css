@@ -1,6 +1,4 @@
 .RosenDialog {
-  --padding: 1.5rem;
-
   position: fixed;
   width: 100%;
   transition: all 150ms;
