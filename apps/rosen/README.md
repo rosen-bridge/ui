@@ -20,8 +20,8 @@ Follow these steps to set up and run your local version of Rosen App:
 
    ```bash
    npm install
-   ./build.sh
    cd apps/rosen
+   npm run bootstrap
    ```
 
 2. **Fetch Tokens Data**

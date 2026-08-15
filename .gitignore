@@ -41,3 +41,5 @@ next-env.d.ts
 
 # default health-check report file
 **/healthReport.json
+
+.turbo

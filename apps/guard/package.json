@@ -8,8 +8,9 @@
   },
   "license": "MIT",
   "scripts": {
+    "bootstrap": "turbo build --filter=@rosen-bridge/guard-app^...",
     "build": "next build",
-    "build:vercel": "cd ../../ && ./build.sh guard && cd apps/guard && npm run build",
+    "build:vercel": "npm run bootstrap && npm run build",
     "dev": "next dev",
     "lint": "biome check --write",
     "lint:check": "biome check",
