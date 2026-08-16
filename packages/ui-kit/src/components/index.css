@@ -71,7 +71,7 @@
   [data-surface='header'] {
     display: flex;
     align-items: center;
-    gap: calc(var(--rosen-spacing) * 2);
+    gap: var(--rosen-spacing);
     padding: var(--padding);
   }
 

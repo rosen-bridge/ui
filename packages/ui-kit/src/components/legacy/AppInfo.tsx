@@ -5,7 +5,14 @@ import { Typography } from '@mui/material';
 
 import type { Network as NetworkType } from '@rosen-ui/types';
 
-import { Dialog, DialogBody, DialogHeader, DialogIcon, DialogTitle } from '@/components';
+import {
+  Dialog,
+  DialogBody,
+  DialogCloseButton,
+  DialogHeader,
+  DialogIcon,
+  DialogTitle,
+} from '@/components';
 
 import { useToast } from '../../hooks';
 import { Avatar } from '../avatar';
@@ -79,6 +86,7 @@ export const AppInfo = ({ children, resolver }: AppInfoProps) => {
           <DialogTitle variant="h2" fontWeight="bold">
             About Rosen Bridge
           </DialogTitle>
+          <DialogCloseButton />
         </DialogHeader>
         <DialogBody>
           <Stack spacing={1}>
