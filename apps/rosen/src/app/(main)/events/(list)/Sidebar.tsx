@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useRef } from 'react';
 
 import useSWR from 'swr';
 
@@ -10,13 +10,16 @@ import {
   CardHeader,
   CardTitle,
   Center,
-  EnhancedDialog,
-  EnhancedDialogContent,
-  EnhancedDialogTitle,
+  Dialog,
+  DialogAction,
+  DialogBody,
+  DialogCloseButton,
+  DialogHeader,
+  DialogIcon,
+  DialogTitle,
   EventDetails,
   type EventDetailsProps,
   Icon,
-  Stack,
   Typography,
   useBreakpoint,
   useStickyBox,
@@ -92,29 +95,44 @@ const Content = ({ value }: SidebarProps) => {
 };
 
 const Drawer = ({ value, onClose }: SidebarProps) => {
+  const previousValue = useRef(value);
+
+  if (value) {
+    previousValue.current = value;
+  }
+
+  const displayValue = value ?? previousValue.current;
+
   return (
-    <EnhancedDialog open={!!value} stickOn="laptop" onClose={onClose}>
-      <EnhancedDialogTitle icon="Exchange" onClose={onClose}>
-        <Stack style={{ width: '100%' }} direction="row" justify="between">
-          Event
-          {value && (
+    <Dialog
+      open={!!value}
+      unstick="laptop"
+      onClose={onClose}
+      onClosed={() => (previousValue.current = undefined)}
+    >
+      <DialogHeader>
+        <DialogIcon name="Exchange" />
+        <DialogTitle>Event</DialogTitle>
+        {displayValue && (
+          <DialogAction>
             <Button
               variant="text"
               size="small"
               target="_blank"
-              href={`/events/${value.eventId}`}
+              href={`/events/${displayValue.eventId}`}
               startIcon={<Icon name="Eye" />}
               style={{ marginLeft: 'auto' }}
             >
               SEE DETAILS
             </Button>
-          )}
-        </Stack>
-      </EnhancedDialogTitle>
-      <EnhancedDialogContent>
-        <Content value={value} />
-      </EnhancedDialogContent>
-    </EnhancedDialog>
+          </DialogAction>
+        )}
+        <DialogCloseButton />
+      </DialogHeader>
+      <DialogBody>
+        <Content value={displayValue} />
+      </DialogBody>
+    </Dialog>
   );
 };
 

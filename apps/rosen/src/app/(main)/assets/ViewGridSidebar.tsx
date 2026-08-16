@@ -1,3 +1,5 @@
+import { useRef } from 'react';
+
 import {
   Amount,
   Card,
@@ -6,9 +8,12 @@ import {
   CardTitle,
   Center,
   Columns,
-  EnhancedDialog,
-  EnhancedDialogContent,
-  EnhancedDialogTitle,
+  Dialog,
+  DialogBody,
+  DialogCloseButton,
+  DialogHeader,
+  DialogIcon,
+  DialogTitle,
   Label,
   Network,
   Token,
@@ -60,15 +65,30 @@ const Content = ({ value }: ViewGridSidebarProps) => {
 };
 
 const DetailsDrawer = ({ value, onClose }: ViewGridSidebarProps) => {
+  const previousValue = useRef(value);
+
+  if (value) {
+    previousValue.current = value;
+  }
+
+  const displayValue = value ?? previousValue.current;
+
   return (
-    <EnhancedDialog open={!!value} stickOn="laptop" onClose={onClose}>
-      <EnhancedDialogTitle icon="BitcoinCircle" onClose={onClose}>
-        Asset Details
-      </EnhancedDialogTitle>
-      <EnhancedDialogContent>
-        <Content value={value} />
-      </EnhancedDialogContent>
-    </EnhancedDialog>
+    <Dialog
+      open={!!value}
+      unstick="laptop"
+      onClose={onClose}
+      onClosed={() => (previousValue.current = undefined)}
+    >
+      <DialogHeader>
+        <DialogIcon name="BitcoinCircle" />
+        <DialogTitle>Asset Details</DialogTitle>
+        <DialogCloseButton />
+      </DialogHeader>
+      <DialogBody>
+        <Content value={displayValue} />
+      </DialogBody>
+    </Dialog>
   );
 };
 

@@ -13,7 +13,7 @@ export type DialogTitleProps = OverridableType<DialogTitleBaseProps, DialogTitle
 export const DialogTitle = (props: DialogTitleProps) => {
   const { ...rest } = useConfig('DialogTitle', props);
 
-  return <Typography component="h2" {...rest} />;
+  return <Typography component="h2" data-surface="title" {...rest} />;
 };
 
 DialogTitle.displayName = 'DialogTitle';
