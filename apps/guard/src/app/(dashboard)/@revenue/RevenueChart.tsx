@@ -1,12 +1,13 @@
 import { useMemo } from 'react';
+
+import moment from 'moment';
 import Chart from 'react-apexcharts';
 
 import { useTheme } from '@rosen-bridge/ui-kit';
-import { ChartPeriod } from '@rosen-ui/types';
+import type { ChartPeriod } from '@rosen-ui/types';
 import { getDecimalString } from '@rosen-ui/utils';
-import moment from 'moment';
 
-import { ApiRevenueChartResponse } from '@/types/api';
+import type { ApiRevenueChartResponse } from '@/types/api';
 
 /**
  * get date format for a period to be used as chart x axis labels
@@ -82,10 +83,9 @@ export const RevenueChart = ({ period, data }: RevenueChartProps) => {
 
   const slots = useMemo(() => {
     const raw = data
-      .map((token) => token.data)
-      .flat()
+      .flatMap((token) => token.data)
       .map((item) => +item.label)
-      .filter((item, index, items) => items.indexOf(item) == index)
+      .filter((item, index, items) => items.indexOf(item) === index)
       .sort((a, b) => a - b);
 
     const min = raw[0];
@@ -125,9 +125,7 @@ export const RevenueChart = ({ period, data }: RevenueChartProps) => {
       ...baseChartOptions,
       xaxis: {
         ...baseChartOptions.xaxis,
-        categories:
-          slots.map((slot) => moment(+slot).format(getDateFormat(period))) ??
-          [],
+        categories: slots.map((slot) => moment(+slot).format(getDateFormat(period))) ?? [],
       },
       theme: {
         mode: theme.palette.mode,
@@ -159,21 +157,12 @@ export const RevenueChart = ({ period, data }: RevenueChartProps) => {
       data.map((token) => ({
         name: token.title.name,
         data: slots.map((slot) => {
-          const amount = token.data.find(
-            (item) => item.label == slot.toString(),
-          )?.amount;
+          const amount = token.data.find((item) => item.label === slot.toString())?.amount;
           return +getDecimalString(amount, token.title.decimals);
         }),
       })),
     [data, slots],
   );
 
-  return (
-    <Chart
-      type="bar"
-      options={apexChartOptions}
-      series={apexChartSeries}
-      height={240}
-    />
-  );
+  return <Chart type="bar" options={apexChartOptions} series={apexChartSeries} height={240} />;
 };

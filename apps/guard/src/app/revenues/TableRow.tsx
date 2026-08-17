@@ -1,36 +1,23 @@
-import { useState, FC, useMemo } from 'react';
+import { type FC, useMemo, useState } from 'react';
 
 import { AngleDown, AngleUp } from '@rosen-bridge/icons';
-import {
-  Amount,
-  Button,
-  EnhancedTableCell,
-  Identifier,
-  TableRow,
-} from '@rosen-bridge/ui-kit';
+import { Amount, Button, EnhancedTableCell, Identifier, TableRow } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 import { getDecimalString, getTxURL } from '@rosen-ui/utils';
 
 import { useInfo } from '@/hooks';
-import { ApiInfoResponse, Revenue } from '@/types/api';
+import type { ApiInfoResponse, Revenue } from '@/types/api';
 
-const getEmissionAmount = (
-  info: ApiInfoResponse | undefined,
-  row: RowProps,
-) => {
+const getEmissionAmount = (info: ApiInfoResponse | undefined, row: RowProps) => {
   if (!info) return;
 
   const revenues = row.revenues.filter(
     (revenue) =>
       revenue.revenueType === 'emission' &&
-      (revenue.data.tokenId === info?.rsnTokenId ||
-        revenue.data.tokenId === info?.emissionTokenId),
+      (revenue.data.tokenId === info?.rsnTokenId || revenue.data.tokenId === info?.emissionTokenId),
   );
 
-  const amount = revenues.reduce(
-    (sum, revenue) => sum + revenue.data.amount,
-    0,
-  );
+  const amount = revenues.reduce((sum, revenue) => sum + revenue.data.amount, 0);
 
   const decimals = revenues.at(0)?.data.decimals;
 
@@ -132,10 +119,7 @@ export const MobileRow: FC<RowProps> = (props) => {
 
   const { data: info, isLoading: isInfoLoading } = useInfo();
 
-  const rowStyles = useMemo(
-    () => (isLoading ? { opacity: 0.3 } : {}),
-    [isLoading],
-  );
+  const rowStyles = useMemo(() => (isLoading ? { opacity: 0.3 } : {}), [isLoading]);
 
   const toggleExpand = () => {
     setExpand((prevState) => !prevState);
@@ -190,10 +174,7 @@ export const MobileRow: FC<RowProps> = (props) => {
           <TableRow style={rowStyles}>
             <EnhancedTableCell>Amount</EnhancedTableCell>
             <EnhancedTableCell>
-              <Amount
-                value={row.lockToken.amount}
-                decimal={row.lockToken.decimals}
-              />
+              <Amount value={row.lockToken.amount} decimal={row.lockToken.decimals} />
             </EnhancedTableCell>
           </TableRow>
           <TableRow style={rowStyles}>
@@ -231,11 +212,7 @@ export const MobileRow: FC<RowProps> = (props) => {
           <TableRow style={rowStyles}>
             <EnhancedTableCell>Emission (RSN)</EnhancedTableCell>
             <EnhancedTableCell>
-              <Amount
-                value={getEmissionAmount(info, row)}
-                fallback="0"
-                loading={isInfoLoading}
-              />
+              <Amount value={getEmissionAmount(info, row)} fallback="0" loading={isInfoLoading} />
             </EnhancedTableCell>
           </TableRow>
         </>
@@ -262,10 +239,7 @@ export const TabletRow: FC<RowProps> = (props) => {
 
   const { data: info, isLoading: isInfoLoading } = useInfo();
 
-  const rowStyles = useMemo(
-    () => (isLoading ? { opacity: 0.3 } : {}),
-    [isLoading],
-  );
+  const rowStyles = useMemo(() => (isLoading ? { opacity: 0.3 } : {}), [isLoading]);
 
   return (
     <TableRow className="divider" style={rowStyles}>
@@ -323,11 +297,7 @@ export const TabletRow: FC<RowProps> = (props) => {
         />
       </EnhancedTableCell>
       <EnhancedTableCell style={rowStyles} align="center">
-        <Amount
-          value={getEmissionAmount(info, row)}
-          fallback="0"
-          loading={isInfoLoading}
-        />
+        <Amount value={getEmissionAmount(info, row)} fallback="0" loading={isInfoLoading} />
       </EnhancedTableCell>
     </TableRow>
   );

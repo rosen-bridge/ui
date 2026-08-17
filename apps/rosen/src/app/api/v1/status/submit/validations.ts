@@ -1,14 +1,15 @@
-import { NextRequest } from 'next/server';
+import type { NextRequest } from 'next/server';
+
+import Joi from 'joi';
 
 import {
-  EventStatus,
+  type EventStatus,
   eventStatuses,
-  TxType,
-  TxStatus,
+  type TxStatus,
+  type TxType,
   txStatuses,
   txTypes,
 } from '@rosen-ui/public-status';
-import Joi from 'joi';
 
 export interface TxParams {
   txId: string;
@@ -56,10 +57,7 @@ export const validator = async (request: NextRequest) => {
   return ParamsSchema.validate(await request.json());
 };
 
-export const paramsToSignMessage = (
-  params: Params,
-  timestampSeconds: number,
-): string => {
+export const paramsToSignMessage = (params: Params, timestampSeconds: number): string => {
   const txData = params.tx
     ? `${params.tx.txId}${params.tx.chain}${params.tx.txType}${params.tx.txStatus}`
     : '';

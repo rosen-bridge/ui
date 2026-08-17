@@ -1,8 +1,4 @@
-import {
-  Toolbar,
-  ThemeToggleButton,
-  useBreakpoint,
-} from '@rosen-bridge/ui-kit';
+import { ThemeToggleButton, Toolbar, useBreakpoint } from '@rosen-bridge/ui-kit';
 
 import { VersionConfig } from './VersionConfig';
 
@@ -14,9 +10,7 @@ export const Actions = ({ sidebar }: { sidebar?: boolean }) => {
   return (
     <Toolbar>
       {sidebar && <VersionConfig />}
-      {((sidebar && isTabletDown) || (!sidebar && !isTabletDown)) && (
-        <ThemeToggleButton />
-      )}
+      {((sidebar && isTabletDown) || (!sidebar && !isTabletDown)) && <ThemeToggleButton />}
     </Toolbar>
   );
 };

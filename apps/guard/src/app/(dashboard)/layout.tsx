@@ -1,13 +1,8 @@
 'use client';
 
-import { Fragment, ReactNode } from 'react';
+import { Fragment, type ReactNode } from 'react';
 
-import {
-  PageHeading,
-  Stack,
-  StackProps,
-  useResponsive,
-} from '@rosen-bridge/ui-kit';
+import { PageHeading, Stack, type StackProps, useResponsive } from '@rosen-bridge/ui-kit';
 
 type LayoutProps = {
   actions: ReactNode;
@@ -17,13 +12,7 @@ type LayoutProps = {
   tokens: ReactNode;
 };
 
-const Layout = ({
-  actions,
-  revenue,
-  health,
-  networks,
-  tokens,
-}: LayoutProps) => {
+const Layout = ({ actions, revenue, health, networks, tokens }: LayoutProps) => {
   const props = useResponsive<StackProps>({
     mobile: {
       direction: 'column',

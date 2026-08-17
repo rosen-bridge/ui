@@ -36,13 +36,13 @@ jobs:
         with:
           node-version-file: .nvmrc
 
-      - name: Setup npm 11.6.2
-        run: npm i -g npm@11.6.2
+      - name: Setup npm ${{ vars.NPM_VERSION }}
+        run: npm i -g npm@${{ vars.NPM_VERSION }}
 
       - name: Build dependencies
         run: |
           npm ci 
-          ./build.sh ${{ matrix.apps }}
+          npm run bootstrap --workspace=@rosen-bridge/${{ matrix.apps }}-app
 
       - name: Move Config Files
         run: |

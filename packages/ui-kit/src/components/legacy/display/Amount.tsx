@@ -1,4 +1,4 @@
-import { HTMLAttributes, useMemo } from 'react';
+import { type HTMLAttributes, useMemo } from 'react';
 
 import { getDecimalString } from '@rosen-ui/utils';
 
@@ -95,7 +95,7 @@ const AmountBase = ({
       case 'bigint':
         return value.toString();
       case 'number':
-        if (isNaN(value)) return;
+        if (Number.isNaN(value)) return;
         return value
           .toLocaleString('en', {
             useGrouping: false,
@@ -105,7 +105,7 @@ const AmountBase = ({
           .replace(/\.0$/, '');
       case 'string':
         if (!value.trim()) return;
-        if (isNaN(Number(value))) return;
+        if (Number.isNaN(Number(value))) return;
         return Number(value)
           .toLocaleString('en', {
             useGrouping: false,
@@ -135,10 +135,7 @@ const AmountBase = ({
 
   const error = useMemo(() => {
     if (value === undefined) return false;
-    return (
-      !normalizedValue ||
-      (decimal !== undefined && !!normalizedValue.split('.').at(1))
-    );
+    return !normalizedValue || (decimal !== undefined && !!normalizedValue.split('.').at(1));
   }, [decimal, normalizedValue, value]);
 
   const tooltip = useMemo(() => {
@@ -165,10 +162,7 @@ const AmountBase = ({
 
       const str = BigInt(num).toString().replace(/^0+/, '') || '0';
 
-      const index = Math.min(
-        Math.floor((str.length - 1 - decimalLength) / 3),
-        units.length - 1,
-      );
+      const index = Math.min(Math.floor((str.length - 1 - decimalLength) / 3), units.length - 1);
 
       const value = Number(num) / 10 ** decimalLength / 1000 ** index;
 
@@ -183,14 +177,11 @@ const AmountBase = ({
       };
     }
 
-    const leadingZeros =
-      splittedValue.decimal?.match(/^(0*)/)?.at(1)?.length || 0;
+    const leadingZeros = splittedValue.decimal?.match(/^(0*)/)?.at(1)?.length || 0;
 
-    const threshold =
-      leadingZeros >= decimalLeadingZeroThreshold ? leadingZeros : 0;
+    const threshold = leadingZeros >= decimalLeadingZeroThreshold ? leadingZeros : 0;
 
-    const precision =
-      leadingZeros + decimalMaxFractionDigits - (threshold ? 1 : 0);
+    const precision = leadingZeros + decimalMaxFractionDigits - (threshold ? 1 : 0);
 
     let fraction = Number(`0.${splittedValue.decimal || 0}`)
       .toFixed(precision)
@@ -234,18 +225,10 @@ const AmountBase = ({
       {...props}
     >
       {variant === 'cold' && (
-        <Icon
-          color="tertiary-dark"
-          name="SnowFlake"
-          style={{ fontSize: 'inherit' }}
-        />
+        <Icon color="tertiary-dark" name="SnowFlake" style={{ fontSize: 'inherit' }} />
       )}
       {variant === 'hot' && (
-        <Icon
-          color="secondary-dark"
-          name="Fire"
-          style={{ fontSize: 'inherit' }}
-        />
+        <Icon color="secondary-dark" name="Fire" style={{ fontSize: 'inherit' }} />
       )}
       <Stack align="center" direction="row">
         <Stack
@@ -253,71 +236,40 @@ const AmountBase = ({
           direction={orientation === 'vertical' ? 'column' : 'row'}
           spacing="4px"
         >
-          <>
-            {!!error && (
-              <Icon
-                name="ExclamationTriangle"
-                style={{ fontSize: 'inherit' }}
-              />
-            )}
-            {!error && (
-              <Tooltip disabled={loading} title={tooltip}>
-                <Typography
-                  component="div"
-                  loading={loading}
-                  style={{ fontSize: 'inherit', whiteSpace: 'nowrap' }}
-                >
-                  {!!parts && (
-                    <>
-                      {parts.number}
-                      {parts.fraction && (
-                        <Typography
-                          component="span"
-                          fontSize="75%"
-                          style={{ opacity: 0.7 }}
-                        >
-                          .{!!parts.zeros && '0'}
-                          {!!parts.zeros && (
-                            <sub style={{ fontSize: '0.75em' }}>
-                              {parts.zeros}
-                            </sub>
-                          )}
-                          {parts.fraction}
-                        </Typography>
-                      )}
-                      {!!parts.unit && ` ${parts.unit}`}
-                    </>
-                  )}
-                </Typography>
-              </Tooltip>
-            )}
-            {!error &&
-              !parts &&
-              !!fallback &&
-              value === undefined &&
-              !loading && <>{fallback}</>}
-          </>
+          {!!error && <Icon name="ExclamationTriangle" style={{ fontSize: 'inherit' }} />}
+          {!error && (
+            <Tooltip disabled={loading} title={tooltip}>
+              <Typography
+                component="div"
+                loading={loading}
+                style={{ fontSize: 'inherit', whiteSpace: 'nowrap' }}
+              >
+                {!!parts && (
+                  <>
+                    {parts.number}
+                    {parts.fraction && (
+                      <Typography component="span" fontSize="75%" style={{ opacity: 0.7 }}>
+                        .{!!parts.zeros && '0'}
+                        {!!parts.zeros && <sub style={{ fontSize: '0.75em' }}>{parts.zeros}</sub>}
+                        {parts.fraction}
+                      </Typography>
+                    )}
+                    {!!parts.unit && ` ${parts.unit}`}
+                  </>
+                )}
+              </Typography>
+            </Tooltip>
+          )}
+          {!error && !parts && !!fallback && value === undefined && !loading && <>{fallback}</>}
           {unit && (
-            <Typography
-              component="div"
-              style={{ fontSize: '75%', opacity: 0.7 }}
-            >
+            <Typography component="div" style={{ fontSize: '75%', opacity: 0.7 }}>
               {unit}
             </Typography>
           )}
-          {formattedPrice && (
-            <Typography style={{ opacity: 0.5 }}>
-              (${formattedPrice})
-            </Typography>
-          )}
+          {formattedPrice && <Typography style={{ opacity: 0.5 }}>(${formattedPrice})</Typography>}
         </Stack>
         {href && (
-          <IconButton
-            target="_blank"
-            rel="noopener noreferrer"
-            size="small"
-            href={href}
-          >
+          <IconButton target="_blank" rel="noopener noreferrer" size="small" href={href}>
             <Icon name="ExternalLinkAlt" size="small" />
           </IconButton>
         )}

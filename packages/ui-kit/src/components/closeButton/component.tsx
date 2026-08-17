@@ -1,8 +1,7 @@
-import { Icon, IconProps, IconButton } from '@/components';
+import { Icon, IconButton, type IconProps } from '@/components';
 import { useConfig } from '@/hooks';
-import { ElementBaseProps, OverridableType } from '@/types';
+import type { ElementBaseProps, OverridableType } from '@/types';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface CloseButtonOverrides {}
 
 export type CloseButtonOwnProps = {
@@ -11,16 +10,9 @@ export type CloseButtonOwnProps = {
   };
 };
 
-export type CloseButtonBaseProps = ElementBaseProps<
-  typeof IconButton,
-  CloseButtonOwnProps
->;
+export type CloseButtonBaseProps = ElementBaseProps<typeof IconButton, CloseButtonOwnProps>;
 
-export type CloseButtonProps = OverridableType<
-  CloseButtonBaseProps,
-  CloseButtonOverrides,
-  never
->;
+export type CloseButtonProps = OverridableType<CloseButtonBaseProps, CloseButtonOverrides, never>;
 
 export const CloseButton = (props: CloseButtonProps) => {
   const { slots, ...rest } = useConfig('CloseButton', props);

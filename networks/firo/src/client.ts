@@ -1,5 +1,5 @@
 import { Firo as FiroIcon } from '@rosen-bridge/icons';
-import { Network, NetworkConfig } from '@rosen-network/base';
+import type { Network, NetworkConfig } from '@rosen-network/base';
 import { NETWORKS } from '@rosen-ui/constants';
 
 import type { buildPaymentUri, generateOpReturnData } from './utils';
@@ -37,9 +37,7 @@ export class FiroNetwork implements Network {
     return this.config.buildPaymentUri(...args);
   };
 
-  public generateOpReturnData: FiroNetworkConfig['generateOpReturnData'] = (
-    ...args
-  ) => {
+  public generateOpReturnData: FiroNetworkConfig['generateOpReturnData'] = (...args) => {
     return this.config.generateOpReturnData(...args);
   };
 

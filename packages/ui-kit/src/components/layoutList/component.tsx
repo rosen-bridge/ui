@@ -1,11 +1,10 @@
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
 import { useConfig } from '@/hooks';
-import { ElementBaseProps, OverridableType } from '@/types';
+import type { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.css';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface LayoutListOverrides {}
 
 export type LayoutListOwnProps = {
@@ -18,15 +17,13 @@ export type LayoutListOwnProps = {
 
 export type LayoutListBaseProps = ElementBaseProps<'div', LayoutListOwnProps>;
 
-export type LayoutListProps = OverridableType<
-  LayoutListBaseProps,
-  LayoutListOverrides,
-  never
->;
+export type LayoutListProps = OverridableType<LayoutListBaseProps, LayoutListOverrides, never>;
 
 export const LayoutList = (props: LayoutListProps) => {
-  const { children, pagination, search, sidebar, sort, view, ...rest } =
-    useConfig('LayoutList', props);
+  const { children, pagination, search, sidebar, sort, view, ...rest } = useConfig(
+    'LayoutList',
+    props,
+  );
 
   return (
     <div {...rest}>

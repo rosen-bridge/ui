@@ -1,10 +1,11 @@
-import { TokenMap, RosenChainToken } from '@rosen-bridge/tokens';
-import { Network } from '@rosen-ui/types';
 import { Psbt } from 'bitcoinjs-lib';
 import { describe, expect, it, vi } from 'vitest';
 
+import { type RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
+import type { Network } from '@rosen-ui/types';
+
 import { DOGE_NETWORK, generateUnsignedTx } from '../../src';
-import { testTokenMap, multiDecimalTokenMap } from '../test-data';
+import { multiDecimalTokenMap, testTokenMap } from '../test-data';
 
 const testData = await vi.hoisted(async () => await import('./testData'));
 
@@ -79,9 +80,7 @@ describe('generateUnsignedTx', () => {
 
     expect(psbt.inputCount).toEqual(1);
     const mockedInput = testData.mockedUtxos[0];
-    expect(psbt.txInputs[0].hash.reverse().toString('hex')).toEqual(
-      mockedInput.txId,
-    );
+    expect(psbt.txInputs[0].hash.reverse().toString('hex')).toEqual(mockedInput.txId);
     expect(psbt.txInputs[0].index).toEqual(mockedInput.index);
 
     expect(psbt.txOutputs.length).toEqual(3);
@@ -98,9 +97,7 @@ describe('generateUnsignedTx', () => {
     const changeUtxo = psbt.txOutputs[2];
     expect(changeUtxo.address).toEqual(fromAddress);
     const expectedFee = 226000n;
-    expect(changeUtxo.value).toEqual(
-      Number(mockedInput.value - amount - expectedFee),
-    );
+    expect(changeUtxo.value).toEqual(Number(mockedInput.value - amount - expectedFee));
   });
 
   /**
@@ -149,9 +146,7 @@ describe('generateUnsignedTx', () => {
 
     expect(psbt.inputCount).toEqual(1);
     const mockedInput = testData.mockedUtxos[0];
-    expect(psbt.txInputs[0].hash.reverse().toString('hex')).toEqual(
-      mockedInput.txId,
-    );
+    expect(psbt.txInputs[0].hash.reverse().toString('hex')).toEqual(mockedInput.txId);
     expect(psbt.txInputs[0].index).toEqual(mockedInput.index);
 
     expect(psbt.txOutputs.length).toEqual(3);
@@ -168,9 +163,7 @@ describe('generateUnsignedTx', () => {
     const changeUtxo = psbt.txOutputs[2];
     expect(changeUtxo.address).toEqual(fromAddress);
     const expectedFee = 226000n;
-    expect(changeUtxo.value).toEqual(
-      Number(mockedInput.value - unwrappedAmount - expectedFee),
-    );
+    expect(changeUtxo.value).toEqual(Number(mockedInput.value - unwrappedAmount - expectedFee));
   });
 
   /**

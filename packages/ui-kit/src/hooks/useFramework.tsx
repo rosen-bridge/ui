@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useContext, useMemo } from 'react';
+import { createContext, type ReactNode, useContext, useMemo } from 'react';
 
 export const useFramework = () => {
   const context = useContext(FrameworkContext);
@@ -18,9 +18,7 @@ export type FrameworkContextType = {
   };
 };
 
-export const FrameworkContext = createContext<FrameworkContextType | undefined>(
-  undefined,
-);
+export const FrameworkContext = createContext<FrameworkContextType | undefined>(undefined);
 
 export type FrameworkProviderProps = {
   children?: ReactNode;
@@ -31,10 +29,7 @@ export type FrameworkProviderProps = {
   };
 };
 
-export const FrameworkProvider = ({
-  children,
-  router,
-}: FrameworkProviderProps) => {
+export const FrameworkProvider = ({ children, router }: FrameworkProviderProps) => {
   const value = useMemo<FrameworkContextType>(
     () => ({
       router: {
@@ -46,9 +41,5 @@ export const FrameworkProvider = ({
     [router.pathname, router.search, router.push],
   );
 
-  return (
-    <FrameworkContext.Provider value={value}>
-      {children}
-    </FrameworkContext.Provider>
-  );
+  return <FrameworkContext.Provider value={value}>{children}</FrameworkContext.Provider>;
 };

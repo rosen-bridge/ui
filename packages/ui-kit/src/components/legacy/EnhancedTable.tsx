@@ -1,29 +1,29 @@
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
 import {
+  Box,
   Table as MuiTable,
-  TableContainer,
-  TableHead,
-  TableRow,
-  TableRowProps,
+  type TablePaginationProps as MuiTablePaginationProps,
   TableBody,
   TableCell,
-  TablePagination,
-  TablePaginationProps as MuiTablePaginationProps,
-  Box,
+  type TableCellProps,
+  TableContainer,
   TableFooter,
-  TableCellProps,
+  TableHead,
+  TablePagination,
+  TableRow,
+  type TableRowProps,
 } from '@mui/material';
 
 import { useResponsive } from '../../hooks';
 import type { Breakpoint, ResponsiveValueOptionsBase } from '../../types';
 
 export {
+  type MuiTablePaginationProps as TablePaginationProps,
   TableCell,
   type TableCellProps,
   TableRow,
   type TableRowProps,
-  type MuiTablePaginationProps as TablePaginationProps,
 };
 
 export interface TableHeadItem {
@@ -31,16 +31,11 @@ export interface TableHeadItem {
   title?: string;
 }
 
-export type TableResponsiveHead<
-  MandatoryBreakpoint extends Breakpoint = 'mobile',
-> = {
+export type TableResponsiveHead<MandatoryBreakpoint extends Breakpoint = 'mobile'> = {
   [Key in MandatoryBreakpoint]: TableHeadItem[];
 } & ResponsiveValueOptionsBase<TableHeadItem[]>;
 
-export type TableRowRenderProp<
-  T,
-  MandatoryBreakpoint extends Breakpoint = 'mobile',
-> = {
+export type TableRowRenderProp<T, MandatoryBreakpoint extends Breakpoint = 'mobile'> = {
   [Key in MandatoryBreakpoint]: (rowData: T) => ReactNode;
 } & ResponsiveValueOptionsBase<(rowData: T) => ReactNode>;
 
@@ -139,11 +134,7 @@ export const EnhancedTable = <Row,>(props: EnhancedTableProps<Row>) => {
     paginated ? (
       <TableFooter>
         <TableRow>
-          <TableCell
-            variant="footer"
-            colSpan={tableHead?.length}
-            padding="none"
-          >
+          <TableCell variant="footer" colSpan={tableHead?.length} padding="none">
             <Box py={1}>
               <TablePagination
                 rowsPerPageOptions={DEFAULT_ROWS_PER_PAGE_OPTIONS}

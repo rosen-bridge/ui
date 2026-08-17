@@ -1,10 +1,5 @@
-import { GuardStatusEntity, Threshold } from '../src';
-import {
-  AggregateEventStatus,
-  AggregateTxStatus,
-  EventStatus,
-  TxStatus,
-} from '../src/constants';
+import type { GuardStatusEntity, Threshold } from '../src';
+import { AggregateEventStatus, AggregateTxStatus, EventStatus, TxStatus } from '../src/constants';
 import { Utils } from '../src/utils';
 import {
   guardPk0,
@@ -291,10 +286,7 @@ describe('Utils', () => {
       ];
 
       // act
-      const result = Utils.getAggregatedTxStatus(
-        emptyGuardStatuses,
-        txStatusThresholds,
-      );
+      const result = Utils.getAggregatedTxStatus(emptyGuardStatuses, txStatusThresholds);
 
       // assert
       expect(result).toBeUndefined();
@@ -317,10 +309,7 @@ describe('Utils', () => {
       ];
 
       // act
-      const result = Utils.getAggregatedTxStatus(
-        guardStatuses,
-        txStatusThresholds,
-      );
+      const result = Utils.getAggregatedTxStatus(guardStatuses, txStatusThresholds);
 
       // assert
       expect(result).toBeUndefined();
@@ -349,10 +338,7 @@ describe('Utils', () => {
       ];
 
       // act
-      const result = Utils.getAggregatedTxStatus(
-        guardStatuses,
-        txStatusThresholds,
-      );
+      const result = Utils.getAggregatedTxStatus(guardStatuses, txStatusThresholds);
 
       // assert
       expect(result).toEqual({
@@ -911,13 +897,7 @@ describe('Utils', () => {
     it('should use strict equality for filtering values', () => {
       // arrange
       type Mixed = { key: number | string };
-      const arr: Mixed[] = [
-        { key: 1 },
-        { key: '1' },
-        { key: 2 },
-        { key: '2' },
-        { key: 1 },
-      ];
+      const arr: Mixed[] = [{ key: 1 }, { key: '1' }, { key: 2 }, { key: '2' }, { key: 1 }];
       const key: keyof Mixed = 'key';
       const filterValue: number | string = 1; // strictly matches numbers equal to 1
       const newObj: Mixed = { key: 'new' };

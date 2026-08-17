@@ -1,10 +1,9 @@
-import { Icon, Tooltip, TooltipProps } from '@/components';
+import { Icon, Tooltip, type TooltipProps } from '@/components';
 import { useConfig } from '@/hooks';
-import { ElementBaseProps, OverridableType } from '@/types';
+import type { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.css';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface InfoIconOverrides {}
 
 export type InfoIconOwnProps = {
@@ -16,11 +15,7 @@ export type InfoIconOwnProps = {
 
 export type InfoIconBaseProps = ElementBaseProps<typeof Icon, InfoIconOwnProps>;
 
-export type InfoIconProps = OverridableType<
-  InfoIconBaseProps,
-  InfoIconOverrides,
-  never
->;
+export type InfoIconProps = OverridableType<InfoIconBaseProps, InfoIconOverrides, never>;
 
 export const InfoIcon = (props: InfoIconProps) => {
   const { info, slots, ...rest } = useConfig('InfoIcon', props);

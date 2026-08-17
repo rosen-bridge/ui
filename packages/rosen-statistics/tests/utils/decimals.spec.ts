@@ -1,11 +1,11 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import {
   getDecimalString,
   getNonDecimalString,
   getNumberOfDecimals,
-  scientificToString,
   multiplyByPowerOfTen,
+  scientificToString,
 } from '../../lib/utils';
 
 describe('getDecimalString', () => {
@@ -78,12 +78,8 @@ describe('getDecimalString', () => {
    * - Correctly formats large numbers without precision loss
    */
   it('should handle edge cases with very large numbers', () => {
-    expect(getDecimalString('12345678901234567890', 8)).toBe(
-      '123456789012.3456789',
-    );
-    expect(getDecimalString(12345678901234567890n, 18)).toBe(
-      '12.34567890123456789',
-    );
+    expect(getDecimalString('12345678901234567890', 8)).toBe('123456789012.3456789');
+    expect(getDecimalString(12345678901234567890n, 18)).toBe('12.34567890123456789');
   });
 });
 
@@ -429,6 +425,6 @@ describe('multiplyByPowerOfTen', () => {
    */
   it('should handle very large powers', () => {
     const result = multiplyByPowerOfTen('1', 50);
-    expect(result).toBe('1' + '0'.repeat(50));
+    expect(result).toBe(`1${'0'.repeat(50)}`);
   });
 });

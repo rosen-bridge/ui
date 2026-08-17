@@ -1,10 +1,9 @@
 import { InfoIcon, Typography } from '@/components';
 import { useConfig } from '@/hooks';
-import { Color, ElementBaseProps, OverridableType } from '@/types';
+import type { Color, ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.css';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface LabelOverrides {}
 
 export type LabelOwnProps = {
@@ -45,11 +44,7 @@ export type LabelOwnProps = {
 
 export type LabelBaseProps = ElementBaseProps<'div', LabelOwnProps>;
 
-export type LabelProps = OverridableType<
-  LabelBaseProps,
-  LabelOverrides,
-  'color'
->;
+export type LabelProps = OverridableType<LabelBaseProps, LabelOverrides, 'color'>;
 
 /**
  * A reusable label component that supports optional tooltip info,
@@ -70,12 +65,7 @@ export const Label = (props: LabelProps) => {
   } = useConfig('Label', props);
 
   return (
-    <div
-      data-dense={!!dense}
-      data-inset={!!inset}
-      data-orientation={orientation}
-      {...rest}
-    >
+    <div data-dense={!!dense} data-inset={!!inset} data-orientation={orientation} {...rest}>
       <div className="RosenLabel-header">
         <Typography
           color={color}

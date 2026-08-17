@@ -1,52 +1,48 @@
 'use client';
 
+import { useEffect, useMemo } from 'react';
 import Link from 'next/link';
-import { useMemo, useEffect } from 'react';
-import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 
-import {
-  SubmitButton,
-  useApiKey,
-  ApiKeyDialogWarning,
-  Stack,
-  useToast,
-  useConfirm,
-  ApiKeyDialogProtectedAction,
-} from '@rosen-bridge/ui-kit';
-import { NETWORKS } from '@rosen-ui/constants';
-import { fetcher, mutatorWithHeaders } from '@rosen-ui/swr-helpers';
-import { TokenInfo } from '@rosen-ui/types';
-import { getNonDecimalString, getTxURL } from '@rosen-ui/utils';
+import { FormProvider, type SubmitHandler, useForm } from 'react-hook-form';
 import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
 
-import { useRsnToken } from '@/hooks';
 import {
+  ApiKeyDialogProtectedAction,
+  ApiKeyDialogWarning,
+  Stack,
+  SubmitButton,
+  useApiKey,
+  useConfirm,
+  useToast,
+} from '@rosen-bridge/ui-kit';
+import { NETWORKS } from '@rosen-ui/constants';
+import { fetcher, mutatorWithHeaders } from '@rosen-ui/swr-helpers';
+import type { TokenInfo } from '@rosen-ui/types';
+import { getNonDecimalString, getTxURL } from '@rosen-ui/utils';
+
+import { useRsnToken } from '@/hooks';
+import type {
   ApiInfoResponse,
   ApiPermitReturnRequestBody,
   ApiPermitReturnResponse,
 } from '@/types/api';
 
 import {
+  type TokenAmountCompatibleFormSchema,
   TokenAmountTextField,
-  TokenAmountCompatibleFormSchema,
 } from '../../TokenAmountTextField';
 
 const UnlockForm = () => {
   const { confirm } = useConfirm();
   const toast = useToast();
 
-  const { data: info, isLoading: isInfoLoading } = useSWR<ApiInfoResponse>(
-    '/info',
-    fetcher,
-  );
+  const { data: info, isLoading: isInfoLoading } = useSWR<ApiInfoResponse>('/info', fetcher);
 
   const { rsnToken, isLoading: isRsnTokenLoading } = useRsnToken();
   const { apiKey } = useApiKey();
 
-  const rwtPartialToken = useMemo<
-    Pick<TokenInfo, 'amount' | 'decimals'> | undefined
-  >(
+  const rwtPartialToken = useMemo<Pick<TokenInfo, 'amount' | 'decimals'> | undefined>(
     () =>
       info?.permitCount.active
         ? {
@@ -60,7 +56,11 @@ const UnlockForm = () => {
 
   const { trigger, isMutating: isUnlockPending } = useSWRMutation<
     ApiPermitReturnResponse,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    /**
+     * TODO: remove the inline Biome comment
+     * local:ergo/rosen-bridge/ui#441
+     */
+    // biome-ignore lint/suspicious/noExplicitAny: Use a better type
     any,
     '/permit/return',
     ApiPermitReturnRequestBody
@@ -96,6 +96,7 @@ const UnlockForm = () => {
     info?.permitCount.active,
     info?.permitCount.total,
     rwtPartialToken,
+    toast.add,
   ]);
 
   useEffect(() => {
@@ -107,14 +108,11 @@ const UnlockForm = () => {
         timeout: 0,
       });
     }
-  }, [isInfoLoading, rwtPartialToken?.amount]);
+  }, [isInfoLoading, rwtPartialToken?.amount, toast.add]);
 
   const submit = async () => {
     try {
-      const count = getNonDecimalString(
-        formData.amount,
-        rsnToken?.decimals ?? 0,
-      );
+      const count = getNonDecimalString(formData.amount, rsnToken?.decimals ?? 0);
       const response = await trigger({
         data: { count },
         headers: {
@@ -128,10 +126,7 @@ const UnlockForm = () => {
           description: (
             <>
               Unlock operation is in progress. Wait for tx [
-              <Link
-                target="_blank"
-                href={getTxURL(NETWORKS.ergo.key, response.txId) ?? '/'}
-              >
+              <Link target="_blank" href={getTxURL(NETWORKS.ergo.key, response.txId) ?? '/'}>
                 {response.txId}
               </Link>
               ] to be confirmed by some blocks.
@@ -139,11 +134,13 @@ const UnlockForm = () => {
           ),
         });
       } else {
-        throw new Error(
-          'Server responded but the response message was unexpected',
-        );
+        throw new Error('Server responded but the response message was unexpected');
       }
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      /**
+       * TODO: remove the inline Biome comment
+       * local:ergo/rosen-bridge/ui#441
+       */
+      // biome-ignore lint/suspicious/noExplicitAny: Use a better type
     } catch (error: any) {
       if (error?.response?.status === 403) {
         toast.add({
@@ -176,8 +173,7 @@ const UnlockForm = () => {
     });
   };
 
-  const disabled =
-    isInfoLoading || isRsnTokenLoading || !rwtPartialToken?.amount;
+  const disabled = isInfoLoading || isRsnTokenLoading || !rwtPartialToken?.amount;
 
   const renderTokenAmountTextField = () => (
     <TokenAmountTextField
@@ -195,10 +191,7 @@ const UnlockForm = () => {
           <ApiKeyDialogWarning />
           {renderTokenAmountTextField()}
           <ApiKeyDialogProtectedAction>
-            <SubmitButton
-              loading={isUnlockPending}
-              disabled={!formState.isValid || disabled}
-            >
+            <SubmitButton loading={isUnlockPending} disabled={!formState.isValid || disabled}>
               Unlock
             </SubmitButton>
           </ApiKeyDialogProtectedAction>

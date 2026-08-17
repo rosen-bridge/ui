@@ -1,6 +1,6 @@
 import {
-  ChangeEvent,
-  KeyboardEvent,
+  type ChangeEvent,
+  type KeyboardEvent,
   useCallback,
   useEffect,
   useMemo,
@@ -16,9 +16,9 @@ import { IconButton } from '../../iconButton';
 import { VirtualScroll } from '../../virtualScroll';
 import { Divider } from '../Divider';
 import { Chips } from './Chips';
-import { History, HistoryRef } from './History';
+import { History, type HistoryRef } from './History';
 import { Picker } from './Picker';
-import { Filter, Input, Selected } from './types';
+import type { Filter, Input, Selected } from './types';
 import { parseFilter } from './utils';
 
 const Root = styled(Card)(({ theme }) => ({
@@ -107,7 +107,7 @@ export const SmartSearch = ({
           if (!Array.isArray(current.value)) return;
           if (!current.value.length) return;
           if (!parsed.value.length) return;
-          if (parsed.value.length != current.value.length) return;
+          if (parsed.value.length !== current.value.length) return;
         }
 
         return current;
@@ -129,9 +129,7 @@ export const SmartSearch = ({
           type: 'select',
           options: filtersInput
             .filter(
-              (flow) =>
-                !flow.unique ||
-                !selectedValidated.find((item) => item.flow == flow.name),
+              (flow) => !flow.unique || !selectedValidated.find((item) => item.flow === flow.name),
             )
             .map((flow) => ({
               label: flow.label,
@@ -156,20 +154,16 @@ export const SmartSearch = ({
           operator: current!.operator!,
         };
 
-        const input =
-          typeof flow.input === 'function' ? flow.input(context) : flow.input;
+        const input = typeof flow.input === 'function' ? flow.input(context) : flow.input;
 
         return input;
       }
     }
   }, [current, filtersInput, selectedValidated, state]);
 
-  const handleInputChange = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => {
-      setQuery(event.target.value);
-    },
-    [],
-  );
+  const handleInputChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    setQuery(event.target.value);
+  }, []);
 
   const handleInputFocus = useCallback(() => {
     clearTimeout(timeout.current);
@@ -180,7 +174,7 @@ export const SmartSearch = ({
     (event: KeyboardEvent<HTMLInputElement>) => {
       switch (event.key) {
         case 'Enter': {
-          if (state == 'flow' && !query) {
+          if (state === 'flow' && !query) {
             onChange(selected);
           }
           break;
@@ -210,8 +204,8 @@ export const SmartSearch = ({
             }
             case 'value': {
               const moreTwoSteps =
-                (filtersInput.find((flow) => flow.name == current!.flow)
-                  ?.operators.length || 0) > 1;
+                (filtersInput.find((flow) => flow.name === current!.flow)?.operators.length || 0) >
+                1;
 
               if (moreTwoSteps) {
                 setCurrent({ flow: current!.flow });
@@ -232,22 +226,14 @@ export const SmartSearch = ({
         }
       }
     },
-    [
-      current,
-      filtersInput,
-      query,
-      selected,
-      selectedValidated,
-      state,
-      onChange,
-    ],
+    [current, filtersInput, query, selected, selectedValidated, state, onChange],
   );
 
   const handlePickerSelect = useCallback(
     (value: Selected['value']) => {
-      if (state == 'idle') return;
+      if (state === 'idle') return;
 
-      if (!(state == 'value' && picker?.type == 'multiple')) {
+      if (!(state === 'value' && picker?.type === 'multiple')) {
         $anchor.current?.focus({ preventScroll: true });
       }
 
@@ -267,6 +253,8 @@ export const SmartSearch = ({
   );
 
   useEffect(() => {
+    void current;
+
     setQuery('');
   }, [current]);
 
@@ -289,10 +277,7 @@ export const SmartSearch = ({
     onChange([]);
   }, [onChange]);
 
-  const hasFilters = useMemo(
-    () => selectedValidated.length > 0,
-    [selectedValidated],
-  );
+  const hasFilters = useMemo(() => selectedValidated.length > 0, [selectedValidated]);
 
   return (
     <Root>
@@ -306,10 +291,7 @@ export const SmartSearch = ({
           onChange(selected);
         }}
       />
-      <Divider
-        orientation="vertical"
-        style={{ alignSelf: 'stretch', height: 'auto' }}
-      />
+      <Divider orientation="vertical" style={{ alignSelf: 'stretch', height: 'auto' }} />
       <VirtualScroll>
         <Container>
           <Chips
@@ -331,7 +313,7 @@ export const SmartSearch = ({
             onFocus={handleInputFocus}
             onKeyDown={handleInputKeyDown}
             onBlur={() => {
-              if (picker?.type == 'multiple') return;
+              if (picker?.type === 'multiple') return;
               timeout.current = window.setTimeout(() => {
                 setCurrent(undefined);
               }, 250);
@@ -349,14 +331,8 @@ export const SmartSearch = ({
           />
         </Container>
       </VirtualScroll>
-      {hasFilters && (
-        <CloseButton disabled={disabled} onClick={handleClearAll} />
-      )}
-      <IconButton
-        disabled={disabled}
-        ref={$search}
-        onClick={() => onChange(selected)}
-      >
+      {hasFilters && <CloseButton disabled={disabled} onClick={handleClearAll} />}
+      <IconButton disabled={disabled} ref={$search} onClick={() => onChange(selected)}>
         <Icon name="Search" />
       </IconButton>
     </Root>

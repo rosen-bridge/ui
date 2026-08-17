@@ -1,20 +1,15 @@
 import { useEffect, useRef } from 'react';
 
 import { useConfig } from '@/hooks';
-import { ElementBaseProps, OverridableType } from '@/types';
+import type { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.css';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface TableGridHeaderOverrides {}
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export type TableGridHeaderOwnProps = {};
 
-export type TableGridHeaderBaseProps = ElementBaseProps<
-  'div',
-  TableGridHeaderOwnProps
->;
+export type TableGridHeaderBaseProps = ElementBaseProps<'div', TableGridHeaderOwnProps>;
 
 export type TableGridHeaderProps = OverridableType<
   TableGridHeaderBaseProps,

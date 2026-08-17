@@ -1,6 +1,6 @@
 'use client';
 
-import { Fragment, ReactNode } from 'react';
+import { Fragment, type ReactNode } from 'react';
 
 import { Box, PageHeading, Stack, useResponsive } from '@rosen-bridge/ui-kit';
 
@@ -12,13 +12,7 @@ type LayoutProps = {
   tokens: ReactNode;
 };
 
-const Layout = ({
-  actions,
-  address,
-  infoWidgets,
-  revenue,
-  tokens,
-}: LayoutProps) => {
+const Layout = ({ actions, address, infoWidgets, revenue, tokens }: LayoutProps) => {
   const gridTemplateColumns = useResponsive({
     mobile: '1fr',
     laptop: '1fr 1fr',

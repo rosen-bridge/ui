@@ -1,37 +1,28 @@
-import { AbstractLogger } from '@rosen-bridge/abstract-logger';
-import { DiscordNotification } from '@rosen-bridge/discord-notification';
-import {
-  AbstractHealthCheckParam,
-  HealthCheck,
-  HealthStatusLevel,
-} from '@rosen-bridge/health-check';
-import { LogLevelHealthCheck } from '@rosen-bridge/log-level-check';
-import {
-  LastSavedBlock,
-  ScannerSyncHealthCheckParam,
-} from '@rosen-bridge/scanner-sync-check';
-import {
-  Dependency,
-  ServiceAction,
-  ServiceStatus,
-} from '@rosen-bridge/service-manager';
-import { NETWORKS } from '@rosen-ui/constants';
 import fs from 'node:fs';
 import path from 'node:path';
 
+import type { AbstractLogger } from '@rosen-bridge/abstract-logger';
+import { DiscordNotification } from '@rosen-bridge/discord-notification';
+import {
+  type AbstractHealthCheckParam,
+  HealthCheck,
+  type HealthCheckConfig,
+  HealthStatusLevel,
+} from '@rosen-bridge/health-check';
+import { LogLevelHealthCheck } from '@rosen-bridge/log-level-check';
+import { type LastSavedBlock, ScannerSyncHealthCheckParam } from '@rosen-bridge/scanner-sync-check';
+import { type Dependency, ServiceAction, ServiceStatus } from '@rosen-bridge/service-manager';
+import { NETWORKS } from '@rosen-ui/constants';
+
 import { configs } from '../configs';
 import {
-  ChainsKeys,
-  ChainScannersType,
-  Chains,
   BLOCK_TIMES,
-  ChainsWithScanner,
+  type ChainScannersType,
+  type Chains,
+  type ChainsKeys,
+  type ChainsWithScanner,
 } from '../types';
-import {
-  AbstractHealthService,
-  AbstractScannerService,
-  AbstractDBService,
-} from './abstracts';
+import { AbstractDBService, AbstractHealthService, AbstractScannerService } from './abstracts';
 
 export class HealthService extends AbstractHealthService {
   static serviceName = AbstractHealthService.name;
@@ -42,20 +33,12 @@ export class HealthService extends AbstractHealthService {
   protected dependencies: Dependency[] = [
     {
       serviceName: AbstractDBService.name,
-      allowedStatuses: [
-        ServiceStatus.started,
-        ServiceStatus.running,
-        ServiceStatus.dormant,
-      ],
+      allowedStatuses: [ServiceStatus.started, ServiceStatus.running, ServiceStatus.dormant],
       action: ServiceAction.assemble,
     },
     {
       serviceName: AbstractScannerService.name,
-      allowedStatuses: [
-        ServiceStatus.started,
-        ServiceStatus.running,
-        ServiceStatus.dormant,
-      ],
+      allowedStatuses: [ServiceStatus.started, ServiceStatus.running, ServiceStatus.dormant],
       action: ServiceAction.assemble,
     },
   ];
@@ -70,8 +53,8 @@ export class HealthService extends AbstractHealthService {
     this.getScanner = AbstractScannerService.getInstance().getScanner;
     this.setStatus(ServiceStatus.dormant);
 
-    let notify;
-    let notificationConfig;
+    let notify: ConstructorParameters<typeof HealthCheck>[0] | undefined;
+    let notificationConfig: HealthCheckConfig | undefined;
     if (configs.healthCheck.notification?.discordWebHookUrl != undefined) {
       const discordNotification = new DiscordNotification(
         configs.healthCheck.notification.discordWebHookUrl,
@@ -79,19 +62,14 @@ export class HealthService extends AbstractHealthService {
       notify = discordNotification.notify;
       notificationConfig = {
         historyConfig: {
-          cleanupThreshold:
-            configs.healthCheck.notification.historyCleanupTimeout,
+          cleanupThreshold: configs.healthCheck.notification.historyCleanupTimeout,
         },
         notificationCheckConfig: {
           hasBeenUnstableForAWhile: {
-            windowDuration:
-              configs.healthCheck.notification
-                .hasBeenUnstableForAWhileWindowDuration,
+            windowDuration: configs.healthCheck.notification.hasBeenUnstableForAWhileWindowDuration,
           },
           hasBeenUnknownForAWhile: {
-            windowDuration:
-              configs.healthCheck.notification
-                .hasBeenUnknownForAWhileWindowDuration,
+            windowDuration: configs.healthCheck.notification.hasBeenUnknownForAWhileWindowDuration,
           },
         },
       };
@@ -114,10 +92,7 @@ export class HealthService extends AbstractHealthService {
    * @param chain - The key of the blockchain
    * @param blockTimeAsMilliSecond - Expected average block time in milliseconds
    */
-  protected addScannerSyncParam = (
-    chain: ChainsKeys,
-    blockTimeAsMilliSecond: number,
-  ) => {
+  protected addScannerSyncParam = (chain: ChainsKeys, blockTimeAsMilliSecond: number) => {
     const scanner = this.getScanner(chain);
 
     if (!scanner) {
@@ -199,11 +174,7 @@ export class HealthService extends AbstractHealthService {
       : path.resolve(process.cwd(), configs.paths.healthReport);
 
     this.logger.debug(`Health-check status is ${JSON.stringify(healthStatus)}`);
-    fs.writeFileSync(
-      healthReportPath,
-      JSON.stringify(healthStatus, null, 2),
-      'utf8',
-    );
+    fs.writeFileSync(healthReportPath, JSON.stringify(healthStatus, null, 2), 'utf8');
   };
 
   /**

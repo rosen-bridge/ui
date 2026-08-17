@@ -13,7 +13,11 @@ const RealNode = Services.NodeBoxFetcher;
  *
  * @param returnValue mocked response for `fetchUnspentBoxesByTokenId`
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+/**
+ * TODO: remove the inline Biome comment
+ * local:ergo/rosen-bridge/ui#441
+ */
+// biome-ignore lint/suspicious/noExplicitAny: Use a better type
 export const setupNodeMock = (returnValue: any) => {
   if (returnValue instanceof Error) {
     mockFetchUnspentBoxes.mockRejectedValue(returnValue);
@@ -24,9 +28,7 @@ export const setupNodeMock = (returnValue: any) => {
     (...args: ConstructorParameters<typeof RealNode>) => {
       const instance = new RealNode(...args);
 
-      vi.spyOn(instance, 'fetchUnspentBoxesByTokenId').mockImplementation(
-        mockFetchUnspentBoxes,
-      );
+      vi.spyOn(instance, 'fetchUnspentBoxesByTokenId').mockImplementation(mockFetchUnspentBoxes);
 
       return instance;
     },

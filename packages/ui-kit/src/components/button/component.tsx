@@ -1,14 +1,13 @@
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
 import { Button as ButtonMUI } from '@mui/material';
 
 import { Link } from '@/components';
 import { useConfig } from '@/hooks';
-import { Color, ElementBaseProps, OverridableType } from '@/types';
+import type { Color, ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.css';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface ButtonOverrides {}
 
 export type ButtonOwnProps = {
@@ -25,11 +24,7 @@ export type ButtonOwnProps = {
 
 export type ButtonBaseProps = ElementBaseProps<'button', ButtonOwnProps>;
 
-export type ButtonProps = OverridableType<
-  ButtonBaseProps,
-  ButtonOverrides,
-  'color'
->;
+export type ButtonProps = OverridableType<ButtonBaseProps, ButtonOverrides, 'color'>;
 
 export const Button = (props: ButtonProps) => {
   const {
@@ -52,7 +47,11 @@ export const Button = (props: ButtonProps) => {
     <ButtonMUI
       LinkComponent={(props) => <Link underline="none" {...props} />}
       data-block={!!block}
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      /**
+       * TODO: remove the inline Biome comment
+       * local:ergo/rosen-bridge/ui#441
+       */
+      // biome-ignore lint/suspicious/noExplicitAny: Use a better type
       color={color as any}
       loading={loading}
       size={size}

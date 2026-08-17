@@ -1,7 +1,7 @@
-import { RosenChainToken } from '@rosen-bridge/tokens';
+import type { RosenChainToken } from '@rosen-bridge/tokens';
 import { CardanoNetwork } from '@rosen-network/cardano/dist/client';
 import { NETWORKS } from '@rosen-ui/constants';
-import { Network } from '@rosen-ui/types';
+import type { Network } from '@rosen-ui/types';
 import { hexToCbor } from '@rosen-ui/utils';
 import {
   SubmitTransactionError,
@@ -9,11 +9,11 @@ import {
   UserDeniedTransactionSignatureError,
   UtxoFetchError,
   Wallet,
-  WalletTransferParams,
+  type WalletTransferParams,
 } from '@rosen-ui/wallet-api';
 
 import { ICON } from './icon';
-import { EtrnlWalletConfig } from './types';
+import type { EtrnlWalletConfig } from './types';
 
 export class EtrnlWallet extends Wallet<EtrnlWalletConfig> {
   icon = ICON;
@@ -43,9 +43,7 @@ export class EtrnlWallet extends Wallet<EtrnlWalletConfig> {
     return await wallet.getChangeAddress();
   };
 
-  fetchBalance = async (
-    token: RosenChainToken,
-  ): Promise<bigint | undefined> => {
+  fetchBalance = async (token: RosenChainToken): Promise<bigint | undefined> => {
     if (!(this.currentNetwork instanceof CardanoNetwork)) {
       throw new UnsupportedChainError(this.name, this.currentChain);
     }
@@ -59,8 +57,7 @@ export class EtrnlWallet extends Wallet<EtrnlWalletConfig> {
     const amount = balances.find(
       (asset) =>
         asset.policyId === token.extra.policyId &&
-        (asset.nameHex === hexToCbor(token.extra.assetName as string) ||
-          !token.extra.policyId),
+        (asset.nameHex === hexToCbor(token.extra.assetName as string) || !token.extra.policyId),
     );
 
     return amount?.quantity;
@@ -83,14 +80,13 @@ export class EtrnlWallet extends Wallet<EtrnlWalletConfig> {
 
     const changeAddressHex = await this.getAddress();
 
-    const auxiliaryDataHex =
-      await this.currentNetwork.generateLockAuxiliaryData(
-        params.toChain,
-        params.address,
-        changeAddressHex,
-        params.networkFee.toString(),
-        params.bridgeFee.toString(),
-      );
+    const auxiliaryDataHex = await this.currentNetwork.generateLockAuxiliaryData(
+      params.toChain,
+      params.address,
+      changeAddressHex,
+      params.networkFee.toString(),
+      params.bridgeFee.toString(),
+    );
 
     const walletUtxos = await wallet.getUtxos();
 
@@ -114,10 +110,7 @@ export class EtrnlWallet extends Wallet<EtrnlWalletConfig> {
       throw new UserDeniedTransactionSignatureError(this.name, error);
     }
 
-    const signedTxHex = await this.currentNetwork.setTxWitnessSet(
-      unsignedTxHex,
-      witnessSetHex,
-    );
+    const signedTxHex = await this.currentNetwork.setTxWitnessSet(unsignedTxHex, witnessSetHex);
 
     try {
       return await wallet.submitTx(signedTxHex);

@@ -1,6 +1,6 @@
-import { createContext, ReactNode } from 'react';
+import { createContext, type ReactNode } from 'react';
 
-import { Components } from './ConfigProvider.components';
+import type { Components } from './ConfigProvider.components';
 
 export type ConfigContextType = ConfigProviderProps['configs'];
 
@@ -20,7 +20,5 @@ export type ConfigProviderProps = {
 };
 
 export const ConfigProvider = ({ children, configs }: ConfigProviderProps) => {
-  return (
-    <ConfigContext.Provider value={configs}>{children}</ConfigContext.Provider>
-  );
+  return <ConfigContext.Provider value={configs}>{children}</ConfigContext.Provider>;
 };

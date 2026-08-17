@@ -1,11 +1,11 @@
-import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
+import { type AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
 import { BlockDbAction } from '@rosen-bridge/abstract-scanner';
-import { DataSource } from '@rosen-bridge/extended-typeorm';
+import type { DataSource } from '@rosen-bridge/extended-typeorm';
 import {
-  MetricAction,
-  METRIC_KEYS,
+  type AggregatedEvents,
   EventCountMetricAction,
-  AggregatedEvents,
+  METRIC_KEYS,
+  MetricAction,
 } from '@rosen-ui/rosen-statistics-entity';
 
 /**
@@ -20,20 +20,10 @@ export const eventCountMetric = async (
 ): Promise<void> => {
   logger.debug('Starting event count metric calculation job');
 
-  const eventCountAction = new EventCountMetricAction(
-    dataSource,
-    logger.child('eventCountAction'),
-  );
-  const metricAction = new MetricAction(
-    dataSource,
-    logger.child('metricAction'),
-  );
+  const eventCountAction = new EventCountMetricAction(dataSource, logger.child('eventCountAction'));
+  const metricAction = new MetricAction(dataSource, logger.child('metricAction'));
 
-  const blockDbAction = new BlockDbAction(
-    dataSource,
-    'ergo',
-    logger.child('blockDbAction'),
-  );
+  const blockDbAction = new BlockDbAction(dataSource, 'ergo', logger.child('blockDbAction'));
 
   try {
     const lastBlock = await blockDbAction.getLastSavedBlock();
@@ -72,17 +62,10 @@ export const eventCountMetric = async (
       });
     }
 
-    const totalExistingEvent = await metricAction.getMetricByKey(
-      METRIC_KEYS.EVENT_COUNT_TOTAL,
-    );
-    const existingTotalCount = totalExistingEvent
-      ? Number(totalExistingEvent.value)
-      : 0;
+    const totalExistingEvent = await metricAction.getMetricByKey(METRIC_KEYS.EVENT_COUNT_TOTAL);
+    const existingTotalCount = totalExistingEvent ? Number(totalExistingEvent.value) : 0;
 
-    await eventCountAction.upsertEventsCount(
-      aggregatedEvents,
-      newTotalCount + existingTotalCount,
-    );
+    await eventCountAction.upsertEventsCount(aggregatedEvents, newTotalCount + existingTotalCount);
 
     logger.debug('Event count metric calculation job completed successfully');
   } catch (error) {

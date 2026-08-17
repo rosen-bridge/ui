@@ -1,16 +1,16 @@
-import { useState } from 'react';
-import React from 'react';
+import React, { useState } from 'react';
 
-import { RosenChainToken } from '@rosen-bridge/tokens';
+import * as Sentry from '@sentry/nextjs';
+import { serializeError } from 'serialize-error';
+
+import type { RosenChainToken } from '@rosen-bridge/tokens';
 import { useToast } from '@rosen-bridge/ui-kit';
 import { InsufficientAssetsError } from '@rosen-network/base/dist/handleUncoveredAssets';
 import { getNonDecimalString, getTxURL } from '@rosen-ui/utils';
 import {
   UserDeniedTransactionSignatureError,
-  WalletTransferParams,
+  type WalletTransferParams,
 } from '@rosen-ui/wallet-api';
-import * as Sentry from '@sentry/nextjs';
-import { serializeError } from 'serialize-error';
 
 import { useNetwork } from './useNetwork';
 import { useTokenMap } from './useTokenMap';
@@ -30,13 +30,8 @@ export const useTransaction = () => {
 
   const { networkFee, bridgeFee } = useTransactionFees();
 
-  const {
-    sourceValue,
-    targetValue,
-    tokenValue,
-    amountValue,
-    walletAddressValue,
-  } = useTransactionFormData();
+  const { sourceValue, targetValue, tokenValue, amountValue, walletAddressValue } =
+    useTransactionFormData();
 
   const { selected: selectedWallet } = useWallet();
 
@@ -60,7 +55,7 @@ export const useTransaction = () => {
 
     setIsSubmitting(true);
 
-    let parameters: WalletTransferParams | undefined = undefined;
+    let parameters: WalletTransferParams | undefined;
 
     try {
       parameters = {
@@ -107,8 +102,11 @@ export const useTransaction = () => {
           ' to see more details.',
         ]),
       });
-
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      /**
+       * TODO: remove the inline Biome comment
+       * local:ergo/rosen-bridge/ui#441
+       */
+      // biome-ignore lint/suspicious/noExplicitAny: Use a better type
     } catch (error: any) {
       toast.add({
         type: 'error',

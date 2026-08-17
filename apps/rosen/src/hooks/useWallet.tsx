@@ -1,6 +1,6 @@
 import {
-  PropsWithChildren,
   createContext,
+  type PropsWithChildren,
   useCallback,
   useContext,
   useEffect,
@@ -9,7 +9,7 @@ import {
 } from 'react';
 
 import { useToast } from '@rosen-bridge/ui-kit';
-import { Wallet } from '@rosen-ui/wallet-api';
+import type { Wallet } from '@rosen-ui/wallet-api';
 
 import * as wallets from '@/wallets';
 
@@ -29,12 +29,7 @@ export const useWallet = () => {
   return context;
 };
 
-type WalletState =
-  | 'IDLE'
-  | 'DISCONNECTING'
-  | 'DISCONNECTED'
-  | 'CONNECTING'
-  | 'CONNECTED';
+type WalletState = 'IDLE' | 'DISCONNECTING' | 'DISCONNECTED' | 'CONNECTING' | 'CONNECTED';
 
 export type WalletContextType = {
   select: (wallet: Wallet) => Promise<void>;
@@ -76,7 +71,11 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
         await wallet.switchChain(selectedSource.name);
 
         await wallet.getAddress();
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        /**
+         * TODO: remove the inline Biome comment
+         * local:ergo/rosen-bridge/ui#441
+         */
+        // biome-ignore lint/suspicious/noExplicitAny: Use a better type
       } catch (error: any) {
         setState('DISCONNECTED');
         toast.add({
@@ -89,9 +88,9 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
       setSelected(wallet);
       setState('CONNECTED');
 
-      localStorage.setItem('rosen:wallet:' + selectedSource.name, wallet.name);
+      localStorage.setItem(`rosen:wallet:${selectedSource.name}`, wallet.name);
     },
-    [selectedSource, toast.add, setSelected, setState],
+    [selectedSource, toast.add],
   );
 
   const disconnect = useCallback(async () => {
@@ -107,7 +106,7 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
       //
     }
 
-    localStorage.removeItem('rosen:wallet:' + selectedSource.name);
+    localStorage.removeItem(`rosen:wallet:${selectedSource.name}`);
 
     setSelected(undefined);
     setState('DISCONNECTED');
@@ -122,13 +121,11 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
 
       setState('DISCONNECTED');
 
-      const name = localStorage.getItem('rosen:wallet:' + selectedSource.name);
+      const name = localStorage.getItem(`rosen:wallet:${selectedSource.name}`);
 
       if (!name) return;
 
-      const wallet = Object.values(wallets).find(
-        (wallet) => wallet.name == name,
-      );
+      const wallet = Object.values(wallets).find((wallet) => wallet.name === name);
 
       if (!wallet) return;
 
@@ -159,7 +156,7 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
         console.log(error);
       }
     })();
-  }, [selectedSource, setSelected, setState]);
+  }, [selectedSource]);
 
   const value = useMemo(
     () => ({
@@ -172,7 +169,5 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
     [select, selected, state, filtered, disconnect],
   );
 
-  return (
-    <WalletContext.Provider value={value}>{children}</WalletContext.Provider>
-  );
+  return <WalletContext.Provider value={value}>{children}</WalletContext.Provider>;
 };

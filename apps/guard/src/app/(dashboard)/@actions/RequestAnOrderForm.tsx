@@ -1,26 +1,27 @@
 import { useState } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
+
+import { type SubmitHandler, useForm } from 'react-hook-form';
+import useSWRMutation from 'swr/mutation';
 
 import {
   Alert,
-  AlertProps,
+  type AlertProps,
   ApiKeyDialogWarning,
   Card,
+  CardBody,
+  CardHeader,
+  CardTitle,
+  MenuItemMui,
+  Stack,
   SubmitButton,
   TextField,
   useApiKey,
-  CardHeader,
-  CardTitle,
-  CardBody,
-  Stack,
-  MenuItemMui,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS, NETWORKS_KEYS } from '@rosen-ui/constants';
 import { mutatorWithHeaders } from '@rosen-ui/swr-helpers';
-import { Network } from '@rosen-ui/types';
-import useSWRMutation from 'swr/mutation';
+import type { Network } from '@rosen-ui/types';
 
-import { ApiOrderRequestBody, ApiOrderResponse } from '@/types/api';
+import type { ApiOrderRequestBody, ApiOrderResponse } from '@/types/api';
 
 interface Form {
   id: string;
@@ -34,7 +35,11 @@ export const RequestAnOrderForm = () => {
   const {
     trigger,
     isMutating: isOrderPending,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    /**
+     * TODO: remove the inline Biome comment
+     * local:ergo/rosen-bridge/ui#441
+     */
+    // biome-ignore lint/suspicious/noExplicitAny: Use a better type
   } = useSWRMutation<ApiOrderResponse, any, '/order', ApiOrderRequestBody>(
     '/order',
     mutatorWithHeaders,
@@ -71,11 +76,13 @@ export const RequestAnOrderForm = () => {
         });
         reset();
       } else {
-        throw new Error(
-          'Server responded but the response message was unexpected',
-        );
+        throw new Error('Server responded but the response message was unexpected');
       }
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      /**
+       * TODO: remove the inline Biome comment
+       * local:ergo/rosen-bridge/ui#441
+       */
+      // biome-ignore lint/suspicious/noExplicitAny: Use a better type
     } catch (error: any) {
       if (error?.response?.status === 403) {
         setAlertData({
@@ -130,12 +137,7 @@ export const RequestAnOrderForm = () => {
               ))}
             </TextField>
 
-            <TextField
-              label="Order"
-              multiline
-              rows={5}
-              {...register('orderJson')}
-            />
+            <TextField label="Order" multiline rows={5} {...register('orderJson')} />
 
             <SubmitButton loading={isOrderPending} disabled={!apiKey}>
               Send

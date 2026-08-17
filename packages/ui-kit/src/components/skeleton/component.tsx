@@ -1,11 +1,10 @@
 import { useMemo } from 'react';
 
 import { useConfig } from '@/hooks';
-import { ElementBaseProps, OverridableType } from '@/types';
+import type { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.css';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface SkeletonOverrides {}
 
 export type SkeletonOwnProps = {
@@ -17,11 +16,7 @@ export type SkeletonOwnProps = {
 
 export type SkeletonBaseProps = ElementBaseProps<'span', SkeletonOwnProps>;
 
-export type SkeletonProps = OverridableType<
-  SkeletonBaseProps,
-  SkeletonOverrides,
-  never
->;
+export type SkeletonProps = OverridableType<SkeletonBaseProps, SkeletonOverrides, never>;
 
 export const Skeleton = (props: SkeletonProps) => {
   const {
@@ -44,12 +39,7 @@ export const Skeleton = (props: SkeletonProps) => {
 
   return (
     <>
-      <span
-        data-attached={!!attached}
-        data-variant={variant}
-        style={styles}
-        {...rest}
-      >
+      <span data-attached={!!attached} data-variant={variant} style={styles} {...rest}>
         &nbsp;
       </span>
       {attached && <>&nbsp;</>}

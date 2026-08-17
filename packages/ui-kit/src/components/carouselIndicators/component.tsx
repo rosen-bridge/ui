@@ -2,20 +2,15 @@ import { useMemo } from 'react';
 
 import { useCarousel } from '@/components';
 import { useConfig } from '@/hooks';
-import { ElementBaseProps, OverridableType } from '@/types';
+import type { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.css';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface CarouselIndicatorsOverrides {}
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export type CarouselIndicatorsOwnProps = {};
 
-export type CarouselIndicatorsBaseProps = ElementBaseProps<
-  'div',
-  CarouselIndicatorsOwnProps
->;
+export type CarouselIndicatorsBaseProps = ElementBaseProps<'div', CarouselIndicatorsOwnProps>;
 
 export type CarouselIndicatorsProps = OverridableType<
   CarouselIndicatorsBaseProps,

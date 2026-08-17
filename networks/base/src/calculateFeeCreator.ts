@@ -1,10 +1,10 @@
 import {
-  ChainMinimumFee,
+  type ChainMinimumFee,
   decodeRegister,
   MinimumFeeBox,
   MinimumFeeExplorerNetwork,
 } from '@rosen-bridge/extended-minimum-fee';
-import { Network } from '@rosen-ui/types';
+import type { Network } from '@rosen-ui/types';
 
 export type CalculateFee = (
   targetNetwork: Network,
@@ -16,10 +16,7 @@ export type CalculateFee = (
   nextFees: ChainMinimumFee;
 }>;
 
-export const calculateFeeCreator = (
-  sourceNetwork: Network,
-  getHeight: () => Promise<number>,
-) => {
+export const calculateFeeCreator = (sourceNetwork: Network, getHeight: () => Promise<number>) => {
   return async (
     targetNetwork: Network,
     tokenId: string,
@@ -43,11 +40,7 @@ export const calculateFeeCreator = (
 
     const [fees, nextFees] = await Promise.all([
       minFeeBox.getFee(sourceNetwork, height, targetNetwork),
-      minFeeBox.getFee(
-        sourceNetwork,
-        height + nextHeightInterval,
-        targetNetwork,
-      ),
+      minFeeBox.getFee(sourceNetwork, height + nextHeightInterval, targetNetwork),
     ]);
 
     return {

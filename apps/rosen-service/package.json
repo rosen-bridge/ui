@@ -12,11 +12,10 @@
   "main": "dist/main.js",
   "types": "dist/main.d.ts",
   "scripts": {
+    "bootstrap": "turbo build --filter=@rosen-bridge/rosen-service^...",
     "get-config": "npx @rosen-bridge/cli download-assets --chain-type public-launch --out config",
-    "lint": "eslint --fix . && npm run prettify",
-    "lint:check": "eslint . && npm run prettify:check",
-    "prettify": "prettier --write . --ignore-path ../../.gitignore",
-    "prettify:check": "prettier --check . --ignore-path ../../.gitignore",
+    "lint": "biome check --write",
+    "lint:check": "biome check",
     "start": "tsx watch ./src/main.ts",
     "start:prod": "tsx ./src/main.ts",
     "type-check": "tsc --noEmit",
@@ -55,11 +54,11 @@
     "@rosen-ui/data-source": "^0.2.7",
     "config": "^3.3.12",
     "ethers": "6.16.0",
-    "pg": "^8.11.3"
+    "pg": "^8.11.3",
+    "tsx": "^4.19.2"
   },
   "devDependencies": {
-    "@types/config": "^0.0.41",
-    "tsx": "^4.19.2"
+    "@types/config": "^0.0.41"
   },
   "engines": {
     "node": ">=22.18.0",

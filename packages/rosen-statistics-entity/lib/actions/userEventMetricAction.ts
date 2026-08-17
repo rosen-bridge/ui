@@ -1,10 +1,10 @@
-import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
-import { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
+import { type AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
+import type { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
 import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
 
 import { METRIC_KEYS } from '../constants';
 import { MetricEntity, UserEventEntity } from '../entities';
-import { AggregatedUserEvents } from '../types';
+import type { AggregatedUserEvents } from '../types';
 
 export class UserEventMetricAction {
   private readonly eventTriggerRepo: Repository<EventTriggerEntity>;
@@ -112,16 +112,12 @@ export class UserEventMetricAction {
    * @param  aggregatedUsersEvents - An array of aggregated users events to upsert.
    * @returns A Promise that resolves when the upsert is completed.
    */
-  upsertUserEventsCount = async (
-    aggregatedUsersEvents: AggregatedUserEvents[],
-  ): Promise<void> => {
-    const queryRunner =
-      this.userEventRepo.manager.connection.createQueryRunner();
+  upsertUserEventsCount = async (aggregatedUsersEvents: AggregatedUserEvents[]): Promise<void> => {
+    const queryRunner = this.userEventRepo.manager.connection.createQueryRunner();
     try {
       await queryRunner.startTransaction();
 
-      const userEventCountRepo =
-        queryRunner.manager.getRepository(UserEventEntity);
+      const userEventCountRepo = queryRunner.manager.getRepository(UserEventEntity);
       const metricRepo = queryRunner.manager.getRepository(MetricEntity);
 
       await userEventCountRepo.upsert(aggregatedUsersEvents, [

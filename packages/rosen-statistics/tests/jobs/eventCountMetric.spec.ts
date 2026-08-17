@@ -1,13 +1,10 @@
-import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
+import { beforeEach, describe, expect, it } from 'vitest';
+
+import { type AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
 import { BlockEntity } from '@rosen-bridge/abstract-scanner';
-import { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
+import type { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
 import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
-import {
-  METRIC_KEYS,
-  MetricEntity,
-  EventCountEntity,
-} from '@rosen-ui/rosen-statistics-entity';
-import { describe, it, expect, beforeEach } from 'vitest';
+import { EventCountEntity, METRIC_KEYS, MetricEntity } from '@rosen-ui/rosen-statistics-entity';
 
 import { eventCountMetric } from '../../lib';
 import { eventCountTestData } from '../testData';
@@ -65,18 +62,10 @@ describe('eventCountMetric', () => {
     expect(metric?.value).toBe(testData.expectedResults.totalMetricValue);
 
     const actualEventCounts = await eventCountRepo.find({
-      select: [
-        'fromChain',
-        'toChain',
-        'eventCount',
-        'status',
-        'lastProcessedHeight',
-      ],
+      select: ['fromChain', 'toChain', 'eventCount', 'status', 'lastProcessedHeight'],
     });
 
-    expect(actualEventCounts).toHaveLength(
-      testData.expectedResults.eventCounts.length,
-    );
+    expect(actualEventCounts).toHaveLength(testData.expectedResults.eventCounts.length);
 
     expect(actualEventCounts).toEqual(testData.expectedResults.eventCounts);
   });
@@ -114,18 +103,10 @@ describe('eventCountMetric', () => {
     expect(metric?.value).toBe(testData.expectedResults.totalMetricValue);
 
     const actualEventCounts = await eventCountRepo.find({
-      select: [
-        'fromChain',
-        'toChain',
-        'eventCount',
-        'status',
-        'lastProcessedHeight',
-      ],
+      select: ['fromChain', 'toChain', 'eventCount', 'status', 'lastProcessedHeight'],
     });
 
-    expect(actualEventCounts).toHaveLength(
-      testData.expectedResults.eventCounts.length,
-    );
+    expect(actualEventCounts).toHaveLength(testData.expectedResults.eventCounts.length);
 
     expect(actualEventCounts).toEqual(testData.expectedResults.eventCounts);
   });
@@ -159,18 +140,10 @@ describe('eventCountMetric', () => {
     expect(metric?.value).toBe(testData.expectedResults.totalMetricValue);
 
     const actualEventCounts = await eventCountRepo.find({
-      select: [
-        'fromChain',
-        'toChain',
-        'eventCount',
-        'status',
-        'lastProcessedHeight',
-      ],
+      select: ['fromChain', 'toChain', 'eventCount', 'status', 'lastProcessedHeight'],
     });
 
-    expect(actualEventCounts).toHaveLength(
-      testData.expectedResults.eventCounts.length,
-    );
+    expect(actualEventCounts).toHaveLength(testData.expectedResults.eventCounts.length);
 
     expect(actualEventCounts).toEqual(testData.expectedResults.eventCounts);
   });

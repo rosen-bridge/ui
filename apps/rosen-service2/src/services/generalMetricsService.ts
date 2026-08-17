@@ -1,17 +1,13 @@
-import { AbstractLogger } from '@rosen-bridge/abstract-logger';
-import { DataSource } from '@rosen-bridge/extended-typeorm';
-import {
-  Dependency,
-  ServiceAction,
-  ServiceStatus,
-} from '@rosen-bridge/service-manager';
+import type { AbstractLogger } from '@rosen-bridge/abstract-logger';
+import type { DataSource } from '@rosen-bridge/extended-typeorm';
+import { type Dependency, ServiceAction, ServiceStatus } from '@rosen-bridge/service-manager';
 import { generalMetrics } from '@rosen-ui/rosen-statistics';
 
 import { configs } from '../configs';
 import {
+  AbstractDBService,
   AbstractGeneralMetricsService,
   AbstractTokenMapService,
-  AbstractDBService,
 } from './abstracts';
 
 export class GeneralMetricsService extends AbstractGeneralMetricsService {
@@ -20,11 +16,7 @@ export class GeneralMetricsService extends AbstractGeneralMetricsService {
   protected dependencies: Dependency[] = [
     {
       serviceName: AbstractDBService.name,
-      allowedStatuses: [
-        ServiceStatus.running,
-        ServiceStatus.started,
-        ServiceStatus.dormant,
-      ],
+      allowedStatuses: [ServiceStatus.running, ServiceStatus.started, ServiceStatus.dormant],
       action: ServiceAction.assemble,
     },
     {
@@ -85,9 +77,7 @@ export class GeneralMetricsService extends AbstractGeneralMetricsService {
         this.logger.child('generalMetricsJob'),
       );
 
-      this.logger.info(
-        'General metrics calculation job completed successfully',
-      );
+      this.logger.info('General metrics calculation job completed successfully');
     } catch (error) {
       this.logger.error(`General metrics calculation job failed: ${error}`);
       if (error instanceof Error && error.stack) {

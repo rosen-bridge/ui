@@ -4,18 +4,13 @@ import { Alert } from '@mui/material';
 
 import { ApiKeyDialog, Button } from '@/components';
 import { useApiKey, useConfig } from '@/hooks';
-import { ElementBaseProps, OverridableType } from '@/types';
+import type { ElementBaseProps, OverridableType } from '@/types';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface ApiKeyDialogWarningOverrides {}
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export type ApiKeyDialogWarningOwnProps = {};
 
-export type ApiKeyDialogWarningBaseProps = ElementBaseProps<
-  'div',
-  ApiKeyDialogWarningOwnProps
->;
+export type ApiKeyDialogWarningBaseProps = ElementBaseProps<'div', ApiKeyDialogWarningOwnProps>;
 
 export type ApiKeyDialogWarningProps = OverridableType<
   ApiKeyDialogWarningBaseProps,
@@ -30,10 +25,7 @@ export const ApiKeyDialogWarning = (props: ApiKeyDialogWarningProps) => {
 
   const [isOpen, setIsOpen] = useState(false);
 
-  const styles = useMemo(
-    () => ({ containerType: 'inline-size', ...style }),
-    [style],
-  );
+  const styles = useMemo(() => ({ containerType: 'inline-size', ...style }), [style]);
 
   if (apiKey) return null;
 

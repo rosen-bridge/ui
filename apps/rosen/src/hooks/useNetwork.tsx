@@ -1,6 +1,6 @@
 import {
-  ReactNode,
   createContext,
+  type ReactNode,
   useCallback,
   useContext,
   useEffect,
@@ -8,10 +8,10 @@ import {
   useState,
 } from 'react';
 
-import { RosenChainToken } from '@rosen-bridge/tokens';
-import { Network } from '@rosen-network/base';
+import type { RosenChainToken } from '@rosen-bridge/tokens';
+import type { Network } from '@rosen-network/base';
 import { NETWORKS } from '@rosen-ui/constants';
-import { Network as NetworkKey } from '@rosen-ui/types';
+import type { Network as NetworkKey } from '@rosen-ui/types';
 
 import * as networks from '@/networks';
 
@@ -65,9 +65,7 @@ export const NetworkProvider = ({ children }: { children: ReactNode }) => {
         .map((raw) => raw.trim())
         .filter(Boolean)
         .map((raw) => {
-          const [fromChain, toChain, tokenName] = raw
-            .split(',')
-            .map((value) => value.trim());
+          const [fromChain, toChain, tokenName] = raw.split(',').map((value) => value.trim());
           return {
             fromChain,
             toChain,
@@ -78,9 +76,7 @@ export const NetworkProvider = ({ children }: { children: ReactNode }) => {
   );
 
   const getNetwork = useCallback((name: NetworkKey) => {
-    return Object.values<Network>(networks).find(
-      (wallet) => wallet.name == name,
-    );
+    return Object.values<Network>(networks).find((wallet) => wallet.name === name);
   }, []);
 
   /**
@@ -138,7 +134,7 @@ export const NetworkProvider = ({ children }: { children: ReactNode }) => {
                 [fromChain, item.fromChain],
                 [toChain, item.toChain],
                 [token.name, item.tokenName],
-              ].some(([a, b]) => b != a && b != '*'),
+              ].some(([a, b]) => b !== a && b !== '*'),
           );
 
           if (isBlocked) continue;
@@ -146,13 +142,13 @@ export const NetworkProvider = ({ children }: { children: ReactNode }) => {
 
           if (sourceNetwork) sources.add(sourceNetwork);
 
-          if (sourceField.value != fromChain) continue;
+          if (sourceField.value !== fromChain) continue;
 
           const targetNetwork = getNetwork(toChain as NetworkKey);
 
           if (targetNetwork) targets.add(targetNetwork);
 
-          if (targetField.value != toChain) continue;
+          if (targetField.value !== toChain) continue;
 
           tokens.add(token);
         }
@@ -177,7 +173,5 @@ export const NetworkProvider = ({ children }: { children: ReactNode }) => {
     availableTokens,
   };
 
-  return (
-    <NetworkContext.Provider value={state}>{children}</NetworkContext.Provider>
-  );
+  return <NetworkContext.Provider value={state}>{children}</NetworkContext.Provider>;
 };

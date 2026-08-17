@@ -1,6 +1,6 @@
-import { BoxEntity } from '@rosen-bridge/address-extractor';
-import { DataSource } from '@rosen-bridge/extended-typeorm';
-import { LastSavedBlock } from '@rosen-bridge/scanner-sync-check';
+import type { BoxEntity } from '@rosen-bridge/address-extractor';
+import type { DataSource } from '@rosen-bridge/extended-typeorm';
+import type { LastSavedBlock } from '@rosen-bridge/scanner-sync-check';
 import { AbstractService } from '@rosen-bridge/service-manager';
 
 export abstract class AbstractDBService extends AbstractService {

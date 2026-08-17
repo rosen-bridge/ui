@@ -1,26 +1,25 @@
 import {
   Amount,
-  AmountProps,
+  type AmountProps,
   Card,
   CardBody,
   Connector,
   EventStatus,
-  EventStatusProps,
+  type EventStatusProps,
   Identifier,
-  IdentifierProps,
+  type IdentifierProps,
   Network,
-  NetworkProps,
+  type NetworkProps,
   RelativeTime,
-  RelativeTimeProps,
+  type RelativeTimeProps,
   Token,
-  TokenProps,
+  type TokenProps,
 } from '@/components';
 import { useConfig } from '@/hooks';
-import { ElementBaseProps, OverridableType } from '@/types';
+import type { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.css';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface EventCardOverrides {}
 
 export type EventCardOwnProps = {
@@ -39,16 +38,9 @@ export type EventCardOwnProps = {
   };
 };
 
-export type EventCardBaseProps = ElementBaseProps<
-  typeof Card,
-  EventCardOwnProps
->;
+export type EventCardBaseProps = ElementBaseProps<typeof Card, EventCardOwnProps>;
 
-export type EventCardProps = OverridableType<
-  EventCardBaseProps,
-  EventCardOverrides,
-  never
->;
+export type EventCardProps = OverridableType<EventCardBaseProps, EventCardOverrides, never>;
 
 export const EventCard = (props: EventCardProps) => {
   const { loading, value, ...rest } = useConfig('EventCard', props);
@@ -81,20 +73,8 @@ export const EventCard = (props: EventCardProps) => {
         <div className="RosenEventCard-footer">
           <Connector
             variant="filled"
-            start={
-              <Network
-                loading={loading}
-                value={value?.fromChain}
-                variant="logo"
-              />
-            }
-            end={
-              <Network
-                loading={loading}
-                value={value?.toChain}
-                variant="logo"
-              />
-            }
+            start={<Network loading={loading} value={value?.fromChain} variant="logo" />}
+            end={<Network loading={loading} value={value?.toChain} variant="logo" />}
           />
           <EventStatus loading={loading} value={value?.status} />
         </div>

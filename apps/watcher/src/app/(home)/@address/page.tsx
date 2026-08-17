@@ -1,16 +1,11 @@
 'use client';
 
-import {
-  Card,
-  CardBody,
-  CardHeader,
-  CardTitle,
-  Identifier,
-} from '@rosen-bridge/ui-kit';
-import { fetcher } from '@rosen-ui/swr-helpers';
 import useSWR from 'swr';
 
-import { ApiInfoResponse } from '@/types/api';
+import { Card, CardBody, CardHeader, CardTitle, Identifier } from '@rosen-bridge/ui-kit';
+import { fetcher } from '@rosen-ui/swr-helpers';
+
+import type { ApiInfoResponse } from '@/types/api';
 
 const Address = () => {
   const { data, isLoading } = useSWR<ApiInfoResponse>('/info', fetcher);

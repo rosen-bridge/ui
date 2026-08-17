@@ -1,16 +1,17 @@
 import * as wasm from '@emurgo/cardano-serialization-lib-nodejs';
+
 import {
-  AssetBalance,
-  CardanoUtxo,
+  type AssetBalance,
   CardanoBoxSelection,
+  type CardanoUtxo,
 } from '@rosen-bridge/cardano-utxo-selection';
-import { TokenMap } from '@rosen-bridge/tokens';
+import type { TokenMap } from '@rosen-bridge/tokens';
 import { handleUncoveredAssets } from '@rosen-network/base';
 import { NETWORKS } from '@rosen-ui/constants';
-import { RosenAmountValue } from '@rosen-ui/types';
+import type { RosenAmountValue } from '@rosen-ui/types';
 
 import { feeAndMinBoxValue } from './constants';
-import { ADA_POLICY_ID, CardanoProtocolParams } from './types';
+import { ADA_POLICY_ID, type CardanoProtocolParams } from './types';
 import {
   generateOutputBox,
   getCardanoProtocolParams,
@@ -68,11 +69,7 @@ export const generateUnsignedTx =
         value: unwrappedAmount,
       });
     }
-    const lockBox = generateOutputBox(
-      lockAssets,
-      lockAddress,
-      protocolParams.coins_per_utxo_size,
-    );
+    const lockBox = generateOutputBox(lockAssets, lockAddress, protocolParams.coins_per_utxo_size);
 
     // calculate required assets to get input boxes
     lockAssets.nativeToken = BigInt(lockBox.amount().coin().to_str());
@@ -92,11 +89,7 @@ export const generateUnsignedTx =
       () => 0n,
     );
     if (!inputs.covered) {
-      handleUncoveredAssets(
-        tokenMap,
-        NETWORKS.cardano.key,
-        inputs.uncoveredAssets,
-      );
+      handleUncoveredAssets(tokenMap, NETWORKS.cardano.key, inputs.uncoveredAssets);
     }
 
     return generateTx(
@@ -139,16 +132,10 @@ const generateTx = (
   fee?: bigint,
 ): string => {
   const auxiliaryData = wasm.AuxiliaryData.from_hex(auxiliaryDataHex);
-  const txBuilder = wasm.TransactionBuilder.new(
-    getTxBuilderConfig(protocolParams),
-  );
+  const txBuilder = wasm.TransactionBuilder.new(getTxBuilderConfig(protocolParams));
 
   // generate lock box
-  const lockBox = generateOutputBox(
-    lockAssets,
-    lockAddress,
-    protocolParams.coins_per_utxo_size,
-  );
+  const lockBox = generateOutputBox(lockAssets, lockAddress, protocolParams.coins_per_utxo_size);
 
   // add lock box to tx and calculate required assets to get input boxes
   lockAssets.nativeToken = BigInt(lockBox.amount().coin().to_str());
@@ -172,10 +159,7 @@ const generateTx = (
     }
     txBuilder.add_regular_input(
       wasm.Address.from_bech32(utxo.address),
-      wasm.TransactionInput.new(
-        wasm.TransactionHash.from_hex(utxo.txId),
-        utxo.index,
-      ),
+      wasm.TransactionInput.new(wasm.TransactionHash.from_hex(utxo.txId), utxo.index),
       lockBox.amount(),
     );
   });

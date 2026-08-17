@@ -1,8 +1,8 @@
-import { Repository } from '@rosen-bridge/extended-typeorm';
-import {
+import type { Repository } from '@rosen-bridge/extended-typeorm';
+import type {
+  AggregatedStatusChangedEntity,
   AggregateEventStatus,
   AggregateTxStatus,
-  AggregatedStatusChangedEntity,
 } from '@rosen-ui/public-status';
 
 class AggregatedStatusChangedAction {
@@ -14,8 +14,7 @@ class AggregatedStatusChangedAction {
    * initialize AggregatedStatusChangedAction
    */
   static init = () => {
-    AggregatedStatusChangedAction.instance =
-      new AggregatedStatusChangedAction();
+    AggregatedStatusChangedAction.instance = new AggregatedStatusChangedAction();
   };
 
   /**
@@ -24,9 +23,7 @@ class AggregatedStatusChangedAction {
    */
   static getInstance = () => {
     if (!AggregatedStatusChangedAction.instance)
-      throw Error(
-        `AggregatedStatusChangedAction should have been initialized before getInstance`,
-      );
+      throw Error(`AggregatedStatusChangedAction should have been initialized before getInstance`);
     return AggregatedStatusChangedAction.instance;
   };
 

@@ -1,15 +1,9 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { Icon } from '../../icon';
-import {
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-} from '../Mui';
+import { List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '../Mui';
 import { Popup } from './Popup';
-import { Input, SelectOption, Selected } from './types';
+import type { Input, Selected, SelectOption } from './types';
 
 export type PickerProps = {
   anchorEl?: HTMLInputElement | null;
@@ -20,21 +14,12 @@ export type PickerProps = {
   onSelect?: (value: Selected['value']) => void;
 };
 
-export const Picker = ({
-  anchorEl,
-  open,
-  query,
-  value,
-  onClose,
-  onSelect,
-}: PickerProps) => {
+export const Picker = ({ anchorEl, open, query, value, onClose, onSelect }: PickerProps) => {
   const lastMoveRef = useRef(0);
 
   const [indexSelected, setIndexSelected] = useState(-1);
 
-  const [items, setItems] = useState(
-    new Set<string | number | boolean | null>(),
-  );
+  const [items, setItems] = useState(new Set<string | number | boolean | null>());
 
   const itemRefs = useRef<Array<HTMLDivElement | null>>([]);
 
@@ -111,7 +96,7 @@ export const Picker = ({
         event.preventDefault();
       }
 
-      const key = event.key + ':' + value.type;
+      const key = `${event.key}:${value.type}`;
 
       switch (key) {
         case 'ArrowLeft:multiple':
@@ -121,16 +106,12 @@ export const Picker = ({
         }
         case 'ArrowDown:multiple':
         case 'ArrowDown:select': {
-          setIndexSelected(
-            options.length > indexSelected + 1 ? indexSelected + 1 : 0,
-          );
+          setIndexSelected(options.length > indexSelected + 1 ? indexSelected + 1 : 0);
           break;
         }
         case 'ArrowUp:multiple':
         case 'ArrowUp:select': {
-          setIndexSelected(
-            0 < indexSelected ? indexSelected - 1 : options.length - 1,
-          );
+          setIndexSelected(0 < indexSelected ? indexSelected - 1 : options.length - 1);
           break;
         }
         case 'Enter:multiple':
@@ -141,7 +122,7 @@ export const Picker = ({
           break;
         }
         case 'Enter:number': {
-          if (!query || isNaN(Number(query))) break;
+          if (!query || Number.isNaN(Number(query))) break;
           event.stopPropagation();
           onSelect?.(Number(query));
           break;
@@ -165,6 +146,9 @@ export const Picker = ({
   );
 
   useEffect(() => {
+    void open;
+    void query;
+
     setIndexSelected(-1);
   }, [open, query]);
 
@@ -179,7 +163,7 @@ export const Picker = ({
   }, [anchorEl, handleKeyDown]);
 
   useEffect(() => {
-    if (value?.type == 'select' && value?.options.length == 1) {
+    if (value?.type === 'select' && value?.options.length === 1) {
       handleClick(value.options.at(0)!);
     }
   }, [value, handleClick]);
@@ -196,7 +180,7 @@ export const Picker = ({
 
   return (
     <Popup anchorEl={anchorEl} open={open} onFocusOut={handleFocusOut}>
-      {(value.type == 'multiple' || value.type == 'select') && (
+      {(value.type === 'multiple' || value.type === 'select') && (
         <List>
           {options.map((option, index) => {
             const post = (() => {
@@ -209,17 +193,13 @@ export const Picker = ({
             })();
 
             return (
-              <ListItem
-                key={`${option.value}`}
-                disablePadding
-                secondaryAction={post}
-              >
+              <ListItem key={`${option.value}`} disablePadding secondaryAction={post}>
                 <ListItemButton
                   ref={setItemRef(index)}
                   selected={indexSelected === index}
                   onClick={() => handleClick(option)}
                 >
-                  {value.type == 'select' && option.pre && (
+                  {value.type === 'select' && option.pre && (
                     <ListItemIcon>{option.pre}</ListItemIcon>
                   )}
                   <ListItemText primary={option.label} />

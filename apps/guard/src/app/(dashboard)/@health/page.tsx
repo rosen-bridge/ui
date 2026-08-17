@@ -2,20 +2,21 @@
 
 import { useMemo } from 'react';
 
+import useSWR from 'swr';
+
 import {
   Card,
   CardBody,
   Icon,
-  IconProps,
+  type IconProps,
   Stack,
   Tooltip,
   Typography,
   useBreakpoint,
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
-import useSWR from 'swr';
 
-import { ApiInfoResponse } from '@/types/api';
+import type { ApiInfoResponse } from '@/types/api';
 
 const VARIANTS: Record<
   ApiInfoResponse['health']['status'],
@@ -57,10 +58,7 @@ const Health = () => {
 
   const status = useMemo(() => data?.health.status || 'Broken', [data]);
 
-  const trialErrors = useMemo(
-    () => data?.health.trialErrors.join('\n'),
-    [data],
-  );
+  const trialErrors = useMemo(() => data?.health.trialErrors.join('\n'), [data]);
 
   const variant = useMemo(() => VARIANTS[status], [status]);
 
@@ -78,22 +76,13 @@ const Health = () => {
         >
           {!isSmall && <div style={{ flexGrow: 1 }} />}
 
-          <Icon
-            color={variant.color}
-            loading={isLoading}
-            name={variant.icon}
-            size="32px"
-          />
+          <Icon color={variant.color} loading={isLoading} name={variant.icon} size="32px" />
 
           <Typography color={variant.color} loading={isLoading}>
             Health is
           </Typography>
 
-          <Typography
-            color={variant.darkColor}
-            loading={isLoading}
-            variant="h3"
-          >
+          <Typography color={variant.darkColor} loading={isLoading} variant="h3">
             {variant.status}
           </Typography>
 

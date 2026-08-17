@@ -2,7 +2,7 @@ import { styled } from '@mui/material';
 
 import { CloseButton } from '../../closeButton';
 import { Typography } from '../../typography';
-import { Filter, Selected } from './types';
+import type { Filter, Selected } from './types';
 import { parseFilter } from './utils';
 
 const Root = styled('div')(({ theme }) => ({
@@ -60,11 +60,11 @@ export const Chips = ({ disabled, filters, value, onRemove }: ChipsProps) => {
 
         if (!parsed) return null;
 
-        const hasFlow = typeof parsed.flow != 'undefined';
+        const hasFlow = typeof parsed.flow !== 'undefined';
 
-        const hasOperator = typeof parsed.operator != 'undefined';
+        const hasOperator = typeof parsed.operator !== 'undefined';
 
-        const hasValue = typeof parsed.value != 'undefined';
+        const hasValue = typeof parsed.value !== 'undefined';
 
         return (
           <div key={JSON.stringify(item)} className="items">
@@ -98,7 +98,7 @@ export const Chips = ({ disabled, filters, value, onRemove }: ChipsProps) => {
                     <div key={content} className="value">
                       {content}
                       {length > 2 && length >= index + 3 && ', '}
-                      {length > 1 && length == index + 2 && ' and '}
+                      {length > 1 && length === index + 2 && ' and '}
                     </div>
                   );
                 })}

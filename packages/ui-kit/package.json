@@ -1,6 +1,6 @@
 {
   "name": "@rosen-bridge/ui-kit",
-  "version": "5.8.2",
+  "version": "5.9.0",
   "private": true,
   "description": "ui kit for Rosen projects",
   "repository": {
@@ -21,10 +21,8 @@
   "scripts": {
     "build": "tsdown",
     "build:watch": "tsdown --watch",
-    "lint": "eslint --fix . && npm run prettify",
-    "lint:check": "eslint . && npm run prettify:check",
-    "prettify": "prettier --write . --ignore-path ../../.gitignore",
-    "prettify:check": "prettier --check . --ignore-path ../../.gitignore",
+    "lint": "biome check --write",
+    "lint:check": "biome check",
     "release": "npm run build && npm publish --access public",
     "test": "NODE_OPTIONS='--import tsx' vitest",
     "type-check": "tsc"

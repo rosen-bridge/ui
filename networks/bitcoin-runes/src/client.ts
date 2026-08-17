@@ -1,5 +1,5 @@
 import { BitcoinRunes as BitcoinRunesIcon } from '@rosen-bridge/icons';
-import { Network, NetworkConfig } from '@rosen-network/base';
+import type { Network, NetworkConfig } from '@rosen-network/base';
 import { NETWORKS } from '@rosen-ui/constants';
 
 import type { generateUnsignedTx } from './generateUnsignedTx';
@@ -27,38 +27,27 @@ export class BitcoinRunesNetwork implements Network {
     this.lockAddress = config.lockAddress;
   }
 
-  public calculateFee: BitcoinRunesNetworkConfig['calculateFee'] = (
-    ...args
-  ) => {
+  public calculateFee: BitcoinRunesNetworkConfig['calculateFee'] = (...args) => {
     return this.config.calculateFee(...args);
   };
 
-  public generateOpReturnData: BitcoinRunesNetworkConfig['generateOpReturnData'] =
-    (...args) => {
-      return this.config.generateOpReturnData(...args);
-    };
+  public generateOpReturnData: BitcoinRunesNetworkConfig['generateOpReturnData'] = (...args) => {
+    return this.config.generateOpReturnData(...args);
+  };
 
-  public generateUnsignedTx: BitcoinRunesNetworkConfig['generateUnsignedTx'] = (
-    ...args
-  ) => {
+  public generateUnsignedTx: BitcoinRunesNetworkConfig['generateUnsignedTx'] = (...args) => {
     return this.config.generateUnsignedTx(...args);
   };
 
-  public getMaxTransfer: BitcoinRunesNetworkConfig['getMaxTransfer'] = (
-    ...args
-  ) => {
+  public getMaxTransfer: BitcoinRunesNetworkConfig['getMaxTransfer'] = (...args) => {
     return this.config.getMaxTransfer(...args);
   };
 
-  public getMinTransfer: BitcoinRunesNetworkConfig['getMinTransfer'] = (
-    ...args
-  ) => {
+  public getMinTransfer: BitcoinRunesNetworkConfig['getMinTransfer'] = (...args) => {
     return this.config.getMinTransfer(...args);
   };
 
-  public submitTransaction: BitcoinRunesNetworkConfig['submitTransaction'] = (
-    ...args
-  ) => {
+  public submitTransaction: BitcoinRunesNetworkConfig['submitTransaction'] = (...args) => {
     return this.config.submitTransaction(...args);
   };
 

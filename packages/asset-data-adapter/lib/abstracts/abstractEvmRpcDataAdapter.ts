@@ -1,9 +1,10 @@
-import { AbstractLogger } from '@rosen-bridge/abstract-logger';
-import { NATIVE_TOKEN, RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
 import { ethers, JsonRpcProvider } from 'ethers';
 
+import type { AbstractLogger } from '@rosen-bridge/abstract-logger';
+import { NATIVE_TOKEN, type RosenChainToken, type TokenMap } from '@rosen-bridge/tokens';
+
 import { PartialERC20ABI } from '../constants';
-import {
+import type {
   ChainAssetBalance,
   EVMChainsType,
   EvmRpcDataAdapterAuthParams,
@@ -48,7 +49,7 @@ export abstract class AbstractEvmRpcDataAdapter extends AbstractDataAdapter {
 
     for (const chainTokenDetails of chunk) {
       try {
-        if (chainTokenDetails.type == NATIVE_TOKEN) {
+        if (chainTokenDetails.type === NATIVE_TOKEN) {
           const balance = await this.provider.getBalance(address);
           assets.push({
             assetId: chainTokenDetails.tokenId,
@@ -71,9 +72,7 @@ export abstract class AbstractEvmRpcDataAdapter extends AbstractDataAdapter {
           });
         }
       } catch (err) {
-        this.logger.error(
-          `Error in fetch ${this.chain} chain assets occurred: ${err}`,
-        );
+        this.logger.error(`Error in fetch ${this.chain} chain assets occurred: ${err}`);
         if (err instanceof Error && err.stack) this.logger.debug(err.stack);
       }
     }
@@ -93,11 +92,7 @@ export abstract class AbstractEvmRpcDataAdapter extends AbstractDataAdapter {
    * @returns The raw total supply as a bigint (not normalized).
    */
   getRawTotalSupply = async (token: RosenChainToken) => {
-    const contract = new ethers.Contract(
-      token.tokenId,
-      PartialERC20ABI,
-      this.provider,
-    );
+    const contract = new ethers.Contract(token.tokenId, PartialERC20ABI, this.provider);
     const totalSupply = await contract.totalSupply();
     if (totalSupply) {
       this.logger.debug(

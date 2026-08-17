@@ -1,13 +1,12 @@
-import { Network, TokenInfoWithColdAmount } from '@rosen-ui/types';
+import type { Network, TokenInfoWithColdAmount } from '@rosen-ui/types';
 import { getTokenUrl } from '@rosen-ui/utils';
 
-import { Amount, Identifier, NetworkProps, Token } from '@/components';
+import { Amount, Identifier, type NetworkProps, Token } from '@/components';
 import { useConfig } from '@/hooks';
-import { ElementBaseProps, OverridableType } from '@/types';
+import type { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.css';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface TokensListOverrides {}
 
 export type TokensListOwnProps = {
@@ -18,11 +17,7 @@ export type TokensListOwnProps = {
 
 export type TokensListBaseProps = ElementBaseProps<'div', TokensListOwnProps>;
 
-export type TokensListProps = OverridableType<
-  TokensListBaseProps,
-  TokensListOverrides,
-  never
->;
+export type TokensListProps = OverridableType<TokensListBaseProps, TokensListOverrides, never>;
 
 /**
  * render a list of `TokenListItem` or some skeletons for the same component
@@ -51,12 +46,7 @@ export const TokensList = (props: TokensListProps) => {
                 gridRow: 'span 2',
               }}
             />
-            <Token
-              label={token.name}
-              loading={loading}
-              style={{ minWidth: 0 }}
-              variant="label"
-            />
+            <Token label={token.name} loading={loading} style={{ minWidth: 0 }} variant="label" />
             <Amount
               decimal={token.decimals}
               loading={loading}
@@ -66,11 +56,7 @@ export const TokensList = (props: TokensListProps) => {
               style={{ justifyContent: hasCold ? 'flex-start' : 'flex-end' }}
             />
             <Identifier
-              href={
-                token.isNativeToken
-                  ? undefined
-                  : getTokenUrl(chain as Network, token.tokenId)
-              }
+              href={token.isNativeToken ? undefined : getTokenUrl(chain as Network, token.tokenId)}
               loading={loading}
               slots={{ text: { color: 'text-secondary', variant: 'body2' } }}
               value={token.tokenId}

@@ -1,9 +1,9 @@
 import { testDataSource } from '@rosen-ui/data-source';
 import {
-  GuardStatusEntity,
   AggregatedStatusChangedEntity,
   AggregatedStatusEntity,
   GuardStatusChangedEntity,
+  GuardStatusEntity,
   TxEntity,
 } from '@rosen-ui/public-status';
 
@@ -30,34 +30,24 @@ export class DataSourceMock {
    * populate AggregatedStatusChangedEntity table with mock records
    * @param records
    */
-  static populateAggregatedStatusChanged = async (
-    records: AggregatedStatusChangedEntity[],
-  ) => {
+  static populateAggregatedStatusChanged = async (records: AggregatedStatusChangedEntity[]) => {
     for (const record of records) {
-      await testDataSource
-        .getRepository(AggregatedStatusChangedEntity)
-        .insert(record);
+      await testDataSource.getRepository(AggregatedStatusChangedEntity).insert(record);
     }
   };
 
   /**
    * gets all AggregatedStatusChangedEntity records
    */
-  static listAggregatedStatusChanged = async (): Promise<
-    AggregatedStatusChangedEntity[]
-  > => {
-    return await testDataSource
-      .getRepository(AggregatedStatusChangedEntity)
-      .find();
+  static listAggregatedStatusChanged = async (): Promise<AggregatedStatusChangedEntity[]> => {
+    return await testDataSource.getRepository(AggregatedStatusChangedEntity).find();
   };
 
   /**
    * populate AggregatedStatusEntity table with mock records
    * @param records
    */
-  static populateAggregatedStatus = async (
-    records: AggregatedStatusEntity[],
-  ) => {
+  static populateAggregatedStatus = async (records: AggregatedStatusEntity[]) => {
     for (const record of records) {
       await testDataSource.getRepository(AggregatedStatusEntity).insert(record);
     }
@@ -74,22 +64,16 @@ export class DataSourceMock {
    * populate GuardStatusChangedEntity table with mock records
    * @param records
    */
-  static populateGuardStatusChanged = async (
-    records: GuardStatusChangedEntity[],
-  ) => {
+  static populateGuardStatusChanged = async (records: GuardStatusChangedEntity[]) => {
     for (const record of records) {
-      await testDataSource
-        .getRepository(GuardStatusChangedEntity)
-        .insert(record);
+      await testDataSource.getRepository(GuardStatusChangedEntity).insert(record);
     }
   };
 
   /**
    * gets all GuardStatusChangedEntity records
    */
-  static listGuardStatusChanged = async (): Promise<
-    GuardStatusChangedEntity[]
-  > => {
+  static listGuardStatusChanged = async (): Promise<GuardStatusChangedEntity[]> => {
     return await testDataSource.getRepository(GuardStatusChangedEntity).find();
   };
 

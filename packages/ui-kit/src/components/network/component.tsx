@@ -1,13 +1,13 @@
-import { FC, SVGAttributes, useMemo } from 'react';
+import { type FC, type SVGAttributes, useMemo } from 'react';
 
-import { Icon, IconProps, Typography, TypographyProps } from '@/components';
+import { Icon, type IconProps, Typography, type TypographyProps } from '@/components';
 import { useConfig } from '@/hooks';
-import { ElementBaseProps, OverridableType } from '@/types';
+import type { ElementBaseProps, OverridableType } from '@/types';
 
 import { Logo } from './logo';
+
 import './styles.css';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface NetworkOverrides {}
 
 export type NetworkMeta = {
@@ -39,11 +39,7 @@ export type NetworkOwnProps = {
 
 export type NetworkBaseProps = ElementBaseProps<'div', NetworkOwnProps>;
 
-export type NetworkProps = OverridableType<
-  NetworkBaseProps,
-  NetworkOverrides,
-  'value'
->;
+export type NetworkProps = OverridableType<NetworkBaseProps, NetworkOverrides, 'value'>;
 
 const DEFAULT_NETWORK: NetworkMeta = {
   label: 'Unsupported',

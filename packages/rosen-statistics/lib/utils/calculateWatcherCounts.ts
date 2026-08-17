@@ -1,9 +1,9 @@
-import { AbstractLogger } from '@rosen-bridge/abstract-logger';
-import { IndexedErgoBox } from '@rosen-clients/ergo-node';
-import { WatcherCountType } from '@rosen-ui/rosen-statistics-entity';
+import type { AbstractLogger } from '@rosen-bridge/abstract-logger';
+import type { IndexedErgoBox } from '@rosen-clients/ergo-node';
+import type { WatcherCountType } from '@rosen-ui/rosen-statistics-entity';
 
 import { WATCHER_COUNT_REGISTER } from '../constants';
-import { WatcherCountConfig, WatcherCountResult } from '../types';
+import type { WatcherCountConfig, WatcherCountResult } from '../types';
 import { getRegisterValue } from './getRegisterValue';
 
 /**
@@ -33,24 +33,16 @@ export const calculateWatcherCounts = (
     }
 
     if (!network) {
-      logger.debug(
-        `Skipping box ${box.boxId}: no valid RWT token found in box assets`,
-      );
+      logger.debug(`Skipping box ${box.boxId}: no valid RWT token found in box assets`);
       continue;
     }
 
     logger.debug(`Resolved network ${network} for box ${box.boxId}`);
 
-    const count = getRegisterValue(
-      box,
-      WATCHER_COUNT_REGISTER,
-      logger.child('getRegisterValue'),
-    );
+    const count = getRegisterValue(box, WATCHER_COUNT_REGISTER, logger.child('getRegisterValue'));
 
     if (count === undefined) {
-      logger.debug(
-        `Skipping box ${box.boxId}: watcher count register not found`,
-      );
+      logger.debug(`Skipping box ${box.boxId}: watcher count register not found`);
       continue;
     }
 

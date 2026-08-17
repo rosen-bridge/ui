@@ -1,20 +1,13 @@
-import {
-  Children,
-  cloneElement,
-  ReactElement,
-  ReactNode,
-  useMemo,
-} from 'react';
+import { Children, cloneElement, type ReactElement, type ReactNode, useMemo } from 'react';
 
 import { mergeProps } from '@base-ui/react/merge-props';
 import { Tooltip as TooltipBaseUI } from '@base-ui/react/tooltip';
 
 import { useConfig } from '@/hooks';
-import { ElementBaseProps, OverridableType } from '@/types';
+import type { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.css';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface TooltipOverrides {}
 
 export type TooltipOwnProps = {
@@ -25,17 +18,17 @@ export type TooltipOwnProps = {
 
 export type TooltipBaseProps = ElementBaseProps<'div', TooltipOwnProps>;
 
-export type TooltipProps = OverridableType<
-  TooltipBaseProps,
-  TooltipOverrides,
-  never
->;
+export type TooltipProps = OverridableType<TooltipBaseProps, TooltipOverrides, never>;
 
 export const Tooltip = (props: TooltipProps) => {
   const { children, disabled, title, ...rest } = useConfig('Tooltip', props);
 
   const child = useMemo(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    /**
+     * TODO: remove the inline Biome comment
+     * local:ergo/rosen-bridge/ui#441
+     */
+    // biome-ignore lint/suspicious/noExplicitAny: Use a better type
     () => Children.only(children) as ReactElement<any, any>,
     [children],
   );
@@ -45,28 +38,24 @@ export const Tooltip = (props: TooltipProps) => {
   if (!title) return children;
 
   return (
-    <>
-      <TooltipBaseUI.Provider delay={250}>
-        <TooltipBaseUI.Root>
-          <TooltipBaseUI.Trigger
-            render={(props) =>
-              cloneElement(children, mergeProps(props, child.props))
-            }
-          />
-          <TooltipBaseUI.Portal>
-            <TooltipBaseUI.Positioner
-              className="RosenTooltip-positioner"
-              positionMethod="fixed"
-              sideOffset={8}
-            >
-              <TooltipBaseUI.Popup className="RosenTooltip" {...rest}>
-                {title}
-              </TooltipBaseUI.Popup>
-            </TooltipBaseUI.Positioner>
-          </TooltipBaseUI.Portal>
-        </TooltipBaseUI.Root>
-      </TooltipBaseUI.Provider>
-    </>
+    <TooltipBaseUI.Provider delay={250}>
+      <TooltipBaseUI.Root>
+        <TooltipBaseUI.Trigger
+          render={(props) => cloneElement(children, mergeProps(props, child.props))}
+        />
+        <TooltipBaseUI.Portal>
+          <TooltipBaseUI.Positioner
+            className="RosenTooltip-positioner"
+            positionMethod="fixed"
+            sideOffset={8}
+          >
+            <TooltipBaseUI.Popup className="RosenTooltip" {...rest}>
+              {title}
+            </TooltipBaseUI.Popup>
+          </TooltipBaseUI.Positioner>
+        </TooltipBaseUI.Portal>
+      </TooltipBaseUI.Root>
+    </TooltipBaseUI.Provider>
   );
 };
 

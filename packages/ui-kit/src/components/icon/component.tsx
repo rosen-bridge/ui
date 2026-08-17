@@ -1,15 +1,14 @@
-import { FC, SVGAttributes, useMemo } from 'react';
+import { type FC, type SVGAttributes, useMemo } from 'react';
 
-import * as Icons from '@rosen-bridge/icons';
+import type * as Icons from '@rosen-bridge/icons';
 
 import { Skeleton } from '@/components';
 import { useConfig } from '@/hooks';
-import { Color, ElementBaseProps, OverridableType } from '@/types';
+import type { Color, ElementBaseProps, OverridableType } from '@/types';
 import { toCSSColor, toCSSUnit } from '@/utils';
 
 import './styles.css';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface IconOverrides {}
 
 export type IconOwnProps = {
@@ -24,11 +23,7 @@ export type IconOwnProps = {
 
 export type IconBaseProps = ElementBaseProps<'svg', IconOwnProps>;
 
-export type IconProps = OverridableType<
-  IconBaseProps,
-  IconOverrides,
-  'color' | 'name' | 'size'
->;
+export type IconProps = OverridableType<IconBaseProps, IconOverrides, 'color' | 'name' | 'size'>;
 
 export const Icon = (props: IconProps) => {
   const {
@@ -43,10 +38,7 @@ export const Icon = (props: IconProps) => {
     ...rest
   } = useConfig('Icon', props);
 
-  const Icon =
-    as ||
-    icons?.[name as keyof typeof icons] ||
-    icons?.[fallback as keyof typeof icons];
+  const Icon = as || icons?.[name as keyof typeof icons] || icons?.[fallback as keyof typeof icons];
 
   const styles = useMemo(
     () => ({

@@ -1,7 +1,7 @@
 'use client';
 
+import type { ReactNode } from 'react';
 import { usePathname } from 'next/navigation';
-import { ReactNode } from 'react';
 
 import { Tabs, TabsList, TabsTab } from '@rosen-bridge/ui-kit';
 
@@ -17,11 +17,7 @@ export const Actions = ({ children }: ActionsProps) => {
   return (
     <Tabs className="actions" value={pathname}>
       <TabsList grow>
-        <TabsTab
-          href="/actions/withdraw"
-          icon="MoneyWithdrawal"
-          iconPosition="top"
-        >
+        <TabsTab href="/actions/withdraw" icon="MoneyWithdrawal" iconPosition="top">
           Withdraw
         </TabsTab>
         <TabsTab disabled icon="Pause" iconPosition="top" value="">

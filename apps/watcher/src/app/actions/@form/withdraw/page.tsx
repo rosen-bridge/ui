@@ -1,45 +1,41 @@
 'use client';
 
 import { useEffect, useMemo } from 'react';
-import {
-  FormProvider,
-  SubmitHandler,
-  useController,
-  useForm,
-} from 'react-hook-form';
+
+import { FormProvider, type SubmitHandler, useController, useForm } from 'react-hook-form';
+import useSWR from 'swr';
+import useSWRMutation from 'swr/mutation';
 
 import {
+  ApiKeyDialogProtectedAction,
+  ApiKeyDialogWarning,
   CircularProgress,
   Identifier,
   InputAdornment,
+  Link,
+  MenuItemMui,
+  Stack,
   SubmitButton,
   TextField,
   useApiKey,
-  ApiKeyDialogWarning,
-  Link,
-  Stack,
+  useConfirm,
   useResponsive,
   useToast,
-  useConfirm,
-  ApiKeyDialogProtectedAction,
-  MenuItemMui,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS, TOKEN_NAME_PLACEHOLDER } from '@rosen-ui/constants';
 import { fetcher, mutatorWithHeaders } from '@rosen-ui/swr-helpers';
 import { getNonDecimalString, getTxURL } from '@rosen-ui/utils';
-import useSWR from 'swr';
-import useSWRMutation from 'swr/mutation';
 
 import { useInfo, useToken } from '@/hooks';
-import {
+import type {
   ApiAddressAssetsResponse,
   ApiWithdrawRequestBody,
   ApiWithdrawResponse,
 } from '@/types/api';
 
 import {
+  type TokenAmountCompatibleFormSchema,
   TokenAmountTextField,
-  TokenAmountCompatibleFormSchema,
 } from '../../TokenAmountTextField';
 
 interface Form extends TokenAmountCompatibleFormSchema {
@@ -51,22 +47,26 @@ const WithdrawForm = () => {
   const { confirm } = useConfirm();
   const toast = useToast();
 
-  const { data, isLoading: isTokensListLoading } =
-    useSWR<ApiAddressAssetsResponse>('/address/assets', fetcher, {});
+  const { data, isLoading: isTokensListLoading } = useSWR<ApiAddressAssetsResponse>(
+    '/address/assets',
+    fetcher,
+    {},
+  );
 
   const { token: ergToken, isLoading: isErgTokenLoading } = useToken('erg');
   const { apiKey } = useApiKey();
 
-  const tokens = useMemo(
-    () => data?.items.filter((token) => !!token.amount),
-    [data],
-  );
+  const tokens = useMemo(() => data?.items.filter((token) => !!token.amount), [data]);
 
   const info = useInfo();
 
   const { trigger, isMutating: isWithdrawPending } = useSWRMutation<
     ApiWithdrawResponse,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    /**
+     * TODO: remove the inline Biome comment
+     * local:ergo/rosen-bridge/ui#441
+     */
+    // biome-ignore lint/suspicious/noExplicitAny: Use a better type
     any,
     '/withdraw',
     ApiWithdrawRequestBody
@@ -81,7 +81,7 @@ const WithdrawForm = () => {
         timeout: 0,
       });
     }
-  }, [isErgTokenLoading, ergToken]);
+  }, [isErgTokenLoading, ergToken, toast.add]);
 
   const formMethods = useForm({
     mode: 'onChange',
@@ -91,8 +91,7 @@ const WithdrawForm = () => {
       amount: '',
     },
   });
-  const { handleSubmit, control, resetField, register, watch, formState } =
-    formMethods;
+  const { handleSubmit, control, resetField, register, watch, formState } = formMethods;
 
   const formData = watch();
 
@@ -126,9 +125,7 @@ const WithdrawForm = () => {
           tokens: [
             {
               tokenId: formData.tokenId,
-              amount: BigInt(
-                getNonDecimalString(formData.amount, selectedToken!.decimals),
-              ),
+              amount: BigInt(getNonDecimalString(formData.amount, selectedToken!.decimals)),
             },
           ],
         },
@@ -142,10 +139,7 @@ const WithdrawForm = () => {
           description: (
             <>
               Withdrawal is successful. Wait for tx [
-              <Link
-                target="_blank"
-                href={getTxURL(NETWORKS.ergo.key, response.txId) ?? '/'}
-              >
+              <Link target="_blank" href={getTxURL(NETWORKS.ergo.key, response.txId) ?? '/'}>
                 {response.txId}
               </Link>
               ] to be confirmed.
@@ -153,11 +147,13 @@ const WithdrawForm = () => {
           ),
         });
       } else {
-        throw new Error(
-          'Server responded but the response message was unexpected',
-        );
+        throw new Error('Server responded but the response message was unexpected');
       }
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      /**
+       * TODO: remove the inline Biome comment
+       * local:ergo/rosen-bridge/ui#441
+       */
+      // biome-ignore lint/suspicious/noExplicitAny: Use a better type
     } catch (error: any) {
       if (error?.response?.status === 403) {
         toast.add({
@@ -185,8 +181,7 @@ const WithdrawForm = () => {
     });
   };
 
-  const disabled =
-    isTokensListLoading || isErgTokenLoading || !ergToken?.amount;
+  const disabled = isTokensListLoading || isErgTokenLoading || !ergToken?.amount;
 
   const renderAddressTextField = () => (
     <TextField
@@ -272,10 +267,7 @@ const WithdrawForm = () => {
             {renderTokenAmountTextField()}
           </Stack>
           <ApiKeyDialogProtectedAction>
-            <SubmitButton
-              disabled={!formState.isValid || disabled}
-              loading={isWithdrawPending}
-            >
+            <SubmitButton disabled={!formState.isValid || disabled} loading={isWithdrawPending}>
               Withdraw
             </SubmitButton>
           </ApiKeyDialogProtectedAction>

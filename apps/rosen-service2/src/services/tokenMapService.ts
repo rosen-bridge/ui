@@ -1,26 +1,24 @@
-import { CallbackType } from '@rosen-bridge/abstract-extractor';
-import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
-import { ErgoUTXOExtractor } from '@rosen-bridge/address-extractor';
-import { ErgoScanner } from '@rosen-bridge/ergo-scanner';
-import { ExtendedTokenMap, TokenMap } from '@rosen-bridge/extended-tokens';
-import {
-  Dependency,
-  ServiceAction,
-  ServiceStatus,
-} from '@rosen-bridge/service-manager';
-import { createClient, VercelKV } from '@vercel/kv';
-import crypto from 'crypto';
-import * as ergoLib from 'ergo-lib-wasm-nodejs';
+import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
+
+import { createClient, type VercelKV } from '@vercel/kv';
+import * as ergoLib from 'ergo-lib-wasm-nodejs';
+
+import { CallbackType } from '@rosen-bridge/abstract-extractor';
+import { type AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
+import { ErgoUTXOExtractor } from '@rosen-bridge/address-extractor';
+import type { ErgoScanner } from '@rosen-bridge/ergo-scanner';
+import { ExtendedTokenMap, type TokenMap } from '@rosen-bridge/extended-tokens';
+import { type Dependency, ServiceAction, ServiceStatus } from '@rosen-bridge/service-manager';
 
 import { configs } from '../configs';
 import { TOKEN_MAP_EXTRACTOR_ID, TOKEN_MAP_REDIS_KEY } from '../constants';
 import { resolveErgoNetworkConfig } from '../utils';
 import {
+  AbstractDBService,
   AbstractErgoScannerService,
   AbstractTokenMapService,
-  AbstractDBService,
 } from './abstracts';
 
 export class TokenMapService extends AbstractTokenMapService {
@@ -37,11 +35,7 @@ export class TokenMapService extends AbstractTokenMapService {
     },
     {
       serviceName: AbstractErgoScannerService.name,
-      allowedStatuses: [
-        ServiceStatus.running,
-        ServiceStatus.dormant,
-        ServiceStatus.started,
-      ],
+      allowedStatuses: [ServiceStatus.running, ServiceStatus.dormant, ServiceStatus.started],
       action: ServiceAction.assemble,
     },
   ];
@@ -52,16 +46,12 @@ export class TokenMapService extends AbstractTokenMapService {
    * @returns {Promise<boolean>} Resolves to `true` when the assembly is successfully completed.
    */
   protected assemble = async (): Promise<boolean> => {
-    this.ergoScanner =
-      AbstractErgoScannerService.getInstance().getErgoScanner();
+    this.ergoScanner = AbstractErgoScannerService.getInstance().getErgoScanner();
     this.tokenMap = new ExtendedTokenMap();
     const { networkType, url } = resolveErgoNetworkConfig();
 
     if (configs.tokenMap.onChainTokenMapEnabled) {
-      if (
-        !configs.contracts.ergo.addresses.tokenMap ||
-        !configs.contracts.ergo.tokens.tokenMap
-      ) {
+      if (!configs.contracts.ergo.addresses.tokenMap || !configs.contracts.ergo.tokens.tokenMap) {
         throw new Error('On-chain token map address or token not defined');
       }
       this.tokenMapBoxExtractor = new ErgoUTXOExtractor(
@@ -82,24 +72,15 @@ export class TokenMapService extends AbstractTokenMapService {
         try {
           await this.updateTokenMap(this.tokenMap, this.redis!);
         } catch (error) {
-          this.logger.error(
-            `Failed to update token map on extractor trigger: ${error}`,
-          );
+          this.logger.error(`Failed to update token map on extractor trigger: ${error}`);
         }
       };
 
-      [
-        CallbackType.Insert,
-        CallbackType.Update,
-        CallbackType.Spend,
-        CallbackType.Delete,
-      ].forEach((type) =>
-        this.tokenMapBoxExtractor.hook(type, updateTokenMapWrapper),
+      [CallbackType.Insert, CallbackType.Update, CallbackType.Spend, CallbackType.Delete].forEach(
+        (type) => this.tokenMapBoxExtractor.hook(type, updateTokenMapWrapper),
       );
 
-      this.logger.debug(
-        'On-chain TokenMap hooks registered in tokenMapBoxExtractor',
-      );
+      this.logger.debug('On-chain TokenMap hooks registered in tokenMapBoxExtractor');
     }
     this.setStatus(ServiceStatus.dormant);
     return true;
@@ -182,10 +163,7 @@ export class TokenMapService extends AbstractTokenMapService {
    * @param {ExtendedTokenMap} tokenMap Token map instance to update.
    * @param {VercelKV} redis Redis client to store updated token map.
    */
-  private updateTokenMap = async (
-    tokenMap: ExtendedTokenMap,
-    redis: VercelKV,
-  ) => {
+  private updateTokenMap = async (tokenMap: ExtendedTokenMap, redis: VercelKV) => {
     const boxes = await AbstractDBService.getInstance().getTokenMapBoxes();
     await tokenMap.updateConfigByBoxes(boxes.map((box) => box.serialized));
 

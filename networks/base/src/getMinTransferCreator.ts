@@ -1,7 +1,7 @@
-import { RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
-import { Network, RosenAmountValue } from '@rosen-ui/types';
+import type { RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
+import type { Network, RosenAmountValue } from '@rosen-ui/types';
 
-import { CalculateFee } from './calculateFeeCreator';
+import type { CalculateFee } from './calculateFeeCreator';
 
 export const getMinTransferCreator =
   (sourceChain: Network, calculateFee: CalculateFee) =>
@@ -20,12 +20,7 @@ export const getMinTransferCreator =
     const ergoTokenId = tokens[0].ergo.tokenId;
 
     try {
-      const { fees } = await calculateFee(
-        targetChain,
-        ergoTokenId,
-        0,
-        minimumFeeNFT,
-      );
+      const { fees } = await calculateFee(targetChain, ergoTokenId, 0, minimumFeeNFT);
 
       const networkFee = fees?.networkFee ?? 0n;
       const bridgeFee = fees?.bridgeFee ?? 0n;

@@ -1,13 +1,8 @@
 import { useMediaQuery, useTheme } from '@mui/material';
 
-import { Breakpoint } from '@/types';
+import type { Breakpoint } from '@/types';
 
-const BREAKPOINT_ORDER: Breakpoint[] = [
-  'mobile',
-  'tablet',
-  'laptop',
-  'desktop',
-];
+const BREAKPOINT_ORDER: Breakpoint[] = ['mobile', 'tablet', 'laptop', 'desktop'];
 
 type ResponsiveInput<T> = { [B in Breakpoint]?: T };
 
@@ -16,9 +11,7 @@ type UseResponsive = {
   <T>(data: ResponsiveInput<T>): T | undefined;
 };
 
-export const useResponsive: UseResponsive = <T>(
-  data: ResponsiveInput<T>,
-): T | undefined => {
+export const useResponsive: UseResponsive = <T>(data: ResponsiveInput<T>): T | undefined => {
   const theme = useTheme();
 
   const matches = [

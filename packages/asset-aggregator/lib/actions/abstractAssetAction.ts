@@ -1,14 +1,9 @@
-import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
-import {
-  DataSource,
-  In,
-  Not,
-  Repository,
-} from '@rosen-bridge/extended-typeorm';
+import { type AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
+import { type DataSource, In, Not, type Repository } from '@rosen-bridge/extended-typeorm';
 import JsonBigInt from '@rosen-bridge/json-bigint';
 
 import { DELETE_CHUNK_SIZE } from '../constants';
-import { AbstractAssetEntity } from '../entities/abstractAssetEntity';
+import type { AbstractAssetEntity } from '../entities/abstractAssetEntity';
 
 export abstract class AbstractAssetAction<Entity extends AbstractAssetEntity> {
   protected readonly repository: Repository<AbstractAssetEntity>;
@@ -24,11 +19,9 @@ export abstract class AbstractAssetAction<Entity extends AbstractAssetEntity> {
    * @returns Promise that resolves when all assets are saved
    */
   store = async (assets: Omit<Entity, 'token'>[] | Omit<Entity, 'token'>) => {
-    if (!(assets instanceof Array)) assets = [assets];
+    if (!Array.isArray(assets)) assets = [assets];
     await this.repository.save(assets);
-    this.logger.debug(
-      `Assets [${JsonBigInt.stringify(assets)}] stored in database`,
-    );
+    this.logger.debug(`Assets [${JsonBigInt.stringify(assets)}] stored in database`);
   };
 
   /**
@@ -42,8 +35,7 @@ export abstract class AbstractAssetAction<Entity extends AbstractAssetEntity> {
       await this.repository.delete({ tokenId: In(chunk) });
       offset += DELETE_CHUNK_SIZE;
     }
-    if (tokenIds.length)
-      this.logger.debug(`Deleted tokens ${tokenIds} from the database`);
+    if (tokenIds.length) this.logger.debug(`Deleted tokens ${tokenIds} from the database`);
   }
 
   /**
@@ -52,8 +44,7 @@ export abstract class AbstractAssetAction<Entity extends AbstractAssetEntity> {
    * @param excludeTokenIds
    */
   keepOnly = async (excludeTokenIds: string[] | string) => {
-    if (!(excludeTokenIds instanceof Array))
-      excludeTokenIds = [excludeTokenIds];
+    if (!Array.isArray(excludeTokenIds)) excludeTokenIds = [excludeTokenIds];
 
     const toRemove = (
       await this.repository.find({

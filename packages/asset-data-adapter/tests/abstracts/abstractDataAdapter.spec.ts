@@ -1,11 +1,11 @@
 import { TokenMap } from '@rosen-bridge/tokens';
 
-import { AssetBalance } from '../../lib/types';
+import type { AssetBalance } from '../../lib/types';
 import {
   sampleTokenMapConfig,
   sampleTokenMapConfigWithDuplicateTokenId,
+  TestAdapter,
 } from '../mocked';
-import { TestAdapter } from '../mocked';
 
 describe('AbstractDataAdapter', () => {
   describe('fetch', () => {
@@ -56,9 +56,7 @@ describe('AbstractDataAdapter', () => {
      */
     it('should return empty balance for a token-id accidentally duplicated on another chain', async () => {
       const tokenMap = new TokenMap();
-      await tokenMap.updateConfigByJson(
-        sampleTokenMapConfigWithDuplicateTokenId,
-      );
+      await tokenMap.updateConfigByJson(sampleTokenMapConfigWithDuplicateTokenId);
 
       const adapter = new TestAdapter(['addr1', 'addr2'], tokenMap);
 
@@ -94,11 +92,7 @@ describe('AbstractDataAdapter', () => {
       expect(chainWrappedTokens.length).toEqual(3);
 
       result.forEach((v) => {
-        const wrappedAmount = mockTokenMap.wrapAmount(
-          v.assetId,
-          5000n,
-          adapter.chain,
-        );
+        const wrappedAmount = mockTokenMap.wrapAmount(v.assetId, 5000n, adapter.chain);
         expect(v).toEqual({
           assetId: v.assetId,
           totalSupply: wrappedAmount.amount,

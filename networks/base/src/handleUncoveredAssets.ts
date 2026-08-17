@@ -1,7 +1,7 @@
-import { AssetBalance } from '@rosen-bridge/selection-types';
-import { RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
+import type { AssetBalance } from '@rosen-bridge/selection-types';
+import type { RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
 import { NETWORKS } from '@rosen-ui/constants';
-import { Network } from '@rosen-ui/types';
+import type { Network } from '@rosen-ui/types';
 import { getDecimalString } from '@rosen-ui/utils';
 
 export class InsufficientAssetsError extends Error {

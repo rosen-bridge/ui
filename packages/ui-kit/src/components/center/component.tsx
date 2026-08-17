@@ -1,9 +1,8 @@
 import { useConfig } from '@/hooks';
-import { ElementBaseProps, OverridableType } from '@/types';
+import type { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.css';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface CenterOverrides {}
 
 export type CenterOwnProps = {
@@ -12,11 +11,7 @@ export type CenterOwnProps = {
 
 export type CenterBaseProps = ElementBaseProps<'div', CenterOwnProps>;
 
-export type CenterProps = OverridableType<
-  CenterBaseProps,
-  CenterOverrides,
-  never
->;
+export type CenterProps = OverridableType<CenterBaseProps, CenterOverrides, never>;
 
 export const Center = (props: CenterProps) => {
   const { inline, ...rest } = useConfig('Center', props);

@@ -1,4 +1,8 @@
-/* eslint-disable */
+/**
+ * TODO: remove the inline Biome comment
+ * local:ergo/rosen-bridge/ui#441
+ */
+/** biome-ignore-all lint/suspicious/noExplicitAny: Use a better type */
 
 const BIGINT_KEY = 'BIGINT:';
 
@@ -12,13 +16,10 @@ type ToSafeData = <Func extends AsyncFunction>(
   func: Func,
 ) => (...args: Parameters<Func>) => Promise<Awaited<ReturnType<Func>>>;
 
-const processDataType = (
-  input: any,
-  convertor: (value: any, type: string) => any,
-): any => {
+const processDataType = (input: any, convertor: (value: any, type: string) => any): any => {
   const type = typeof input;
 
-  if (type != 'object') return convertor(input, type);
+  if (type !== 'object') return convertor(input, type);
 
   if (Array.isArray(input)) {
     return input.map((item: any) => processDataType(item, convertor));
@@ -43,13 +44,13 @@ const processDataType = (
 
 const from = <T>(input: T): T =>
   processDataType(input, (value, type) => {
-    if (type != 'string' || !value.startsWith(BIGINT_KEY)) return value;
+    if (type !== 'string' || !value.startsWith(BIGINT_KEY)) return value;
     return BigInt(value.replace(BIGINT_KEY, ''));
   });
 
 const to = <T>(input: T): T =>
   processDataType(input, (value, type) => {
-    if (type != 'bigint') return value;
+    if (type !== 'bigint') return value;
     return BIGINT_KEY + value.toString();
   });
 

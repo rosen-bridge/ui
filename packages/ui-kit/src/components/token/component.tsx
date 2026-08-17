@@ -2,20 +2,19 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 
 import {
   Avatar,
-  AvatarProps,
+  type AvatarProps,
   Icon,
   IconButton,
   Image,
-  ImageProps,
+  type ImageProps,
   Typography,
-  TypographyProps,
+  type TypographyProps,
 } from '@/components';
 import { useConfig } from '@/hooks';
-import { ElementBaseProps, OverridableType } from '@/types';
+import type { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.css';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface TokenOverrides {}
 
 export type TokenMeta = {
@@ -61,11 +60,7 @@ export type TokenOwnProps = {
 
 export type TokenBaseProps = ElementBaseProps<'div', TokenOwnProps>;
 
-export type TokenProps = OverridableType<
-  TokenBaseProps,
-  TokenOverrides,
-  'value'
->;
+export type TokenProps = OverridableType<TokenBaseProps, TokenOverrides, 'value'>;
 
 const DEFAULT_NETWORK: TokenMeta = {
   label: 'Unsupported token',

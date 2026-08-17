@@ -1,8 +1,8 @@
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
 import { Toast } from '@base-ui/react/toast';
 
-import { Alert, AlertProps, CopyButton } from '@/components';
+import { Alert, type AlertProps, CopyButton } from '@/components';
 
 import './ToastProvider.css';
 

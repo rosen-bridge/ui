@@ -1,10 +1,10 @@
-/* eslint-disable */
+/**
+ * TODO: remove the inline Biome comment
+ * local:ergo/rosen-bridge/ui#441
+ */
+/** biome-ignore-all lint/suspicious/noExplicitAny: Use a better type */
 
-type Listed<T> = T extends string | number
-  ? T extends `${infer _}` | number
-    ? T
-    : never
-  : never;
+type Listed<T> = T extends string | number ? (T extends `${infer _}` | number ? T : never) : never;
 
 type Unlisted<T> = Exclude<T, Listed<T>>;
 

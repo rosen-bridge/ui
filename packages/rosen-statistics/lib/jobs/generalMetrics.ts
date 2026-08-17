@@ -1,8 +1,8 @@
-import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
-import { DataSource } from '@rosen-bridge/extended-typeorm';
+import { type AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
+import type { DataSource } from '@rosen-bridge/extended-typeorm';
 import { TokenPriceAction } from '@rosen-bridge/token-price-entity';
-import { ERGO_CHAIN, TokenMap } from '@rosen-bridge/tokens';
-import { MetricAction, METRIC_KEYS } from '@rosen-ui/rosen-statistics-entity';
+import { ERGO_CHAIN, type TokenMap } from '@rosen-bridge/tokens';
+import { METRIC_KEYS, MetricAction } from '@rosen-ui/rosen-statistics-entity';
 
 /**
  * Calculate and persist general system metrics.
@@ -20,14 +20,8 @@ export const generalMetrics = async (
 ): Promise<void> => {
   logger.debug('Starting general metrics calculation job');
 
-  const metricAction = new MetricAction(
-    dataSource,
-    logger.child('metricAction'),
-  );
-  const tokenPriceAction = new TokenPriceAction(
-    dataSource,
-    logger.child('tokenPriceAction'),
-  );
+  const metricAction = new MetricAction(dataSource, logger.child('metricAction'));
+  const tokenPriceAction = new TokenPriceAction(dataSource, logger.child('tokenPriceAction'));
 
   const timestamp = Math.floor(Date.now() / 1000);
 
@@ -54,19 +48,12 @@ export const generalMetrics = async (
       timestamp,
     );
 
-    const rsnPrice = await tokenPriceAction.getLatestTokenPrice(
-      rsnTokenId,
-      timestamp,
-    );
+    const rsnPrice = await tokenPriceAction.getLatestTokenPrice(rsnTokenId, timestamp);
 
     if (rsnPrice !== undefined) {
       logger.debug(`RSN price is: ${rsnPrice.toString()}`);
 
-      await metricAction.upsertMetric(
-        METRIC_KEYS.RSN_PRICE_USD,
-        rsnPrice.toString(),
-        timestamp,
-      );
+      await metricAction.upsertMetric(METRIC_KEYS.RSN_PRICE_USD, rsnPrice.toString(), timestamp);
     } else {
       logger.warn('RSN price not found, skipping RSN_PRICE_USD metric');
     }

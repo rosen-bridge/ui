@@ -7,9 +7,7 @@ import { handleError } from '../utils';
 const logger = DefaultLogger.getInstance().child(import.meta.url);
 
 process.on('SIGTERM', async () => {
-  logger.debug(
-    'termination signal received, graceful shutdown process starting',
-  );
+  logger.debug('termination signal received, graceful shutdown process starting');
   await dataSource.destroy();
   logger.debug('data source destroyed');
   logger.info('shutting down service as a result of a termination signal');

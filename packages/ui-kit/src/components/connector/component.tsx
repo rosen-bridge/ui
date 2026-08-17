@@ -1,12 +1,11 @@
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
-import { Icon, IconProps } from '@/components';
+import { Icon, type IconProps } from '@/components';
 import { useConfig } from '@/hooks';
-import { ElementBaseProps, OverridableType } from '@/types';
+import type { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.css';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface ConnectorOverrides {}
 
 export type ConnectorOwnProps = {
@@ -32,23 +31,13 @@ export type ConnectorOwnProps = {
 
 export type ConnectorBaseProps = ElementBaseProps<'div', ConnectorOwnProps>;
 
-export type ConnectorProps = OverridableType<
-  ConnectorBaseProps,
-  ConnectorOverrides,
-  never
->;
+export type ConnectorProps = OverridableType<ConnectorBaseProps, ConnectorOverrides, never>;
 
 /**
  * Connector component: visually connects two elements with an arrow.
  */
 export const Connector = (props: ConnectorProps) => {
-  const {
-    end,
-    slots,
-    start,
-    variant = 'standard',
-    ...rest
-  } = useConfig('Connector', props);
+  const { end, slots, start, variant = 'standard', ...rest } = useConfig('Connector', props);
 
   return (
     <div data-variant={variant} {...rest}>

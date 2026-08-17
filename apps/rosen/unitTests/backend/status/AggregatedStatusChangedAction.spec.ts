@@ -1,19 +1,11 @@
-import { Repository } from '@rosen-bridge/extended-typeorm';
+import type { Repository } from '@rosen-bridge/extended-typeorm';
 import { testDataSource } from '@rosen-ui/data-source';
-import {
-  AggregatedStatusChangedEntity,
-  AggregateEventStatus,
-} from '@rosen-ui/public-status';
+import { AggregatedStatusChangedEntity, AggregateEventStatus } from '@rosen-ui/public-status';
 
 import AggregatedStatusChangedAction from '@/backend/status/AggregatedStatusChangedAction';
 
 import { DataSourceMock } from '../../mocked/DataSource.mock';
-import {
-  mockAggregatedStatusChangedRecords,
-  id0,
-  mockPaginationTestData,
-  triggerId0,
-} from './testData';
+import { mockAggregatedStatusChangedRecords, mockPaginationTestData, triggerId0 } from './testData';
 
 describe('AggregatedStatusChangedAction', () => {
   beforeAll(() => {
@@ -38,11 +30,10 @@ describe('AggregatedStatusChangedAction', () => {
       };
 
       // act
-      const lastStatus =
-        await AggregatedStatusChangedAction.getInstance().getLast(
-          repository as unknown as Repository<AggregatedStatusChangedEntity>,
-          triggerId0,
-        );
+      const lastStatus = await AggregatedStatusChangedAction.getInstance().getLast(
+        repository as unknown as Repository<AggregatedStatusChangedEntity>,
+        triggerId0,
+      );
 
       // assert
       expect(lastStatus).toBeNull();
@@ -66,13 +57,12 @@ describe('AggregatedStatusChangedAction', () => {
      */
     it('should call repository.find with DESC ordering on insertedAt field', async () => {
       // act
-      const { total, items } =
-        await AggregatedStatusChangedAction.getInstance().getMany(
-          testDataSource.getRepository(AggregatedStatusChangedEntity),
-          triggerId0,
-          0,
-          100,
-        );
+      const { total, items } = await AggregatedStatusChangedAction.getInstance().getMany(
+        testDataSource.getRepository(AggregatedStatusChangedEntity),
+        triggerId0,
+        0,
+        100,
+      );
 
       // assert
       expect(total).toBe(0);
@@ -101,13 +91,12 @@ describe('AggregatedStatusChangedAction', () => {
       );
 
       // act
-      const { total, items } =
-        await AggregatedStatusChangedAction.getInstance().getMany(
-          testDataSource.getRepository(AggregatedStatusChangedEntity),
-          triggerId0,
-          0,
-          6,
-        );
+      const { total, items } = await AggregatedStatusChangedAction.getInstance().getMany(
+        testDataSource.getRepository(AggregatedStatusChangedEntity),
+        triggerId0,
+        0,
+        6,
+      );
 
       // assert
       expect(total).toBe(10);
@@ -128,9 +117,7 @@ describe('AggregatedStatusChangedAction', () => {
       // assert
       expect(total2).toBe(10);
       expect(items2).toHaveLength(5);
-      expect(items2).toEqual(
-        mockPaginationTestData.aggregatedStatusChanged.toReversed().slice(5),
-      );
+      expect(items2).toEqual(mockPaginationTestData.aggregatedStatusChanged.toReversed().slice(5));
     });
   });
 

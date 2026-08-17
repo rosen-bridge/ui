@@ -1,15 +1,11 @@
-import { Route } from 'next';
+import { type PropsWithChildren, useMemo } from 'react';
+import type { Route } from 'next';
 import NextLink from 'next/link';
-import { PropsWithChildren, useMemo } from 'react';
 
 import * as AllIcons from '@rosen-bridge/icons';
-import {
-  ConfigProvider,
-  type ConfigContextType,
-  type DefaultColor,
-} from '@rosen-bridge/ui-kit';
+import { type ConfigContextType, ConfigProvider, type DefaultColor } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
-import { Network } from '@rosen-ui/types';
+import type { Network } from '@rosen-ui/types';
 
 import { Actions } from './app/Actions';
 
@@ -50,9 +46,7 @@ const getUiKitConfig: () => ConfigContextType = () => ({
     },
     Icon: {
       defaultProps: {
-        icons: Object.fromEntries(
-          Object.entries(AllIcons).filter(([key]) => key !== 'TOKENS'),
-        ),
+        icons: Object.fromEntries(Object.entries(AllIcons).filter(([key]) => key !== 'TOKENS')),
       },
     },
     Link: {
@@ -67,6 +61,7 @@ const getUiKitConfig: () => ConfigContextType = () => ({
             key,
             {
               label: value.label,
+              // biome-ignore lint/performance/noDynamicNamespaceImportAccess: Keep it
               logo: AllIcons[
                 key
                   .split('-')

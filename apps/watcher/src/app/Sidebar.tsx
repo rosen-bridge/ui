@@ -1,11 +1,6 @@
 import Link from 'next/link';
 
-import {
-  AppBar,
-  AppLogo,
-  NavigationBar,
-  NavigationButton,
-} from '@rosen-bridge/ui-kit';
+import { AppBar, AppLogo, NavigationBar, NavigationButton } from '@rosen-bridge/ui-kit';
 
 import { Actions } from './Actions';
 
@@ -21,16 +16,8 @@ export const Sidebar = () => {
         <NavigationBar>
           <NavigationButton icon="Estate" label="Home" path="/" />
           <NavigationButton icon="Heartbeat" label="Health" path="/health" />
-          <NavigationButton
-            icon="Newspaper"
-            label="Observations"
-            path="/observations"
-          />
-          <NavigationButton
-            icon="ClipboardNotes"
-            label="Events"
-            path="/events"
-          />
+          <NavigationButton icon="Newspaper" label="Observations" path="/observations" />
+          <NavigationButton icon="ClipboardNotes" label="Events" path="/events" />
           <NavigationButton icon="Moneybag" label="Revenues" path="/revenues" />
         </NavigationBar>
       }

@@ -1,15 +1,12 @@
-import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
+import { beforeEach, describe, expect, it } from 'vitest';
+
+import { type AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
 import { BlockEntity } from '@rosen-bridge/abstract-scanner';
-import { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
+import type { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
 import { TokenPriceEntity } from '@rosen-bridge/token-price-entity';
 import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
 import { TokenEntity } from '@rosen-ui/asset-calculator';
-import {
-  METRIC_KEYS,
-  MetricEntity,
-  BridgedAmountEntity,
-} from '@rosen-ui/rosen-statistics-entity';
-import { describe, it, expect, beforeEach } from 'vitest';
+import { BridgedAmountEntity, METRIC_KEYS, MetricEntity } from '@rosen-ui/rosen-statistics-entity';
 
 import { bridgeAmountMetric } from '../../lib';
 import { bridgeMetricTestData } from '../testData';
@@ -71,28 +68,14 @@ describe('bridgeAmountMetric', () => {
     const metric = await metricRepo.findOne({
       where: { key: METRIC_KEYS.TOTAL_BRIDGE_AMOUNT_USD },
     });
-    expect(metric?.value).toBe(
-      testData.expectedResults.totalBridgeAmountMetricValue,
-    );
+    expect(metric?.value).toBe(testData.expectedResults.totalBridgeAmountMetricValue);
 
     const actualBridgeAmount = await bridgeAmountRepo.find({
-      select: [
-        'fromChain',
-        'amount',
-        'day',
-        'week',
-        'month',
-        'year',
-        'lastProcessedHeight',
-      ],
+      select: ['fromChain', 'amount', 'day', 'week', 'month', 'year', 'lastProcessedHeight'],
     });
 
-    expect(actualBridgeAmount).toHaveLength(
-      testData.expectedResults.bridgeAmountRecords.length,
-    );
-    expect(actualBridgeAmount).toEqual(
-      testData.expectedResults.bridgeAmountRecords,
-    );
+    expect(actualBridgeAmount).toHaveLength(testData.expectedResults.bridgeAmountRecords.length);
+    expect(actualBridgeAmount).toEqual(testData.expectedResults.bridgeAmountRecords);
   });
 
   /**
@@ -125,28 +108,14 @@ describe('bridgeAmountMetric', () => {
     const metric = await metricRepo.findOne({
       where: { key: METRIC_KEYS.TOTAL_BRIDGE_AMOUNT_USD },
     });
-    expect(metric?.value).toBe(
-      testData.expectedResults.totalBridgeAmountMetricValue,
-    );
+    expect(metric?.value).toBe(testData.expectedResults.totalBridgeAmountMetricValue);
 
     const actualBridgeAmount = await bridgeAmountRepo.find({
-      select: [
-        'fromChain',
-        'amount',
-        'day',
-        'week',
-        'month',
-        'year',
-        'lastProcessedHeight',
-      ],
+      select: ['fromChain', 'amount', 'day', 'week', 'month', 'year', 'lastProcessedHeight'],
     });
 
-    expect(actualBridgeAmount).toHaveLength(
-      testData.expectedResults.bridgeAmountRecords.length,
-    );
-    expect(actualBridgeAmount).toEqual(
-      testData.expectedResults.bridgeAmountRecords,
-    );
+    expect(actualBridgeAmount).toHaveLength(testData.expectedResults.bridgeAmountRecords.length);
+    expect(actualBridgeAmount).toEqual(testData.expectedResults.bridgeAmountRecords);
   });
 
   /**
@@ -209,28 +178,14 @@ describe('bridgeAmountMetric', () => {
     const metric = await metricRepo.findOne({
       where: { key: METRIC_KEYS.TOTAL_BRIDGE_AMOUNT_USD },
     });
-    expect(metric?.value).toBe(
-      testData.expectedResults.totalBridgeAmountMetricValue,
-    );
+    expect(metric?.value).toBe(testData.expectedResults.totalBridgeAmountMetricValue);
 
     const actualBridgeAmount = await bridgeAmountRepo.find({
-      select: [
-        'fromChain',
-        'amount',
-        'day',
-        'month',
-        'year',
-        'lastProcessedHeight',
-        'week',
-      ],
+      select: ['fromChain', 'amount', 'day', 'month', 'year', 'lastProcessedHeight', 'week'],
     });
 
-    expect(actualBridgeAmount).toHaveLength(
-      testData.expectedResults.bridgeAmountRecords.length,
-    );
-    expect(actualBridgeAmount).toEqual(
-      testData.expectedResults.bridgeAmountRecords,
-    );
+    expect(actualBridgeAmount).toHaveLength(testData.expectedResults.bridgeAmountRecords.length);
+    expect(actualBridgeAmount).toEqual(testData.expectedResults.bridgeAmountRecords);
   });
 
   /**
@@ -260,28 +215,14 @@ describe('bridgeAmountMetric', () => {
     const metric = await metricRepo.findOne({
       where: { key: METRIC_KEYS.TOTAL_BRIDGE_AMOUNT_USD },
     });
-    expect(metric?.value).toBe(
-      testData.expectedResults.totalBridgeAmountMetricValue,
-    );
+    expect(metric?.value).toBe(testData.expectedResults.totalBridgeAmountMetricValue);
 
     const actualBridgeAmount = await bridgeAmountRepo.find({
-      select: [
-        'fromChain',
-        'amount',
-        'day',
-        'week',
-        'month',
-        'year',
-        'lastProcessedHeight',
-      ],
+      select: ['fromChain', 'amount', 'day', 'week', 'month', 'year', 'lastProcessedHeight'],
     });
 
-    expect(actualBridgeAmount).toHaveLength(
-      testData.expectedResults.bridgeAmountRecords.length,
-    );
-    expect(actualBridgeAmount).toEqual(
-      testData.expectedResults.bridgeAmountRecords,
-    );
+    expect(actualBridgeAmount).toHaveLength(testData.expectedResults.bridgeAmountRecords.length);
+    expect(actualBridgeAmount).toEqual(testData.expectedResults.bridgeAmountRecords);
   });
 
   /**
@@ -331,27 +272,15 @@ describe('bridgeAmountMetric', () => {
     await bridgeAmountMetric(dataSource, logger);
 
     const bridgeAmount = await bridgeAmountRepo.find({
-      select: [
-        'fromChain',
-        'amount',
-        'day',
-        'week',
-        'month',
-        'year',
-        'lastProcessedHeight',
-      ],
+      select: ['fromChain', 'amount', 'day', 'week', 'month', 'year', 'lastProcessedHeight'],
     });
-    expect(bridgeAmount).toHaveLength(
-      testData.expectedResults.bridgeAmountRecords.length,
-    );
+    expect(bridgeAmount).toHaveLength(testData.expectedResults.bridgeAmountRecords.length);
     expect(bridgeAmount).toEqual(testData.expectedResults.bridgeAmountRecords);
 
     const metric = await metricRepo.findOne({
       where: { key: METRIC_KEYS.TOTAL_BRIDGE_AMOUNT_USD },
     });
-    expect(metric?.value).toBe(
-      testData.expectedResults.totalBridgeAmountMetricValue,
-    );
+    expect(metric?.value).toBe(testData.expectedResults.totalBridgeAmountMetricValue);
   });
 
   /**
@@ -381,28 +310,14 @@ describe('bridgeAmountMetric', () => {
     const metric = await metricRepo.findOne({
       where: { key: METRIC_KEYS.TOTAL_BRIDGE_AMOUNT_USD },
     });
-    expect(metric?.value).toBe(
-      testData.expectedResults.totalBridgeAmountMetricValue,
-    );
+    expect(metric?.value).toBe(testData.expectedResults.totalBridgeAmountMetricValue);
 
     const actualBridgeAmount = await bridgeAmountRepo.find({
-      select: [
-        'fromChain',
-        'amount',
-        'day',
-        'week',
-        'month',
-        'year',
-        'lastProcessedHeight',
-      ],
+      select: ['fromChain', 'amount', 'day', 'week', 'month', 'year', 'lastProcessedHeight'],
     });
 
-    expect(actualBridgeAmount).toHaveLength(
-      testData.expectedResults.bridgeAmountRecords.length,
-    );
-    expect(actualBridgeAmount).toEqual(
-      testData.expectedResults.bridgeAmountRecords,
-    );
+    expect(actualBridgeAmount).toHaveLength(testData.expectedResults.bridgeAmountRecords.length);
+    expect(actualBridgeAmount).toEqual(testData.expectedResults.bridgeAmountRecords);
   });
   /**
    * @target Should store events in different days when timestamp crosses midnight
@@ -432,27 +347,13 @@ describe('bridgeAmountMetric', () => {
     const metric = await metricRepo.findOne({
       where: { key: METRIC_KEYS.TOTAL_BRIDGE_AMOUNT_USD },
     });
-    expect(metric?.value).toBe(
-      testData.expectedResults.totalBridgeAmountMetricValue,
-    );
+    expect(metric?.value).toBe(testData.expectedResults.totalBridgeAmountMetricValue);
 
     const actualBridgeAmounts = await bridgeAmountRepo.find({
-      select: [
-        'fromChain',
-        'amount',
-        'day',
-        'week',
-        'month',
-        'year',
-        'lastProcessedHeight',
-      ],
+      select: ['fromChain', 'amount', 'day', 'week', 'month', 'year', 'lastProcessedHeight'],
     });
 
-    expect(actualBridgeAmounts).toHaveLength(
-      testData.expectedResults.bridgeAmountRecords.length,
-    );
-    expect(actualBridgeAmounts).toEqual(
-      testData.expectedResults.bridgeAmountRecords,
-    );
+    expect(actualBridgeAmounts).toHaveLength(testData.expectedResults.bridgeAmountRecords.length);
+    expect(actualBridgeAmounts).toEqual(testData.expectedResults.bridgeAmountRecords);
   });
 });

@@ -1,15 +1,10 @@
-import { AbstractLogger } from '@rosen-bridge/abstract-logger';
-import { RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
+import type { AbstractLogger } from '@rosen-bridge/abstract-logger';
+import type { RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
 import { Axios } from '@rosen-clients/rate-limited-axios';
 import { NETWORKS } from '@rosen-ui/constants';
 
 import { AbstractDataAdapter } from './abstracts';
-import {
-  AddressRunesBalance,
-  ChainAssetBalance,
-  RuneInfo,
-  UnisatResponse,
-} from './types';
+import type { AddressRunesBalance, ChainAssetBalance, RuneInfo, UnisatResponse } from './types';
 
 export class BitcoinRunesDataAdapter extends AbstractDataAdapter {
   chain = NETWORKS['bitcoin-runes'].key;
@@ -46,34 +41,26 @@ export class BitcoinRunesDataAdapter extends AbstractDataAdapter {
    * @returns {Promise<ChainAssetBalance[]>} list of asset balances for the address
    */
   getAddressAssets = async (address: string): Promise<ChainAssetBalance[]> => {
-    this.logger.info(
-      `Collecting rune balances from ${this.chain} for address ${address} started.`,
-    );
+    this.logger.info(`Collecting rune balances from ${this.chain} for address ${address} started.`);
 
     const balances: ChainAssetBalance[] = [];
 
     const tokens = this.tokenMap.getTokens(this.chain, this.chain);
     for (const token of tokens) {
-      const response = await this.client.get<
-        UnisatResponse<AddressRunesBalance>
-      >(`/v1/indexer/address/${address}/runes/${token.tokenId}/balance`);
-      const amount = response.data.data
-        ? BigInt(response.data.data.amount)
-        : 0n;
+      const response = await this.client.get<UnisatResponse<AddressRunesBalance>>(
+        `/v1/indexer/address/${address}/runes/${token.tokenId}/balance`,
+      );
+      const amount = response.data.data ? BigInt(response.data.data.amount) : 0n;
 
       balances.push({
         assetId: token.tokenId,
         balance: amount,
       });
 
-      this.logger.debug(
-        `Balance of token [${token.name}] in address [${address}] is [${amount}]`,
-      );
+      this.logger.debug(`Balance of token [${token.name}] in address [${address}] is [${amount}]`);
     }
 
-    this.logger.info(
-      `Collecting rune balances from ${this.chain} for address ${address} done.`,
-    );
+    this.logger.info(`Collecting rune balances from ${this.chain} for address ${address} done.`);
 
     return balances;
   };
@@ -91,8 +78,7 @@ export class BitcoinRunesDataAdapter extends AbstractDataAdapter {
 
     const tokenDetail = response.data.data;
 
-    if (!tokenDetail)
-      throw Error(`Total supply of token [${token.tokenId}] is not available`);
+    if (!tokenDetail) throw Error(`Total supply of token [${token.tokenId}] is not available`);
 
     return BigInt(tokenDetail.supply);
   };

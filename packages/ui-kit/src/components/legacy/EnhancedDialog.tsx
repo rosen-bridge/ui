@@ -1,6 +1,6 @@
-import { HTMLAttributes, ReactNode } from 'react';
+import type { HTMLAttributes, ReactNode } from 'react';
 
-import { Breakpoint, Dialog } from '@mui/material';
+import { type Breakpoint, Dialog } from '@mui/material';
 
 import { useBreakpoint } from '../../hooks';
 

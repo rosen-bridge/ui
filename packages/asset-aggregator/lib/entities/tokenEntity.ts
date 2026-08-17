@@ -1,5 +1,5 @@
 import { Column, Entity, PrimaryColumn } from '@rosen-bridge/extended-typeorm';
-import { Network } from '@rosen-ui/types';
+import type { Network } from '@rosen-ui/types';
 
 @Entity('token_entity')
 export class TokenEntity {
@@ -20,4 +20,10 @@ export class TokenEntity {
 
   @Column('varchar')
   chain: Network;
+
+  @Column('varchar')
+  ergoSideTokenId: string;
+
+  @Column('boolean')
+  isResident: boolean;
 }

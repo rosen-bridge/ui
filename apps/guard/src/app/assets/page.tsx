@@ -3,12 +3,12 @@
 import { useCallback, useMemo } from 'react';
 
 import { EnhancedTable } from '@rosen-bridge/ui-kit';
-import { Network } from '@rosen-ui/types';
+import type { Network } from '@rosen-ui/types';
 
 import { useBalance } from '@/hooks';
-import { GuardTokenInfo } from '@/types/api';
+import type { GuardTokenInfo } from '@/types/api';
 
-import { MobileRow, TabletRow, mobileHeader, tabletHeader } from './TableRow';
+import { MobileRow, mobileHeader, TabletRow, tabletHeader } from './TableRow';
 import { TableSkeleton } from './TableSkeleton';
 
 const Assets = () => {
@@ -22,10 +22,7 @@ const Assets = () => {
       ...data.hot.items.map((item) => ({ ...item, type: 'hot' })),
     ];
 
-    const all = Object.groupBy(
-      items,
-      (item) => item.chain + ':' + item.balance.tokenId,
-    );
+    const all = Object.groupBy(items, (item) => `${item.chain}:${item.balance.tokenId}`);
 
     return Object.values(all)
       .filter((items) => !!items)

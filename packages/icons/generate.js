@@ -1,6 +1,7 @@
-import * as glob from 'glob';
 import fs from 'node:fs';
 import path from 'node:path';
+
+import * as glob from 'glob';
 
 const lines = [];
 
@@ -17,10 +18,7 @@ glob
       match.replace('-', '').toUpperCase(),
     );
 
-    lines.push(
-      `export { default as ${componentName} } from './${file}?react';`,
-      '',
-    );
+    lines.push(`export { default as ${componentName} } from './${file}?react';`, '');
   });
 
 lines.push('export const TOKENS = {');
@@ -33,17 +31,11 @@ glob
   .forEach((file) => {
     const filename = path.basename(file, path.extname(file));
 
-    lines.push(
-      `  '${filename}': new URL(/* @vite-ignore */'${file}', import.meta.url).href,`,
-    );
+    lines.push(`  '${filename}': new URL(/* @vite-ignore */'${file}', import.meta.url).href,`);
   });
 
 lines.push('} as const');
 
 const content = lines.join('\n');
 
-fs.writeFileSync(
-  path.resolve(import.meta.dirname, 'src', 'index.ts'),
-  content,
-  'utf8',
-);
+fs.writeFileSync(path.resolve(import.meta.dirname, 'src', 'index.ts'), content, 'utf8');

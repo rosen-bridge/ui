@@ -1,5 +1,5 @@
 import { NETWORKS } from '@rosen-ui/constants';
-import { Network } from '@rosen-ui/types';
+import type { Network } from '@rosen-ui/types';
 
 const baseAddressURLs: { [key in Network]: string } = {
   [NETWORKS.binance.key]: 'https://bscscan.com/address',
@@ -12,10 +12,7 @@ const baseAddressURLs: { [key in Network]: string } = {
   [NETWORKS.firo.key]: 'https://explorer.firo.org/address',
 };
 
-export const getAddressUrl = (
-  network?: Network,
-  address?: string,
-): string | undefined => {
+export const getAddressUrl = (network?: Network, address?: string): string | undefined => {
   if (!network || !address) return;
 
   const baseURL = baseAddressURLs[network as keyof typeof baseAddressURLs];

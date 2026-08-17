@@ -1,13 +1,11 @@
 import { Link } from '@/components';
 import { useConfig } from '@/hooks';
-import { ElementBaseProps, OverridableType } from '@/types';
+import type { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.css';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface ActionOverrides {}
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export type ActionOwnProps = {};
 
 type ActionAsAnchor = ElementBaseProps<
@@ -15,10 +13,7 @@ type ActionAsAnchor = ElementBaseProps<
   ActionOwnProps & { href: string | undefined; disabled?: boolean }
 >;
 
-type ActionAsButton = ElementBaseProps<
-  'button',
-  ActionOwnProps & { href?: never }
->;
+type ActionAsButton = ElementBaseProps<'button', ActionOwnProps & { href?: never }>;
 
 export type ActionBaseProps = ActionAsAnchor | ActionAsButton;
 
@@ -31,10 +26,18 @@ export const Action = (props: ActionProps) => {
 
   const isLink = 'href' in rest;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  /**
+   * TODO: remove the inline Biome comment
+   * local:ergo/rosen-bridge/ui#441
+   */
+  // biome-ignore lint/suspicious/noExplicitAny: Use a better type
   const Component = (isLink ? Link : 'button') as any;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  /**
+   * TODO: remove the inline Biome comment
+   * local:ergo/rosen-bridge/ui#441
+   */
+  // biome-ignore lint/suspicious/noExplicitAny: Use a better type
   const next = { ...rest } as any;
 
   if (isLink) {

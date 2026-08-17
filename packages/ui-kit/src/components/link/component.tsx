@@ -1,16 +1,19 @@
 import { useMemo } from 'react';
 
 import { useConfig } from '@/hooks';
-import { Color, ElementBaseProps, OverridableType } from '@/types';
+import type { Color, ElementBaseProps, OverridableType } from '@/types';
 import { toCSSColor } from '@/utils';
 
 import './styles.css';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface LinkOverrides {}
 
 export type LinkOwnProps = {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  /**
+   * TODO: remove the inline Biome comment
+   * local:ergo/rosen-bridge/ui#441
+   */
+  // biome-ignore lint/suspicious/noExplicitAny: Use a better type
   as?: any;
   color?: Color;
   underline?: 'always' | 'hover' | 'none';
@@ -18,11 +21,7 @@ export type LinkOwnProps = {
 
 export type LinkBaseProps = ElementBaseProps<'a', LinkOwnProps>;
 
-export type LinkProps = OverridableType<
-  LinkBaseProps,
-  LinkOverrides,
-  'color' | 'href'
->;
+export type LinkProps = OverridableType<LinkBaseProps, LinkOverrides, 'color' | 'href'>;
 
 export const Link = (props: LinkProps) => {
   const {

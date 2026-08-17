@@ -1,9 +1,4 @@
-import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  Unique,
-} from '@rosen-bridge/extended-typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, Unique } from '@rosen-bridge/extended-typeorm';
 
 @Unique(['network'])
 @Entity('watcher_count_entity')

@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import { Network } from '@rosen-ui/types';
+import type { Network } from '@rosen-ui/types';
 
 import { useBalance } from './useBalance';
 

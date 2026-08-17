@@ -1,5 +1,6 @@
-import { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
-import { describe, it, expect, beforeEach } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
+
+import type { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
 
 import { WatcherCountEntity, WatcherCountMetricAction } from '../../lib';
 import { upsertWatcherCountScenarios } from '../testData';
@@ -76,8 +77,7 @@ describe('WatcherCountMetricAction', () => {
      * - new record added, existing records preserved
      */
     it('should insert multiple different networks', async () => {
-      const scenario =
-        upsertWatcherCountScenarios.insertMultipleDifferentNetworks;
+      const scenario = upsertWatcherCountScenarios.insertMultipleDifferentNetworks;
       await watcherRepo.insert(scenario.initialData);
 
       await action.upsertWatcherCount(scenario.upsertData);

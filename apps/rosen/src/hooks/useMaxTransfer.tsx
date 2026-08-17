@@ -1,12 +1,6 @@
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-  useTransition,
-} from 'react';
+import { useCallback, useEffect, useMemo, useState, useTransition } from 'react';
 
-import { RosenAmountValue } from '@rosen-ui/types';
+import type { RosenAmountValue } from '@rosen-ui/types';
 import { getDecimalString } from '@rosen-ui/utils';
 
 import { useBalance } from './useBalance';
@@ -67,14 +61,15 @@ export const useMaxTransfer = (): MaxTransferState => {
       return;
 
     startTransition(async () => {
+      if (!network.selectedSource || !transactionFormData.targetValue || !wallet.selected) return;
       try {
-        const amount = await network.selectedSource!.getMaxTransfer({
+        const amount = await network.selectedSource.getMaxTransfer({
           balance: balance.amount,
           isNative: transactionFormData.tokenValue.type === 'native',
           eventData: {
-            fromAddress: await wallet.selected!.getAddress(),
+            fromAddress: await wallet.selected.getAddress(),
             toAddress: transactionFormData.walletAddressValue,
-            toChain: transactionFormData.targetValue!,
+            toChain: transactionFormData.targetValue,
           },
         });
 

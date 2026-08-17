@@ -3,12 +3,11 @@ import { useMemo } from 'react';
 import { Tabs as TabsBaseUI } from '@base-ui/react/tabs';
 
 import { useConfig } from '@/hooks';
-import { ElementBaseProps, Gap, OverridableType } from '@/types';
+import type { ElementBaseProps, Gap, OverridableType } from '@/types';
 import { toCSSUnit } from '@/utils';
 
 import './styles.css';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface TabsOverrides {}
 
 export type TabsOwnProps = {
@@ -25,10 +24,7 @@ export type TabsProps = OverridableType<TabsBaseProps, TabsOverrides, 'gap'>;
 export const Tabs = (props: TabsProps) => {
   const { gap, style, value, onChange, ...rest } = useConfig('Tabs', props);
 
-  const styles = useMemo(
-    () => ({ gap: toCSSUnit('gap', gap), ...style }),
-    [gap, style],
-  );
+  const styles = useMemo(() => ({ gap: toCSSUnit('gap', gap), ...style }), [gap, style]);
 
   return (
     <TabsBaseUI.Root

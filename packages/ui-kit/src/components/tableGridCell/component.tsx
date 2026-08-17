@@ -1,22 +1,18 @@
 import { useMemo } from 'react';
 
 import { useConfig } from '@/hooks';
-import { ElementBaseProps, OverridableType, Width } from '@/types';
+import type { ElementBaseProps, OverridableType, Width } from '@/types';
 import { toCSSUnit } from '@/utils';
 
 import './styles.css';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface TableGridCellOverrides {}
 
 export type TableGridCellOwnProps = {
   width?: Width;
 };
 
-export type TableGridCellBaseProps = ElementBaseProps<
-  'div',
-  TableGridCellOwnProps
->;
+export type TableGridCellBaseProps = ElementBaseProps<'div', TableGridCellOwnProps>;
 
 export type TableGridCellProps = OverridableType<
   TableGridCellBaseProps,

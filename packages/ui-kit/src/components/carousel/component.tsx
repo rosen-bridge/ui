@@ -1,22 +1,17 @@
 import { useConfig } from '@/hooks';
-import { ElementBaseProps, OverridableType } from '@/types';
+import type { ElementBaseProps, OverridableType } from '@/types';
 
 import { useCarousel } from './hook';
+
 import './styles.css';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface CarouselOverrides {}
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export type CarouselOwnProps = {};
 
 export type CarouselBaseProps = ElementBaseProps<'div', CarouselOwnProps>;
 
-export type CarouselProps = OverridableType<
-  CarouselBaseProps,
-  CarouselOverrides,
-  never
->;
+export type CarouselProps = OverridableType<CarouselBaseProps, CarouselOverrides, never>;
 
 export const Carousel = (props: CarouselProps) => {
   const { children, ...rest } = useConfig('Carousel', props);

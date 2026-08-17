@@ -1,16 +1,12 @@
-import { AbstractLogger } from '@rosen-bridge/abstract-logger';
-import { DataSource } from '@rosen-bridge/extended-typeorm';
-import {
-  Dependency,
-  ServiceAction,
-  ServiceStatus,
-} from '@rosen-bridge/service-manager';
+import type { AbstractLogger } from '@rosen-bridge/abstract-logger';
+import type { DataSource } from '@rosen-bridge/extended-typeorm';
+import { type Dependency, ServiceAction, ServiceStatus } from '@rosen-bridge/service-manager';
 import { eventCountMetric } from '@rosen-ui/rosen-statistics';
 
 import { configs } from '../configs';
 import {
-  AbstractEventCountMetricService,
   AbstractDBService,
+  AbstractEventCountMetricService,
   AbstractScannerService,
 } from './abstracts';
 
@@ -20,11 +16,7 @@ export class EventCountMetricService extends AbstractEventCountMetricService {
   protected dependencies: Dependency[] = [
     {
       serviceName: AbstractDBService.name,
-      allowedStatuses: [
-        ServiceStatus.running,
-        ServiceStatus.started,
-        ServiceStatus.dormant,
-      ],
+      allowedStatuses: [ServiceStatus.running, ServiceStatus.started, ServiceStatus.dormant],
       action: ServiceAction.assemble,
     },
     {
@@ -64,9 +56,7 @@ export class EventCountMetricService extends AbstractEventCountMetricService {
     if (AbstractEventCountMetricService.instance != undefined) {
       return;
     }
-    AbstractEventCountMetricService.instance = new EventCountMetricService(
-      logger,
-    );
+    AbstractEventCountMetricService.instance = new EventCountMetricService(logger);
   };
 
   /**
@@ -77,10 +67,7 @@ export class EventCountMetricService extends AbstractEventCountMetricService {
    */
   private eventCountCalculation = async (): Promise<void> => {
     try {
-      await eventCountMetric(
-        this.dataSource,
-        this.logger.child('eventCountMetric'),
-      );
+      await eventCountMetric(this.dataSource, this.logger.child('eventCountMetric'));
 
       this.logger.info('Event count calculation job completed successfully');
     } catch (error) {

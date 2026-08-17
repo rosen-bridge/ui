@@ -1,6 +1,6 @@
 {
   "name": "@rosen-bridge/guard-app",
-  "version": "4.4.1",
+  "version": "4.4.2",
   "private": true,
   "repository": {
     "type": "git",
@@ -8,20 +8,19 @@
   },
   "license": "MIT",
   "scripts": {
+    "bootstrap": "turbo build --filter=@rosen-bridge/guard-app^...",
     "build": "next build",
-    "build:vercel": "cd ../../ && ./build.sh guard && cd apps/guard && npm run build",
+    "build:vercel": "npm run bootstrap && npm run build",
     "dev": "next dev",
-    "lint": "eslint --fix . && npm run prettify",
-    "lint:check": "eslint . && npm run prettify:check",
-    "prettify": "prettier --write . --ignore-path ../../.gitignore",
-    "prettify:check": "prettier --check . --ignore-path ../../.gitignore",
+    "lint": "biome check --write",
+    "lint:check": "biome check",
     "start": "next start",
     "tauri": "tauri",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "@rosen-bridge/icons": "^3.7.1",
-    "@rosen-bridge/ui-kit": "^5.8.2",
+    "@rosen-bridge/ui-kit": "^5.9.0",
     "@rosen-ui/constants": "^1.1.0",
     "@rosen-ui/swr-helpers": "^0.2.2",
     "@rosen-ui/utils": "^1.0.4",

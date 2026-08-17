@@ -1,10 +1,10 @@
-/* eslint-disable */
-import { Schema } from 'joi';
-import {
-  addKnownErrorConstructor,
-  serializeError,
-  deserializeError,
-} from 'serialize-error';
+/**
+ * TODO: remove the inline Biome comment
+ * local:ergo/rosen-bridge/ui#441
+ */
+/** biome-ignore-all lint/suspicious/noExplicitAny: Use a better type */
+import type { Schema } from 'joi';
+import { addKnownErrorConstructor, deserializeError, serializeError } from 'serialize-error';
 
 import { fromSafeData, toSafeData } from './safeData';
 
@@ -62,7 +62,7 @@ const DEFAULT_CONFIG: Partial<CreateSafeActionConfig> = {
 export const createSafeAction = (config: CreateSafeActionConfig) => {
   config = Object.assign({}, DEFAULT_CONFIG, config);
 
-  const actions = new Map<Function, number>();
+  const actions = new Map<AsyncFunction, number>();
 
   const caches: Record<
     string,
@@ -93,7 +93,7 @@ export const createSafeAction = (config: CreateSafeActionConfig) => {
       } catch (error: unknown) {
         await config.onError?.(error, options?.traceKey, args);
         return {
-          serializedError: config.serializeError!(error),
+          serializedError: config.serializeError?.(error),
           traceKey: options?.traceKey,
         };
       }
@@ -123,8 +123,7 @@ export const createSafeAction = (config: CreateSafeActionConfig) => {
 
       const isInitiated = caches[key]?.initiated;
 
-      const isExpired =
-        Date.now() >= (caches[key]?.timestamp || 0) + (caches[key]?.cache || 0);
+      const isExpired = Date.now() >= (caches[key]?.timestamp || 0) + (caches[key]?.cache || 0);
 
       if (!isInCache || (isInitiated && isExpired)) {
         caches[key] = Object.assign({}, caches[key], {
@@ -138,7 +137,7 @@ export const createSafeAction = (config: CreateSafeActionConfig) => {
       if (unwrapResult.serializedError) {
         delete caches[key];
 
-        const error = config.deserializeError!(unwrapResult.serializedError);
+        const error = config.deserializeError?.(unwrapResult.serializedError);
 
         await config.onError?.(error, unwrapResult.traceKey, args);
 

@@ -1,9 +1,9 @@
-import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
-import { NATIVE_TOKEN, RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
+import { type AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
+import { NATIVE_TOKEN, type RosenChainToken, type TokenMap } from '@rosen-bridge/tokens';
 import { NETWORKS_KEYS } from '@rosen-ui/constants';
 
-import { BridgedAssetEntity, LockedAssetEntity } from './entities';
-import { AssetBalance, NetworkItem, TotalSupply } from './types';
+import type { BridgedAssetEntity, LockedAssetEntity } from './entities';
+import type { AssetBalance, NetworkItem, TotalSupply } from './types';
 
 export class TokensAnalyzer {
   protected lockedTokens: Omit<LockedAssetEntity, 'token'>[];
@@ -55,11 +55,9 @@ export class TokensAnalyzer {
    */
   protected getNativeTokenId = (tokenId: string) => {
     const tokenSet = this.tokenMap.getTokenSet(tokenId);
-    if (!tokenSet)
-      throw new Error(`Can't find token-set for token by [${tokenId}] id`);
-    return Object.entries(tokenSet).filter(
-      ([, token]) => token.residency == NATIVE_TOKEN,
-    )[0][1].tokenId;
+    if (!tokenSet) throw new Error(`Can't find token-set for token by [${tokenId}] id`);
+    return Object.entries(tokenSet).filter(([, token]) => token.residency === NATIVE_TOKEN)[0][1]
+      .tokenId;
   };
 
   /**
@@ -68,10 +66,7 @@ export class TokensAnalyzer {
    * @param chain
    * @param chainAssets
    */
-  protected inspectChainTokens = async (
-    chain: NetworkItem,
-    chainAssets: AssetBalance,
-  ) => {
+  protected inspectChainTokens = async (chain: NetworkItem, chainAssets: AssetBalance) => {
     this.logger.debug(`Processing chain: ${chain}`);
     const tokens = this.tokenMap.getTokens(chain, chain);
     this.logger.debug(`Found ${tokens.length} tokens for ${chain} chain`);
@@ -82,12 +77,10 @@ export class TokensAnalyzer {
         );
         continue;
       }
-      this.logger.debug(
-        `Processing token [${token.tokenId}] (${token.name}) on ${chain} chain`,
-      );
+      this.logger.debug(`Processing token [${token.tokenId}] (${token.name}) on ${chain} chain`);
 
       const addressBalances = chainAssets[token.tokenId];
-      if (token.residency == NATIVE_TOKEN) {
+      if (token.residency === NATIVE_TOKEN) {
         addressBalances.forEach((addressBalance) => {
           this.lockedTokens.push({
             amount: addressBalance.balance,
@@ -123,7 +116,7 @@ export class TokensAnalyzer {
     );
 
     const assetTotalSupply = this.totalSupply[chain]
-      ?.filter((t) => t.assetId == token.tokenId)
+      ?.filter((t) => t.assetId === token.tokenId)
       .at(0);
 
     if (!assetTotalSupply) {
@@ -138,8 +131,7 @@ export class TokensAnalyzer {
       .reduce((acc: bigint, cur: bigint) => {
         return BigInt(acc) + BigInt(cur);
       }, 0n);
-    const bridgedAmount =
-      BigInt(assetTotalSupply.totalSupply) - BigInt(lockedAmount);
+    const bridgedAmount = BigInt(assetTotalSupply.totalSupply) - BigInt(lockedAmount);
 
     this.logger.debug(
       `Token [${token.tokenId}]: total supply=${assetTotalSupply.totalSupply}, locked=${lockedAmount}, bridged=${bridgedAmount}`,

@@ -12,7 +12,7 @@ interface TestContext {
   mockTokenMap: TokenMap;
 }
 
-let mockClient = {
+const mockClient = {
   get: vi.fn().mockReturnValue(blockCypherClientDogeReturnValue),
 };
 
@@ -37,9 +37,7 @@ describe('DogeBlockCypherDataAdapter', () => {
      * @expected
      * - result includes native doge balance
      */
-    it<TestContext>('should fetch balances for native asset', async ({
-      adapter,
-    }) => {
+    it<TestContext>('should fetch balances for native asset', async ({ adapter }) => {
       const result = await adapter.getAddressAssets('addr1');
 
       expect(result).toEqual(expectedDogeGetAddressAssetsResult);

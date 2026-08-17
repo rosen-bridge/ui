@@ -1,8 +1,12 @@
-/* eslint-disable */
-import { NextRequest } from 'next/server';
+/**
+ * TODO: remove the inline Biome comment
+ * local:ergo/rosen-bridge/ui#441
+ */
+/* biome-ignore-all lint/suspicious/noExplicitAny: Use a better type */
+import type { NextRequest } from 'next/server';
 
 import * as Sentry from '@sentry/nextjs';
-import { ValidationResult } from 'joi';
+import type { ValidationResult } from 'joi';
 
 export class AccessDeniedError extends Error {
   constructor(message: string) {
@@ -33,11 +37,7 @@ export const withValidation =
     try {
       const result = await validator(request, context);
 
-      if (
-        result &&
-        typeof result === 'object' &&
-        ('error' in result || 'value' in result)
-      ) {
+      if (result && typeof result === 'object' && ('error' in result || 'value' in result)) {
         const { error, value: data } = result as ValidationResult<TSchema>;
 
         if (error) throw error;
@@ -47,10 +47,7 @@ export const withValidation =
         value = result;
       }
     } catch (error) {
-      return Response.json(
-        { message: (error as any).message },
-        { status: 400 },
-      );
+      return Response.json({ message: (error as any).message }, { status: 400 });
     }
 
     try {

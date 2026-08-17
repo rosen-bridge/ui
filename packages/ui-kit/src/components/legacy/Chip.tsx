@@ -1,10 +1,10 @@
-import { ComponentProps, forwardRef, HtmlHTMLAttributes, useMemo } from 'react';
+import { type ComponentProps, forwardRef, type HtmlHTMLAttributes, useMemo } from 'react';
 
 import { styled } from '@mui/material';
 
 import { Skeleton } from '@/components';
 
-import { Icon, IconProps } from '../icon';
+import { Icon, type IconProps } from '../icon';
 import { Typography } from '../typography';
 
 /**
@@ -27,21 +27,11 @@ import { Typography } from '../typography';
 type ChipBaseProps = HtmlHTMLAttributes<HTMLDivElement> & {
   label?: string;
   icon?: IconProps['name'];
-  color?:
-    | 'primary'
-    | 'secondary'
-    | 'success'
-    | 'warning'
-    | 'error'
-    | 'neutral'
-    | 'info';
+  color?: 'primary' | 'secondary' | 'success' | 'warning' | 'error' | 'neutral' | 'info';
   loading?: boolean;
 };
 
-const ChipWrapper = styled('div')<ChipBaseProps>(({
-  theme,
-  color = 'primary',
-}) => {
+const ChipWrapper = styled('div')<ChipBaseProps>(({ theme, color = 'primary' }) => {
   const palette = theme.palette || theme;
   const colors = palette[color] || palette.primary;
 

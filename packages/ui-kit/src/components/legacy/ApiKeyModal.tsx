@@ -1,7 +1,8 @@
-import React, { FormEvent, useEffect, useState } from 'react';
-import { useForm, Controller } from 'react-hook-form';
+import type React from 'react';
+import { type FormEvent, useEffect, useState } from 'react';
 
-import { Button, Tooltip, IconButton, Typography } from '@mui/material';
+import { Button, IconButton, Tooltip, Typography } from '@mui/material';
+import { Controller, useForm } from 'react-hook-form';
 
 import { useApiKey, useToast } from '../../hooks';
 import { CloseButton } from '../closeButton';
@@ -65,12 +66,7 @@ export const ApiKeyModal = ({ children }: ApiKeyModalProps) => {
           <Icon name="KeySkeleton" />
         </IconButton>
       )}
-      <Dialog
-        open={isOpen}
-        onClose={handleCloseModal}
-        maxWidth="tablet"
-        fullWidth
-      >
+      <Dialog open={isOpen} onClose={handleCloseModal} maxWidth="tablet" fullWidth>
         <DialogTitle>Authorization</DialogTitle>
         <form onSubmit={onSubmit}>
           <DialogContent dividers>

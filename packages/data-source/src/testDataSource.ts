@@ -13,32 +13,32 @@ import {
   migrations as tokenPriceMigrations,
 } from '@rosen-bridge/token-price-entity';
 import {
-  EventTriggerEntity,
   CommitmentEntity,
+  EventTriggerEntity,
   migrations as eventTriggerExtractorMigrations,
 } from '@rosen-bridge/watcher-data-extractor';
 import {
+  migrations as assetCalculatorMigrations,
   BridgedAssetEntity,
   LockedAssetEntity,
   TokenEntity,
-  migrations as assetCalculatorMigrations,
 } from '@rosen-ui/asset-calculator';
 import {
   AggregatedStatusChangedEntity,
   AggregatedStatusEntity,
   GuardStatusChangedEntity,
   GuardStatusEntity,
-  TxEntity,
   migrations as publicStatusMigrations,
+  TxEntity,
 } from '@rosen-ui/public-status';
 import {
-  MetricEntity,
   BridgedAmountEntity,
   BridgeFeeEntity,
   EventCountEntity,
+  MetricEntity,
+  migrations as statisticsMigrations,
   UserEventEntity,
   WatcherCountEntity,
-  migrations as statisticsMigrations,
 } from '@rosen-ui/rosen-statistics-entity';
 
 export const testDataSource = new DataSource({

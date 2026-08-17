@@ -3,7 +3,7 @@ import { styled } from '@mui/material';
 export const NavigationBar = styled('div', {
   name: 'RosenNavigationBar',
   slot: 'Root',
-  overridesResolver: (props, styles) => styles.root,
+  overridesResolver: (_props, styles) => styles.root,
 })(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',

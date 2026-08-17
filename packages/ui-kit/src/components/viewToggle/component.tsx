@@ -1,10 +1,9 @@
 import { Icon, IconButton } from '@/components';
 import { useConfig } from '@/hooks';
-import { ElementBaseProps, OverridableType } from '@/types';
+import type { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.css';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface ViewToggleOverrides {}
 
 export type ViewToggleType = 'grid' | 'row';
@@ -17,11 +16,7 @@ export type ViewToggleOwnProps = {
 
 export type ViewToggleBaseProps = ElementBaseProps<'div', ViewToggleOwnProps>;
 
-export type ViewToggleProps = OverridableType<
-  ViewToggleBaseProps,
-  ViewToggleOverrides,
-  never
->;
+export type ViewToggleProps = OverridableType<ViewToggleBaseProps, ViewToggleOverrides, never>;
 
 /**
  * A simple toggle component for switching between 'grid' and 'row' view modes.

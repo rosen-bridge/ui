@@ -1,11 +1,7 @@
-import { AbstractLogger } from '@rosen-bridge/abstract-logger';
-import {
-  Dependency,
-  ServiceAction,
-  ServiceStatus,
-} from '@rosen-bridge/service-manager';
+import type { AbstractLogger } from '@rosen-bridge/abstract-logger';
+import { type Dependency, ServiceAction, ServiceStatus } from '@rosen-bridge/service-manager';
 import ergoExplorerClientFactory from '@rosen-clients/ergo-explorer';
-import { TotalSupply } from '@rosen-ui/asset-aggregator';
+import type { TotalSupply } from '@rosen-ui/asset-aggregator';
 import {
   BinanceEvmRpcDataAdapter,
   BitcoinEsploraDataAdapter,
@@ -15,20 +11,14 @@ import {
   ErgoExplorerDataAdapter,
   EthereumEvmRpcDataAdapter,
 } from '@rosen-ui/asset-data-adapter';
-import {
-  AssetBalance,
-  ChainsAdapters,
-} from '@rosen-ui/asset-data-adapter/dist/types';
+import type { AssetBalance, ChainsAdapters } from '@rosen-ui/asset-data-adapter/dist/types';
 import { NETWORKS, NETWORKS_KEYS } from '@rosen-ui/constants';
 
 import { configs } from '../configs';
 import { TOTAL_SUPPLY_REDIS_KEY } from '../constants';
-import { ChainChoices } from '../types';
+import type { ChainChoices } from '../types';
 import { stringSerializer } from '../utils';
-import {
-  AbstractAssetDataAdapterService,
-  AbstractTokenMapService,
-} from './abstracts';
+import { AbstractAssetDataAdapterService, AbstractTokenMapService } from './abstracts';
 import { AbstractRedisService } from './abstracts/abstractRedisService';
 
 export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
@@ -84,9 +74,7 @@ export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
         try {
           assets[chain] = await adapter.getAllTokensTotalSupply();
         } catch (error) {
-          this.logger.error(
-            `Failed to get total supply for ${chain}: ${error}`,
-          );
+          this.logger.error(`Failed to get total supply for ${chain}: ${error}`);
           assets[chain] = [];
         }
       }
@@ -125,8 +113,7 @@ export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
               addresses,
               tokenMap,
               {
-                explorerUrl:
-                  configs.chains.ergo.explorer.connections.at(0)!.url,
+                explorerUrl: configs.chains.ergo.explorer.connections.at(0)!.url,
               },
               this.logger.child(`ergoExplorerDataAdapter`),
             );
@@ -155,9 +142,8 @@ export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
               addresses,
               tokenMap,
               {
-                url: configs.chains.ethereum.rpc.connections.at(0)!.url!,
-                authToken:
-                  configs.chains.ethereum.rpc.connections.at(0)?.authToken,
+                url: configs.chains.ethereum.rpc.connections.at(0)!.url || '',
+                authToken: configs.chains.ethereum.rpc.connections.at(0)?.authToken,
               },
               configs.chains.ethereum.adapter.chunkSize,
               this.logger.child('ethereumEvmRpcDataAdapter'),
@@ -168,9 +154,8 @@ export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
               addresses,
               tokenMap,
               {
-                url: configs.chains.binance.rpc.connections.at(0)!.url!,
-                authToken:
-                  configs.chains.binance.rpc.connections.at(0)?.authToken,
+                url: configs.chains.binance.rpc.connections.at(0)!.url || '',
+                authToken: configs.chains.binance.rpc.connections.at(0)?.authToken,
               },
               configs.chains.binance.adapter.chunkSize,
               this.logger.child('binanceEvmRpcDataAdapter'),
@@ -182,9 +167,7 @@ export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
               tokenMap,
               {
                 koiosUrl: configs.chains.cardano.koios.connections.at(0)!.url,
-                authToken: configs.chains.cardano.koios.connections
-                  .at(0)
-                  ?.authToken?.toString(),
+                authToken: configs.chains.cardano.koios.connections.at(0)?.authToken?.toString(),
               },
               this.logger.child('cardanoKoiosDataAdapter'),
             );
@@ -215,9 +198,7 @@ export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
     if (AbstractAssetDataAdapterService.instance != undefined) {
       return;
     }
-    AbstractAssetDataAdapterService.instance = new AssetDataAdapterService(
-      logger,
-    );
+    AbstractAssetDataAdapterService.instance = new AssetDataAdapterService(logger);
   };
 
   /**
@@ -238,25 +219,17 @@ export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
    * @param {ChainChoices} chain - The chain name of data adapter
    * @protected
    */
-  protected chainDataUpdated = async (
-    adapter: ChainsAdapters,
-  ): Promise<void> => {
+  protected chainDataUpdated = async (adapter: ChainsAdapters): Promise<void> => {
     let newData = await adapter.fetch();
 
-    if (
-      adapter.chain == NETWORKS.ethereum.key ||
-      adapter.chain == NETWORKS.binance.key
-    ) {
+    if (adapter.chain === NETWORKS.ethereum.key || adapter.chain === NETWORKS.binance.key) {
       // preventing of overriding old chunks of data
       const oldData =
         (await AbstractRedisService.getInstance().getFromRedis<AssetBalance | null>(
           adapter.chain,
         )) || {};
       const finalData = { ...oldData };
-      for (const tokenId of new Set([
-        ...Object.keys(oldData),
-        ...Object.keys(newData),
-      ])) {
+      for (const tokenId of new Set([...Object.keys(oldData), ...Object.keys(newData)])) {
         if (!Object.hasOwn(finalData, tokenId)) {
           finalData[tokenId] = newData[tokenId];
         } else if (!Object.hasOwn(newData, tokenId)) {
@@ -286,10 +259,7 @@ export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
         newData = finalData;
       }
     }
-    await AbstractRedisService.getInstance().setToRedis(
-      adapter.chain,
-      stringSerializer(newData),
-    );
+    await AbstractRedisService.getInstance().setToRedis(adapter.chain, stringSerializer(newData));
   };
 
   /**

@@ -1,6 +1,6 @@
 import {
-  PropsWithChildren,
   createContext,
+  type PropsWithChildren,
   useCallback,
   useContext,
   useEffect,
@@ -10,8 +10,8 @@ import {
 } from 'react';
 
 import { useToast } from '@rosen-bridge/ui-kit';
-import { RosenAmountValue } from '@rosen-ui/types';
-import { getNonDecimalString, getDecimalString } from '@rosen-ui/utils';
+import type { RosenAmountValue } from '@rosen-ui/types';
+import { getDecimalString, getNonDecimalString } from '@rosen-ui/utils';
 
 import { FEE_CONFIG_TOKEN_ID } from '../../configs';
 import { useNetwork } from './useNetwork';
@@ -26,9 +26,7 @@ export const useTransactionFees = () => {
   const context = useContext(TransactionFeesContext);
 
   if (!context) {
-    throw new Error(
-      'useTransactionFees must be used within TransactionFeesProvider',
-    );
+    throw new Error('useTransactionFees must be used within TransactionFeesProvider');
   }
 
   return context;
@@ -47,8 +45,7 @@ export type TransactionFeesContextType = {
   isLoading: boolean;
 };
 
-export const TransactionFeesContext =
-  createContext<TransactionFeesContextType | null>(null);
+export const TransactionFeesContext = createContext<TransactionFeesContextType | null>(null);
 
 export const TransactionFeesProvider = ({ children }: PropsWithChildren) => {
   const { selectedSource } = useNetwork();
@@ -57,8 +54,7 @@ export const TransactionFeesProvider = ({ children }: PropsWithChildren) => {
 
   const tokenMap = useTokenMap();
 
-  const { sourceValue, targetValue, tokenValue, amountValue } =
-    useTransactionFormData();
+  const { sourceValue, targetValue, tokenValue, amountValue } = useTransactionFormData();
 
   const [error, setError] = useState<unknown>();
 
@@ -104,11 +100,9 @@ export const TransactionFeesProvider = ({ children }: PropsWithChildren) => {
       }
     })();
 
-    const variableBridgeFee =
-      (paymentAmount * fees.feeRatio) / fees.feeRatioDivisor;
+    const variableBridgeFee = (paymentAmount * fees.feeRatio) / fees.feeRatioDivisor;
 
-    const bridgeFee =
-      fees.bridgeFee > variableBridgeFee ? fees.bridgeFee : variableBridgeFee;
+    const bridgeFee = fees.bridgeFee > variableBridgeFee ? fees.bridgeFee : variableBridgeFee;
 
     const bridgeFeeRaw = getDecimalString(bridgeFee, decimals);
 
@@ -116,9 +110,7 @@ export const TransactionFeesProvider = ({ children }: PropsWithChildren) => {
 
     const networkFeeRaw = getDecimalString(fees.networkFee, decimals);
 
-    const receivingAmount = feesInfo
-      ? paymentAmount - (fees.networkFee + bridgeFee!)
-      : 0n;
+    const receivingAmount = feesInfo ? paymentAmount - (fees.networkFee + bridgeFee) : 0n;
 
     const receivingAmountRaw =
       receivingAmount > 0 ? getDecimalString(receivingAmount, decimals) : '0';
@@ -167,8 +159,7 @@ export const TransactionFeesProvider = ({ children }: PropsWithChildren) => {
         ) {
           toast.add({
             type: 'warning',
-            description:
-              'Fees might change depending on the height of mining the transactions.',
+            description: 'Fees might change depending on the height of mining the transactions.',
           });
         }
 
@@ -193,12 +184,14 @@ export const TransactionFeesProvider = ({ children }: PropsWithChildren) => {
   }, [feesInfo, tokenId, load]);
 
   useEffect(() => {
+    void sourceValue;
+    void targetValue;
+    void tokenValue;
+
     setFeesInfo(undefined);
   }, [sourceValue, targetValue, tokenValue]);
 
   return (
-    <TransactionFeesContext.Provider value={state}>
-      {children}
-    </TransactionFeesContext.Provider>
+    <TransactionFeesContext.Provider value={state}>{children}</TransactionFeesContext.Provider>
   );
 };

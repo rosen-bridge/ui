@@ -1,15 +1,15 @@
-import { CSSProperties, useMemo } from 'react';
+import { type CSSProperties, useMemo } from 'react';
 
 import {
   Collapsible,
   DateTime,
   Icon,
   IconButton,
-  IconProps,
+  type IconProps,
   Tooltip,
   Typography,
 } from '@/components';
-import { Color } from '@/types';
+import type { Color } from '@/types';
 import { toCSSColor } from '@/utils';
 
 import { Line } from './line';
@@ -28,17 +28,7 @@ export type StepProps = {
 };
 
 export const Step = (props: StepProps) => {
-  const {
-    active,
-    color,
-    description,
-    icon,
-    label,
-    setActive,
-    sub,
-    timestamp,
-    value,
-  } = props;
+  const { active, color, description, icon, label, setActive, sub, timestamp, value } = props;
 
   const open = active === value;
 
@@ -59,9 +49,7 @@ export const Step = (props: StepProps) => {
           title={
             <div>
               {timestamp && <DateTime color="inherit" timestamp={timestamp} />}
-              {description && (
-                <Typography variant="caption">{description}</Typography>
-              )}
+              {description && <Typography variant="caption">{description}</Typography>}
             </div>
           }
         >
@@ -85,7 +73,7 @@ export const Step = (props: StepProps) => {
                 <Line />
                 <div data-level="sub" className="sub">
                   {sub?.map((item, index) => (
-                    <Step key={index} {...item} />
+                    <Step key={index.toString()} {...item} />
                   ))}
                 </div>
               </div>

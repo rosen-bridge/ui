@@ -1,9 +1,9 @@
-import { HTMLAttributes, MouseEventHandler, ReactNode } from 'react';
+import type { HTMLAttributes, MouseEventHandler, ReactNode } from 'react';
 
 import { styled } from '@mui/material';
 
 import { CloseButton } from '../closeButton';
-import { Icon, IconProps } from '../icon';
+import { Icon, type IconProps } from '../icon';
 import { DialogTitle } from './Mui';
 
 const IconContainer = styled('div')(({ theme }) => ({
@@ -22,11 +22,7 @@ export type EnhancedDialogTitleProps = {
 /**
  * renders an enhanced version of material ui DialogTitle
  */
-export const EnhancedDialogTitle = ({
-  children,
-  icon,
-  onClose,
-}: EnhancedDialogTitleProps) => {
+export const EnhancedDialogTitle = ({ children, icon, onClose }: EnhancedDialogTitleProps) => {
   return (
     <DialogTitle display="flex" alignItems="center" flexDirection="row" gap={1}>
       {icon && (

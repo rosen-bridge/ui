@@ -2,30 +2,31 @@
 
 import { useEffect } from 'react';
 
+import useSWR from 'swr';
+
 import {
   Amount,
   Columns,
   Connector,
-  Identifier,
-  Label,
-  Network,
-  Token,
   DateTime,
   EventStatus,
-  useResponsive,
-  Typography,
-  Menu,
-  MenuItem,
   Icon,
-  MenuTrigger,
+  Identifier,
+  Label,
+  Menu,
   MenuBody,
+  MenuItem,
+  MenuTrigger,
+  Network,
+  Token,
+  Typography,
+  useResponsive,
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
-import { Network as NetworkType } from '@rosen-ui/types';
+import type { Network as NetworkType } from '@rosen-ui/types';
 import { getAddressUrl } from '@rosen-ui/utils';
-import useSWR from 'swr';
 
-import { EventDetailsType } from '@/backend/events/repository';
+import type { EventDetailsType } from '@/backend/events/repository';
 
 import { Section } from './Section';
 
@@ -47,7 +48,7 @@ export const Overview = ({
 
   useEffect(() => {
     onFlowIdChange(events?.at(0)?.txId);
-  }, [events]);
+  }, [events, onFlowIdChange]);
 
   const data = events?.find((event) => event.txId === flowId);
 
@@ -74,12 +75,7 @@ export const Overview = ({
     <Section error={error} load={mutate} title="Overview">
       <Columns count={multipleFLow ? 3 : 1} width="320px" gap="24px">
         <Label label="Event Id" orientation={labelOrientation}>
-          <Identifier
-            style={identifierStyle}
-            loading={isLoading}
-            value={data?.eventId}
-            copyable
-          />
+          <Identifier style={identifierStyle} loading={isLoading} value={data?.eventId} copyable />
         </Label>
         {multipleFLow && (
           <>
@@ -119,11 +115,7 @@ export const Overview = ({
       </Columns>
       <Columns count={3} width="320px" gap="24px">
         <Label label="Token" orientation={labelOrientation}>
-          <Token
-            loading={isLoading}
-            value={data?.lockToken?.id}
-            variant={tokenVariant}
-          />
+          <Token loading={isLoading} value={data?.lockToken?.id} variant={tokenVariant} />
         </Label>
         <Label label="Amount" orientation={labelOrientation}>
           <Amount
@@ -157,10 +149,7 @@ export const Overview = ({
           <EventStatus value={data?.status} loading={isLoading} />
         </Label>
         <Label label="Time" orientation={labelOrientation}>
-          <DateTime
-            loading={isLoading}
-            timestamp={(data?.timestamp || 0) * 1000}
-          />
+          <DateTime loading={isLoading} timestamp={(data?.timestamp || 0) * 1000} />
         </Label>
         <Label label="Fee Sum" orientation={labelOrientation}>
           <Amount

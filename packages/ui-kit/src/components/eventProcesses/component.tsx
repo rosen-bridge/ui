@@ -1,14 +1,14 @@
-import { CSSProperties, useMemo } from 'react';
+import { type CSSProperties, useMemo } from 'react';
 
 import { Skeleton } from '@/components';
 import { useConfig } from '@/hooks';
-import { ElementBaseProps, OverridableType } from '@/types';
+import type { ElementBaseProps, OverridableType } from '@/types';
 
 import { StepExtra } from './stepExtra';
-import { Step, StepProps } from './steps';
+import { Step, type StepProps } from './steps';
+
 import './styles.css';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface EventProcessesOverrides {}
 
 export type EventProcessesOwnProps = {
@@ -19,10 +19,7 @@ export type EventProcessesOwnProps = {
   onChange?: (value?: string) => void;
 };
 
-export type EventProcessesBaseProps = ElementBaseProps<
-  'div',
-  EventProcessesOwnProps
->;
+export type EventProcessesBaseProps = ElementBaseProps<'div', EventProcessesOwnProps>;
 
 export type EventProcessesProps = OverridableType<
   EventProcessesBaseProps,
@@ -59,16 +56,14 @@ export const EventProcesses = (props: EventProcessesProps) => {
       gridTemplateColumns: gridTemplateColumns,
       ...style,
     } as CSSProperties;
-  }, [gridTemplateColumns]);
+  }, [gridTemplateColumns, style]);
 
   return (
     <div style={{ ...styles }} data-orientation={orientation} {...rest}>
       {items?.map((item, index) => {
-        if (item.line) return <StepExtra {...item} key={index} />;
+        if (item.line) return <StepExtra {...item} key={index.toString()} />;
 
-        return (
-          <Step key={index} active={value} setActive={onChange} {...item} />
-        );
+        return <Step key={index.toString()} active={value} setActive={onChange} {...item} />;
       })}
       {loading && <Skeleton attached variant="rounded" />}
     </div>

@@ -1,6 +1,6 @@
 import { Binance as BinanceIcon } from '@rosen-bridge/icons';
-import { Network, NetworkConfig } from '@rosen-network/base';
-import { generateLockData, generateTxParameters } from '@rosen-network/evm';
+import type { Network, NetworkConfig } from '@rosen-network/base';
+import type { generateLockData, generateTxParameters } from '@rosen-network/evm';
 import { NETWORKS } from '@rosen-ui/constants';
 
 type BinanceNetworkConfig = NetworkConfig & {
@@ -28,15 +28,11 @@ export class BinanceNetwork implements Network {
     return this.config.calculateFee(...args);
   };
 
-  public generateLockData: BinanceNetworkConfig['generateLockData'] = (
-    ...args
-  ) => {
+  public generateLockData: BinanceNetworkConfig['generateLockData'] = (...args) => {
     return this.config.generateLockData(...args);
   };
 
-  public generateTxParameters: BinanceNetworkConfig['generateTxParameters'] = (
-    ...args
-  ) => {
+  public generateTxParameters: BinanceNetworkConfig['generateTxParameters'] = (...args) => {
     return this.config.generateTxParameters(...args);
   };
 

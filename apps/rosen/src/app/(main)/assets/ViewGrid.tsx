@@ -11,7 +11,7 @@ import {
   Token,
 } from '@rosen-bridge/ui-kit';
 
-import { AssetsFullData } from './getFullAssetData';
+import type { AssetsFullData } from './getFullAssetData';
 
 export type ViewGridProps = {
   current?: AssetsFullData;
@@ -20,12 +20,7 @@ export type ViewGridProps = {
   setCurrent: (current?: AssetsFullData) => void;
 };
 
-export const ViewGrid = ({
-  current,
-  items,
-  isLoading,
-  setCurrent,
-}: ViewGridProps) => {
+export const ViewGrid = ({ current, items, isLoading, setCurrent }: ViewGridProps) => {
   return (
     <GridContainer minWidth="260px" gap={1}>
       {items.map((item, index) => (
@@ -39,18 +34,9 @@ export const ViewGrid = ({
           }}
         >
           <CardBody>
-            <Stack
-              direction="row"
-              justify="between"
-              spacing={1}
-              style={{ maxWidth: 600 }}
-            >
+            <Stack direction="row" justify="between" spacing={1} style={{ maxWidth: 600 }}>
               <Token loading={isLoading} value={item.id} style={{ flex: 1 }} />
-              <Chip
-                color="neutral"
-                loading={isLoading}
-                style={{ fontSize: '13px' }}
-              >
+              <Chip color="neutral" loading={isLoading} style={{ fontSize: '13px' }}>
                 <Network value={item.chain} />
               </Chip>
             </Stack>

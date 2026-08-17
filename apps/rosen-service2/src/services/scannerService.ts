@@ -1,33 +1,25 @@
-import { AbstractLogger } from '@rosen-bridge/abstract-logger';
-import { WebSocketScanner } from '@rosen-bridge/abstract-scanner';
-import { TokenMap } from '@rosen-bridge/extended-tokens';
-import { DataSource } from '@rosen-bridge/extended-typeorm';
 import {
-  Dependency,
-  ServiceStatus,
-  ServiceAction,
-} from '@rosen-bridge/service-manager';
-import { NETWORKS } from '@rosen-ui/constants';
-import {
-  getDogeScanner,
-  getCardanoScanner,
-  getBitcoinScanner,
   getBinanceScanner,
+  getBitcoinScanner,
+  getCardanoScanner,
+  getDogeScanner,
   getEthereumScanner,
 } from 'scanners';
 
+import type { AbstractLogger } from '@rosen-bridge/abstract-logger';
+import { WebSocketScanner } from '@rosen-bridge/abstract-scanner';
+import type { TokenMap } from '@rosen-bridge/extended-tokens';
+import type { DataSource } from '@rosen-bridge/extended-typeorm';
+import { type Dependency, ServiceAction, ServiceStatus } from '@rosen-bridge/service-manager';
+import { NETWORKS } from '@rosen-ui/constants';
+
 import { configs } from '../configs';
+import type { ChainChoices, ChainScannersType, ChainsKeys, ChainsWithScanner } from '../types';
 import {
-  ChainChoices,
-  ChainScannersType,
-  ChainsKeys,
-  ChainsWithScanner,
-} from '../types';
-import {
+  AbstractDBService,
   AbstractErgoScannerService,
   AbstractScannerService,
   AbstractTokenMapService,
-  AbstractDBService,
 } from './abstracts';
 
 export class ScannerService extends AbstractScannerService {
@@ -38,20 +30,12 @@ export class ScannerService extends AbstractScannerService {
   protected dependencies: Dependency[] = [
     {
       serviceName: AbstractDBService.name,
-      allowedStatuses: [
-        ServiceStatus.running,
-        ServiceStatus.started,
-        ServiceStatus.dormant,
-      ],
+      allowedStatuses: [ServiceStatus.running, ServiceStatus.started, ServiceStatus.dormant],
       action: ServiceAction.assemble,
     },
     {
       serviceName: AbstractTokenMapService.name,
-      allowedStatuses: [
-        ServiceStatus.running,
-        ServiceStatus.started,
-        ServiceStatus.dormant,
-      ],
+      allowedStatuses: [ServiceStatus.running, ServiceStatus.started, ServiceStatus.dormant],
       action: ServiceAction.assemble,
     },
     {
@@ -144,10 +128,7 @@ export class ScannerService extends AbstractScannerService {
           }
           break;
         case NETWORKS.bitcoin.key:
-          if (
-            configs.chains.bitcoin.active ||
-            configs.chains['bitcoin-runes'].active
-          ) {
+          if (configs.chains.bitcoin.active || configs.chains['bitcoin-runes'].active) {
             this.scanners[NETWORKS.bitcoin.key] = await getBitcoinScanner(
               this.dataSource,
               this.tokenMap,
@@ -156,10 +137,7 @@ export class ScannerService extends AbstractScannerService {
           break;
         case NETWORKS.doge.key:
           if (configs.chains.doge.active) {
-            this.scanners[NETWORKS.doge.key] = await getDogeScanner(
-              this.dataSource,
-              this.tokenMap,
-            );
+            this.scanners[NETWORKS.doge.key] = await getDogeScanner(this.dataSource, this.tokenMap);
           }
           break;
       }
@@ -209,8 +187,7 @@ export class ScannerService extends AbstractScannerService {
             await scanner.update();
           }
         },
-        interval:
-          configs.chains[chain as ChainsWithScanner].scanInterval * 1000,
+        interval: configs.chains[chain as ChainsWithScanner].scanInterval * 1000,
       });
     }
     return tasks;

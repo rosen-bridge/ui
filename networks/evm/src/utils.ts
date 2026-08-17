@@ -1,7 +1,8 @@
+import { type FeeData, isAddress, JsonRpcProvider } from 'ethers';
+
 import { encodeAddress } from '@rosen-bridge/address-codec';
 import { NETWORKS } from '@rosen-ui/constants';
-import { Network } from '@rosen-ui/types';
-import { FeeData, isAddress, JsonRpcProvider } from 'ethers';
+import type { Network } from '@rosen-ui/types';
 
 import { EvmChains } from './types';
 
@@ -33,13 +34,9 @@ export const generateLockData = async (
 
   // parse toAddress
   const addressHex = encodeAddress(toChain, toAddress);
-  const addressLengthCode = (addressHex.length / 2)
-    .toString(16)
-    .padStart(2, '0');
+  const addressLengthCode = (addressHex.length / 2).toString(16).padStart(2, '0');
 
-  return (
-    toChainHex + bridgeFeeHex + networkFeeHex + addressLengthCode + addressHex
-  );
+  return toChainHex + bridgeFeeHex + networkFeeHex + addressLengthCode + addressHex;
 };
 
 /**

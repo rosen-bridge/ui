@@ -1,21 +1,9 @@
 'use client';
 
-import { RosenChainToken } from '@rosen-bridge/tokens';
-import {
-  Alert,
-  Amount,
-  Card,
-  CardBody,
-  Divider,
-  Label,
-  Truncate,
-} from '@rosen-bridge/ui-kit';
+import type { RosenChainToken } from '@rosen-bridge/tokens';
+import { Alert, Amount, Card, CardBody, Divider, Label, Truncate } from '@rosen-bridge/ui-kit';
 
-import {
-  useTokenMap,
-  useTransactionFees,
-  useTransactionFormData,
-} from '@/hooks';
+import { useTokenMap, useTransactionFees, useTransactionFormData } from '@/hooks';
 
 /**
  * shows fees to the user and handles wallet transaction
@@ -39,13 +27,11 @@ export const TransactionInfo = () => {
 
   const targetTokenSearchResults =
     sourceValue &&
-    tokenValue &&
-    tokenValue.tokenId &&
+    tokenValue?.tokenId &&
     tokenMap.search(sourceValue, {
       tokenId: tokenValue.tokenId,
     });
-  const targetTokenInfo =
-    targetValue && targetTokenSearchResults?.[0]?.[targetValue];
+  const targetTokenInfo = targetValue && targetTokenSearchResults?.[0]?.[targetValue];
 
   const isPending = isLoadingFees && sourceValue && targetValue && tokenValue;
 
@@ -60,11 +46,7 @@ export const TransactionInfo = () => {
       <CardBody>
         <Label label="You Will Receive" color="text-primary" dense>
           <Amount
-            value={
-              !tokenValue || receivingAmountRaw === '0'
-                ? undefined
-                : receivingAmountRaw
-            }
+            value={!tokenValue || receivingAmountRaw === '0' ? undefined : receivingAmountRaw}
             unit={targetTokenInfo?.name}
             fallback="0"
             loading={isPending}
@@ -99,7 +81,11 @@ export const TransactionInfo = () => {
         {!!error && (
           <Alert severity="error">
             <Truncate lines={1} style={{ whiteSpace: 'nowrap' }}>
-              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+              {/**
+               * TODO: remove the inline Biome comment
+               * local:ergo/rosen-bridge/ui#441
+               */
+              /* biome-ignore lint/suspicious/noExplicitAny: Use a better type */}
               {(error as any)?.message}
             </Truncate>
           </Alert>

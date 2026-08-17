@@ -1,10 +1,9 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { Icon, IconProps, IconButton } from '@/components';
+import { Icon, IconButton, type IconProps, Tooltip } from '@/components';
 import { useConfig } from '@/hooks';
-import { ElementBaseProps, OverridableType } from '@/types';
+import type { ElementBaseProps, OverridableType } from '@/types';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface CopyButtonOverrides {}
 
 export type CopyButtonStatus = 'idle' | 'copying' | 'copied' | 'failed';
@@ -25,24 +24,24 @@ export type CopyButtonOwnProps = {
   value?: string | (() => string | undefined);
 };
 
-export type CopyButtonBaseProps = ElementBaseProps<
-  typeof IconButton,
-  CopyButtonOwnProps
->;
+export type CopyButtonBaseProps = ElementBaseProps<typeof IconButton, CopyButtonOwnProps>;
 
-export type CopyButtonProps = OverridableType<
-  CopyButtonBaseProps,
-  CopyButtonOverrides,
-  never
->;
+export type CopyButtonProps = OverridableType<CopyButtonBaseProps, CopyButtonOverrides, never>;
 
 /**
  * A button that copies text to the clipboard and shows the status with an icon.
  */
 export const CopyButton = (props: CopyButtonProps) => {
-  const { icons, slots, value, ...rest } = useConfig('CopyButton', props);
+  const { icons, slots, value, disabled, ...rest } = useConfig('CopyButton', props);
 
   const [status, setStatus] = useState<CopyButtonStatus>('idle');
+  const timeoutRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, []);
 
   const icon = useMemo(() => {
     switch (status) {
@@ -53,33 +52,48 @@ export const CopyButton = (props: CopyButtonProps) => {
       case 'copied':
         return icons?.copied || 'Check';
       case 'failed':
-        return icons?.failed || 'Times';
+        return icons?.failed || 'CloseCircle';
     }
   }, [icons, status]);
 
-  const handleCopy = useCallback(() => {
-    setStatus('copying');
+  const isDisabled = Boolean(disabled || value === undefined || value === '');
 
+  const handleCopy = useCallback(() => {
     const text = typeof value === 'function' ? value() : value;
 
-    if (!text) return;
+    if (isDisabled || !text) return;
+
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+
+    setStatus('copying');
+
+    if (!navigator?.clipboard?.writeText) {
+      setStatus('failed');
+      timeoutRef.current = window.setTimeout(() => setStatus('idle'), 5000);
+      return;
+    }
 
     navigator.clipboard
       .writeText(text)
       .then(() => {
         setStatus('copied');
-        setTimeout(() => setStatus('idle'), 1500);
+        timeoutRef.current = window.setTimeout(() => setStatus('idle'), 1500);
       })
       .catch(() => {
         setStatus('failed');
-        setTimeout(() => setStatus('idle'), 1500);
+        timeoutRef.current = window.setTimeout(() => setStatus('idle'), 5000);
       });
-  }, [value]);
+  }, [value, isDisabled]);
 
   return (
-    <IconButton onClick={handleCopy} {...rest}>
-      <Icon name={icon} {...slots?.icon} />
-    </IconButton>
+    <Tooltip
+      disabled={status !== 'failed'}
+      title="The browser does not allow access to the clipboard"
+    >
+      <IconButton onClick={handleCopy} disabled={isDisabled} {...rest}>
+        <Icon name={icon} color={status === 'failed' ? 'error' : undefined} {...slots?.icon} />
+      </IconButton>
+    </Tooltip>
   );
 };
 

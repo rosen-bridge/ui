@@ -1,12 +1,13 @@
-import { ErgoBoxSelection } from '@rosen-bridge/ergo-box-selection';
-import { TokenMap, RosenChainToken } from '@rosen-bridge/tokens';
-import { handleUncoveredAssets } from '@rosen-network/base';
-import { NETWORKS } from '@rosen-ui/constants';
-import { Network, RosenAmountValue } from '@rosen-ui/types';
 import * as wasm from 'ergo-lib-wasm-nodejs';
 
+import { ErgoBoxSelection } from '@rosen-bridge/ergo-box-selection';
+import type { RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
+import { handleUncoveredAssets } from '@rosen-network/base';
+import { NETWORKS } from '@rosen-ui/constants';
+import type { Network, RosenAmountValue } from '@rosen-ui/types';
+
 import { fee, minBoxValue } from './constants';
-import { AssetBalance, ErgoBoxProxy, UnsignedErgoTxProxy } from './types';
+import type { AssetBalance, ErgoBoxProxy, UnsignedErgoTxProxy } from './types';
 import { unsignedTransactionToProxy } from './unsignedTransactionToProxy';
 import { createChangeBox, createLockBox, getHeight } from './utils';
 
@@ -93,11 +94,7 @@ export const generateUnsignedTx =
       () => fee,
     );
     if (!inputs.covered) {
-      handleUncoveredAssets(
-        tokenMap,
-        NETWORKS.ergo.key,
-        inputs.uncoveredAssets,
-      );
+      handleUncoveredAssets(tokenMap, NETWORKS.ergo.key, inputs.uncoveredAssets);
     }
     // add input boxes to transaction
     const unsignedInputs = new wasm.UnsignedInputs();
@@ -106,9 +103,7 @@ export const generateUnsignedTx =
     });
 
     const feeBox = wasm.ErgoBoxCandidate.new_miner_fee_box(
-      wasm.BoxValue.from_i64(
-        wasm.I64.from_str(inputs.additionalAssets.fee.toString()),
-      ),
+      wasm.BoxValue.from_i64(wasm.I64.from_str(inputs.additionalAssets.fee.toString())),
       height,
     );
 

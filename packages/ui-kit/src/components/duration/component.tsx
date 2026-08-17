@@ -1,13 +1,12 @@
 import { useMemo } from 'react';
 
-import { Typography, TypographyProps } from '@/components';
+import { Typography, type TypographyProps } from '@/components';
 import { useConfig } from '@/hooks';
-import { ElementBaseProps, OverridableType } from '@/types';
+import type { ElementBaseProps, OverridableType } from '@/types';
 import { formatDuration } from '@/utils';
 
 import './styles.css';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface DurationOverrides {}
 
 export type DurationOwnProps = {
@@ -32,26 +31,18 @@ export type DurationOwnProps = {
 
 export type DurationBaseProps = ElementBaseProps<'div', DurationOwnProps>;
 
-export type DurationProps = OverridableType<
-  DurationBaseProps,
-  DurationOverrides,
-  never
->;
+export type DurationProps = OverridableType<DurationBaseProps, DurationOverrides, never>;
 
 /**
  * A component for displaying duration values in a human-readable format.
  * It handles loading, invalid values, and fallback states automatically.
  */
 export const Duration = (props: DurationProps) => {
-  const { fallback, loading, slots, value, ...rest } = useConfig(
-    'Duration',
-    props,
-  );
+  const { fallback, loading, slots, value, ...rest } = useConfig('Duration', props);
 
   const { parts, error } = useMemo(() => formatDuration(value), [value]);
 
-  const ready =
-    !error && !loading && !(fallback && value === undefined) && parts;
+  const ready = !error && !loading && !(fallback && value === undefined) && parts;
 
   return (
     <div {...rest}>
@@ -66,12 +57,7 @@ export const Duration = (props: DurationProps) => {
             <Typography component="div" {...slots?.value}>
               {part.value}
             </Typography>
-            <Typography
-              color="text-disabled"
-              component="div"
-              variant="caption"
-              {...slots?.unit}
-            >
+            <Typography color="text-disabled" component="div" variant="caption" {...slots?.unit}>
               {part.unit}
               {part.value > 1 ? 's' : ''}
             </Typography>

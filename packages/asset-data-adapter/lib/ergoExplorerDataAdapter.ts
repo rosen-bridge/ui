@@ -1,10 +1,10 @@
-import { AbstractLogger } from '@rosen-bridge/abstract-logger';
-import { RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
+import type { AbstractLogger } from '@rosen-bridge/abstract-logger';
+import type { RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
 import ergoExplorerClientFactory from '@rosen-clients/ergo-explorer';
 import { NETWORKS } from '@rosen-ui/constants';
 
 import { AbstractDataAdapter } from './abstracts';
-import { ChainAssetBalance, ErgoExplorerDataAdapterAuthParams } from './types';
+import type { ChainAssetBalance, ErgoExplorerDataAdapterAuthParams } from './types';
 
 export class ErgoExplorerDataAdapter extends AbstractDataAdapter {
   chain = NETWORKS.ergo.key;
@@ -28,8 +28,7 @@ export class ErgoExplorerDataAdapter extends AbstractDataAdapter {
    * @returns {Promise<ChainAssetBalance[]>} list of asset balances for the address
    */
   getAddressAssets = async (address: string): Promise<ChainAssetBalance[]> => {
-    const apiResult =
-      await this.explorerApi.v1.getApiV1AddressesP1BalanceConfirmed(address);
+    const apiResult = await this.explorerApi.v1.getApiV1AddressesP1BalanceConfirmed(address);
     const assets: ChainAssetBalance[] = [];
     assets.push({
       assetId: NETWORKS.ergo.nativeToken,
@@ -51,9 +50,7 @@ export class ErgoExplorerDataAdapter extends AbstractDataAdapter {
    * @returns The raw total supply as a bigint (not normalized).
    */
   getRawTotalSupply = async (token: RosenChainToken) => {
-    const tokenDetail = await this.explorerApi.v1.getApiV1TokensP1(
-      token.tokenId,
-    );
+    const tokenDetail = await this.explorerApi.v1.getApiV1TokensP1(token.tokenId);
     if (tokenDetail) {
       this.logger.debug(
         `Total supply of token [${token.tokenId}] is [${tokenDetail.emissionAmount}]`,

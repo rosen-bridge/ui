@@ -1,11 +1,6 @@
 'use client';
 
-import {
-  Center,
-  Stack,
-  Typography,
-  UnderDevelopSection,
-} from '@rosen-bridge/ui-kit';
+import { Center, Stack, Typography, UnderDevelopmentSection } from '@rosen-bridge/ui-kit';
 
 import { Section } from './Section';
 
@@ -14,7 +9,7 @@ export const Watchers = () => {
     <Section collapsible title="Watchers">
       <Center>
         <Stack align="center" spacing={1}>
-          <UnderDevelopSection />
+          <UnderDevelopmentSection />
           <Typography align="center" variant="body1">
             This section is under development!
           </Typography>

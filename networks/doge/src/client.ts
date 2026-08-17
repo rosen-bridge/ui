@@ -1,13 +1,9 @@
 import { Doge as DogeIcon } from '@rosen-bridge/icons';
-import { Network, NetworkConfig } from '@rosen-network/base';
+import type { Network, NetworkConfig } from '@rosen-network/base';
 import { NETWORKS } from '@rosen-ui/constants';
 
 import type { generateUnsignedTx } from './generateUnsignedTx';
-import type {
-  generateOpReturnData,
-  getAddressBalance,
-  submitTransaction,
-} from './utils';
+import type { generateOpReturnData, getAddressBalance, submitTransaction } from './utils';
 
 type DogeNetworkConfig = NetworkConfig & {
   generateOpReturnData: typeof generateOpReturnData;
@@ -36,21 +32,15 @@ export class DogeNetwork implements Network {
     return this.config.calculateFee(...args);
   };
 
-  public generateOpReturnData: DogeNetworkConfig['generateOpReturnData'] = (
-    ...args
-  ) => {
+  public generateOpReturnData: DogeNetworkConfig['generateOpReturnData'] = (...args) => {
     return this.config.generateOpReturnData(...args);
   };
 
-  public generateUnsignedTx: DogeNetworkConfig['generateUnsignedTx'] = (
-    ...args
-  ) => {
+  public generateUnsignedTx: DogeNetworkConfig['generateUnsignedTx'] = (...args) => {
     return this.config.generateUnsignedTx(...args);
   };
 
-  public getAddressBalance: DogeNetworkConfig['getAddressBalance'] = (
-    ...args
-  ) => {
+  public getAddressBalance: DogeNetworkConfig['getAddressBalance'] = (...args) => {
     return this.config.getAddressBalance(...args);
   };
 
@@ -62,9 +52,7 @@ export class DogeNetwork implements Network {
     return this.config.getMinTransfer(...args);
   };
 
-  public submitTransaction: DogeNetworkConfig['submitTransaction'] = (
-    ...args
-  ) => {
+  public submitTransaction: DogeNetworkConfig['submitTransaction'] = (...args) => {
     return this.config.submitTransaction(...args);
   };
 

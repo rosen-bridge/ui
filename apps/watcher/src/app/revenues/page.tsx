@@ -2,6 +2,8 @@
 
 import { useCallback, useMemo, useState } from 'react';
 
+import useSWR from 'swr';
+
 import {
   Amount,
   EmptyState,
@@ -23,10 +25,9 @@ import {
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import { getDecimalString } from '@rosen-ui/utils';
-import useSWR from 'swr';
 
 import { useERsnToken, useRsnToken } from '@/hooks';
-import { ApiRevenueResponse, Revenue } from '@/types/api';
+import type { ApiRevenueResponse, Revenue } from '@/types/api';
 
 const Revenues = () => {
   const collection = useCollection({
@@ -59,12 +60,8 @@ const Revenues = () => {
   const getRSNIncome = (item?: Revenue) => {
     if (!item?.revenues) return;
 
-    const rsnTokenInfo = item.revenues.find(
-      (token) => token.tokenId === rsnToken?.tokenId,
-    );
-    const eRsnTokenInfo = item.revenues.find(
-      (token) => token.tokenId === eRsnToken?.tokenId,
-    );
+    const rsnTokenInfo = item.revenues.find((token) => token.tokenId === rsnToken?.tokenId);
+    const eRsnTokenInfo = item.revenues.find((token) => token.tokenId === eRsnToken?.tokenId);
 
     const amount = [rsnTokenInfo, eRsnTokenInfo]
       .map((info) => getDecimalString(info?.amount, info?.decimals))
@@ -77,9 +74,7 @@ const Revenues = () => {
   const getTokenIncome = (item?: Revenue) => {
     if (!item?.revenues) return [];
     return item.revenues.filter(
-      (token) =>
-        token.tokenId !== rsnToken?.tokenId &&
-        token.tokenId !== eRsnToken?.tokenId,
+      (token) => token.tokenId !== rsnToken?.tokenId && token.tokenId !== eRsnToken?.tokenId,
     );
   };
 
@@ -113,7 +108,7 @@ const Revenues = () => {
       pagination={renderPagination()}
       view={null}
     >
-      {!isLoading && !items.length && <EmptyState style={{ height: '100%' }} />}
+      {!isLoading && !items.length && <EmptyState style={{ height: 'calc(100vh - 288px)' }} />}
       {!!items.length && (
         <TableGrid variant="separated">
           <TableGridHeader>
@@ -161,24 +156,15 @@ const Revenues = () => {
                         disabled={isLoading}
                         size="small"
                         onClick={() => {
-                          setCurrent(
-                            current?.id === item.id ? undefined : item,
-                          );
+                          setCurrent(current?.id === item.id ? undefined : item);
                         }}
                       >
-                        <Icon
-                          name={
-                            current?.id === item.id ? 'AngleUp' : 'AngleDown'
-                          }
-                        />
+                        <Icon name={current?.id === item.id ? 'AngleUp' : 'AngleDown'} />
                       </IconButton>
                     </TableGridCell>
                     <TableGridBodyDetails open={current?.id === item.id}>
                       <Label label="Income" orientation="horizontal">
-                        <Amount
-                          loading={isLoading}
-                          value={getRSNIncome(item)}
-                        />
+                        <Amount loading={isLoading} value={getRSNIncome(item)} />
                       </Label>
                       <Label label="Token Income" orientation="horizontal">
                         {getTokenIncome(item).map((token) => (

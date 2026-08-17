@@ -1,18 +1,12 @@
-import { TokenMap } from '@rosen-bridge/tokens';
+import type { TokenMap } from '@rosen-bridge/tokens';
 import { NETWORKS } from '@rosen-ui/constants';
-import { RosenAmountValue } from '@rosen-ui/types';
+import type { RosenAmountValue } from '@rosen-ui/types';
 
 import { fee as ergoFee, minBoxValue as ergoMinBoxValue } from './constants';
 
 export const getMaxTransferCreator =
   (getTokenMap: () => Promise<TokenMap>) =>
-  async ({
-    balance,
-    isNative,
-  }: {
-    balance: RosenAmountValue;
-    isNative: boolean;
-  }) => {
+  async ({ balance, isNative }: { balance: RosenAmountValue; isNative: boolean }) => {
     const tokenMap = await getTokenMap();
     const feeAndMinBoxValueWrapped = tokenMap.wrapAmount(
       NETWORKS.ergo.nativeToken,

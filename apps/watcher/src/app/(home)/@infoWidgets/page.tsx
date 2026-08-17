@@ -1,16 +1,17 @@
 'use client';
 
-import { GridContainer, IconProps, useResponsive } from '@rosen-bridge/ui-kit';
-import { NETWORKS } from '@rosen-ui/constants';
-import { fetcher } from '@rosen-ui/swr-helpers';
-import { getDecimalString } from '@rosen-ui/utils';
 import { upperFirst } from 'lodash-es';
 import useSWR from 'swr';
 
-import { useERsnToken, useRsnToken, useToken } from '@/hooks';
-import { ApiInfoResponse } from '@/types/api';
+import { GridContainer, type IconProps, useResponsive } from '@rosen-bridge/ui-kit';
+import { NETWORKS } from '@rosen-ui/constants';
+import { fetcher } from '@rosen-ui/swr-helpers';
+import { getDecimalString } from '@rosen-ui/utils';
 
-import { InfoWidgetCard, InfoWidgetCardProps } from './InfoWidgetCard';
+import { useERsnToken, useRsnToken, useToken } from '@/hooks';
+import type { ApiInfoResponse } from '@/types/api';
+
+import { InfoWidgetCard, type InfoWidgetCardProps } from './InfoWidgetCard';
 
 const healthStatusColorMap: Record<
   ApiInfoResponse['health']['status'],
@@ -22,44 +23,34 @@ const healthStatusColorMap: Record<
 };
 
 const InfoWidgets = () => {
-  const { data, isLoading: isInfoLoading } = useSWR<ApiInfoResponse>(
-    '/info',
-    fetcher,
-  );
+  const { data, isLoading: isInfoLoading } = useSWR<ApiInfoResponse>('/info', fetcher);
 
   const { rsnToken, isLoading: isRsnTokenLoading } = useRsnToken();
   const { eRsnToken, isLoading: isERsnTokenLoading } = useERsnToken();
 
-  let titleRSN =
+  const titleRSN =
     rsnToken?.amount !== undefined && rsnToken?.amount !== 0
-      ? getDecimalString(rsnToken.amount.toString(), rsnToken.decimals) + ' RSN'
+      ? `${getDecimalString(rsnToken.amount.toString(), rsnToken.decimals)} RSN`
       : '';
 
-  let titleERSN =
+  const titleERSN =
     eRsnToken?.amount !== undefined && eRsnToken?.amount !== 0
-      ? getDecimalString(eRsnToken?.amount.toString(), eRsnToken.decimals) +
-        ' eRSN'
+      ? `${getDecimalString(eRsnToken?.amount.toString(), eRsnToken.decimals)} eRSN`
       : '';
 
   const { token: ergToken, isLoading: isErgTokenLoading } = useToken('erg');
 
   const networkIcoName = upperFirst(
-    data?.network.replace(/(^\w|-\w)/g, (match) =>
-      match.replace('-', '').toUpperCase(),
-    ) || '',
+    data?.network.replace(/(^\w|-\w)/g, (match) => match.replace('-', '').toUpperCase()) || '',
   ) as IconProps['name'];
 
   const totalPermits = data
-    ? Math.floor(
-        (data.permitCount.total - (data.permitCount.total ? 1 : 0)) /
-          data.permitsPerEvent,
-      )
+    ? Math.floor((data.permitCount.total - (data.permitCount.total ? 1 : 0)) / data.permitsPerEvent)
     : 0n;
 
   const allowedPermits = data
     ? Math.floor(
-        (data.permitCount.active - (data.permitCount.active ? 1 : 0)) /
-          data.permitsPerEvent,
+        (data.permitCount.active - (data.permitCount.active ? 1 : 0)) / data.permitsPerEvent,
       )
     : 0n;
 
@@ -74,11 +65,7 @@ const InfoWidgets = () => {
     <GridContainer gap={2} minWidth={gridContainerMinWidth}>
       <InfoWidgetCard
         title="Network"
-        value={
-          data?.network
-            ? NETWORKS[data.network as keyof typeof NETWORKS].label
-            : ''
-        }
+        value={data?.network ? NETWORKS[data.network as keyof typeof NETWORKS].label : ''}
         icon={networkIcoName}
         color="primary"
         isLoading={isInfoLoading}
@@ -133,14 +120,8 @@ const InfoWidgets = () => {
       <InfoWidgetCard
         title="Health"
         value={data?.health.status ?? ''}
-        icon={
-          data?.health.status === 'Healthy'
-            ? 'ShieldCheck'
-            : 'ShieldExclamation'
-        }
-        color={
-          data?.health ? healthStatusColorMap[data.health.status] : 'success'
-        }
+        icon={data?.health.status === 'Healthy' ? 'ShieldCheck' : 'ShieldExclamation'}
+        color={data?.health ? healthStatusColorMap[data.health.status] : 'success'}
         isLoading={isInfoLoading}
         warning={data?.health.trialErrors.join('\n')}
       />

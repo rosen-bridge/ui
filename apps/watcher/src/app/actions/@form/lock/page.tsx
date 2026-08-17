@@ -1,7 +1,10 @@
 'use client';
 
 import { useEffect, useMemo } from 'react';
-import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
+
+import { FormProvider, type SubmitHandler, useForm } from 'react-hook-form';
+import useSWR from 'swr';
+import useSWRMutation from 'swr/mutation';
 
 import {
   Alert,
@@ -16,25 +19,15 @@ import {
   useToast,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
-import { mutatorWithHeaders, fetcher } from '@rosen-ui/swr-helpers';
-import {
-  getNonDecimalString,
-  getDecimalString,
-  getTxURL,
-} from '@rosen-ui/utils';
-import useSWR from 'swr';
-import useSWRMutation from 'swr/mutation';
+import { fetcher, mutatorWithHeaders } from '@rosen-ui/swr-helpers';
+import { getDecimalString, getNonDecimalString, getTxURL } from '@rosen-ui/utils';
 
 import { useRsnToken, useToken } from '@/hooks';
-import {
-  ApiPermitRequestBody,
-  ApiPermitResponse,
-  ApiInfoResponse,
-} from '@/types/api';
+import type { ApiInfoResponse, ApiPermitRequestBody, ApiPermitResponse } from '@/types/api';
 
 import {
+  type TokenAmountCompatibleFormSchema,
   TokenAmountTextField,
-  TokenAmountCompatibleFormSchema,
 } from '../../TokenAmountTextField';
 
 const LockForm = () => {
@@ -43,10 +36,7 @@ const LockForm = () => {
 
   const { rsnToken, isLoading: isRsnTokenLoading } = useRsnToken();
   const { token: ergToken, isLoading: isErgTokenLoading } = useToken('erg');
-  const { data: info, isLoading: isInfoLoading } = useSWR<ApiInfoResponse>(
-    '/info',
-    fetcher,
-  );
+  const { data: info, isLoading: isInfoLoading } = useSWR<ApiInfoResponse>('/info', fetcher);
   const { apiKey } = useApiKey();
 
   const modifiedRsnTokenConsideringCollateral = useMemo(
@@ -64,7 +54,11 @@ const LockForm = () => {
   const {
     trigger,
     isMutating: isLockPending,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    /**
+     * TODO: remove the inline Biome comment
+     * local:ergo/rosen-bridge/ui#441
+     */
+    // biome-ignore lint/suspicious/noExplicitAny: Use a better type
   } = useSWRMutation<ApiPermitResponse, any, '/permit', ApiPermitRequestBody>(
     '/permit',
     mutatorWithHeaders,
@@ -79,7 +73,7 @@ const LockForm = () => {
         timeout: 0,
       });
     }
-  }, [isRsnTokenLoading, rsnToken]);
+  }, [isRsnTokenLoading, rsnToken, toast.add]);
 
   const formMethods = useForm({
     mode: 'onChange',
@@ -109,23 +103,21 @@ const LockForm = () => {
           description: (
             <>
               Lock operation is in progress. Wait for tx [
-              <Link
-                target="_blank"
-                href={getTxURL(NETWORKS.ergo.key, response.txId)}
-              >
+              <Link target="_blank" href={getTxURL(NETWORKS.ergo.key, response.txId)}>
                 {response.txId}
               </Link>
-              ] to be confirmed by some blocks, so your new permits will be
-              activated.
+              ] to be confirmed by some blocks, so your new permits will be activated.
             </>
           ),
         });
       } else {
-        throw new Error(
-          'Server responded but the response message was unexpected',
-        );
+        throw new Error('Server responded but the response message was unexpected');
       }
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      /**
+       * TODO: remove the inline Biome comment
+       * local:ergo/rosen-bridge/ui#441
+       */
+      // biome-ignore lint/suspicious/noExplicitAny: Use a better type
     } catch (error: any) {
       if (error?.response?.status === 403) {
         toast.add({
@@ -158,11 +150,7 @@ const LockForm = () => {
     });
   };
 
-  const disabled =
-    isRsnTokenLoading ||
-    isInfoLoading ||
-    isErgTokenLoading ||
-    !rsnToken?.amount;
+  const disabled = isRsnTokenLoading || isInfoLoading || isErgTokenLoading || !rsnToken?.amount;
 
   const renderTokenAmountTextField = () => (
     <TokenAmountTextField
@@ -179,51 +167,33 @@ const LockForm = () => {
       <Alert severity="info" variant="filled">
         <Typography>
           An additional{' '}
-          {getDecimalString(
-            ((info?.collateral.rsn ?? 0) + 1).toString(),
-            rsnToken?.decimals ?? 0,
-          )}{' '}
+          {getDecimalString(((info?.collateral.rsn ?? 0) + 1).toString(), rsnToken?.decimals ?? 0)}{' '}
           RSN and{' '}
-          {getDecimalString(
-            (info?.collateral.erg ?? 0).toString(),
-            ergToken?.decimals ?? 0,
-          )}{' '}
-          ERG is required to put your collateral. (You need more ERG to pay for
-          transaction fees.)
+          {getDecimalString((info?.collateral.erg ?? 0).toString(), ergToken?.decimals ?? 0)} ERG is
+          required to put your collateral. (You need more ERG to pay for transaction fees.)
         </Typography>
       </Alert>
     );
 
   const renderReportsCountAlert = () => {
-    if (
-      !formData.amount ||
-      !info?.collateral.rsn ||
-      !rsnToken?.decimals ||
-      !rsnToken.amount
-    )
+    if (!formData.amount || !info?.collateral.rsn || !rsnToken?.decimals || !rsnToken.amount)
       return null;
 
-    const nonDecimalAmount = +getNonDecimalString(
-      formData.amount,
-      rsnToken!.decimals,
-    );
+    const nonDecimalAmount = +getNonDecimalString(formData.amount, rsnToken?.decimals);
 
     const reportsCount = Math.floor(+nonDecimalAmount / info?.permitsPerEvent);
 
     const nonDecimalRemainder = +nonDecimalAmount % info?.permitsPerEvent;
-    const remainder = +getDecimalString(
-      nonDecimalRemainder.toString(),
-      rsnToken.decimals,
-    );
+    const remainder = +getDecimalString(nonDecimalRemainder.toString(), rsnToken.decimals);
 
     if (reportsCount) {
       if (remainder) {
         return (
           <Alert severity="info" variant="filled">
             <Typography>
-              Currently, by locking {formData.amount} RSN, you can report{' '}
-              {reportsCount} events using {+formData.amount - remainder} RSN and{' '}
-              {remainder} RSN will be reserved until you lock more.
+              Currently, by locking {formData.amount} RSN, you can report {reportsCount} events
+              using {+formData.amount - remainder} RSN and {remainder} RSN will be reserved until
+              you lock more.
             </Typography>
           </Alert>
         );
@@ -231,8 +201,7 @@ const LockForm = () => {
       return (
         <Alert severity="info" variant="filled">
           <Typography>
-            Currently, by locking {formData.amount} RSN, you can report{' '}
-            {reportsCount} events.
+            Currently, by locking {formData.amount} RSN, you can report {reportsCount} events.
           </Typography>
         </Alert>
       );
@@ -240,8 +209,8 @@ const LockForm = () => {
     return (
       <Alert severity="info" variant="filled">
         <Typography>
-          Currently, by locking {remainder} RSN, you cannot report any
-          additional event unless you already have at least{' '}
+          Currently, by locking {remainder} RSN, you cannot report any additional event unless you
+          already have at least{' '}
           {getDecimalString(
             (info?.permitsPerEvent - nonDecimalRemainder).toString(),
             rsnToken.decimals,
@@ -261,10 +230,7 @@ const LockForm = () => {
           {renderCollateralAlert()}
           {renderReportsCountAlert()}
           <ApiKeyDialogProtectedAction>
-            <SubmitButton
-              loading={isLockPending}
-              disabled={!formState.isValid || disabled}
-            >
+            <SubmitButton loading={isLockPending} disabled={!formState.isValid || disabled}>
               Lock
             </SubmitButton>
           </ApiKeyDialogProtectedAction>

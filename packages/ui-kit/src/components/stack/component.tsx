@@ -1,7 +1,7 @@
-import { CSSProperties, useMemo } from 'react';
+import { type CSSProperties, useMemo } from 'react';
 
 import { useConfig } from '@/hooks';
-import { ElementBaseProps, Gap, OverridableType } from '@/types';
+import type { ElementBaseProps, Gap, OverridableType } from '@/types';
 import { toCSSUnit } from '@/utils';
 
 const ALIGN_MAP: Record<NonNullable<StackBaseProps['align']>, string> = {
@@ -21,7 +21,6 @@ const JUSTIFY_MAP: Record<NonNullable<StackBaseProps['justify']>, string> = {
   start: 'flex-start',
 };
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface StackOverrides {}
 
 export type StackOwnProps = {
@@ -46,11 +45,7 @@ export type StackOwnProps = {
 
 export type StackBaseProps = ElementBaseProps<'div', StackOwnProps>;
 
-export type StackProps = OverridableType<
-  StackBaseProps,
-  StackOverrides,
-  'spacing'
->;
+export type StackProps = OverridableType<StackBaseProps, StackOverrides, 'spacing'>;
 
 /**
  * A flexible layout component based on CSS flexbox.

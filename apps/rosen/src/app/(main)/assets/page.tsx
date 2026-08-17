@@ -6,26 +6,27 @@
  */
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
+import { serializeError } from 'serialize-error';
+import useSWR from 'swr';
+
 import {
+  EmptyState,
   LayoutList,
   Pagination,
   SmartSearch,
   SortField,
   useBreakpoint,
   useCollection,
-  ViewToggle,
-  EmptyState,
   useToast,
-  ViewToggleType,
+  ViewToggle,
+  type ViewToggleType,
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
-import { serializeError } from 'serialize-error';
-import useSWR from 'swr';
 
-import { ApiAssetsResponse } from '@/types/api';
+import type { ApiAssetsResponse } from '@/types/api';
 
 import { filters, sorts } from './config';
-import { AssetsFullData, getFullAssetData } from './getFullAssetData';
+import { type AssetsFullData, getFullAssetData } from './getFullAssetData';
 import { ViewGrid } from './ViewGrid';
 import { ViewGridSidebar } from './ViewGridSidebar';
 import { ViewRow } from './ViewRow';
@@ -112,9 +113,7 @@ const Assets = () => {
 
   const renderSidebar = useCallback(() => {
     if (collection.view !== 'grid') return null;
-    return (
-      <ViewGridSidebar value={current} onClose={() => setCurrent(undefined)} />
-    );
+    return <ViewGridSidebar value={current} onClose={() => setCurrent(undefined)} />;
   }, [current, collection.view]);
 
   const renderView = useCallback(
@@ -149,6 +148,10 @@ const Assets = () => {
   }, [collection.setFragment, current?.id]);
 
   useEffect(() => {
+    void collection.sort;
+    void collection.fields;
+    void collection.pageIndex;
+
     setCurrent(undefined);
   }, [collection.sort, collection.fields, collection.pageIndex]);
 
@@ -171,23 +174,13 @@ const Assets = () => {
       view={renderView()}
     >
       {!isLoading && !items.length && (
-        <EmptyState style={{ height: 'calc(100vh - 288px)' }} />
+        <EmptyState subtitle style={{ height: 'calc(100vh - 288px)' }} />
       )}
       {collection.view === 'grid' && !!items.length && (
-        <ViewGrid
-          current={current}
-          items={items}
-          isLoading={isLoading}
-          setCurrent={setCurrent}
-        />
+        <ViewGrid current={current} items={items} isLoading={isLoading} setCurrent={setCurrent} />
       )}
       {collection.view === 'row' && !!items.length && (
-        <ViewRow
-          current={current}
-          items={items}
-          isLoading={isLoading}
-          setCurrent={setCurrent}
-        />
+        <ViewRow current={current} items={items} isLoading={isLoading} setCurrent={setCurrent} />
       )}
     </LayoutList>
   );

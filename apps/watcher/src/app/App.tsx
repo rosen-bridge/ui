@@ -1,20 +1,21 @@
 'use client';
 
-import { Route } from 'next';
+import type { PropsWithChildren } from 'react';
+import type { Route } from 'next';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { PropsWithChildren } from 'react';
+
+import { SWRConfig } from 'swr';
 
 import {
-  App as AppBase,
   ApiKeyProvider,
+  App as AppBase,
   ConfirmProvider,
   FrameworkProvider,
+  NoSsr,
   ThemeProvider,
   ToastProvider,
-  NoSsr,
 } from '@rosen-bridge/ui-kit';
 import { mockMiddlewareFactory } from '@rosen-ui/swr-helpers';
-import { SWRConfig } from 'swr';
 
 import { Favicon } from '@/components';
 import { mockedData } from '@/mock/mockedData';
@@ -36,8 +37,7 @@ export const App = ({ children }: PropsWithChildren) => {
         router={{
           pathname,
           search: searchParams.toString(),
-          push: (href) =>
-            router.push(href as unknown as Route, { scroll: false }),
+          push: (href) => router.push(href as unknown as Route, { scroll: false }),
         }}
       >
         <UIKitProvider>

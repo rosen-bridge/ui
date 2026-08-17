@@ -1,11 +1,11 @@
-import {
+import type {
   HealthParamInfo,
-  TokenChartData,
-  TokenInfo,
-  Paginated,
-  TokenInfoWithColdAmount,
   MutationRequestBodyWithHeaders,
   Network,
+  Paginated,
+  TokenChartData,
+  TokenInfo,
+  TokenInfoWithColdAmount,
 } from '@rosen-ui/types';
 
 export interface TokenInfoWithAddress {
@@ -61,11 +61,9 @@ export interface ApiOrderRequestBodyData {
   orderJson: string;
 }
 
-export type ApiSignRequestBody =
-  MutationRequestBodyWithHeaders<ApiSignRequestBodyData>;
+export type ApiSignRequestBody = MutationRequestBodyWithHeaders<ApiSignRequestBodyData>;
 
-export type ApiOrderRequestBody =
-  MutationRequestBodyWithHeaders<ApiOrderRequestBodyData>;
+export type ApiOrderRequestBody = MutationRequestBodyWithHeaders<ApiOrderRequestBodyData>;
 
 export type ApiSignResponse = {
   message: string;

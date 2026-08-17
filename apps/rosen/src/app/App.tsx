@@ -1,15 +1,10 @@
 'use client';
 
-import { Route } from 'next';
+import type { PropsWithChildren } from 'react';
+import type { Route } from 'next';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { PropsWithChildren } from 'react';
 
-import {
-  FrameworkProvider,
-  NoSsr,
-  ThemeProvider,
-  ToastProvider,
-} from '@rosen-bridge/ui-kit';
+import { FrameworkProvider, NoSsr, ThemeProvider, ToastProvider } from '@rosen-bridge/ui-kit';
 
 import { theme } from '@/theme/theme';
 import { UIKitProvider } from '@/uiKitProvider';
@@ -27,8 +22,7 @@ export const App = ({ children }: PropsWithChildren) => {
         router={{
           pathname,
           search: searchParams.toString(),
-          push: (href: string) =>
-            router.push(href as unknown as Route, { scroll: false }),
+          push: (href: string) => router.push(href as unknown as Route, { scroll: false }),
         }}
       >
         <UIKitProvider>

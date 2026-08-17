@@ -1,25 +1,24 @@
 import {
   Amount,
-  AmountProps,
+  type AmountProps,
   Columns,
   EventStatus,
-  EventStatusProps,
+  type EventStatusProps,
   Identifier,
-  IdentifierProps,
+  type IdentifierProps,
   Label,
   LabelGroup,
   Network,
-  NetworkProps,
+  type NetworkProps,
   RelativeTime,
-  RelativeTimeProps,
+  type RelativeTimeProps,
   Token,
-  TokenProps,
+  type TokenProps,
   Typography,
 } from '@/components';
 import { useConfig } from '@/hooks';
-import { ElementBaseProps, OverridableType } from '@/types';
+import type { ElementBaseProps, OverridableType } from '@/types';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface EventDetailsOverrides {}
 
 export type EventDetailsOwnProps = {
@@ -51,10 +50,7 @@ export type EventDetailsOwnProps = {
   };
 };
 
-export type EventDetailsBaseProps = ElementBaseProps<
-  typeof Columns,
-  EventDetailsOwnProps
->;
+export type EventDetailsBaseProps = ElementBaseProps<typeof Columns, EventDetailsOwnProps>;
 
 export type EventDetailsProps = OverridableType<
   EventDetailsBaseProps,
@@ -97,25 +93,15 @@ export const EventDetails = (props: EventDetailsProps) => {
           <Label label="Chain" />
           <LabelGroup>
             <Label label="From" inset>
-              <Network
-                value={value.fromChain}
-                variant="reverse"
-                loading={loading}
-              />
+              <Network value={value.fromChain} variant="reverse" loading={loading} />
             </Label>
             <Label label="To" inset>
-              <Network
-                value={value.toChain}
-                variant="reverse"
-                loading={loading}
-              />
+              <Network value={value.toChain} variant="reverse" loading={loading} />
             </Label>
           </LabelGroup>
         </div>
       )}
-      {('sourceTxId' in value ||
-        'paymentTxId' in value ||
-        'spendTxId' in value) && (
+      {('sourceTxId' in value || 'paymentTxId' in value || 'spendTxId' in value) && (
         <div>
           <Label label="Tx ID" />
           <LabelGroup>

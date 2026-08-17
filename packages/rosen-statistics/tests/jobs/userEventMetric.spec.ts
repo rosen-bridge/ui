@@ -1,13 +1,10 @@
-import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
+import { beforeEach, describe, expect, it } from 'vitest';
+
+import { type AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
 import { BlockEntity } from '@rosen-bridge/abstract-scanner';
-import { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
+import type { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
 import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
-import {
-  METRIC_KEYS,
-  MetricEntity,
-  UserEventEntity,
-} from '@rosen-ui/rosen-statistics-entity';
-import { describe, it, expect, beforeEach } from 'vitest';
+import { METRIC_KEYS, MetricEntity, UserEventEntity } from '@rosen-ui/rosen-statistics-entity';
 
 import { userEventMetric } from '../../lib';
 import { userEventMetricTestData } from '../testData';
@@ -65,18 +62,9 @@ describe('userEventMetric', () => {
     expect(metric?.value).toBe(testData.expectedResults.totalMetricValue);
 
     const actualUserEvents = await userEventRepo.find({
-      select: [
-        'fromAddress',
-        'fromChain',
-        'toAddress',
-        'toChain',
-        'count',
-        'lastProcessedHeight',
-      ],
+      select: ['fromAddress', 'fromChain', 'toAddress', 'toChain', 'count', 'lastProcessedHeight'],
     });
-    expect(actualUserEvents).toHaveLength(
-      testData.expectedResults.userEvents.length,
-    );
+    expect(actualUserEvents).toHaveLength(testData.expectedResults.userEvents.length);
 
     expect(actualUserEvents).toEqual(testData.expectedResults.userEvents);
   });
@@ -115,19 +103,10 @@ describe('userEventMetric', () => {
     expect(metric?.value).toBe(testData.expectedResults.totalMetricValue);
 
     const actualUserEvents = await userEventRepo.find({
-      select: [
-        'fromAddress',
-        'fromChain',
-        'toAddress',
-        'toChain',
-        'count',
-        'lastProcessedHeight',
-      ],
+      select: ['fromAddress', 'fromChain', 'toAddress', 'toChain', 'count', 'lastProcessedHeight'],
     });
 
-    expect(actualUserEvents).toHaveLength(
-      testData.expectedResults.userEvents.length,
-    );
+    expect(actualUserEvents).toHaveLength(testData.expectedResults.userEvents.length);
 
     expect(actualUserEvents).toEqual(testData.expectedResults.userEvents);
   });
@@ -163,19 +142,10 @@ describe('userEventMetric', () => {
     expect(metric?.value).toBe(testData.expectedResults.totalMetricValue);
 
     const actualUserEvents = await userEventRepo.find({
-      select: [
-        'fromAddress',
-        'fromChain',
-        'toAddress',
-        'toChain',
-        'count',
-        'lastProcessedHeight',
-      ],
+      select: ['fromAddress', 'fromChain', 'toAddress', 'toChain', 'count', 'lastProcessedHeight'],
     });
 
-    expect(actualUserEvents).toHaveLength(
-      testData.expectedResults.userEvents.length,
-    );
+    expect(actualUserEvents).toHaveLength(testData.expectedResults.userEvents.length);
 
     expect(actualUserEvents).toEqual(testData.expectedResults.userEvents);
   });

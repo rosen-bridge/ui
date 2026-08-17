@@ -1,12 +1,11 @@
 import { useMemo } from 'react';
 
 import { useConfig } from '@/hooks';
-import { ElementBaseProps, Gap, OverridableType, Width } from '@/types';
+import type { ElementBaseProps, Gap, OverridableType, Width } from '@/types';
 import { toCSSUnit } from '@/utils';
 
 import './styles.css';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface GridContainerOverrides {}
 
 export type GridContainerOwnProps = {
@@ -26,10 +25,7 @@ export type GridContainerOwnProps = {
   minWidth?: Width;
 };
 
-export type GridContainerBaseProps = ElementBaseProps<
-  'div',
-  GridContainerOwnProps
->;
+export type GridContainerBaseProps = ElementBaseProps<'div', GridContainerOwnProps>;
 
 export type GridContainerProps = OverridableType<
   GridContainerBaseProps,

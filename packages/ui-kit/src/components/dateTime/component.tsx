@@ -2,10 +2,9 @@ import { useMemo } from 'react';
 
 import { Typography } from '@/components';
 import { useConfig } from '@/hooks';
-import { Color, ElementBaseProps, OverridableType } from '@/types';
+import type { Color, ElementBaseProps, OverridableType } from '@/types';
 import { formatDateTime } from '@/utils';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface DateTimeOverrides {}
 
 export type DateTimeOwnProps = {
@@ -26,11 +25,7 @@ export type DateTimeOwnProps = {
 
 export type DateTimeBaseProps = ElementBaseProps<'div', DateTimeOwnProps>;
 
-export type DateTimeProps = OverridableType<
-  DateTimeBaseProps,
-  DateTimeOverrides,
-  never
->;
+export type DateTimeProps = OverridableType<DateTimeBaseProps, DateTimeOverrides, never>;
 
 /**
  * A component to display a formatted date and time string.

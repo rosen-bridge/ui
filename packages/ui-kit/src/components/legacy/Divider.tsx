@@ -1,4 +1,4 @@
-import { ComponentProps, forwardRef, HTMLAttributes, useMemo } from 'react';
+import { type ComponentProps, forwardRef, type HTMLAttributes, useMemo } from 'react';
 
 import { Divider as MuiDivider } from '@mui/material';
 
@@ -47,51 +47,49 @@ export type DividerPropsBase = HTMLAttributes<HTMLHRElement> & {
  * Supports custom border style, thickness, placement, and variant.
  * Can wrap content for labeled dividers.
  */
-const DividerBase = forwardRef<HTMLHRElement, DividerPropsBase>(
-  (props, ref) => {
-    const {
-      borderStyle = 'solid',
-      children,
-      orientation = 'horizontal',
-      placement = 'left',
-      thickness = '1px',
-      variant = 'full',
-      ...rest
-    } = props;
+const DividerBase = forwardRef<HTMLHRElement, DividerPropsBase>((props, ref) => {
+  const {
+    borderStyle = 'solid',
+    children,
+    orientation = 'horizontal',
+    placement = 'left',
+    thickness = '1px',
+    variant = 'full',
+    ...rest
+  } = props;
 
-    const styles = useMemo(
-      () => ({
-        '&::before, &::after': {
-          borderTopStyle: borderStyle,
-          borderTopWidth: thickness,
-        },
-        '&::before': {
-          flex: placement === 'left' ? 0 : 1,
-        },
-        '&::after': {
-          flex: placement === 'left' ? 1 : 1,
-        },
-        '& .MuiDivider-wrapper': {
-          paddingLeft: placement === 'left' ? 0 : undefined,
-        },
-      }),
-      [borderStyle, thickness, placement],
-    );
+  const styles = useMemo(
+    () => ({
+      '&::before, &::after': {
+        borderTopStyle: borderStyle,
+        borderTopWidth: thickness,
+      },
+      '&::before': {
+        flex: placement === 'left' ? 0 : 1,
+      },
+      '&::after': {
+        flex: placement === 'left' ? 1 : 1,
+      },
+      '& .MuiDivider-wrapper': {
+        paddingLeft: placement === 'left' ? 0 : undefined,
+      },
+    }),
+    [borderStyle, thickness, placement],
+  );
 
-    return (
-      <MuiDivider
-        orientation={orientation}
-        ref={ref}
-        sx={styles}
-        textAlign={placement}
-        variant={variant === 'full' ? 'fullWidth' : variant}
-        {...rest}
-      >
-        {children}
-      </MuiDivider>
-    );
-  },
-);
+  return (
+    <MuiDivider
+      orientation={orientation}
+      ref={ref}
+      sx={styles}
+      textAlign={placement}
+      variant={variant === 'full' ? 'fullWidth' : variant}
+      {...rest}
+    >
+      {children}
+    </MuiDivider>
+  );
+});
 
 DividerBase.displayName = 'Divider';
 

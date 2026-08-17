@@ -2,8 +2,8 @@ import { alpha, Button, styled } from '@mui/material';
 
 import { Badge } from '@/components';
 
-import { useFramework, useBreakpoint } from '../../../hooks';
-import { Icon, IconProps } from '../../icon';
+import { useBreakpoint, useFramework } from '../../../hooks';
+import { Icon, type IconProps } from '../../icon';
 import { Link } from '../../link';
 
 const NavigationButtonBase = styled(Button)(({ theme }) => ({
@@ -34,18 +34,14 @@ const NavigationButtonBase = styled(Button)(({ theme }) => ({
   '&.active': {
     'opacity': 1,
     'color':
-      theme.palette.mode === 'light'
-        ? theme.palette.common.white
-        : theme.palette.primary.main,
+      theme.palette.mode === 'light' ? theme.palette.common.white : theme.palette.primary.main,
     '& .MuiButton-startIcon': {
       color:
         theme.palette.mode === 'light'
           ? alpha(theme.palette.common.black, 0.8)
           : theme.palette.primary.contrastText,
       backgroundColor:
-        theme.palette.mode === 'light'
-          ? theme.palette.common.white
-          : theme.palette.primary.main,
+        theme.palette.mode === 'light' ? theme.palette.common.white : theme.palette.primary.main,
     },
   },
   [theme.breakpoints.down('tablet')]: {
@@ -72,7 +68,7 @@ const NavigationButtonBase = styled(Button)(({ theme }) => ({
 const NavigationButtonIndicator = styled('div', {
   name: 'RosenNavigationButton',
   slot: 'indicator',
-  overridesResolver: (props, styles) => styles.root,
+  overridesResolver: (_props, styles) => styles.root,
 })(({ theme }) => ({
   height: theme.spacing(1),
   width: theme.spacing(3),
@@ -97,13 +93,7 @@ export type NavigationButtonProps = {
  * @property {boolean} isActive - if true the component will be rendered in active state
  * @property {boolean} disabled - if true the component will be rendered in disabled state
  */
-export const NavigationButton = ({
-  badge,
-  label,
-  icon,
-  path,
-  disabled,
-}: NavigationButtonProps) => {
+export const NavigationButton = ({ badge, label, icon, path, disabled }: NavigationButtonProps) => {
   const { router } = useFramework();
 
   const isActive = router.pathname === path;

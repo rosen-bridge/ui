@@ -1,12 +1,9 @@
 import { DefaultLogger } from '@rosen-bridge/abstract-logger';
-import {
-  FailoverStrategy,
-  NetworkConnectorManager,
-} from '@rosen-bridge/abstract-scanner';
+import { FailoverStrategy, NetworkConnectorManager } from '@rosen-bridge/abstract-scanner';
 import {
   BitcoinRpcNetwork,
   BitcoinRpcScanner,
-  BitcoinRpcTransaction,
+  type BitcoinRpcTransaction,
 } from '@rosen-bridge/bitcoin-scanner';
 
 import config from '../../configs';
@@ -27,11 +24,10 @@ const scannerLogger = logger.child(BITCOIN_SCANNER_LOGGER_NAME);
  * Creates and configures a NetworkConnectorManager instance for bitcoin scanner
  */
 export const createBitcoinNetworkConnectorManager = () => {
-  const networkConnectorManager =
-    new NetworkConnectorManager<BitcoinRpcTransaction>(
-      new FailoverStrategy(),
-      scannerLogger,
-    );
+  const networkConnectorManager = new NetworkConnectorManager<BitcoinRpcTransaction>(
+    new FailoverStrategy(),
+    scannerLogger,
+  );
 
   networkConnectorManager.addConnector(
     new BitcoinRpcNetwork(

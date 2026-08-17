@@ -1,11 +1,10 @@
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
 import { useConfig } from '@/hooks';
-import { ElementBaseProps, OverridableType } from '@/types';
+import type { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.css';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface AppBarOverrides {}
 
 export type AppBarOwnProps = {
@@ -16,11 +15,7 @@ export type AppBarOwnProps = {
 
 export type AppBarBaseProps = ElementBaseProps<'div', AppBarOwnProps>;
 
-export type AppBarProps = OverridableType<
-  AppBarBaseProps,
-  AppBarOverrides,
-  never
->;
+export type AppBarProps = OverridableType<AppBarBaseProps, AppBarOverrides, never>;
 
 /**
  * renders a appBar wrapper

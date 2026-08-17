@@ -1,8 +1,7 @@
-import { useCarousel, Icon, IconProps, IconButton } from '@/components';
+import { Icon, IconButton, type IconProps, useCarousel } from '@/components';
 import { useConfig } from '@/hooks';
-import { ElementBaseProps, OverridableType } from '@/types';
+import type { ElementBaseProps, OverridableType } from '@/types';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface CarouselButtonOverrides {}
 
 export type CarouselButtonOwnProps = {
@@ -13,10 +12,7 @@ export type CarouselButtonOwnProps = {
   type: 'next' | 'prev';
 };
 
-export type CarouselButtonBaseProps = ElementBaseProps<
-  typeof IconButton,
-  CarouselButtonOwnProps
->;
+export type CarouselButtonBaseProps = ElementBaseProps<typeof IconButton, CarouselButtonOwnProps>;
 
 export type CarouselButtonProps = OverridableType<
   CarouselButtonBaseProps,
@@ -29,9 +25,9 @@ export const CarouselButton = (props: CarouselButtonProps) => {
 
   const api = useCarousel();
 
-  const canScroll = type == 'next' ? api.canScrollNext : api.canScrollPrev;
+  const canScroll = type === 'next' ? api.canScrollNext : api.canScrollPrev;
 
-  const scroll = type == 'next' ? api.scrollNext : api.scrollPrev;
+  const scroll = type === 'next' ? api.scrollNext : api.scrollPrev;
 
   return (
     <IconButton disabled={!canScroll} onClick={scroll} {...rest}>

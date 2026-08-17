@@ -1,20 +1,20 @@
-import { RosenChainToken } from '@rosen-bridge/tokens';
+import type { RosenChainToken } from '@rosen-bridge/tokens';
 import type { ErgoTxProxy } from '@rosen-network/ergo';
 import { ErgoNetwork } from '@rosen-network/ergo/dist/client';
 import { NETWORKS } from '@rosen-ui/constants';
-import { Network } from '@rosen-ui/types';
+import type { Network } from '@rosen-ui/types';
 import {
+  ConnectionTimeoutError,
   SubmitTransactionError,
+  UnsupportedChainError,
   UserDeniedTransactionSignatureError,
   UtxoFetchError,
   Wallet,
-  WalletTransferParams,
-  ConnectionTimeoutError,
-  UnsupportedChainError,
+  type WalletTransferParams,
 } from '@rosen-ui/wallet-api';
 
 import { ICON } from './icon';
-import { NautilusWalletConfig } from './types';
+import type { NautilusWalletConfig } from './types';
 
 export class NautilusWallet extends Wallet<NautilusWalletConfig> {
   icon = ICON;
@@ -67,18 +67,13 @@ export class NautilusWallet extends Wallet<NautilusWalletConfig> {
      * The following condition is required because nautilus only accepts
      * uppercase ERG as tokenId for the erg native token
      */
-    const amount = await wallet.get_balance(
-      token.tokenId === 'erg' ? 'ERG' : token.tokenId,
-    );
+    const amount = await wallet.get_balance(token.tokenId === 'erg' ? 'ERG' : token.tokenId);
 
     return amount;
   };
 
   isAvailable = (): boolean => {
-    return (
-      typeof window.ergoConnector !== 'undefined' &&
-      !!window.ergoConnector.nautilus
-    );
+    return typeof window.ergoConnector !== 'undefined' && !!window.ergoConnector.nautilus;
   };
 
   hasConnection = async (): Promise<boolean> => {

@@ -1,13 +1,11 @@
+import type { TransactionResponse } from 'ethers';
+
 import { DefaultLogger } from '@rosen-bridge/abstract-logger';
-import {
-  FailoverStrategy,
-  NetworkConnectorManager,
-} from '@rosen-bridge/abstract-scanner';
+import { FailoverStrategy, NetworkConnectorManager } from '@rosen-bridge/abstract-scanner';
 import { EthereumRpcObservationExtractor } from '@rosen-bridge/evm-observation-extractor';
 import { EvmRpcNetwork, EvmRpcScanner } from '@rosen-bridge/evm-scanner';
-import { TokenMap } from '@rosen-bridge/extended-tokens';
-import { DataSource } from '@rosen-bridge/extended-typeorm';
-import { TransactionResponse } from 'ethers';
+import type { TokenMap } from '@rosen-bridge/extended-tokens';
+import type { DataSource } from '@rosen-bridge/extended-typeorm';
 
 import { configs } from '../configs';
 
@@ -20,22 +18,20 @@ const logger = DefaultLogger.getInstance().child(import.meta.url);
  * @returns Configured and ready-to-use EthereumScanner instance
  * @throws Error if observation extractor creation or registration fails
  */
-export const getEthereumScanner = async (
-  dataSource: DataSource,
-  tokenMap: TokenMap,
-) => {
+export const getEthereumScanner = async (dataSource: DataSource, tokenMap: TokenMap) => {
   logger.info('Starting Ethereum scanner initialization...');
 
   // Create Ethereum scanner with RPC network settings
-  const networkConnectorManager =
-    new NetworkConnectorManager<TransactionResponse>(
-      new FailoverStrategy(),
-      logger.child('ethereumScannerLogger'),
-    );
+  const networkConnectorManager = new NetworkConnectorManager<TransactionResponse>(
+    new FailoverStrategy(),
+    logger.child('ethereumScannerLogger'),
+  );
   configs.chains.ethereum.rpc.connections.forEach((rpc) => {
-    networkConnectorManager.addConnector(
-      new EvmRpcNetwork(rpc.url!, rpc.timeout! * 1000, rpc.authToken),
-    );
+    if (rpc.url && rpc.timeout) {
+      networkConnectorManager.addConnector(
+        new EvmRpcNetwork(rpc.url, rpc.timeout * 1000, rpc.authToken),
+      );
+    }
   });
   const ethereumScanner = new EvmRpcScanner('ethereum', {
     dataSource: dataSource,

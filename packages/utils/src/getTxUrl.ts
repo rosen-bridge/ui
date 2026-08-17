@@ -1,5 +1,5 @@
 import { NETWORKS } from '@rosen-ui/constants';
-import { Network } from '@rosen-ui/types';
+import type { Network } from '@rosen-ui/types';
 
 /**
  * TODO: This util is temporary and its logic should be moved to individual
@@ -21,10 +21,7 @@ const baseTxURLs: { [key in Network]: HttpsURL } = {
   [NETWORKS.firo.key]: 'https://explorer.firo.org/tx',
 };
 
-export const getTxURL = (
-  network?: Network,
-  tx?: string,
-): HttpsURL | undefined => {
+export const getTxURL = (network?: Network, tx?: string): HttpsURL | undefined => {
   if (!network || !tx) return;
 
   const baseURL = baseTxURLs[network as keyof typeof baseTxURLs];

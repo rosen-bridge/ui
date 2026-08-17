@@ -1,21 +1,21 @@
 'use client';
 
-import { useCallback, ChangeEvent, SyntheticEvent } from 'react';
+import { type ChangeEvent, type SyntheticEvent, useCallback } from 'react';
 
-import { RosenChainToken } from '@rosen-bridge/tokens';
+import type { RosenChainToken } from '@rosen-bridge/tokens';
 import {
-  TextField,
-  CircularProgress,
   Alert,
   Autocomplete,
-  InputAdornment,
-  IconButton,
+  CircularProgress,
   Icon,
+  IconButton,
+  InputAdornment,
+  MenuItemMui,
   Network,
   Stack,
+  type StackProps,
+  TextField,
   useResponsive,
-  StackProps,
-  MenuItemMui,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 
@@ -51,8 +51,7 @@ export const BridgeForm = () => {
     formState: { isValidating },
   } = useTransactionFormData();
 
-  const { sources, availableSources, availableTargets, availableTokens } =
-    useNetwork();
+  const { sources, availableSources, availableTargets, availableTokens } = useNetwork();
 
   const { isLoading, raw: balanceRaw, amount: balanceAmount } = useBalance();
 
@@ -66,15 +65,13 @@ export const BridgeForm = () => {
   });
 
   const renderSelectedNetwork = (value: unknown) => {
-    const network = sources.find((network) => network.name === value)!;
-    return (
-      <Network value={network.name} slots={{ logo: { size: 'medium' } }} />
-    );
+    const network = sources.find((network) => network.name === value);
+    return <Network value={network?.name} slots={{ logo: { size: 'medium' } }} />;
   };
 
   const handleTokenChange = useCallback(
-    (e: SyntheticEvent, value: RosenChainToken | null, reason: string) => {
-      if (reason == 'clear') return;
+    (_e: SyntheticEvent, value: RosenChainToken | null, reason: string) => {
+      if (reason === 'clear') return;
       const currentToken = value || undefined;
       setValue('token', currentToken, {
         shouldDirty: true,
@@ -149,10 +146,7 @@ export const BridgeForm = () => {
         >
           {availableSources.map((network) => (
             <MenuItemMui key={network.name} value={network.name}>
-              <Network
-                value={network.name}
-                slots={{ logo: { size: 'medium' } }}
-              />
+              <Network value={network.name} slots={{ logo: { size: 'medium' } }} />
             </MenuItemMui>
           ))}
         </TextField>
@@ -174,10 +168,7 @@ export const BridgeForm = () => {
         >
           {availableTargets.map((network) => (
             <MenuItemMui key={network.name} value={network.name}>
-              <Network
-                value={network.name}
-                slots={{ logo: { size: 'medium' } }}
-              />
+              <Network value={network.name} slots={{ logo: { size: 'medium' } }} />
             </MenuItemMui>
           ))}
         </TextField>
@@ -210,11 +201,7 @@ export const BridgeForm = () => {
         variant="filled"
         error={!!errors?.walletAddress}
         helperText={
-          isValidating ? (
-            <CircularProgress size={10} />
-          ) : (
-            errors.walletAddress?.message?.toString()
-          )
+          isValidating ? <CircularProgress size={10} /> : errors.walletAddress?.message?.toString()
         }
         disabled={!targetField.value}
         autoComplete="off"
@@ -229,7 +216,7 @@ export const BridgeForm = () => {
           });
         }}
       />
-      {targetField.value == NETWORKS.bitcoin.key && (
+      {targetField.value === NETWORKS.bitcoin.key && (
         <Alert severity="warning">
           Only Native SegWit (P2WPKH or P2WSH) addresses are supported.
         </Alert>
@@ -244,14 +231,9 @@ export const BridgeForm = () => {
         value={tokenField.value}
         getOptionLabel={(option) => option.name || ''}
         isOptionEqualToValue={(option, value) => {
-          return (
-            (option as RosenChainToken)?.tokenId ===
-            (value as RosenChainToken)?.tokenId
-          );
+          return (option as RosenChainToken)?.tokenId === (value as RosenChainToken)?.tokenId;
         }}
-        renderInput={(params) => (
-          <TextField {...params} label="Token" name={tokenField.name} />
-        )}
+        renderInput={(params) => <TextField {...params} label="Token" name={tokenField.name} />}
         onChange={handleTokenChange}
       />
       <TextField
@@ -263,19 +245,17 @@ export const BridgeForm = () => {
         helperText={errors.amount?.message?.toString()}
         InputProps={{
           disableUnderline: true,
-          endAdornment: tokenField.value &&
-            selectedWallet &&
-            balanceAmount >= 0n && (
-              <UseAllAmount
-                disabled={!addressField.value || !!errors?.walletAddress}
-                error={!!error}
-                loading={isLoading || isMaxLoading}
-                value={balanceRaw}
-                unit={(tokenValue as RosenChainToken)?.name}
-                onClick={handleSelectMax}
-                onRetry={load}
-              />
-            ),
+          endAdornment: tokenField.value && selectedWallet && balanceAmount >= 0n && (
+            <UseAllAmount
+              disabled={!addressField.value || !!errors?.walletAddress}
+              error={!!error}
+              loading={isLoading || isMaxLoading}
+              value={balanceRaw}
+              unit={(tokenValue as RosenChainToken)?.name}
+              onClick={handleSelectMax}
+              onRetry={load}
+            />
+          ),
         }}
         inputProps={{
           'style': { fontSize: '2rem' },

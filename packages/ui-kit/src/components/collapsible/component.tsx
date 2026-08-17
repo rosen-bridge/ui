@@ -1,11 +1,10 @@
 import { Collapsible as CollapsibleBaseUI } from '@base-ui/react/collapsible';
 
 import { useConfig } from '@/hooks';
-import { ElementBaseProps, OverridableType } from '@/types';
+import type { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.css';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface CollapsibleOverrides {}
 
 export type CollapsibleOwnProps = {
@@ -14,11 +13,7 @@ export type CollapsibleOwnProps = {
 
 export type CollapsibleBaseProps = ElementBaseProps<'div', CollapsibleOwnProps>;
 
-export type CollapsibleProps = OverridableType<
-  CollapsibleBaseProps,
-  CollapsibleOverrides,
-  never
->;
+export type CollapsibleProps = OverridableType<CollapsibleBaseProps, CollapsibleOverrides, never>;
 
 export const Collapsible = (props: CollapsibleProps) => {
   const { children, ...rest } = useConfig('Collapsible', props);

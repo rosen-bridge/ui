@@ -1,24 +1,21 @@
 import { DefaultLogger } from '@rosen-bridge/abstract-logger';
+import { FailoverStrategy, NetworkConnectorManager } from '@rosen-bridge/abstract-scanner';
 import {
-  FailoverStrategy,
-  NetworkConnectorManager,
-} from '@rosen-bridge/abstract-scanner';
-import {
-  CardanoKoiosObservationExtractor,
   CardanoBlockFrostObservationExtractor,
+  CardanoKoiosObservationExtractor,
   CardanoOgmiosObservationExtractor,
 } from '@rosen-bridge/cardano-observation-extractor';
 import {
   BlockFrostNetwork,
-  BlockFrostTransaction,
+  type BlockFrostTransaction,
   CardanoBlockFrostScanner,
   CardanoKoiosScanner,
   CardanoOgmiosScanner,
   KoiosNetwork,
-  KoiosTransaction,
+  type KoiosTransaction,
 } from '@rosen-bridge/cardano-scanner';
-import { TokenMap } from '@rosen-bridge/extended-tokens';
-import { DataSource } from '@rosen-bridge/extended-typeorm';
+import type { TokenMap } from '@rosen-bridge/extended-tokens';
+import type { DataSource } from '@rosen-bridge/extended-typeorm';
 
 import { configs } from '../configs';
 import {
@@ -49,13 +46,15 @@ const buildCardanoKoiosScannerWithExtractors = async (
     logger.child('cardanoKoiosScannerLogger'),
   );
   configs.chains.cardano.koios.connections.forEach((koios) => {
-    networkConnectorManager.addConnector(
-      new KoiosNetwork(koios.url!, koios.timeout! * 1000, koios.authToken),
-    );
+    if (koios.url && koios.timeout) {
+      networkConnectorManager.addConnector(
+        new KoiosNetwork(koios.url, koios.timeout * 1000, koios.authToken),
+      );
+    }
   });
   const cardanoScanner = new CardanoKoiosScanner({
     dataSource: dataSource,
-    initialHeight: configs.chains.cardano.initialHeight!,
+    initialHeight: configs.chains.cardano.initialHeight || 0,
     network: networkConnectorManager,
     blockRetrieveGap: configs.chains.cardano.blockRetrieveGap,
     logger: logger.child('cardanoKoiosScannerLogger'),
@@ -101,19 +100,20 @@ const buildCardanoBlockFrostScannerWithExtractors = async (
   logger.info('Starting Cardano scanner initialization...');
 
   // Create Cardano scanner with BlockFrost network settings
-  const networkConnectorManager =
-    new NetworkConnectorManager<BlockFrostTransaction>(
-      new FailoverStrategy(),
-      logger.child('cardanoBlockFrostScannerLogger'),
-    );
+  const networkConnectorManager = new NetworkConnectorManager<BlockFrostTransaction>(
+    new FailoverStrategy(),
+    logger.child('cardanoBlockFrostScannerLogger'),
+  );
   configs.chains.cardano.blockfrost.connections.forEach((blockfrost) => {
-    networkConnectorManager.addConnector(
-      new BlockFrostNetwork(blockfrost.projectId!, blockfrost.url),
-    );
+    if (blockfrost.projectId) {
+      networkConnectorManager.addConnector(
+        new BlockFrostNetwork(blockfrost.projectId, blockfrost.url),
+      );
+    }
   });
   const cardanoScanner = new CardanoBlockFrostScanner({
     dataSource: dataSource,
-    initialHeight: configs.chains.cardano.initialHeight!,
+    initialHeight: configs.chains.cardano.initialHeight || 0,
     network: networkConnectorManager,
     blockRetrieveGap: configs.chains.cardano.blockRetrieveGap,
     logger: logger.child('cardanoBlockFrostScannerLogger'),
@@ -163,10 +163,10 @@ const buildCardanoOgmiosScannerWithExtractors = async (
   const cardanoScanner = new CardanoOgmiosScanner(
     {
       dataSource: dataSource,
-      nodeHostOrIp: configs.chains.cardano.ogmios.connection.address!,
-      nodePort: configs.chains.cardano.ogmios.connection.port!,
-      initialSlot: configs.chains.cardano.ogmios.connection.initialSlot!,
-      initialHash: configs.chains.cardano.ogmios.connection.initialHash!,
+      nodeHostOrIp: configs.chains.cardano.ogmios.connection.address || '',
+      nodePort: configs.chains.cardano.ogmios.connection.port || 0,
+      initialSlot: configs.chains.cardano.ogmios.connection.initialSlot || 0,
+      initialHash: configs.chains.cardano.ogmios.connection.initialHash || '',
     },
     logger.child('cardanoOgmiosScannerLogger'),
   );
@@ -208,20 +208,12 @@ const buildCardanoOgmiosScannerWithExtractors = async (
 export const getCardanoScanner = async (
   dataSource: DataSource,
   tokenMap: TokenMap,
-): Promise<
-  CardanoKoiosScanner | CardanoBlockFrostScanner | CardanoOgmiosScanner
-> => {
+): Promise<CardanoKoiosScanner | CardanoBlockFrostScanner | CardanoOgmiosScanner> => {
   switch (configs.chains.cardano.method) {
     case CARDANO_METHOD_BLOCKFROST:
-      return await buildCardanoBlockFrostScannerWithExtractors(
-        dataSource,
-        tokenMap,
-      );
+      return await buildCardanoBlockFrostScannerWithExtractors(dataSource, tokenMap);
     case CARDANO_METHOD_OGMIOS:
-      return await buildCardanoOgmiosScannerWithExtractors(
-        dataSource,
-        tokenMap,
-      );
+      return await buildCardanoOgmiosScannerWithExtractors(dataSource, tokenMap);
     case CARDANO_METHOD_KOIOS:
       return await buildCardanoKoiosScannerWithExtractors(dataSource, tokenMap);
     default:

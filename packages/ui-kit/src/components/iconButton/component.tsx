@@ -1,11 +1,10 @@
-import { HTMLAttributeAnchorTarget } from 'react';
+import type { HTMLAttributeAnchorTarget } from 'react';
 
 import { IconButton as IconButtonMUI } from '@mui/material';
 
 import { useConfig } from '@/hooks';
-import { ElementBaseProps, OverridableType } from '@/types';
+import type { ElementBaseProps, OverridableType } from '@/types';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface IconButtonOverrides {}
 
 export type IconButtonOwnProps = {
@@ -13,16 +12,9 @@ export type IconButtonOwnProps = {
   target?: HTMLAttributeAnchorTarget;
 };
 
-export type IconButtonBaseProps = ElementBaseProps<
-  typeof IconButtonMUI,
-  IconButtonOwnProps
->;
+export type IconButtonBaseProps = ElementBaseProps<typeof IconButtonMUI, IconButtonOwnProps>;
 
-export type IconButtonProps = OverridableType<
-  IconButtonBaseProps,
-  IconButtonOverrides,
-  never
->;
+export type IconButtonProps = OverridableType<IconButtonBaseProps, IconButtonOverrides, never>;
 
 export const IconButton = (props: IconButtonProps) => {
   const { ...rest } = useConfig('IconButton', props);

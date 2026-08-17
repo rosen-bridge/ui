@@ -1,5 +1,5 @@
 import { Ergo as ErgoIcon } from '@rosen-bridge/icons';
-import { Network, NetworkConfig } from '@rosen-network/base';
+import type { Network, NetworkConfig } from '@rosen-network/base';
 import { NETWORKS } from '@rosen-ui/constants';
 
 import type { generateUnsignedTx } from './generateUnsignedTx';
@@ -28,9 +28,7 @@ export class ErgoNetwork implements Network {
     return this.config.calculateFee(...args);
   };
 
-  public generateUnsignedTx: ErgoNetworkConfig['generateUnsignedTx'] = (
-    ...args
-  ) => {
+  public generateUnsignedTx: ErgoNetworkConfig['generateUnsignedTx'] = (...args) => {
     return this.config.generateUnsignedTx(...args);
   };
 
