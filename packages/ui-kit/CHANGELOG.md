@@ -1,5 +1,14 @@
 # @rosen-bridge/ui-kit
 
+## 5.9.0
+
+### Minor Changes
+
+- Fix scroll lock in `Menu` component
+- Add `CopyButton` error state
+- Move illustration components from legacy to the main illustrations directory
+- Refactor `EmptyState` component
+
 ## 5.8.2
 
 ### Patch Changes
