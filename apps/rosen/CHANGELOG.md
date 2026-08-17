@@ -1,5 +1,18 @@
 # @rosen-bridge/rosen-app
 
+## 5.6.0
+
+### Minor Changes
+
+- Remove Beta badge from Events navigation
+- Optimize network height extraction by using the `extractor_status_entity` table to improve query performance while preserving existing results
+- Handle undefined aggregated status in getEventStatus
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-bridge/ui-kit@5.9.0
+
 ## 5.5.2
 
 ### Patch Changes
