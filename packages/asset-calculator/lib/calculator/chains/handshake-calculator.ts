@@ -8,12 +8,16 @@ import type { Network } from '@rosen-ui/types';
 
 import AbstractCalculator from '../abstract-calculator';
 
+const NONE_COVENANT_TYPE = 0;
+
 /**
  * This type only contains the part of the type that is required here
  */
-interface PartialHandshakeRpcAddress {
-  confirmed: number;
-  unconfirmed: number;
+interface PartialHandshakeCoin {
+  value: number;
+  covenant: {
+    type: number;
+  };
 }
 
 export class HandshakeCalculator extends AbstractCalculator {
@@ -21,7 +25,12 @@ export class HandshakeCalculator extends AbstractCalculator {
 
   protected client: Axios;
 
-  constructor(tokenMap: TokenMap, addresses: string[], url: string, logger?: AbstractLogger) {
+  constructor(
+    tokenMap: TokenMap,
+    addresses: string[],
+    url: string = 'https://api.handshakeapi.com/hsd',
+    logger?: AbstractLogger,
+  ) {
     super(addresses, logger, tokenMap);
     this.client = axios.create({
       baseURL: url,
@@ -50,13 +59,13 @@ export class HandshakeCalculator extends AbstractCalculator {
     if (token.type === NATIVE_TOKEN) {
       const balances = await Promise.all(
         this.addresses.map(async (address) => {
-          const response = await this.client.post<{
-            result: PartialHandshakeRpcAddress;
-          }>('', {
-            method: 'getaddressbalance',
-            params: [address],
-          });
-          return BigInt(response.data.result.confirmed);
+          const response = await this.client.get<PartialHandshakeCoin[]>(
+            `/coin/address/${address}`,
+          );
+          // name related covenants lock their value, so only plain coins are counted
+          return response.data
+            .filter((coin) => coin.covenant.type === NONE_COVENANT_TYPE)
+            .reduce((sum, coin) => sum + BigInt(coin.value), 0n);
         }),
       );
       return zipWith(this.addresses, balances, (address, amount) => ({

@@ -100,7 +100,7 @@ handshake:
   tokens:
     rwt:
   initialHeight:
-  rpcUrl:
+  rpcUrl: https://api.handshakeapi.com/hsd
 ethereum:
   addresses:
     lock:
