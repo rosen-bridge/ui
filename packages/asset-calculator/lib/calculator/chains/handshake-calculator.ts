@@ -28,7 +28,7 @@ export class HandshakeCalculator extends AbstractCalculator {
   constructor(
     tokenMap: TokenMap,
     addresses: string[],
-    url: string = 'https://api.handshakeapi.com/hsd',
+    url: string = 'https://hsd.ergexplorer.com',
     logger?: AbstractLogger,
   ) {
     super(addresses, logger, tokenMap);
