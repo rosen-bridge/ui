@@ -1,11 +1,11 @@
-import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
-import { DataSource } from '@rosen-bridge/extended-typeorm';
+import { type AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
+import type { DataSource } from '@rosen-bridge/extended-typeorm';
 import { TokenPriceAction } from '@rosen-bridge/token-price-entity';
 import {
   LockedAssetsMetricAction,
+  type LockedAssetsType,
   METRIC_KEYS,
   MetricAction,
-  LockedAssetsType,
 } from '@rosen-ui/rosen-statistics-entity';
 
 import {
@@ -32,14 +32,8 @@ export const lockedAssetsMetric = async (
     dataSource,
     logger.child('lockedAssetsMetricAction'),
   );
-  const metricAction = new MetricAction(
-    dataSource,
-    logger.child('metricAction'),
-  );
-  const tokenPriceAction = new TokenPriceAction(
-    dataSource,
-    logger.child('tokenPriceAction'),
-  );
+  const metricAction = new MetricAction(dataSource, logger.child('metricAction'));
+  const tokenPriceAction = new TokenPriceAction(dataSource, logger.child('tokenPriceAction'));
 
   const timestamp = Math.floor(Date.now() / 1000);
 
@@ -55,18 +49,12 @@ export const lockedAssetsMetric = async (
     const processedAssets: LockedAssetsType[] = [];
 
     for (const asset of lockedAssets) {
-      const tokenUsdPrice = await tokenPriceAction.getLatestTokenPrice(
-        asset.tokenId,
-        timestamp,
-      );
+      const tokenUsdPrice = await tokenPriceAction.getLatestTokenPrice(asset.tokenId, timestamp);
       if (tokenUsdPrice === undefined) continue;
 
       const tokenUsdPriceString = scientificToString(tokenUsdPrice);
       const tokenUsdPriceDecimals = getNumberOfDecimals(tokenUsdPriceString);
-      const tokenUsdPriceRaw = getNonDecimalString(
-        tokenUsdPriceString,
-        tokenUsdPriceDecimals,
-      );
+      const tokenUsdPriceRaw = getNonDecimalString(tokenUsdPriceString, tokenUsdPriceDecimals);
 
       const rawUsdValue = asset.amount * BigInt(tokenUsdPriceRaw);
 
@@ -96,10 +84,7 @@ export const lockedAssetsMetric = async (
       }
     }
 
-    const totalUsdValueString = getDecimalString(
-      totalRawNormalized,
-      maxDecimals,
-    );
+    const totalUsdValueString = getDecimalString(totalRawNormalized, maxDecimals);
 
     logger.debug(`Total locked assets USD value: [${totalUsdValueString}]`);
 
@@ -109,9 +94,7 @@ export const lockedAssetsMetric = async (
       timestamp,
     );
 
-    logger.debug(
-      'Locked assets USD metric calculation job completed successfully',
-    );
+    logger.debug('Locked assets USD metric calculation job completed successfully');
   } catch (error) {
     logger.error('Locked assets USD metric calculation job failed', {
       message: error instanceof Error ? error.message : '',

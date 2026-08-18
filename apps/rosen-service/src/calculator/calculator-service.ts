@@ -11,10 +11,7 @@ import { getTokenMap, handleError, runAndSetInterval } from '../utils';
  * @param calculator
  * @param updateInterval
  */
-const startUpdateJob = async (
-  calculator: AssetCalculator,
-  updateInterval: number,
-) => {
+const startUpdateJob = async (calculator: AssetCalculator, updateInterval: number) => {
   const logger = DefaultLogger.getInstance().child(import.meta.url);
 
   const tryUpdating = async () => {
@@ -77,6 +74,10 @@ const start = async () => {
     {
       addresses: config.calculator.addresses.doge,
       blockcypherUrl: config.doge.blockcypherUrl,
+    },
+    {
+      addresses: config.calculator.addresses.firo,
+      explorerUrl: config.firo.explorerUrl,
     },
     {
       addresses: config.calculator.addresses.handshake,

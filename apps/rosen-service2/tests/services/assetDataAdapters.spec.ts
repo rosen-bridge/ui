@@ -1,26 +1,40 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+/**
+ * TODO: remove the inline Biome comment
+ * local:ergo/rosen-bridge/ui#441
+ */
+/** biome-ignore-all lint/suspicious/noExplicitAny: Use a better type */
+
+import type { VercelKV } from '@vercel/kv';
+import { beforeEach, describe, expect, it, type Mock, vi } from 'vitest';
+
 import { DummyLogger } from '@rosen-bridge/abstract-logger';
 import { TokenMap } from '@rosen-bridge/extended-tokens';
 import { DataSource } from '@rosen-bridge/extended-typeorm';
 import { TokenEntity } from '@rosen-ui/asset-aggregator';
 import { NETWORKS } from '@rosen-ui/constants';
-import { describe, it, beforeEach, expect, vi, Mock } from 'vitest';
 
-import { AssetDataAdapterService } from '../../src/services/assetDataAdapters';
-import { DBService } from '../../src/services/db';
-import { TokensConfig } from '../../src/tokensConfig';
+import {
+  AbstractAssetDataAdapterService,
+  AbstractTokenMapService,
+} from '../../src/services/abstracts';
+import { AbstractRedisService } from '../../src/services/abstracts/abstractRedisService';
+import { AssetDataAdapterService } from '../../src/services/assetDataAdaptersService';
+import { DBService } from '../../src/services/dbService';
+import { RedisService } from '../../src/services/redisService';
+import { TokenMapService } from '../../src/services/tokenMapService';
 import {
   expectedErgoGetAssetsTotalSupplyResult,
   sampleTokenMapConfig,
 } from './assetDataAdaptersTestData';
 
 interface TestContext {
-  service: AssetDataAdapterService;
+  service: AbstractAssetDataAdapterService;
   mockTokenMap: TokenMap;
+  mockRedis: VercelKV;
   mockExplorer: { v1: { [k: string]: Mock } };
 }
 
-let mockExplorer = {
+const mockExplorer = {
   v1: {
     getApiV1AddressesP1BalanceConfirmed: vi.fn(),
     getApiV1TokensP1: vi.fn(),
@@ -36,16 +50,22 @@ describe('AssetDataAdapterService', () => {
 
       ctx.mockTokenMap = new TokenMap();
       await ctx.mockTokenMap.updateConfigByJson(sampleTokenMapConfig);
-      TokensConfig.init = vi.fn().mockImplementation(() => {
-        (TokensConfig as any).instance = {
+      TokenMapService.init = vi.fn().mockImplementation(() => {
+        (AbstractTokenMapService as any).instance = {
           tokenMap: ctx.mockTokenMap,
           logger: new DummyLogger(),
+          getName: () => 'Mocked Token Map Service',
         };
       });
-      await TokensConfig.init();
-      TokensConfig.getInstance().getTokenMap = vi
-        .fn()
-        .mockReturnValue(ctx.mockTokenMap);
+      RedisService.init = vi.fn().mockImplementation(() => {
+        (AbstractRedisService as any).instance = {
+          logger: new DummyLogger(),
+          getName: () => 'Mocked Redis Service',
+        };
+      });
+      await RedisService.init();
+      await TokenMapService.init();
+      AbstractTokenMapService.getInstance().getTokenMap = vi.fn().mockReturnValue(ctx.mockTokenMap);
 
       const dataSource = new DataSource({
         type: 'sqlite',
@@ -57,8 +77,10 @@ describe('AssetDataAdapterService', () => {
       DBService.init(dataSource);
 
       await AssetDataAdapterService.init();
-      ctx.service = AssetDataAdapterService.getInstance();
-
+      ctx.service = AbstractAssetDataAdapterService.getInstance();
+      // Start the service to trigger preStart to register tokenMap and createDataAdapters
+      await ctx.service['assemble']();
+      await ctx.service['start']();
       ctx.mockExplorer = mockExplorer;
     });
 

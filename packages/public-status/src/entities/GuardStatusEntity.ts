@@ -6,16 +6,19 @@ import {
   PrimaryColumn,
 } from '@rosen-bridge/extended-typeorm';
 
-import { EventStatus, TxStatus } from '../constants';
+import type { EventStatus, TxStatus } from '../constants';
 import { TxEntity } from './TxEntity';
 
 @Entity('guard_status_entity')
 export class GuardStatusEntity {
   @PrimaryColumn('varchar')
-  eventId: string;
+  triggerTxId: string;
 
   @PrimaryColumn('varchar')
   guardPk: string;
+
+  @Column('varchar')
+  eventId: string;
 
   @Column('integer')
   updatedAt: number;
@@ -23,11 +26,15 @@ export class GuardStatusEntity {
   @Column('varchar')
   status: EventStatus;
 
-  @ManyToOne(() => TxEntity, (tx) => tx.guardStatusRecords, {
-    cascade: false,
-    nullable: true,
-    eager: true,
-  })
+  @ManyToOne(
+    () => TxEntity,
+    (tx) => tx.guardStatusRecords,
+    {
+      cascade: false,
+      nullable: true,
+      eager: true,
+    },
+  )
   @JoinColumn([
     { name: 'txId', referencedColumnName: 'txId' },
     { name: 'txChain', referencedColumnName: 'chain' },

@@ -1,0 +1,26 @@
+.RosenToast-viewport {
+  position: fixed;
+  z-index: 1;
+  top: 8px;
+  right: 8px;
+  left: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.RosenToast {
+  position: absolute;
+  top: 0;
+  transform-origin: top center;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: 1400;
+  &[data-starting-style],
+  &[data-ending-style] {
+    transform: translateY(-150%);
+  }
+}
+
+body:has(div[data-orientation='horizontal']) .RosenToast-viewport {
+  left: 122px;
+}

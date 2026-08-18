@@ -1,45 +1,41 @@
 'use client';
 
-import { ReactNode, useEffect, useMemo, useState } from 'react';
-import {
-  FormProvider,
-  SubmitHandler,
-  useController,
-  useForm,
-} from 'react-hook-form';
+import { useEffect, useMemo } from 'react';
+
+import { FormProvider, type SubmitHandler, useController, useForm } from 'react-hook-form';
+import useSWR from 'swr';
+import useSWRMutation from 'swr/mutation';
 
 import {
-  AlertCard,
-  AlertProps,
+  ApiKeyDialogProtectedAction,
+  ApiKeyDialogWarning,
   CircularProgress,
-  Grid,
-  Id,
+  Identifier,
   InputAdornment,
-  MenuItem,
+  Link,
+  MenuItemMui,
+  Stack,
   SubmitButton,
   TextField,
   useApiKey,
-  ApiKeyModalWarning,
-  Link,
-  Stack,
+  useConfirm,
+  useResponsive,
+  useToast,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS, TOKEN_NAME_PLACEHOLDER } from '@rosen-ui/constants';
 import { fetcher, mutatorWithHeaders } from '@rosen-ui/swr-helpers';
 import { getNonDecimalString, getTxURL } from '@rosen-ui/utils';
-import useSWR from 'swr';
-import useSWRMutation from 'swr/mutation';
 
 import { useInfo, useToken } from '@/hooks';
-import {
+import type {
   ApiAddressAssetsResponse,
   ApiWithdrawRequestBody,
   ApiWithdrawResponse,
 } from '@/types/api';
 
-import { ConfirmationModal } from '../../ConfirmationModal';
 import {
+  type TokenAmountCompatibleFormSchema,
   TokenAmountTextField,
-  TokenAmountCompatibleFormSchema,
 } from '../../TokenAmountTextField';
 
 interface Form extends TokenAmountCompatibleFormSchema {
@@ -48,30 +44,29 @@ interface Form extends TokenAmountCompatibleFormSchema {
 }
 
 const WithdrawForm = () => {
-  const { data, isLoading: isTokensListLoading } =
-    useSWR<ApiAddressAssetsResponse>('/address/assets', fetcher, {});
+  const { confirm } = useConfirm();
+  const toast = useToast();
+
+  const { data, isLoading: isTokensListLoading } = useSWR<ApiAddressAssetsResponse>(
+    '/address/assets',
+    fetcher,
+    {},
+  );
 
   const { token: ergToken, isLoading: isErgTokenLoading } = useToken('erg');
   const { apiKey } = useApiKey();
 
-  const tokens = useMemo(
-    () => data?.items.filter((token) => !!token.amount),
-    [data],
-  );
+  const tokens = useMemo(() => data?.items.filter((token) => !!token.amount), [data]);
 
   const info = useInfo();
 
-  const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
-
-  const [alertData, setAlertData] = useState<{
-    severity: AlertProps['severity'];
-    message: ReactNode;
-    more?: () => string;
-  } | null>(null);
-
   const { trigger, isMutating: isWithdrawPending } = useSWRMutation<
     ApiWithdrawResponse,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    /**
+     * TODO: remove the inline Biome comment
+     * local:ergo/rosen-bridge/ui#441
+     */
+    // biome-ignore lint/suspicious/noExplicitAny: Use a better type
     any,
     '/withdraw',
     ApiWithdrawRequestBody
@@ -79,12 +74,14 @@ const WithdrawForm = () => {
 
   useEffect(() => {
     if (!isErgTokenLoading && !ergToken?.amount) {
-      setAlertData({
-        severity: 'error',
-        message: 'Your wallet is empty. There is nothing to withdraw.',
+      toast.add({
+        type: 'error',
+        dismissible: true,
+        description: 'Your wallet is empty. There is nothing to withdraw.',
+        timeout: 0,
       });
     }
-  }, [isErgTokenLoading, ergToken]);
+  }, [isErgTokenLoading, ergToken, toast.add]);
 
   const formMethods = useForm({
     mode: 'onChange',
@@ -94,8 +91,7 @@ const WithdrawForm = () => {
       amount: '',
     },
   });
-  const { handleSubmit, control, resetField, register, watch, formState } =
-    formMethods;
+  const { handleSubmit, control, resetField, register, watch, formState } = formMethods;
 
   const formData = watch();
 
@@ -129,9 +125,7 @@ const WithdrawForm = () => {
           tokens: [
             {
               tokenId: formData.tokenId,
-              amount: BigInt(
-                getNonDecimalString(formData.amount, selectedToken!.decimals),
-              ),
+              amount: BigInt(getNonDecimalString(formData.amount, selectedToken!.decimals)),
             },
           ],
         },
@@ -140,15 +134,12 @@ const WithdrawForm = () => {
         },
       });
       if (response.status === 'OK') {
-        setAlertData({
-          severity: 'success',
-          message: (
+        toast.add({
+          type: 'success',
+          description: (
             <>
               Withdrawal is successful. Wait for tx [
-              <Link
-                target="_blank"
-                href={getTxURL(NETWORKS.ergo.key, response.txId) ?? ''}
-              >
+              <Link target="_blank" href={getTxURL(NETWORKS.ergo.key, response.txId) ?? '/'}>
                 {response.txId}
               </Link>
               ] to be confirmed.
@@ -156,46 +147,48 @@ const WithdrawForm = () => {
           ),
         });
       } else {
-        throw new Error(
-          'Server responded but the response message was unexpected',
-        );
+        throw new Error('Server responded but the response message was unexpected');
       }
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      /**
+       * TODO: remove the inline Biome comment
+       * local:ergo/rosen-bridge/ui#441
+       */
+      // biome-ignore lint/suspicious/noExplicitAny: Use a better type
     } catch (error: any) {
       if (error?.response?.status === 403) {
-        setAlertData({
-          severity: 'error',
-          message: 'The Api key is not correct',
+        toast.add({
+          type: 'error',
+          description: 'The Api key is not correct',
         });
       } else {
-        setAlertData({
-          severity: 'error',
-          message: error.message,
+        toast.add({
+          type: 'error',
+          description: error.message,
+          dismissible: true,
+          timeout: 0,
           more: () => JSON.stringify(error.response?.data, null, 2),
         });
       }
     }
   };
 
-  const onSubmit: SubmitHandler<Form> = () => {
-    setConfirmationModalOpen(true);
+  const onSubmit: SubmitHandler<Form> = async () => {
+    await confirm({
+      title: 'Confirm Withdraw',
+      content: `You are going to withdraw ${formData.amount} of token with id ${formData.tokenId} to address ${formData.address}.`,
+      confirmText: 'Withdraw',
+      onConfirm: submit,
+    });
   };
 
-  const renderAlert = () => (
-    <AlertCard
-      more={alertData?.more}
-      severity={alertData?.severity}
-      onClose={() => setAlertData(null)}
-    >
-      {alertData?.message}
-    </AlertCard>
-  );
-
-  const disabled =
-    isTokensListLoading || isErgTokenLoading || !ergToken?.amount;
+  const disabled = isTokensListLoading || isErgTokenLoading || !ergToken?.amount;
 
   const renderAddressTextField = () => (
     <TextField
+      variant="filled"
+      InputProps={{
+        disableUnderline: true,
+      }}
       label="Address"
       disabled={disabled}
       {...register('address', {
@@ -222,9 +215,11 @@ const WithdrawForm = () => {
 
   const renderTokensListSelect = () => (
     <TextField
+      variant="filled"
       label="Token"
       select={!isTokensListLoading}
       InputProps={{
+        disableUnderline: true,
         startAdornment: isTokensListLoading && (
           <InputAdornment position="start">
             <CircularProgress size={18} color="inherit" />
@@ -235,15 +230,15 @@ const WithdrawForm = () => {
       disabled={disabled}
     >
       {tokens?.map((token) => (
-        <MenuItem value={token.tokenId} key={token.tokenId}>
+        <MenuItemMui value={token.tokenId} key={token.tokenId}>
           {token.name ?? TOKEN_NAME_PLACEHOLDER}
           &nbsp;
           {!token.isNativeToken && (
             <>
-              (<Id id={token.tokenId} indicator="middle" />)
+              (<Identifier value={token.tokenId} variant="legacy-middle" />)
             </>
           )}
-        </MenuItem>
+        </MenuItemMui>
       ))}
     </TextField>
   );
@@ -256,36 +251,27 @@ const WithdrawForm = () => {
     />
   );
 
+  const stackDirection = useResponsive({
+    mobile: 'column',
+    laptop: 'row',
+  } as const);
+
   return (
     <FormProvider {...formMethods}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Stack spacing={2}>
-          {renderAlert()}
-          <ApiKeyModalWarning />
+          <ApiKeyDialogWarning />
           {renderAddressTextField()}
-          <Grid container spacing={2}>
-            <Grid size={{ mobile: 12, tablet: 12, laptop: 6 }}>
-              {renderTokensListSelect()}
-            </Grid>
-            <Grid size={{ mobile: 12, tablet: 12, laptop: 6 }}>
-              {renderTokenAmountTextField()}
-            </Grid>
-          </Grid>
-          <SubmitButton
-            disabled={!formState.isValid || !apiKey || disabled}
-            loading={isWithdrawPending}
-          >
-            Withdraw
-          </SubmitButton>
+          <Stack direction={stackDirection} spacing={2}>
+            {renderTokensListSelect()}
+            {renderTokenAmountTextField()}
+          </Stack>
+          <ApiKeyDialogProtectedAction>
+            <SubmitButton disabled={!formState.isValid || disabled} loading={isWithdrawPending}>
+              Withdraw
+            </SubmitButton>
+          </ApiKeyDialogProtectedAction>
         </Stack>
-        <ConfirmationModal
-          open={confirmationModalOpen}
-          title="Confirm Withdraw"
-          content={`You are going to withdraw ${formData.amount} of token with id ${formData.tokenId} to address ${formData.address}.`}
-          buttonText="Withdraw"
-          handleClose={() => setConfirmationModalOpen(false)}
-          onConfirm={submit}
-        />
       </form>
     </FormProvider>
   );

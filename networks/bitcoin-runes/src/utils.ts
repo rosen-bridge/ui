@@ -1,21 +1,22 @@
+import Axios from 'axios';
+import * as bitcoinJs from 'bitcoinjs-lib';
+import { Psbt } from 'bitcoinjs-lib';
+
 import { encodeAddress } from '@rosen-bridge/address-codec';
 import {
   BitcoinRunesBoxSelection,
-  BitcoinRunesUtxo,
-  CoveringBoxes,
-  FeeEstimator,
+  type BitcoinRunesUtxo,
+  type CoveringBoxes,
+  type FeeEstimator,
 } from '@rosen-bridge/bitcoin-runes-utxo-selection';
 import JsonBigInt from '@rosen-bridge/json-bigint';
 import {
-  CalculateFee,
+  type CalculateFee,
   calculateFeeCreator,
   getMinTransferCreator as getMinTransferCreatorBase,
 } from '@rosen-network/base';
 import { NETWORKS } from '@rosen-ui/constants';
-import { Network } from '@rosen-ui/types';
-import Axios from 'axios';
-import { Psbt } from 'bitcoinjs-lib';
-import * as bitcoinJs from 'bitcoinjs-lib';
+import type { Network } from '@rosen-ui/types';
 
 import {
   CONFIRMATION_TARGET,
@@ -60,9 +61,7 @@ export const generateOpReturnData = async (
 
   // parse toAddress
   const addressHex = encodeAddress(toChain, toAddress);
-  const addressLengthCode = (addressHex.length / 2)
-    .toString(16)
-    .padStart(2, '0');
+  const addressLengthCode = (addressHex.length / 2).toString(16).padStart(2, '0');
 
   return Promise.resolve(
     toChainHex + bridgeFeeHex + networkFeeHex + addressLengthCode + addressHex,
@@ -74,9 +73,7 @@ export const generateOpReturnData = async (
  * @param path
  * @returns UnisatResponse
  */
-export const requestUnisat = async <T>(
-  path: string,
-): Promise<UnisatResponse<T | undefined>> => {
+export const requestUnisat = async <T>(path: string): Promise<UnisatResponse<T | undefined>> => {
   const headers = { 'Content-Type': 'application/json' };
   if (process.env.BITCOIN_RUNES_SECRET) {
     Object.assign(headers, {
@@ -172,11 +169,15 @@ export async function* getAddressAvailableBtcUtxos(
       yield* page;
 
       offset += limit;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      /**
+       * TODO: remove the inline Biome comment
+       * local:ergo/rosen-bridge/ui#441
+       */
+      // biome-ignore lint/suspicious/noExplicitAny: Use a better type
     } catch (e: any) {
       const baseError = `Failed to get available UTxOs containing BTC only for address [${address}] with offset/limit [${offset}/${limit}] from Unisat: `;
       if (e.response) {
-        throw new Error(baseError + `${JsonBigInt.stringify(e.response.data)}`);
+        throw new Error(`${baseError}${JsonBigInt.stringify(e.response.data)}`);
       }
       throw new Error(baseError + e.message);
     }
@@ -218,11 +219,15 @@ export async function* getAddressAllBtcUtxos(
       yield* page;
 
       offset += limit;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      /**
+       * TODO: remove the inline Biome comment
+       * local:ergo/rosen-bridge/ui#441
+       */
+      // biome-ignore lint/suspicious/noExplicitAny: Use a better type
     } catch (e: any) {
       const baseError = `Failed to get all UTxOs containing BTC only for address [${address}] with offset/limit [${offset}/${limit}] from Unisat: `;
       if (e.response) {
-        throw new Error(baseError + `${JsonBigInt.stringify(e.response.data)}`);
+        throw new Error(`${baseError}${JsonBigInt.stringify(e.response.data)}`);
       }
       throw new Error(baseError + e.message);
     }
@@ -269,11 +274,15 @@ export async function* getAddressRunesUtxos(
       yield* page;
 
       offset += limit;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      /**
+       * TODO: remove the inline Biome comment
+       * local:ergo/rosen-bridge/ui#441
+       */
+      // biome-ignore lint/suspicious/noExplicitAny: Use a better type
     } catch (e: any) {
       const baseError = `Failed to get UTxOs containing rune [${runeId}] for address [${address}] with offset/limit [${offset}/${limit}] from Unisat: `;
       if (e.response) {
-        throw new Error(baseError + `${JsonBigInt.stringify(e.response.data)}`);
+        throw new Error(`${baseError}${JsonBigInt.stringify(e.response.data)}`);
       }
       throw new Error(baseError + e.message);
     }
@@ -304,24 +313,17 @@ export const submitTransaction = async (
   const POST_TX = `${esploraUrl}/api/tx`;
 
   const psbt =
-    encoding === 'base64'
-      ? Psbt.fromBase64(serializedPsbt)
-      : Psbt.fromHex(serializedPsbt);
+    encoding === 'base64' ? Psbt.fromBase64(serializedPsbt) : Psbt.fromHex(serializedPsbt);
 
   psbt.finalizeAllInputs();
 
-  const res = await Axios.post<string>(
-    POST_TX,
-    psbt.extractTransaction().toHex(),
-  );
+  const res = await Axios.post<string>(POST_TX, psbt.extractTransaction().toHex());
 
   return res.data;
 };
 
 export const getHeight = async (): Promise<number> => {
-  const response = await fetch(
-    `${process.env.BITCOIN_ESPLORA_API}/api/blocks/tip/height`,
-  );
+  const response = await fetch(`${process.env.BITCOIN_ESPLORA_API}/api/blocks/tip/height`);
 
   const height = await response.json();
 
@@ -378,10 +380,7 @@ export const generateFeeEstimatorWithAssumptions = (
   nativeSegwitOutputSize: number,
   taprootOutputSize: number,
 ): FeeEstimator<BitcoinRunesUtxo> => {
-  return (
-    selectedBoxes: Array<BitcoinRunesUtxo>,
-    changeBoxesCount: number,
-  ): bigint => {
+  return (selectedBoxes: Array<BitcoinRunesUtxo>, changeBoxesCount: number): bigint => {
     const estimatedVsize = estimateTxVsize(
       selectedBoxes.length + preSelectedInputCount,
       opReturnScriptLength,
@@ -431,9 +430,7 @@ export const makeTaprootPayment = (
   if (!payment.output) throw Error(`failed to extract taproot output script!`);
   if (!payment.address) throw Error(`failed to extract taproot address!`);
   if (payment.address !== address)
-    throw Error(
-      `the calculated taproot address by public key is not equal to address!`,
-    );
+    throw Error(`the calculated taproot address by public key is not equal to address!`);
 
   return payment;
 };
@@ -443,9 +440,7 @@ export const makeTaprootPayment = (
  * @param address
  * @returns p2wpkh payment
  */
-export const makeP2wpkhPayment = (
-  address: string,
-): bitcoinJs.payments.Payment => {
+export const makeP2wpkhPayment = (address: string): bitcoinJs.payments.Payment => {
   const addressScript = bitcoinJs.address.toOutputScript(address);
 
   if (addressScript.subarray(0, 2).toString('hex') !== '0014') {
@@ -459,9 +454,7 @@ export const makeP2wpkhPayment = (
   if (!payment.output) throw Error(`failed to extract p2wpkh output script!`);
   if (!payment.address) throw Error(`failed to extract p2wpkh address!`);
   if (payment.address !== address)
-    throw Error(
-      `the calculated p2wpkh address by public key is not equal to address!`,
-    );
+    throw Error(`the calculated p2wpkh address by public key is not equal to address!`);
 
   return payment;
 };

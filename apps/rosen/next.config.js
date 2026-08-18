@@ -1,14 +1,9 @@
-/** @type {import('next').NextConfig} */
-const path = require('path');
+const path = require('node:path');
+const { withSentryConfig } = require('@sentry/nextjs');
 
+/** @type {import('next').NextConfig} */
 const nextConfig = {
-  outputFileTracingIncludes: {
-    /**
-     * Transfer the 'configs' directory to the production build to ensure
-     * the 'tokensMap.json' file is accessible in the production environment.
-     */
-    '/': ['./configs/*'],
-  },
+  typedRoutes: true,
   serverExternalPackages: [
     'ergo-lib-wasm-nodejs',
     '@emurgo/cardano-serialization-lib-nodejs',
@@ -27,7 +22,7 @@ const nextConfig = {
       },
     ];
   },
-  webpack: function (config, options) {
+  webpack: (config, options) => {
     /**
      * This configuration should be applied as recommended in:
      * https://docs.reown.com/appkit/next/core/installation#extra-configuration
@@ -35,24 +30,46 @@ const nextConfig = {
     config.externals.push('pino-pretty', 'lokijs', 'encoding');
 
     config.experiments = {
+      ...config.experiments,
       asyncWebAssembly: true,
       syncWebAssembly: true,
       layers: true,
     };
+
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      '@react-native-async-storage/async-storage': false,
+      '@sap/hana-client/extension/Stream': false,
+      '@solana/kit': false,
+      'mysql': false,
+      'react-native-sqlite-storage': false,
+    };
+
     if (!options.isServer) {
       config.resolve.fallback = {
-        'fs': false,
-        // Ignore the dependency imported internally by @reown/appkit since we don't use Solana
-        '@solana/kit': false,
-        // Ignore the dependency warning from @metamask/sdk
-        '@react-native-async-storage/async-storage': false,
+        ...config.resolve.fallback,
+        fs: false,
       };
     }
-    config.resolve.alias['@solana/kit'] = false;
 
     return config;
   },
   outputFileTracingRoot: path.join(__dirname, '../../'),
 };
 
-module.exports = nextConfig;
+/** @type {import('@sentry/nextjs').SentryBuildOptions} */
+const sentryOptions = {
+  org: process.env.SENTRY_ORG,
+  project: process.env.SENTRY_PROJECT,
+  authToken: process.env.SENTRY_AUTH_TOKEN,
+  silent: !process.env.CI,
+  tunnelRoute: '/monitoring',
+  debug: false,
+  webpack: {
+    treeshake: {
+      removeDebugLogging: false,
+    },
+  },
+};
+
+module.exports = withSentryConfig(nextConfig, sentryOptions);

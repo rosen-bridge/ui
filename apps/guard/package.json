@@ -1,6 +1,6 @@
 {
   "name": "@rosen-bridge/guard-app",
-  "version": "4.2.1",
+  "version": "4.4.2",
   "private": true,
   "repository": {
     "type": "git",
@@ -8,33 +8,32 @@
   },
   "license": "MIT",
   "scripts": {
+    "bootstrap": "turbo build --filter=@rosen-bridge/guard-app^...",
     "build": "next build",
-    "build:vercel": "cd ../../ && ./build.sh guard && cd apps/guard && npm run build",
+    "build:vercel": "npm run bootstrap && npm run build",
     "dev": "next dev",
-    "lint": "eslint --fix . && npm run prettify",
-    "lint:check": "eslint . && npm run prettify:check",
-    "prettify": "prettier --write . --ignore-path ../../.gitignore",
-    "prettify:check": "prettier --check . --ignore-path ../../.gitignore",
+    "lint": "biome check --write",
+    "lint:check": "biome check",
     "start": "next start",
     "tauri": "tauri",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@rosen-bridge/icons": "^3.6.0",
-    "@rosen-bridge/ui-kit": "^5.5.0",
-    "@rosen-ui/constants": "^1.0.0",
+    "@rosen-bridge/icons": "^3.7.1",
+    "@rosen-bridge/ui-kit": "^5.9.0",
+    "@rosen-ui/constants": "^1.1.0",
     "@rosen-ui/swr-helpers": "^0.2.2",
-    "@rosen-ui/utils": "^1.0.3",
+    "@rosen-ui/utils": "^1.0.4",
     "moment": "^2.29.4",
     "next": "^15.5.18",
-    "react": "^19.2.4",
+    "react": "^19.2.6",
     "react-apexcharts": "^1.4.0",
-    "react-dom": "^19.2.4",
+    "react-dom": "^19.2.6",
     "react-hook-form": "^7.71.2",
     "swr": "^2.4.1"
   },
   "devDependencies": {
-    "@rosen-ui/types": "^0.5.0",
+    "@rosen-ui/types": "^0.5.1",
     "@tauri-apps/cli": "^1.4.0",
     "@types/moment": "^2.13.0"
   },

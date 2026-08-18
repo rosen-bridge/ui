@@ -1,15 +1,17 @@
-import { MouseEventHandler, useEffect } from 'react';
+import { type MouseEventHandler, useEffect } from 'react';
+
 import { useController, useFormContext } from 'react-hook-form';
 
 import {
   Button,
   CircularProgress,
+  Divider,
   InputAdornment,
-  Link,
+  Stack,
   TextField,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
-import { TokenInfo } from '@rosen-ui/types';
+import type { TokenInfo } from '@rosen-ui/types';
 import { getDecimalString, getNonDecimalString } from '@rosen-ui/utils';
 
 export interface TokenAmountCompatibleFormSchema {
@@ -44,8 +46,7 @@ export const TokenAmountTextField = ({
   minBoxValue,
   setMinValue,
 }: TokenAmountTextFieldProps) => {
-  const { control, setValue } =
-    useFormContext<TokenAmountCompatibleFormSchema>();
+  const { control, setValue } = useFormContext<TokenAmountCompatibleFormSchema>();
 
   const { field: amountField, fieldState } = useController({
     control: control,
@@ -63,14 +64,11 @@ export const TokenAmountTextField = ({
         if (!match) return 'Invalid amount';
 
         // prevent user from entering more decimals than token decimals
-        const isDecimalsLarge =
-          (match?.groups?.floatingDigits?.length ?? 0) > token.decimals;
+        const isDecimalsLarge = (match?.groups?.floatingDigits?.length ?? 0) > token.decimals;
         if (isDecimalsLarge)
           return `The current token only supports ${token.decimals} ${token.decimals <= 1 ? 'decimal' : 'decimals'}`;
 
-        const newValueBigInt = BigInt(
-          getNonDecimalString(newValue, token.decimals),
-        );
+        const newValueBigInt = BigInt(getNonDecimalString(newValue, token.decimals));
 
         // prevent user from entering more than token amount
         if (newValueBigInt > token.amount) return `Insufficient balance`;
@@ -92,19 +90,19 @@ export const TokenAmountTextField = ({
 
   useEffect(() => {
     if (!setMinValue) return;
-    const getMinAmount = () =>
-      token!.decimals ? `0.${'0'.repeat(token!.decimals - 1)}1` : '1';
 
-    if (token) {
-      setValue('amount', getMinAmount(), { shouldValidate: true });
-    }
+    if (!token) return;
+
+    const value = token.decimals ? `0.${'0'.repeat(token.decimals - 1)}1` : '1';
+
+    setValue('amount', value, { shouldValidate: true });
   }, [token, setValue, setMinValue]);
 
   const setAmountFieldValue = (value: string) =>
     setValue('amount', value, { shouldValidate: true });
 
   const getMaxAvailableTokenAmount = () =>
-    getDecimalString(token!.amount.toString(), token!.decimals);
+    getDecimalString(token?.amount.toString(), token?.decimals);
 
   const setAmountToMaxAvailable: MouseEventHandler = (event) => {
     event.preventDefault();
@@ -114,32 +112,31 @@ export const TokenAmountTextField = ({
 
   return (
     <TextField
+      variant="filled"
       label="Amount"
       {...amountField}
       disabled={disabled}
       error={!!fieldState.error}
-      helperText={
-        fieldState.error?.message ||
-        (token && (
-          <>
-            <Link component="button" onClick={setAmountToMaxAvailable}>
-              {getMaxAvailableTokenAmount()}
-            </Link>{' '}
-            {token.name} available
-          </>
-        ))
-      }
+      helperText={fieldState.error?.message}
       InputProps={{
+        disableUnderline: true,
         endAdornment: token && (
-          <InputAdornment position="end">
+          <Stack direction="row" align="center" justify="between" spacing={1.5}>
+            <Divider orientation="vertical" style={{ alignSelf: 'stretch', height: 'auto' }} />
             <Button
+              disabled={disabled}
+              loading={loading}
               size="small"
               onClick={setAmountToMaxAvailable}
-              disabled={disabled}
             >
-              Max
+              <span style={{ whiteSpace: 'nowrap' }}>
+                Use all
+                <br />
+                {getMaxAvailableTokenAmount()}{' '}
+                <small style={{ textTransform: 'none' }}>{token.name}</small>
+              </span>
             </Button>
-          </InputAdornment>
+          </Stack>
         ),
         startAdornment: loading && (
           <InputAdornment position="start">

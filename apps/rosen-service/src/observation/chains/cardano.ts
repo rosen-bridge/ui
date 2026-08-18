@@ -1,6 +1,6 @@
 import { DefaultLogger } from '@rosen-bridge/abstract-logger';
 import { CardanoKoiosObservationExtractor } from '@rosen-bridge/cardano-observation-extractor';
-import { CardanoKoiosScanner } from '@rosen-bridge/cardano-scanner';
+import type { CardanoKoiosScanner } from '@rosen-bridge/cardano-scanner';
 
 import config from '../../configs';
 import dataSource from '../../data-source';
@@ -13,9 +13,7 @@ const logger = DefaultLogger.getInstance().child(import.meta.url);
  * register an observation extractor for the provided scanner
  * @param scanner
  */
-export const registerCardanoExtractor = async (
-  scanner: CardanoKoiosScanner,
-) => {
+export const registerCardanoExtractor = async (scanner: CardanoKoiosScanner) => {
   try {
     const observationExtractor = new CardanoKoiosObservationExtractor(
       config.cardano.addresses.lock,

@@ -1,13 +1,14 @@
+import Axios from 'axios';
+import { address, Psbt } from 'bitcoinjs-lib';
+
 import { encodeAddress } from '@rosen-bridge/address-codec';
 import {
-  CalculateFee,
+  type CalculateFee,
   calculateFeeCreator,
   getMinTransferCreator as getMinTransferCreatorBase,
 } from '@rosen-network/base';
 import { NETWORKS } from '@rosen-ui/constants';
-import { Network } from '@rosen-ui/types';
-import Axios from 'axios';
-import { Psbt, address } from 'bitcoinjs-lib';
+import type { Network } from '@rosen-ui/types';
 
 import {
   CONFIRMATION_TARGET,
@@ -44,9 +45,7 @@ export const generateOpReturnData = async (
 
   // parse toAddress
   const addressHex = encodeAddress(toChain, toAddress);
-  const addressLengthCode = (addressHex.length / 2)
-    .toString(16)
-    .padStart(2, '0');
+  const addressLengthCode = (addressHex.length / 2).toString(16).padStart(2, '0');
 
   return Promise.resolve(
     toChainHex + bridgeFeeHex + networkFeeHex + addressLengthCode + addressHex,
@@ -58,9 +57,7 @@ export const generateOpReturnData = async (
  * @param address
  * @returns
  */
-export const getAddressUtxos = async (
-  address: string,
-): Promise<Array<BitcoinUtxo>> => {
+export const getAddressUtxos = async (address: string): Promise<Array<BitcoinUtxo>> => {
   const esploraUrl = process.env.BITCOIN_ESPLORA_API;
   const GET_ADDRESS_UTXOS = `${esploraUrl}/api/address/${address}/utxo`;
   const res = await Axios.get<Array<EsploraUtxo>>(GET_ADDRESS_UTXOS);
@@ -145,14 +142,9 @@ export const submitTransaction = async (
   const POST_TX = `${esploraUrl}/api/tx`;
 
   const psbt =
-    encoding === 'base64'
-      ? Psbt.fromBase64(serializedPsbt)
-      : Psbt.fromHex(serializedPsbt);
+    encoding === 'base64' ? Psbt.fromBase64(serializedPsbt) : Psbt.fromHex(serializedPsbt);
   psbt.finalizeAllInputs();
-  const res = await Axios.post<string>(
-    POST_TX,
-    psbt.extractTransaction().toHex(),
-  );
+  const res = await Axios.post<string>(POST_TX, psbt.extractTransaction().toHex());
   return res.data;
 };
 
@@ -184,21 +176,13 @@ export const isValidAddress = (addr: string) => {
 };
 
 export const getHeight = async (): Promise<number> => {
-  const response = await fetch(
-    `${process.env.BITCOIN_ESPLORA_API}/api/blocks/tip/height`,
-  );
+  const response = await fetch(`${process.env.BITCOIN_ESPLORA_API}/api/blocks/tip/height`);
 
   const height = await response.json();
 
   return height;
 };
 
-export const calculateFee: CalculateFee = calculateFeeCreator(
-  NETWORKS.bitcoin.key,
-  getHeight,
-);
+export const calculateFee: CalculateFee = calculateFeeCreator(NETWORKS.bitcoin.key, getHeight);
 
-export const getMinTransferCreator = getMinTransferCreatorBase(
-  NETWORKS.bitcoin.key,
-  calculateFee,
-);
+export const getMinTransferCreator = getMinTransferCreatorBase(NETWORKS.bitcoin.key, calculateFee);

@@ -1,23 +1,24 @@
 import type { MetaMaskSDK } from '@metamask/sdk';
-import { RosenChainToken } from '@rosen-bridge/tokens';
+
+import type { RosenChainToken } from '@rosen-bridge/tokens';
 import { BinanceNetwork } from '@rosen-network/binance/dist/client';
 import { EthereumNetwork } from '@rosen-network/ethereum/dist/client';
 import { tokenABI } from '@rosen-network/evm/dist/constants';
 import { NETWORKS } from '@rosen-ui/constants';
-import { Network } from '@rosen-ui/types';
+import type { Network } from '@rosen-ui/types';
 import {
   ChainNotAddedError,
   ChainSwitchingRejectedError,
-  UnsupportedChainError,
-  Wallet,
-  InteractionError,
-  WalletTransferParams,
-  UserDeniedTransactionSignatureError,
   CurrentChainError,
+  InteractionError,
+  UnsupportedChainError,
+  UserDeniedTransactionSignatureError,
+  Wallet,
+  type WalletTransferParams,
 } from '@rosen-ui/wallet-api';
 
 import { ICON } from './icon';
-import { MetaMaskWalletConfig } from './types';
+import type { MetaMaskWalletConfig } from './types';
 
 export class MetaMaskWallet extends Wallet<MetaMaskWalletConfig> {
   icon = ICON;
@@ -41,7 +42,7 @@ export class MetaMaskWallet extends Wallet<MetaMaskWalletConfig> {
 
   get currentChain(): Network {
     const chain = Object.values(NETWORKS).find(
-      (network) => network.id == this.provider.chainId,
+      (network) => network.id === this.provider.chainId,
     )?.key;
 
     if (!chain) throw new CurrentChainError(this.name);
@@ -102,14 +103,12 @@ export class MetaMaskWallet extends Wallet<MetaMaskWalletConfig> {
     return accounts?.at(0);
   };
 
-  fetchBalance = async (
-    token: RosenChainToken,
-  ): Promise<string | undefined> => {
+  fetchBalance = async (token: RosenChainToken): Promise<string | undefined | null> => {
     const { BrowserProvider, Contract } = await import('ethers');
 
     const address = await this.getAddress();
 
-    let amount;
+    let amount: string | undefined | null;
 
     if (token.type === 'native') {
       amount = await this.provider.request<string>({
@@ -119,11 +118,7 @@ export class MetaMaskWallet extends Wallet<MetaMaskWalletConfig> {
     } else {
       const browserProvider = new BrowserProvider(window.ethereum!);
 
-      const contract = new Contract(
-        token.tokenId,
-        tokenABI,
-        await browserProvider.getSigner(),
-      );
+      const contract = new Contract(token.tokenId, tokenABI, await browserProvider.getSigner());
 
       amount = await contract.balanceOf(address);
     }
@@ -139,20 +134,14 @@ export class MetaMaskWallet extends Wallet<MetaMaskWalletConfig> {
     return !!(await this.permissions()).length;
   };
 
-  performSwitchChain = async (
-    chain: Network,
-    silent?: boolean,
-  ): Promise<void> => {
+  performSwitchChain = async (chain: Network, silent?: boolean): Promise<void> => {
     const chainId = NETWORKS[chain].id;
 
     if (silent) {
       const has = (await this.permissions())
-        .map((permission) => permission.caveats)
-        .flat()
+        .flatMap((permission) => permission.caveats)
         .some(
-          (caveat) =>
-            caveat.type === 'restrictNetworkSwitching' &&
-            caveat.value.includes(chainId),
+          (caveat) => caveat.type === 'restrictNetworkSwitching' && caveat.value.includes(chainId),
         );
 
       if (!has) throw new Error();
@@ -164,7 +153,11 @@ export class MetaMaskWallet extends Wallet<MetaMaskWalletConfig> {
         params: [{ chainId }],
       });
     } catch (error) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      /**
+       * TODO: remove the inline Biome comment
+       * local:ergo/rosen-bridge/ui#441
+       */
+      // biome-ignore lint/suspicious/noExplicitAny: Use a better type
       switch ((error as any)?.code) {
         case 4001:
           throw new ChainSwitchingRejectedError(this.name, chain, error);
@@ -193,16 +186,15 @@ export class MetaMaskWallet extends Wallet<MetaMaskWalletConfig> {
       params.bridgeFee.toString(),
     );
 
-    const transactionParameters =
-      await this.currentNetwork.generateTxParameters(
-        params.token.tokenId,
-        params.lockAddress,
-        address,
-        params.amount,
-        rosenData,
-        params.token,
-        params.fromChain,
-      );
+    const transactionParameters = await this.currentNetwork.generateTxParameters(
+      params.token.tokenId,
+      params.lockAddress,
+      address,
+      params.amount,
+      rosenData,
+      params.token,
+      params.fromChain,
+    );
 
     try {
       return (await this.provider.request<string>({

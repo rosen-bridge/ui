@@ -1,9 +1,3 @@
-export const healthStatusColorMap = {
-  Healthy: 'success',
-  Unstable: 'warning',
-  Broken: 'error',
-};
-
 export const TOKEN_NAME_PLACEHOLDER = 'unnamed token';
 
 export const HEALTH_DATA_REFRESH_INTERVAL = 60000;
@@ -65,8 +59,16 @@ export const NETWORKS = {
     id: '',
     hasTokenSupport: false,
   },
-  'handshake': {
+  'firo': {
     index: 7,
+    key: 'firo',
+    label: 'Firo',
+    nativeToken: 'firo',
+    id: '',
+    hasTokenSupport: false,
+  },
+  'handshake': {
+    index: 8,
     key: 'handshake',
     label: 'Handshake',
     nativeToken: 'hns',
@@ -75,6 +77,4 @@ export const NETWORKS = {
   },
 } as const;
 
-export const NETWORKS_KEYS = Object.values(NETWORKS).map(
-  (network) => network.key,
-);
+export const NETWORKS_KEYS = Object.values(NETWORKS).map((network) => network.key);

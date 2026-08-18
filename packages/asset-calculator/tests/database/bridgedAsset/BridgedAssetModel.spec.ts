@@ -3,11 +3,7 @@ import { expect } from 'vitest';
 
 import { BridgedAssetModel } from '../../../lib/database/bridgedAsset/BridgedAssetModel';
 import { bridgedAssets } from '../test-data';
-import {
-  allAssetRecords,
-  initDatabase,
-  insertAssetRecords,
-} from './BridgedAssetModel.mock';
+import { allAssetRecords, initDatabase, insertAssetRecords } from './BridgedAssetModel.mock';
 
 describe('BridgedAssetModel', () => {
   let assetModel: BridgedAssetModel;

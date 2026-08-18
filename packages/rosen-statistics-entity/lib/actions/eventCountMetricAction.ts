@@ -1,10 +1,10 @@
-import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
-import { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
+import { type AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
+import type { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
 import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
 
 import { METRIC_KEYS } from '../constants';
 import { EventCountEntity, MetricEntity } from '../entities';
-import { AggregatedEvents, EventCountStatus } from '../types';
+import type { AggregatedEvents, EventCountStatus } from '../types';
 
 export class EventCountMetricAction {
   private readonly eventTriggerRepo: Repository<EventTriggerEntity>;
@@ -43,10 +43,7 @@ export class EventCountMetricAction {
    * @param untilProcessedHeight - Upper bound height (exclusive)
    * @returns Promise resolving to aggregated event statistics
    */
-  getAggregatedEvents = async (
-    lastProcessedHeight: number,
-    untilProcessedHeight: number,
-  ) => {
+  getAggregatedEvents = async (lastProcessedHeight: number, untilProcessedHeight: number) => {
     this.logger.debug(
       `Fetching aggregated events after height ${lastProcessedHeight} until height ${untilProcessedHeight}`,
     );
@@ -86,14 +83,8 @@ export class EventCountMetricAction {
    * @param toChain - Target chain
    * @returns Promise resolving to existing event count, or 0 if no record exists
    */
-  getExistingEventCount = async (
-    status: EventCountStatus,
-    fromChain: string,
-    toChain: string,
-  ) => {
-    this.logger.debug(
-      `Fetching existing event count for ${status}, ${fromChain} -> ${toChain}`,
-    );
+  getExistingEventCount = async (status: EventCountStatus, fromChain: string, toChain: string) => {
+    this.logger.debug(`Fetching existing event count for ${status}, ${fromChain} -> ${toChain}`);
     const existing = await this.eventCountRepo.findOne({
       where: { status, fromChain, toChain },
     });
@@ -110,20 +101,14 @@ export class EventCountMetricAction {
     aggregatedEvents: AggregatedEvents[],
     totalCount: number,
   ): Promise<void> => {
-    const queryRunner =
-      this.eventCountRepo.manager.connection.createQueryRunner();
+    const queryRunner = this.eventCountRepo.manager.connection.createQueryRunner();
     try {
       await queryRunner.startTransaction();
 
-      const eventCountRepo =
-        queryRunner.manager.getRepository(EventCountEntity);
+      const eventCountRepo = queryRunner.manager.getRepository(EventCountEntity);
       const metricRepo = queryRunner.manager.getRepository(MetricEntity);
 
-      await eventCountRepo.upsert(aggregatedEvents, [
-        'status',
-        'fromChain',
-        'toChain',
-      ]);
+      await eventCountRepo.upsert(aggregatedEvents, ['status', 'fromChain', 'toChain']);
 
       await metricRepo.upsert(
         {

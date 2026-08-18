@@ -1,5 +1,5 @@
 import { NETWORKS } from '@rosen-ui/constants';
-import { Network } from '@rosen-ui/types';
+import type { Network } from '@rosen-ui/types';
 
 /**
  * TODO: This util is temporary and its logic should be moved to individual
@@ -18,13 +18,11 @@ const baseTxURLs: { [key in Network]: HttpsURL } = {
   [NETWORKS['bitcoin-runes'].key]: 'https://uniscan.cc/tx',
   [NETWORKS.ethereum.key]: 'https://etherscan.io/tx',
   [NETWORKS.doge.key]: 'https://blockexplorer.one/dogecoin/mainnet/tx',
+  [NETWORKS.firo.key]: 'https://explorer.firo.org/tx',
   [NETWORKS.handshake.key]: 'https://e.hnsfans.com/tx',
 };
 
-export const getTxURL = (
-  network?: Network,
-  tx?: string,
-): HttpsURL | undefined => {
+export const getTxURL = (network?: Network, tx?: string): HttpsURL | undefined => {
   if (!network || !tx) return;
 
   const baseURL = baseTxURLs[network as keyof typeof baseTxURLs];

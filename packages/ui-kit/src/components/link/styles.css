@@ -1,0 +1,14 @@
+.RosenLink[data-underline='always'] {
+  text-decoration: underline;
+}
+
+.RosenLink[data-underline='hover'] {
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.RosenLink[data-underline='none'] {
+  text-decoration: none;
+}

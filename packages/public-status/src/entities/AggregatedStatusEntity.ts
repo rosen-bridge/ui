@@ -6,12 +6,15 @@ import {
   PrimaryColumn,
 } from '@rosen-bridge/extended-typeorm';
 
-import { AggregateTxStatus, AggregateEventStatus } from '../constants';
+import type { AggregateEventStatus, AggregateTxStatus } from '../constants';
 import { TxEntity } from './TxEntity';
 
 @Entity('aggregated_status_entity')
 export class AggregatedStatusEntity {
   @PrimaryColumn('varchar')
+  triggerTxId: string;
+
+  @Column('varchar')
   eventId: string;
 
   @Column('integer')
@@ -23,11 +26,15 @@ export class AggregatedStatusEntity {
   @Column('varchar', { nullable: true })
   txStatus: AggregateTxStatus | null;
 
-  @ManyToOne(() => TxEntity, (tx) => tx.aggregatedStatusRecords, {
-    cascade: false,
-    nullable: true,
-    eager: true,
-  })
+  @ManyToOne(
+    () => TxEntity,
+    (tx) => tx.aggregatedStatusRecords,
+    {
+      cascade: false,
+      nullable: true,
+      eager: true,
+    },
+  )
   @JoinColumn([
     { name: 'txId', referencedColumnName: 'txId' },
     { name: 'txChain', referencedColumnName: 'chain' },

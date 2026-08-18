@@ -1,18 +1,11 @@
-import { Repository } from '@rosen-bridge/extended-typeorm';
+import type { Repository } from '@rosen-bridge/extended-typeorm';
 import { testDataSource } from '@rosen-ui/data-source';
-import {
-  AggregatedStatusChangedEntity,
-  AggregateEventStatus,
-} from '@rosen-ui/public-status';
+import { AggregatedStatusChangedEntity, AggregateEventStatus } from '@rosen-ui/public-status';
 
 import AggregatedStatusChangedAction from '@/backend/status/AggregatedStatusChangedAction';
 
 import { DataSourceMock } from '../../mocked/DataSource.mock';
-import {
-  mockAggregatedStatusChangedRecords,
-  id0,
-  mockPaginationTestData,
-} from './testData';
+import { mockAggregatedStatusChangedRecords, mockPaginationTestData, triggerId0 } from './testData';
 
 describe('AggregatedStatusChangedAction', () => {
   beforeAll(() => {
@@ -37,17 +30,16 @@ describe('AggregatedStatusChangedAction', () => {
       };
 
       // act
-      const lastStatus =
-        await AggregatedStatusChangedAction.getInstance().getLast(
-          repository as unknown as Repository<AggregatedStatusChangedEntity>,
-          id0,
-        );
+      const lastStatus = await AggregatedStatusChangedAction.getInstance().getLast(
+        repository as unknown as Repository<AggregatedStatusChangedEntity>,
+        triggerId0,
+      );
 
       // assert
       expect(lastStatus).toBeNull();
       expect(repository.findOne).toHaveBeenCalledOnce();
       expect(repository.findOne).toHaveBeenCalledWith({
-        where: { eventId: id0 },
+        where: { triggerTxId: triggerId0 },
         relations: ['tx'],
         order: { insertedAt: 'DESC' },
       });
@@ -65,13 +57,12 @@ describe('AggregatedStatusChangedAction', () => {
      */
     it('should call repository.find with DESC ordering on insertedAt field', async () => {
       // act
-      const { total, items } =
-        await AggregatedStatusChangedAction.getInstance().getMany(
-          testDataSource.getRepository(AggregatedStatusChangedEntity),
-          id0,
-          0,
-          100,
-        );
+      const { total, items } = await AggregatedStatusChangedAction.getInstance().getMany(
+        testDataSource.getRepository(AggregatedStatusChangedEntity),
+        triggerId0,
+        0,
+        100,
+      );
 
       // assert
       expect(total).toBe(0);
@@ -100,13 +91,12 @@ describe('AggregatedStatusChangedAction', () => {
       );
 
       // act
-      const { total, items } =
-        await AggregatedStatusChangedAction.getInstance().getMany(
-          testDataSource.getRepository(AggregatedStatusChangedEntity),
-          id0,
-          0,
-          6,
-        );
+      const { total, items } = await AggregatedStatusChangedAction.getInstance().getMany(
+        testDataSource.getRepository(AggregatedStatusChangedEntity),
+        triggerId0,
+        0,
+        6,
+      );
 
       // assert
       expect(total).toBe(10);
@@ -119,7 +109,7 @@ describe('AggregatedStatusChangedAction', () => {
       const { total: total2, items: items2 } =
         await AggregatedStatusChangedAction.getInstance().getMany(
           testDataSource.getRepository(AggregatedStatusChangedEntity),
-          id0,
+          triggerId0,
           5,
           10,
         );
@@ -127,15 +117,13 @@ describe('AggregatedStatusChangedAction', () => {
       // assert
       expect(total2).toBe(10);
       expect(items2).toHaveLength(5);
-      expect(items2).toEqual(
-        mockPaginationTestData.aggregatedStatusChanged.toReversed().slice(5),
-      );
+      expect(items2).toEqual(mockPaginationTestData.aggregatedStatusChanged.toReversed().slice(5));
     });
   });
 
   describe('insertOne', () => {
     /**
-     * @target AggregatedStatusChangedAction.insertOne should call insert when eventId is new
+     * @target AggregatedStatusChangedAction.insertOne should call insert when triggerTxId is new
      * @dependencies
      * @scenario
      * - stub repository.findOne and insert to resolve to null
@@ -143,7 +131,7 @@ describe('AggregatedStatusChangedAction', () => {
      * @expected
      * - insert should have been called once with the mock record
      */
-    it('should call insert when eventId is new', async () => {
+    it('should call insert when triggerTxId is new', async () => {
       // arrange
       const repository = {
         findOne: vi.fn().mockResolvedValue(null),
@@ -156,6 +144,7 @@ describe('AggregatedStatusChangedAction', () => {
       await AggregatedStatusChangedAction.getInstance().insertOne(
         repository as unknown as Repository<AggregatedStatusChangedEntity>,
         record.eventId,
+        record.triggerTxId,
         record.insertedAt,
         record.status,
         record.txStatus ?? undefined,
@@ -190,6 +179,7 @@ describe('AggregatedStatusChangedAction', () => {
       await AggregatedStatusChangedAction.getInstance().insertOne(
         repository as unknown as Repository<AggregatedStatusChangedEntity>,
         record.eventId,
+        record.triggerTxId,
         record.insertedAt,
         AggregateEventStatus.paymentWaiting,
         record.txStatus ?? undefined,
@@ -229,6 +219,7 @@ describe('AggregatedStatusChangedAction', () => {
         await AggregatedStatusChangedAction.getInstance().insertOne(
           repository as unknown as Repository<AggregatedStatusChangedEntity>,
           record.eventId,
+          record.triggerTxId,
           record.insertedAt + 5,
           record.status,
           record.txStatus ?? undefined,

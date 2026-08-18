@@ -1,11 +1,6 @@
-import { useCallback, useMemo, FC } from 'react';
+import { type FC, useCallback, useMemo } from 'react';
 
-import {
-  Skeleton,
-  EnhancedTable,
-  TableRow,
-  TableCell,
-} from '@rosen-bridge/ui-kit';
+import { EnhancedTable, Skeleton, TableCell, TableRow } from '@rosen-bridge/ui-kit';
 
 import { mobileHeader, tabletHeader } from './TableRow';
 
@@ -19,7 +14,7 @@ export const TableSkeleton: FC<TableSkeletonProps> = (props) => {
       <TableRow>
         {mobileHeader.map((headerItem) => (
           <TableCell key={headerItem.title} sx={{ p: 1 }}>
-            <Skeleton animation="wave" height={60} width="100%" />
+            <Skeleton height={60} width="100%" />
           </TableCell>
         ))}
       </TableRow>
@@ -32,7 +27,7 @@ export const TableSkeleton: FC<TableSkeletonProps> = (props) => {
       <TableRow>
         {tabletHeader.map((headerItem) => (
           <TableCell key={headerItem.title} sx={{ p: 1 }}>
-            <Skeleton animation="wave" height={35} width="100%" />
+            <Skeleton height={35} width="100%" />
           </TableCell>
         ))}
       </TableRow>
@@ -58,7 +53,7 @@ export const TableSkeleton: FC<TableSkeletonProps> = (props) => {
 
   return (
     <EnhancedTable
-      data={new Array(props.numberOfItems || 5).map((item, index) => ({
+      data={new Array(props.numberOfItems || 5).map((_item, index) => ({
         title: index.toString(),
       }))}
       responsiveHead={tableHeaderProps}

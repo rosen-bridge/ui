@@ -1,18 +1,12 @@
-import { useState, FC, useMemo } from 'react';
+import { type FC, useMemo, useState } from 'react';
 
 import { AngleDown, AngleUp } from '@rosen-bridge/icons';
-import {
-  Amount,
-  Button,
-  EnhancedTableCell,
-  Identifier,
-  TableRow,
-} from '@rosen-bridge/ui-kit';
+import { Amount, Button, EnhancedTableCell, Identifier, TableRow } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 import { getAddressUrl, getTokenUrl } from '@rosen-ui/utils';
 
 import { useAddresses } from '@/hooks';
-import { GuardTokenInfo } from '@/types/api';
+import type { GuardTokenInfo } from '@/types/api';
 
 interface RowProps extends GuardTokenInfo {
   isLoading?: boolean;
@@ -70,10 +64,7 @@ export const MobileRow: FC<RowProps> = (props) => {
   const { isLoading, ...row } = props;
   const [expand, setExpand] = useState(false);
 
-  const rowStyles = useMemo(
-    () => (isLoading ? { opacity: 0.3 } : {}),
-    [isLoading],
-  );
+  const rowStyles = useMemo(() => (isLoading ? { opacity: 0.3 } : {}), [isLoading]);
 
   const toggleExpand = () => {
     setExpand((prevState) => !prevState);
@@ -84,10 +75,7 @@ export const MobileRow: FC<RowProps> = (props) => {
       <TableRow className="divider" style={rowStyles}>
         <EnhancedTableCell>Id</EnhancedTableCell>
         <EnhancedTableCell>
-          <Identifier
-            value={row.isNativeToken ? '' : row.tokenId}
-            fallback="-"
-          />
+          <Identifier value={row.isNativeToken ? '' : row.tokenId} fallback="-" />
         </EnhancedTableCell>
       </TableRow>
       <TableRow style={rowStyles}>
@@ -138,15 +126,10 @@ export const TabletRow: FC<RowProps> = (props) => {
 
   const tokenUrl = getTokenUrl(
     row.chain,
-    row.chain == NETWORKS.cardano.key
-      ? row.tokenId.replace('.', '')
-      : row.tokenId,
+    row.chain === NETWORKS.cardano.key ? row.tokenId.replace('.', '') : row.tokenId,
   );
 
-  const rowStyles = useMemo(
-    () => (isLoading ? { opacity: 0.3 } : {}),
-    [isLoading],
-  );
+  const rowStyles = useMemo(() => (isLoading ? { opacity: 0.3 } : {}), [isLoading]);
 
   const coldUrl = getAddressUrl(row.chain, addresses.cold[row?.chain]);
 

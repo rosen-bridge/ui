@@ -1,26 +1,28 @@
 import { DefaultLogger } from '@rosen-bridge/abstract-logger';
+import { FailoverStrategy, NetworkConnectorManager } from '@rosen-bridge/abstract-scanner';
 import {
-  FailoverStrategy,
-  NetworkConnectorManager,
-} from '@rosen-bridge/abstract-scanner';
-import {
-  CardanoKoiosObservationExtractor,
   CardanoBlockFrostObservationExtractor,
+  CardanoKoiosObservationExtractor,
   CardanoOgmiosObservationExtractor,
 } from '@rosen-bridge/cardano-observation-extractor';
 import {
   BlockFrostNetwork,
-  BlockFrostTransaction,
+  type BlockFrostTransaction,
   CardanoBlockFrostScanner,
   CardanoKoiosScanner,
   CardanoOgmiosScanner,
   KoiosNetwork,
-  KoiosTransaction,
+  type KoiosTransaction,
 } from '@rosen-bridge/cardano-scanner';
-import { DataSource } from '@rosen-bridge/extended-typeorm';
+import type { TokenMap } from '@rosen-bridge/extended-tokens';
+import type { DataSource } from '@rosen-bridge/extended-typeorm';
 
 import { configs } from '../configs';
-import { TokensConfig } from '../tokensConfig';
+import {
+  CARDANO_METHOD_BLOCKFROST,
+  CARDANO_METHOD_KOIOS,
+  CARDANO_METHOD_OGMIOS,
+} from '../constants';
 
 const logger = DefaultLogger.getInstance().child(import.meta.url);
 
@@ -28,11 +30,13 @@ const logger = DefaultLogger.getInstance().child(import.meta.url);
  * Initializes and configures a Cardano Koios scanner instance.
  *
  * @param dataSource - TypeORM DataSource for DB connection
+ * @param tokenMap
  * @returns Configured and ready-to-use CardanoKoiosScanner instance
  * @throws Error if observation extractor creation or registration fails
  */
-export const buildCardanoKoiosScannerWithExtractors = async (
+const buildCardanoKoiosScannerWithExtractors = async (
   dataSource: DataSource,
+  tokenMap: TokenMap,
 ) => {
   logger.info('Starting Cardano scanner initialization...');
 
@@ -42,21 +46,21 @@ export const buildCardanoKoiosScannerWithExtractors = async (
     logger.child('cardanoKoiosScannerLogger'),
   );
   configs.chains.cardano.koios.connections.forEach((koios) => {
-    networkConnectorManager.addConnector(
-      new KoiosNetwork(koios.url!, koios.timeout! * 1000, koios.authToken),
-    );
+    if (koios.url && koios.timeout) {
+      networkConnectorManager.addConnector(
+        new KoiosNetwork(koios.url, koios.timeout * 1000, koios.authToken),
+      );
+    }
   });
   const cardanoScanner = new CardanoKoiosScanner({
     dataSource: dataSource,
-    initialHeight: configs.chains.cardano.initialHeight!,
+    initialHeight: configs.chains.cardano.initialHeight || 0,
     network: networkConnectorManager,
     blockRetrieveGap: configs.chains.cardano.blockRetrieveGap,
     logger: logger.child('cardanoKoiosScannerLogger'),
   });
 
   try {
-    const tokenMap = TokensConfig.getInstance().getTokenMap();
-
     logger.debug('Creating Cardano observation extractor...');
     const observationExtractor = new CardanoKoiosObservationExtractor(
       configs.contracts.cardano.addresses.lock,
@@ -85,36 +89,37 @@ export const buildCardanoKoiosScannerWithExtractors = async (
  * Initializes and configures a Cardano BlockFrost scanner instance.
  *
  * @param dataSource - TypeORM DataSource for DB connection
+ * @param tokenMap
  * @returns Configured and ready-to-use CardanoBlockFrostScanner instance
  * @throws Error if observation extractor creation or registration fails
  */
-export const buildCardanoBlockFrostScannerWithExtractors = async (
+const buildCardanoBlockFrostScannerWithExtractors = async (
   dataSource: DataSource,
+  tokenMap: TokenMap,
 ) => {
   logger.info('Starting Cardano scanner initialization...');
 
   // Create Cardano scanner with BlockFrost network settings
-  const networkConnectorManager =
-    new NetworkConnectorManager<BlockFrostTransaction>(
-      new FailoverStrategy(),
-      logger.child('cardanoBlockFrostScannerLogger'),
-    );
+  const networkConnectorManager = new NetworkConnectorManager<BlockFrostTransaction>(
+    new FailoverStrategy(),
+    logger.child('cardanoBlockFrostScannerLogger'),
+  );
   configs.chains.cardano.blockfrost.connections.forEach((blockfrost) => {
-    networkConnectorManager.addConnector(
-      new BlockFrostNetwork(blockfrost.projectId!, blockfrost.url),
-    );
+    if (blockfrost.projectId) {
+      networkConnectorManager.addConnector(
+        new BlockFrostNetwork(blockfrost.projectId, blockfrost.url),
+      );
+    }
   });
   const cardanoScanner = new CardanoBlockFrostScanner({
     dataSource: dataSource,
-    initialHeight: configs.chains.cardano.initialHeight!,
+    initialHeight: configs.chains.cardano.initialHeight || 0,
     network: networkConnectorManager,
     blockRetrieveGap: configs.chains.cardano.blockRetrieveGap,
     logger: logger.child('cardanoBlockFrostScannerLogger'),
   });
 
   try {
-    const tokenMap = TokensConfig.getInstance().getTokenMap();
-
     logger.debug('Creating Cardano observation extractor...');
     const observationExtractor = new CardanoBlockFrostObservationExtractor(
       configs.contracts.cardano.addresses.lock,
@@ -144,11 +149,13 @@ export const buildCardanoBlockFrostScannerWithExtractors = async (
  * Initializes and configures a Cardano Ogmios scanner instance.
  *
  * @param dataSource - TypeORM DataSource for DB connection
+ * @param tokenMap
  * @returns Configured and ready-to-use CardanoOgmiosScanner instance
  * @throws Error if observation extractor creation or registration fails
  */
-export const buildCardanoOgmiosScannerWithExtractors = async (
+const buildCardanoOgmiosScannerWithExtractors = async (
   dataSource: DataSource,
+  tokenMap: TokenMap,
 ) => {
   logger.info('Starting Cardano scanner initialization...');
 
@@ -156,17 +163,15 @@ export const buildCardanoOgmiosScannerWithExtractors = async (
   const cardanoScanner = new CardanoOgmiosScanner(
     {
       dataSource: dataSource,
-      nodeHostOrIp: configs.chains.cardano.ogmios.connection.address!,
-      nodePort: configs.chains.cardano.ogmios.connection.port!,
-      initialSlot: configs.chains.cardano.ogmios.connection.initialSlot!,
-      initialHash: configs.chains.cardano.ogmios.connection.initialHash!,
+      nodeHostOrIp: configs.chains.cardano.ogmios.connection.address || '',
+      nodePort: configs.chains.cardano.ogmios.connection.port || 0,
+      initialSlot: configs.chains.cardano.ogmios.connection.initialSlot || 0,
+      initialHash: configs.chains.cardano.ogmios.connection.initialHash || '',
     },
     logger.child('cardanoOgmiosScannerLogger'),
   );
 
   try {
-    const tokenMap = TokensConfig.getInstance().getTokenMap();
-
     logger.debug('Creating Cardano observation extractor...');
     const observationExtractor = new CardanoOgmiosObservationExtractor(
       configs.contracts.cardano.addresses.lock,
@@ -190,4 +195,28 @@ export const buildCardanoOgmiosScannerWithExtractors = async (
 
   logger.info('Cardano scanner initialization completed successfully');
   return cardanoScanner;
+};
+
+/**
+ * Creates a cardano scanner.
+ *
+ * @param dataSource - TypeORM DataSource for database connection
+ * @param tokenMap
+ * @returns { CardanoKoiosScanner | CardanoBlockFrostScanner | CardanoOgmiosScanner}
+ * @throws Error if observation extractor creation or registration fails
+ */
+export const getCardanoScanner = async (
+  dataSource: DataSource,
+  tokenMap: TokenMap,
+): Promise<CardanoKoiosScanner | CardanoBlockFrostScanner | CardanoOgmiosScanner> => {
+  switch (configs.chains.cardano.method) {
+    case CARDANO_METHOD_BLOCKFROST:
+      return await buildCardanoBlockFrostScannerWithExtractors(dataSource, tokenMap);
+    case CARDANO_METHOD_OGMIOS:
+      return await buildCardanoOgmiosScannerWithExtractors(dataSource, tokenMap);
+    case CARDANO_METHOD_KOIOS:
+      return await buildCardanoKoiosScannerWithExtractors(dataSource, tokenMap);
+    default:
+      throw new Error(`Unsupported or missing Cardano scanner method`);
+  }
 };

@@ -1,49 +1,48 @@
 'use client';
 
+import { useEffect, useMemo } from 'react';
 import Link from 'next/link';
-import { useMemo, useState, useEffect, ReactNode } from 'react';
-import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 
-import {
-  AlertCard,
-  AlertProps,
-  SubmitButton,
-  useApiKey,
-  ApiKeyModalWarning,
-  Stack,
-} from '@rosen-bridge/ui-kit';
-import { NETWORKS } from '@rosen-ui/constants';
-import { fetcher, mutatorWithHeaders } from '@rosen-ui/swr-helpers';
-import { TokenInfo } from '@rosen-ui/types';
-import { getNonDecimalString, getTxURL } from '@rosen-ui/utils';
+import { FormProvider, type SubmitHandler, useForm } from 'react-hook-form';
 import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
 
-import { useRsnToken } from '@/hooks';
 import {
+  ApiKeyDialogProtectedAction,
+  ApiKeyDialogWarning,
+  Stack,
+  SubmitButton,
+  useApiKey,
+  useConfirm,
+  useToast,
+} from '@rosen-bridge/ui-kit';
+import { NETWORKS } from '@rosen-ui/constants';
+import { fetcher, mutatorWithHeaders } from '@rosen-ui/swr-helpers';
+import type { TokenInfo } from '@rosen-ui/types';
+import { getNonDecimalString, getTxURL } from '@rosen-ui/utils';
+
+import { useRsnToken } from '@/hooks';
+import type {
   ApiInfoResponse,
   ApiPermitReturnRequestBody,
   ApiPermitReturnResponse,
 } from '@/types/api';
 
-import { ConfirmationModal } from '../../ConfirmationModal';
 import {
+  type TokenAmountCompatibleFormSchema,
   TokenAmountTextField,
-  TokenAmountCompatibleFormSchema,
 } from '../../TokenAmountTextField';
 
 const UnlockForm = () => {
-  const { data: info, isLoading: isInfoLoading } = useSWR<ApiInfoResponse>(
-    '/info',
-    fetcher,
-  );
+  const { confirm } = useConfirm();
+  const toast = useToast();
+
+  const { data: info, isLoading: isInfoLoading } = useSWR<ApiInfoResponse>('/info', fetcher);
 
   const { rsnToken, isLoading: isRsnTokenLoading } = useRsnToken();
   const { apiKey } = useApiKey();
 
-  const rwtPartialToken = useMemo<
-    Pick<TokenInfo, 'amount' | 'decimals'> | undefined
-  >(
+  const rwtPartialToken = useMemo<Pick<TokenInfo, 'amount' | 'decimals'> | undefined>(
     () =>
       info?.permitCount.active
         ? {
@@ -55,17 +54,13 @@ const UnlockForm = () => {
     [info, rsnToken],
   );
 
-  const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
-
-  const [alertData, setAlertData] = useState<{
-    severity: AlertProps['severity'];
-    message: ReactNode;
-    more?: () => string;
-  } | null>(null);
-
   const { trigger, isMutating: isUnlockPending } = useSWRMutation<
     ApiPermitReturnResponse,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    /**
+     * TODO: remove the inline Biome comment
+     * local:ergo/rosen-bridge/ui#441
+     */
+    // biome-ignore lint/suspicious/noExplicitAny: Use a better type
     any,
     '/permit/return',
     ApiPermitReturnRequestBody
@@ -88,38 +83,36 @@ const UnlockForm = () => {
       getNonDecimalString(formData.amount, rwtPartialToken?.decimals) ===
         info?.permitCount.active.toString()
     ) {
-      setAlertData({
-        severity: 'warning',
-        message:
+      toast.add({
+        type: 'warning',
+        dismissible: true,
+        description:
           'Currently you have inactive permits, we recommend not unlocking all your permits to prevent future malfunctioning.',
+        timeout: 0,
       });
-    } else {
-      setAlertData(null);
     }
   }, [
     formData.amount,
     info?.permitCount.active,
     info?.permitCount.total,
     rwtPartialToken,
+    toast.add,
   ]);
 
   useEffect(() => {
     if (!isInfoLoading && !rwtPartialToken?.amount) {
-      setAlertData({
-        severity: 'error',
-        message: "You don't have any locked RSN.",
+      toast.add({
+        type: 'error',
+        dismissible: true,
+        description: "You don't have any locked RSN.",
+        timeout: 0,
       });
-    } else {
-      setAlertData(null);
     }
-  }, [isInfoLoading, rwtPartialToken?.amount]);
+  }, [isInfoLoading, rwtPartialToken?.amount, toast.add]);
 
   const submit = async () => {
     try {
-      const count = getNonDecimalString(
-        formData.amount,
-        rsnToken?.decimals ?? 0,
-      );
+      const count = getNonDecimalString(formData.amount, rsnToken?.decimals ?? 0);
       const response = await trigger({
         data: { count },
         headers: {
@@ -128,15 +121,12 @@ const UnlockForm = () => {
       });
 
       if (response?.txId) {
-        setAlertData({
-          severity: 'success',
-          message: (
+        toast.add({
+          type: 'success',
+          description: (
             <>
               Unlock operation is in progress. Wait for tx [
-              <Link
-                target="_blank"
-                href={getTxURL(NETWORKS.ergo.key, response.txId) ?? '/'}
-              >
+              <Link target="_blank" href={getTxURL(NETWORKS.ergo.key, response.txId) ?? '/'}>
                 {response.txId}
               </Link>
               ] to be confirmed by some blocks.
@@ -144,21 +134,25 @@ const UnlockForm = () => {
           ),
         });
       } else {
-        throw new Error(
-          'Server responded but the response message was unexpected',
-        );
+        throw new Error('Server responded but the response message was unexpected');
       }
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      /**
+       * TODO: remove the inline Biome comment
+       * local:ergo/rosen-bridge/ui#441
+       */
+      // biome-ignore lint/suspicious/noExplicitAny: Use a better type
     } catch (error: any) {
       if (error?.response?.status === 403) {
-        setAlertData({
-          severity: 'error',
-          message: 'The Api key is not correct',
+        toast.add({
+          type: 'error',
+          description: 'The Api key is not correct',
         });
       } else {
-        setAlertData({
-          severity: 'error',
-          message: error.message,
+        toast.add({
+          type: 'error',
+          description: error.message,
+          dismissible: true,
+          timeout: 0,
           more: () => JSON.stringify(error.response?.data, null, 2),
         });
       }
@@ -166,21 +160,20 @@ const UnlockForm = () => {
   };
 
   const onSubmit: SubmitHandler<TokenAmountCompatibleFormSchema> = async () => {
-    setConfirmationModalOpen(true);
+    await confirm({
+      title: 'Confirm Unlock',
+      /**
+       * TODO: The content should show the amounts of collateral and
+       * unlocked RSN
+       * local:ergo/rosen-bridge/ui#104
+       */
+      content: `You are going to unlock ${formData.amount} ${rsnToken?.name ?? 'token'}.`,
+      confirmText: 'Unlock',
+      onConfirm: submit,
+    });
   };
 
-  const renderAlert = () => (
-    <AlertCard
-      more={alertData?.more}
-      severity={alertData?.severity}
-      onClose={() => setAlertData(null)}
-    >
-      {alertData?.message}
-    </AlertCard>
-  );
-
-  const disabled =
-    isInfoLoading || isRsnTokenLoading || !rwtPartialToken?.amount;
+  const disabled = isInfoLoading || isRsnTokenLoading || !rwtPartialToken?.amount;
 
   const renderTokenAmountTextField = () => (
     <TokenAmountTextField
@@ -195,31 +188,14 @@ const UnlockForm = () => {
     <FormProvider {...formMethods}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Stack spacing={2}>
-          {renderAlert()}
-          <ApiKeyModalWarning />
+          <ApiKeyDialogWarning />
           {renderTokenAmountTextField()}
-          <SubmitButton
-            loading={isUnlockPending}
-            disabled={!formState.isValid || !apiKey || disabled}
-          >
-            Unlock
-          </SubmitButton>
+          <ApiKeyDialogProtectedAction>
+            <SubmitButton loading={isUnlockPending} disabled={!formState.isValid || disabled}>
+              Unlock
+            </SubmitButton>
+          </ApiKeyDialogProtectedAction>
         </Stack>
-        <ConfirmationModal
-          open={confirmationModalOpen}
-          title="Confirm Unlock"
-          /**
-           * TODO: The content should show the amounts of collateral and
-           * unlocked RSN
-           * local:ergo/rosen-bridge/ui#104
-           */
-          content={`You are going to unlock ${formData.amount} ${
-            rsnToken?.name ?? 'token'
-          }.`}
-          buttonText="Unlock"
-          handleClose={() => setConfirmationModalOpen(false)}
-          onConfirm={submit}
-        />
       </form>
     </FormProvider>
   );

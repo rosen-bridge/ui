@@ -1,5 +1,49 @@
 # @rosen-bridge/guard-app
 
+## 4.4.2
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-bridge/ui-kit@5.9.0
+
+## 4.4.1
+
+### Patch Changes
+
+- Fix value display issue in the manual transaction submission form
+- Update dependencies
+  - @rosen-bridge/icons@3.7.0
+  - @rosen-bridge/ui-kit@5.8.0
+  - @rosen-ui/constants@1.1.0
+  - @rosen-ui/utils@1.0.4
+
+## 4.4.0
+
+### Minor Changes
+
+- Fix NoSsr import issue during pre-rendering from `ui-kit`
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-bridge/ui-kit@5.7.0
+
+## 4.3.0
+
+### Minor Changes
+
+- Move App-related provider configuration to the application layer to enable more flexible setup and composition
+- Update application layouts across the app based on the new UI Kit layout structure
+- Align applications with updated UI Kit components and related fixes
+- Add new UI kit foundation layer
+
+### Patch Changes
+
+- Fix incorrect decimal precision display in the Revenues page and Dashboard Revenue Chart
+- Update dependencies
+  - @rosen-bridge/ui-kit@5.6.0
+
 ## 4.2.1
 
 ### Patch Changes

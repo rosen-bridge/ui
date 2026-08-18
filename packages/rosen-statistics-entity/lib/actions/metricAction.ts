@@ -1,7 +1,7 @@
-import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
-import { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
+import { type AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
+import type { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
 
-import { MetricKey } from '../constants';
+import type { MetricKey } from '../constants';
 import { MetricEntity } from '../entities';
 
 export class MetricAction {
@@ -25,16 +25,10 @@ export class MetricAction {
    * @param timestamp unix timestamp (seconds).
    *                  If not provided, current time is used.
    */
-  upsertMetric = async (
-    key: MetricKey,
-    value: string,
-    timestamp?: number,
-  ): Promise<void> => {
+  upsertMetric = async (key: MetricKey, value: string, timestamp?: number): Promise<void> => {
     const updatedAt = timestamp ?? Math.floor(Date.now() / 1000);
 
-    this.logger.debug(
-      `Upserting metric [${key}] with value [${value}] at [${updatedAt}]`,
-    );
+    this.logger.debug(`Upserting metric [${key}] with value [${value}] at [${updatedAt}]`);
 
     await this.repository.upsert(
       {

@@ -1,0 +1,65 @@
+import { Tabs } from '@base-ui/react/tabs';
+
+import { Action, Icon, type IconProps } from '@/components';
+import { useConfig } from '@/hooks';
+import type { ElementBaseProps, OverridableType } from '@/types';
+
+import './styles.css';
+
+export interface TabsTabOverrides {}
+
+export type TabsTabOwnProps = {
+  icon?: IconProps['name'];
+  iconPosition?: 'start' | 'top';
+  slots?: {
+    icon?: IconProps;
+  };
+};
+
+type TabsTabAsAnchor = ElementBaseProps<'a', TabsTabOwnProps & { href: string | undefined }>;
+
+type TabsTabAsButton = ElementBaseProps<
+  'button',
+  TabsTabOwnProps & { href?: never; value: number | string | undefined }
+>;
+
+export type TabsTabBaseProps = TabsTabAsAnchor | TabsTabAsButton;
+
+export type TabsTabProps =
+  | OverridableType<TabsTabAsAnchor, TabsTabOverrides, never>
+  | OverridableType<TabsTabAsButton, TabsTabOverrides, never>;
+
+export const TabsTab = (props: TabsTabProps) => {
+  const { children, icon, iconPosition, slots, ...rest } = useConfig('TabsTab', props);
+
+  /**
+   * TODO: remove the inline Biome comment
+   * local:ergo/rosen-bridge/ui#441
+   */
+  // biome-ignore lint/suspicious/noExplicitAny: Use a better type
+  const Component = Tabs.Tab as any;
+
+  /**
+   * TODO: remove the inline Biome comment
+   * local:ergo/rosen-bridge/ui#441
+   */
+  // biome-ignore lint/suspicious/noExplicitAny: Use a better type
+  const value = (rest as any).value;
+
+  return (
+    <Component
+      data-icon-position={iconPosition}
+      nativeButton={!rest.href}
+      {...rest}
+      value={rest.href ?? value}
+      render={(props: {}) => (
+        <Action {...props} {...rest}>
+          {icon && <Icon name={icon} size="small" {...slots?.icon} />}
+          {children && <span>{children}</span>}
+        </Action>
+      )}
+    />
+  );
+};
+
+TabsTab.displayName = 'TabsTab';

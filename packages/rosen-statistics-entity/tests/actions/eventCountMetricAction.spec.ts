@@ -1,14 +1,10 @@
-import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
-import { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
-import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
-import { describe, it, expect, beforeEach } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 
-import {
-  METRIC_KEYS,
-  EventCountEntity,
-  MetricEntity,
-  EventCountMetricAction,
-} from '../../lib';
+import { type AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
+import type { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
+import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
+
+import { EventCountEntity, EventCountMetricAction, METRIC_KEYS, MetricEntity } from '../../lib';
 import { eventCountMetricActionTestData } from '../testData';
 import { createDatabase } from '../utils';
 
@@ -46,8 +42,7 @@ describe('EventCountMetricAction', () => {
      * - Returns 0
      */
     it('should return 0 when no event count records exist', async () => {
-      const testData =
-        eventCountMetricActionTestData.getLastProcessedHeightNoRecords;
+      const testData = eventCountMetricActionTestData.getLastProcessedHeightNoRecords;
 
       const height = await action.getLastProcessedHeight();
 
@@ -65,8 +60,7 @@ describe('EventCountMetricAction', () => {
      * - Returns the maximum lastProcessedHeight value (150)
      */
     it('should return the highest lastProcessedHeight from existing records', async () => {
-      const testData =
-        eventCountMetricActionTestData.getLastProcessedHeightMultipleRecords;
+      const testData = eventCountMetricActionTestData.getLastProcessedHeightMultipleRecords;
 
       await eventCountRepo.insert(testData.eventCountRepo);
 
@@ -94,8 +88,7 @@ describe('EventCountMetricAction', () => {
      * - Does not include events that are not in valid range or with null status
      */
     it('should aggregate events by status and chain pairs since last height up to untilProcessedHeight', async () => {
-      const testData =
-        eventCountMetricActionTestData.getAggregatedEventsMultipleGroups;
+      const testData = eventCountMetricActionTestData.getAggregatedEventsMultipleGroups;
 
       await eventTriggerRepo.insert(testData.eventTriggerRepo);
 
@@ -118,8 +111,7 @@ describe('EventCountMetricAction', () => {
      * - Returns single group with count = 3 (as number) and lastProcessedHeight = 121
      */
     it('should aggregate multiple events in same group into single record', async () => {
-      const testData =
-        eventCountMetricActionTestData.getAggregatedEventsSameGroup;
+      const testData = eventCountMetricActionTestData.getAggregatedEventsSameGroup;
 
       await eventTriggerRepo.insert(testData.eventTriggerRepo);
 
@@ -143,8 +135,7 @@ describe('EventCountMetricAction', () => {
      * - Returns empty array
      */
     it('should return empty array when no events since last height', async () => {
-      const testData =
-        eventCountMetricActionTestData.getAggregatedEventsNoNewEvents;
+      const testData = eventCountMetricActionTestData.getAggregatedEventsNoNewEvents;
 
       await eventTriggerRepo.insert(testData.eventTriggerRepo);
 
@@ -169,8 +160,7 @@ describe('EventCountMetricAction', () => {
      * - Returns 10
      */
     it('should return event count when record exists', async () => {
-      const testData =
-        eventCountMetricActionTestData.getExistingEventCountExists;
+      const testData = eventCountMetricActionTestData.getExistingEventCountExists;
 
       await eventCountRepo.insert(testData.eventCountRepo);
 
@@ -194,8 +184,7 @@ describe('EventCountMetricAction', () => {
      * - Returns 0
      */
     it('should return 0 when record does not exist', async () => {
-      const testData =
-        eventCountMetricActionTestData.getExistingEventCountNotExists;
+      const testData = eventCountMetricActionTestData.getExistingEventCountNotExists;
 
       await eventCountRepo.insert(testData.eventCountRepo);
 
@@ -223,22 +212,12 @@ describe('EventCountMetricAction', () => {
      * - All operations succeed in same transaction
      */
     it('should create new event count records and update total metric', async () => {
-      const testData =
-        eventCountMetricActionTestData.upsertEventsCountNewGroups;
+      const testData = eventCountMetricActionTestData.upsertEventsCountNewGroups;
 
-      await action.upsertEventsCount(
-        testData.aggregatedEvents,
-        testData.totalCount,
-      );
+      await action.upsertEventsCount(testData.aggregatedEvents, testData.totalCount);
 
       const eventCounts = await eventCountRepo.find({
-        select: [
-          'fromChain',
-          'toChain',
-          'eventCount',
-          'status',
-          'lastProcessedHeight',
-        ],
+        select: ['fromChain', 'toChain', 'eventCount', 'status', 'lastProcessedHeight'],
       });
 
       expect(eventCounts).toHaveLength(testData.expectedEventCounts.length);
@@ -264,25 +243,15 @@ describe('EventCountMetricAction', () => {
      * - MetricEntity is updated to '7'
      */
     it('should replace existing event count records with new values', async () => {
-      const testData =
-        eventCountMetricActionTestData.upsertEventsCountUpdateExisting;
+      const testData = eventCountMetricActionTestData.upsertEventsCountUpdateExisting;
 
       await eventCountRepo.insert(testData.existingEventCounts);
       await metricRepo.insert(testData.existingMetric);
 
-      await action.upsertEventsCount(
-        testData.aggregatedEvents,
-        testData.totalCount,
-      );
+      await action.upsertEventsCount(testData.aggregatedEvents, testData.totalCount);
 
       const eventCounts = await eventCountRepo.find({
-        select: [
-          'fromChain',
-          'toChain',
-          'eventCount',
-          'status',
-          'lastProcessedHeight',
-        ],
+        select: ['fromChain', 'toChain', 'eventCount', 'status', 'lastProcessedHeight'],
       });
 
       expect(eventCounts).toHaveLength(testData.expectedEventCounts.length);
@@ -311,25 +280,15 @@ describe('EventCountMetricAction', () => {
      * - Total metric is updated to '10'
      */
     it('should handle both new and existing groups in same transaction', async () => {
-      const testData =
-        eventCountMetricActionTestData.upsertEventsCountMixedGroups;
+      const testData = eventCountMetricActionTestData.upsertEventsCountMixedGroups;
 
       await eventCountRepo.insert(testData.existingEventCounts);
       await metricRepo.insert(testData.existingMetric);
 
-      await action.upsertEventsCount(
-        testData.aggregatedEvents,
-        testData.totalCount,
-      );
+      await action.upsertEventsCount(testData.aggregatedEvents, testData.totalCount);
 
       const eventCounts = await eventCountRepo.find({
-        select: [
-          'fromChain',
-          'toChain',
-          'eventCount',
-          'status',
-          'lastProcessedHeight',
-        ],
+        select: ['fromChain', 'toChain', 'eventCount', 'status', 'lastProcessedHeight'],
       });
 
       expect(eventCounts).toHaveLength(testData.expectedEventCounts.length);
@@ -359,19 +318,10 @@ describe('EventCountMetricAction', () => {
       await eventCountRepo.insert(testData.existingEventCounts);
       await metricRepo.insert(testData.existingMetric);
 
-      await action.upsertEventsCount(
-        testData.aggregatedEvents,
-        testData.totalCount,
-      );
+      await action.upsertEventsCount(testData.aggregatedEvents, testData.totalCount);
 
       const eventCounts = await eventCountRepo.find({
-        select: [
-          'fromChain',
-          'toChain',
-          'eventCount',
-          'status',
-          'lastProcessedHeight',
-        ],
+        select: ['fromChain', 'toChain', 'eventCount', 'status', 'lastProcessedHeight'],
       });
 
       expect(eventCounts).toHaveLength(testData.expectedEventCounts.length);

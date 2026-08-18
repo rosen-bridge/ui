@@ -1,4 +1,4 @@
-import { BridgeMetricRecord } from '@rosen-ui/rosen-statistics-entity';
+import type { BridgeMetricRecord } from '@rosen-ui/rosen-statistics-entity';
 
 /**
  * Aggregated bridge data for a specific chain

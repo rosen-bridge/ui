@@ -1,11 +1,11 @@
+import fs from 'node:fs';
+import path from 'node:path';
+
 import { DefaultLogger } from '@rosen-bridge/abstract-logger';
-import CallbackLogger from '@rosen-bridge/callback-logger';
 import { DiscordNotification } from '@rosen-bridge/discord-notification';
 import { HealthCheck, HealthStatusLevel } from '@rosen-bridge/health-check';
 import { LogLevelHealthCheck } from '@rosen-bridge/log-level-check';
 import { ScannerSyncHealthCheckParam } from '@rosen-bridge/scanner-sync-check';
-import fs from 'node:fs';
-import path from 'node:path';
 
 import config from '../configs';
 import {
@@ -21,6 +21,8 @@ import {
   ERGO_SCANNER_INTERVAL,
   ETHEREUM_BLOCK_TIME,
   ETHEREUM_SCANNER_INTERVAL,
+  FIRO_BLOCK_TIME,
+  FIRO_SCANNER_INTERVAL,
   HANDSHAKE_BLOCK_TIME,
   HANDSHAKE_SCANNER_INTERVAL,
 } from '../constants';
@@ -37,21 +39,17 @@ const getNotifySetup = () => {
     return { notify: undefined, notificationConfig: undefined };
   }
 
-  const discordNotification = new DiscordNotification(
-    config.notification.discordWebHookUrl,
-  );
+  const discordNotification = new DiscordNotification(config.notification.discordWebHookUrl);
   const notificationConfig = {
     historyConfig: {
       cleanupThreshold: config.notification.historyCleanupTimeout,
     },
     notificationCheckConfig: {
       hasBeenUnstableForAWhile: {
-        windowDuration:
-          config.notification.hasBeenUnstableForAWhileWindowDuration,
+        windowDuration: config.notification.hasBeenUnstableForAWhileWindowDuration,
       },
       hasBeenUnknownForAWhile: {
-        windowDuration:
-          config.notification.hasBeenUnknownForAWhileWindowDuration,
+        windowDuration: config.notification.hasBeenUnknownForAWhileWindowDuration,
       },
     },
   };
@@ -77,8 +75,7 @@ const registerAllHealthChecks = (healthCheck: HealthCheck) => {
     {
       instance: new ScannerSyncHealthCheckParam(
         scannerService.getCardanoScanner().name(),
-        async () =>
-          getLastSavedBlock(scannerService.getCardanoScanner().name()),
+        async () => getLastSavedBlock(scannerService.getCardanoScanner().name()),
         config.healthCheck.cardanoScannerWarnDiff,
         config.healthCheck.cardanoScannerCriticalDiff,
         CARDANO_BLOCK_TIME,
@@ -89,8 +86,7 @@ const registerAllHealthChecks = (healthCheck: HealthCheck) => {
     {
       instance: new ScannerSyncHealthCheckParam(
         scannerService.getBitcoinScanner().name(),
-        async () =>
-          getLastSavedBlock(scannerService.getBitcoinScanner().name()),
+        async () => getLastSavedBlock(scannerService.getBitcoinScanner().name()),
         config.healthCheck.bitcoinScannerWarnDiff,
         config.healthCheck.bitcoinScannerCriticalDiff,
         BITCOIN_BLOCK_TIME,
@@ -112,8 +108,7 @@ const registerAllHealthChecks = (healthCheck: HealthCheck) => {
     {
       instance: new ScannerSyncHealthCheckParam(
         scannerService.getEthereumScanner().name(),
-        async () =>
-          getLastSavedBlock(scannerService.getEthereumScanner().name()),
+        async () => getLastSavedBlock(scannerService.getEthereumScanner().name()),
         config.healthCheck.ethereumScannerWarnDiff,
         config.healthCheck.ethereumScannerCriticalDiff,
         ETHEREUM_BLOCK_TIME,
@@ -124,8 +119,7 @@ const registerAllHealthChecks = (healthCheck: HealthCheck) => {
     {
       instance: new ScannerSyncHealthCheckParam(
         scannerService.getBinanceScanner().name(),
-        async () =>
-          getLastSavedBlock(scannerService.getBinanceScanner().name()),
+        async () => getLastSavedBlock(scannerService.getBinanceScanner().name()),
         config.healthCheck.binanceScannerWarnDiff,
         config.healthCheck.binanceScannerCriticalDiff,
         BINANCE_BLOCK_TIME,
@@ -135,9 +129,19 @@ const registerAllHealthChecks = (healthCheck: HealthCheck) => {
     },
     {
       instance: new ScannerSyncHealthCheckParam(
+        scannerService.getFiroScanner().name(),
+        async () => getLastSavedBlock(scannerService.getFiroScanner().name()),
+        config.healthCheck.firoScannerWarnDiff,
+        config.healthCheck.firoScannerCriticalDiff,
+        FIRO_BLOCK_TIME,
+        FIRO_SCANNER_INTERVAL,
+      ),
+      label: 'firo',
+    },
+    {
+      instance: new ScannerSyncHealthCheckParam(
         scannerService.getHandshakeScanner().name(),
-        async () =>
-          getLastSavedBlock(scannerService.getHandshakeScanner().name()),
+        async () => getLastSavedBlock(scannerService.getHandshakeScanner().name()),
         config.healthCheck.handshakeScannerWarnDiff,
         config.healthCheck.handshakeScannerCriticalDiff,
         HANDSHAKE_BLOCK_TIME,
@@ -192,19 +196,11 @@ const start = async () => {
           ? config.healthCheck.reportPath
           : path.resolve(process.cwd(), config.healthCheck.reportPath);
 
-        fs.writeFileSync(
-          healthReportPath,
-          JSON.stringify(healthStatus, null, 2),
-          'utf8',
-        );
+        fs.writeFileSync(healthReportPath, JSON.stringify(healthStatus, null, 2), 'utf8');
         logger.debug('periodic health check update done');
       } catch (e) {
         if (e instanceof AggregateError) {
-          logger.warn(
-            `Health check update job failed: ${e.errors.map(
-              (error) => error.message,
-            )}`,
-          );
+          logger.warn(`Health check update job failed: ${e.errors.map((error) => error.message)}`);
         } else logger.warn(`Health check update job failed: ${e}`);
       }
     }, interval);

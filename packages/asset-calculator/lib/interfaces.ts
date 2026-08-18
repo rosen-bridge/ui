@@ -18,6 +18,10 @@ interface DogeCalculatorInterface extends CalculatorInterface {
   blockcypherUrl: string;
 }
 
+interface FiroCalculatorInterface extends CalculatorInterface {
+  explorerUrl?: string;
+}
+
 interface EvmCalculatorInterface extends CalculatorInterface {
   rpcUrl: string;
   authToken?: string;
@@ -31,12 +35,13 @@ interface CalculatorInterface {
   addresses: string[];
 }
 
-export {
-  ErgoCalculatorInterface,
-  CardanoCalculatorInterface,
+export type {
   BitcoinCalculatorInterface,
   BitcoinRunesCalculatorInterface,
-  EvmCalculatorInterface,
+  CardanoCalculatorInterface,
   DogeCalculatorInterface,
+  ErgoCalculatorInterface,
+  EvmCalculatorInterface,
+  FiroCalculatorInterface,
   HandshakeCalculatorInterface,
 };

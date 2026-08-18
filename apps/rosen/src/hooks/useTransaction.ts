@@ -1,17 +1,16 @@
-import { useState } from 'react';
-import React from 'react';
+import React, { useState } from 'react';
 
-import { RosenChainToken } from '@rosen-bridge/tokens';
-import { useSnackbar } from '@rosen-bridge/ui-kit';
+import * as Sentry from '@sentry/nextjs';
+import { serializeError } from 'serialize-error';
+
+import type { RosenChainToken } from '@rosen-bridge/tokens';
+import { useToast } from '@rosen-bridge/ui-kit';
 import { InsufficientAssetsError } from '@rosen-network/base/dist/handleUncoveredAssets';
 import { getNonDecimalString, getTxURL } from '@rosen-ui/utils';
 import {
   UserDeniedTransactionSignatureError,
-  WalletTransferParams,
+  type WalletTransferParams,
 } from '@rosen-ui/wallet-api';
-import { serializeError } from 'serialize-error';
-
-import { logger } from '@/actions';
 
 import { useNetwork } from './useNetwork';
 import { useTokenMap } from './useTokenMap';
@@ -25,19 +24,14 @@ import { useWallet } from './useWallet';
 export const useTransaction = () => {
   const { selectedSource, selectedTarget } = useNetwork();
 
-  const { openSnackbar } = useSnackbar();
+  const toast = useToast();
 
   const tokenMap = useTokenMap();
 
   const { networkFee, bridgeFee } = useTransactionFees();
 
-  const {
-    sourceValue,
-    targetValue,
-    tokenValue,
-    amountValue,
-    walletAddressValue,
-  } = useTransactionFormData();
+  const { sourceValue, targetValue, tokenValue, amountValue, walletAddressValue } =
+    useTransactionFormData();
 
   const { selected: selectedWallet } = useWallet();
 
@@ -61,7 +55,7 @@ export const useTransaction = () => {
 
     setIsSubmitting(true);
 
-    let parameters: WalletTransferParams | undefined = undefined;
+    let parameters: WalletTransferParams | undefined;
 
     try {
       parameters = {
@@ -80,15 +74,23 @@ export const useTransaction = () => {
         lockAddress: selectedSource.lockAddress,
       };
 
-      const txId = await selectedWallet.transfer(parameters);
+      const result = await selectedWallet.transfer(parameters);
 
-      openSnackbar(
-        React.createElement('div', undefined, [
+      const isQrCode = result.startsWith('qrcode:');
+
+      if (isQrCode) {
+        setIsSubmitting(false);
+        return result;
+      }
+
+      toast.add({
+        type: 'success',
+        description: React.createElement('div', undefined, [
           'Transaction submitted successfully, click ',
           React.createElement(
             'a',
             {
-              href: getTxURL(sourceValue, txId),
+              href: getTxURL(sourceValue, result),
               target: '_blank',
               style: {
                 color: 'inherit',
@@ -99,31 +101,31 @@ export const useTransaction = () => {
           ),
           ' to see more details.',
         ]),
-        'success',
-      );
-
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      });
+      /**
+       * TODO: remove the inline Biome comment
+       * local:ergo/rosen-bridge/ui#441
+       */
+      // biome-ignore lint/suspicious/noExplicitAny: Use a better type
     } catch (error: any) {
-      openSnackbar(
-        error?.info ?? error?.message ?? JSON.stringify(error),
-        'error',
-        undefined,
-        () => JSON.stringify(serializeError(error), null, 2),
-      );
+      toast.add({
+        type: 'error',
+        description: error?.info ?? error?.message ?? JSON.stringify(error),
+        more: () => JSON.stringify(serializeError(error), null, 2),
+      });
 
       if (error instanceof InsufficientAssetsError) return;
 
       if (error instanceof UserDeniedTransactionSignatureError) return;
 
-      logger(
-        `${selectedWallet.name}:transfer`,
-        parameters,
-        serializeError(error),
-      )
-        .then(() => {})
-        .catch((error) => {
-          console.log('Failed to send log to Discord', error);
-        });
+      Sentry.withScope((scope) => {
+        scope.setTag('feature', 'transaction');
+        scope.setTag('wallet', selectedWallet.name);
+
+        scope.setContext('transaction', { parameters: parameters });
+
+        Sentry.captureException(error);
+      });
     } finally {
       setIsSubmitting(false);
     }

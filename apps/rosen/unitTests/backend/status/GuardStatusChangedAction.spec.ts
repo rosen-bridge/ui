@@ -1,15 +1,11 @@
-import { Repository } from '@rosen-bridge/extended-typeorm';
+import type { Repository } from '@rosen-bridge/extended-typeorm';
 import { testDataSource } from '@rosen-ui/data-source';
-import { GuardStatusChangedEntity, EventStatus } from '@rosen-ui/public-status';
+import { EventStatus, GuardStatusChangedEntity } from '@rosen-ui/public-status';
 
 import GuardStatusChangedAction from '@/backend/status/GuardStatusChangedAction';
 
 import { DataSourceMock } from '../../mocked/DataSource.mock';
-import {
-  mockGuardStatusChangedRecords,
-  id0,
-  mockPaginationTestData,
-} from './testData';
+import { mockGuardStatusChangedRecords, mockPaginationTestData, triggerId0 } from './testData';
 
 describe('GuardStatusChangedAction', () => {
   beforeAll(() => {
@@ -36,7 +32,7 @@ describe('GuardStatusChangedAction', () => {
       // act
       const lastStatus = await GuardStatusChangedAction.getInstance().getLast(
         repository as unknown as Repository<GuardStatusChangedEntity>,
-        id0,
+        triggerId0,
         'pk',
       );
 
@@ -44,7 +40,7 @@ describe('GuardStatusChangedAction', () => {
       expect(lastStatus).toBeNull();
       expect(repository.findOne).toHaveBeenCalledOnce();
       expect(repository.findOne).toHaveBeenCalledWith({
-        where: { eventId: id0, guardPk: 'pk' },
+        where: { triggerTxId: triggerId0, guardPk: 'pk' },
         relations: ['tx'],
         order: { insertedAt: 'DESC' },
       });
@@ -62,14 +58,13 @@ describe('GuardStatusChangedAction', () => {
      */
     it('should call repository.find with DESC ordering on insertedAt field', async () => {
       // act
-      const { total, items } =
-        await GuardStatusChangedAction.getInstance().getMany(
-          testDataSource.getRepository(GuardStatusChangedEntity),
-          id0,
-          ['pk'],
-          0,
-          100,
-        );
+      const { total, items } = await GuardStatusChangedAction.getInstance().getMany(
+        testDataSource.getRepository(GuardStatusChangedEntity),
+        triggerId0,
+        ['pk'],
+        0,
+        100,
+      );
 
       // assert
       expect(total).toBe(0);
@@ -93,49 +88,41 @@ describe('GuardStatusChangedAction', () => {
      */
     it('should respond with respect to pagination params', async () => {
       // arrange
-      await DataSourceMock.populateGuardStatusChanged(
-        mockPaginationTestData.guardStatusChanged,
-      );
+      await DataSourceMock.populateGuardStatusChanged(mockPaginationTestData.guardStatusChanged);
 
       // act
-      const { total, items } =
-        await GuardStatusChangedAction.getInstance().getMany(
-          testDataSource.getRepository(GuardStatusChangedEntity),
-          id0,
-          [],
-          0,
-          6,
-        );
+      const { total, items } = await GuardStatusChangedAction.getInstance().getMany(
+        testDataSource.getRepository(GuardStatusChangedEntity),
+        triggerId0,
+        [],
+        0,
+        6,
+      );
 
       // assert
       expect(total).toBe(10);
       expect(items).toHaveLength(6);
-      expect(items).toEqual(
-        mockPaginationTestData.guardStatusChanged.toReversed().slice(0, 6),
-      );
+      expect(items).toEqual(mockPaginationTestData.guardStatusChanged.toReversed().slice(0, 6));
 
       // act
-      const { total: total2, items: items2 } =
-        await GuardStatusChangedAction.getInstance().getMany(
-          testDataSource.getRepository(GuardStatusChangedEntity),
-          id0,
-          [],
-          5,
-          10,
-        );
+      const { total: total2, items: items2 } = await GuardStatusChangedAction.getInstance().getMany(
+        testDataSource.getRepository(GuardStatusChangedEntity),
+        triggerId0,
+        [],
+        5,
+        10,
+      );
 
       // assert
       expect(total2).toBe(10);
       expect(items2).toHaveLength(5);
-      expect(items2).toEqual(
-        mockPaginationTestData.guardStatusChanged.toReversed().slice(5),
-      );
+      expect(items2).toEqual(mockPaginationTestData.guardStatusChanged.toReversed().slice(5));
     });
   });
 
   describe('insertOne', () => {
     /**
-     * @target GuardStatusChangedAction.insertOne should call insert when eventId is new
+     * @target GuardStatusChangedAction.insertOne should call insert when triggerTxId is new
      * @dependencies
      * @scenario
      * - stub repository.findOne and insert to resolve to null
@@ -143,7 +130,7 @@ describe('GuardStatusChangedAction', () => {
      * @expected
      * - insert should have been called once with the mock record
      */
-    it('should call insert when eventId is new', async () => {
+    it('should call insert when triggerTxId is new', async () => {
       // arrange
       const repository = {
         findOne: vi.fn().mockResolvedValue(null),
@@ -156,6 +143,7 @@ describe('GuardStatusChangedAction', () => {
       await GuardStatusChangedAction.getInstance().insertOne(
         repository as unknown as Repository<GuardStatusChangedEntity>,
         record.eventId,
+        record.triggerTxId,
         record.guardPk,
         record.insertedAt,
         record.status,
@@ -195,6 +183,7 @@ describe('GuardStatusChangedAction', () => {
       await GuardStatusChangedAction.getInstance().insertOne(
         repository as unknown as Repository<GuardStatusChangedEntity>,
         record.eventId,
+        record.triggerTxId,
         record.guardPk,
         record.insertedAt,
         EventStatus.paymentWaiting,
@@ -239,6 +228,7 @@ describe('GuardStatusChangedAction', () => {
         await GuardStatusChangedAction.getInstance().insertOne(
           repository as unknown as Repository<GuardStatusChangedEntity>,
           record.eventId,
+          record.triggerTxId,
           record.guardPk,
           record.insertedAt + 5,
           record.status,

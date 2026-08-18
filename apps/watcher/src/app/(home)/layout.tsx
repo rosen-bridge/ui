@@ -1,8 +1,8 @@
 'use client';
 
-import { Fragment, ReactNode } from 'react';
+import { Fragment, type ReactNode } from 'react';
 
-import { Box, PageHeading, Stack } from '@rosen-bridge/ui-kit';
+import { Box, PageHeading, Stack, useResponsive } from '@rosen-bridge/ui-kit';
 
 type LayoutProps = {
   actions: ReactNode;
@@ -12,38 +12,32 @@ type LayoutProps = {
   tokens: ReactNode;
 };
 
-const Layout = ({
-  actions,
-  address,
-  infoWidgets,
-  revenue,
-  tokens,
-}: LayoutProps) => (
-  <Fragment>
-    <PageHeading title="Home" />
-    <Stack spacing={2}>
-      {infoWidgets}
-      <Box
-        style={{
-          display: 'grid',
-          gap: '16px',
-        }}
-        overrides={{
-          mobile: {
-            gridTemplateColumns: '1fr',
-          },
-          laptop: {
-            gridTemplateColumns: '1fr 1fr',
-          },
-        }}
-      >
-        {revenue}
-        {tokens}
-        {actions}
-        {address}
-      </Box>
-    </Stack>
-  </Fragment>
-);
+const Layout = ({ actions, address, infoWidgets, revenue, tokens }: LayoutProps) => {
+  const gridTemplateColumns = useResponsive({
+    mobile: '1fr',
+    laptop: '1fr 1fr',
+  });
+
+  return (
+    <Fragment>
+      <PageHeading title="Home" />
+      <Stack spacing={2}>
+        {infoWidgets}
+        <Box
+          style={{
+            display: 'grid',
+            gap: '16px',
+            gridTemplateColumns,
+          }}
+        >
+          {revenue}
+          {tokens}
+          {actions}
+          {address}
+        </Box>
+      </Stack>
+    </Fragment>
+  );
+};
 
 export default Layout;

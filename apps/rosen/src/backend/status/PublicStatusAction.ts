@@ -1,19 +1,22 @@
-import { DataSource } from '@rosen-bridge/extended-typeorm';
+import crypto from 'node:crypto';
+
+import * as Sentry from '@sentry/nextjs';
+
+import type { DataSource } from '@rosen-bridge/extended-typeorm';
 import {
-  AggregateEventStatus,
-  AggregateTxStatus,
-  EventStatus,
-  TxStatus,
-  TxType,
-  Threshold,
-  Utils,
   AggregatedStatusChangedEntity,
   AggregatedStatusEntity,
+  AggregateEventStatus,
+  type AggregateTxStatus,
+  type EventStatus,
   GuardStatusChangedEntity,
   GuardStatusEntity,
+  type Threshold,
   TxEntity,
+  type TxStatus,
+  type TxType,
+  Utils,
 } from '@rosen-ui/public-status';
-import crypto from 'crypto';
 
 import AggregatedStatusAction from './AggregatedStatusAction';
 import AggregatedStatusChangedAction from './AggregatedStatusChangedAction';
@@ -51,15 +54,14 @@ export class PublicStatusAction {
    */
   static getInstance = () => {
     if (!PublicStatusAction.instance)
-      throw Error(
-        `PublicStatusAction should have been initialized before getInstance`,
-      );
+      throw Error(`PublicStatusAction should have been initialized before getInstance`);
     return PublicStatusAction.instance;
   };
 
   /**
    * updates guard's status and if the new status changes the aggregated status it also updates aggregated status of the event
    * @param eventId
+   * @param triggerTxId
    * @param pk
    * @param timestampSeconds
    * @param status
@@ -68,6 +70,7 @@ export class PublicStatusAction {
    */
   insertStatus = async (
     eventId: string,
+    triggerTxId: string,
     pk: string,
     timestampSeconds: number,
     status: EventStatus,
@@ -89,19 +92,14 @@ export class PublicStatusAction {
         // automatically released when the transaction commits or rolls back
         await entityManager.query('SELECT pg_advisory_xact_lock($1, $2)', [
           1, // namespace
-          this.intHash(eventId),
+          this.intHash(triggerTxId),
         ]);
       }
 
       // get repositories from transactional entity manager
-      const guardStatusRepository =
-        entityManager.getRepository(GuardStatusEntity);
-      const guardStatusChangedRepository = entityManager.getRepository(
-        GuardStatusChangedEntity,
-      );
-      const aggregatedStatusRepository = entityManager.getRepository(
-        AggregatedStatusEntity,
-      );
+      const guardStatusRepository = entityManager.getRepository(GuardStatusEntity);
+      const guardStatusChangedRepository = entityManager.getRepository(GuardStatusChangedEntity);
+      const aggregatedStatusRepository = entityManager.getRepository(AggregatedStatusEntity);
       const aggregatedStatusChangedRepository = entityManager.getRepository(
         AggregatedStatusChangedEntity,
       );
@@ -129,12 +127,13 @@ export class PublicStatusAction {
       // get array of last status of all guards
       const guardsStatus = await GuardStatusAction.getInstance().getMany(
         guardStatusRepository,
-        eventId,
+        triggerTxId,
         [],
       );
 
       const newGuardStatus: GuardStatusEntity = {
         eventId,
+        triggerTxId,
         guardPk: pk,
         updatedAt: timestampSeconds,
         status,
@@ -149,18 +148,39 @@ export class PublicStatusAction {
 
       // inserts or replaces a status with matching pk (if exists) with the new status
       // without mutating the original array
-      const newStatuses = Utils.cloneFilterPush(
-        guardsStatus.items,
-        'guardPk',
-        pk,
-        newGuardStatus,
-      );
+      const newStatuses = Utils.cloneFilterPush(guardsStatus.items, 'guardPk', pk, newGuardStatus);
 
       // calculate aggregated status with the new status
       const aggregatedStatusNew = Utils.calcAggregatedStatus(
         newStatuses,
         eventStatusThresholds,
         txStatusThresholds,
+      );
+
+      const missingTx =
+        !aggregatedStatusNew.tx &&
+        [AggregateEventStatus.inPayment, AggregateEventStatus.inReward].includes(
+          aggregatedStatusNew.status,
+        );
+
+      if (missingTx) {
+        Sentry.withScope((scope) => {
+          scope.setTag('layer', 'public-event-status');
+          Sentry.logger.debug(
+            "Aggregated status did not update since the tx is expected based on the event status but it's missing",
+            {
+              newStatuses,
+              eventStatusThresholds,
+              txStatusThresholds,
+            },
+          );
+        });
+      }
+
+      // get the last aggregated status for comparison with the new aggregated status
+      const lastAggregatedStatus = await AggregatedStatusAction.getInstance().getOne(
+        aggregatedStatusRepository,
+        triggerTxId,
       );
 
       const guardStatusTx = tx
@@ -171,10 +191,11 @@ export class PublicStatusAction {
           }
         : undefined;
 
-      let promises = [
+      const promises = [
         GuardStatusAction.getInstance().upsertOne(
           guardStatusRepository,
           eventId,
+          triggerTxId,
           pk,
           timestampSeconds,
           status,
@@ -183,6 +204,7 @@ export class PublicStatusAction {
         GuardStatusChangedAction.getInstance().insertOne(
           guardStatusChangedRepository,
           eventId,
+          triggerTxId,
           pk,
           timestampSeconds,
           status,
@@ -190,41 +212,37 @@ export class PublicStatusAction {
         ),
       ];
 
-      // if eventId is new or aggregated status has changed, update the aggregated status
+      // if no aggregated status exist for this eventId or it has changed, update the aggregated status
       if (
-        guardsStatus.items.length === 0 ||
-        Utils.aggregatedStatusesMatch(
-          Utils.calcAggregatedStatus(
-            guardsStatus.items,
-            eventStatusThresholds,
-            txStatusThresholds,
-          ),
-          aggregatedStatusNew,
-        ) === false
+        (!lastAggregatedStatus ||
+          Utils.aggregatedStatusesMatch(
+            {
+              status: lastAggregatedStatus.status,
+              txStatus: lastAggregatedStatus.txStatus ?? undefined,
+              tx: lastAggregatedStatus.tx ?? undefined,
+            },
+            aggregatedStatusNew,
+          ) === false) &&
+        !missingTx
       ) {
-        const aggregatedStatusTx = aggregatedStatusNew.tx
-          ? {
-              txId: aggregatedStatusNew.tx.txId,
-              chain: aggregatedStatusNew.tx.chain,
-            }
-          : undefined;
-
         promises.push(
           AggregatedStatusAction.getInstance().upsertOne(
             aggregatedStatusRepository,
             eventId,
+            triggerTxId,
             timestampSeconds,
             aggregatedStatusNew.status,
             aggregatedStatusNew.txStatus,
-            aggregatedStatusTx,
+            aggregatedStatusNew.tx,
           ),
           AggregatedStatusChangedAction.getInstance().insertOne(
             aggregatedStatusChangedRepository,
             eventId,
+            triggerTxId,
             timestampSeconds,
             aggregatedStatusNew.status,
             aggregatedStatusNew.txStatus,
-            aggregatedStatusTx,
+            aggregatedStatusNew.tx,
           ),
         );
       }
@@ -235,10 +253,7 @@ export class PublicStatusAction {
         if (
           !(
             e instanceof Error &&
-            [
-              'aggregated_status_not_changed',
-              'guard_status_not_changed',
-            ].includes(e.message)
+            ['aggregated_status_not_changed', 'guard_status_not_changed'].includes(e.message)
           )
         ) {
           throw e;
@@ -249,41 +264,30 @@ export class PublicStatusAction {
 
   /**
    * gets array of AggregatedStatusEntity
-   * @param eventIds
+   * @param triggerTxIds
    * @returns promise of AggregatedStatusEntity array
    */
-  getAggregatedStatuses = (
-    eventIds: string[],
-  ): Promise<AggregatedStatusEntity[]> => {
-    const aggregatedStatusRepository = this.dataSource.getRepository(
-      AggregatedStatusEntity,
-    );
+  getAggregatedStatuses = (triggerTxIds: string[]): Promise<AggregatedStatusEntity[]> => {
+    const aggregatedStatusRepository = this.dataSource.getRepository(AggregatedStatusEntity);
 
-    return AggregatedStatusAction.getInstance().getMany(
-      aggregatedStatusRepository,
-      eventIds,
-    );
+    return AggregatedStatusAction.getInstance().getMany(aggregatedStatusRepository, triggerTxIds);
   };
 
   /**
    * gets array of AggregatedStatusChangedEntity (timeline)
-   * @param eventId
+   * @param triggerTxId
    * @param offset
    * @param limit
    * @returns promise of AggregatedStatusChangedEntity array
    */
-  getAggregatedStatusTimeline = (
-    eventId: string,
-    offset?: number,
-    limit?: number,
-  ) => {
+  getAggregatedStatusTimeline = (triggerTxId: string, offset?: number, limit?: number) => {
     const aggregatedStatusChangedRepository = this.dataSource.getRepository(
       AggregatedStatusChangedEntity,
     );
 
     return AggregatedStatusChangedAction.getInstance().getMany(
       aggregatedStatusChangedRepository,
-      eventId,
+      triggerTxId,
       offset,
       limit,
     );
@@ -291,25 +295,23 @@ export class PublicStatusAction {
 
   /**
    * gets array of GuardStatusChangedEntity (timeline)
-   * @param eventId
+   * @param triggerTxId
    * @param guardPks
    * @param offset
    * @param limit
    * @returns promise of GuardStatusChangedEntity array
    */
   getGuardStatusTimeline = (
-    eventId: string,
+    triggerTxId: string,
     guardPks: string[],
     offset?: number,
     limit?: number,
   ) => {
-    const guardStatusChangedRepository = this.dataSource.getRepository(
-      GuardStatusChangedEntity,
-    );
+    const guardStatusChangedRepository = this.dataSource.getRepository(GuardStatusChangedEntity);
 
     return GuardStatusChangedAction.getInstance().getMany(
       guardStatusChangedRepository,
-      eventId,
+      triggerTxId,
       guardPks,
       offset,
       limit,

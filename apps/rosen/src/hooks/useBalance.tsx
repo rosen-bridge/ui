@@ -1,44 +1,23 @@
-import {
-  PropsWithChildren,
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-  useTransition,
-} from 'react';
+import { useCallback, useEffect, useMemo, useState, useTransition } from 'react';
 
-import { RosenAmountValue } from '@rosen-ui/types';
+import type { RosenAmountValue } from '@rosen-ui/types';
 import { getDecimalString } from '@rosen-ui/utils';
 
 import { useBridgeForm } from './useBridgeForm';
 import { useTokenMap } from './useTokenMap';
 import { useWallet } from './useWallet';
 
-/**
- * returns the amount of currently selected asset
- */
-export const useBalance = () => {
-  const context = useContext(BalanceContext);
-
-  if (!context) {
-    throw new Error('useBalance must be used within BalanceProvider');
-  }
-
-  return context;
-};
-
-export type BalanceContextType = {
+export type BalanceState = {
   amount: RosenAmountValue;
   error: unknown;
   isLoading: boolean;
   raw: string;
 };
 
-export const BalanceContext = createContext<BalanceContextType | null>(null);
-
-export const BalanceProvider = ({ children }: PropsWithChildren) => {
+/**
+ * returns the amount of currently selected asset
+ */
+export const useBalance = (): BalanceState => {
   const {
     tokenField: { value: token },
   } = useBridgeForm();
@@ -54,11 +33,8 @@ export const BalanceProvider = ({ children }: PropsWithChildren) => {
   const [isLoading, startTransition] = useTransition();
 
   const raw = useMemo(() => {
-    if (!amount || !tokenMap || !token) return '0';
-    return getDecimalString(
-      amount,
-      tokenMap.getSignificantDecimals(token.tokenId),
-    );
+    if (!token) return '0';
+    return getDecimalString(amount, tokenMap.getSignificantDecimals(token.tokenId));
   }, [amount, tokenMap, token]);
 
   const load = useCallback(() => {
@@ -79,14 +55,10 @@ export const BalanceProvider = ({ children }: PropsWithChildren) => {
 
   useEffect(load, [load]);
 
-  const state = {
+  return {
     amount,
     error,
     isLoading,
     raw,
   };
-
-  return (
-    <BalanceContext.Provider value={state}>{children}</BalanceContext.Provider>
-  );
 };

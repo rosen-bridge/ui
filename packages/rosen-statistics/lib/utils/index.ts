@@ -1,10 +1,10 @@
 export { calculateBridgeData } from './calculateBridgeData';
-export { calculateWatcherCounts } from './calculateWatcherCounts ';
+export { calculateWatcherCounts } from './calculateWatcherCounts';
 export {
   getDecimalString,
   getNonDecimalString,
   getNumberOfDecimals,
-  scientificToString,
   multiplyByPowerOfTen,
+  scientificToString,
 } from './decimals';
 export { getRegisterValue } from './getRegisterValue';

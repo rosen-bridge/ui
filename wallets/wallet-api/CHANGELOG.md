@@ -1,5 +1,13 @@
 # @rosen-ui/wallet-api
 
+## 3.2.1
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-bridge/tokens@6.0.2
+  - @rosen-network/base@0.5.4
+
 ## 3.2.0
 
 ### Minor Changes

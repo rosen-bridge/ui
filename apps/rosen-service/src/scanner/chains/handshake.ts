@@ -1,12 +1,9 @@
 import { DefaultLogger } from '@rosen-bridge/abstract-logger';
-import {
-  FailoverStrategy,
-  NetworkConnectorManager,
-} from '@rosen-bridge/abstract-scanner';
+import { FailoverStrategy, NetworkConnectorManager } from '@rosen-bridge/abstract-scanner';
 import {
   HandshakeRpcNetwork,
   HandshakeRpcScanner,
-  HandshakeRpcTransaction,
+  type HandshakeRpcTransaction,
 } from '@rosen-bridge/handshake-scanner';
 
 import config from '../../configs';
@@ -27,17 +24,13 @@ const scannerLogger = logger.child(HANDSHAKE_SCANNER_LOGGER_NAME);
  * Creates and configures a NetworkConnectorManager instance for handshake scanner
  */
 export const createHandshakeNetworkConnectorManager = () => {
-  const networkConnectorManager =
-    new NetworkConnectorManager<HandshakeRpcTransaction>(
-      new FailoverStrategy(),
-      scannerLogger,
-    );
+  const networkConnectorManager = new NetworkConnectorManager<HandshakeRpcTransaction>(
+    new FailoverStrategy(),
+    scannerLogger,
+  );
 
   networkConnectorManager.addConnector(
-    new HandshakeRpcNetwork(
-      config.handshake.rpcUrl,
-      SCANNER_API_TIMEOUT * 1000,
-    ),
+    new HandshakeRpcNetwork(config.handshake.rpcUrl, SCANNER_API_TIMEOUT * 1000),
   );
 
   return networkConnectorManager;

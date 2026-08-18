@@ -1,0 +1,5 @@
+.RosenToolbar {
+  display: flex;
+  flex-direction: row;
+  gap: var(--rosen-spacing);
+}

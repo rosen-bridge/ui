@@ -1,0 +1,9 @@
+.RosenCarousel {
+  overflow: hidden;
+}
+
+.RosenCarousel-container {
+  display: flex;
+  touch-action: pan-y pinch-zoom;
+  gap: 1rem;
+}

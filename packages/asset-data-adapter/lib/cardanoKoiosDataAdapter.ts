@@ -1,10 +1,10 @@
-import { AbstractLogger } from '@rosen-bridge/abstract-logger';
-import { RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
+import type { AbstractLogger } from '@rosen-bridge/abstract-logger';
+import type { RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
 import cardanoKoiosClientFactory from '@rosen-clients/cardano-koios';
 import { NETWORKS } from '@rosen-ui/constants';
 
 import { AbstractDataAdapter } from './abstracts';
-import { CardanoKoiosDataAdapterAuthParams, ChainAssetBalance } from './types';
+import type { CardanoKoiosDataAdapterAuthParams, ChainAssetBalance } from './types';
 
 export class CardanoKoiosDataAdapter extends AbstractDataAdapter {
   chain = NETWORKS.cardano.key;
@@ -50,9 +50,7 @@ export class CardanoKoiosDataAdapter extends AbstractDataAdapter {
    * @returns {Promise<ChainAssetBalance[]>} list of asset balances for the address
    */
   getAddressAssets = async (address: string): Promise<ChainAssetBalance[]> => {
-    this.logger.info(
-      `Collecting assets data from ${this.chain} and ${address} address started.`,
-    );
+    this.logger.info(`Collecting assets data from ${this.chain} and ${address} address started.`);
     const assetBalances: ChainAssetBalance[] = [];
     const nativeBalance = await this.getNativeAssetBalance(address);
     if (nativeBalance) assetBalances.push(nativeBalance);
@@ -69,9 +67,7 @@ export class CardanoKoiosDataAdapter extends AbstractDataAdapter {
         balance: BigInt(asset.quantity),
       });
     });
-    this.logger.info(
-      `Collecting assets data from ${this.chain} and ${address} address done.`,
-    );
+    this.logger.info(`Collecting assets data from ${this.chain} and ${address} address done.`);
     return assetBalances;
   };
 
@@ -83,9 +79,7 @@ export class CardanoKoiosDataAdapter extends AbstractDataAdapter {
    */
   getRawTotalSupply = async (token: RosenChainToken) => {
     const assetSummary = await this.koiosApi.assetInfo({
-      _asset_list: [
-        [token.extra.policyId as string, token.extra.assetName as string],
-      ],
+      _asset_list: [[token.extra.policyId as string, token.extra.assetName as string]],
     });
     if (assetSummary.length && assetSummary[0].total_supply) {
       this.logger.debug(

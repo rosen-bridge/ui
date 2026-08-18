@@ -1,6 +1,6 @@
 import { DefaultLogger } from '@rosen-bridge/abstract-logger';
 import { HandshakeRpcObservationExtractor } from '@rosen-bridge/handshake-observation-extractor';
-import { HandshakeRpcScanner } from '@rosen-bridge/handshake-scanner';
+import type { HandshakeRpcScanner } from '@rosen-bridge/handshake-scanner';
 
 import config from '../../configs';
 import dataSource from '../../data-source';
@@ -13,9 +13,7 @@ const logger = DefaultLogger.getInstance().child(import.meta.url);
  * register an observation extractor for the provided scanner
  * @param scanner
  */
-export const registerHandshakeExtractor = async (
-  scanner: HandshakeRpcScanner,
-) => {
+export const registerHandshakeExtractor = async (scanner: HandshakeRpcScanner) => {
   try {
     const observationExtractor = new HandshakeRpcObservationExtractor(
       config.handshake.addresses.lock,

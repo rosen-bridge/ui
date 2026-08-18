@@ -1,9 +1,10 @@
-import { TokenMap } from '@rosen-bridge/tokens';
-import { NETWORKS } from '@rosen-ui/constants';
 import { beforeEach, describe, expect, it, vitest } from 'vitest';
 
+import { TokenMap } from '@rosen-bridge/tokens';
+import { NETWORKS } from '@rosen-ui/constants';
+
 import { AssetCalculator } from '../lib';
-import AbstractCalculator from '../lib/calculator/abstract-calculator';
+import type AbstractCalculator from '../lib/calculator/abstract-calculator';
 import { initDatabase } from './database/bridgedAsset/BridgedAssetModel.mock';
 import { bridgedAssets, lockedAssets, tokens } from './database/test-data';
 import { tokenMapData } from './test-data';
@@ -32,6 +33,10 @@ describe('AssetCalculator', () => {
         {
           addresses: ['hotAddr', 'coldAddr'],
           blockcypherUrl: 'blockcypherUrl',
+        },
+        {
+          addresses: ['hotAddr', 'coldAddr'],
+          explorerUrl: 'firoExplorerUrl',
         },
         { addresses: ['hotAddr', 'coldAddr'], rpcUrl: 'handshakeRpcUrl' },
         dataSource,
@@ -121,6 +126,10 @@ describe('AssetCalculator', () => {
           addresses: ['hotAddr', 'coldAddr'],
           blockcypherUrl: 'blockcypherUrl',
         },
+        {
+          addresses: ['hotAddr', 'coldAddr'],
+          explorerUrl: 'firoExplorerUrl',
+        },
         { addresses: ['hotAddr', 'coldAddr'], rpcUrl: 'handshakeRpcUrl' },
         dataSource,
       );
@@ -142,8 +151,7 @@ describe('AssetCalculator', () => {
       const calculator = {
         totalSupply: () => Promise.resolve(1000n),
         totalBalance: () => Promise.resolve(900n),
-        getLockedAmountsPerAddress: () =>
-          Promise.resolve([{ address: 'hotAddr', amount: 1000n }]),
+        getLockedAmountsPerAddress: () => Promise.resolve([{ address: 'hotAddr', amount: 1000n }]),
       } as unknown as AbstractCalculator;
       const map = new Map([[NETWORKS.ergo.key, calculator]]);
       assetCalculator['calculatorMap'] = map;
@@ -195,12 +203,12 @@ describe('AssetCalculator', () => {
         { addresses: ['Addr'], rpcUrl: 'rpcUrl' },
         { addresses: ['Addr'], rpcUrl: 'bnbRpcUrl' },
         { addresses: ['Addr'], blockcypherUrl: 'blockcypherUrl' },
-        { addresses: ['hotAddr', 'coldAddr'], rpcUrl: 'handshakeRpcUrl' },
+        { addresses: ['Addr'], explorerUrl: 'firoExplorerUrl' },
+        { addresses: ['Addr'], rpcUrl: 'handshakeRpcUrl' },
         dataSource,
       );
       assetCalculator['totalSupplyInit'] = true;
-      assetCalculator['calculateEmissionForChain'] = () =>
-        Promise.resolve(1000n);
+      assetCalculator['calculateEmissionForChain'] = () => Promise.resolve(1000n);
       assetCalculator['calculateLocked'] = () =>
         Promise.resolve([{ address: 'Addr', amount: 1000n }]);
       const upsertBridgedAssetSpy = vitest.spyOn(
@@ -211,36 +219,24 @@ describe('AssetCalculator', () => {
         assetCalculator['bridgedAssetModel'],
         'removeAssets',
       );
-      const upsertLockedAssetSpy = vitest.spyOn(
-        assetCalculator['lockedAssetModel'],
-        'upsertAsset',
-      );
+      const upsertLockedAssetSpy = vitest.spyOn(assetCalculator['lockedAssetModel'], 'upsertAsset');
       const removeLockedAssetSpy = vitest.spyOn(
         assetCalculator['lockedAssetModel'],
         'removeAssets',
       );
-      const insertTokenSpy = vitest.spyOn(
-        assetCalculator['tokenModel'],
-        'insertToken',
-      );
+      const insertTokenSpy = vitest.spyOn(assetCalculator['tokenModel'], 'insertToken');
 
       await assetCalculator.update();
       const allStoredBridgedAssets =
         await assetCalculator['bridgedAssetModel'].getAllStoredAssets();
-      const allStoredLockedAssets =
-        await assetCalculator['lockedAssetModel'].getAllStoredAssets();
-      const allStoredTokens =
-        await assetCalculator['tokenModel'].getAllStoredTokens();
+      const allStoredLockedAssets = await assetCalculator['lockedAssetModel'].getAllStoredAssets();
+      const allStoredTokens = await assetCalculator['tokenModel'].getAllStoredTokens();
       expect(upsertBridgedAssetSpy).to.have.toBeCalledTimes(3);
       expect(upsertLockedAssetSpy).to.have.toBeCalledTimes(3);
       expect(removeBridgedAssetSpy).to.have.toBeCalledWith([]);
       expect(removeLockedAssetSpy).to.have.toBeCalledWith([]);
       expect(insertTokenSpy).toBeCalledTimes(6);
-      expect(
-        allStoredBridgedAssets.sort((a, b) =>
-          a.tokenId.localeCompare(b.tokenId),
-        ),
-      ).toEqual(
+      expect(allStoredBridgedAssets.sort((a, b) => a.tokenId.localeCompare(b.tokenId))).toEqual(
         [
           {
             tokenId: tokenMapData[0].ergo.tokenId,
@@ -256,11 +252,7 @@ describe('AssetCalculator', () => {
           },
         ].sort((a, b) => a.tokenId.localeCompare(b.tokenId)),
       );
-      expect(
-        allStoredLockedAssets.sort((a, b) =>
-          a.tokenId.localeCompare(b.tokenId),
-        ),
-      ).toEqual(
+      expect(allStoredLockedAssets.sort((a, b) => a.tokenId.localeCompare(b.tokenId))).toEqual(
         [
           { tokenId: tokenMapData[0].ergo.tokenId, address: 'Addr' },
           { tokenId: tokenMapData[1].ergo.tokenId, address: 'Addr' },
@@ -315,19 +307,15 @@ describe('AssetCalculator', () => {
         { addresses: ['Addr'], rpcUrl: 'rpcUrl' },
         { addresses: ['Addr'], rpcUrl: 'bnbRpcUrl' },
         { addresses: ['Addr'], blockcypherUrl: 'blockcypherUrl' },
-        { addresses: ['hotAddr', 'coldAddr'], rpcUrl: 'handshakeRpcUrl' },
+        { addresses: ['Addr'], explorerUrl: 'firoExplorerUrl' },
+        { addresses: ['Addr'], rpcUrl: 'handshakeRpcUrl' },
         dataSource,
       );
       assetCalculator['totalSupplyInit'] = true;
       await assetCalculator['tokenModel']['tokenRepository'].insert(tokens);
-      await assetCalculator['bridgedAssetModel'][
-        'bridgedAssetRepository'
-      ].insert(bridgedAssets);
-      await assetCalculator['lockedAssetModel']['lockedAssetRepository'].insert(
-        lockedAssets,
-      );
-      assetCalculator['calculateEmissionForChain'] = () =>
-        Promise.resolve(1000n);
+      await assetCalculator['bridgedAssetModel']['bridgedAssetRepository'].insert(bridgedAssets);
+      await assetCalculator['lockedAssetModel']['lockedAssetRepository'].insert(lockedAssets);
+      assetCalculator['calculateEmissionForChain'] = () => Promise.resolve(1000n);
       assetCalculator['calculateLocked'] = () =>
         Promise.resolve([{ address: 'Addr', amount: 1000n }]);
       const updateBridgedAssetSpy = vitest.spyOn(
@@ -338,10 +326,7 @@ describe('AssetCalculator', () => {
         assetCalculator['bridgedAssetModel'],
         'removeAssets',
       );
-      const updateLockedAssetSpy = vitest.spyOn(
-        assetCalculator['lockedAssetModel'],
-        'upsertAsset',
-      );
+      const updateLockedAssetSpy = vitest.spyOn(assetCalculator['lockedAssetModel'], 'upsertAsset');
       const removeLockedAssetsSpy = vitest.spyOn(
         assetCalculator['lockedAssetModel'],
         'removeAssets',
@@ -350,8 +335,7 @@ describe('AssetCalculator', () => {
       await assetCalculator.update();
       const allStoredBridgedAssets =
         await assetCalculator['bridgedAssetModel'].getAllStoredAssets();
-      const allStoredLockedAssets =
-        await assetCalculator['lockedAssetModel'].getAllStoredAssets();
+      const allStoredLockedAssets = await assetCalculator['lockedAssetModel'].getAllStoredAssets();
       expect(updateBridgedAssetSpy).to.have.toBeCalledTimes(3);
       expect(updateLockedAssetSpy).to.have.toBeCalledTimes(3);
       expect(removeBridgedAssetsSpy).to.have.toBeCalledWith(
@@ -368,11 +352,7 @@ describe('AssetCalculator', () => {
           }))
           .sort((a, b) => a.tokenId.localeCompare(b.tokenId)),
       );
-      expect(
-        allStoredBridgedAssets.sort((a, b) =>
-          a.tokenId.localeCompare(b.tokenId),
-        ),
-      ).toEqual(
+      expect(allStoredBridgedAssets.sort((a, b) => a.tokenId.localeCompare(b.tokenId))).toEqual(
         [
           {
             tokenId: tokenMapData[0].ergo.tokenId,
@@ -388,11 +368,7 @@ describe('AssetCalculator', () => {
           },
         ].sort((a, b) => a.tokenId.localeCompare(b.tokenId)),
       );
-      expect(
-        allStoredLockedAssets.sort((a, b) =>
-          a.tokenId.localeCompare(b.tokenId),
-        ),
-      ).toEqual(
+      expect(allStoredLockedAssets.sort((a, b) => a.tokenId.localeCompare(b.tokenId))).toEqual(
         [
           { tokenId: tokenMapData[0].ergo.tokenId, address: 'Addr' },
           { tokenId: tokenMapData[1].ergo.tokenId, address: 'Addr' },
@@ -425,6 +401,10 @@ describe('AssetCalculator', () => {
         {
           addresses: ['hotAddr', 'coldAddr'],
           blockcypherUrl: 'blockcypherUrl',
+        },
+        {
+          addresses: ['hotAddr', 'coldAddr'],
+          explorerUrl: 'firoExplorerUrl',
         },
         { addresses: ['hotAddr', 'coldAddr'], rpcUrl: 'handshakeRpcUrl' },
         dataSource,
@@ -468,12 +448,8 @@ describe('AssetCalculator', () => {
       // Cardano wrapped tokens (token1 and token2) should be stored
       const cardanoToken1Key = `${NETWORKS.cardano.key}-${tokenMapData[0].cardano.tokenId}`;
       const cardanoToken2Key = `${NETWORKS.cardano.key}-${tokenMapData[1].cardano.tokenId}`;
-      expect(assetCalculator['totalSupplyMap'].get(cardanoToken1Key)).toBe(
-        2000n,
-      );
-      expect(assetCalculator['totalSupplyMap'].get(cardanoToken2Key)).toBe(
-        2000n,
-      );
+      expect(assetCalculator['totalSupplyMap'].get(cardanoToken1Key)).toBe(2000n);
+      expect(assetCalculator['totalSupplyMap'].get(cardanoToken2Key)).toBe(2000n);
 
       // Verify totalSupply was called for wrapped tokens
       expect(ergoCalculator.totalSupply).toHaveBeenCalled();
@@ -507,12 +483,8 @@ describe('AssetCalculator', () => {
       // Native tokens (token1 and token2 on ergo) should not be in the map
       const ergoToken1Key = `${NETWORKS.ergo.key}-${tokenMapData[0].ergo.tokenId}`;
       const ergoToken2Key = `${NETWORKS.ergo.key}-${tokenMapData[1].ergo.tokenId}`;
-      expect(
-        assetCalculator['totalSupplyMap'].get(ergoToken1Key),
-      ).toBeUndefined();
-      expect(
-        assetCalculator['totalSupplyMap'].get(ergoToken2Key),
-      ).toBeUndefined();
+      expect(assetCalculator['totalSupplyMap'].get(ergoToken1Key)).toBeUndefined();
+      expect(assetCalculator['totalSupplyMap'].get(ergoToken2Key)).toBeUndefined();
     });
   });
 });

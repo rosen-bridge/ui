@@ -2,31 +2,23 @@
 
 import { useCallback, useState } from 'react';
 
-import {
-  Grid,
-  HealthParamCard,
-  HealthParamCardSkeleton,
-  useSnackbar,
-} from '@rosen-bridge/ui-kit';
-import { HEALTH_DATA_REFRESH_INTERVAL } from '@rosen-ui/constants';
-import { fetcher } from '@rosen-ui/swr-helpers';
-import { HealthParamInfo } from '@rosen-ui/types';
 import useSWR from 'swr';
 
-import { ApiHealthStatusResponse } from '@/types/api';
+import { GridContainer, HealthParamCard, useResponsive, useToast } from '@rosen-bridge/ui-kit';
+import { HEALTH_DATA_REFRESH_INTERVAL } from '@rosen-ui/constants';
+import { fetcher } from '@rosen-ui/swr-helpers';
+import type { HealthParamInfo } from '@rosen-ui/types';
+
+import type { ApiHealthStatusResponse } from '@/types/api';
 
 const Health = () => {
   const [checking, setChecking] = useState<string[]>([]);
 
-  const { data, isLoading, mutate } = useSWR<ApiHealthStatusResponse>(
-    '/health/status',
-    fetcher,
-    {
-      refreshInterval: HEALTH_DATA_REFRESH_INTERVAL,
-    },
-  );
+  const { data, isLoading, mutate } = useSWR<ApiHealthStatusResponse>('/health/status', fetcher, {
+    refreshInterval: HEALTH_DATA_REFRESH_INTERVAL,
+  });
 
-  const { openSnackbar } = useSnackbar();
+  const toast = useToast();
 
   /**
    * revalidate info of health param with id `paramId`
@@ -50,59 +42,60 @@ const Health = () => {
 
         if (
           currentHealthParamInfo.lastCheck === newHealthParamInfo.lastCheck &&
-          currentHealthParamInfo.lastTrialErrorTime ===
-            newHealthParamInfo.lastTrialErrorTime
+          currentHealthParamInfo.lastTrialErrorTime === newHealthParamInfo.lastTrialErrorTime
         ) {
           return void setTimeout(trying, 1000);
         }
 
-        setChecking((checking) => checking.filter((item) => item != paramId));
+        setChecking((checking) => checking.filter((item) => item !== paramId));
 
-        const healthParamIndex = data!.findIndex(
-          (healthParam) => healthParam.id === paramId,
-        );
-        openSnackbar(currentHealthParamInfo.title + ' status updated', 'info');
+        if (!data) return;
+
+        const healthParamIndex = data.findIndex((healthParam) => healthParam.id === paramId);
+
+        toast.add({
+          type: 'info',
+          description: `${currentHealthParamInfo.title} status updated`,
+        });
 
         mutate([
-          ...data!.slice(0, healthParamIndex),
+          ...data.slice(0, healthParamIndex),
           newHealthParamInfo,
-          ...data!.slice(healthParamIndex + 1),
+          ...data.slice(healthParamIndex + 1),
         ]);
       };
 
       await trying();
     },
-    [data, mutate, openSnackbar],
+    [data, mutate, toast.add],
   );
 
-  return isLoading ? (
-    <Grid container spacing={3}>
-      <Grid size={{ mobile: 12, tablet: 6, laptop: 4 }} key={0}>
-        <HealthParamCardSkeleton />
-      </Grid>
-      <Grid size={{ mobile: 12, tablet: 6, laptop: 4 }} key={1}>
-        <HealthParamCardSkeleton />
-      </Grid>
-      <Grid size={{ mobile: 12, tablet: 6, laptop: 4 }} key={2}>
-        <HealthParamCardSkeleton />
-      </Grid>
-    </Grid>
-  ) : (
-    data && (
-      <Grid container spacing={3}>
-        {data
-          .sort((a, b) => (a.id.toLowerCase() > b.id.toLowerCase() ? 1 : -1))
-          .map((item) => (
-            <Grid size={{ mobile: 12, tablet: 6, laptop: 4 }} key={item.id}>
-              <HealthParamCard
-                {...item}
-                checking={checking.includes(item.id)}
-                handleCheckNow={() => handleCheckNow(item.id)}
-              />
-            </Grid>
-          ))}
-      </Grid>
-    )
+  const gridContainerMinWidth = useResponsive({
+    mobile: '100%',
+    tablet: '35%',
+    laptop: '25%',
+  });
+
+  return (
+    <GridContainer gap={3} minWidth={gridContainerMinWidth}>
+      {isLoading && (
+        <>
+          <HealthParamCard loading />
+          <HealthParamCard loading />
+          <HealthParamCard loading />
+        </>
+      )}
+      {data
+        ?.sort((a, b) => (a.id.toLowerCase() > b.id.toLowerCase() ? 1 : -1))
+        ?.map((item) => (
+          <HealthParamCard
+            key={item.id}
+            value={item}
+            checking={checking.includes(item.id)}
+            handleCheckNow={() => handleCheckNow(item.id)}
+          />
+        ))}
+    </GridContainer>
   );
 };
 

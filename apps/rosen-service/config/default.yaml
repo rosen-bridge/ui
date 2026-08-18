@@ -1,6 +1,11 @@
 logs:
   - type: 'console'
     level: 'info'
+  - type: 'file'
+    level: 'info'
+    path: './logs/'
+    maxSize: '20m'
+    maxFiles: '14d'
 ergo:
   addresses:
     lock:
@@ -70,6 +75,21 @@ doge:
     # - url:
     #   username:
     #   password:
+firo:
+  addresses:
+    lock:
+    eventTrigger:
+    permit:
+    fraud:
+    commitment:
+  tokens:
+    rwt:
+  initialHeight:
+  explorerUrl: https://explorer.firo.org
+  electrumx:
+    host:
+    port:
+    reconnectDelay:
 handshake:
   addresses:
     lock:
@@ -119,6 +139,7 @@ calculator:
     handshake: []
     ethereum: []
     binance: []
+    firo: []
 healthCheck:
   ergoScannerWarnDiff: 3
   ergoScannerCriticalDiff: 5
@@ -132,6 +153,8 @@ healthCheck:
   ethereumScannerCriticalDiff: 5
   binanceScannerWarnDiff: 3
   binanceScannerCriticalDiff: 5
+  firoScannerWarnDiff: 3
+  firoScannerCriticalDiff: 5
   handshakeScannerWarnDiff: 3
   handshakeScannerCriticalDiff: 5
   interval: 60 # health check update interval (in seconds)

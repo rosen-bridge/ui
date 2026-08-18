@@ -1,66 +1,4 @@
-import {
-  AggregatedStatusChangedEntity,
-  GuardStatusChangedEntity,
-  AggregatedStatusEntity,
-  Utils,
-  Threshold,
-  AggregateEventStatus,
-  AggregateTxStatus,
-} from '@rosen-ui/public-status';
-
-/**
- * a response type used in api
- */
-export type AggregatedStatusChangedDTO = Omit<
-  AggregatedStatusChangedEntity,
-  'id' | 'eventId'
->;
-
-/**
- * helper function to map AggregatedStatusChangedEntity to its DTO
- * @param record
- * @returns AggregatedStatusChangedDTO
- */
-export const aggregatedStatusChangedToDTO = (
-  record: AggregatedStatusChangedEntity,
-): AggregatedStatusChangedDTO => {
-  return Utils.cloneOmitting(record, ['id', 'eventId']);
-};
-
-/**
- * a response type used in api
- */
-export type AggregatedStatusDTO = Omit<AggregatedStatusEntity, 'eventId'>;
-
-/**
- * helper function to map AggregatedStatusEntity to its DTO
- * @param record
- * @returns AggregatedStatusDTO
- */
-export const aggregatedStatusToDTO = (
-  record: AggregatedStatusEntity,
-): AggregatedStatusDTO => {
-  return Utils.cloneOmitting(record, ['eventId']);
-};
-
-/**
- * a response type used in api
- */
-export type GuardStatusChangedDTO = Omit<
-  GuardStatusChangedEntity,
-  'id' | 'eventId'
->;
-
-/**
- * helper function to map GuardStatusChangedEntity to its DTO
- * @param record
- * @returns GuardStatusChangedDTO
- */
-export const guardStatusChangedToDTO = (
-  record: GuardStatusChangedEntity,
-): GuardStatusChangedDTO => {
-  return Utils.cloneOmitting(record, ['id', 'eventId']);
-};
+import { AggregateEventStatus, AggregateTxStatus, type Threshold } from '@rosen-ui/public-status';
 
 /**
  * reads the environment variable with the given key and converts it to a Threshold type
@@ -69,9 +7,7 @@ export const guardStatusChangedToDTO = (
  * @returns the parsed Threshold value or undefined if the environment variable is not defined
  * @throws will throw an error if the JSON is invalid, or if the parsed value does not match the Threshold type
  */
-export const getThresholdFromEnv = <T>(
-  envKey: string,
-): Threshold<T>[] | undefined => {
+export const getThresholdFromEnv = <T>(envKey: string): Threshold<T>[] | undefined => {
   const envValue = process.env[envKey];
 
   if (!envValue) {
@@ -82,9 +18,7 @@ export const getThresholdFromEnv = <T>(
   try {
     parsed = JSON.parse(envValue);
   } catch (err) {
-    throw new Error(
-      `Failed to parse JSON from environment variable ${envKey}: ${err}`,
-    );
+    throw new Error(`Failed to parse JSON from environment variable ${envKey}: ${err}`);
   }
 
   // Validate that `parsed` matches the Threshold type.
@@ -118,30 +52,93 @@ const getNumber = (key: string): number | undefined => {
   return process.env[key] ? parseFloat(process.env[key]!) : undefined;
 };
 
+const thresholdsMapping = {
+  requiredParticipants: getNumber('REQUIRED_PARTICIPANTS') ?? 6,
+  minimumParticipants: getNumber('MINIMUM_PARTICIPANTS') ?? 1,
+  vetoNumber: getNumber('VETO_NUMBER') ?? 5,
+};
+
+const customEventThresholds = getThresholdFromEnv<AggregateEventStatus>('EVENT_STATUS_THRESHOLDS');
+const customTxThresholds = getThresholdFromEnv<AggregateTxStatus>('TX_STATUS_THRESHOLDS');
+
+const customEventThresholdMap = new Map(customEventThresholds?.map((t) => [t.key, t.count]) ?? []);
+const customTxThresholdMap = new Map(customTxThresholds?.map((t) => [t.key, t.count]) ?? []);
+
+const defaultEventStatusMapping: Threshold<AggregateEventStatus>[] = [
+  {
+    key: AggregateEventStatus.finished,
+    count: thresholdsMapping.minimumParticipants,
+  },
+  {
+    key: AggregateEventStatus.inReward,
+    count: thresholdsMapping.requiredParticipants,
+  },
+  {
+    key: AggregateEventStatus.pendingReward,
+    count: thresholdsMapping.minimumParticipants,
+  },
+  {
+    key: AggregateEventStatus.inPayment,
+    count: thresholdsMapping.requiredParticipants,
+  },
+  { key: AggregateEventStatus.rejected, count: thresholdsMapping.vetoNumber },
+  { key: AggregateEventStatus.timeout, count: thresholdsMapping.vetoNumber },
+  {
+    key: AggregateEventStatus.reachedLimit,
+    count: thresholdsMapping.vetoNumber,
+  },
+  {
+    key: AggregateEventStatus.paymentWaiting,
+    count: thresholdsMapping.vetoNumber,
+  },
+  {
+    key: AggregateEventStatus.rewardWaiting,
+    count: thresholdsMapping.vetoNumber,
+  },
+  {
+    key: AggregateEventStatus.pendingPayment,
+    count: thresholdsMapping.minimumParticipants,
+  },
+];
+
+const defaultTxStatusMapping: Threshold<AggregateTxStatus>[] = [
+  {
+    key: AggregateTxStatus.completed,
+    count: thresholdsMapping.minimumParticipants,
+  },
+  { key: AggregateTxStatus.invalid, count: thresholdsMapping.vetoNumber },
+  {
+    key: AggregateTxStatus.sent,
+    count: thresholdsMapping.requiredParticipants,
+  },
+  {
+    key: AggregateTxStatus.signed,
+    count: thresholdsMapping.minimumParticipants,
+  },
+  {
+    key: AggregateTxStatus.inSign,
+    count: thresholdsMapping.requiredParticipants,
+  },
+];
+
+const eventStatusThresholds = defaultEventStatusMapping.map((status) => {
+  const customCount = customEventThresholdMap.get(status.key);
+  return { key: status.key, count: customCount ?? status.count };
+});
+
+const txStatusThresholds = defaultTxStatusMapping.map((status) => {
+  const customCount = customTxThresholdMap.get(status.key);
+  return { key: status.key, count: customCount ?? status.count };
+});
+
 export const publicStatusConfigs = {
   timeoutThresholdSeconds: getNumber('TIMEOUT_THRESHOLD_SECONDS') ?? 30,
-  allowedPks: (process.env['ALLOWED_PKS'] ?? '').split(','),
-  eventStatusThresholds: getThresholdFromEnv<AggregateEventStatus>(
-    'EVENT_STATUS_THRESHOLDS',
-  ) ?? [
-    { key: AggregateEventStatus.finished, count: 6 },
-    { key: AggregateEventStatus.inReward, count: 3 },
-    { key: AggregateEventStatus.pendingReward, count: 3 },
-    { key: AggregateEventStatus.inPayment, count: 6 },
-    { key: AggregateEventStatus.rejected, count: 5 },
-    { key: AggregateEventStatus.timeout, count: 5 },
-    { key: AggregateEventStatus.reachedLimit, count: 5 },
-    { key: AggregateEventStatus.paymentWaiting, count: 5 },
-    { key: AggregateEventStatus.rewardWaiting, count: 5 },
-    { key: AggregateEventStatus.pendingPayment, count: 3 },
-  ],
-  txStatusThresholds: getThresholdFromEnv<AggregateTxStatus>(
-    'TX_STATUS_THRESHOLDS',
-  ) ?? [
-    { key: AggregateTxStatus.completed, count: 6 },
-    { key: AggregateTxStatus.invalid, count: 6 },
-    { key: AggregateTxStatus.sent, count: 6 },
-    { key: AggregateTxStatus.signed, count: 3 },
-    { key: AggregateTxStatus.inSign, count: 6 },
-  ],
+  allowedPks: (
+    JSON.parse(process.env.NEXT_PUBLIC_ALLOWED_PKS ?? '[]') as Array<{
+      key: string;
+      label: string;
+    }>
+  ).map((guard) => guard.key),
+  eventStatusThresholds,
+  txStatusThresholds,
 };

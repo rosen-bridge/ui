@@ -2,13 +2,13 @@
 
 import { useCallback, useMemo } from 'react';
 
-import { EnhancedTable, Grid } from '@rosen-bridge/ui-kit';
-import { Network } from '@rosen-ui/types';
+import { EnhancedTable } from '@rosen-bridge/ui-kit';
+import type { Network } from '@rosen-ui/types';
 
 import { useBalance } from '@/hooks';
-import { GuardTokenInfo } from '@/types/api';
+import type { GuardTokenInfo } from '@/types/api';
 
-import { MobileRow, TabletRow, mobileHeader, tabletHeader } from './TableRow';
+import { MobileRow, mobileHeader, TabletRow, tabletHeader } from './TableRow';
 import { TableSkeleton } from './TableSkeleton';
 
 const Assets = () => {
@@ -22,10 +22,7 @@ const Assets = () => {
       ...data.hot.items.map((item) => ({ ...item, type: 'hot' })),
     ];
 
-    const all = Object.groupBy(
-      items,
-      (item) => item.chain + ':' + item.balance.tokenId,
-    );
+    const all = Object.groupBy(items, (item) => `${item.chain}:${item.balance.tokenId}`);
 
     return Object.values(all)
       .filter((items) => !!items)
@@ -75,19 +72,15 @@ const Assets = () => {
   );
 
   return isLoading ? (
-    <Grid>
-      <TableSkeleton numberOfItems={25} />
-    </Grid>
+    <TableSkeleton numberOfItems={25} />
   ) : (
     data && (
-      <Grid container>
-        <EnhancedTable
-          data={items}
-          responsiveHead={tableHeaderProps}
-          responsiveRenderRow={tableRenderRowProps}
-          paginated={false}
-        />
-      </Grid>
+      <EnhancedTable
+        data={items}
+        responsiveHead={tableHeaderProps}
+        responsiveRenderRow={tableRenderRowProps}
+        paginated={false}
+      />
     )
   );
 };

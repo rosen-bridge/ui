@@ -1,0 +1,24 @@
+import { Tabs } from '@base-ui/react/tabs';
+
+import { useConfig } from '@/hooks';
+import type { ElementBaseProps, OverridableType } from '@/types';
+
+import './styles.css';
+
+export interface TabsPanelOverrides {}
+
+export type TabsPanelOwnProps = {
+  value?: number | string;
+};
+
+export type TabsPanelBaseProps = ElementBaseProps<'div', TabsPanelOwnProps>;
+
+export type TabsPanelProps = OverridableType<TabsPanelBaseProps, TabsPanelOverrides, never>;
+
+export const TabsPanel = (props: TabsPanelProps) => {
+  const { value, ...rest } = useConfig('TabsPanel', props);
+
+  return <Tabs.Panel value={value} {...rest} />;
+};
+
+TabsPanel.displayName = 'TabsPanel';

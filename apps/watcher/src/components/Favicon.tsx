@@ -1,13 +1,15 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 import { upperFirst } from 'lodash-es';
 
-import { useIcon, useInfo } from '@/hooks';
+import { Icon, type IconProps } from '@rosen-bridge/ui-kit';
+
+import { useInfo } from '@/hooks';
 
 export const Favicon = () => {
-  const { data } = useInfo();
+  const ref = useRef<SVGSVGElement>(null);
 
-  const icon = useIcon('auto-reverse');
+  const { data } = useInfo();
 
   /**
    * TODO: In the next phase, refactor this React hook to utilize SSR and data fetching
@@ -20,18 +22,30 @@ export const Favicon = () => {
 
     document.title = `[${upperFirst(data.network)}] Watcher`;
 
-    if (!icon) return;
+    if (!ref.current?.outerHTML) return;
+
+    const blob = new Blob([ref.current.outerHTML], { type: 'image/svg+xml' });
+
+    const url = URL.createObjectURL(blob);
 
     const link = document.createElement('link');
+
     link.rel = 'icon';
-    link.href = icon;
+    link.href = url;
 
     document.head.appendChild(link);
 
     return () => {
+      URL.revokeObjectURL(url);
       document.head.removeChild(link);
     };
-  }, [data, icon]);
+  }, [data]);
 
-  return null;
+  return (
+    <Icon
+      ref={ref}
+      name={upperFirst(data?.network || 'ExclamationTriangle') as IconProps['name']}
+      style={{ display: 'contents' }}
+    />
+  );
 };

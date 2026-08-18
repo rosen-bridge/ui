@@ -1,0 +1,20 @@
+import { useConfig } from '@/hooks';
+import type { ElementBaseProps, OverridableType } from '@/types';
+
+import './styles.css';
+
+export interface ToolbarOverrides {}
+
+export type ToolbarOwnProps = {};
+
+export type ToolbarBaseProps = ElementBaseProps<'div', ToolbarOwnProps>;
+
+export type ToolbarProps = OverridableType<ToolbarBaseProps, ToolbarOverrides, never>;
+
+export const Toolbar = (props: ToolbarProps) => {
+  const { ...rest } = useConfig('Toolbar', props);
+
+  return <div {...rest} />;
+};
+
+Toolbar.displayName = 'Toolbar';

@@ -1,10 +1,15 @@
-import { NETWORKS_KEYS } from '@rosen-ui/constants';
-
-import { configs } from '../configs';
-
-export type ChainChoices = (typeof NETWORKS_KEYS)[number];
+import type { configs } from '../configs';
+import {
+  BINANCE_BLOCK_TIME,
+  BITCOIN_BLOCK_TIME,
+  CARDANO_BLOCK_TIME,
+  DOGE_BLOCK_TIME,
+  ERGO_BLOCK_TIME,
+  ETHEREUM_BLOCK_TIME,
+} from '../constants';
 
 export type ChainsKeys = keyof (typeof configs)['chains'];
+export type ChainChoices = ChainsKeys;
 export type ChainsWithScanner = Exclude<ChainsKeys, 'bitcoin-runes'>;
 
 export interface ChainConfigs {
@@ -30,4 +35,13 @@ export type AllChainsConfigs = {
   };
 } & {
   [K in ChainChoices]: ChainConfigs;
+};
+
+export const BLOCK_TIMES: Record<ChainsWithScanner, number> = {
+  ergo: ERGO_BLOCK_TIME,
+  cardano: CARDANO_BLOCK_TIME,
+  bitcoin: BITCOIN_BLOCK_TIME,
+  doge: DOGE_BLOCK_TIME,
+  ethereum: ETHEREUM_BLOCK_TIME,
+  binance: BINANCE_BLOCK_TIME,
 };

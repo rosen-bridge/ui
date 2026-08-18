@@ -1,5 +1,6 @@
-import { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
-import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+
+import type { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
 
 import { MetricAction } from '../../lib/actions';
 import { METRIC_KEYS } from '../../lib/constants';
@@ -120,9 +121,7 @@ describe('MetricAction', () => {
         updatedAt: 1_000,
       });
 
-      const result = await action.getMetricByKey(
-        METRIC_KEYS.NUMBER_OF_NETWORKS,
-      );
+      const result = await action.getMetricByKey(METRIC_KEYS.NUMBER_OF_NETWORKS);
 
       expect(result).not.toBeNull();
       expect(result?.value).toBe('5');
@@ -137,9 +136,7 @@ describe('MetricAction', () => {
      * - return null
      */
     it('should return null when key does not exist', async () => {
-      const result = await action.getMetricByKey(
-        METRIC_KEYS.NUMBER_OF_NETWORKS,
-      );
+      const result = await action.getMetricByKey(METRIC_KEYS.NUMBER_OF_NETWORKS);
 
       expect(result).toBeNull();
     });

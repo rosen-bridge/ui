@@ -1,10 +1,10 @@
 'use client';
 
 import { Amount, Identifier, Stack, Typography } from '@rosen-bridge/ui-kit';
-import { Network as NetworkType } from '@rosen-ui/types';
+import type { Network as NetworkType } from '@rosen-ui/types';
 import { getAddressUrl } from '@rosen-ui/utils';
 
-import { TokenInfoWithAddress } from '@/types/api';
+import type { TokenInfoWithAddress } from '@/types/api';
 
 export type ItemAddressProps = {
   loading?: boolean;
@@ -22,7 +22,7 @@ export const ItemAddress = ({ loading, state, value }: ItemAddressProps) => {
         style={{ fontSize: '1.5rem', width: '100%' }}
       >
         <Typography
-          color={`${state === 'hot' ? 'secondary.dark' : 'tertiary.dark'}`}
+          color={`${state === 'hot' ? 'secondary-dark' : 'tertiary-dark'}`}
           component="div"
           fontWeight="700"
           fontSize="1.5rem"

@@ -1,13 +1,9 @@
 import { Bitcoin as BitcoinIcon } from '@rosen-bridge/icons';
-import { Network, NetworkConfig } from '@rosen-network/base';
+import type { Network, NetworkConfig } from '@rosen-network/base';
 import { NETWORKS } from '@rosen-ui/constants';
 
 import type { generateUnsignedTx } from './generateUnsignedTx';
-import type {
-  generateOpReturnData,
-  getAddressBalance,
-  submitTransaction,
-} from './utils';
+import type { generateOpReturnData, getAddressBalance, submitTransaction } from './utils';
 
 type BitcoinNetworkConfig = NetworkConfig & {
   generateOpReturnData: typeof generateOpReturnData;
@@ -36,21 +32,15 @@ export class BitcoinNetwork implements Network {
     return this.config.calculateFee(...args);
   };
 
-  public generateOpReturnData: BitcoinNetworkConfig['generateOpReturnData'] = (
-    ...args
-  ) => {
+  public generateOpReturnData: BitcoinNetworkConfig['generateOpReturnData'] = (...args) => {
     return this.config.generateOpReturnData(...args);
   };
 
-  public generateUnsignedTx: BitcoinNetworkConfig['generateUnsignedTx'] = (
-    ...args
-  ) => {
+  public generateUnsignedTx: BitcoinNetworkConfig['generateUnsignedTx'] = (...args) => {
     return this.config.generateUnsignedTx(...args);
   };
 
-  public getAddressBalance: BitcoinNetworkConfig['getAddressBalance'] = (
-    ...args
-  ) => {
+  public getAddressBalance: BitcoinNetworkConfig['getAddressBalance'] = (...args) => {
     return this.config.getAddressBalance(...args);
   };
 
@@ -62,9 +52,7 @@ export class BitcoinNetwork implements Network {
     return this.config.getMinTransfer(...args);
   };
 
-  public submitTransaction: BitcoinNetworkConfig['submitTransaction'] = (
-    ...args
-  ) => {
+  public submitTransaction: BitcoinNetworkConfig['submitTransaction'] = (...args) => {
     return this.config.submitTransaction(...args);
   };
 

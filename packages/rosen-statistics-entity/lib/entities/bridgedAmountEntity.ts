@@ -1,9 +1,4 @@
-import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  Unique,
-} from '@rosen-bridge/extended-typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, Unique } from '@rosen-bridge/extended-typeorm';
 
 @Unique(['fromChain', 'day', 'month', 'year'])
 @Entity('bridged_amount_entity')

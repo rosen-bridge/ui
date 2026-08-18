@@ -1,5 +1,13 @@
 # @rosen-network/base
 
+## 0.5.4
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-bridge/address-codec@2.1.0
+  - @rosen-bridge/extended-minimum-fee@0.1.1
+
 ## 0.5.3
 
 ### Patch Changes

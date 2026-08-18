@@ -1,4 +1,6 @@
-import { PropsWithChildren, Suspense } from 'react';
+import { type PropsWithChildren, Suspense } from 'react';
+
+import '@rosen-bridge/ui-kit/style.css';
 
 import { App } from './App';
 

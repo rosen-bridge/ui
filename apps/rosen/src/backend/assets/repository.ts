@@ -1,13 +1,8 @@
-import {
-  Filters,
-  filtersToTypeorm,
-} from '@rosen-bridge/ui-kit/dist/components/common/smartSearch/server';
-import {
-  BridgedAssetEntity,
-  LockedAssetEntity,
-  TokenEntity,
-} from '@rosen-ui/asset-calculator';
-import { Network } from '@rosen-ui/types';
+import type { Filter } from '@rosen-bridge/query-params';
+import { BridgedAssetEntity, LockedAssetEntity, TokenEntity } from '@rosen-ui/asset-calculator';
+import type { Network } from '@rosen-ui/types';
+
+import { filtersToTypeorm } from '@/filters';
 
 import { dataSource } from '../dataSource';
 import '../initialize-datasource-if-needed';
@@ -45,19 +40,16 @@ export const getAsset = async (id: string) => {
     throw new ReferenceError(`Token with id [${id}] not found`);
   }
 
-  const bridged: Pick<
-    BridgedAssetEntity,
-    'amount' | 'chain' | 'bridgedTokenId'
-  >[] = await bridgedAssetRepository.find({
-    where: { tokenId: id },
-    select: ['amount', 'chain', 'bridgedTokenId'],
-  });
-
-  const locked: Pick<LockedAssetEntity, 'amount' | 'address'>[] =
-    await lockedAssetRepository.find({
+  const bridged: Pick<BridgedAssetEntity, 'amount' | 'chain' | 'bridgedTokenId'>[] =
+    await bridgedAssetRepository.find({
       where: { tokenId: id },
-      select: ['amount', 'address'],
+      select: ['amount', 'chain', 'bridgedTokenId'],
     });
+
+  const locked: Pick<LockedAssetEntity, 'amount' | 'address'>[] = await lockedAssetRepository.find({
+    where: { tokenId: id },
+    select: ['amount', 'address'],
+  });
 
   return {
     token,
@@ -70,24 +62,13 @@ export const getAsset = async (id: string) => {
  * get paginated list of assets
  * @param filters
  */
-export const getAllAssets = async (filters: Filters) => {
-  if (!filters.sort) {
-    filters.sort = {
-      key: 'name',
-      order: 'ASC',
-    };
-  }
-
-  if (filters.search) {
-    filters.search.in ||= [];
-  }
-
-  let { pagination, query, sort } = filtersToTypeorm(filters, (key) => {
+export const getAllAssets = async (filters: Filter) => {
+  const { pagination, sorts, where } = filtersToTypeorm(filters, (key) => {
     switch (key) {
       case 'bridged':
-        return `sub."${key}Normalized"`;
+        return `"${key}Normalized"`;
       default:
-        return `sub."${key}"`;
+        return `"${key}"`;
     }
   });
 
@@ -134,13 +115,9 @@ export const getAllAssets = async (filters: Filters) => {
     .from(`(${subquery.getQuery()})`, 'sub')
     .setParameters(subquery.getParameters());
 
-  if (query) {
-    queryBuilder = queryBuilder.where(query);
-  }
+  queryBuilder = queryBuilder.where(where);
 
-  if (sort) {
-    queryBuilder = queryBuilder.orderBy(sort.key, sort.order);
-  }
+  sorts?.forEach((sort) => queryBuilder.addOrderBy(sort.key, sort.order));
 
   if (pagination?.offset) {
     queryBuilder = queryBuilder.offset(pagination.offset);
@@ -152,7 +129,6 @@ export const getAllAssets = async (filters: Filters) => {
 
   const rawItems = await queryBuilder.getRawMany<AssetWithTotal>();
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const items = rawItems.map(({ total, ...item }) => item);
 
   return {

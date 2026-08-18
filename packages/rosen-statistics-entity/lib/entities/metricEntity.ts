@@ -1,8 +1,4 @@
-import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-} from '@rosen-bridge/extended-typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from '@rosen-bridge/extended-typeorm';
 
 @Entity('metric_entity')
 export class MetricEntity {

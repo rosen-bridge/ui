@@ -6,7 +6,7 @@ import '@/backend/initialize-datasource-if-needed';
 import { PublicStatusAction } from '@/backend/status/PublicStatusAction';
 import { publicStatusConfigs } from '@/backend/status/services';
 
-import { paramsToSignMessage, validator, Params } from './validations';
+import { type Params, paramsToSignMessage, validator } from './validations';
 
 PublicStatusAction.init(dataSource);
 
@@ -41,6 +41,7 @@ const handler = async (params: Params) => {
 
   await PublicStatusAction.getInstance().insertStatus(
     params.eventId,
+    params.triggerTxId,
     params.pk,
     nowSeconds,
     params.status,

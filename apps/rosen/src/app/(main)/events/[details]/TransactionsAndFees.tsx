@@ -1,0 +1,160 @@
+'use client';
+
+import { type CSSProperties, useMemo } from 'react';
+
+import useSWR from 'swr';
+
+import {
+  Amount,
+  Box,
+  Columns,
+  Duration,
+  Identifier,
+  Label,
+  LabelGroup,
+  useResponsive,
+} from '@rosen-bridge/ui-kit';
+import { NETWORKS } from '@rosen-ui/constants';
+import { fetcher } from '@rosen-ui/swr-helpers';
+import { getTxURL } from '@rosen-ui/utils';
+
+import type { EventDetailsType } from '@/backend/events/repository';
+
+import { Section } from './Section';
+
+export const TransactionsAndFees = ({ id, flowId }: { id: string; flowId: string | undefined }) => {
+  const {
+    error,
+    data: events,
+    isLoading,
+    mutate,
+  } = useSWR<EventDetailsType[]>(`/v1/events/${id}`, fetcher);
+
+  const data = events?.find((event) => event.txId === flowId);
+
+  const txIds = useMemo(() => {
+    const allTxs = [
+      {
+        type: 'source',
+        label: 'Source Tx',
+        chain: data?.fromChain,
+        txId: data?.sourceTxId,
+      },
+      {
+        type: 'payment',
+        label: 'Payment Tx',
+        chain: data?.toChain,
+        txId: data?.paymentTxId || undefined,
+      },
+      {
+        type: 'reward',
+        label: 'Reward Tx',
+        chain: NETWORKS.ergo.key,
+        txId: data?.spendTxId || undefined,
+      },
+      {
+        type: 'trigger',
+        label: 'Trigger Tx',
+        chain: NETWORKS.ergo.key,
+        txId: data?.txId,
+      },
+    ] as const;
+
+    if (data?.status === 'FRAUD') {
+      return allTxs.filter((tx) => tx.type !== 'payment' && tx.type !== 'reward');
+    }
+
+    return allTxs;
+  }, [data]);
+
+  const boxStyle = useResponsive<CSSProperties>({
+    mobile: { columnSpan: 'all' },
+    desktop: { columnSpan: 'unset' },
+  });
+
+  const columnsCount = useResponsive({
+    mobile: 1,
+    tablet: 1,
+    laptop: 2,
+    desktop: 3,
+  });
+
+  return (
+    <Section error={error} load={mutate} title="Transactions and Fees">
+      <Columns gap="24px" count={columnsCount} rule>
+        <div>
+          <Label
+            orientation="horizontal"
+            label="Duration"
+            info="How long it takes from when the lock transaction is recorded on the blockchain until the reward transaction is confirmed. (Note: the actual payment may arrive before this full interval.)"
+          >
+            <Duration fallback="-" loading={isLoading} />
+          </Label>
+          <Label label="Total Emission">
+            <Amount style={{ height: '20px' }} loading={isLoading} fallback="-" />
+          </Label>
+          <Label label="Guards" inset>
+            <Amount style={{ height: '20px' }} loading={isLoading} fallback="-" />
+          </Label>
+          <Label label="Watchers" inset>
+            <Amount style={{ height: '20px' }} loading={isLoading} fallback="-" />
+          </Label>
+          <Label
+            label="RSN Ratio"
+            info="The number of RSN tokens that correspond to one unit of this token."
+          >
+            <Amount style={{ height: '20px' }} loading={isLoading} fallback="-" />
+          </Label>
+        </div>
+        <div>
+          <Label label="Token Price">
+            <Amount style={{ height: '20px' }} loading={isLoading} value={data?.price} unit="$" />
+          </Label>
+          <Label label="Fee Sum">
+            <Amount
+              loading={isLoading}
+              value={data?.totalFee}
+              decimal={data?.lockToken?.significantDecimal}
+              unit={data?.lockToken?.name}
+              price={data?.price}
+            />
+          </Label>
+          <Label label="Bridge Fee" inset>
+            <Amount
+              loading={isLoading}
+              value={data?.bridgeFee}
+              decimal={data?.lockToken?.significantDecimal}
+              unit={data?.lockToken?.name}
+              price={data?.price}
+            />
+          </Label>
+          <Label label="Network Fee" inset>
+            <Amount
+              loading={isLoading}
+              value={data?.networkFee}
+              decimal={data?.lockToken?.significantDecimal}
+              unit={data?.lockToken?.name}
+              price={data?.price}
+            />
+          </Label>
+        </div>
+        <Box style={boxStyle}>
+          <Label label="Tx IDs" />
+          <LabelGroup>
+            {txIds.map(({ type, label, chain, txId }) => (
+              <Label key={type} label={label} inset>
+                <Identifier
+                  copyable
+                  href={getTxURL(chain, txId)}
+                  loading={isLoading}
+                  value={txId}
+                  style={{ width: '90%' }}
+                />
+              </Label>
+            ))}
+          </LabelGroup>
+        </Box>
+      </Columns>
+    </Section>
+  );
+};

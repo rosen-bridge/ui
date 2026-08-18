@@ -1,35 +1,38 @@
-import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
-import { DataSource } from '@rosen-bridge/extended-typeorm';
+import { difference, differenceWith, isEqual } from 'lodash-es';
+
+import { type AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
+import type { DataSource } from '@rosen-bridge/extended-typeorm';
 import JsonBigInt from '@rosen-bridge/json-bigint';
 import {
   NATIVE_RESIDENCY,
   NATIVE_TOKEN,
-  RosenChainToken,
-  TokenMap,
+  type RosenChainToken,
+  type TokenMap,
 } from '@rosen-bridge/tokens';
 import { NETWORKS } from '@rosen-ui/constants';
-import { Network } from '@rosen-ui/types';
-import { difference, differenceWith, isEqual } from 'lodash-es';
+import type { Network } from '@rosen-ui/types';
 
-import AbstractCalculator from './calculator/abstract-calculator';
+import type AbstractCalculator from './calculator/abstract-calculator';
 import { BitcoinCalculator } from './calculator/chains/bitcoin-calculator';
 import { BitcoinRunesCalculator } from './calculator/chains/bitcoin-runes';
 import { CardanoCalculator } from './calculator/chains/cardano-calculator';
 import { DogeCalculator } from './calculator/chains/doge-calculator';
 import { ErgoCalculator } from './calculator/chains/ergo-calculator';
 import { EvmCalculator } from './calculator/chains/evm-calculator';
+import { FiroCalculator } from './calculator/chains/firo-calculator';
 import { HandshakeCalculator } from './calculator/chains/handshake-calculator';
 import { BridgedAssetModel } from './database/bridgedAsset/BridgedAssetModel';
-import { LockedAssetEntity } from './database/lockedAsset/LockedAssetEntity';
+import type { LockedAssetEntity } from './database/lockedAsset/LockedAssetEntity';
 import { LockedAssetModel } from './database/lockedAsset/LockedAssetModel';
 import { TokenModel } from './database/token/TokenModel';
-import {
+import type {
   BitcoinCalculatorInterface,
   BitcoinRunesCalculatorInterface,
   CardanoCalculatorInterface,
   DogeCalculatorInterface,
   ErgoCalculatorInterface,
   EvmCalculatorInterface,
+  FiroCalculatorInterface,
   HandshakeCalculatorInterface,
 } from './interfaces';
 
@@ -51,6 +54,7 @@ class AssetCalculator {
     ethereumCalculator: EvmCalculatorInterface,
     binanceCalculator: EvmCalculatorInterface,
     dogeCalculator: DogeCalculatorInterface,
+    firoCalculator: FiroCalculatorInterface,
     handshakeCalculator: HandshakeCalculatorInterface,
     dataSource: DataSource,
     protected readonly logger: AbstractLogger = new DummyLogger(),
@@ -104,6 +108,12 @@ class AssetCalculator {
       dogeCalculator.blockcypherUrl,
       logger.child('dogeCalculator'),
     );
+    const firoAssetCalculator = new FiroCalculator(
+      this.tokens,
+      firoCalculator.addresses,
+      firoCalculator.explorerUrl,
+      logger.child('firoCalculator'),
+    );
     const handshakeAssetCalculator = new HandshakeCalculator(
       this.tokens,
       handshakeCalculator.addresses,
@@ -113,22 +123,14 @@ class AssetCalculator {
     this.calculatorMap.set(NETWORKS.ergo.key, ergoAssetCalculator);
     this.calculatorMap.set(NETWORKS.cardano.key, cardanoAssetCalculator);
     this.calculatorMap.set(NETWORKS.bitcoin.key, bitcoinAssetCalculator);
-    this.calculatorMap.set(
-      NETWORKS['bitcoin-runes'].key,
-      bitcoinRunesAssetCalculator,
-    );
+    this.calculatorMap.set(NETWORKS['bitcoin-runes'].key, bitcoinRunesAssetCalculator);
     this.calculatorMap.set(NETWORKS.ethereum.key, ethereumAssetCalculator);
     this.calculatorMap.set(NETWORKS.binance.key, binanceAssetCalculator);
     this.calculatorMap.set(NETWORKS.doge.key, dogeAssetCalculator);
+    this.calculatorMap.set(NETWORKS.firo.key, firoAssetCalculator);
     this.calculatorMap.set(NETWORKS.handshake.key, handshakeAssetCalculator);
-    this.bridgedAssetModel = new BridgedAssetModel(
-      dataSource,
-      logger.child('bridgedAssetModel'),
-    );
-    this.lockedAssetModel = new LockedAssetModel(
-      dataSource,
-      logger.child('lockedAssetModel'),
-    );
+    this.bridgedAssetModel = new BridgedAssetModel(dataSource, logger.child('bridgedAssetModel'));
+    this.lockedAssetModel = new LockedAssetModel(dataSource, logger.child('lockedAssetModel'));
     this.tokenModel = new TokenModel(dataSource, logger.child('tokenModel'));
   }
 
@@ -155,7 +157,7 @@ class AssetCalculator {
       );
 
       for (const token of chainTokens) {
-        if (token.residency == NATIVE_RESIDENCY) {
+        if (token.residency === NATIVE_RESIDENCY) {
           this.logger.debug(
             `Token ${token.name} is native on chain ${chain}, skipping total supply extraction`,
           );
@@ -208,8 +210,7 @@ class AssetCalculator {
   ): Promise<bigint> => {
     const calculator = this.calculatorMap.get(chain);
 
-    if (!calculator)
-      throw Error(`Chain [${chain}] is not supported in asset calculator`);
+    if (!calculator) throw Error(`Chain [${chain}] is not supported in asset calculator`);
 
     const chainToken = this.getTokenDataForChain(token, residencyChain, chain);
     if (!chainToken) {
@@ -219,7 +220,7 @@ class AssetCalculator {
 
     // Get total supply from stored map, fallback to calculator if not found
     const tokenMapKey = `${chain}-${chainToken.tokenId}`;
-    let totalSupply = this.totalSupplyMap.get(tokenMapKey);
+    const totalSupply = this.totalSupplyMap.get(tokenMapKey);
     if (!totalSupply) {
       throw new Error(
         `ImpossibleBehavior: Total supply for token [${chainToken.tokenId}] on chain [${chain}] not found in map`,
@@ -244,19 +245,12 @@ class AssetCalculator {
    * @param token
    * @param residencyChain
    */
-  private calculateLocked = async (
-    token: RosenChainToken,
-    residencyChain: Network,
-  ) => {
+  private calculateLocked = async (token: RosenChainToken, residencyChain: Network) => {
     const calculator = this.calculatorMap.get(residencyChain);
 
-    if (!calculator)
-      throw Error(
-        `Chain [${residencyChain}] is not supported in asset calculator`,
-      );
+    if (!calculator) throw Error(`Chain [${residencyChain}] is not supported in asset calculator`);
 
-    const lockedAmountsPerAddress =
-      await calculator.getLockedAmountsPerAddress(token);
+    const lockedAmountsPerAddress = await calculator.getLockedAmountsPerAddress(token);
 
     lockedAmountsPerAddress.forEach((lockedAmountPerAddress) =>
       this.logger.debug(
@@ -278,25 +272,17 @@ class AssetCalculator {
       await this.storeAllTokenSupplies();
       this.totalSupplyInit = true;
     }
-    const allStoredBridgedAssets =
-      await this.bridgedAssetModel.getAllStoredAssets();
+    const allStoredBridgedAssets = await this.bridgedAssetModel.getAllStoredAssets();
     this.logger.debug(
-      `All current stored bridge assets are ${JsonBigInt.stringify(
-        allStoredBridgedAssets,
-      )}`,
+      `All current stored bridge assets are ${JsonBigInt.stringify(allStoredBridgedAssets)}`,
     );
-    const allStoredLockedAssets =
-      await this.lockedAssetModel.getAllStoredAssets();
+    const allStoredLockedAssets = await this.lockedAssetModel.getAllStoredAssets();
     this.logger.debug(
-      `All current stored locked assets are ${JsonBigInt.stringify(
-        allStoredBridgedAssets,
-      )}`,
+      `All current stored locked assets are ${JsonBigInt.stringify(allStoredBridgedAssets)}`,
     );
     const allStoredTokens = await this.tokenModel.getAllStoredTokens();
     this.logger.debug(
-      `All current stored tokens are ${JsonBigInt.stringify(
-        allStoredBridgedAssets,
-      )}`,
+      `All current stored tokens are ${JsonBigInt.stringify(allStoredBridgedAssets)}`,
     );
 
     const allCurrentBridgedAssets = [];
@@ -305,32 +291,21 @@ class AssetCalculator {
 
     const residencyChains = this.tokens.getAllChains() as Network[];
     for (const residencyChain of residencyChains) {
-      const allTokensOnChain = this.tokens.getTokens(
-        residencyChain,
-        residencyChain,
-      );
+      const allTokensOnChain = this.tokens.getTokens(residencyChain, residencyChain);
       this.logger.debug(
-        `All tokens of ${residencyChain} chain are ${JsonBigInt.stringify(
-          allTokensOnChain,
-        )}`,
+        `All tokens of ${residencyChain} chain are ${JsonBigInt.stringify(allTokensOnChain)}`,
       );
 
       for (const token of allTokensOnChain) {
         this.logger.info(
           `Started calculating values for ${token.name} native on chain ${residencyChain}`,
         );
-        const significantDecimal = this.tokens.getSignificantDecimals(
-          token.tokenId,
-        );
+        const significantDecimal = this.tokens.getSignificantDecimals(token.tokenId);
         if (significantDecimal == undefined)
-          throw new Error(
-            `Failed to retrieve significant decimals for tokenId: ${token.tokenId}`,
-          );
+          throw new Error(`Failed to retrieve significant decimals for tokenId: ${token.tokenId}`);
         const tokenSet = this.tokens.getTokenSet(token.tokenId);
         if (!tokenSet) {
-          throw new Error(
-            `ImpossibleBehavior: Token set not found for token ${token.tokenId}`,
-          );
+          throw new Error(`ImpossibleBehavior: Token set not found for token ${token.tokenId}`);
         }
         const ergoSideTokenId = this.tokens.getID(tokenSet, NETWORKS.ergo.key);
 
@@ -367,22 +342,14 @@ class AssetCalculator {
                 `Updated asset [${token.tokenId}] locked amount to [${lockedItem.amount}] for address [${lockedItem.address}]`,
               );
               this.logger.debug(
-                `Updated asset details for [${JsonBigInt.stringify(
-                  newLockedAsset,
-                )}]`,
+                `Updated asset details for [${JsonBigInt.stringify(newLockedAsset)}]`,
               );
             }),
           );
-          const supportedChains = this.tokens.getSupportedChains(
-            residencyChain,
-          ) as Network[];
+          const supportedChains = this.tokens.getSupportedChains(residencyChain) as Network[];
           for (const chain of supportedChains) {
             try {
-              const emission = await this.calculateEmissionForChain(
-                token,
-                chain,
-                residencyChain,
-              );
+              const emission = await this.calculateEmissionForChain(token, chain, residencyChain);
               this.logger.debug(
                 `Asset [${token.tokenId}] emitted amount on chain ${chain} is [${emission}]`,
               );
@@ -395,10 +362,7 @@ class AssetCalculator {
               const tokenDataOnAllChains = this.tokens.search(residencyChain, {
                 tokenId: newToken.id,
               })[0];
-              const bridgedTokenId = this.tokens.getID(
-                tokenDataOnAllChains,
-                chain,
-              );
+              const bridgedTokenId = this.tokens.getID(tokenDataOnAllChains, chain);
 
               const newBridgedAsset = {
                 amount: emission,
@@ -416,9 +380,7 @@ class AssetCalculator {
                 `Updated asset [${token.tokenId}] bridged amount on chain ${chain} to [${emission}]`,
               );
               this.logger.debug(
-                `Updated bridged asset details for [${JsonBigInt.stringify(
-                  newBridgedAsset,
-                )}]`,
+                `Updated bridged asset details for [${JsonBigInt.stringify(newBridgedAsset)}]`,
               );
             } catch (e) {
               this.logger.warn(
@@ -436,11 +398,7 @@ class AssetCalculator {
       allCurrentBridgedAssets,
       isEqual,
     );
-    const oldLockedAssets = differenceWith(
-      allStoredLockedAssets,
-      allCurrentLockedAssets,
-      isEqual,
-    );
+    const oldLockedAssets = differenceWith(allStoredLockedAssets, allCurrentLockedAssets, isEqual);
     const oldTokens = difference(allStoredTokens, allCurrentTokens);
     await this.bridgedAssetModel.removeAssets(oldBridgedAssets);
     await this.lockedAssetModel.removeAssets(oldLockedAssets);

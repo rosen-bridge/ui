@@ -1,6 +1,7 @@
+import { beforeEach, describe, expect, it, type Mock, vi } from 'vitest';
+
 import { BitcoinRunesBoxSelection } from '@rosen-bridge/bitcoin-runes-utxo-selection';
-import { TokenMap } from '@rosen-bridge/tokens';
-import { describe, expect, it, vi, Mock, beforeEach } from 'vitest';
+import type { TokenMap } from '@rosen-bridge/tokens';
 
 import { generateUnsignedTx } from '../src';
 import * as testData from './testData';
@@ -32,8 +33,7 @@ vi.mock(import('@rosen-bridge/bitcoin-runes-utxo-selection'), () => {
 });
 
 describe('generateUnsignedTx', () => {
-  const getCoveringBoxesMock = BitcoinRunesBoxSelection.prototype
-    .getCoveringBoxes as Mock;
+  const getCoveringBoxesMock = BitcoinRunesBoxSelection.prototype.getCoveringBoxes as Mock;
 
   beforeEach(() => {
     getCoveringBoxesMock.mockClear();
@@ -60,9 +60,7 @@ describe('generateUnsignedTx', () => {
 
     const getTokenMap = async () =>
       ({
-        unwrapAmount: vi
-          .fn()
-          .mockImplementation(() => ({ amount: 10n, decimals: 2 })),
+        unwrapAmount: vi.fn().mockImplementation(() => ({ amount: 10n, decimals: 2 })),
       }) as unknown as TokenMap;
 
     // act
@@ -106,9 +104,7 @@ describe('generateUnsignedTx', () => {
 
     const getTokenMap = async () =>
       ({
-        unwrapAmount: vi
-          .fn()
-          .mockImplementation(() => ({ amount: 10n, decimals: 2 })),
+        unwrapAmount: vi.fn().mockImplementation(() => ({ amount: 10n, decimals: 2 })),
       }) as unknown as TokenMap;
 
     // act
@@ -153,9 +149,7 @@ describe('generateUnsignedTx', () => {
 
     const getTokenMap = async () =>
       ({
-        unwrapAmount: vi
-          .fn()
-          .mockImplementation(() => ({ amount: 10n, decimals: 2 })),
+        unwrapAmount: vi.fn().mockImplementation(() => ({ amount: 10n, decimals: 2 })),
       }) as unknown as TokenMap;
 
     // act
@@ -201,9 +195,7 @@ describe('generateUnsignedTx', () => {
 
     const getTokenMap = async () =>
       ({
-        unwrapAmount: vi
-          .fn()
-          .mockImplementation(() => ({ amount: 10n, decimals: 2 })),
+        unwrapAmount: vi.fn().mockImplementation(() => ({ amount: 10n, decimals: 2 })),
       }) as unknown as TokenMap;
 
     // act
@@ -243,9 +235,7 @@ describe('generateUnsignedTx', () => {
 
     const getTokenMap = async () =>
       ({
-        unwrapAmount: vi
-          .fn()
-          .mockImplementation(() => ({ amount: 1000n, decimals: 2 })),
+        unwrapAmount: vi.fn().mockImplementation(() => ({ amount: 1000n, decimals: 2 })),
       }) as unknown as TokenMap;
 
     // act and assert
@@ -285,9 +275,7 @@ describe('generateUnsignedTx', () => {
 
     const getTokenMap = async () =>
       ({
-        unwrapAmount: vi
-          .fn()
-          .mockImplementation(() => ({ amount: 10n, decimals: 2 })),
+        unwrapAmount: vi.fn().mockImplementation(() => ({ amount: 10n, decimals: 2 })),
       }) as unknown as TokenMap;
 
     // act and assert

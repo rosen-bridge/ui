@@ -16,12 +16,12 @@
     "skipLibCheck": true,
     "strict": true,
     "target": "ESNext",
-    "useDefineForClassFields": true
+    "useDefineForClassFields": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
   },
   "include": ["src"],
-  "references": [
-    { "path": "../constants" },
-    { "path": "../types" },
-    { "path": "../utils" }
-  ]
+  "references": [{ "path": "../constants" }, { "path": "../types" }, { "path": "../utils" }]
 }

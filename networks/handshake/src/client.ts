@@ -1,19 +1,11 @@
 import { Handshake as HandshakeIcon } from '@rosen-bridge/icons';
-import { Network, NetworkConfig } from '@rosen-network/base';
+import type { Network, NetworkConfig } from '@rosen-network/base';
 import { NETWORKS } from '@rosen-ui/constants';
 
-import type { generateUnsignedTx } from './generateUnsignedTx';
-import type {
-  generateOpReturnData,
-  getAddressBalance,
-  submitTransaction,
-} from './utils';
+import type { generateOpReturnData } from './utils';
 
-type HandshakeNetworkConfig = NetworkConfig & {
+type HandshakeNetworkConfig = Omit<NetworkConfig, 'getMaxTransfer'> & {
   generateOpReturnData: typeof generateOpReturnData;
-  generateUnsignedTx: ReturnType<typeof generateUnsignedTx>;
-  getAddressBalance: typeof getAddressBalance;
-  submitTransaction: typeof submitTransaction;
 };
 
 export class HandshakeNetwork implements Network {
@@ -36,39 +28,16 @@ export class HandshakeNetwork implements Network {
     return this.config.calculateFee(...args);
   };
 
-  public generateOpReturnData: HandshakeNetworkConfig['generateOpReturnData'] =
-    (...args) => {
-      return this.config.generateOpReturnData(...args);
-    };
-
-  public generateUnsignedTx: HandshakeNetworkConfig['generateUnsignedTx'] = (
-    ...args
-  ) => {
-    return this.config.generateUnsignedTx(...args);
+  public generateOpReturnData: HandshakeNetworkConfig['generateOpReturnData'] = (...args) => {
+    return this.config.generateOpReturnData(...args);
   };
 
-  public getAddressBalance: HandshakeNetworkConfig['getAddressBalance'] = (
-    ...args
-  ) => {
-    return this.config.getAddressBalance(...args);
+  public getMaxTransfer: Network['getMaxTransfer'] = async () => {
+    return BigInt(Number.MAX_VALUE);
   };
 
-  public getMaxTransfer: HandshakeNetworkConfig['getMaxTransfer'] = (
-    ...args
-  ) => {
-    return this.config.getMaxTransfer(...args);
-  };
-
-  public getMinTransfer: HandshakeNetworkConfig['getMinTransfer'] = (
-    ...args
-  ) => {
+  public getMinTransfer: HandshakeNetworkConfig['getMinTransfer'] = (...args) => {
     return this.config.getMinTransfer(...args);
-  };
-
-  public submitTransaction: HandshakeNetworkConfig['submitTransaction'] = (
-    ...args
-  ) => {
-    return this.config.submitTransaction(...args);
   };
 
   public toSafeAddress = (address: string): string => {

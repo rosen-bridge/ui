@@ -1,18 +1,28 @@
-import { useState, FC, useMemo } from 'react';
+import { type FC, useMemo, useState } from 'react';
 
 import { AngleDown, AngleUp } from '@rosen-bridge/icons';
-import {
-  Amount,
-  Button,
-  EnhancedTableCell,
-  Id,
-  TableRow,
-} from '@rosen-bridge/ui-kit';
+import { Amount, Button, EnhancedTableCell, Identifier, TableRow } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
-import { getTxURL } from '@rosen-ui/utils';
+import { getDecimalString, getTxURL } from '@rosen-ui/utils';
 
 import { useInfo } from '@/hooks';
-import { Revenue } from '@/types/api';
+import type { ApiInfoResponse, Revenue } from '@/types/api';
+
+const getEmissionAmount = (info: ApiInfoResponse | undefined, row: RowProps) => {
+  if (!info) return;
+
+  const revenues = row.revenues.filter(
+    (revenue) =>
+      revenue.revenueType === 'emission' &&
+      (revenue.data.tokenId === info?.rsnTokenId || revenue.data.tokenId === info?.emissionTokenId),
+  );
+
+  const amount = revenues.reduce((sum, revenue) => sum + revenue.data.amount, 0);
+
+  const decimals = revenues.at(0)?.data.decimals;
+
+  return getDecimalString(amount, decimals);
+};
 
 interface RowProps extends Revenue {
   isLoading?: boolean;
@@ -109,10 +119,7 @@ export const MobileRow: FC<RowProps> = (props) => {
 
   const { data: info, isLoading: isInfoLoading } = useInfo();
 
-  const rowStyles = useMemo(
-    () => (isLoading ? { opacity: 0.3 } : {}),
-    [isLoading],
-  );
+  const rowStyles = useMemo(() => (isLoading ? { opacity: 0.3 } : {}), [isLoading]);
 
   const toggleExpand = () => {
     setExpand((prevState) => !prevState);
@@ -123,13 +130,17 @@ export const MobileRow: FC<RowProps> = (props) => {
       <TableRow style={rowStyles}>
         <EnhancedTableCell>Event Id</EnhancedTableCell>
         <EnhancedTableCell>
-          <Id id={row.eventId} />
+          <Identifier value={row.eventId} variant="legacy" />
         </EnhancedTableCell>
       </TableRow>
       <TableRow style={rowStyles}>
         <EnhancedTableCell>Lock TX Id</EnhancedTableCell>
         <EnhancedTableCell>
-          <Id id={row.lockTxId} href={getTxURL(row.fromChain, row.lockTxId)} />
+          <Identifier
+            value={row.lockTxId}
+            href={getTxURL(row.fromChain, row.lockTxId)}
+            variant="legacy"
+          />
         </EnhancedTableCell>
       </TableRow>
       {expand && (
@@ -137,22 +148,23 @@ export const MobileRow: FC<RowProps> = (props) => {
           <TableRow style={rowStyles}>
             <EnhancedTableCell>Reward TX Id</EnhancedTableCell>
             <EnhancedTableCell>
-              <Id
-                id={row.rewardTxId}
+              <Identifier
+                value={row.rewardTxId}
                 href={getTxURL(NETWORKS.ergo.key, row.rewardTxId)}
+                variant="legacy"
               />
             </EnhancedTableCell>
           </TableRow>
           <TableRow style={rowStyles}>
             <EnhancedTableCell>From Address</EnhancedTableCell>
             <EnhancedTableCell>
-              <Id id={row.fromAddress} />
+              <Identifier value={row.fromAddress} variant="legacy" />
             </EnhancedTableCell>
           </TableRow>
           <TableRow style={rowStyles}>
             <EnhancedTableCell>To Address</EnhancedTableCell>
             <EnhancedTableCell>
-              <Id id={row.toAddress} />
+              <Identifier value={row.toAddress} variant="legacy" />
             </EnhancedTableCell>
           </TableRow>
           <TableRow style={rowStyles}>
@@ -162,10 +174,7 @@ export const MobileRow: FC<RowProps> = (props) => {
           <TableRow style={rowStyles}>
             <EnhancedTableCell>Amount</EnhancedTableCell>
             <EnhancedTableCell>
-              <Amount
-                value={row.lockToken.amount}
-                decimal={row.lockToken.decimals}
-              />
+              <Amount value={row.lockToken.amount} decimal={row.lockToken.decimals} />
             </EnhancedTableCell>
           </TableRow>
           <TableRow style={rowStyles}>
@@ -203,19 +212,7 @@ export const MobileRow: FC<RowProps> = (props) => {
           <TableRow style={rowStyles}>
             <EnhancedTableCell>Emission (RSN)</EnhancedTableCell>
             <EnhancedTableCell>
-              <Amount
-                value={
-                  row.revenues.find(
-                    (revenue) =>
-                      revenue.revenueType === 'emission' &&
-                      (revenue.data.tokenId === info?.rsnTokenId ||
-                        revenue.data.tokenId === info?.emissionTokenId),
-                  )?.data.amount
-                }
-                fallback="0"
-                decimal={row.lockToken.decimals}
-                loading={isInfoLoading}
-              />
+              <Amount value={getEmissionAmount(info, row)} fallback="0" loading={isInfoLoading} />
             </EnhancedTableCell>
           </TableRow>
         </>
@@ -242,30 +239,32 @@ export const TabletRow: FC<RowProps> = (props) => {
 
   const { data: info, isLoading: isInfoLoading } = useInfo();
 
-  const rowStyles = useMemo(
-    () => (isLoading ? { opacity: 0.3 } : {}),
-    [isLoading],
-  );
+  const rowStyles = useMemo(() => (isLoading ? { opacity: 0.3 } : {}), [isLoading]);
 
   return (
     <TableRow className="divider" style={rowStyles}>
       <EnhancedTableCell>
-        <Id id={row.eventId} />
+        <Identifier value={row.eventId} variant="legacy" />
       </EnhancedTableCell>
       <EnhancedTableCell>
-        <Id id={row.lockTxId} href={getTxURL(row.fromChain, row.lockTxId)} />
+        <Identifier
+          value={row.lockTxId}
+          href={getTxURL(row.fromChain, row.lockTxId)}
+          variant="legacy"
+        />
       </EnhancedTableCell>
       <EnhancedTableCell>
-        <Id
-          id={row.rewardTxId}
+        <Identifier
+          value={row.rewardTxId}
           href={getTxURL(NETWORKS.ergo.key, row.rewardTxId)}
+          variant="legacy"
         />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
-        <Id id={row.fromAddress} />
+        <Identifier value={row.fromAddress} variant="legacy" />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
-        <Id id={row.toAddress} />
+        <Identifier value={row.toAddress} variant="legacy" />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">{row.lockToken.name}</EnhancedTableCell>
       <EnhancedTableCell align="center">
@@ -298,19 +297,7 @@ export const TabletRow: FC<RowProps> = (props) => {
         />
       </EnhancedTableCell>
       <EnhancedTableCell style={rowStyles} align="center">
-        <Amount
-          value={row.revenues
-            .filter(
-              (revenue) =>
-                revenue.revenueType === 'emission' &&
-                (revenue.data.tokenId === info?.rsnTokenId ||
-                  revenue.data.tokenId === info?.emissionTokenId),
-            )
-            .reduce((sum, revenue) => sum + revenue.data.amount, 0)}
-          fallback="0"
-          decimal={row.lockToken.decimals}
-          loading={isInfoLoading}
-        />
+        <Amount value={getEmissionAmount(info, row)} fallback="0" loading={isInfoLoading} />
       </EnhancedTableCell>
     </TableRow>
   );

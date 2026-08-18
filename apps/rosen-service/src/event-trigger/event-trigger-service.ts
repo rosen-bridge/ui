@@ -1,5 +1,5 @@
 import { DefaultLogger } from '@rosen-bridge/abstract-logger';
-import { ErgoScanner } from '@rosen-bridge/ergo-scanner';
+import type { ErgoScanner } from '@rosen-bridge/ergo-scanner';
 import { ErgoNetworkType } from '@rosen-bridge/scanner-interfaces';
 import { EventTriggerExtractor } from '@rosen-bridge/watcher-data-extractor';
 
@@ -8,30 +8,15 @@ import dataSource from '../data-source';
 import AppError from '../errors/AppError';
 
 const logger = DefaultLogger.getInstance().child(import.meta.url);
-const ergoEventTriggerExtractorLogger = logger.child(
-  'ergoEventTriggerExtractor',
-);
-const cardanoEventTriggerExtractorLogger = logger.child(
-  'cardanoEventTriggerExtractor',
-);
-const bitcoinEventTriggerExtractorLogger = logger.child(
-  'bitcoinEventTriggerExtractor',
-);
-const bitcoinRunesEventTriggerExtractorLogger = logger.child(
-  'bitcoinRunesEventTriggerExtractor',
-);
-const ethereumEventTriggerExtractorLogger = logger.child(
-  'ethereumEventTriggerExtractor',
-);
-const binanceEventTriggerExtractorLogger = logger.child(
-  'binanceEventTriggerExtractor',
-);
-const dogeEventTriggerExtractorLogger = logger.child(
-  'dogeEventTriggerExtractor',
-);
-const handshakeEventTriggerExtractorLogger = logger.child(
-  'handshakeEventTriggerExtractor',
-);
+const ergoEventTriggerExtractorLogger = logger.child('ergoEventTriggerExtractor');
+const cardanoEventTriggerExtractorLogger = logger.child('cardanoEventTriggerExtractor');
+const bitcoinEventTriggerExtractorLogger = logger.child('bitcoinEventTriggerExtractor');
+const bitcoinRunesEventTriggerExtractorLogger = logger.child('bitcoinRunesEventTriggerExtractor');
+const ethereumEventTriggerExtractorLogger = logger.child('ethereumEventTriggerExtractor');
+const binanceEventTriggerExtractorLogger = logger.child('binanceEventTriggerExtractor');
+const dogeEventTriggerExtractorLogger = logger.child('dogeEventTriggerExtractor');
+const firoEventTriggerExtractorLogger = logger.child('firoEventTriggerExtractor');
+const handshakeEventTriggerExtractorLogger = logger.child('handshakeEventTriggerExtractor');
 
 /**
  * register event trigger extractors for all chains
@@ -116,6 +101,17 @@ export const registerExtractors = async (scanner: ErgoScanner) => {
       configs.binance.addresses.fraud,
       binanceEventTriggerExtractorLogger,
     );
+    const firoEventTriggerExtractor = new EventTriggerExtractor(
+      'firo-extractor',
+      dataSource,
+      ErgoNetworkType.Explorer,
+      configs.ergo.explorerUrl,
+      configs.firo.addresses.eventTrigger,
+      configs.firo.tokens.rwt,
+      configs.firo.addresses.permit,
+      configs.firo.addresses.fraud,
+      firoEventTriggerExtractorLogger,
+    );
     const handshakeEventTriggerExtractor = new EventTriggerExtractor(
       'handshake-extractor',
       dataSource,
@@ -134,6 +130,7 @@ export const registerExtractors = async (scanner: ErgoScanner) => {
     await scanner.registerExtractor(dogeEventTriggerExtractor);
     await scanner.registerExtractor(ethereumEventTriggerExtractor);
     await scanner.registerExtractor(binanceEventTriggerExtractor);
+    await scanner.registerExtractor(firoEventTriggerExtractor);
     await scanner.registerExtractor(handshakeEventTriggerExtractor);
 
     logger.debug('event trigger extractors registered', {
@@ -146,6 +143,7 @@ export const registerExtractors = async (scanner: ErgoScanner) => {
         dogeEventTriggerExtractor.getId(),
         ethereumEventTriggerExtractor.getId(),
         binanceEventTriggerExtractor.getId(),
+        firoEventTriggerExtractor.getId(),
         handshakeEventTriggerExtractor.getId(),
       ],
     });

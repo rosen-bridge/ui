@@ -1,20 +1,21 @@
-import type { AppKit, Provider } from '@reown/appkit';
-import { mainnet, bsc } from '@reown/appkit/networks';
-import { RosenChainToken } from '@rosen-bridge/tokens';
+import type { AppKit, Provider, RequestArguments } from '@reown/appkit';
+import { bsc, mainnet } from '@reown/appkit/networks';
+
+import type { RosenChainToken } from '@rosen-bridge/tokens';
 import { BinanceNetwork } from '@rosen-network/binance/dist/client';
 import { EthereumNetwork } from '@rosen-network/ethereum/dist/client';
 import { NETWORKS } from '@rosen-ui/constants';
-import { Network } from '@rosen-ui/types';
+import type { Network } from '@rosen-ui/types';
 import {
   CurrentChainError,
   UnsupportedChainError,
   UserDeniedTransactionSignatureError,
   Wallet,
-  WalletTransferParams,
+  type WalletTransferParams,
 } from '@rosen-ui/wallet-api';
 
 import { ICON } from './icon';
-import { WalletConnectConfig } from './types';
+import type { WalletConnectConfig } from './types';
 
 let connected: ReturnType<typeof createDeferred>;
 
@@ -71,7 +72,7 @@ const createModal = async (projectId: string) => {
         initialized.resolve();
         break;
       case 'MODAL_CLOSE':
-        if (modal!.getIsConnectedState()) {
+        if (modal?.getIsConnectedState()) {
           connected?.resolve();
         } else {
           connected?.reject();
@@ -81,9 +82,7 @@ const createModal = async (projectId: string) => {
   });
 };
 
-export class WalletConnect<
-  Config extends WalletConnectConfig,
-> extends Wallet<Config> {
+export class WalletConnect<Config extends WalletConnectConfig> extends Wallet<Config> {
   icon = ICON;
 
   name = 'WalletConnect';
@@ -108,7 +107,7 @@ export class WalletConnect<
   }
 
   get modal(): AppKit {
-    return modal!;
+    return modal as AppKit;
   }
 
   get provider() {
@@ -156,14 +155,12 @@ export class WalletConnect<
     return this.modal.getAddress();
   };
 
-  fetchBalance = async (
-    token: RosenChainToken,
-  ): Promise<string | undefined> => {
+  fetchBalance = async (token: RosenChainToken): Promise<string | undefined> => {
     await this.ensureCorrectChain();
 
     const address = await this.getAddress();
 
-    let request;
+    let request: RequestArguments;
 
     if (token.type === 'native') {
       request = {
@@ -176,7 +173,7 @@ export class WalletConnect<
         params: [
           {
             to: token.tokenId,
-            data: '0x70a08231' + address.replace('0x', '').padStart(64, '0'),
+            data: `0x70a08231${address.replace('0x', '').padStart(64, '0')}`,
           },
           'latest',
         ],
@@ -204,7 +201,7 @@ export class WalletConnect<
   };
 
   performSwitchChain = async (chain: Network): Promise<void> => {
-    if (this.modal.getChainId() == Number(NETWORKS[chain].id)) {
+    if (this.modal.getChainId() === Number(NETWORKS[chain].id)) {
       return;
     }
 
@@ -239,22 +236,21 @@ export class WalletConnect<
       params.bridgeFee.toString(),
     );
 
-    const transactionParameters =
-      await this.currentNetwork.generateTxParameters(
-        params.token.tokenId,
-        params.lockAddress,
-        address,
-        params.amount,
-        rosenData,
-        params.token,
-        params.fromChain,
-      );
+    const transactionParameters = await this.currentNetwork.generateTxParameters(
+      params.token.tokenId,
+      params.lockAddress,
+      address,
+      params.amount,
+      rosenData,
+      params.token,
+      params.fromChain,
+    );
 
     try {
-      return (await this.provider.request({
+      return await this.provider.request({
         method: 'eth_sendTransaction',
         params: [transactionParameters],
-      }))!;
+      });
     } catch (error) {
       throw new UserDeniedTransactionSignatureError(this.name, error);
     }

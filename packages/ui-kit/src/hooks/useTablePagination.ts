@@ -1,8 +1,9 @@
 import { useCallback, useState } from 'react';
 
+import useSWR, { type Key } from 'swr';
+
 import { fetcher } from '@rosen-ui/swr-helpers';
-import { Paginated } from '@rosen-ui/types';
-import useSWR, { Key } from 'swr';
+import type { Paginated } from '@rosen-ui/types';
 
 /**
  * this hook uses swr to to fetch and manage paginated data.
@@ -25,13 +26,9 @@ export const useTableDataPagination = <T extends Paginated<unknown>>(
     setPageIndex(0);
   }, []);
 
-  const { data, isLoading } = useSWR<T>(
-    getKey(pageIndex * pageSize, pageSize),
-    fetcher,
-    {
-      keepPreviousData: true,
-    },
-  );
+  const { data, isLoading } = useSWR<T>(getKey(pageIndex * pageSize, pageSize), fetcher, {
+    keepPreviousData: true,
+  });
 
   return {
     isLoading,

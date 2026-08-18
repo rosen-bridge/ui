@@ -1,9 +1,10 @@
-import { AbstractLogger } from '@rosen-bridge/abstract-logger';
-import { NATIVE_TOKEN, RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
-import axios, { Axios } from '@rosen-clients/rate-limited-axios';
-import { NETWORKS } from '@rosen-ui/constants';
-import { Network } from '@rosen-ui/types';
 import { zipWith } from 'lodash-es';
+
+import type { AbstractLogger } from '@rosen-bridge/abstract-logger';
+import { NATIVE_TOKEN, type RosenChainToken, type TokenMap } from '@rosen-bridge/tokens';
+import axios, { type Axios } from '@rosen-clients/rate-limited-axios';
+import { NETWORKS } from '@rosen-ui/constants';
+import type { Network } from '@rosen-ui/types';
 
 import AbstractCalculator from '../abstract-calculator';
 
@@ -20,12 +21,7 @@ export class HandshakeCalculator extends AbstractCalculator {
 
   protected client: Axios;
 
-  constructor(
-    tokenMap: TokenMap,
-    addresses: string[],
-    url: string,
-    logger?: AbstractLogger,
-  ) {
+  constructor(tokenMap: TokenMap, addresses: string[], url: string, logger?: AbstractLogger) {
     super(addresses, logger, tokenMap);
     this.client = axios.create({
       baseURL: url,
@@ -54,22 +50,13 @@ export class HandshakeCalculator extends AbstractCalculator {
     if (token.type === NATIVE_TOKEN) {
       const balances = await Promise.all(
         this.addresses.map(async (address) => {
-          try {
-            // RPC call to get address balance
-            const response = await this.client.post<{
-              result: PartialHandshakeRpcAddress;
-            }>('', {
-              method: 'getaddressbalance',
-              params: [address],
-            });
-            const balance = response.data.result;
-            return BigInt(balance.confirmed);
-          } catch (error) {
-            this.logger?.warn(
-              `Failed to get balance for Handshake address ${address}: ${error}`,
-            );
-            return 0n;
-          }
+          const response = await this.client.post<{
+            result: PartialHandshakeRpcAddress;
+          }>('', {
+            method: 'getaddressbalance',
+            params: [address],
+          });
+          return BigInt(response.data.result.confirmed);
         }),
       );
       return zipWith(this.addresses, balances, (address, amount) => ({

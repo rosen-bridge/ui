@@ -1,10 +1,15 @@
-import { TokenMap } from '@rosen-bridge/tokens';
+/**
+ * TODO: remove the inline Biome comment
+ * local:ergo/rosen-bridge/ui#441
+ */
+// biome-ignore lint/style/useNodejsImportProtocol: Replace with a browser-compatible package
 import crypto from 'crypto';
+
+import { TokenMap } from '@rosen-bridge/tokens';
 
 import { unwrap } from '@/safeServerAction';
 
 import { getOnChainRosenTokensWithCache } from './getOnChainRosenTokens';
-import { getRosenTokensWithCache } from './getRosenTokens';
 
 let tokenMap: TokenMap;
 
@@ -27,9 +32,9 @@ export const getTokenMap = async () => {
     }
   } else {
     if (tokenMap) return tokenMap;
-    const tokens = await unwrap(getRosenTokensWithCache)();
+    const { TOKENS } = await import('../../configs');
     tokenMap = new TokenMap();
-    await tokenMap.updateConfigByJson(tokens);
+    await tokenMap.updateConfigByJson(TOKENS);
   }
 
   return tokenMap;

@@ -1,24 +1,26 @@
 'use client';
 
-import NextImage from 'next/image';
-import NextLink from 'next/link';
+import type { PropsWithChildren } from 'react';
+import type { Route } from 'next';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { PropsWithChildren } from 'react';
 
-import { NoSsr } from '@mui/material';
+import { SWRConfig } from 'swr';
+
 import {
-  App as AppBase,
   ApiKeyProvider,
+  App as AppBase,
   FrameworkProvider,
+  NoSsr,
+  ThemeProvider,
+  ToastProvider,
 } from '@rosen-bridge/ui-kit';
 import { mockMiddlewareFactory } from '@rosen-ui/swr-helpers';
-import { SWRConfig } from 'swr';
 
 import { mockedData } from '@/mock/mockedData';
 import { theme } from '@/theme/theme';
+import { UIKitProvider } from '@/uiKitProvider';
 
-import { SideBar } from './SideBar';
-import { Toolbar } from './Toolbar';
+import { Sidebar } from './Sidebar';
 
 export const App = ({ children }: PropsWithChildren) => {
   const pathname = usePathname();
@@ -30,32 +32,34 @@ export const App = ({ children }: PropsWithChildren) => {
   return (
     <NoSsr>
       <FrameworkProvider
-        components={{
-          Anchor: (props) => <NextLink {...props} />,
-          Image: (props) => <NextImage {...props} />,
-        }}
         router={{
           pathname,
           search: searchParams.toString(),
-          push: (href: string) => router.push(href, { scroll: false }),
+          push: (href) => router.push(href as unknown as Route, { scroll: false }),
         }}
       >
-        <ApiKeyProvider>
-          <AppBase sideBar={<SideBar />} theme={theme} toolbar={<Toolbar />}>
-            <SWRConfig
-              value={{
-                revalidateOnFocus: false,
-                errorRetryCount: 3,
-                use:
-                  process.env.NEXT_PUBLIC_USE_MOCKED_APIS === 'true'
-                    ? [mockMiddlewareFactory(mockedData)]
-                    : [],
-              }}
-            >
-              {children}
-            </SWRConfig>
-          </AppBase>
-        </ApiKeyProvider>
+        <UIKitProvider>
+          <ApiKeyProvider>
+            <ThemeProvider theme={theme}>
+              <ToastProvider>
+                <AppBase sidebar={<Sidebar />}>
+                  <SWRConfig
+                    value={{
+                      revalidateOnFocus: false,
+                      errorRetryCount: 3,
+                      use:
+                        process.env.NEXT_PUBLIC_USE_MOCKED_APIS === 'true'
+                          ? [mockMiddlewareFactory(mockedData)]
+                          : [],
+                    }}
+                  >
+                    {children}
+                  </SWRConfig>
+                </AppBase>
+              </ToastProvider>
+            </ThemeProvider>
+          </ApiKeyProvider>
+        </UIKitProvider>
       </FrameworkProvider>
     </NoSsr>
   );

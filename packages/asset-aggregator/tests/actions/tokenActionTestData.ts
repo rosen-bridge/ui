@@ -1,4 +1,4 @@
-import { Network } from '@rosen-ui/types';
+import type { Network } from '@rosen-ui/types';
 
 import { TokenEntity } from '../../lib/entities/tokenEntity';
 
@@ -18,6 +18,8 @@ export class TokenTestData {
     token.decimal = 9;
     token.significantDecimal = 9;
     token.isNative = false;
+    token.isResident = true;
+    token.ergoSideTokenId = 'tkn-1';
     token.chain = 'ergo' as Network;
     Object.assign(token, overrides);
     return token;
@@ -42,6 +44,8 @@ export class TokenTestData {
       token.decimal = 9;
       token.significantDecimal = 9;
       token.isNative = i % 2 === 0;
+      token.isResident = i % 2 === 0;
+      token.ergoSideTokenId = `tkn-${i + 1}`;
       token.chain = i % 2 === 0 ? ('ergo' as Network) : ('ethereum' as Network);
       Object.assign(token, baseOverrides);
       tokens.push(token);

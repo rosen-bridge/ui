@@ -3,8 +3,8 @@ import { TokenMap } from '@rosen-bridge/tokens';
 import { BitcoinEsploraDataAdapter } from '../lib';
 import { sampleTokenMapConfig } from './mocked';
 import {
-  rpcClientMockReturnValue,
   expectedBitcoinGetAddressAssetsResult,
+  rpcClientMockReturnValue,
 } from './mocked/bitcoinBlockCypherDataAdapter.mock';
 
 interface TestContext {
@@ -12,7 +12,7 @@ interface TestContext {
   mockTokenMap: TokenMap;
 }
 
-let mockClient = {
+const mockClient = {
   get: vi.fn().mockReturnValue(rpcClientMockReturnValue),
 };
 
@@ -37,9 +37,7 @@ describe('BitcoinEsploraDataAdapter', () => {
      * @expected
      * - result includes native bitcoin balance
      */
-    it<TestContext>('should fetch balances for native asset', async ({
-      adapter,
-    }) => {
+    it<TestContext>('should fetch balances for native asset', async ({ adapter }) => {
       const result = await adapter.getAddressAssets('addr1');
 
       expect(result).toEqual(expectedBitcoinGetAddressAssetsResult);

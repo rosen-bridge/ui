@@ -1,10 +1,9 @@
-import { RosenTokens } from '@rosen-bridge/tokens';
+import type { RosenTokens } from '@rosen-bridge/tokens';
 
 export const tokenMapData: RosenTokens = [
   {
     ergo: {
-      tokenId:
-        '1111111111111111111111111111111111111111111111111111111111111111',
+      tokenId: '1111111111111111111111111111111111111111111111111111111111111111',
       extra: {},
       name: 'test token1',
       decimals: 0,
@@ -25,8 +24,7 @@ export const tokenMapData: RosenTokens = [
   },
   {
     ergo: {
-      tokenId:
-        '2222222222222222222222222222222222222222222222222222222222222222',
+      tokenId: '2222222222222222222222222222222222222222222222222222222222222222',
       extra: {},
       name: 'test token2',
       decimals: 0,

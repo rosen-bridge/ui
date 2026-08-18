@@ -1,8 +1,4 @@
-import {
-  DataSource,
-  QueryRunner,
-  Repository,
-} from '@rosen-bridge/extended-typeorm';
+import type { DataSource, QueryRunner, Repository } from '@rosen-bridge/extended-typeorm';
 
 import { TokenEntity } from '../../lib';
 import { TokenAction } from '../../lib/actions';
@@ -33,10 +29,7 @@ describe('TokenAction', () => {
      * @expected
      * - New record of TokenEntity should stored in database
      */
-    it<TokenTestContext>('should store a single token', async ({
-      action,
-      repository,
-    }) => {
+    it<TokenTestContext>('should store a single token', async ({ action, repository }) => {
       const token = TokenTestData.createSingleToken();
       await action.store(token);
       const stored = await repository.find();
@@ -52,10 +45,7 @@ describe('TokenAction', () => {
      * @expected
      * - Two new records of TokenEntity should stored in database
      */
-    it<TokenTestContext>('should store multiple tokens', async ({
-      action,
-      repository,
-    }) => {
+    it<TokenTestContext>('should store multiple tokens', async ({ action, repository }) => {
       const tokens = TokenTestData.createMultipleTokens(2);
       await action.store(tokens);
       const stored = await repository.find();

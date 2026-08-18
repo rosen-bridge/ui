@@ -1,13 +1,13 @@
-import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
-import { DataSource } from '@rosen-bridge/extended-typeorm';
+import { type AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
+import type { DataSource } from '@rosen-bridge/extended-typeorm';
 import {
-  MetricAction,
   METRIC_KEYS,
+  MetricAction,
   WatcherCountMetricAction,
 } from '@rosen-ui/rosen-statistics-entity';
 
 import { NodeBoxFetcher } from '../fetchers';
-import { WatcherCountConfig } from '../types';
+import type { WatcherCountConfig } from '../types';
 import { calculateWatcherCounts } from '../utils';
 
 /**
@@ -28,24 +28,14 @@ export const watcherCountMetric = async (
     dataSource,
     logger.child('watcherCountMetricAction'),
   );
-  const metricAction = new MetricAction(
-    dataSource,
-    logger.child('metricAction'),
-  );
+  const metricAction = new MetricAction(dataSource, logger.child('metricAction'));
   try {
-    const boxService = new NodeBoxFetcher(
-      config.url,
-      logger.child('nodeBoxFetcher'),
-    );
-    const boxes = await boxService.fetchUnspentBoxesByTokenId(
-      config.rwtRepoNFT,
-    );
+    const boxService = new NodeBoxFetcher(config.url, logger.child('nodeBoxFetcher'));
+    const boxes = await boxService.fetchUnspentBoxesByTokenId(config.rwtRepoNFT);
     logger.debug(`Fetched ${boxes.length} watcher boxes from Node provider`);
     const result = calculateWatcherCounts(boxes, config, logger);
 
-    logger.debug(
-      `Found watchers in ${result.networkWatcherCounts.length} networks`,
-    );
+    logger.debug(`Found watchers in ${result.networkWatcherCounts.length} networks`);
 
     await watcherAction.upsertWatcherCount(result.networkWatcherCounts);
 
@@ -54,9 +44,7 @@ export const watcherCountMetric = async (
       result.totalWatchers.toString(),
       Math.floor(Date.now() / 1000),
     );
-    logger.debug(
-      `WatcherCount updated. Total watchers: ${result.totalWatchers}`,
-    );
+    logger.debug(`WatcherCount updated. Total watchers: ${result.totalWatchers}`);
   } catch (error) {
     logger.error(`Watcher count metric calculation job failed: ${error}`, {
       message: error instanceof Error ? error.message : '',

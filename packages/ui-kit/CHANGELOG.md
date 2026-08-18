@@ -1,5 +1,68 @@
 # @rosen-bridge/ui-kit
 
+## 5.9.0
+
+### Minor Changes
+
+- Fix scroll lock in `Menu` component
+- Add `CopyButton` error state
+- Move illustration components from legacy to the main illustrations directory
+- Refactor `EmptyState` component
+
+## 5.8.2
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-bridge/icons@3.7.1
+
+## 5.8.1
+
+### Patch Changes
+
+- Remove the unused `server.ts` file from the `SmartSearch` component
+
+## 5.8.0
+
+### Minor Changes
+
+- Implement `Menu` component
+- Move MUI-dependent components to the legacy folder
+- Implement the `EventProcesses` component
+- Implement `useConfirm` hook, `ApiKeyDialogProtectedAction` component, and add `TableGrid` variant property
+- Add useMemo to `useCollection` to stabilize output and reduce unnecessary re-renders
+- Remove unused `QrCodeModal` component
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-bridge/icons@3.7.0
+  - @rosen-ui/utils@1.0.4
+
+## 5.7.0
+
+### Minor Changes
+
+- Add NotFound illustrations
+- Expose `NoSsr` component
+- Add Under Development illustration
+
+## 5.6.0
+
+### Minor Changes
+
+- Replace relative component imports with aliases
+- Update application layout-related components and their dependent components based on the new structure
+- Export the `QRCodeCanvas` component from the package
+- Migrate selected components to the new UI Kit architecture
+- Remove application-level providers from the App component and keep it focused on layout responsibilities
+- Implement new UI kit foundation layer
+- Add CubeNet Background component
+
+### Patch Changes
+
+- Refactor existing components while preserving legacy components to maintain backward compatibility and prevent breaking changes
+
 ## 5.5.0
 
 ### Minor Changes

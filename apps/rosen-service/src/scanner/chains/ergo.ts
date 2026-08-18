@@ -1,17 +1,11 @@
 import { DefaultLogger } from '@rosen-bridge/abstract-logger';
-import {
-  FailoverStrategy,
-  NetworkConnectorManager,
-} from '@rosen-bridge/abstract-scanner';
-import { ErgoScanner, ErgoExplorerNetwork } from '@rosen-bridge/ergo-scanner';
-import { Transaction } from '@rosen-bridge/scanner-interfaces';
+import { FailoverStrategy, NetworkConnectorManager } from '@rosen-bridge/abstract-scanner';
+import { ErgoExplorerNetwork, ErgoScanner } from '@rosen-bridge/ergo-scanner';
+import type { Transaction } from '@rosen-bridge/scanner-interfaces';
 
 import commitmentService from '../../commitment/commitment-service';
 import config from '../../configs';
-import {
-  ERGO_SCANNER_INTERVAL,
-  ERGO_SCANNER_LOGGER_NAME,
-} from '../../constants';
+import { ERGO_SCANNER_INTERVAL, ERGO_SCANNER_LOGGER_NAME } from '../../constants';
 import dataSource from '../../data-source';
 import AppError from '../../errors/AppError';
 import eventTriggerService from '../../event-trigger/event-trigger-service';
@@ -24,17 +18,14 @@ const scannerLogger = logger.child(ERGO_SCANNER_LOGGER_NAME);
 /**
  * Creates and configures a NetworkConnectorManager instance for Ergo node
  */
-export const createErgoNodeNetworkConnectorManager =
-  (): NetworkConnectorManager<Transaction> => {
-    const networkConnectorManager = new NetworkConnectorManager<Transaction>(
-      new FailoverStrategy(),
-      scannerLogger,
-    );
-    networkConnectorManager.addConnector(
-      new ErgoExplorerNetwork(config.ergo.explorerUrl),
-    );
-    return networkConnectorManager;
-  };
+export const createErgoNodeNetworkConnectorManager = (): NetworkConnectorManager<Transaction> => {
+  const networkConnectorManager = new NetworkConnectorManager<Transaction>(
+    new FailoverStrategy(),
+    scannerLogger,
+  );
+  networkConnectorManager.addConnector(new ErgoExplorerNetwork(config.ergo.explorerUrl));
+  return networkConnectorManager;
+};
 
 /**
  * create an ergo scanner, initializing it and calling its update method

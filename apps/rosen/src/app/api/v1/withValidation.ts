@@ -1,7 +1,12 @@
-/* eslint-disable */
-import { NextRequest } from 'next/server';
+/**
+ * TODO: remove the inline Biome comment
+ * local:ergo/rosen-bridge/ui#441
+ */
+/* biome-ignore-all lint/suspicious/noExplicitAny: Use a better type */
+import type { NextRequest } from 'next/server';
 
-import { ValidationResult } from 'joi';
+import * as Sentry from '@sentry/nextjs';
+import type { ValidationResult } from 'joi';
 
 export class AccessDeniedError extends Error {
   constructor(message: string) {
@@ -32,11 +37,7 @@ export const withValidation =
     try {
       const result = await validator(request, context);
 
-      if (
-        result &&
-        typeof result === 'object' &&
-        ('error' in result || 'value' in result)
-      ) {
+      if (result && typeof result === 'object' && ('error' in result || 'value' in result)) {
         const { error, value: data } = result as ValidationResult<TSchema>;
 
         if (error) throw error;
@@ -46,7 +47,7 @@ export const withValidation =
         value = result;
       }
     } catch (error) {
-      return Response.json((error as any).message, { status: 400 });
+      return Response.json({ message: (error as any).message }, { status: 400 });
     }
 
     try {
@@ -54,13 +55,29 @@ export const withValidation =
       return Response.json(response);
     } catch (error) {
       if (error instanceof ReferenceError) {
-        return Response.json(error.message, { status: 404 });
+        return Response.json({ message: error.message }, { status: 404 });
       }
       if (error instanceof AccessDeniedError) {
-        return Response.json({ error: error.message }, { status: 403 });
+        return Response.json({ message: error.message }, { status: 403 });
       }
+
+      Sentry.withScope((scope) => {
+        scope.setTag('layer', 'api-route');
+
+        scope.setContext('request', {
+          url: request.url,
+          method: request.method,
+        });
+
+        scope.setContext('validation', {
+          value,
+        });
+
+        Sentry.captureException(error);
+      });
+
       if (error instanceof Error) {
-        return Response.json(error.message, { status: 500 });
+        return Response.json({ message: error.message }, { status: 500 });
       }
       return Response.json(JSON.stringify(error), { status: 500 });
     }

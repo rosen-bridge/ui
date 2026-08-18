@@ -13,7 +13,7 @@ interface TestContext {
   mockTokenMap: TokenMap;
 }
 
-let mockKoios = {
+const mockKoios = {
   addressInfo: vi.fn().mockReturnValue(CardanoAddressInfoMockValue),
   addressAssets: vi.fn().mockReturnValue(koiosAPIAddressAssetsMockedData),
 };
@@ -65,9 +65,7 @@ describe('CardanoKoiosDataAdapter', () => {
     }) => {
       const token = adapter['getAllWrappedTokens']().at(0)!;
 
-      adapter['koiosApi'].assetInfo = vi
-        .fn()
-        .mockResolvedValue([{ total_supply: '123456789' }]);
+      adapter['koiosApi'].assetInfo = vi.fn().mockResolvedValue([{ total_supply: '123456789' }]);
 
       const result = await adapter.getRawTotalSupply(token);
 
@@ -85,9 +83,7 @@ describe('CardanoKoiosDataAdapter', () => {
      * @expected
      * - method throws an error indicating total supply is not calculable
      */
-    it<TestContext>('should throw if assetInfo returns empty array', async ({
-      adapter,
-    }) => {
+    it<TestContext>('should throw if assetInfo returns empty array', async ({ adapter }) => {
       const token = adapter['getAllWrappedTokens']().at(0)!;
 
       adapter['koiosApi'].assetInfo = vi.fn().mockResolvedValue([]);

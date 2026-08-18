@@ -1,23 +1,25 @@
 import { HandshakeNetwork } from '@rosen-network/handshake/dist/client';
 import { NETWORKS } from '@rosen-ui/constants';
-import { Network } from '@rosen-ui/types';
+import type { Network } from '@rosen-ui/types';
 import {
   SubmitTransactionError,
   UnsupportedChainError,
   UserDeniedTransactionSignatureError,
   Wallet,
-  WalletTransferParams,
+  type WalletTransferParams,
 } from '@rosen-ui/wallet-api';
 
 import { ICON } from './icon';
-import { ShakeWalletConfig, ShakeWallet as ShakeWalletAPI } from './types';
+import type { ShakeWalletClient, ShakeWalletConfig } from './types';
+
+const USER_REJECTED_MESSAGE = 'user rejected.';
 
 export class ShakeWallet extends Wallet<ShakeWalletConfig> {
   icon = ICON;
 
-  name = 'Shake Wallet';
+  name = 'Shake';
 
-  label = 'Shake Wallet';
+  label = 'Shake';
 
   link = 'https://ipfs.hnsproxy.au/shakewallet/';
 
@@ -25,28 +27,26 @@ export class ShakeWallet extends Wallet<ShakeWalletConfig> {
 
   supportedChains: Network[] = [NETWORKS.handshake.key];
 
-  private wallet: ShakeWalletAPI | null = null;
+  private client: ShakeWalletClient | null = null;
 
   private get api() {
     return window.shake!;
   }
 
   performConnect = async (): Promise<void> => {
-    this.wallet = await this.api.connect();
+    this.client = await this.api.connect();
   };
 
   performDisconnect = async (): Promise<void> => {
-    this.wallet = null;
+    this.client = null;
   };
 
   fetchAddress = async (): Promise<string | undefined> => {
-    return await this.wallet?.getAddress();
+    return this.client?.getAddress();
   };
 
-  fetchBalance = async (): Promise<string | undefined> => {
-    const balance = await this.wallet?.getBalance();
-
-    return balance?.confirmed.toString();
+  fetchBalance = async (): Promise<number | undefined> => {
+    return (await this.client?.getBalance())?.confirmed;
   };
 
   isAvailable = (): boolean => {
@@ -54,9 +54,7 @@ export class ShakeWallet extends Wallet<ShakeWalletConfig> {
   };
 
   hasConnection = async (): Promise<boolean> => {
-    if (!this.wallet || (await this.api.isLocked())) {
-      return false;
-    }
+    if (!this.client || (await this.api.isLocked())) return false;
 
     return !!(await this.fetchAddress());
   };
@@ -66,50 +64,36 @@ export class ShakeWallet extends Wallet<ShakeWalletConfig> {
       throw new UnsupportedChainError(this.name, this.currentChain);
     }
 
+    const client = await this.api.connect();
+
+    const data = await this.currentNetwork.generateOpReturnData(
+      params.toChain,
+      params.address,
+      params.networkFee.toString(),
+      params.bridgeFee.toString(),
+    );
+
+    const tokenMap = await this.config.getTokenMap();
+
+    const unwrappedAmount = tokenMap.unwrapAmount(
+      params.token.tokenId,
+      params.amount,
+      NETWORKS.handshake.key,
+    ).amount;
+
     try {
-      const rosenDataHex = await this.currentNetwork.generateOpReturnData(
-        params.toChain,
-        params.address,
-        params.networkFee.toString(),
-        params.bridgeFee.toString(),
-      );
-
-      const tokenMap = await this.config.getTokenMap();
-      const unwrappedAmount = tokenMap.unwrapAmount(
-        params.token.tokenId,
-        params.amount,
-        NETWORKS.handshake.key,
-      ).amount;
-
-      const result = await this.wallet!.sendRosenBridgeData({
+      const tx = await client.sendRosenBridgeData({
         receiver: params.lockAddress,
         amount: Number(unwrappedAmount),
-        data: rosenDataHex,
+        data,
       });
 
-      if (!result.hash) {
-        throw new Error('Transaction failed - no hash returned');
-      }
-
-      return result.hash;
+      return tx.hash;
     } catch (error) {
-      if (error instanceof Error) {
-        if (
-          error.message.includes('rejected') ||
-          error.message.includes('denied') ||
-          error.message.includes('cancelled')
-        ) {
-          throw new UserDeniedTransactionSignatureError(this.name);
-        }
-        if (
-          error.message.includes('insufficient') ||
-          error.message.includes('balance')
-        ) {
-          throw new Error('Insufficient balance for transaction');
-        }
-        throw new SubmitTransactionError(this.name, error.message);
+      if (error instanceof Error && error.message === USER_REJECTED_MESSAGE) {
+        throw new UserDeniedTransactionSignatureError(this.name, error);
       }
-      throw new SubmitTransactionError(this.name, 'Unknown error occurred');
+      throw new SubmitTransactionError(this.name, error);
     }
   };
 }

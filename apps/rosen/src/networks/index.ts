@@ -3,6 +3,7 @@ export * from './bitcoin';
 export * from './bitcoin-runes';
 export * from './cardano';
 export * from './doge';
-export * from './handshake';
 export * from './ergo';
 export * from './ethereum';
+export * from './firo';
+export * from './handshake';

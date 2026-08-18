@@ -1,18 +1,18 @@
-import { useState, FC, useMemo } from 'react';
+import { type FC, useMemo, useState } from 'react';
 
 import { AngleDown, AngleUp } from '@rosen-bridge/icons';
 import {
-  Button,
-  EnhancedTableCell,
-  TableRow,
-  Id,
-  Connector,
   Amount,
+  Button,
+  Connector,
+  EnhancedTableCell,
+  Identifier,
+  TableRow,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 import { getTxURL } from '@rosen-ui/utils';
 
-import { OngoingEvent } from '@/types/api';
+import type { OngoingEvent } from '@/types/api';
 
 interface RowProps extends OngoingEvent {
   isLoading?: boolean;
@@ -110,10 +110,7 @@ export const MobileRow: FC<RowProps> = (props) => {
   const { isLoading, ...row } = props;
   const [expand, setExpand] = useState(false);
 
-  const rowStyles = useMemo(
-    () => (isLoading ? { opacity: 0.3 } : {}),
-    [isLoading],
-  );
+  const rowStyles = useMemo(() => (isLoading ? { opacity: 0.3 } : {}), [isLoading]);
 
   const toggleExpand = () => {
     setExpand((prevState) => !prevState);
@@ -124,15 +121,16 @@ export const MobileRow: FC<RowProps> = (props) => {
       <TableRow style={rowStyles}>
         <EnhancedTableCell>Event Id</EnhancedTableCell>
         <EnhancedTableCell>
-          <Id id={row.eventId} />
+          <Identifier value={row.eventId} variant="legacy" />
         </EnhancedTableCell>
       </TableRow>
       <TableRow style={rowStyles}>
         <EnhancedTableCell>Lock TX Id</EnhancedTableCell>
         <EnhancedTableCell>
-          <Id
+          <Identifier
             href={getTxURL(row.fromChain, row.sourceTxId)}
-            id={row.sourceTxId}
+            value={row.sourceTxId}
+            variant="legacy"
           />
         </EnhancedTableCell>
       </TableRow>
@@ -141,24 +139,25 @@ export const MobileRow: FC<RowProps> = (props) => {
           <TableRow style={rowStyles}>
             <EnhancedTableCell>Trigger TX Id</EnhancedTableCell>
             <EnhancedTableCell>
-              <Id id={row.txId} href={getTxURL(NETWORKS.ergo.key, row.txId)} />
+              <Identifier
+                value={row.txId}
+                href={getTxURL(NETWORKS.ergo.key, row.txId)}
+                variant="legacy"
+              />
             </EnhancedTableCell>
           </TableRow>
           <TableRow style={rowStyles}>
             <EnhancedTableCell>Chain</EnhancedTableCell>
             <EnhancedTableCell>
-              <Connector
-                start={NETWORKS[row.fromChain].label}
-                end={NETWORKS[row.toChain].label}
-              />
+              <Connector start={NETWORKS[row.fromChain].label} end={NETWORKS[row.toChain].label} />
             </EnhancedTableCell>
           </TableRow>
           <TableRow style={rowStyles}>
             <EnhancedTableCell>Addresses</EnhancedTableCell>
             <EnhancedTableCell>
               <Connector
-                start={<Id id={row.fromAddress} />}
-                end={<Id id={row.toAddress} />}
+                start={<Identifier value={row.fromAddress} variant="legacy" />}
+                end={<Identifier value={row.toAddress} variant="legacy" />}
               />
             </EnhancedTableCell>
           </TableRow>
@@ -169,28 +168,19 @@ export const MobileRow: FC<RowProps> = (props) => {
           <TableRow style={rowStyles}>
             <EnhancedTableCell>Amount</EnhancedTableCell>
             <EnhancedTableCell>
-              <Amount
-                value={row.sourceChainToken.amount}
-                decimal={row.sourceChainToken.decimals}
-              />
+              <Amount value={row.sourceChainToken.amount} decimal={row.sourceChainToken.decimals} />
             </EnhancedTableCell>
           </TableRow>
           <TableRow style={rowStyles}>
             <EnhancedTableCell>Bridge Fee</EnhancedTableCell>
             <EnhancedTableCell>
-              <Amount
-                value={row.bridgeFee}
-                decimal={row.sourceChainToken.decimals}
-              />
+              <Amount value={row.bridgeFee} decimal={row.sourceChainToken.decimals} />
             </EnhancedTableCell>
           </TableRow>
           <TableRow style={rowStyles}>
             <EnhancedTableCell>Network Fee</EnhancedTableCell>
             <EnhancedTableCell>
-              <Amount
-                value={row.networkFee}
-                decimal={row.sourceChainToken.decimals}
-              />
+              <Amount value={row.networkFee} decimal={row.sourceChainToken.decimals} />
             </EnhancedTableCell>
           </TableRow>
           <TableRow style={rowStyles}>
@@ -219,54 +209,45 @@ export const MobileRow: FC<RowProps> = (props) => {
 export const TabletRow: FC<RowProps> = (props) => {
   const { isLoading, ...row } = props;
 
-  const rowStyles = useMemo(
-    () => (isLoading ? { opacity: 0.3 } : {}),
-    [isLoading],
-  );
+  const rowStyles = useMemo(() => (isLoading ? { opacity: 0.3 } : {}), [isLoading]);
 
   return (
     <TableRow className="divider" style={rowStyles}>
       <EnhancedTableCell align="center">
-        <Id id={row.eventId} />
+        <Identifier value={row.eventId} variant="legacy" />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
-        <Id
+        <Identifier
           href={getTxURL(row.fromChain, row.sourceTxId)}
-          id={row.sourceTxId}
+          value={row.sourceTxId}
+          variant="legacy"
         />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
-        <Id id={row.txId} href={getTxURL(NETWORKS.ergo.key, row.txId)} />
+        <Identifier
+          value={row.txId}
+          href={getTxURL(NETWORKS.ergo.key, row.txId)}
+          variant="legacy"
+        />
+      </EnhancedTableCell>
+      <EnhancedTableCell align="center">
+        <Connector start={NETWORKS[row.fromChain].label} end={NETWORKS[row.toChain].label} />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
         <Connector
-          start={NETWORKS[row.fromChain].label}
-          end={NETWORKS[row.toChain].label}
+          start={<Identifier value={row.fromAddress} variant="legacy" />}
+          end={<Identifier value={row.toAddress} variant="legacy" />}
         />
       </EnhancedTableCell>
+      <EnhancedTableCell align="center">{row.sourceChainToken.name}</EnhancedTableCell>
       <EnhancedTableCell align="center">
-        <Connector
-          start={<Id id={row.fromAddress} />}
-          end={<Id id={row.toAddress} />}
-        />
-      </EnhancedTableCell>
-      <EnhancedTableCell align="center">
-        {row.sourceChainToken.name}
-      </EnhancedTableCell>
-      <EnhancedTableCell align="center">
-        <Amount
-          value={row.sourceChainToken.amount}
-          decimal={row.sourceChainToken.decimals}
-        />
+        <Amount value={row.sourceChainToken.amount} decimal={row.sourceChainToken.decimals} />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
         <Amount value={row.bridgeFee} decimal={row.sourceChainToken.decimals} />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
-        <Amount
-          value={row.networkFee}
-          decimal={row.sourceChainToken.decimals}
-        />
+        <Amount value={row.networkFee} decimal={row.sourceChainToken.decimals} />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">{row.status}</EnhancedTableCell>
     </TableRow>

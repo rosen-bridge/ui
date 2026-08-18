@@ -1,13 +1,12 @@
-import { WalletConfig } from '@rosen-ui/wallet-api';
+import type { WalletConfig } from '@rosen-ui/wallet-api';
 
 export type ShakeWalletConfig = WalletConfig;
 
-export interface ShakeWallet {
+export interface ShakeWalletClient {
   getAddress(): Promise<string>;
   getBalance(): Promise<{
     confirmed: number;
     unconfirmed: number;
-    total: number;
   }>;
   sendRosenBridgeData(opts: {
     receiver: string;
@@ -16,13 +15,14 @@ export interface ShakeWallet {
   }): Promise<{ hash: string }>;
 }
 
-export interface ShakeAPI {
-  connect(): Promise<ShakeWallet>;
-  isLocked(): Promise<boolean>;
-}
-
+/**
+ * global type augmentation for the wallet
+ */
 declare global {
   interface Window {
-    shake?: ShakeAPI;
+    shake?: {
+      connect(): Promise<ShakeWalletClient>;
+      isLocked(): Promise<boolean>;
+    };
   }
 }

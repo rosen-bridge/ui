@@ -1,9 +1,10 @@
-import { AbstractLogger } from '@rosen-bridge/abstract-logger';
-import { NATIVE_TOKEN, RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
-import axios, { Axios } from '@rosen-clients/rate-limited-axios';
-import { NETWORKS } from '@rosen-ui/constants';
-import { Network } from '@rosen-ui/types';
 import { zipWith } from 'lodash-es';
+
+import type { AbstractLogger } from '@rosen-bridge/abstract-logger';
+import { NATIVE_TOKEN, type RosenChainToken, type TokenMap } from '@rosen-bridge/tokens';
+import axios, { type Axios } from '@rosen-clients/rate-limited-axios';
+import { NETWORKS } from '@rosen-ui/constants';
+import type { Network } from '@rosen-ui/types';
 
 import AbstractCalculator from '../abstract-calculator';
 
@@ -56,9 +57,7 @@ export class BitcoinCalculator extends AbstractCalculator {
     if (token.type === NATIVE_TOKEN) {
       const balances = await Promise.all(
         this.addresses.map(async (address) => {
-          const response = await this.client.get<PartialEsploraAddress>(
-            `/api/address/${address}`,
-          );
+          const response = await this.client.get<PartialEsploraAddress>(`/api/address/${address}`);
           const chainStats = response.data.chain_stats;
           return BigInt(chainStats.funded_txo_sum - chainStats.spent_txo_sum);
         }),

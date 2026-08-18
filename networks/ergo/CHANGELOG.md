@@ -1,5 +1,21 @@
 # @rosen-network/ergo
 
+## 2.5.8
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-bridge/icons@3.7.1
+
+## 2.5.7
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-bridge/tokens@6.0.2
+  - @rosen-clients/ergo-explorer@2.1.3
+  - @rosen-network/base@0.5.4
+
 ## 2.5.6
 
 ### Patch Changes

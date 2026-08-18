@@ -1,5 +1,34 @@
 # @rosen-ui/data-source
 
+## 0.2.7
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-bridge/abstract-observation-extractor@1.0.10
+  - @rosen-bridge/abstract-scanner@2.0.3
+  - @rosen-bridge/token-price-entity@0.2.2
+  - @rosen-bridge/watcher-data-extractor@13.0.10
+  - @rosen-ui/asset-calculator@2.4.0
+  - @rosen-ui/public-status@0.2.0
+  - @rosen-ui/rosen-statistics-entity@0.4.2
+
+## 0.2.6
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-bridge/abstract-observation-extractor@1.0.6
+  - @rosen-bridge/abstract-scanner@1.0.4
+  - @rosen-bridge/watcher-data-extractor@13.0.6
+  - @rosen-bridge/extended-typeorm@1.1.0
+  - @rosen-bridge/abstract-observation-extractor@1.0.7
+  - @rosen-bridge/abstract-scanner@2.0.0
+  - @rosen-bridge/watcher-data-extractor@13.0.7
+  - @rosen-ui/asset-calculator@2.3.3
+  - @rosen-ui/public-status@0.1.2
+  - @rosen-ui/rosen-statistics-entity@0.4.1
+
 ## 0.2.5
 
 ### Patch Changes

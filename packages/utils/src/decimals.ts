@@ -64,11 +64,10 @@ export const getNonDecimalString = (value: string, decimals: number) => {
   return `${value.slice(0, decimalPointIndex)}${value.slice(
     decimalPointIndex + 1,
     decimalPointIndex + 1 + decimals,
-  )}${
-    fractionalPartLength <= decimals
-      ? '0'.repeat(decimals - fractionalPartLength)
-      : ''
-  }`.replace(/^0+(\d+)/, '$1');
+  )}${fractionalPartLength <= decimals ? '0'.repeat(decimals - fractionalPartLength) : ''}`.replace(
+    /^0+(\d+)/,
+    '$1',
+  );
 };
 
 /**
@@ -82,7 +81,7 @@ export const getNonDecimalString = (value: string, decimals: number) => {
  * roundToPrecision(1.126, 2) === 1.13 // true
  */
 export const roundToPrecision = (value: number, precision: number) => {
-  return Math.round(value * Math.pow(10, precision)) / Math.pow(10, precision);
+  return Math.round(value * 10 ** precision) / 10 ** precision;
 };
 
 /**
@@ -103,10 +102,7 @@ export const getNumberOfDecimals = (inputNumber: number) => {
  * @param {number} allowedDecimals - The maximum number of decimal places allowed.
  * @throws {Error} If the number of decimal places in `inputNumber` exceeds `allowedDecimals`.
  */
-export const validateDecimalPlaces = (
-  inputNumber: number,
-  allowedDecimals: number,
-) => {
+export const validateDecimalPlaces = (inputNumber: number, allowedDecimals: number) => {
   const currentDecimals = getNumberOfDecimals(inputNumber);
 
   if (currentDecimals > allowedDecimals) {

@@ -1,16 +1,16 @@
-import { BlockEntity, PROCEED } from '@rosen-bridge/abstract-scanner';
-import { DeepPartial } from '@rosen-bridge/extended-typeorm';
-import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
-import { TokenEntity } from '@rosen-ui/asset-calculator';
+import { type BlockEntity, PROCEED } from '@rosen-bridge/abstract-scanner';
+import type { DeepPartial } from '@rosen-bridge/extended-typeorm';
+import type { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
+import type { TokenEntity } from '@rosen-ui/asset-calculator';
 
 import {
+  type BridgedAmountEntity,
+  type BridgeFeeEntity,
+  type BridgeMetricRecord,
+  type EventCountStatus,
   METRIC_KEYS,
-  EventCountStatus,
-  WatcherCountType,
-  BridgeFeeEntity,
-  BridgeMetricRecord,
-  MetricEntity,
-  BridgedAmountEntity,
+  type MetricEntity,
+  type WatcherCountType,
 } from '../lib';
 
 /**
@@ -49,9 +49,7 @@ const createEventTrigger = (
 /**
  * Helper function to create minimal BlockEntity for testing
  */
-const createBlock = (
-  overrides: Partial<BlockEntity>,
-): DeepPartial<BlockEntity> => ({
+const createBlock = (overrides: Partial<BlockEntity>): DeepPartial<BlockEntity> => ({
   id: Math.floor(Math.random() * 10000),
   height: 100,
   hash: 'block1',
@@ -1125,10 +1123,7 @@ export const upsertWatcherCountScenarios = {
   },
 
   insertMultipleDifferentNetworks: {
-    initialData: [
-      watcherCountTestData.ergoNetwork,
-      watcherCountTestData.cardanoNetwork,
-    ],
+    initialData: [watcherCountTestData.ergoNetwork, watcherCountTestData.cardanoNetwork],
     upsertData: [
       {
         network: 'ethereum',

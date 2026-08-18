@@ -1,12 +1,10 @@
 import { DefaultLogger } from '@rosen-bridge/abstract-logger';
-import {
-  BitcoinRpcScanner,
-  DogeRpcScanner,
-} from '@rosen-bridge/bitcoin-scanner';
-import { CardanoKoiosScanner } from '@rosen-bridge/cardano-scanner';
-import { ErgoScanner } from '@rosen-bridge/ergo-scanner';
-import { EvmRpcScanner } from '@rosen-bridge/evm-scanner';
-import { HandshakeRpcScanner } from '@rosen-bridge/handshake-scanner';
+import type { BitcoinRpcScanner, DogeRpcScanner } from '@rosen-bridge/bitcoin-scanner';
+import type { CardanoKoiosScanner } from '@rosen-bridge/cardano-scanner';
+import type { ErgoScanner } from '@rosen-bridge/ergo-scanner';
+import type { EvmRpcScanner } from '@rosen-bridge/evm-scanner';
+import type { FiroElectrumXScanner } from '@rosen-bridge/firo-scanner';
+import type { HandshakeRpcScanner } from '@rosen-bridge/handshake-scanner';
 
 import { handleError } from '../utils';
 import { startBinanceScanner } from './chains/binance';
@@ -15,6 +13,7 @@ import { startCardanoScanner } from './chains/cardano';
 import { startDogeScanner } from './chains/doge';
 import { startErgoScanner } from './chains/ergo';
 import { startEthereumScanner } from './chains/ethereum';
+import { startFiroScanner } from './chains/firo';
 import { startHandshakeScanner } from './chains/handshake';
 
 const logger = DefaultLogger.getInstance().child(import.meta.url);
@@ -26,6 +25,7 @@ let bitcoinScanner: BitcoinRpcScanner;
 let ethereumScanner: EvmRpcScanner;
 let binanceScanner: EvmRpcScanner;
 let dogeScanner: DogeRpcScanner;
+let firoScanner: FiroElectrumXScanner;
 let handshakeScanner: HandshakeRpcScanner;
 
 /**
@@ -40,6 +40,7 @@ const start = async () => {
       ethereumScanner,
       binanceScanner,
       dogeScanner,
+      firoScanner,
       handshakeScanner,
     ] = await Promise.all([
       startErgoScanner(),
@@ -48,6 +49,7 @@ const start = async () => {
       startEthereumScanner(),
       startBinanceScanner(),
       startDogeScanner(),
+      startFiroScanner(),
       startHandshakeScanner(),
     ]);
 
@@ -59,6 +61,7 @@ const start = async () => {
         ethereumScanner.name(),
         binanceScanner.name(),
         dogeScanner.name(),
+        firoScanner.name(),
         handshakeScanner.name(),
       ],
     });
@@ -76,6 +79,7 @@ const scannerService = {
   getEthereumScanner: () => ethereumScanner,
   getBinanceScanner: () => binanceScanner,
   getDogeScanner: () => dogeScanner,
+  getFiroScanner: () => firoScanner,
   getHandshakeScanner: () => handshakeScanner,
 };
 

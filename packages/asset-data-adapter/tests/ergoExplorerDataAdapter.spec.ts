@@ -1,5 +1,6 @@
+import type { Mock } from 'vitest';
+
 import { TokenMap } from '@rosen-bridge/tokens';
-import { Mock } from 'vitest';
 
 import { ErgoExplorerDataAdapter } from '../lib';
 import { sampleTokenMapConfig } from './mocked';
@@ -14,7 +15,7 @@ interface TestContext {
   mockExplorer: { v1: { [k: string]: Mock } };
 }
 
-let mockExplorer = {
+const mockExplorer = {
   v1: {
     getApiV1AddressesP1BalanceConfirmed: vi.fn(),
     getApiV1TokensP1: vi.fn(),
@@ -78,9 +79,7 @@ describe('ErgoExplorerDataAdapter', () => {
 
       const result = await adapter.getRawTotalSupply(token);
       expect(result).toBe(1000n);
-      expect(mockExplorer.v1.getApiV1TokensP1).toHaveBeenCalledWith(
-        token.tokenId,
-      );
+      expect(mockExplorer.v1.getApiV1TokensP1).toHaveBeenCalledWith(token.tokenId);
     });
 
     /**

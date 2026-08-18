@@ -1,5 +1,5 @@
-import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
-import { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
+import { type AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
+import type { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
 import JsonBigInt from '@rosen-bridge/json-bigint';
 
 import { LockedAssetEntity } from './LockedAssetEntity';
@@ -20,20 +20,16 @@ class LockedAssetModel {
    */
   upsertAsset = async (asset: LockedAssetEntity) => {
     await this.lockedAssetRepository.save(asset);
-    this.logger.debug(
-      `Asset [${JsonBigInt.stringify(asset)}] upserted in database`,
-    );
+    this.logger.debug(`Asset [${JsonBigInt.stringify(asset)}] upserted in database`);
   };
 
   /**
    * Return all stored asset primary keys (tokenId+chain combination)
    */
-  getAllStoredAssets = async (): Promise<
-    { tokenId: string; address: string }[]
-  > => {
-    return (
-      await this.lockedAssetRepository.find({ select: ['address', 'tokenId'] })
-    ).map((asset) => ({ tokenId: asset.tokenId, address: asset.address }));
+  getAllStoredAssets = async (): Promise<{ tokenId: string; address: string }[]> => {
+    return (await this.lockedAssetRepository.find({ select: ['address', 'tokenId'] })).map(
+      (asset) => ({ tokenId: asset.tokenId, address: asset.address }),
+    );
   };
 
   /**
@@ -50,9 +46,7 @@ class LockedAssetModel {
       ),
     );
     assets.length &&
-      this.logger.debug(
-        `Deleted assets ${JsonBigInt.stringify(assets)} from database`,
-      );
+      this.logger.debug(`Deleted assets ${JsonBigInt.stringify(assets)} from database`);
   };
 }
 

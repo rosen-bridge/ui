@@ -1,14 +1,15 @@
-import { NextRequest } from 'next/server';
+import type { NextRequest } from 'next/server';
+
+import Joi from 'joi';
 
 import {
-  EventStatus,
+  type EventStatus,
   eventStatuses,
-  TxType,
-  TxStatus,
+  type TxStatus,
+  type TxType,
   txStatuses,
   txTypes,
 } from '@rosen-ui/public-status';
-import Joi from 'joi';
 
 export interface TxParams {
   txId: string;
@@ -19,6 +20,7 @@ export interface TxParams {
 
 export interface Params {
   date: Date;
+  triggerTxId: string;
   eventId: string;
   status: EventStatus;
   pk: string;
@@ -41,33 +43,23 @@ const TxSchema = Joi.object<TxParams>().keys({
 
 const ParamsSchema = Joi.object<Params>().keys({
   date: Joi.date().timestamp('unix').required(),
-  eventId: Joi.string()
-    .length(64)
-    .pattern(/^[a-fA-F0-9]+$/)
-    .required(),
+  triggerTxId: Joi.string().hex().length(64).required(),
+  eventId: Joi.string().hex().length(64).required(),
   status: Joi.string()
     .valid(...eventStatuses)
     .required(),
   tx: TxSchema.optional(),
-  pk: Joi.string()
-    .length(66)
-    .pattern(/^[a-fA-F0-9]+$/)
-    .required(),
-  signature: Joi.string()
-    .length(128)
-    .pattern(/^[a-fA-F0-9]+$/)
-    .required(),
+  pk: Joi.string().hex().length(66).required(),
+  signature: Joi.string().hex().length(128).required(),
 });
 
 export const validator = async (request: NextRequest) => {
   return ParamsSchema.validate(await request.json());
 };
 
-export const paramsToSignMessage = (
-  params: Params,
-  timestampSeconds: number,
-): string => {
-  return params.tx
-    ? `${params.eventId}${params.status}${params.tx.txId}${params.tx.chain}${params.tx.txType}${params.tx.txStatus}${timestampSeconds}`
-    : `${params.eventId}${params.status}${timestampSeconds}`;
+export const paramsToSignMessage = (params: Params, timestampSeconds: number): string => {
+  const txData = params.tx
+    ? `${params.tx.txId}${params.tx.chain}${params.tx.txType}${params.tx.txStatus}`
+    : '';
+  return `${params.triggerTxId}${params.eventId}${params.status}${txData}${timestampSeconds}`;
 };

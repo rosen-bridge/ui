@@ -1,5 +1,19 @@
 # @rosen-ui/public-status
 
+## 0.2.0
+
+### Minor Changes
+
+- Add trigger tx id to entities
+
+## 0.1.2
+
+### Patch Changes
+
+- Fix inconsistent aggregate transaction status calculation
+- Update dependencies
+  - @rosen-bridge/extended-typeorm@1.1.0
+
 ## 0.1.1
 
 ### Patch Changes

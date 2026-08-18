@@ -1,6 +1,6 @@
 {
   "name": "@rosen-ui/wallet-api",
-  "version": "3.2.0",
+  "version": "3.2.1",
   "private": true,
   "description": "This is a private package utilized within Rosen Bridge UI app",
   "repository": {
@@ -13,17 +13,15 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc --build",
-    "lint": "eslint --fix . && npm run prettify",
-    "lint:check": "eslint . && npm run prettify:check",
-    "prettify": "prettier --write . --ignore-path ../../.gitignore",
-    "prettify:check": "prettier --check . --ignore-path ../../.gitignore",
+    "lint": "biome check --write",
+    "lint:check": "biome check",
     "release": "npm run build && npm publish --access public",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@rosen-bridge/tokens": "^6.0.0",
-    "@rosen-network/base": "^0.5.3",
-    "@rosen-ui/types": "^0.5.0"
+    "@rosen-bridge/tokens": "^6.0.2",
+    "@rosen-network/base": "^0.5.4",
+    "@rosen-ui/types": "^0.5.1"
   },
   "engines": {
     "node": ">=22.18.0",

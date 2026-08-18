@@ -5,6 +5,7 @@ import { registerCardanoExtractor } from './chains/cardano';
 import { registerDogeExtractor } from './chains/doge';
 import { registerErgoExtractor } from './chains/ergo';
 import { registerEthereumExtractor } from './chains/ethereum';
+import { registerFiroExtractor } from './chains/firo';
 import { registerHandshakeExtractor } from './chains/handshake';
 
 const observationService = {
@@ -16,6 +17,7 @@ const observationService = {
   registerErgoExtractor,
   registerEthereumExtractor,
   registerBinanceExtractor,
+  registerFiroExtractor,
 };
 
 export default observationService;

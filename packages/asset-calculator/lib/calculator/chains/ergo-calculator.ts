@@ -1,9 +1,10 @@
-import { AbstractLogger } from '@rosen-bridge/abstract-logger';
-import { NATIVE_TOKEN, RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
-import ergoExplorerClientFactory, { V1 } from '@rosen-clients/ergo-explorer';
-import { NETWORKS } from '@rosen-ui/constants';
-import { Network } from '@rosen-ui/types';
 import { zipWith } from 'lodash-es';
+
+import type { AbstractLogger } from '@rosen-bridge/abstract-logger';
+import { NATIVE_TOKEN, type RosenChainToken, type TokenMap } from '@rosen-bridge/tokens';
+import ergoExplorerClientFactory, { type V1 } from '@rosen-clients/ergo-explorer';
+import { NETWORKS } from '@rosen-ui/constants';
+import type { Network } from '@rosen-ui/types';
 
 import { ERG_TOTAL_SUPPLY } from '../../constants';
 import AbstractCalculator from '../abstract-calculator';
@@ -29,14 +30,10 @@ export class ErgoCalculator extends AbstractCalculator {
    */
   totalRawSupply = async (token: RosenChainToken): Promise<bigint> => {
     if (token.type === NATIVE_TOKEN) {
-      this.logger.debug(
-        `Total supply of token [${token.tokenId}] is [${ERG_TOTAL_SUPPLY}]`,
-      );
+      this.logger.debug(`Total supply of token [${token.tokenId}] is [${ERG_TOTAL_SUPPLY}]`);
       return ERG_TOTAL_SUPPLY;
     }
-    const tokenDetail = await this.explorerApi.v1.getApiV1TokensP1(
-      token.tokenId,
-    );
+    const tokenDetail = await this.explorerApi.v1.getApiV1TokensP1(token.tokenId);
     if (tokenDetail) {
       this.logger.debug(
         `Total supply of token [${token.tokenId}] is [${tokenDetail.emissionAmount}]`,
@@ -53,19 +50,15 @@ export class ErgoCalculator extends AbstractCalculator {
   totalRawBalance = async (token: RosenChainToken): Promise<bigint> => {
     let tokenBalance = 0n;
     for (const address of this.addresses) {
-      const balance =
-        await this.explorerApi.v1.getApiV1AddressesP1BalanceConfirmed(address);
+      const balance = await this.explorerApi.v1.getApiV1AddressesP1BalanceConfirmed(address);
       const addressTokenBalance =
-        balance.tokens!.filter((asset) => asset.tokenId == token.tokenId)[0]
-          ?.amount ?? 0n;
+        balance.tokens?.filter((asset) => asset.tokenId === token.tokenId)[0]?.amount ?? 0n;
       this.logger.debug(
         `Balance of token [${token.name}] in address [${address}] is [${addressTokenBalance}]`,
       );
       tokenBalance += addressTokenBalance;
     }
-    this.logger.debug(
-      `Total balance of token [${token.name}] is [${tokenBalance}]`,
-    );
+    this.logger.debug(`Total balance of token [${token.name}] is [${tokenBalance}]`);
     return tokenBalance;
   };
 

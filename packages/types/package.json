@@ -1,6 +1,6 @@
 {
   "name": "@rosen-ui/types",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "private": true,
   "description": "This is a private package utilized within Rosen UI apps",
   "repository": {
@@ -13,20 +13,15 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc --build",
-    "lint": "eslint --fix . && npm run prettify",
-    "lint:check": "eslint . && npm run prettify:check",
-    "prettify": "prettier --write . --ignore-path ../../.gitignore",
-    "prettify:check": "prettier --check . --ignore-path ../../.gitignore",
+    "lint": "biome check --write",
+    "lint:check": "biome check",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@rosen-ui/constants": "^1.0.0"
-  },
-  "devDependencies": {
-    "@mui/material": "^7.3.9"
+    "@rosen-ui/constants": "^1.1.0"
   },
   "peerDependencies": {
-    "react": "^19.2.4"
+    "react": "^19.2.6"
   },
   "engines": {
     "node": ">=22.18.0",

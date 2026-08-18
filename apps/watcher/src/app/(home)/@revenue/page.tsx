@@ -1,32 +1,41 @@
 'use client';
 
-import dynamic from 'next/dynamic';
 import { useState } from 'react';
+import dynamic from 'next/dynamic';
+
+import useSWR from 'swr';
 
 import {
+  Button,
   Card,
+  CardAction,
   CardBody,
   CardHeader,
   CardTitle,
+  Icon,
+  Menu,
+  MenuBody,
+  MenuItem,
+  MenuTrigger,
   Skeleton,
-  Typography,
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
-import { ChartPeriod } from '@rosen-ui/types';
-import useSWR from 'swr';
+import type { ChartPeriod } from '@rosen-ui/types';
 
-import { ApiRevenueChartResponse } from '@/types/api';
+import type { ApiRevenueChartResponse } from '@/types/api';
 
-import { PeriodSelect } from './PeriodSelect';
+const periodOptions = ['week', 'month', 'year'] as const;
+
+const Loading = () => <Skeleton height={285} width="100%" variant="rounded" />;
 
 /**
  * This is required because revenue chart cannot be pre-rendered in next and
  * throws an error
  */
-const RevenueChart = dynamic(
-  () => import('./RevenueChart').then((mod) => mod.RevenueChart),
-  { ssr: false },
-);
+const RevenueChart = dynamic(() => import('./RevenueChart').then((mod) => mod.RevenueChart), {
+  ssr: false,
+  loading: () => <Loading />,
+});
 
 const Revenue = () => {
   const [period, setPeriod] = useState<ChartPeriod>('week');
@@ -36,23 +45,30 @@ const Revenue = () => {
   );
 
   return (
-    <Card style={{ minWidth: 0 }} backgroundColor="background.paper">
-      <CardHeader
-        action={<PeriodSelect period={period} setPeriod={setPeriod} />}
-      >
-        <CardTitle>
-          <Typography fontWeight="700">Revenue</Typography>
-        </CardTitle>
+    <Card style={{ minWidth: 0 }}>
+      <CardHeader>
+        <CardTitle>Revenue</CardTitle>
+        <CardAction>
+          <Menu>
+            <MenuTrigger as={Button} endIcon={<Icon name="AngleDown" size="small" />} size="small">
+              {period}
+            </MenuTrigger>
+            <MenuBody offset={[0, 4]} placement="bottom-end">
+              {periodOptions.map((periodOption) => (
+                <MenuItem
+                  key={periodOption}
+                  selected={periodOption === period}
+                  onClick={() => setPeriod(periodOption)}
+                >
+                  {periodOption}
+                </MenuItem>
+              ))}
+            </MenuBody>
+          </Menu>
+        </CardAction>
       </CardHeader>
       <CardBody>
-        {isLoading && (
-          <Skeleton
-            animation="wave"
-            height={285}
-            width="100%"
-            variant="rounded"
-          />
-        )}
+        {isLoading && <Loading />}
         {!isLoading && data && <RevenueChart period={period} data={data} />}
       </CardBody>
     </Card>

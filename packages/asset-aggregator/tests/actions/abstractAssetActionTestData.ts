@@ -1,6 +1,6 @@
-import { Network } from '@rosen-ui/types';
+import type { Network } from '@rosen-ui/types';
 
-import { BridgedAssetEntity, TokenEntity } from '../../lib/entities';
+import { BridgedAssetEntity, type TokenEntity } from '../../lib/entities';
 
 export class AbstractAssetTestData {
   /**
@@ -14,6 +14,8 @@ export class AbstractAssetTestData {
       significantDecimal: 18,
       isNative: false,
       chain: 'ergo',
+      isResident: true,
+      ergoSideTokenId: 'test-token-1',
     },
     {
       id: 'test-token-2',
@@ -22,6 +24,8 @@ export class AbstractAssetTestData {
       significantDecimal: 18,
       isNative: false,
       chain: 'ethereum',
+      isResident: false,
+      ergoSideTokenId: 'test-token-2',
     },
     {
       id: 'test-token-3',
@@ -30,6 +34,8 @@ export class AbstractAssetTestData {
       significantDecimal: 18,
       isNative: false,
       chain: 'bitcoin',
+      isResident: false,
+      ergoSideTokenId: 'test-token-3',
     },
   ];
 
@@ -38,9 +44,7 @@ export class AbstractAssetTestData {
    * @param overrides - Optional properties to override default values
    * @returns BridgedAssetEntity instance
    */
-  static createSingleAsset(
-    overrides: Partial<BridgedAssetEntity> = {},
-  ): BridgedAssetEntity {
+  static createSingleAsset(overrides: Partial<BridgedAssetEntity> = {}): BridgedAssetEntity {
     const asset = new BridgedAssetEntity();
     asset.chain = 'ergo';
     asset.tokenId = 'test-token-1';
@@ -49,7 +53,6 @@ export class AbstractAssetTestData {
 
     // Apply overrides
     Object.assign(asset, overrides);
-
     return asset;
   }
 
@@ -108,10 +111,7 @@ export class AbstractAssetTestData {
    *
    * @returns Not saved LockedTokenEntities
    */
-  static generateTestDataBridgedEntity = (
-    tokens: TokenEntity[],
-    amount: bigint = 1000n,
-  ) => {
+  static generateTestDataBridgedEntity = (tokens: TokenEntity[], amount: bigint = 1000n) => {
     const lockedTokens = [];
     for (const token of tokens)
       lockedTokens.push({

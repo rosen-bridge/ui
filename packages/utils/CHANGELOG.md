@@ -1,5 +1,14 @@
 # @rosen-ui/utils
 
+## 1.0.4
+
+### Patch Changes
+
+- Add Firo entries to the `getAddressUrl`, `getTokenUrl`, and `getTxUrl` explorer helpers.
+- Update dependencies
+  - @rosen-ui/constants@1.1.0
+  - @rosen-ui/types@0.5.1
+
 ## 1.0.3
 
 ### Patch Changes

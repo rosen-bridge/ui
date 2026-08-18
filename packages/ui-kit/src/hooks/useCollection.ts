@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { OPERATORS, Selected, SortValue, ViewType } from '../components';
+import { OPERATORS, type Selected, type SortValue, type ViewToggleType } from '../components';
 import { useFramework } from './useFramework';
 
 type Options = {
@@ -8,7 +8,7 @@ type Options = {
   defaultPageSize?: number;
   defaultSortField?: string;
   defaultSortOrder?: 'ASC' | 'DESC';
-  defaultView?: ViewType;
+  defaultView?: ViewToggleType;
   localStorageKey?: string;
 };
 
@@ -21,8 +21,8 @@ const getInitialState = (search: string, options?: Options) => {
   const offsetRaw = searchParams.get('offset');
   searchParams.delete('offset');
 
-  const sortRaw = searchParams.get('sort');
-  searchParams.delete('sort');
+  const sortRaw = searchParams.get('sorts');
+  searchParams.delete('sorts');
 
   const limit = limitRaw === null ? options?.defaultPageSize : Number(limitRaw);
   const offset = offsetRaw === null ? undefined : Number(offsetRaw);
@@ -38,10 +38,7 @@ const getInitialState = (search: string, options?: Options) => {
 
   const sortField = sortParam?.at(0) ?? options?.defaultSortField;
 
-  const sortOrder = (sortParam?.at(1) ?? options?.defaultSortOrder) as
-    | 'ASC'
-    | 'DESC'
-    | undefined;
+  const sortOrder = (sortParam?.at(1) ?? options?.defaultSortOrder) as 'ASC' | 'DESC' | undefined;
 
   const sort = sortField ? { key: sortField, order: sortOrder } : undefined;
 
@@ -49,15 +46,11 @@ const getInitialState = (search: string, options?: Options) => {
 
   const fields = Array.from(searchParams.entries())
     .map(([key, value]) => {
-      const operator = operators.find((operator) =>
-        key.endsWith(operator.symbol),
-      );
+      const operator = operators.find((operator) => key.endsWith(operator.symbol));
 
       if (!operator) return;
 
-      const name = operator.symbol.length
-        ? key.slice(0, -operator.symbol.length)
-        : key;
+      const name = operator.symbol.length ? key.slice(0, -operator.symbol.length) : key;
 
       let parsed: string | number | boolean | (string | number | boolean)[];
 
@@ -91,14 +84,9 @@ const getInitialState = (search: string, options?: Options) => {
 
   const fragment = window.location.hash.replace('#', '');
 
-  const raw =
-    window.localStorage.getItem(
-      `rosen:collection:${options?.localStorageKey}`,
-    ) || '';
+  const raw = window.localStorage.getItem(`rosen:collection:${options?.localStorageKey}`) || '';
 
-  const view = ['grid', 'row'].includes(raw)
-    ? (raw as ViewType)
-    : options?.defaultView;
+  const view = ['grid', 'row'].includes(raw) ? (raw as ViewToggleType) : options?.defaultView;
 
   return {
     fields,
@@ -123,7 +111,7 @@ export const useCollection = (options?: Options) => {
 
   const [sort, setSort] = useState<SortValue>();
 
-  const [view, setView] = useState<ViewType>();
+  const [view, setView] = useState<ViewToggleType>();
 
   const [fragment, setFragment] = useState<string>();
 
@@ -131,9 +119,7 @@ export const useCollection = (options?: Options) => {
     const params: Record<string, string> = {};
 
     for (const field of fields || []) {
-      const operator = OPERATORS.find(
-        (OPERATOR) => OPERATOR.value === field.operator,
-      );
+      const operator = OPERATORS.find((OPERATOR) => OPERATOR.value === field.operator);
 
       if (!operator) continue;
 
@@ -147,15 +133,15 @@ export const useCollection = (options?: Options) => {
     }
 
     if (typeof pageSize === 'number') {
-      params['limit'] = String(pageSize);
+      params.limit = String(pageSize);
     }
 
     if (typeof pageSize === 'number' && typeof pageIndex === 'number') {
-      params['offset'] = String(pageSize * pageIndex);
+      params.offset = String(pageSize * pageIndex);
     }
 
     if (sort?.key) {
-      params['sort'] = sort.order ? `${sort.key}-${sort.order}` : sort.key;
+      params.sorts = sort.order ? `${sort.key}-${sort.order}` : sort.key;
     }
 
     if (!Object.keys(params).length) return;
@@ -215,8 +201,7 @@ export const useCollection = (options?: Options) => {
     const inViewport =
       rect.top >= 0 &&
       rect.left >= 0 &&
-      rect.bottom <=
-        (window.innerHeight || document.documentElement.clientHeight) &&
+      rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
       rect.right <= (window.innerWidth || document.documentElement.clientWidth);
 
     if (inViewport) return;
@@ -232,14 +217,9 @@ export const useCollection = (options?: Options) => {
     if (!options?.localStorageKey) return;
 
     if (view) {
-      window.localStorage.setItem(
-        `rosen:collection:${options.localStorageKey}`,
-        view,
-      );
+      window.localStorage.setItem(`rosen:collection:${options.localStorageKey}`, view);
     } else {
-      window.localStorage.removeItem(
-        `rosen:collection:${options.localStorageKey}`,
-      );
+      window.localStorage.removeItem(`rosen:collection:${options.localStorageKey}`);
     }
   }, [options?.localStorageKey, view]);
 
@@ -289,27 +269,48 @@ export const useCollection = (options?: Options) => {
 
   useEffect(scrollIntoView, [scrollIntoView]);
 
-  return {
-    query,
+  return useMemo(
+    () => ({
+      query,
 
-    scrollIntoView,
+      scrollIntoView,
 
-    fields,
-    setFields: handleFieldsChange,
+      fields,
+      setFields: handleFieldsChange,
 
-    fragment,
-    setFragment,
+      fragment,
+      setFragment,
 
-    pageIndex,
-    setPageIndex,
+      pageIndex,
+      setPageIndex,
 
-    pageSize,
-    setPageSize: handlePageSizeChange,
+      pageSize,
+      setPageSize: handlePageSizeChange,
 
-    sort,
-    setSort,
+      sort,
+      setSort,
 
-    view,
-    setView,
-  };
+      view,
+      setView,
+    }),
+    [
+      query,
+
+      scrollIntoView,
+
+      fields,
+      handleFieldsChange,
+
+      fragment,
+
+      pageIndex,
+
+      pageSize,
+      handlePageSizeChange,
+
+      sort,
+
+      view,
+    ],
+  );
 };

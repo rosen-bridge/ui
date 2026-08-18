@@ -1,17 +1,16 @@
 'use client';
 
-import { ChangeEvent, MouseEvent, useCallback, useMemo } from 'react';
+import { type ChangeEvent, type MouseEvent, useCallback, useMemo } from 'react';
 
 import {
   EnhancedTable,
-  Grid,
-  TablePaginationProps,
+  type TablePaginationProps,
   useTableDataPagination,
 } from '@rosen-bridge/ui-kit';
 
-import { ApiEventResponse, Event } from '@/types/api';
+import type { ApiEventResponse, Event } from '@/types/api';
 
-import { MobileRow, TabletRow, mobileHeader, tabletHeader } from './TableRow';
+import { MobileRow, mobileHeader, TabletRow, tabletHeader } from './TableRow';
 import { TableSkeleton } from './TableSkeleton';
 
 const getKey = (offset: number, limit: number) => {
@@ -32,7 +31,7 @@ const Events = () => {
   } = useTableDataPagination<ApiEventResponse>(getKey);
 
   const handleChangePage = useCallback(
-    (event: MouseEvent<HTMLButtonElement> | null, newPage: number) => {
+    (_event: MouseEvent<HTMLButtonElement> | null, newPage: number) => {
       setPageIndex(newPage);
     },
     [setPageIndex],
@@ -46,16 +45,12 @@ const Events = () => {
   );
 
   const renderMobileRow = useCallback(
-    (rowData: Event) => (
-      <MobileRow key={rowData.eventId} {...rowData} isLoading={isLoading} />
-    ),
+    (rowData: Event) => <MobileRow key={rowData.eventId} {...rowData} isLoading={isLoading} />,
     [isLoading],
   );
 
   const renderTabletRow = useCallback(
-    (rowData: Event) => (
-      <TabletRow key={rowData.eventId} {...rowData} isLoading={isLoading} />
-    ),
+    (rowData: Event) => <TabletRow key={rowData.eventId} {...rowData} isLoading={isLoading} />,
     [isLoading],
   );
 
@@ -106,20 +101,16 @@ const Events = () => {
   );
 
   return isFirstLoad ? (
-    <Grid>
-      <TableSkeleton numberOfItems={pageSize} />
-    </Grid>
+    <TableSkeleton numberOfItems={pageSize} />
   ) : (
     data && (
-      <Grid container>
-        <EnhancedTable
-          data={data.items}
-          responsiveHead={tableHeaderProps}
-          responsiveRenderRow={tableRenderRowProps}
-          paginated={true}
-          tablePaginationProps={paginationProps}
-        />
-      </Grid>
+      <EnhancedTable
+        data={data.items}
+        responsiveHead={tableHeaderProps}
+        responsiveRenderRow={tableRenderRowProps}
+        paginated={true}
+        tablePaginationProps={paginationProps}
+      />
     )
   );
 };

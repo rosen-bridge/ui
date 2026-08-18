@@ -1,12 +1,8 @@
-import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
-import {
-  NATIVE_RESIDENCY,
-  RosenChainToken,
-  TokenMap,
-} from '@rosen-bridge/tokens';
-import { Network } from '@rosen-ui/types';
+import { type AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
+import { NATIVE_RESIDENCY, type RosenChainToken, type TokenMap } from '@rosen-bridge/tokens';
+import type { Network } from '@rosen-ui/types';
 
-import { AssetBalance, ChainAssetBalance, TotalSupply } from '../types';
+import type { AssetBalance, ChainAssetBalance, TotalSupply } from '../types';
 
 export abstract class AbstractDataAdapter {
   abstract chain: Network;
@@ -31,17 +27,13 @@ export abstract class AbstractDataAdapter {
         if (
           tokenSet != undefined &&
           tokenSet[this.chain] &&
-          tokenSet[this.chain].tokenId == asset.assetId &&
+          tokenSet[this.chain].tokenId === asset.assetId &&
           asset.balance > 0n
         ) {
           chainAssets[asset.assetId] = chainAssets[asset.assetId] ?? [];
           chainAssets[asset.assetId].push({
             address: address,
-            balance: this.tokenMap.wrapAmount(
-              asset.assetId,
-              asset.balance,
-              this.chain,
-            ).amount,
+            balance: this.tokenMap.wrapAmount(asset.assetId, asset.balance, this.chain).amount,
           });
         }
       }
@@ -65,7 +57,7 @@ export abstract class AbstractDataAdapter {
   protected getAllWrappedTokens = (): RosenChainToken[] => {
     return this.tokenMap
       .getTokens(this.chain, this.chain)
-      .filter((t) => t.residency != NATIVE_RESIDENCY);
+      .filter((t) => t.residency !== NATIVE_RESIDENCY);
   };
 
   /**

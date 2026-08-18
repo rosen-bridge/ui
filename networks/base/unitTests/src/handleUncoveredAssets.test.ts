@@ -1,12 +1,10 @@
+import { describe, expect, it } from 'vitest';
+
 import type { AssetBalance } from '@rosen-bridge/selection-types';
 import { TokenMap } from '@rosen-bridge/tokens';
 import { NETWORKS } from '@rosen-ui/constants';
-import { describe, it, expect } from 'vitest';
 
-import {
-  handleUncoveredAssets,
-  InsufficientAssetsError,
-} from '../../src/handleUncoveredAssets';
+import { handleUncoveredAssets, InsufficientAssetsError } from '../../src/handleUncoveredAssets';
 import { testTokenMap } from '../test-data';
 
 const getTokenMap = async () => {
@@ -37,9 +35,9 @@ describe('handleUncoveredAssets', () => {
       tokens: [],
     };
 
-    expect(() =>
-      handleUncoveredAssets(tokenMap, NETWORKS.ergo.key, assetBalance),
-    ).toThrowError(InsufficientAssetsError);
+    expect(() => handleUncoveredAssets(tokenMap, NETWORKS.ergo.key, assetBalance)).toThrowError(
+      InsufficientAssetsError,
+    );
 
     try {
       handleUncoveredAssets(tokenMap, NETWORKS.ergo.key, assetBalance);
@@ -78,9 +76,9 @@ describe('handleUncoveredAssets', () => {
       ],
     };
 
-    expect(() =>
-      handleUncoveredAssets(tokenMap, NETWORKS.ergo.key, assetBalance),
-    ).toThrowError(InsufficientAssetsError);
+    expect(() => handleUncoveredAssets(tokenMap, NETWORKS.ergo.key, assetBalance)).toThrowError(
+      InsufficientAssetsError,
+    );
 
     try {
       handleUncoveredAssets(tokenMap, NETWORKS.ergo.key, assetBalance);
@@ -118,9 +116,9 @@ describe('handleUncoveredAssets', () => {
       ],
     };
 
-    expect(() =>
-      handleUncoveredAssets(tokenMap, NETWORKS.ergo.key, assetBalance),
-    ).toThrowError(InsufficientAssetsError);
+    expect(() => handleUncoveredAssets(tokenMap, NETWORKS.ergo.key, assetBalance)).toThrowError(
+      InsufficientAssetsError,
+    );
 
     try {
       handleUncoveredAssets(tokenMap, NETWORKS.ergo.key, assetBalance);
@@ -152,12 +150,12 @@ describe('handleUncoveredAssets', () => {
       tokens: [],
     };
 
-    expect(() =>
-      handleUncoveredAssets(tokenMap, NETWORKS.ergo.key, assetBalance),
-    ).toThrowError('Unexpected Error');
+    expect(() => handleUncoveredAssets(tokenMap, NETWORKS.ergo.key, assetBalance)).toThrowError(
+      'Unexpected Error',
+    );
 
-    expect(() =>
-      handleUncoveredAssets(tokenMap, NETWORKS.ergo.key),
-    ).toThrowError('Unexpected Error');
+    expect(() => handleUncoveredAssets(tokenMap, NETWORKS.ergo.key)).toThrowError(
+      'Unexpected Error',
+    );
   });
 });
