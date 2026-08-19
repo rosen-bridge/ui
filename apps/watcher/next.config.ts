@@ -1,8 +1,6 @@
-// @ts-check
-const path = require('node:path');
+import type { NextConfig } from 'next';
 
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+const nextConfig: NextConfig = {
   typedRoutes: true,
   images: {
     unoptimized: true,
@@ -15,7 +13,6 @@ const nextConfig = {
   env: {
     API_BASE_URL: process.env.API_BASE_URL,
   },
-  outputFileTracingRoot: path.join(__dirname, '../../'),
 };
 
-module.exports = nextConfig;
+export default nextConfig;

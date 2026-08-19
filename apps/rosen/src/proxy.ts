@@ -38,7 +38,7 @@ const getCORSHeaders = (origin: string) => {
   return responseHeaders;
 };
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const ip = ipAddress(request) ?? '127.0.0.1';
 
   const success = (await rateLimit?.limit(ip))?.success ?? true;
