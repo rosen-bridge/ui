@@ -10,7 +10,7 @@
   "scripts": {
     "bootstrap": "turbo build --filter=@rosen-bridge/rosen-app^...",
     "build": "next build",
-    "build:vercel": "npm run bootstrap && npm run generate && npm run db:migration && npm run build",
+    "build:vercel": "npm run bootstrap && npm run generate && npm run validate-token-icons && npm run db:migration && npm run build",
     "coverage": "npm run test -- --run --coverage",
     "db:migration": "node --import tsx ./scripts/migration.js",
     "dev": "next dev",
@@ -20,7 +20,8 @@
     "lint:check": "biome check",
     "start": "next start",
     "test": "NODE_OPTIONS='--import tsx' vitest",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "validate-token-icons": "tsx ./scripts/validateTokenIcons"
   },
   "dependencies": {
     "@rosen-bridge/abstract-observation-extractor": "^1.0.10",
