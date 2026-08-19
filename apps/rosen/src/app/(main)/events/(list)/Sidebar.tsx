@@ -27,9 +27,11 @@ import { getAddressUrl, getTxURL } from '@rosen-ui/utils';
 
 import type { ApiEventResponse, EventItem } from '@/types';
 
+import { eventStatusParser } from '../eventStatusParser';
+
 const Content = ({ value }: SidebarProps) => {
   const shouldLoad = useMemo(() => {
-    return !!value && !!value.eventId && value.status !== 'multipleFlows';
+    return !!value && !!value.eventId && value.status !== 'MULTIPLE_FLOWS';
   }, [value]);
 
   const { data: events, isLoading } = useSWR<EventItem[]>(
@@ -54,7 +56,7 @@ const Content = ({ value }: SidebarProps) => {
       reports: data?.WIDsCount,
       sourceTxId: data?.sourceTxId,
       sourceTxIdUrl: getTxURL(data?.fromChain, data?.sourceTxId),
-      status: data?.status,
+      status: eventStatusParser(data?.status),
       toAddress: data?.toAddress,
       toAddressUrl: getAddressUrl(data?.toChain, data?.toAddress),
       toChain: data?.toChain,
@@ -62,7 +64,7 @@ const Content = ({ value }: SidebarProps) => {
       token: data?.lockToken?.id,
     };
 
-    if (result.status !== 'fraud') {
+    if (result.status !== 'FRAUD') {
       result.paymentTxId = data?.paymentTxId ?? undefined;
       result.paymentTxIdUrl = getTxURL(data?.toChain, result?.paymentTxId);
       result.spendTxId = data?.spendTxId ?? undefined;
@@ -72,7 +74,7 @@ const Content = ({ value }: SidebarProps) => {
     return result;
   }, [data]);
 
-  if (!value || value.status === 'multipleFlows') {
+  if (!value || value.status === 'MULTIPLE_FLOWS') {
     return (
       <Center style={{ minHeight: 'calc(100vh - 304px)' }}>
         <Typography variant="body1" color="text-secondary">

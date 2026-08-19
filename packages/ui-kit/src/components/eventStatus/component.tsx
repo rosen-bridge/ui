@@ -9,33 +9,51 @@ import { STATUS_MAP } from './constants';
 export interface EventStatusOverrides {}
 
 export type EventStatusMeta = {
-  label: string;
-  color: ChipProps['color'];
   icon: IconProps['name'];
+  label: string;
+  severity?: 'info' | 'success' | 'warning' | 'error';
 };
 
 export type EventStatusOwnProps = {
   fallback?: EventStatusMeta;
-  value?: keyof typeof STATUS_MAP;
+  value?: keyof typeof STATUS_MAP | EventStatusMeta;
 };
 
 export type EventStatusBaseProps = ElementBaseProps<typeof Chip, EventStatusOwnProps>;
 
 export type EventStatusProps = OverridableType<EventStatusBaseProps, EventStatusOverrides, never>;
 
-const DEFAULT_EVENT_STATUS: EventStatusMeta = {
-  label: 'Unknown',
-  color: 'neutral',
-  icon: 'ExclamationCircle',
-};
-
 export const EventStatus = (props: EventStatusProps) => {
   const { fallback, value, ...rest } = useConfig('EventStatus', props);
 
-  const { color, icon, label } = useMemo(
-    () => Object.assign({}, DEFAULT_EVENT_STATUS, fallback, value && STATUS_MAP?.[value]),
+  const { icon, label, severity } = useMemo(
+    () =>
+      Object.assign(
+        {},
+        {
+          icon: 'ExclamationCircle',
+          label: 'Unknown',
+        },
+        fallback,
+        typeof value === 'string' ? STATUS_MAP?.[value] : value,
+      ),
     [fallback, value],
   );
+
+  const color = useMemo<ChipProps['color']>(() => {
+    switch (severity) {
+      case 'error':
+        return 'error';
+      case 'info':
+        return 'info';
+      case 'success':
+        return 'success';
+      case 'warning':
+        return 'warning';
+      default:
+        return 'neutral';
+    }
+  }, [severity]);
 
   return <Chip color={color} icon={icon} label={label} {...rest} />;
 };
