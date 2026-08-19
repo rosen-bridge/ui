@@ -7,6 +7,7 @@
 }
 
 .RosenIdentifier-value {
+  position: relative;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -14,14 +15,25 @@
   font-family: monospace;
 }
 
+.RosenIdentifier-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  color: transparent;
+}
+
 .RosenIdentifier-leading {
   white-space: nowrap;
   flex-shrink: 1;
   min-width: 0;
+  user-select: none;
 }
 
 .RosenIdentifier-trailing {
   flex-shrink: 0;
+  user-select: none;
 }
 
 .RosenIdentifier-actions {

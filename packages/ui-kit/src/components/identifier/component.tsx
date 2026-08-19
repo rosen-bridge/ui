@@ -146,6 +146,9 @@ export const Identifier = (props: IdentifierProps) => {
       {loading && <Skeleton attached />}
       <Tooltip disabled={loading} title={value} {...slots?.tooltip}>
         <div className="RosenIdentifier-value">
+          <span className="RosenIdentifier-overlay" aria-hidden="true">
+            {value}
+          </span>
           <Typography
             className="RosenIdentifier-leading"
             component="div"
