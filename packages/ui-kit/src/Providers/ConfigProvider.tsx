@@ -6,6 +6,8 @@ export type ConfigContextType = ConfigProviderProps['configs'];
 
 export const ConfigContext = createContext<ConfigContextType | null>(null);
 
+type PresetKey<T> = T extends { preset?: infer P } ? Extract<P, string> : never;
+
 export type ConfigProviderProps = {
   children?: ReactNode;
   configs?: {
@@ -13,6 +15,9 @@ export type ConfigProviderProps = {
       [C in keyof Components]?: {
         defaultProps?: {
           [P in keyof Components[C]]?: Partial<Components[C][P]>;
+        };
+        presets?: {
+          [key in PresetKey<Components[C]>]?: Omit<Partial<Components[C]>, 'preset'>;
         };
       };
     };

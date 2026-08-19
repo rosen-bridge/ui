@@ -9,12 +9,15 @@ import {
   CardBody,
   Center,
   Connector,
-  DialogContentText,
+  Dialog,
+  DialogBody,
+  DialogCloseButton,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogIcon,
+  DialogTitle,
   Divider,
-  EnhancedDialog,
-  EnhancedDialogActions,
-  EnhancedDialogContent,
-  EnhancedDialogTitle,
   Identifier,
   Label,
   Network,
@@ -126,18 +129,20 @@ export const SubmitButton = () => {
       >
         SUBMIT
       </Button>
-      <EnhancedDialog open={open} maxWidth="tablet" stickOn="mobile" onClose={() => close()}>
+      <Dialog open={open} unstick="tablet" width="small" onClose={() => close()}>
         {qrCode ? (
           <>
-            <EnhancedDialogTitle icon="QrcodeScan" onClose={() => close()}>
-              Scan QR Code
-            </EnhancedDialogTitle>
-            <EnhancedDialogContent>
+            <DialogHeader>
+              <DialogIcon name="QrcodeScan" />
+              <DialogTitle>Scan QR Code</DialogTitle>
+              <DialogCloseButton />
+            </DialogHeader>
+            <DialogBody>
               <Stack spacing={2}>
-                <DialogContentText>
+                <DialogDescription>
                   Scan this QR code or copy the transaction data below and submit it using a
                   compatible wallet or application.
-                </DialogContentText>
+                </DialogDescription>
                 <Center>
                   <QRCodeCanvas
                     bgColor="transparent"
@@ -151,8 +156,8 @@ export const SubmitButton = () => {
                   submission, network or bridge fees may change and the transaction may fail.
                 </Alert>
               </Stack>
-            </EnhancedDialogContent>
-            <EnhancedDialogActions>
+            </DialogBody>
+            <DialogFooter>
               <Button
                 color="secondary"
                 variant="contained"
@@ -170,14 +175,16 @@ export const SubmitButton = () => {
               >
                 Copy
               </Button>
-            </EnhancedDialogActions>
+            </DialogFooter>
           </>
         ) : (
           <>
-            <EnhancedDialogTitle icon="CommentAltExclamation" onClose={() => close()}>
-              Confirm Transaction
-            </EnhancedDialogTitle>
-            <EnhancedDialogContent
+            <DialogHeader>
+              <DialogIcon name="CommentAltExclamation" />
+              <DialogTitle>Confirm Transaction</DialogTitle>
+              <DialogCloseButton />
+            </DialogHeader>
+            <DialogBody
               style={{
                 paddingTop: 0,
                 paddingBottom: 0,
@@ -216,8 +223,8 @@ export const SubmitButton = () => {
                   </Stack>
                 </CardBody>
               </Card>
-            </EnhancedDialogContent>
-            <EnhancedDialogActions>
+            </DialogBody>
+            <DialogFooter>
               <Button
                 color="secondary"
                 variant="contained"
@@ -234,10 +241,10 @@ export const SubmitButton = () => {
               >
                 Confirm
               </Button>
-            </EnhancedDialogActions>
+            </DialogFooter>
           </>
         )}
-      </EnhancedDialog>
+      </Dialog>
     </>
   );
 };

@@ -1,4 +1,9 @@
-import { ApiKeyModal, ThemeToggleButton, Toolbar, useBreakpoint } from '@rosen-bridge/ui-kit';
+import {
+  ApiKeyDialogButton,
+  ThemeToggleButton,
+  Toolbar,
+  useBreakpoint,
+} from '@rosen-bridge/ui-kit';
 
 import { VersionConfig } from './VersionConfig';
 
@@ -10,7 +15,7 @@ export const Actions = ({ sidebar }: { sidebar?: boolean }) => {
   return (
     <Toolbar>
       {sidebar && <VersionConfig />}
-      {((sidebar && isTabletDown) || (!sidebar && !isTabletDown)) && <ApiKeyModal />}
+      {((sidebar && isTabletDown) || (!sidebar && !isTabletDown)) && <ApiKeyDialogButton />}
       {((sidebar && isTabletDown) || (!sidebar && !isTabletDown)) && <ThemeToggleButton />}
     </Toolbar>
   );
