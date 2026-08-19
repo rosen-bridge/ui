@@ -5,6 +5,13 @@ import { Controller, useForm } from 'react-hook-form';
 import {
   Button,
   CloseButton,
+  Dialog,
+  DialogBody,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogIcon,
+  DialogTitle,
   Icon,
   IconButton,
   InputAdornment,
@@ -13,13 +20,6 @@ import {
 } from '@/components';
 import { useApiKey, useConfig, useToast } from '@/hooks';
 import type { ElementBaseProps, OverridableType } from '@/types';
-
-import { Dialog } from '../dialog';
-import { DialogContent } from '../dialogContent';
-import { DialogDescription } from '../dialogDescription';
-import { DialogFooter } from '../dialogFooter';
-import { DialogHeader } from '../dialogHeader';
-import { DialogTitle } from '../dialogTitle';
 
 export interface ApiKeyDialogOverrides {}
 
@@ -73,12 +73,13 @@ export const ApiKeyDialog = (props: ApiKeyDialogProps) => {
   }, [apiKey, open, setValue]);
 
   return (
-    <Dialog maxWidth="tablet" open={open} onClose={onClose} {...rest}>
+    <Dialog open={open} unstick="tablet" width="small" onClose={onClose} {...rest}>
       <DialogHeader>
+        <DialogIcon name="KeySkeleton" />
         <DialogTitle>Authorization</DialogTitle>
       </DialogHeader>
-      <DialogDescription>Set API key to access actions</DialogDescription>
-      <DialogContent>
+      <DialogBody>
+        <DialogDescription gutterBottom>Set API key to access actions</DialogDescription>
         <form id="api-key-form" onSubmit={onSubmit}>
           <Controller
             name="apiKey"
@@ -110,10 +111,10 @@ export const ApiKeyDialog = (props: ApiKeyDialogProps) => {
             )}
           />
         </form>
-      </DialogContent>
+      </DialogBody>
       <DialogFooter>
         <Button onClick={onClose}>Cancel</Button>
-        <Button form="api-key-form" type="submit">
+        <Button form="api-key-form" type="submit" variant="contained">
           Set key
         </Button>
       </DialogFooter>

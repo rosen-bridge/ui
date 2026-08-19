@@ -62,7 +62,7 @@ export const Section = ({
         </CardAction>
       </CardHeader>
       <Collapsible open={!collapsible || disclosure.state === 'open' || !!error}>
-        <CardBody>
+        <CardBody style={{ paddingTop: 0 }}>
           {!error && children}
           {!!error && (
             <Center style={{ height: '20rem' }}>

@@ -57,6 +57,7 @@ export const Card = (props: CardProps) => {
     <div
       data-active={!!active}
       data-clickable={!!clickable}
+      data-surface="root"
       data-variant={variant}
       style={styles}
       {...rest}

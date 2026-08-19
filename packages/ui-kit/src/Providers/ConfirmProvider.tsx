@@ -9,9 +9,10 @@ import {
 import {
   Button,
   Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
+  DialogBody,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
   DialogTitle,
 } from '@/components';
 
@@ -68,23 +69,25 @@ export const ConfirmProvider = ({ children }: PropsWithChildren) => {
     <ConfirmContext.Provider value={{ confirm }}>
       {children}
       {options && (
-        <Dialog open onClose={handleCancel} maxWidth="tablet">
-          <DialogTitle>{options.title}</DialogTitle>
-          <DialogContent>
+        <Dialog open unstick="tablet" width="small" onClose={handleCancel}>
+          <DialogHeader>
+            <DialogTitle>{options.title}</DialogTitle>
+          </DialogHeader>
+          <DialogBody>
             {typeof options.content === 'string' ? (
-              <DialogContentText>{options.content}</DialogContentText>
+              <DialogDescription>{options.content}</DialogDescription>
             ) : (
               options.content
             )}
-          </DialogContent>
-          <DialogActions>
+          </DialogBody>
+          <DialogFooter>
             <Button variant="text" disabled={loading} onClick={handleCancel}>
               {options.cancelText ?? 'Cancel'}
             </Button>
             <Button variant="text" loading={loading} onClick={handleConfirm}>
               {options.confirmText ?? 'Confirm'}
             </Button>
-          </DialogActions>
+          </DialogFooter>
         </Dialog>
       )}
     </ConfirmContext.Provider>

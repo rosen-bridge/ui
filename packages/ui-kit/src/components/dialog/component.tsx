@@ -1,17 +1,20 @@
 import { Dialog as DialogBaseUI } from '@base-ui/react/dialog';
 
-import { useConfig } from '@/hooks';
-import type { ElementBaseProps, OverridableType } from '@/types';
+import { type BreakpointQuery, useBreakpoint, useConfig } from '@/hooks';
+import type { Breakpoint, ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.css';
 
 export interface DialogOverrides {}
 
 export type DialogOwnProps = {
+  edge?: boolean;
   open?: boolean;
-  maxWidth?: string;
-  stickOn?: string;
+  placement?: 'center' | 'bottom';
+  unstick?: Breakpoint;
+  width?: 'small' | 'medium' | 'large' | 'full';
   onClose?: () => void;
+  onClosed?: () => void;
 };
 
 export type DialogBaseProps = ElementBaseProps<'div', DialogOwnProps>;
@@ -19,16 +22,40 @@ export type DialogBaseProps = ElementBaseProps<'div', DialogOwnProps>;
 export type DialogProps = OverridableType<DialogBaseProps, DialogOverrides, never>;
 
 export const Dialog = (props: DialogProps) => {
-  const { open, maxWidth, stickOn, onClose, ...rest } = useConfig('Dialog', props);
+  let {
+    edge,
+    open,
+    placement = 'center',
+    unstick,
+    width = 'medium',
+    onClose,
+    onClosed,
+    ...rest
+  } = useConfig('Dialog', props);
 
-  void maxWidth;
-  void stickOn;
+  const isUnstick = useBreakpoint(`${unstick}-up` as BreakpointQuery);
+
+  if (unstick && !isUnstick) {
+    edge = true;
+    placement = 'bottom';
+    width = 'full';
+  }
 
   return (
-    <DialogBaseUI.Root open={open} onOpenChange={(open) => !open && onClose?.()}>
+    <DialogBaseUI.Root
+      open={open}
+      onOpenChange={(open) => !open && onClose?.()}
+      onOpenChangeComplete={(open) => !open && onClosed?.()}
+    >
       <DialogBaseUI.Portal>
         <DialogBaseUI.Backdrop className="RosenDialog-backdrop" />
-        <DialogBaseUI.Popup {...rest} />
+        <DialogBaseUI.Popup
+          data-edge={edge || null}
+          data-placement={placement}
+          data-surface="root"
+          data-width={width}
+          {...rest}
+        />
       </DialogBaseUI.Portal>
     </DialogBaseUI.Root>
   );
