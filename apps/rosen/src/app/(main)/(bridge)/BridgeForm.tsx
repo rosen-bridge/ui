@@ -132,6 +132,7 @@ export const BridgeForm = () => {
     <>
       <Stack direction={stackDirection} spacing={2}>
         <TextField
+          disabled={!availableSources.length}
           id="source"
           select
           label="Source"
