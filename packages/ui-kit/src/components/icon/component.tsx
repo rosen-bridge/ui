@@ -14,10 +14,10 @@ export interface IconOverrides {}
 export type IconOwnProps = {
   as?: FC<SVGAttributes<SVGElement>>;
   color?: Color;
-  fallback?: Exclude<keyof typeof Icons, 'TOKENS'>;
+  fallback?: keyof typeof Icons;
   icons?: Record<NonNullable<IconProps['name']>, FC<SVGAttributes<SVGElement>>>;
   loading?: boolean;
-  name?: Exclude<keyof typeof Icons, 'TOKENS'>;
+  name?: keyof typeof Icons;
   size?: 'small' | 'medium' | 'large' | (number & {}) | (string & {});
 };
 

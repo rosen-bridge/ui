@@ -3,7 +3,8 @@ import type { Route } from 'next';
 import NextImage from 'next/image';
 import NextLink from 'next/link';
 
-import * as AllIcons from '@rosen-bridge/icons';
+import * as icons from '@rosen-bridge/icons';
+import * as tokens from '@rosen-bridge/token-icons';
 import type { TokenMap } from '@rosen-bridge/tokens';
 import { type ConfigContextType, ConfigProvider, type DefaultColor } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
@@ -18,7 +19,7 @@ declare module '@rosen-bridge/ui-kit' {
   }
 
   interface IconOverrides {
-    name: Exclude<keyof typeof AllIcons, 'TOKENS'>;
+    name: keyof typeof icons;
   }
 
   interface LinkOverrides {
@@ -49,7 +50,7 @@ const getUiKitConfig: (tokenMap: TokenMap) => ConfigContextType = (tokenMap) => 
     },
     Icon: {
       defaultProps: {
-        icons: Object.fromEntries(Object.entries(AllIcons).filter(([key]) => key !== 'TOKENS')),
+        icons,
       },
     },
     Image: {
@@ -70,12 +71,12 @@ const getUiKitConfig: (tokenMap: TokenMap) => ConfigContextType = (tokenMap) => 
             {
               label: value.label,
               // biome-ignore lint/performance/noDynamicNamespaceImportAccess: Keep it
-              logo: AllIcons[
+              logo: icons[
                 key
                   .split('-')
                   .filter(Boolean)
                   .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-                  .join('') as keyof typeof AllIcons
+                  .join('') as keyof typeof icons
               ],
             },
           ]),
@@ -90,12 +91,13 @@ const getUiKitConfig: (tokenMap: TokenMap) => ConfigContextType = (tokenMap) => 
     Token: {
       defaultProps: {
         tokens: Object.fromEntries(
-          tokenMap.getConfig().flatMap((tokens) =>
-            Object.entries(tokens).map(([, token]) => [
+          tokenMap.getConfig().flatMap((items) =>
+            Object.entries(items).map(([, token]) => [
               token.tokenId,
               {
                 label: token.name,
-                logo: AllIcons.TOKENS[tokens.ergo.tokenId as keyof typeof AllIcons.TOKENS],
+                // biome-ignore lint/performance/noDynamicNamespaceImportAccess: Keep it
+                logo: tokens[`Token_${items.ergo.tokenId}` as keyof typeof tokens],
               },
             ]),
           ),
