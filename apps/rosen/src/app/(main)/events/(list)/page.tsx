@@ -22,6 +22,7 @@ import { fetcher } from '@rosen-ui/swr-helpers';
 import { useTokenMap } from '@/hooks';
 import type { ApiEventResponse } from '@/types';
 
+import { eventStatusParser } from '../eventStatusParser';
 import { getFilters, sorts } from './config';
 import { Sidebar } from './Sidebar';
 
@@ -148,7 +149,7 @@ const Page = () => {
                     fromChain: item.fromChain,
                     href: `/events/${item.eventId}`,
                     id: item.eventId,
-                    status: item.status,
+                    status: eventStatusParser(item.status),
                     toChain: item.toChain,
                     token: item.lockToken?.id,
                     unit: item?.lockToken?.name,

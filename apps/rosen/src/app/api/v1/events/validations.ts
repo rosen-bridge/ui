@@ -58,7 +58,7 @@ const filterParser = new FilterParser({
         key: 'status',
         type: 'string',
         operators: ['equal', 'notEqual'],
-        values: ['fraud', 'processing', 'successful'],
+        values: ['FRAUD', 'processing', 'COMPLETED'],
       },
       {
         key: 'sourceTxId',
