@@ -352,18 +352,13 @@ export const Process = ({ id, flowId }: { id: string; flowId: string | undefined
 
   const [guardPublicKey, setGuardPublicKey] = useState<string | undefined>();
 
-  const [open, setOpen] = useState(false);
-
   const url = guardPublicKey
     ? `/v1/events/${id}/status?triggerTxId=${flowId}&guardPublicKey=${guardPublicKey}`
     : `/v1/events/${id}/status?triggerTxId=${flowId}`;
 
-  const { data, error, isLoading, mutate } = useSWR<EventStatusType>(
-    open && flowId ? url : null,
-    fetcher,
-  );
+  const { data, error, isLoading, mutate } = useSWR<EventStatusType>(flowId ? url : null, fetcher);
 
-  const items = useMemo(() => {
+  const items = useMemo<EventProcessesProps['items']>(() => {
     if (!data) return [];
 
     const info = structuredClone(pick(steps, findPath(steps, data.status)));
@@ -417,17 +412,15 @@ export const Process = ({ id, flowId }: { id: string; flowId: string | undefined
       action={
         <ProcessSelect disabled={isLoading} value={guardPublicKey} onChange={setGuardPublicKey} />
       }
-      collapsible
       error={error}
       load={mutate}
       badge="New"
       title="Progress"
-      onOpenChange={setOpen}
     >
       <EventProcesses
         items={items}
-        loading={isLoading}
-        style={{ width: '100%', height: isLoading ? '104px' : undefined }}
+        loading={isLoading || !flowId}
+        style={{ width: '100%', height: isLoading || !flowId ? '104px' : undefined }}
         value={active}
         onChange={setActive}
       />

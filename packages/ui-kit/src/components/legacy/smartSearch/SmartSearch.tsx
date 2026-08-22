@@ -8,8 +8,9 @@ import {
   useState,
 } from 'react';
 
-import { Card, styled } from '@mui/material';
+import { styled } from '@mui/material';
 
+import { Card } from '../../card';
 import { CloseButton } from '../../closeButton';
 import { Icon } from '../../icon';
 import { IconButton } from '../../iconButton';
@@ -25,6 +26,7 @@ const Root = styled(Card)(({ theme }) => ({
   flexGrow: 1,
   display: 'flex',
   alignItems: 'center',
+  flexDirection: 'row',
   gap: theme.spacing(0.5),
   padding: theme.spacing(1, 0.5),
   input: {

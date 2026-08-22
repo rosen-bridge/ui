@@ -79,7 +79,7 @@ const Content = ({ value }: SidebarProps) => {
 
   if (!value || value.status === 'MULTIPLE_FLOWS') {
     return (
-      <Center style={{ minHeight: 'calc(100vh - 304px)' }}>
+      <Center style={{ minHeight: 'calc(100vh - 304px)', textAlign: 'center' }}>
         <Typography variant="body1" color="text-secondary">
           {value ? (
             <>
