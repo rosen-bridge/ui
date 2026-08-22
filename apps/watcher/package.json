@@ -26,7 +26,7 @@
     "@rosen-ui/utils": "^1.0.4",
     "lodash-es": "^4.17.21",
     "moment": "^2.29.4",
-    "next": "^16.3.1",
+    "next": "^16.3.2",
     "react": "^19.2.6",
     "react-apexcharts": "^1.4.0",
     "react-dom": "^19.2.6",
