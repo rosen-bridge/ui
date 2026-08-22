@@ -26,6 +26,9 @@ import type {
   ConnectorProps,
   CopyButtonProps,
   DateTimeProps,
+  DrawerBodyProps,
+  DrawerProps,
+  DrawerTriggerProps,
   DurationProps,
   EmptyStateProps,
   EventCardProps,
@@ -106,6 +109,9 @@ export type Components = {
   CopyButton: CopyButtonProps;
   DateTime: DateTimeProps;
   Duration: DurationProps;
+  Drawer: DrawerProps;
+  DrawerBody: DrawerBodyProps;
+  DrawerTrigger: DrawerTriggerProps;
   EventCard: EventCardProps;
   EventDetails: EventDetailsProps;
   EventProcesses: EventProcessesProps;

@@ -4,6 +4,7 @@ export * from './useCollection';
 export * from './useConfig';
 export * from './useConfirm';
 export * from './useDisclosure';
+export * from './useDrawer';
 export * from './useFramework';
 export * from './useIsDarkMode';
 export * from './useMenu';
