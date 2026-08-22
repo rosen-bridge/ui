@@ -190,18 +190,6 @@ export const lightThemeOptions: ThemeOptions = {
         }),
       },
     },
-    MuiCard: {
-      defaultProps: {
-        elevation: 0,
-      },
-    },
-    MuiCardHeader: {
-      styleOverrides: {
-        title: {
-          fontSize: '1rem',
-        },
-      },
-    },
     MuiButton: {
       styleOverrides: {
         containedSecondary: ({ theme }: { theme: Theme }) => ({
@@ -305,13 +293,6 @@ export const lightThemeOptions: ThemeOptions = {
         },
       },
     },
-    MuiSnackbar: {
-      styleOverrides: {
-        root: {
-          left: '116px',
-        },
-      },
-    },
     MuiAlert: {
       defaultProps: {
         iconMapping: {
@@ -356,56 +337,6 @@ export const lightThemeOptions: ThemeOptions = {
         standardWarning: ({ theme }: { theme: Theme }) => ({
           color: theme.palette.warning.main,
           backgroundColor: theme.palette.warning.light,
-        }),
-      },
-    },
-    MuiTooltip: {
-      styleOverrides: {
-        tooltip: ({ theme }: { theme: Theme }) => ({
-          color: theme.palette.primary.contrastText,
-          backgroundColor: theme.palette.primary.dark,
-          borderRadius: theme.shape.borderRadius / 2,
-        }),
-        arrow: ({ theme }: { theme: Theme }) => ({
-          color: theme.palette.primary.dark,
-        }),
-      },
-    },
-    MuiSkeleton: {
-      styleOverrides: {
-        text: ({ theme }: { theme: Theme }) => ({
-          borderRadius: theme.spacing(0.5),
-        }),
-      },
-    },
-    RosenNavigationBar: {
-      styleOverrides: {
-        root: ({ theme }: { theme: Theme }) => ({
-          [theme.breakpoints.down('tablet')]: {
-            borderColor: theme.palette.primary.light,
-            background: theme.palette.background.paper,
-            boxShadow: `0px 8px 8px 0px ${theme.palette.background.default}`,
-          },
-        }),
-      },
-    },
-    RosenApp: {
-      styleOverrides: {
-        root: ({ theme }: { theme: Theme }) => ({
-          background:
-            theme.palette.mode === 'light'
-              ? `linear-gradient(180deg, ${theme.palette.primary.dark} 0%, ${theme.palette.secondary.dark} 100%)`
-              : theme.palette.background.paper,
-          color:
-            theme.palette.mode === 'light'
-              ? theme.palette.common.white
-              : theme.palette.text.primary,
-          [theme.breakpoints.down('tablet')]: {
-            background:
-              theme.palette.mode === 'light'
-                ? `linear-gradient(90deg, ${theme.palette.primary.dark} 0%, ${theme.palette.secondary.dark} 100%)`
-                : theme.palette.primary.light,
-          },
         }),
       },
     },

@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 
-import { ConfigContext } from '@/Providers';
+import { ConfigContext } from '@/providers';
 
 type WithClassName = {
   className?: string;

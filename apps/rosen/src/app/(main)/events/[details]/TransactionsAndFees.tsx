@@ -6,7 +6,6 @@ import useSWR from 'swr';
 
 import {
   Amount,
-  Box,
   Columns,
   Duration,
   Identifier,
@@ -138,7 +137,7 @@ export const TransactionsAndFees = ({ id, flowId }: { id: string; flowId: string
             />
           </Label>
         </div>
-        <Box style={boxStyle}>
+        <div style={boxStyle}>
           <Label label="Tx IDs" />
           <LabelGroup>
             {txIds.map(({ type, label, chain, txId }) => (
@@ -153,7 +152,7 @@ export const TransactionsAndFees = ({ id, flowId }: { id: string; flowId: string
               </Label>
             ))}
           </LabelGroup>
-        </Box>
+        </div>
       </Columns>
     </Section>
   );

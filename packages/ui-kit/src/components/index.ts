@@ -10,6 +10,7 @@ export * from './apiKeyDialogProtectedAction';
 export * from './apiKeyDialogWarning';
 export * from './app';
 export * from './appBar';
+export * from './appLogo';
 export * from './avatar';
 export * from './badge';
 export * from './button';

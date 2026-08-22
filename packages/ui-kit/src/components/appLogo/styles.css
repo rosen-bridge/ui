@@ -1,0 +1,28 @@
+[data-theme='light'] .RosenAppLogo {
+  --rosen-app-logo-main: #dd704f;
+  --rosen-app-logo-subt: #f5d4ca;
+  --rosen-app-logo-comp: #b52b4c;
+  --rosen-app-logo-back: #cdd7ff;
+  --rosen-app-logo-line-1: #ccc;
+  --rosen-app-logo-line-2: #b3b3b3;
+  --rosen-app-logo-line-3: #999;
+  --rosen-app-logo-line-4: #808080;
+  --rosen-app-logo-line-5: #666;
+}
+
+[data-theme='dark'] .RosenAppLogo {
+  --rosen-app-logo-main: #b15a3f;
+  --rosen-app-logo-subt: #c48d7c;
+  --rosen-app-logo-comp: #90314f;
+  --rosen-app-logo-back: #1f2937;
+  --rosen-app-logo-line-1: #333;
+  --rosen-app-logo-line-2: #4d4d4d;
+  --rosen-app-logo-line-3: #666;
+  --rosen-app-logo-line-4: #808080;
+  --rosen-app-logo-line-5: #999;
+}
+
+.RosenApp[data-orientation='horizontal'] .RosenAppLogo-horizontal,
+.RosenApp[data-orientation='vertical'] .RosenAppLogo-vertical {
+  display: none;
+}
