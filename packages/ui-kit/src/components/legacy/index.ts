@@ -1,5 +1,4 @@
 export * from './AppInfo';
-export * from './Chip';
 export * from './DisclosureButton';
 export * from './Divider';
 export * from './display';

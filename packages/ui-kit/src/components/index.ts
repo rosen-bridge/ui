@@ -24,6 +24,7 @@ export * from './carouselButton';
 export * from './carouselIndicators';
 export * from './carouselItem';
 export * from './center';
+export * from './chip';
 export * from './closeButton';
 export * from './collapsible';
 export * from './columns';

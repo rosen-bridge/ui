@@ -20,6 +20,7 @@ import type {
   CarouselItemProps,
   CarouselProps,
   CenterProps,
+  ChipProps,
   CloseButtonProps,
   CollapsibleProps,
   ColumnsProps,
@@ -103,6 +104,7 @@ export type Components = {
   Collapsible: CollapsibleProps;
   Columns: ColumnsProps;
   Connector: ConnectorProps;
+  Chip: ChipProps;
   CopyButton: CopyButtonProps;
   DateTime: DateTimeProps;
   Duration: DurationProps;

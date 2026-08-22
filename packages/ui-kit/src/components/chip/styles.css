@@ -1,0 +1,8 @@
+.RosenChip {
+  display: inline-flex;
+  align-items: center;
+  padding: calc(var(--rosen-spacing) / 2) var(--rosen-spacing);
+  border-radius: calc(var(--rosen-spacing) * 2);
+  background-color: var(--rosen-chip-color);
+  color: var(--rosen-chip-text-color);
+}
