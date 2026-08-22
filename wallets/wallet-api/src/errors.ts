@@ -4,10 +4,6 @@ export class WalletError extends Error {
   constructor(message: string, options?: { cause?: unknown }) {
     super(message, options);
 
-    if (Error.captureStackTrace) {
-      Error.captureStackTrace(this, WalletError);
-    }
-
     this.name = new.target.name;
   }
 }

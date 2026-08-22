@@ -57,7 +57,7 @@ export const Section = ({
           {badge ? <Badge content={badge}>{title}</Badge> : title}
         </CardTitle>
         <CardAction>
-          {disclosure.state !== 'close' && action}
+          {action}
           {collapsible && <DisclosureButton disclosure={disclosure} />}
         </CardAction>
       </CardHeader>
