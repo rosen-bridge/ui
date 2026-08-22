@@ -12,6 +12,7 @@ import {
   DialogHeader,
   DialogIcon,
   DialogTitle,
+  Divider,
 } from '@/components';
 
 import { useToast } from '../../hooks';
@@ -20,7 +21,6 @@ import { Icon, type IconProps } from '../icon';
 import { IconButton } from '../iconButton';
 import { Network } from '../network';
 import { Stack } from '../stack';
-import { Divider } from './Divider';
 
 type NetworkHeight = {
   network: NetworkType;

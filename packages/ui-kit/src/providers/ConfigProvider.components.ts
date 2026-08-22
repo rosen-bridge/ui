@@ -26,6 +26,7 @@ import type {
   ConnectorProps,
   CopyButtonProps,
   DateTimeProps,
+  DividerProps,
   DurationProps,
   EmptyStateProps,
   EventCardProps,
@@ -106,6 +107,7 @@ export type Components = {
   CopyButton: CopyButtonProps;
   DateTime: DateTimeProps;
   Duration: DurationProps;
+  Divider: DividerProps;
   EventCard: EventCardProps;
   EventDetails: EventDetailsProps;
   EventProcesses: EventProcessesProps;

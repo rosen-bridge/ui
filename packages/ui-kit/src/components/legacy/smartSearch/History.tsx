@@ -10,12 +10,13 @@ import {
 
 import { ClickAwayListener } from '@mui/material';
 
+import { Divider } from '@/components';
+
 import { useBreakpoint } from '../../../hooks';
 import { CloseButton } from '../../closeButton';
 import { Icon } from '../../icon';
 import { IconButton } from '../../iconButton';
 import { Truncate } from '../../truncate';
-import { Divider } from '../Divider';
 import { List, ListItem, ListItemButton, ListItemText, ListSubheader } from '../Mui';
 import { Popup } from './Popup';
 import type { Filter, Selected } from './types';

@@ -40,6 +40,7 @@ export * from './dialogFooter';
 export * from './dialogHeader';
 export * from './dialogIcon';
 export * from './dialogTitle';
+export * from './divider';
 export * from './duration';
 export * from './emptyState';
 export * from './eventCard';

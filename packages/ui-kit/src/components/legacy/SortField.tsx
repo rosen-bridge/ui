@@ -5,6 +5,7 @@ import { styled } from '@mui/material';
 import {
   Button,
   Card,
+  Divider,
   Menu,
   MenuBody,
   MenuGroup,
@@ -18,7 +19,6 @@ import { Icon } from '../icon';
 import { IconButton } from '../iconButton';
 import { Stack } from '../stack';
 import { Typography } from '../typography';
-import { Divider } from './Divider';
 
 const Root = styled(Card)(({ theme }) => ({
   display: 'flex',

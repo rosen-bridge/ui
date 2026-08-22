@@ -10,12 +10,13 @@ import {
 
 import { styled } from '@mui/material';
 
+import { Divider } from '@/components';
+
 import { Card } from '../../card';
 import { CloseButton } from '../../closeButton';
 import { Icon } from '../../icon';
 import { IconButton } from '../../iconButton';
 import { VirtualScroll } from '../../virtualScroll';
-import { Divider } from '../Divider';
 import { Chips } from './Chips';
 import { History, type HistoryRef } from './History';
 import { Picker } from './Picker';
