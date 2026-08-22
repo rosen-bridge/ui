@@ -130,9 +130,7 @@ export const RequestToSignForm = () => {
   return (
     <Card backgroundColor="transparent">
       <CardHeader>
-        <CardTitle variant="h5" fontWeight="bold">
-          Request To Sign
-        </CardTitle>
+        <CardTitle>Request To Sign</CardTitle>
       </CardHeader>
       <CardBody>
         <form onSubmit={handleSubmit(onSubmit)}>

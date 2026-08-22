@@ -116,9 +116,7 @@ export const RequestAnOrderForm = () => {
   return (
     <Card backgroundColor="transparent">
       <CardHeader>
-        <CardTitle variant="h5" fontWeight="bold">
-          Request An Order
-        </CardTitle>
+        <CardTitle>Request An Order</CardTitle>
       </CardHeader>
       <CardBody>
         <form onSubmit={handleSubmit(onSubmit)}>

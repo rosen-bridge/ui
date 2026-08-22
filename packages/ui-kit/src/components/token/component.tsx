@@ -162,10 +162,10 @@ export const Token = (props: TokenProps) => {
       )}
       {showLabel && (
         <Typography
-          component="div"
+          as="div"
           loading={loading}
           noWrap
-          variant="inherit"
+          variant="body1"
           style={{ minWidth: 0 }}
           {...slots?.label}
         >

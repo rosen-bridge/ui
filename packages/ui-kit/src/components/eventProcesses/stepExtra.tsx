@@ -7,9 +7,7 @@ export const StepExtra = ({ label, icon, color }: StepProps) => {
     <div className="RosenStep-extra">
       <div className="RosenStep-label">
         <Icon size="small" color={color} name={icon} />
-        <Typography variant="body1" color={color}>
-          {label}
-        </Typography>
+        <Typography color={color}>{label}</Typography>
       </div>
     </div>
   );

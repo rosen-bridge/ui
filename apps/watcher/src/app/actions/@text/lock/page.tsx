@@ -19,7 +19,7 @@ const LockText = () => {
 
   return (
     <>
-      <Typography gutterBottom>
+      <Typography>
         To activate a watcher, there is a need for some collateral that is fully refundable and
         safe. On top of that, you&apos;ll need reporting permits to report each event. These
         reporting permits are at risk of seizure in case of fraudulent reports. Otherwise, they will
@@ -28,10 +28,10 @@ const LockText = () => {
 
       {info && !info.permitCount.total && (
         <>
-          <Typography fontWeight="bold" sx={{ mt: 2 }}>
+          <Typography variant="h4" style={{ marginTop: '8px' }}>
             Collateral
           </Typography>
-          <Typography sx={{ mb: 2 }}>
+          <Typography style={{ marginTop: '8px' }}>
             Currently, the required collateral is{' '}
             {isInfoLoading || isErgTokenLoading ? (
               <CircularProgress size={12} />
@@ -50,7 +50,7 @@ const LockText = () => {
         </>
       )}
 
-      <Typography fontWeight="bold" sx={{ mt: 2 }}>
+      <Typography variant="h4" style={{ marginTop: '8px' }}>
         RSN
       </Typography>
       <Typography>

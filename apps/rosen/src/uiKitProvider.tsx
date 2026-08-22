@@ -42,10 +42,16 @@ const getUiKitConfig: (tokenMap: TokenMap) => ConfigContextType = (tokenMap) => 
         },
       },
     },
+    CardTitle: {
+      defaultProps: {
+        color: 'text-secondary',
+        variant: 'h3',
+      },
+    },
     DialogTitle: {
       defaultProps: {
         color: 'secondary-dark',
-        variant: 'h2',
+        variant: 'h3',
       },
     },
     Icon: {

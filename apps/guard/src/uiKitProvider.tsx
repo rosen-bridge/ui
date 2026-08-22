@@ -41,7 +41,13 @@ const getUiKitConfig: () => ConfigContextType = () => ({
     DialogTitle: {
       defaultProps: {
         color: 'secondary-dark',
-        variant: 'h2',
+        variant: 'h3',
+      },
+    },
+    CardTitle: {
+      defaultProps: {
+        variant: 'h3',
+        color: 'text-secondary',
       },
     },
     Icon: {

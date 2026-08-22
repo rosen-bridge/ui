@@ -44,31 +44,22 @@ export const RelativeTime = (props: RelativeTimeProps) => {
     <div {...rest}>
       {loading && <Skeleton attached />}
       {displayText ? (
-        <Typography color="text-secondary" variant="body2">
-          {displayText}
-        </Typography>
+        <Typography color="text-primary">{displayText}</Typography>
       ) : (
         <>
           {prefix && (
-            <Typography color="text-secondary" variant="body2">
+            <Typography color="text-secondary" variant="body3">
               {prefix}
             </Typography>
           )}
-          <Typography
-            color="text-primary"
-            sx={{
-              fontSize: '18px',
-            }}
-          >
-            {number}
-          </Typography>
+          <Typography color="text-primary">{number}</Typography>
           {unit && (
-            <Typography color="text-secondary" variant="body2">
+            <Typography color="text-secondary" variant="body3">
               {unit}
             </Typography>
           )}
           {suffix && (
-            <Typography color="text-secondary" variant="body2">
+            <Typography color="text-secondary" variant="body3">
               {suffix}
             </Typography>
           )}

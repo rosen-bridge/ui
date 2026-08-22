@@ -80,10 +80,11 @@ export const Network = (props: NetworkProps) => {
       {showLabel && (
         <Typography
           className="RosenNetwork-label"
-          component="div"
+          as="div"
           loading={loading}
           noWrap
-          variant="inherit"
+          variant="body1"
+          // style={{ fontSize: 'inherit' }}
           {...slots?.label}
         >
           {label}

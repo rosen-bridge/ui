@@ -12,11 +12,11 @@ const LockText = () => {
 
   return (
     <>
-      <Typography gutterBottom>
+      <Typography>
         You can redeem your permits and unlock your RSN tokens. If you redeem all of your permits,
         your collateral will be redeemed automatically.
       </Typography>
-      <Typography fontWeight="bold" sx={{ mt: 2 }}>
+      <Typography variant="h4" style={{ marginTop: '8px' }}>
         Caution
       </Typography>
       <Typography>

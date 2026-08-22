@@ -79,7 +79,9 @@ export const ApiKeyDialog = (props: ApiKeyDialogProps) => {
         <DialogTitle>Authorization</DialogTitle>
       </DialogHeader>
       <DialogBody>
-        <DialogDescription gutterBottom>Set API key to access actions</DialogDescription>
+        <DialogDescription variant="body1" color="text-secondary" style={{ marginBottom: '16px' }}>
+          Set API key to access actions
+        </DialogDescription>
         <form id="api-key-form" onSubmit={onSubmit}>
           <Controller
             name="apiKey"

@@ -47,9 +47,7 @@ const Revenue = () => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle variant="h5" fontWeight="bold">
-          Revenue
-        </CardTitle>
+        <CardTitle>Revenue</CardTitle>
         <CardAction>
           <Menu>
             <MenuTrigger as={Button} size="small" endIcon={<Icon name="AngleDown" size="small" />}>

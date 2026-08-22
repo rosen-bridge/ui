@@ -78,11 +78,11 @@ const Health = () => {
 
           <Icon color={variant.color} loading={isLoading} name={variant.icon} size="32px" />
 
-          <Typography color={variant.color} loading={isLoading}>
+          <Typography variant="body1" color={variant.color} loading={isLoading}>
             Health is
           </Typography>
 
-          <Typography color={variant.darkColor} loading={isLoading} variant="h3">
+          <Typography color={variant.darkColor} loading={isLoading} variant="display2">
             {variant.status}
           </Typography>
 

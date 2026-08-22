@@ -1,8 +1,6 @@
 import type React from 'react';
 import { useState } from 'react';
 
-import { Typography } from '@mui/material';
-
 import type { Network as NetworkType } from '@rosen-ui/types';
 
 import {
@@ -12,6 +10,7 @@ import {
   DialogHeader,
   DialogIcon,
   DialogTitle,
+  Typography,
 } from '@/components';
 
 import { useToast } from '../../hooks';
@@ -83,15 +82,13 @@ export const AppInfo = ({ children, resolver }: AppInfoProps) => {
       <Dialog open={open} unstick="tablet" width="small" onClose={() => setOpen(false)}>
         <DialogHeader>
           <DialogIcon name="ExclamationCircle" />
-          <DialogTitle variant="h2" fontWeight="bold">
-            About Rosen Bridge
-          </DialogTitle>
+          <DialogTitle>About Rosen Bridge</DialogTitle>
           <DialogCloseButton />
         </DialogHeader>
         <DialogBody>
           <Stack spacing={1}>
             <Divider borderStyle="dashed">
-              <Typography noWrap color="text-secondary" variant="body2">
+              <Typography noWrap color="text-secondary" variant="h4">
                 App Version
               </Typography>
             </Divider>
@@ -101,7 +98,7 @@ export const AppInfo = ({ children, resolver }: AppInfoProps) => {
                   <Avatar size="32px" background="neutral-contrastText">
                     <Icon name={icon} />
                   </Avatar>
-                  <Typography noWrap variant="body1">
+                  <Typography color="text-secondary" noWrap variant="body1">
                     {label}
                   </Typography>
                 </Stack>
@@ -112,14 +109,16 @@ export const AppInfo = ({ children, resolver }: AppInfoProps) => {
             {networks && (
               <>
                 <Divider borderStyle="dashed">
-                  <Typography noWrap color="text-secondary" variant="body2">
+                  <Typography noWrap color="text-secondary" variant="h4">
                     Network Height
                   </Typography>
                 </Divider>
                 {networks.map(({ network, height }) => (
                   <Stack key={network} direction="row" justify="between">
                     <Network value={network} />
-                    <Typography>{height}</Typography>
+                    <Typography color="text-secondary" variant="body1">
+                      {height}
+                    </Typography>
                   </Stack>
                 ))}
               </>

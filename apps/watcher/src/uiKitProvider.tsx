@@ -31,7 +31,8 @@ const getUiKitConfig: () => ConfigContextType = () => ({
   components: {
     CardTitle: {
       defaultProps: {
-        fontWeight: '700',
+        color: 'text-secondary',
+        variant: 'h3',
       },
     },
     Connector: {
@@ -46,7 +47,7 @@ const getUiKitConfig: () => ConfigContextType = () => ({
     DialogTitle: {
       defaultProps: {
         color: 'secondary-dark',
-        variant: 'h2',
+        variant: 'h3',
       },
     },
     Icon: {

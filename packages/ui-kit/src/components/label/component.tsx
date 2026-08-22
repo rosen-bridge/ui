@@ -69,11 +69,10 @@ export const Label = (props: LabelProps) => {
       <div className="RosenLabel-header">
         <Typography
           color={color}
-          lineHeight="1.5rem"
           noWrap
-          variant="body2"
-          sx={{
-            my: orientation === 'vertical' ? 0 : 0.5,
+          variant="label1"
+          style={{
+            margin: orientation === 'vertical' ? 0 : '4px 0',
           }}
         >
           {label}

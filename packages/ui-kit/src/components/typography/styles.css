@@ -1,0 +1,150 @@
+.RosenTypography {
+  margin: 0;
+  color: var(--rosen-typography-color);
+
+  &[data-uppercase='true'] {
+    text-transform: uppercase;
+  }
+
+  &[data-nowrap='true'] {
+    white-space: nowrap;
+  }
+
+  &[data-align='center'] {
+    text-align: center;
+  }
+
+  &[data-align='left'] {
+    text-align: left;
+  }
+
+  &[data-align='right'] {
+    text-align: right;
+  }
+}
+
+/** Headings */
+.RosenTypography-h1 {
+  font-size: 24px;
+  line-height: 40px;
+  font-weight: var(--rosen-typography-bold, 600);
+
+  background: linear-gradient(
+    180deg,
+    var(--rosen-palette-primary-dark) 0%,
+    var(--rosen-palette-secondary-dark) 100%
+  );
+
+  -webkit-background-clip: text;
+  background-clip: text;
+
+  color: transparent;
+
+  [data-theme='dark'] & {
+    color: var(--rosen-palette-secondary-dark);
+  }
+}
+
+.RosenTypography-h2 {
+  font-size: 20px;
+  line-height: 40px;
+  font-weight: var(--rosen-typography-bold, 600);
+}
+
+.RosenTypography-h3 {
+  font-size: 16px;
+  line-height: 28px;
+  font-weight: var(--rosen-typography-bold, 600);
+}
+
+.RosenTypography-h4 {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: var(--rosen-typography-bold, 600);
+}
+
+/** Body */
+.RosenTypography-body1 {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: var(--rosen-typography-bold, 400);
+}
+
+.RosenTypography-body2 {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: var(--rosen-typography-bold, 400);
+  color: var(--rosen-typography-color, --rosen-palette-text-secondary);
+}
+
+.RosenTypography-body3 {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: var(--rosen-typography-bold, 400);
+}
+
+/** Labels */
+.RosenTypography-label1 {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: var(--rosen-typography-bold, 400);
+}
+
+.RosenTypography-label2 {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: var(--rosen-typography-bold, 400);
+}
+
+/** Code */
+.RosenTypography-code1 {
+  font-family: monospace;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: var(--rosen-typography-bold, 400);
+}
+
+.RosenTypography-code2 {
+  font-family: monospace;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: var(--rosen-typography-bold, 400);
+}
+
+/** Buttons */
+.RosenTypography-button1 {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: var(--rosen-typography-bold, 500);
+}
+
+.RosenTypography-button2 {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: var(--rosen-typography-bold, 500);
+}
+
+.RosenTypography-button3 {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: var(--rosen-typography-bold, 500);
+}
+
+/** Display */
+.RosenTypography-display1 {
+  font-size: 24px;
+  line-height: 32px;
+  font-weight: var(--rosen-typography-bold, 400);
+}
+
+.RosenTypography-display2 {
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: var(--rosen-typography-bold, 400);
+}
+
+.RosenTypography-display3 {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: var(--rosen-typography-bold, 400);
+}

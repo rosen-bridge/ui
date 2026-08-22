@@ -10,12 +10,8 @@ export const SourceTx = () => {
       <Center>
         <Stack align="center" spacing={1}>
           <UnderDevelopmentSection />
-          <Typography align="center" variant="body1">
-            This section is under development!
-          </Typography>
-          <Typography variant="body2" color="text-secondary">
-            We’re working on it.
-          </Typography>
+          <Typography variant="body1">This section is under development!</Typography>
+          <Typography color="text-secondary">We’re working on it.</Typography>
         </Stack>
       </Center>
     </Section>

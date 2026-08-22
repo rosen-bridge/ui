@@ -29,6 +29,8 @@
   flex-shrink: 1;
   min-width: 0;
   user-select: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .RosenIdentifier-trailing {

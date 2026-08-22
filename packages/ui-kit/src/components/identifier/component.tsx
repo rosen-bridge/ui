@@ -123,7 +123,7 @@ export const Identifier = (props: IdentifierProps) => {
               gap: '8px',
             }}
           >
-            <Typography noWrap variant="caption" component="span">
+            <Typography noWrap as="span">
               {text}
             </Typography>
             <Icon
@@ -133,9 +133,7 @@ export const Identifier = (props: IdentifierProps) => {
             />
           </a>
         ) : (
-          <Typography noWrap variant="caption">
-            {text}
-          </Typography>
+          <Typography noWrap>{text}</Typography>
         )}
       </Tooltip>
     );
@@ -146,14 +144,14 @@ export const Identifier = (props: IdentifierProps) => {
       {loading && <Skeleton attached />}
       <Tooltip disabled={loading} title={value} {...slots?.tooltip}>
         <div className="RosenIdentifier-value">
-          <span className="RosenIdentifier-overlay" aria-hidden="true">
+          <span className="RosenIdentifier-overlay RosenTypography-code2" aria-hidden="true">
             {value}
           </span>
           <Typography
             className="RosenIdentifier-leading"
-            component="div"
+            as="div"
             noWrap
-            variant="inherit"
+            variant="code2"
             {...slots?.text}
             {...slots?.leading}
           >
@@ -161,8 +159,8 @@ export const Identifier = (props: IdentifierProps) => {
           </Typography>
           <Typography
             className="RosenIdentifier-trailing"
-            component="div"
-            variant="inherit"
+            as="div"
+            variant="code2"
             {...slots?.text}
             {...slots?.trailing}
           >

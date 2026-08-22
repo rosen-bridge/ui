@@ -47,17 +47,17 @@ export const Duration = (props: DurationProps) => {
   return (
     <div {...rest}>
       {!ready && (
-        <Typography component="div" loading={loading} {...slots?.fallback}>
+        <Typography as="div" loading={loading} {...slots?.fallback}>
           {fallback || 'Invalid'}
         </Typography>
       )}
       {ready &&
         parts.map((part) => (
           <div className="RosenDuration-part" key={part.value + part.unit}>
-            <Typography component="div" {...slots?.value}>
+            <Typography variant="body1" as="div" {...slots?.value}>
               {part.value}
             </Typography>
-            <Typography color="text-disabled" component="div" variant="caption" {...slots?.unit}>
+            <Typography color="text-disabled" as="div" {...slots?.unit}>
               {part.unit}
               {part.value > 1 ? 's' : ''}
             </Typography>

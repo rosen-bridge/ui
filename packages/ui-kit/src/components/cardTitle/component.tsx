@@ -1,4 +1,4 @@
-import { Typography } from '@/components';
+import { Typography} from '@/components';
 import { useConfig } from '@/hooks';
 import type { ElementBaseProps, OverridableType } from '@/types';
 

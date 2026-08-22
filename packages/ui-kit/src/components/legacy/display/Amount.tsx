@@ -240,7 +240,7 @@ const AmountBase = ({
           {!error && (
             <Tooltip disabled={loading} title={tooltip}>
               <Typography
-                component="div"
+                as="div"
                 loading={loading}
                 style={{ fontSize: 'inherit', whiteSpace: 'nowrap' }}
               >
@@ -248,7 +248,7 @@ const AmountBase = ({
                   <>
                     {parts.number}
                     {parts.fraction && (
-                      <Typography component="span" fontSize="75%" style={{ opacity: 0.7 }}>
+                      <Typography as="span" style={{ opacity: 0.7, fontSize: '75%' }}>
                         .{!!parts.zeros && '0'}
                         {!!parts.zeros && <sub style={{ fontSize: '0.75em' }}>{parts.zeros}</sub>}
                         {parts.fraction}
@@ -262,7 +262,7 @@ const AmountBase = ({
           )}
           {!error && !parts && !!fallback && value === undefined && !loading && <>{fallback}</>}
           {unit && (
-            <Typography component="div" style={{ fontSize: '75%', opacity: 0.7 }}>
+            <Typography as="div" style={{ fontSize: '75%', opacity: 0.7 }}>
               {unit}
             </Typography>
           )}
