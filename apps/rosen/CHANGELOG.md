@@ -1,5 +1,40 @@
 # @rosen-bridge/rosen-app
 
+## 5.7.0
+
+### Minor Changes
+
+- Update event repository logic to support status overrides and display appropriate views in the event list, sidebar, and details
+- Upgrade `Next.js` from `15` to `16` to improve build performance and development scripts
+- Add environment variable to disable bridge form
+
+### Patch Changes
+
+- Upgrade the Next.js dependency to the latest patched release to address the critical security vulnerability announced for August 26, 2026
+- Update dependencies
+  - @rosen-bridge/ui-kit@6.0.0
+  - @rosen-ui/data-source@0.3.0
+  - @rosen-bridge/token-icons@0.1.0
+  - @rosen-bridge/icons@4.0.0
+  - @rosen-ui/public-status@0.3.0
+  - @rosen-network/binance@0.4.9
+  - @rosen-network/bitcoin@2.4.8
+  - @rosen-network/bitcoin-runes@1.0.8
+  - @rosen-network/cardano@2.5.8
+  - @rosen-network/doge@0.4.8
+  - @rosen-network/ergo@2.5.9
+  - @rosen-network/ethereum@0.4.9
+  - @rosen-network/firo@0.1.2
+  - @rosen-ui/metamask-wallet@2.2.3
+  - @rosen-ui/wallet-connect@0.3.3
+  - @rosen-ui/okx-wallet@2.2.5
+  - @rosen-ui/xverse-wallet@0.5.3
+  - @rosen-ui/eternl-wallet@3.1.10
+  - @rosen-ui/lace-wallet@3.1.10
+  - @rosen-ui/my-doge-wallet@1.1.12
+  - @rosen-ui/nautilus-wallet@3.1.10
+  - @rosen-ui/firo-wallet@0.1.2
+
 ## 5.6.0
 
 ### Minor Changes

@@ -1,5 +1,11 @@
 # @rosen-ui/my-doge-wallet
 
+## 1.1.12
+
+### Patch Changes
+
+- @rosen-network/doge@0.4.8
+
 ## 1.1.11
 
 ### Patch Changes

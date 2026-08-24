@@ -1,5 +1,12 @@
 # @rosen-ui/metamask-wallet
 
+## 2.2.3
+
+### Patch Changes
+
+- @rosen-network/binance@0.4.9
+- @rosen-network/ethereum@0.4.9
+
 ## 2.2.2
 
 ### Patch Changes

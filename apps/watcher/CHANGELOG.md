@@ -1,5 +1,18 @@
 # @rosen-bridge/watcher-app
 
+## 4.5.0
+
+### Minor Changes
+
+- Upgrade `Next.js` from `15` to `16` to improve build performance and development scripts
+
+### Patch Changes
+
+- Upgrade the Next.js dependency to the latest patched release to address the critical security vulnerability announced for August 26, 2026
+- Update dependencies
+  - @rosen-bridge/ui-kit@6.0.0
+  - @rosen-bridge/icons@4.0.0
+
 ## 4.4.2
 
 ### Patch Changes

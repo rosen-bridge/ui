@@ -1,5 +1,11 @@
 # @rosen-ui/firo-wallet
 
+## 0.1.2
+
+### Patch Changes
+
+- @rosen-network/firo@0.1.2
+
 ## 0.1.1
 
 ### Patch Changes
