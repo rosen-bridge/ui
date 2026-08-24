@@ -7,6 +7,7 @@ COPY nginx.conf /etc/nginx/nginx.conf
 COPY entrypoint.sh ./
 ENV SERVICE_NAME=service
 ENV SERVICE_PORT=3000
+ENV APP_NAME=watcher
 ENTRYPOINT ["bash", "entrypoint.sh"]
 
 FROM nginx:stable AS guard
@@ -18,6 +19,7 @@ COPY nginx.conf /etc/nginx/nginx.conf
 COPY entrypoint.sh ./
 ENV SERVICE_NAME=service
 ENV SERVICE_PORT=8080
+ENV APP_NAME=guard
 ENTRYPOINT ["bash", "entrypoint.sh"]
 
 FROM node:22.18 AS prepare
