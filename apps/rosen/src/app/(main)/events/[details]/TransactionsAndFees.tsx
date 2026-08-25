@@ -9,6 +9,7 @@ import {
   Columns,
   Duration,
   Identifier,
+  InvalidValue,
   Label,
   LabelGroup,
   useResponsive,
@@ -31,40 +32,40 @@ export const TransactionsAndFees = ({ id, flowId }: { id: string; flowId: string
 
   const data = events?.find((event) => event.txId === flowId);
 
+  const isCustomStatus = typeof data?.status === 'object';
+
   const txIds = useMemo(() => {
-    const allTxs = [
+    return [
       {
-        type: 'source',
-        label: 'Source Tx',
+        type: 'lock',
+        label: 'Lock Tx',
         chain: data?.fromChain,
         txId: data?.sourceTxId,
+        isInvalid: false,
       },
       {
         type: 'payment',
         label: 'Payment Tx',
         chain: data?.toChain,
         txId: data?.paymentTxId || undefined,
+        isInvalid: isCustomStatus,
       },
       {
         type: 'reward',
-        label: 'Reward Tx',
+        label: data?.status === 'FRAUD' ? 'Fraud Tx' : 'Reward Tx',
         chain: NETWORKS.ergo.key,
         txId: data?.spendTxId || undefined,
+        isInvalid: isCustomStatus,
       },
       {
         type: 'trigger',
         label: 'Trigger Tx',
         chain: NETWORKS.ergo.key,
         txId: data?.txId,
+        isInvalid: false,
       },
     ] as const;
-
-    if (data?.status === 'FRAUD') {
-      return allTxs.filter((tx) => tx.type !== 'payment' && tx.type !== 'reward');
-    }
-
-    return allTxs;
-  }, [data]);
+  }, [data, isCustomStatus]);
 
   const boxStyle = useResponsive<CSSProperties>({
     mobile: { columnSpan: 'all' },
@@ -87,22 +88,50 @@ export const TransactionsAndFees = ({ id, flowId }: { id: string; flowId: string
             label="Duration"
             info="How long it takes from when the lock transaction is recorded on the blockchain until the reward transaction is confirmed. (Note: the actual payment may arrive before this full interval.)"
           >
-            <Duration fallback="-" loading={isLoading} />
+            {isCustomStatus ? (
+              <InvalidValue />
+            ) : (
+              <Duration
+                fallback="-"
+                loading={isLoading}
+                value={
+                  data?.timestamps.COMPLETED && data?.timestamps.CREATED
+                    ? (data.timestamps.COMPLETED - data.timestamps.CREATED) * 1000
+                    : undefined
+                }
+              />
+            )}
           </Label>
           <Label label="Total Emission">
-            <Amount style={{ height: '20px' }} loading={isLoading} fallback="-" />
+            {isCustomStatus ? (
+              <InvalidValue />
+            ) : (
+              <Amount style={{ height: '20px' }} loading={isLoading} fallback="-" />
+            )}
           </Label>
           <Label label="Guards" inset>
-            <Amount style={{ height: '20px' }} loading={isLoading} fallback="-" />
+            {isCustomStatus ? (
+              <InvalidValue />
+            ) : (
+              <Amount style={{ height: '20px' }} loading={isLoading} fallback="-" />
+            )}
           </Label>
           <Label label="Watchers" inset>
-            <Amount style={{ height: '20px' }} loading={isLoading} fallback="-" />
+            {isCustomStatus ? (
+              <InvalidValue />
+            ) : (
+              <Amount style={{ height: '20px' }} loading={isLoading} fallback="-" />
+            )}
           </Label>
           <Label
             label="RSN Ratio"
             info="The number of RSN tokens that correspond to one unit of this token."
           >
-            <Amount style={{ height: '20px' }} loading={isLoading} fallback="-" />
+            {isCustomStatus ? (
+              <InvalidValue />
+            ) : (
+              <Amount style={{ height: '20px' }} loading={isLoading} fallback="-" />
+            )}
           </Label>
         </div>
         <div>
@@ -140,15 +169,20 @@ export const TransactionsAndFees = ({ id, flowId }: { id: string; flowId: string
         <div style={boxStyle}>
           <Label label="Tx IDs" />
           <LabelGroup>
-            {txIds.map(({ type, label, chain, txId }) => (
-              <Label key={type} label={label} inset>
-                <Identifier
-                  copyable
-                  href={getTxURL(chain, txId)}
-                  loading={isLoading}
-                  value={txId}
-                  style={{ width: '90%' }}
-                />
+            {txIds.map((item) => (
+              <Label key={item.type} label={item.label} inset>
+                {item.isInvalid ? (
+                  <InvalidValue />
+                ) : (
+                  <Identifier
+                    copyable
+                    fallback="N/A"
+                    href={getTxURL(item.chain, item.txId)}
+                    loading={isLoading}
+                    value={item.txId}
+                    style={{ width: '90%' }}
+                  />
+                )}
               </Label>
             ))}
           </LabelGroup>

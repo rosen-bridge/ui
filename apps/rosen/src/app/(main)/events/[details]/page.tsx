@@ -5,6 +5,7 @@ import { useParams } from 'next/navigation';
 
 import { Stack } from '@rosen-bridge/ui-kit';
 
+import { Banner } from './Banner';
 import { Overview } from './Overview';
 import { Process } from './Process';
 import { SourceTx } from './SourceTx';
@@ -18,6 +19,7 @@ const Page = () => {
 
   return (
     <Stack spacing={2} direction="column">
+      <Banner id={id} flowId={flowId} />
       <Overview id={id} flowId={flowId} onFlowIdChange={setFlowId} />
       <TransactionsAndFees id={id} flowId={flowId} />
       <Process id={id} flowId={flowId} />

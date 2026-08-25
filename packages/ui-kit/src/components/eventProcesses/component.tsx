@@ -87,7 +87,7 @@ export const EventProcesses = (props: EventProcessesProps) => {
 
         return <Step key={index.toString()} active={value} setActive={handleSetActive} {...item} />;
       })}
-      {loading && <Skeleton attached variant="rounded" />}
+      {loading && <Skeleton variant="rounded" height="104px" />}
     </div>
   );
 };

@@ -38,6 +38,7 @@ import type {
   IdentifierProps,
   ImageProps,
   InfoIconProps,
+  InvalidValueProps,
   LabelGroupProps,
   LabelProps,
   LayoutListProps,
@@ -117,6 +118,7 @@ export type Components = {
   Identifier: IdentifierProps;
   Image: ImageProps;
   InfoIcon: InfoIconProps;
+  InvalidValue: InvalidValueProps;
   Label: LabelProps;
   LabelGroup: LabelGroupProps;
   LayoutList: LayoutListProps;
