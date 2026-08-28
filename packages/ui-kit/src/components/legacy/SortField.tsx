@@ -1,9 +1,10 @@
 import { type HTMLAttributes, useCallback, useEffect, useMemo } from 'react';
 
-import { Card, styled } from '@mui/material';
+import { styled } from '@mui/material';
 
 import {
   Button,
+  Card,
   Menu,
   MenuBody,
   MenuGroup,
@@ -21,6 +22,7 @@ import { Divider } from './Divider';
 
 const Root = styled(Card)(({ theme }) => ({
   display: 'flex',
+  flexDirection: 'row',
   alignItems: 'center',
   flexWrap: 'nowrap',
   gap: theme.spacing(1),

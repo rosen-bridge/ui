@@ -3,124 +3,109 @@ import type { EventStatusMeta } from './component';
 export const STATUS_MAP: Record<string, EventStatusMeta> = {
   COMPLETED: {
     label: 'Completed',
-    color: 'success',
+    severity: 'success',
     icon: 'CheckCircle',
   },
   CREATED: {
     label: 'Created',
-    color: 'info',
+    severity: 'info',
     icon: 'Edit',
   },
   FRAUD: {
     label: 'Fraud',
-    color: 'error',
+    severity: 'error',
     icon: 'Ban',
   },
   MULTIPLE_FLOWS: {
     label: 'Multiple Flows',
-    color: 'warning',
+    severity: 'warning',
     icon: 'CodeBranch',
   },
   PAID: {
     label: 'Paid',
-    color: 'info',
+    severity: 'info',
     icon: 'Coins',
   },
   PAYMENT_APPROVED: {
     label: 'Payment Approved',
-    color: 'info',
+    severity: 'info',
     icon: 'Coins',
   },
   PAYMENT_SENT: {
     label: 'Payment Sent',
-    color: 'info',
+    severity: 'info',
     icon: 'Coins',
   },
   PAYMENT_SIGNED: {
     label: 'Payment Signed',
-    color: 'info',
+    severity: 'info',
     icon: 'Coins',
   },
   PAYMENT_SIGNING: {
     label: 'Signing Payment',
-    color: 'info',
+    severity: 'info',
     icon: 'Coins',
   },
   PAYMENT_STALLED: {
     label: 'Payment Stalled',
-    color: 'warning',
+    severity: 'warning',
     icon: 'ExclamationCircle',
   },
   REACHED_LIMIT: {
     label: 'Reached Limit',
-    color: 'error',
+    severity: 'error',
     icon: 'ExclamationOctagon',
   },
   REJECTED: {
     label: 'Rejected',
-    color: 'error',
+    severity: 'error',
     icon: 'CloseCircle',
   },
   REWARD_APPROVED: {
     label: 'Reward Approved',
-    color: 'info',
+    severity: 'info',
     icon: 'Gift',
   },
   REWARD_SENT: {
     label: 'Reward Sent',
-    color: 'info',
+    severity: 'info',
     icon: 'Gift',
   },
   REWARD_SIGNED: {
     label: 'Reward Signed',
-    color: 'info',
+    severity: 'info',
     icon: 'Gift',
   },
   REWARD_SIGNING: {
     label: 'Signing Reward',
-    color: 'info',
+    severity: 'info',
     icon: 'Gift',
   },
   REWARD_STALLED: {
     label: 'Reward Stalled',
-    color: 'warning',
+    severity: 'warning',
     icon: 'ExclamationCircle',
   },
   TIMEOUT: {
     label: 'Timeout',
-    color: 'neutral',
+    severity: undefined,
     icon: 'ClockThree',
   },
   TRIGGERED: {
     label: 'Triggered',
-    color: 'info',
+    severity: 'info',
     icon: 'SignOutAlt',
   },
   UNKNOWN: {
     label: 'Unknown',
-    color: 'neutral',
+    severity: undefined,
     icon: 'ExclamationCircle',
   },
 
   // should remove
   processing: {
     label: 'Processing',
-    color: 'info',
+    severity: 'info',
     icon: 'Hourglass',
-  },
-  successful: {
-    label: 'Successful',
-    color: 'success',
-    icon: 'CheckCircle',
-  },
-  fraud: {
-    label: 'Fraud',
-    color: 'error',
-    icon: 'Ban',
-  },
-  multipleFlows: {
-    label: 'Multiple Flows',
-    color: 'warning',
-    icon: 'CodeBranch',
   },
 } as const;

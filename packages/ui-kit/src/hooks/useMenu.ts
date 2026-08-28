@@ -14,6 +14,7 @@ export const useMenu = () => {
     close: handle.close,
     isOpen,
     open: handle.open,
-    store: handle.store,
+    // biome-ignore lint/suspicious/noExplicitAny: Keep this
+    store: handle.store as any,
   };
 };

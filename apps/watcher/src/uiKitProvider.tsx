@@ -2,7 +2,7 @@ import { type PropsWithChildren, useMemo } from 'react';
 import type { Route } from 'next';
 import NextLink from 'next/link';
 
-import * as AllIcons from '@rosen-bridge/icons';
+import * as icons from '@rosen-bridge/icons';
 import { type ConfigContextType, ConfigProvider, type DefaultColor } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 import type { Network } from '@rosen-ui/types';
@@ -15,7 +15,7 @@ declare module '@rosen-bridge/ui-kit' {
   }
 
   interface IconOverrides {
-    name: Exclude<keyof typeof AllIcons, 'TOKENS'>;
+    name: keyof typeof icons;
   }
 
   interface LinkOverrides {
@@ -51,7 +51,7 @@ const getUiKitConfig: () => ConfigContextType = () => ({
     },
     Icon: {
       defaultProps: {
-        icons: Object.fromEntries(Object.entries(AllIcons).filter(([key]) => key !== 'TOKENS')),
+        icons,
       },
     },
     Link: {
@@ -67,12 +67,12 @@ const getUiKitConfig: () => ConfigContextType = () => ({
             {
               label: value.label,
               // biome-ignore lint/performance/noDynamicNamespaceImportAccess: Keep it
-              logo: AllIcons[
+              logo: icons[
                 key
                   .split('-')
                   .filter(Boolean)
                   .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-                  .join('') as keyof typeof AllIcons
+                  .join('') as keyof typeof icons
               ],
             },
           ]),

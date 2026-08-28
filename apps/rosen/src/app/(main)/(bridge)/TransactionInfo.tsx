@@ -39,8 +39,8 @@ export const TransactionInfo = () => {
     <Card
       backgroundColor="primary-light"
       style={{
-        alignContent: 'end',
         flexGrow: 1,
+        justifyContent: 'end',
       }}
     >
       <CardBody>

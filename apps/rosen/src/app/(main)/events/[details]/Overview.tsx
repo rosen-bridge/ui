@@ -19,6 +19,7 @@ import {
   MenuTrigger,
   Network,
   Token,
+  Tooltip,
   Typography,
   useResponsive,
 } from '@rosen-bridge/ui-kit';
@@ -28,6 +29,7 @@ import { getAddressUrl } from '@rosen-ui/utils';
 
 import type { EventDetailsType } from '@/backend/events/repository';
 
+import { eventStatusParser } from '../eventStatusParser';
 import { Section } from './Section';
 
 export const Overview = ({
@@ -70,6 +72,8 @@ export const Overview = ({
     mobile: 'reverse',
     tablet: 'both',
   } as const);
+
+  const reason = typeof data?.status === 'object' ? data.status.reason : undefined;
 
   return (
     <Section error={error} load={mutate} title="Overview">
@@ -146,7 +150,13 @@ export const Overview = ({
           />
         </Label>
         <Label label="Status" orientation={labelOrientation}>
-          <EventStatus value={data?.status} loading={isLoading} />
+          <Tooltip disabled={!reason} title={reason}>
+            <EventStatus
+              value={eventStatusParser(data?.status)}
+              loading={isLoading}
+              style={{ cursor: reason ? '' : 'auto' }}
+            />
+          </Tooltip>
         </Label>
         <Label label="Time" orientation={labelOrientation}>
           <DateTime loading={isLoading} timestamp={(data?.timestamp || 0) * 1000} />

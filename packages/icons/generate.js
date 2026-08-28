@@ -6,7 +6,7 @@ import * as glob from 'glob';
 const lines = [];
 
 glob
-  .sync(['icons/*.svg', 'networks/*.svg'], {
+  .sync('**/*.svg', {
     posix: true,
     cwd: path.resolve(import.meta.dirname, 'src'),
   })
@@ -18,23 +18,8 @@ glob
       match.replace('-', '').toUpperCase(),
     );
 
-    lines.push(`export { default as ${componentName} } from './${file}?react';`, '');
+    lines.push(`export { default as ${componentName} } from './${file}';`, '');
   });
-
-lines.push('export const TOKENS = {');
-
-glob
-  .sync('tokens/*.*', {
-    posix: true,
-    cwd: path.resolve(import.meta.dirname, 'src'),
-  })
-  .forEach((file) => {
-    const filename = path.basename(file, path.extname(file));
-
-    lines.push(`  '${filename}': new URL(/* @vite-ignore */'${file}', import.meta.url).href,`);
-  });
-
-lines.push('} as const');
 
 const content = lines.join('\n');
 

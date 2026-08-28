@@ -26,6 +26,7 @@ import {
 import {
   AggregatedStatusChangedEntity,
   AggregatedStatusEntity,
+  EventStatusOverrideEntity,
   GuardStatusChangedEntity,
   GuardStatusEntity,
   migrations as publicStatusMigrations,
@@ -54,6 +55,7 @@ export const testDataSource = new DataSource({
     ExtractorStatusEntity,
     AggregatedStatusEntity,
     AggregatedStatusChangedEntity,
+    EventStatusOverrideEntity,
     GuardStatusEntity,
     GuardStatusChangedEntity,
     CommitmentEntity,
