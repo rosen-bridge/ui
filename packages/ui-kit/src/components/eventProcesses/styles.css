@@ -2,7 +2,6 @@
   &[data-orientation='horizontal'] {
     display: grid;
     align-items: start;
-    width: calc(100% - 75px);
     margin: 0 auto;
 
     .RosenStep {

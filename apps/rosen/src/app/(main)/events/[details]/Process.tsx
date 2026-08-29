@@ -10,6 +10,7 @@ import {
   type EventProcessesProps,
   formatDateTime,
   type IconProps,
+  Typography,
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 
@@ -352,14 +353,37 @@ export const Process = ({ id, flowId }: { id: string; flowId: string | undefined
 
   const [guardPublicKey, setGuardPublicKey] = useState<string | undefined>();
 
-  const url = guardPublicKey
-    ? `/v1/events/${id}/status?triggerTxId=${flowId}&guardPublicKey=${guardPublicKey}`
-    : `/v1/events/${id}/status?triggerTxId=${flowId}`;
+  const {
+    data: events,
+    error: eventsError,
+    isLoading: eventsIsLoading,
+    mutate: eventMutate,
+  } = useSWR<EventDetailsType[]>(`/v1/events/${id}`, fetcher);
 
-  const { data, error, isLoading, mutate } = useSWR<EventStatusType>(flowId ? url : null, fetcher);
+  const {
+    data: status,
+    error: statusError,
+    isLoading: statusIsLoading,
+    mutate: statusMutate,
+  } = useSWR<EventStatusType>(
+    flowId && guardPublicKey
+      ? `/v1/events/${id}/status?triggerTxId=${flowId}&guardPublicKey=${guardPublicKey}`
+      : null,
+    fetcher,
+  );
+
+  const error = eventsError || statusError;
+  const isLoading = eventsIsLoading || statusIsLoading || !flowId;
+  const mutate = eventsError ? eventMutate : statusMutate;
+
+  const data = guardPublicKey ? status : events?.find((event) => event.txId === flowId);
+
+  const isCustomStatus = typeof data?.status === 'object';
 
   const items = useMemo<EventProcessesProps['items']>(() => {
     if (!data) return [];
+
+    if (typeof data.status === 'object') return [];
 
     const info = structuredClone(pick(steps, findPath(steps, data.status)));
 
@@ -410,20 +434,23 @@ export const Process = ({ id, flowId }: { id: string; flowId: string | undefined
   return (
     <Section
       action={
-        <ProcessSelect disabled={isLoading} value={guardPublicKey} onChange={setGuardPublicKey} />
+        !isCustomStatus && (
+          <ProcessSelect disabled={isLoading} value={guardPublicKey} onChange={setGuardPublicKey} />
+        )
       }
       error={error}
       load={mutate}
       badge="New"
       title="Progress"
     >
-      <EventProcesses
-        items={items}
-        loading={isLoading || !flowId}
-        style={{ width: '100%', height: isLoading || !flowId ? '104px' : undefined }}
-        value={active}
-        onChange={setActive}
-      />
+      {isCustomStatus ? (
+        <Typography>
+          No progress chart is available because this event deviated from the standard lifecycle.
+          The reason for this exception is noted above.
+        </Typography>
+      ) : (
+        <EventProcesses items={items} loading={isLoading} value={active} onChange={setActive} />
+      )}
     </Section>
   );
 };
