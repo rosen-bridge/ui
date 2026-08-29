@@ -8,17 +8,16 @@
  * - `undefined`, `null`, `NaN` → `"Invalid DateTime"`
  * - `0` is valid (Unix epoch)
  */
-export const formatDateTime = (timestamp?: number): string => {
-  if (
-    timestamp === undefined ||
-    timestamp === null ||
-    Number.isNaN(timestamp) ||
-    !Number.isFinite(timestamp)
-  ) {
+export const formatDateTime = (value?: number | Date): string => {
+  if (value === undefined || value === null) {
     return 'Invalid DateTime';
   }
 
-  const date = new Date(timestamp);
+  const date = value instanceof Date ? value : new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return 'Invalid DateTime';
+  }
 
   return new Intl.DateTimeFormat('en-US', {
     day: '2-digit',
