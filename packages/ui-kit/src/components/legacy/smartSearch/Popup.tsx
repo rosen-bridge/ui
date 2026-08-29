@@ -7,6 +7,7 @@ const Root = styled('div')(({ theme }) => ({
   background: theme.palette.background.paper,
   boxShadow: theme.shadows[8],
   padding: theme.spacing(1, 0),
+  overflow: 'hidden',
 }));
 
 const Scrollable = styled('div')(({ theme }) => ({
