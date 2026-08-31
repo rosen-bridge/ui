@@ -25,7 +25,6 @@
     "type-check": "tsc"
   },
   "devDependencies": {
-    "@svgr/rollup": "^8.1.0",
     "glob": "^11.1.0",
     "tsdown": "^0.22.14"
   },
