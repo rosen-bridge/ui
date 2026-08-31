@@ -1,6 +1,6 @@
 {
   "name": "@rosen-bridge/rosen-service",
-  "version": "4.4.0",
+  "version": "4.4.1",
   "private": true,
   "repository": {
     "type": "git",
@@ -51,7 +51,7 @@
     "@rosen-clients/rate-limited-axios": "^2.0.1",
     "@rosen-ui/asset-calculator": "^2.4.0",
     "@rosen-ui/constants": "^1.1.0",
-    "@rosen-ui/data-source": "^0.2.7",
+    "@rosen-ui/data-source": "^0.3.0",
     "config": "^3.3.12",
     "ethers": "6.16.0",
     "pg": "^8.11.3",

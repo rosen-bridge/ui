@@ -1,5 +1,16 @@
 # @rosen-ui/data-source
 
+## 0.3.0
+
+### Minor Changes
+
+- Add `EventStatusOverrideEntity` and its migrations to the data source
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-ui/public-status@0.3.0
+
 ## 0.2.7
 
 ### Patch Changes
