@@ -49,7 +49,7 @@ export const InfoWidgetCard = ({
           />
           <Stack direction="column" style={{ flexGrow: 1, minWidth: 0 }}>
             <Stack direction="row" align="center" justify="between">
-              <Typography variant="h6" color="primary-contrastText" lineHeight="normal">
+              <Typography variant="display2" color="primary-contrastText">
                 {isLoading && <CircularProgress size={16} color="inherit" />}
                 {!isLoading && <Truncate lines={1}>{value}</Truncate>}
               </Typography>
@@ -60,7 +60,7 @@ export const InfoWidgetCard = ({
               )}
             </Stack>
             <Typography
-              component="div"
+              as="div"
               variant="body2"
               color="primary-contrastText"
               style={{ opacity: 0.6 }}

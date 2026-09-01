@@ -56,9 +56,7 @@ export const RelativeTime = (props: RelativeTimeProps) => {
           )}
           <Typography
             color="text-primary"
-            sx={{
-              fontSize: '18px',
-            }}
+            variant='body1'
           >
             {number}
           </Typography>

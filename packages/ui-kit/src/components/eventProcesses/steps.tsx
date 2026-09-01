@@ -49,7 +49,7 @@ export const Step = (props: StepProps) => {
           title={
             <div>
               {timestamp && <DateTime color="inherit" timestamp={timestamp} />}
-              {description && <Typography variant="caption">{description}</Typography>}
+              {description && <Typography variant="label1">{description}</Typography>}
             </div>
           }
         >

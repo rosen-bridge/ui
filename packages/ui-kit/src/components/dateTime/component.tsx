@@ -45,7 +45,6 @@ export const DateTime = (props: DateTimeProps) => {
   return (
     <Typography
       color="text-primary"
-      gutterBottom={loading}
       loading={loading}
       variant="body1"
       {...rest}

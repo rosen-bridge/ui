@@ -120,7 +120,7 @@ export const HealthParamCard = ({
           flex: '1 1 0%',
         }}
       >
-        <Typography gutterBottom>{value?.title}</Typography>
+        <Typography variant="heading3">{value?.title}</Typography>
         <Typography variant="body2">{value?.description}</Typography>
         {value?.details && (
           <Alert

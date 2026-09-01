@@ -53,7 +53,7 @@ const Actions = ({ form, text, title }: ActionsProps) => {
           <CardBody style={style}>
             <div style={{ order: wide ? '-1' : '1' }}>{form}</div>
             {wide && <Divider orientation="vertical" />}
-            <Typography component="div" color="text-secondary">
+            <Typography as="div" color="text-secondary">
               {text}
             </Typography>
           </CardBody>

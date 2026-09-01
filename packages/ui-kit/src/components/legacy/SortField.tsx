@@ -117,10 +117,10 @@ export const SortField = ({
           }}
         >
           <Stack align="start">
-            <Typography hidden={dense} variant="caption" color="text-secondary" lineHeight="12px">
+            <Typography hidden={dense} variant="label2" color="text-secondary">
               Sort by
             </Typography>
-            <Typography variant="body1" lineHeight="24px">
+            <Typography variant="body1">
               {current?.label}
             </Typography>
           </Stack>
@@ -135,7 +135,7 @@ export const SortField = ({
                 backgroundColor: 'transparent',
               }}
             >
-              <Typography variant="caption" color="text-secondary">
+              <Typography variant="label2" color="text-secondary">
                 Sort by
               </Typography>
             </MenuGroupLabel>

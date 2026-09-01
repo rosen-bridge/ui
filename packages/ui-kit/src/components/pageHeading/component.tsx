@@ -22,7 +22,7 @@ export const PageHeading = (props: PageHeadingProps) => {
 
   return (
     <div {...rest}>
-      <Typography variant="h1">{title}</Typography>
+      <Typography variant="heading1">{title}</Typography>
       {actions}
     </div>
   );

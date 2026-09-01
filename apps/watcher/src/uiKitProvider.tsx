@@ -31,7 +31,7 @@ const getUiKitConfig: () => ConfigContextType = () => ({
   components: {
     CardTitle: {
       defaultProps: {
-        fontWeight: '700',
+        weight: 'bold',
       },
     },
     Connector: {

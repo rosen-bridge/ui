@@ -144,52 +144,7 @@ export const lightThemeOptions: ThemeOptions = {
       desktop: 1200,
     },
   },
-  typography: {
-    h1: {
-      fontSize: '1.5rem',
-      fontWeight: 'bold',
-    },
-    h2: {
-      fontSize: '1.5rem',
-    },
-    h3: {
-      fontSize: '1.5rem',
-    },
-    h5: {
-      fontSize: '1rem',
-    },
-    body1: {
-      fontSize: '1rem',
-    },
-    body2: {
-      fontSize: '0.875rem',
-      lineHeight: '1.25rem',
-    },
-    subtitle1: {
-      fontSize: '1.5rem',
-    },
-    subtitle2: {
-      fontSize: '0.625rem',
-    },
-  },
   components: {
-    MuiTypography: {
-      styleOverrides: {
-        h1: ({ theme }: { theme: Theme }) =>
-          theme.palette.mode === 'light'
-            ? {
-                background: `linear-gradient(180deg, ${theme.palette.primary.dark} 0%, ${theme.palette.secondary.dark} 100%)`,
-                backgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-              }
-            : {
-                color: theme.palette.secondary.dark,
-              },
-        body2: ({ theme }: { theme: Theme }) => ({
-          color: theme.palette.text.secondary,
-        }),
-      },
-    },
     MuiButton: {
       styleOverrides: {
         containedSecondary: ({ theme }: { theme: Theme }) => ({

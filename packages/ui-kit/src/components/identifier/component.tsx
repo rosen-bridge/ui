@@ -123,7 +123,7 @@ export const Identifier = (props: IdentifierProps) => {
               gap: '8px',
             }}
           >
-            <Typography noWrap variant="caption" component="span">
+            <Typography truncate variant="label1" as="span">
               {text}
             </Typography>
             <Icon
@@ -133,7 +133,7 @@ export const Identifier = (props: IdentifierProps) => {
             />
           </a>
         ) : (
-          <Typography noWrap variant="caption">
+          <Typography truncate variant="label1">
             {text}
           </Typography>
         )}
@@ -151,8 +151,8 @@ export const Identifier = (props: IdentifierProps) => {
           </span>
           <Typography
             className="RosenIdentifier-leading"
-            component="div"
-            noWrap
+            as="div"
+            truncate
             variant="inherit"
             {...slots?.text}
             {...slots?.leading}
@@ -161,7 +161,7 @@ export const Identifier = (props: IdentifierProps) => {
           </Typography>
           <Typography
             className="RosenIdentifier-trailing"
-            component="div"
+            as="div"
             variant="inherit"
             {...slots?.text}
             {...slots?.trailing}

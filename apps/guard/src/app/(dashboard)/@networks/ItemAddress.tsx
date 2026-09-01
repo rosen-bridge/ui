@@ -23,7 +23,7 @@ export const ItemAddress = ({ loading, state, value }: ItemAddressProps) => {
       >
         <Typography
           color={`${state === 'hot' ? 'secondary-dark' : 'tertiary-dark'}`}
-          component="div"
+          as="div"
           fontWeight="700"
           fontSize="1.5rem"
         >

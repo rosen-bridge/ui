@@ -5,15 +5,15 @@ import { Typography } from '@rosen-bridge/ui-kit';
 const WithdrawalText = () => {
   return (
     <>
-      <Typography gutterBottom>
+      <Typography>
         All your watcher rewards are being deposited to the watcher wallet. You can withdraw your
         reward tokens to any address. Remember to maintain a sufficient balance of ERGs in your
         wallet to ensure uninterrupted operation.
       </Typography>
-      <Typography fontWeight="bold" sx={{ mt: 2 }}>
+      <Typography weight="bold" style={{ marginTop: '16px' }}>
         Caution
       </Typography>
-      <Typography component="div" sx={{ mt: 2 }}>
+      <Typography as="div" style={{ marginTop: '16px' }}>
         To secure your assets, send two of your three WID tokens to another wallet (preferably a
         cold wallet) as soon as possible after setting up this Watcher.
         <ul>

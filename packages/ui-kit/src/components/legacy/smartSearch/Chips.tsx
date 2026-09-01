@@ -69,12 +69,12 @@ export const Chips = ({ disabled, filters, value, onRemove }: ChipsProps) => {
         return (
           <div key={JSON.stringify(item)} className="items">
             {hasFlow && (
-              <Typography component="div" className="item item-start">
+              <Typography as="div" className="item item-start">
                 {parsed.flow.label}
               </Typography>
             )}
             {hasFlow && hasOperator && (
-              <Typography component="div" className="item item-middle">
+              <Typography as="div" className="item item-middle">
                 {parsed.operator.preview || parsed.operator.label}
               </Typography>
             )}

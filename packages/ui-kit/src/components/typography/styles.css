@@ -1,0 +1,193 @@
+.RosenTypography {
+  margin: 0;
+  color: var(--rosen-typography-color);
+ 
+  &[data-align='center'] {
+    text-align: center;
+  }
+  &[data-align='left'] {
+    text-align: left;
+  }
+  &[data-align='justify'] {
+    text-align: justify;
+  }
+  &[data-align='right'] {
+    text-align: right;
+  }
+
+  &[data-transform='none'] {
+    text-transform: none;
+  }
+  &[data-transform='uppercase'] {
+    text-transform: uppercase;
+  }
+
+  &[data-truncate] {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &[data-variant=display1] {
+    font-size: 24px;
+    line-height: 32px;
+    font-weight: 400;
+  }
+  &[data-variant=display2] {
+    font-size: 20px;
+    line-height: 28px;
+    font-weight: 400;
+  }
+  &[data-variant=display3] {
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 400;
+  }
+  &[data-variant=heading1] {
+    font-size: 24px;
+    line-height: 40px;
+    font-weight: 600;
+  }
+  &[data-variant=heading2] {
+    font-size: 20px;
+    line-height: 40px;
+    font-weight: 600;
+  }
+  &[data-variant=heading3] {
+    font-size: 16px;
+    line-height: 28px;
+    font-weight: 600;
+  }
+  &[data-variant=heading4] {
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 600;
+  }
+  &[data-variant=body1] {
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 400;
+  }
+  &[data-variant=body2] {
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 400;
+  }
+  &[data-variant=body3] {
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 400;
+  }
+  &[data-variant=label1] {
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 400;
+  }
+  &[data-variant=label2] {
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 400;
+  }
+  &[data-variant=button1] {
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 500;
+  }
+  &[data-variant=button2] {
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 500;
+  }
+  &[data-variant=button3] {
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 500;
+  }
+  &[data-variant=code1] {
+    font-family: monospace;
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 400;
+  }
+  &[data-variant=code2] {
+    font-family: monospace;
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 400;
+  }
+
+  &[data-weight='bold'] {
+    font-weight: bold;
+  }
+}
+
+/* TODO */
+/* .RosenTypography {
+  &[data-variant=heading1] {
+    background: linear-gradient(
+      180deg,
+      var(--rosen-palette-primary-dark) 0%,
+      var(--rosen-palette-secondary-dark) 100%
+    );
+
+    -webkit-background-clip: text;
+    background-clip: text;
+
+    color: transparent;
+
+    [data-theme='dark'] & {
+      color: var(--rosen-palette-secondary-dark);
+    }
+  }
+  &[data-variant=body2] {
+    color: var(--rosen-typography-color, --rosen-palette-text-secondary);
+  }
+} */
+
+  /* typography: {
+    h1: {
+      fontSize: '1.5rem',
+      fontWeight: 'bold',
+    },
+    h2: {
+      fontSize: '1.5rem',
+    },
+    h3: {
+      fontSize: '1.5rem',
+    },
+    h5: {
+      fontSize: '1rem',
+    },
+    body1: {
+      fontSize: '1rem',
+    },
+    body2: {
+      fontSize: '0.875rem',
+      lineHeight: '1.25rem',
+    },
+    subtitle1: {
+      fontSize: '1.5rem',
+    },
+    subtitle2: {
+      fontSize: '0.625rem',
+    },
+  }, */
+
+/* 
+    MuiTypography: {
+      styleOverrides: {
+        h1: ({ theme }: { theme: Theme }) =>
+          theme.palette.mode === 'light'
+            ? {
+                background: `linear-gradient(180deg, ${theme.palette.primary.dark} 0%, ${theme.palette.secondary.dark} 100%)`,
+                backgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+              }
+            : {
+                color: theme.palette.secondary.dark,
+              },
+        body2: ({ theme }: { theme: Theme }) => ({
+          color: theme.palette.text.secondary,
+        }),
+      },
+    }, */

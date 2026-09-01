@@ -196,14 +196,14 @@ export const EventDetails = (props: EventDetailsProps) => {
       )}
       {'reports' in value && (
         <Label label="Reports">
-          <Typography component="div" loading={loading}>
+          <Typography as="div" loading={loading}>
             {value.reports}
           </Typography>
         </Label>
       )}
       {'height' in value && (
         <Label label="Height">
-          <Typography component="div" loading={loading}>
+          <Typography as="div" loading={loading}>
             {value.height}
           </Typography>
         </Label>
