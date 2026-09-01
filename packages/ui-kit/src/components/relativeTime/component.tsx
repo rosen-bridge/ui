@@ -54,10 +54,7 @@ export const RelativeTime = (props: RelativeTimeProps) => {
               {prefix}
             </Typography>
           )}
-          <Typography
-            color="text-primary"
-            variant='body1'
-          >
+          <Typography color="text-primary" variant="body1">
             {number}
           </Typography>
           {unit && (

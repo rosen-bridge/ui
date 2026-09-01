@@ -43,12 +43,7 @@ export const DateTime = (props: DateTimeProps) => {
   const parts = useMemo(() => formatDateTime(timestamp), [timestamp]);
 
   return (
-    <Typography
-      color="text-primary"
-      loading={loading}
-      variant="body1"
-      {...rest}
-    >
+    <Typography color="text-primary" loading={loading} variant="body1" {...rest}>
       {parts}
     </Typography>
   );

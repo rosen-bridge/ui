@@ -120,9 +120,7 @@ export const SortField = ({
             <Typography hidden={dense} variant="label2" color="text-secondary">
               Sort by
             </Typography>
-            <Typography variant="body1">
-              {current?.label}
-            </Typography>
+            <Typography variant="body1">{current?.label}</Typography>
           </Stack>
         </MenuTrigger>
       )}

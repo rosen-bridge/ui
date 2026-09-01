@@ -59,9 +59,7 @@ const Tokens = () => {
     <CarouselProvider>
       <Stack spacing="0.5rem">
         <Stack direction="row" align="center" justify="between">
-          <Typography variant="heading2">
-            Tokens
-          </Typography>
+          <Typography variant="heading2">Tokens</Typography>
           <Stack direction="row" align="center" spacing="0.5rem">
             <CarouselButton type="prev" />
             <CarouselIndicators />

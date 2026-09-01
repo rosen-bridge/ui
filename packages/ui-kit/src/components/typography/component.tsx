@@ -67,7 +67,7 @@ export const Typography = <T extends ElementType = 'p'>(props: TypographyProps<T
   const styles = {
     '--rosen-typography-color': toCSSColor(color),
     ...style,
-  }
+  };
 
   return (
     <Component
@@ -77,7 +77,8 @@ export const Typography = <T extends ElementType = 'p'>(props: TypographyProps<T
       data-variant={variant}
       data-weight={weight}
       style={styles}
-      {...rest} >
+      {...rest}
+    >
       {children}
       {loading && <Skeleton attached />}
     </Component>

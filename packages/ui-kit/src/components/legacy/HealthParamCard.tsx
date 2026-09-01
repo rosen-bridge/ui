@@ -101,7 +101,7 @@ export const HealthParamCard = ({
     >
       <CardHeader>
         <Icon color={colors.cardColor as Color} name={icon} />
-        <CardTitle color={colors.cardColor as Color} fontWeight="700">
+        <CardTitle color={colors.cardColor as Color} weight="bold">
           {value?.lastCheck ? value?.status : 'Unknown'}
         </CardTitle>
         {value?.lastTrialErrorTime && (

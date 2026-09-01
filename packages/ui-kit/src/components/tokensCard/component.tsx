@@ -37,7 +37,7 @@ export const TokensCard = (props: TokensCardProps) => {
   return (
     <Card style={{ height: '100%' }} {...rest}>
       <CardHeader>
-        <CardTitle fontWeight="700">{title}</CardTitle>
+        <CardTitle weight="bold">{title}</CardTitle>
         {href && (
           <CardAction>
             <Button
