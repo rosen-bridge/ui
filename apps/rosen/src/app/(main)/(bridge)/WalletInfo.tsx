@@ -25,6 +25,8 @@ export const WalletInfo = () => {
           alignItems: 'center',
           justifyContent: 'space-between',
           height: 56,
+          paddingTop: 0,
+          paddingBottom: 0,
         }}
       >
         {wallet.state === 'IDLE' && (

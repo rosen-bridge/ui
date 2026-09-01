@@ -11,6 +11,7 @@ import {
   AggregatedStatusEntity,
   AggregateEventStatus,
   AggregateTxStatus,
+  EventStatusOverrideEntity,
   GuardStatusChangedEntity,
   GuardStatusEntity,
 } from '@rosen-ui/public-status';
@@ -32,54 +33,87 @@ const aggregatedStatusChangedRepository = dataSource.getRepository(AggregatedSta
 const guardStatusRepository = dataSource.getRepository(GuardStatusEntity);
 const guardStatusChangedRepository = dataSource.getRepository(GuardStatusChangedEntity);
 
-interface EventWithTotal
-  extends Omit<ObservationEntity, 'requestId'>,
-    Pick<EventTriggerEntity, 'WIDsCount' | 'paymentTxId' | 'spendTxId'> {
-  eventId: string;
-  eventTriggerId: string;
-  timestamp: number;
-  total: number;
-  flows: number;
-  status: 'fraud' | 'processing' | 'successful' | 'multipleFlows';
-  fromChain: Network;
-  toChain: Network;
-  lockToken?: TokenEntity;
-}
+type EventListItem = Omit<ObservationEntity, 'requestId'> &
+  Pick<EventTriggerEntity, 'WIDsCount' | 'paymentTxId' | 'spendTxId'> & {
+    eventId: string;
+    eventTriggerId: number;
+    timestamp: number;
+    flows: number;
+    status: EventStatusValue;
+    fromChain: Network;
+    toChain: Network;
+    lockToken?: TokenEntity;
+  };
 
-export type EventDetailsType = Omit<EventWithTotal, 'status' | 'total'> & {
+type EventListItemWithTotal = {
+  items: EventListItem[];
+  total: number;
+};
+
+type EventStatus =
+  | 'COMPLETED'
+  | 'CREATED'
+  | 'FRAUD'
+  | 'MULTIPLE_FLOWS'
+  | 'PAID'
+  | 'PAYMENT_APPROVED'
+  | 'PAYMENT_SENT'
+  | 'PAYMENT_SIGNED'
+  | 'PAYMENT_SIGNING'
+  | 'PAYMENT_STALLED'
+  | 'REACHED_LIMIT'
+  | 'REJECTED'
+  | 'REWARDED'
+  | 'REWARD_APPROVED'
+  | 'REWARD_SENT'
+  | 'REWARD_SIGNED'
+  | 'REWARD_SIGNING'
+  | 'REWARD_STALLED'
+  | 'TIMEOUT'
+  | 'TRIGGERED'
+  | 'UNKNOWN'
+  | 'processing';
+
+type EventStatusOverride = {
+  reason?: string;
+  severity?: 'error' | 'info' | 'success' | 'warning';
+  status: string;
+};
+
+type EventStatusValue = EventStatus | EventStatusOverride;
+
+export type EventDetailsType = EventListItem & {
   txId: string;
-  status:
-    | 'COMPLETED'
-    | 'CREATED'
-    | 'FRAUD'
-    | 'MULTIPLE_FLOWS'
-    | 'PAID'
-    | 'PAYMENT_APPROVED'
-    | 'PAYMENT_SENT'
-    | 'PAYMENT_SIGNED'
-    | 'PAYMENT_SIGNING'
-    | 'PAYMENT_STALLED'
-    | 'REACHED_LIMIT'
-    | 'REJECTED'
-    | 'REWARDED'
-    | 'REWARD_APPROVED'
-    | 'REWARD_SENT'
-    | 'REWARD_SIGNED'
-    | 'REWARD_SIGNING'
-    | 'REWARD_STALLED'
-    | 'TIMEOUT'
-    | 'TRIGGERED'
-    | 'UNKNOWN';
-  timestamps: Partial<Record<EventDetailsType['status'], number>>;
   price?: number;
   totalFee: string;
+  timestamps: EventStatusType['timestamps'];
 };
 
 export type EventStatusType = {
-  status: EventDetailsType['status'];
-  timestamps: Partial<
-    Record<EventDetailsType['status'] | 'PAID_CONFIRMED_AT_EXPERIMENTAL', number>
-  >;
+  status: EventStatus;
+  timestamps: Partial<Record<EventStatus | 'PAID_CONFIRMED_AT_EXPERIMENTAL', number>>;
+};
+
+const toDatabaseStatus = (status: EventStatus): string => {
+  switch (status) {
+    case 'COMPLETED':
+      return 'successful';
+    case 'FRAUD':
+      return 'fraud';
+    default:
+      return 'processing';
+  }
+};
+
+const fromDatabaseStatus = (status: string): EventStatus => {
+  switch (status) {
+    case 'successful':
+      return 'COMPLETED';
+    case 'fraud':
+      return 'FRAUD';
+    default:
+      return 'processing';
+  }
 };
 
 /**
@@ -87,7 +121,7 @@ export type EventStatusType = {
  * @param offset
  * @param limit
  */
-export const getEvents = async (filters: Filter) => {
+export const getEvents = async (filters: Filter): Promise<EventListItemWithTotal> => {
   await (async () => {
     if (!filters.fields) return;
 
@@ -148,19 +182,24 @@ export const getEvents = async (filters: Filter) => {
   if (status) {
     switch (status.operator) {
       case 'equal':
-        where.statuses = ArrayContains([status.value]);
+        where.statuses = ArrayContains([toDatabaseStatus(status.value as EventStatus)]);
         break;
       case 'notEqual':
-        where.statuses = Not(ArrayContains([status.value]));
+        where.statuses = Not(ArrayContains([toDatabaseStatus(status.value as EventStatus)]));
         break;
     }
   }
 
   const subquery = observationRepository
     .createQueryBuilder('oe')
-    .leftJoin(blockRepository.metadata.tableName, 'be', 'be.hash = oe.block')
-    .leftJoin(eventTriggerRepository.metadata.tableName, 'ete', 'ete.eventId = oe.requestId')
-    .leftJoin(tokenRepository.metadata.tableName, 'te', 'te.id = oe.sourceChainTokenId')
+    .leftJoin(BlockEntity, 'be', 'be.hash = oe.block')
+    .leftJoin(EventTriggerEntity, 'ete', 'ete.eventId = oe.requestId')
+    .leftJoin(TokenEntity, 'te', 'te.id = oe.sourceChainTokenId')
+    .leftJoin(
+      EventStatusOverrideEntity,
+      'esoe',
+      'esoe.eventId = oe.requestId AND (esoe.eventTriggerId IS NULL OR esoe.eventTriggerId = ete.id)',
+    )
     .select([
       'oe.id AS "id"',
       'oe.fromChain AS "fromChain"',
@@ -180,6 +219,9 @@ export const getEvents = async (filters: Filter) => {
       'ete.spendTxId AS "spendTxId"',
       'ete.id AS "eventTriggerId"',
       'to_jsonb(te) AS "lockToken"',
+      'esoe.status AS "statusOverrideStatus"',
+      'esoe.reason AS "statusOverrideReason"',
+      'esoe.severity AS "statusOverrideSeverity"',
       'COALESCE(ete.result, \'processing\') AS "status"',
       '(CAST(oe.amount AS DOUBLE PRECISION) / POWER(10, COALESCE(te.significantDecimal, 0))) AS "amountNormalized"',
       '(CAST(oe.networkFee AS DOUBLE PRECISION) / POWER(10, COALESCE(te.significantDecimal, 0))) AS "networkFeeNormalized"',
@@ -219,26 +261,42 @@ export const getEvents = async (filters: Filter) => {
    * TODO: convert the query to a view
    * local:ergo/rosen-bridge/ui#194
    */
-  const rawItems = await queryBuilder.getRawMany<EventWithTotal>();
+  const rawItems = await queryBuilder.getRawMany();
 
   const items = rawItems.map(({ total, ...item }) => item);
 
   return {
-    items: items.map((item) => ({
-      ...item,
-      status: item.flows > 1 ? 'multipleFlows' : item.status,
-    })),
+    items: items.map(
+      ({ statusOverrideStatus, statusOverrideReason, statusOverrideSeverity, ...item }) => ({
+        ...item,
+        status:
+          item.flows > 1
+            ? 'MULTIPLE_FLOWS'
+            : statusOverrideStatus
+              ? {
+                  status: statusOverrideStatus,
+                  reason: statusOverrideReason,
+                  severity: statusOverrideSeverity,
+                }
+              : fromDatabaseStatus(item.status),
+      }),
+    ),
     total: rawItems[0]?.total ?? 0,
   };
 };
 
-export const getEvent = async (id: string) => {
+export const getEvent = async (id: string): Promise<EventDetailsType[]> => {
   const events = await dataSource
     .getRepository(ObservationEntity)
     .createQueryBuilder('oe')
     .leftJoin(BlockEntity, 'be', 'be.hash = oe.block')
     .leftJoin(EventTriggerEntity, 'ete', 'ete.eventId = oe.requestId')
     .leftJoin(TokenEntity, 'te', 'te.id = oe.sourceChainTokenId')
+    .leftJoin(
+      EventStatusOverrideEntity,
+      'esoe',
+      'esoe.eventId = oe.requestId AND (esoe.eventTriggerId IS NULL OR esoe.eventTriggerId = ete.id)',
+    )
     .select([
       'oe.id AS "id"',
       'oe.fromChain AS "fromChain"',
@@ -258,36 +316,54 @@ export const getEvent = async (id: string) => {
       'ete.spendTxId AS "spendTxId"',
       'ete.txId AS "txId"',
       'to_jsonb(te) AS "lockToken"',
+      'esoe.status AS "statusOverrideStatus"',
+      'esoe.reason AS "statusOverrideReason"',
+      'esoe.severity AS "statusOverrideSeverity"',
     ])
     .where('oe.requestId = :id', { id })
-    .getRawMany<EventDetailsType>();
+    .getRawMany();
 
   if (!events.length) throw new Error(`Not found`);
 
-  const result = events.map(async (event) => {
-    if (!event.lockToken) throw new Error(`Not found`);
+  const ergoSideTokenIds = events.map((event) => event.lockToken?.ergoSideTokenId).filter(Boolean);
 
-    const token = await tokenRepository.findOne({
-      where: {
-        isResident: true,
-        ergoSideTokenId: event.lockToken.ergoSideTokenId,
-      },
-    });
-
-    if (!token) throw new Error(`Not found`);
-
-    const price = await tokenPriceAction.getLatestTokenPrice(token.id, event.timestamp);
-
-    const { status, timestamps } = await getEventStatus(id, event.txId);
-    event.status = status;
-    event.timestamps = timestamps;
-
-    return {
-      ...event,
-      price,
-      totalFee: (+event.bridgeFee + +event.networkFee).toString(),
-    };
+  const tokens = await tokenRepository.findBy({
+    isResident: true,
+    ergoSideTokenId: In(ergoSideTokenIds),
   });
+
+  const tokensByErgoSideTokenId = new Map(tokens.map((token) => [token.ergoSideTokenId, token]));
+
+  const result = events.map(
+    async ({ statusOverrideStatus, statusOverrideReason, statusOverrideSeverity, ...event }) => {
+      if (!event.lockToken) throw new Error(`Not found`);
+
+      const token = tokensByErgoSideTokenId.get(event.lockToken.ergoSideTokenId);
+
+      if (!token) throw new Error(`Not found`);
+
+      const price = await tokenPriceAction.getLatestTokenPrice(token.id, event.timestamp);
+
+      let status: EventDetailsType['status'];
+      let timestamps: EventDetailsType['timestamps'] = {};
+
+      if (statusOverrideStatus) {
+        status = {
+          status: statusOverrideStatus,
+          reason: statusOverrideReason,
+          severity: statusOverrideSeverity,
+        };
+      } else {
+        const eventStatus = await getEventStatus(id, event.txId);
+        status = eventStatus.status;
+        timestamps = eventStatus.timestamps;
+      }
+
+      const totalFee = (+event.bridgeFee + +event.networkFee).toString();
+
+      return { ...event, price, status, timestamps, totalFee };
+    },
+  );
 
   return await Promise.all(result);
 };
@@ -496,7 +572,7 @@ export const getEventStatus = async (
   }
 
   const TIMESTAMP_EXTRACTION_MAP: {
-    [key in EventDetailsType['status']]?: [AggregateEventStatus, AggregateTxStatus | undefined];
+    [key in EventStatus]?: [AggregateEventStatus, AggregateTxStatus | undefined];
   } = {
     PAYMENT_APPROVED: [AggregateEventStatus.inPayment, AggregateTxStatus.inSign],
     PAYMENT_SIGNED: [AggregateEventStatus.inPayment, AggregateTxStatus.signed],
@@ -511,7 +587,7 @@ export const getEventStatus = async (
   };
 
   Object.keys(TIMESTAMP_EXTRACTION_MAP).forEach((keyRaw) => {
-    const key = keyRaw as EventDetailsType['status'];
+    const key = keyRaw as EventStatus;
 
     const [status, txStatus] = TIMESTAMP_EXTRACTION_MAP[key] || [];
 

@@ -1,5 +1,12 @@
 # @rosen-network/bitcoin
 
+## 2.4.8
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-bridge/icons@4.0.0
+
 ## 2.4.7
 
 ### Patch Changes

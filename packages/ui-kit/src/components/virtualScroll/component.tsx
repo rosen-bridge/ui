@@ -21,7 +21,7 @@ export const VirtualScroll = (props: VirtualScrollProps) => {
   return (
     <CarouselProvider>
       <Carousel {...rest}>
-        <CarouselItem>{children}</CarouselItem>
+        <CarouselItem style={{ flexGrow: '1' }}>{children}</CarouselItem>
         <CarouselItem />
       </Carousel>
     </CarouselProvider>

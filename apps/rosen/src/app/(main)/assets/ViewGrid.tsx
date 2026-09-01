@@ -1,6 +1,5 @@
 import {
   Amount,
-  Box,
   Card,
   CardBody,
   Chip,
@@ -40,14 +39,13 @@ export const ViewGrid = ({ current, items, isLoading, setCurrent }: ViewGridProp
                 <Network value={item.chain} />
               </Chip>
             </Stack>
-            <Box mt={1} mb={-1}>
-              <Label label="Bridged" dense>
-                <Amount loading={isLoading} value={item.bridgedAmount} />
-              </Label>
-              <Label label="Locked" dense>
-                <Amount loading={isLoading} value={item.lockedAmount} />
-              </Label>
-            </Box>
+            <br />
+            <Label label="Bridged" dense>
+              <Amount loading={isLoading} value={item.bridgedAmount} />
+            </Label>
+            <Label label="Locked" dense style={{ marginBottom: '-8px' }}>
+              <Amount loading={isLoading} value={item.lockedAmount} />
+            </Label>
           </CardBody>
         </Card>
       ))}

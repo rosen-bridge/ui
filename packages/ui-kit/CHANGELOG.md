@@ -1,5 +1,28 @@
 # @rosen-bridge/ui-kit
 
+## 6.0.0
+
+### Major Changes
+
+- Improve `Dialog` and `Card` styling, APIs, responsive behavior, and animations
+
+### Minor Changes
+
+- Add date tooltip to time field in Events page Parts details
+- Fix Smart Search History item overflow inside popup
+- Implement InvalidValue component
+- Add expandable functionality to the `Truncate` component
+- Update `EventStatus` component to support custom statuses
+- Add `preset` support for reusable component prop configurations
+
+### Patch Changes
+
+- Fix `Identifier` text selection and copying so truncated values can be selected and copied correctly without partial selection or stray newlines
+- Keep `EventProcesses` height stable during step changes to prevent layout jumps
+- Fix EventProcesses loading styles
+- Update dependencies
+  - @rosen-bridge/icons@4.0.0
+
 ## 5.9.0
 
 ### Minor Changes

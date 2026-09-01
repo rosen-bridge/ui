@@ -1,12 +1,8 @@
 import { QRCodeCanvas } from 'qrcode.react';
 
-import { Button, Stack } from '@/components';
+import { Button, Dialog, DialogBody, DialogFooter, Stack } from '@/components';
 import { useConfig } from '@/hooks';
 import type { ElementBaseProps, OverridableType } from '@/types';
-
-import { Dialog } from '../dialog';
-import { DialogContent } from '../dialogContent';
-import { DialogFooter } from '../dialogFooter';
 
 export interface QrCodeDialogOverrides {}
 
@@ -26,13 +22,13 @@ export const QrCodeDialog = (props: QrCodeDialogProps) => {
   const { value, onClose, ...rest } = useConfig('QrCodeDialog', props);
 
   return (
-    <Dialog maxWidth="tablet" onClose={onClose} {...rest}>
-      <DialogContent>
+    <Dialog unstick="tablet" width="small" onClose={onClose} {...rest}>
+      <DialogBody>
         <Stack align="center" justify="center" spacing={2}>
           <QRCodeCanvas size={200} value={value} />
           <div style={{ textAlign: 'center', wordBreak: 'break-all' }}>{value}</div>
         </Stack>
-      </DialogContent>
+      </DialogBody>
       <DialogFooter>
         <Button onClick={onClose}>Close</Button>
       </DialogFooter>

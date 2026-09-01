@@ -1,4 +1,4 @@
-import { type CSSProperties, useMemo } from 'react';
+import { type CSSProperties, useMemo, useRef } from 'react';
 
 import { Skeleton } from '@/components';
 import { useConfig } from '@/hooks';
@@ -38,6 +38,10 @@ export const EventProcesses = (props: EventProcessesProps) => {
     ...rest
   } = useConfig('EventProcesses', props);
 
+  const ref = useRef<HTMLDivElement>(null);
+
+  const timeout = useRef<number>(-1);
+
   const gridTemplateColumns = useMemo(() => {
     if (!items?.length) return '';
 
@@ -58,14 +62,32 @@ export const EventProcesses = (props: EventProcessesProps) => {
     } as CSSProperties;
   }, [gridTemplateColumns, style]);
 
+  const handleSetActive = (newValue?: string) => {
+    onChange?.(newValue);
+
+    window.clearTimeout(timeout.current);
+
+    if (!value || !newValue || value === newValue || !ref.current) return;
+
+    const height = getComputedStyle(ref.current).height;
+
+    ref.current.style.minHeight = height;
+
+    timeout.current = window.setTimeout(() => {
+      if (ref.current) {
+        ref.current.style.minHeight = '';
+      }
+    }, 250);
+  };
+
   return (
-    <div style={{ ...styles }} data-orientation={orientation} {...rest}>
+    <div data-orientation={orientation} ref={ref} style={{ ...styles }} {...rest}>
       {items?.map((item, index) => {
         if (item.line) return <StepExtra {...item} key={index.toString()} />;
 
-        return <Step key={index.toString()} active={value} setActive={onChange} {...item} />;
+        return <Step key={index.toString()} active={value} setActive={handleSetActive} {...item} />;
       })}
-      {loading && <Skeleton attached variant="rounded" />}
+      {loading && <Skeleton variant="rounded" height="104px" />}
     </div>
   );
 };

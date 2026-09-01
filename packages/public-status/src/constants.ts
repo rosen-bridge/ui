@@ -49,6 +49,14 @@ export enum AggregateTxStatus {
   invalid = 'invalid',
 }
 
+export enum EventStatusOverrideSeverity {
+  error = 'error',
+  warning = 'warning',
+  success = 'success',
+  info = 'info',
+}
+
 export const eventStatuses = Object.values(EventStatus);
 export const txStatuses = Object.values(TxStatus);
 export const txTypes = Object.values(TxType);
+export const eventStatusOverrideSeverities = Object.values(EventStatusOverrideSeverity);

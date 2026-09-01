@@ -1,6 +1,6 @@
 {
   "name": "@rosen-bridge/watcher-app",
-  "version": "4.4.2",
+  "version": "4.5.0",
   "private": true,
   "repository": {
     "type": "git",
@@ -19,14 +19,14 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@rosen-bridge/icons": "^3.7.1",
-    "@rosen-bridge/ui-kit": "^5.9.0",
+    "@rosen-bridge/icons": "^4.0.0",
+    "@rosen-bridge/ui-kit": "^6.0.0",
     "@rosen-ui/constants": "^1.1.0",
     "@rosen-ui/swr-helpers": "^0.2.2",
     "@rosen-ui/utils": "^1.0.4",
     "lodash-es": "^4.17.21",
     "moment": "^2.29.4",
-    "next": "^15.5.18",
+    "next": "^16.3.2",
     "react": "^19.2.6",
     "react-apexcharts": "^1.4.0",
     "react-dom": "^19.2.6",

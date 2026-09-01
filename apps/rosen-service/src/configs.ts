@@ -75,7 +75,6 @@ const getConfig = () => {
           fraud: nodeConfig.get<string>('bitcoin-runes.addresses.fraud'),
           commitment: nodeConfig.get<string>('bitcoin-runes.addresses.commitment'),
         },
-        initialHeight: nodeConfig.get<number>('bitcoin-runes.initialHeight'),
         tokens: {
           rwt: nodeConfig.get<string>('bitcoin-runes.tokens.rwt'),
         },

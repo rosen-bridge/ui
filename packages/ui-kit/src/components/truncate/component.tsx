@@ -1,6 +1,8 @@
+import { useLayoutEffect, useRef, useState } from 'react';
+
 import { Slot } from '@radix-ui/react-slot';
 
-import { Tooltip, type TooltipProps } from '@/components';
+import { Button, type ButtonProps, Tooltip, type TooltipProps } from '@/components';
 import { useConfig } from '@/hooks';
 import type { ElementBaseProps, OverridableType } from '@/types';
 
@@ -12,12 +14,20 @@ export type TruncateOwnProps = {
   asChild?: boolean;
 
   /**
+   * Replaces the static line clamp with a "Show more" / "Show less" toggle, fading the last
+   * line to transparent once the content actually overflows `lines`.
+   * @default false
+   */
+  expandable?: boolean;
+
+  /**
    * Number of lines to display before truncating the content.
    * @default 1
    */
   lines?: number;
 
   slots?: {
+    action?: ButtonProps;
     tooltip?: TooltipProps;
   };
 
@@ -45,6 +55,7 @@ export const Truncate = (props: TruncateProps) => {
   const {
     asChild,
     children,
+    expandable,
     lines = 1,
     slots,
     tooltip = true,
@@ -53,12 +64,45 @@ export const Truncate = (props: TruncateProps) => {
 
   const Component = asChild ? Slot : 'div';
 
+  const ref = useRef<HTMLDivElement>(null);
+
+  const [expanded, setExpanded] = useState(false);
+  const [overflowing, setOverflowing] = useState(false);
+
+  useLayoutEffect(() => {
+    void children;
+
+    if (!expandable || !ref.current) return;
+
+    setOverflowing(ref.current.scrollHeight > ref.current.clientHeight + 1);
+  }, [expandable, children]);
+
   return (
-    <Tooltip disabled={!tooltip} title={children} {...slots?.tooltip}>
-      <Component style={{ WebkitLineClamp: lines }} {...rest}>
-        {children}
-      </Component>
-    </Tooltip>
+    <>
+      <Tooltip disabled={expandable || !tooltip} title={children} {...slots?.tooltip}>
+        <Component
+          data-fade={!expanded && overflowing}
+          ref={ref}
+          style={{ WebkitLineClamp: expanded ? 'unset' : lines }}
+          {...rest}
+        >
+          {children}
+        </Component>
+      </Tooltip>
+      {expandable && overflowing && (
+        <div className="RosenTruncateAction">
+          <Button
+            color="inherit"
+            size="small"
+            variant="text"
+            onClick={() => setExpanded((value) => !value)}
+            {...slots?.action}
+          >
+            {expanded ? 'Show less' : 'Show more'}
+          </Button>
+        </div>
+      )}
+    </>
   );
 };
 

@@ -14,10 +14,12 @@ import {
   type RelativeTimeProps,
   Token,
   type TokenProps,
+  Tooltip,
   Typography,
 } from '@/components';
 import { useConfig } from '@/hooks';
 import type { ElementBaseProps, OverridableType } from '@/types';
+import { formatDateTime } from '@/utils';
 
 export interface EventDetailsOverrides {}
 
@@ -163,7 +165,13 @@ export const EventDetails = (props: EventDetailsProps) => {
       )}
       {'timestamp' in value && (
         <Label label="Time">
-          <RelativeTime loading={loading} value={value.timestamp} />
+          <Tooltip
+            title={formatDateTime(
+              typeof value.timestamp === 'number' ? value.timestamp * 1000 : value.timestamp,
+            )}
+          >
+            <RelativeTime loading={loading} value={value.timestamp} />
+          </Tooltip>
         </Label>
       )}
       {'bridgeFee' in value && (

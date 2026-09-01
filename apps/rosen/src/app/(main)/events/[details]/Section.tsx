@@ -57,12 +57,12 @@ export const Section = ({
           {badge ? <Badge content={badge}>{title}</Badge> : title}
         </CardTitle>
         <CardAction>
-          {disclosure.state !== 'close' && action}
+          {action}
           {collapsible && <DisclosureButton disclosure={disclosure} />}
         </CardAction>
       </CardHeader>
       <Collapsible open={!collapsible || disclosure.state === 'open' || !!error}>
-        <CardBody>
+        <CardBody style={{ paddingTop: 0 }}>
           {!error && children}
           {!!error && (
             <Center style={{ height: '20rem' }}>

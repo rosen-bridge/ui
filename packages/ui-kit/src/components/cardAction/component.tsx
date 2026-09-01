@@ -1,8 +1,6 @@
 import { useConfig } from '@/hooks';
 import type { ElementBaseProps, OverridableType } from '@/types';
 
-import './styles.css';
-
 export interface CardActionOverrides {}
 
 export type CardActionOwnProps = {};
@@ -14,7 +12,7 @@ export type CardActionProps = OverridableType<CardActionBaseProps, CardActionOve
 export const CardAction = (props: CardActionProps) => {
   const { ...rest } = useConfig('CardAction', props);
 
-  return <div {...rest} />;
+  return <div data-surface="action" {...rest} />;
 };
 
 CardAction.displayName = 'CardAction';

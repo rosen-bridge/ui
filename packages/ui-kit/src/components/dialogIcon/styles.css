@@ -1,0 +1,8 @@
+.RosenDialogIcon {
+  display: flex;
+  box-sizing: content-box;
+  border-radius: 50%;
+  color: var(--rosen-palette-secondary-dark);
+  background: var(--rosen-palette-secondary-light);
+  border: solid 8px var(--rosen-palette-secondary-light);
+}

@@ -1,6 +1,7 @@
 export * from './constants';
 export { AggregatedStatusChangedEntity } from './entities/AggregatedStatusChangedEntity';
 export { AggregatedStatusEntity } from './entities/AggregatedStatusEntity';
+export { EventStatusOverrideEntity } from './entities/EventStatusOverrideEntity';
 export { GuardStatusChangedEntity } from './entities/GuardStatusChangedEntity';
 export { GuardStatusEntity } from './entities/GuardStatusEntity';
 export { TxEntity } from './entities/TxEntity';

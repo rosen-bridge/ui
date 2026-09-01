@@ -42,6 +42,17 @@ const RosenBridge = () => {
           <WalletProvider>
             <TransactionFeesProvider>
               <div className="rosen-bridge-page-main">
+                {!!process.env.NEXT_PUBLIC_BRIDGE_WARNING_MESSAGE && (
+                  <Alert
+                    severity="error"
+                    style={{
+                      textAlign: 'justify',
+                      gridColumn: '1 / -1',
+                    }}
+                  >
+                    {process.env.NEXT_PUBLIC_BRIDGE_WARNING_MESSAGE}
+                  </Alert>
+                )}
                 <div className="rosen-bridge-page-form">
                   <BridgeFormComponent />
                 </div>
