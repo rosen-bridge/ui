@@ -1,5 +1,17 @@
 # @rosen-bridge/watcher-app
 
+## 4.5.0
+
+### Minor Changes
+
+- Upgrade `Next.js` from `15` to `16` to improve build performance and development scripts
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-bridge/ui-kit@6.0.0
+  - @rosen-bridge/icons@4.0.0
+
 ## 4.4.2
 
 ### Patch Changes

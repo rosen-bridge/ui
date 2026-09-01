@@ -1,5 +1,13 @@
 # @rosen-bridge/rosen-service
 
+## 4.4.1
+
+### Patch Changes
+
+- Remove redundant initialHeight from bitcoin-runes config
+- Update dependencies
+  - @rosen-ui/data-source@0.3.0
+
 ## 4.4.0
 
 ### Minor Changes
