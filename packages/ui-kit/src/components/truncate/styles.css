@@ -5,3 +5,13 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.RosenTruncate[data-fade='true'] {
+  mask-image: linear-gradient(to bottom, #000 calc(100% - 1.75em), transparent);
+}
+
+.RosenTruncateAction {
+  display: flex;
+  justify-content: center;
+  margin-bottom: -8px;
+}

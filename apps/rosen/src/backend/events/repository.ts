@@ -86,6 +86,7 @@ export type EventDetailsType = EventListItem & {
   txId: string;
   price?: number;
   totalFee: string;
+  timestamps: EventStatusType['timestamps'];
 };
 
 export type EventStatusType = {
@@ -343,17 +344,24 @@ export const getEvent = async (id: string): Promise<EventDetailsType[]> => {
 
       const price = await tokenPriceAction.getLatestTokenPrice(token.id, event.timestamp);
 
-      const status = statusOverrideStatus
-        ? {
-            status: statusOverrideStatus,
-            reason: statusOverrideReason,
-            severity: statusOverrideSeverity,
-          }
-        : (await getEventStatus(id, event.txId)).status;
+      let status: EventDetailsType['status'];
+      let timestamps: EventDetailsType['timestamps'] = {};
+
+      if (statusOverrideStatus) {
+        status = {
+          status: statusOverrideStatus,
+          reason: statusOverrideReason,
+          severity: statusOverrideSeverity,
+        };
+      } else {
+        const eventStatus = await getEventStatus(id, event.txId);
+        status = eventStatus.status;
+        timestamps = eventStatus.timestamps;
+      }
 
       const totalFee = (+event.bridgeFee + +event.networkFee).toString();
 
-      return { ...event, price, status, totalFee };
+      return { ...event, price, status, timestamps, totalFee };
     },
   );
 

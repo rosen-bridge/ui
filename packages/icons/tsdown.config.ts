@@ -6,5 +6,5 @@ export default defineConfig({
   platform: 'neutral',
   dts: true,
   format: ['esm'],
-  plugins: [svgr({ expandProps: 'end' })],
+  plugins: [svgr({ expandProps: 'end', svgo: false })],
 });

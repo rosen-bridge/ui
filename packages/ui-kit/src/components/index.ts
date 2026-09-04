@@ -53,6 +53,7 @@ export * from './identifier';
 export * from './illustrations';
 export * from './image';
 export * from './infoIcon';
+export * from './invalidValue';
 export * from './label';
 export * from './labelGroup';
 export * from './layoutList';
