@@ -27,6 +27,10 @@ interface EvmCalculatorInterface extends CalculatorInterface {
   authToken?: string;
 }
 
+interface HandshakeCalculatorInterface extends CalculatorInterface {
+  rpcUrl: string;
+}
+
 interface CalculatorInterface {
   addresses: string[];
 }
@@ -39,4 +43,5 @@ export type {
   ErgoCalculatorInterface,
   EvmCalculatorInterface,
   FiroCalculatorInterface,
+  HandshakeCalculatorInterface,
 };

@@ -79,6 +79,10 @@ const start = async () => {
       addresses: config.calculator.addresses.firo,
       explorerUrl: config.firo.explorerUrl,
     },
+    {
+      addresses: config.calculator.addresses.handshake,
+      rpcUrl: config.handshake.rpcUrl,
+    },
     dataSource,
     logger,
   );

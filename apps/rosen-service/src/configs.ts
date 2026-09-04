@@ -150,6 +150,20 @@ const getConfig = () => {
         electrumxPort: nodeConfig.get<number>('firo.electrumx.port'),
         electrumxReconnectDelay: nodeConfig.get<number>('firo.electrumx.reconnectDelay'),
       },
+      handshake: {
+        addresses: {
+          lock: nodeConfig.get<string>('handshake.addresses.lock'),
+          eventTrigger: nodeConfig.get<string>('handshake.addresses.eventTrigger'),
+          permit: nodeConfig.get<string>('handshake.addresses.permit'),
+          fraud: nodeConfig.get<string>('handshake.addresses.fraud'),
+          commitment: nodeConfig.get<string>('handshake.addresses.commitment'),
+        },
+        initialHeight: nodeConfig.get<number>('handshake.initialHeight'),
+        tokens: {
+          rwt: nodeConfig.get<string>('handshake.tokens.rwt'),
+        },
+        rpcUrl: nodeConfig.get<string>('handshake.rpcUrl'),
+      },
       postgres: {
         url: nodeConfig.get<string>('postgres.url'),
         logging: nodeConfig.get<boolean>('postgres.logging'),
@@ -165,6 +179,7 @@ const getConfig = () => {
           binance: nodeConfig.get<string[]>('calculator.addresses.binance'),
           doge: nodeConfig.get<string[]>('calculator.addresses.doge'),
           firo: nodeConfig.get<string[]>('calculator.addresses.firo'),
+          handshake: nodeConfig.get<string[]>('calculator.addresses.handshake'),
         },
         interval: nodeConfig.get<number>('calculator.interval'),
       },
@@ -191,6 +206,10 @@ const getConfig = () => {
         ),
         firoScannerWarnDiff: nodeConfig.get<number>('healthCheck.firoScannerWarnDiff'),
         firoScannerCriticalDiff: nodeConfig.get<number>('healthCheck.firoScannerCriticalDiff'),
+        handshakeScannerWarnDiff: nodeConfig.get<number>('healthCheck.handshakeScannerWarnDiff'),
+        handshakeScannerCriticalDiff: nodeConfig.get<number>(
+          'healthCheck.handshakeScannerCriticalDiff',
+        ),
         updateInterval: nodeConfig.get<number>('healthCheck.interval'),
         logDuration: nodeConfig.get<number>('healthCheck.duration'),
         errorLogAllowedCount: nodeConfig.get<number>('healthCheck.maxAllowedErrorCount'),

@@ -23,6 +23,8 @@ import {
   ETHEREUM_SCANNER_INTERVAL,
   FIRO_BLOCK_TIME,
   FIRO_SCANNER_INTERVAL,
+  HANDSHAKE_BLOCK_TIME,
+  HANDSHAKE_SCANNER_INTERVAL,
 } from '../constants';
 import scannerService from '../scanner/scanner-service';
 import { getLastSavedBlock } from './health-check-utils';
@@ -135,6 +137,17 @@ const registerAllHealthChecks = (healthCheck: HealthCheck) => {
         FIRO_SCANNER_INTERVAL,
       ),
       label: 'firo',
+    },
+    {
+      instance: new ScannerSyncHealthCheckParam(
+        scannerService.getHandshakeScanner().name(),
+        async () => getLastSavedBlock(scannerService.getHandshakeScanner().name()),
+        config.healthCheck.handshakeScannerWarnDiff,
+        config.healthCheck.handshakeScannerCriticalDiff,
+        HANDSHAKE_BLOCK_TIME,
+        HANDSHAKE_SCANNER_INTERVAL,
+      ),
+      label: 'handshake',
     },
   ];
 

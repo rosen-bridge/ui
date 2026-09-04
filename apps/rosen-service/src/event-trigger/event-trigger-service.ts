@@ -16,6 +16,7 @@ const ethereumEventTriggerExtractorLogger = logger.child('ethereumEventTriggerEx
 const binanceEventTriggerExtractorLogger = logger.child('binanceEventTriggerExtractor');
 const dogeEventTriggerExtractorLogger = logger.child('dogeEventTriggerExtractor');
 const firoEventTriggerExtractorLogger = logger.child('firoEventTriggerExtractor');
+const handshakeEventTriggerExtractorLogger = logger.child('handshakeEventTriggerExtractor');
 
 /**
  * register event trigger extractors for all chains
@@ -111,6 +112,17 @@ export const registerExtractors = async (scanner: ErgoScanner) => {
       configs.firo.addresses.fraud,
       firoEventTriggerExtractorLogger,
     );
+    const handshakeEventTriggerExtractor = new EventTriggerExtractor(
+      'handshake-extractor',
+      dataSource,
+      ErgoNetworkType.Explorer,
+      configs.ergo.explorerUrl,
+      configs.handshake.addresses.eventTrigger,
+      configs.handshake.tokens.rwt,
+      configs.handshake.addresses.permit,
+      configs.handshake.addresses.fraud,
+      handshakeEventTriggerExtractorLogger,
+    );
     await scanner.registerExtractor(ergoEventTriggerExtractor);
     await scanner.registerExtractor(cardanoEventTriggerExtractor);
     await scanner.registerExtractor(bitcoinEventTriggerExtractor);
@@ -119,6 +131,7 @@ export const registerExtractors = async (scanner: ErgoScanner) => {
     await scanner.registerExtractor(ethereumEventTriggerExtractor);
     await scanner.registerExtractor(binanceEventTriggerExtractor);
     await scanner.registerExtractor(firoEventTriggerExtractor);
+    await scanner.registerExtractor(handshakeEventTriggerExtractor);
 
     logger.debug('event trigger extractors registered', {
       scannerName: scanner.name(),
@@ -131,6 +144,7 @@ export const registerExtractors = async (scanner: ErgoScanner) => {
         ethereumEventTriggerExtractor.getId(),
         binanceEventTriggerExtractor.getId(),
         firoEventTriggerExtractor.getId(),
+        handshakeEventTriggerExtractor.getId(),
       ],
     });
   } catch (error) {
