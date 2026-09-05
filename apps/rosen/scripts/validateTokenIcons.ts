@@ -12,7 +12,7 @@ if (ignores.includes('*')) {
 const iconIds = new Set(Object.keys(icons));
 
 const missingTokens = TOKENS.filter(
-  (token) => !ignores.includes(token.ergo.tokenId) && !iconIds.has(token.ergo.tokenId),
+  (token) => !ignores.includes(token.ergo.tokenId) && !iconIds.has(`Token_${token.ergo.tokenId}`),
 ).map((token) => token.ergo);
 
 if (missingTokens.length === 0) {
