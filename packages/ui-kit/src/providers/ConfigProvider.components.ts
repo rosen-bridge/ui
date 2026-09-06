@@ -53,6 +53,7 @@ import type {
   NavigationProps,
   NetworkProps,
   PageHeadingProps,
+  PaginationProps,
   QrCodeDialogProps,
   RelativeTimeProps,
   SkeletonProps,
@@ -134,6 +135,7 @@ export type Components = {
   MenuItem: MenuItemProps;
   MenuTrigger: MenuTriggerProps;
   Network: NetworkProps;
+  Pagination: PaginationProps;
   PageHeading: PageHeadingProps;
   QrCodeDialog: QrCodeDialogProps;
   RelativeTime: RelativeTimeProps;

@@ -69,6 +69,7 @@ export * from './navigation';
 export * from './navigationButton';
 export * from './network';
 export * from './pageHeading';
+export * from './pagination';
 export * from './qrCodeDialog';
 export * from './relativeTime';
 export * from './skeleton';

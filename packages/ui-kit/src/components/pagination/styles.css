@@ -1,0 +1,152 @@
+.RosenPagination {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+  container-type: inline-size;
+  container-name: pagination;
+
+  background-color: var(--rosen-palette-background-paper);
+  width: 100%;
+  height: 56px;
+
+  gap: calc(var(--rosen-spacing) * 1);
+  padding: calc(var(--rosen-spacing) * 1) calc(var(--rosen-spacing) * 2);
+  border-radius: calc(var(--rosen-spacing) * 2);
+}
+
+.RosenPagination-info {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+
+  .pagination-text {
+    display: inline;
+  }
+
+  .pagination-text::before {
+    content: 'Showing ';
+  }
+
+  .hide {
+    display: inline;
+  }
+
+  @container (max-width: 480px) {
+    .pagination-text::before {
+      content: '';
+    }
+
+    .hide {
+      display: none;
+    }
+  }
+}
+
+.RosenPagination-pages {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  flex-direction: row;
+  gap: calc(var(--rosen-spacing) * 1);
+
+  container-type: inline-size;
+
+  .Pages {
+    display: flex;
+    gap: calc(var(--rosen-spacing) * 1);
+
+    button {
+      background-color: transparent;
+    }
+
+    button[data-type='page'] {
+      cursor: pointer;
+    }
+
+    button[data-action='active'] {
+      background-color: var(--rosen-palette-primary);
+
+      &:disabled {
+        background-color: var(--rosen-palette-action-selected);
+      }
+
+      p {
+        color: var(--rosen-palette-primary-light);
+      }
+    }
+
+    button:disabled {
+      cursor: default;
+    }
+  }
+
+  @container (max-width: 863px) {
+    justify-content: flex-end;
+    @container (max-width: 450px) {
+      .Pages {
+        display: none;
+      }
+    }
+  }
+}
+
+.RosenPagination-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--rosen-spacing);
+  position: relative;
+  flex: 0 0 auto;
+
+  > .RosenDivider {
+    display: none;
+
+    @container (max-width: 864px) {
+      display: block;
+      height: 24px;
+      align-self: center;
+    }
+  }
+
+  .RosenPagination-actionsInner {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    gap: var(--rosen-spacing);
+  }
+
+  .RosenPagination-button {
+    padding: var(--rosen-spacing);
+    text-transform: none;
+
+    & p {
+      @container (max-width: 864px) {
+        display: none;
+      }
+    }
+  }
+
+  .RosenPagination-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &[data-size='larg'] {
+      display: none;
+
+      @container (min-width: 865px) {
+        display: flex;
+      }
+    }
+
+    &[data-size='small'] {
+      display: flex;
+
+      @container (min-width: 865px) {
+        display: none;
+      }
+    }
+  }
+}
