@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import { AppBar, AppLogo, NavigationBar, NavigationButton } from '@rosen-bridge/ui-kit';
+import { AppBar, AppLogo, Navigation, NavigationButton } from '@rosen-bridge/ui-kit';
 
 import { Actions } from './Actions';
 
@@ -13,13 +13,23 @@ export const Sidebar = () => {
         </Link>
       }
       links={
-        <NavigationBar>
-          <NavigationButton icon="Archway" label="Bridge" path="/" />
-          <NavigationButton icon="Exchange" label="Events" path="/events" />
-          <NavigationButton icon="BitcoinCircle" label="Assets" path="/assets" />
-          <NavigationButton disabled={true} icon="Headphones" label="Support" path="/support" />
-          <NavigationButton disabled={true} icon="Dashboard" label="Dashboard" path="/dashboard" />
-        </NavigationBar>
+        <Navigation>
+          <NavigationButton icon="Archway" href="/">
+            Bridge
+          </NavigationButton>
+          <NavigationButton icon="Exchange" href="/events">
+            Events
+          </NavigationButton>
+          <NavigationButton icon="BitcoinCircle" href="/assets">
+            Assets
+          </NavigationButton>
+          <NavigationButton disabled={true} icon="Headphones" href="/support">
+            Support
+          </NavigationButton>
+          <NavigationButton disabled={true} icon="Dashboard" href="/dashboard">
+            Dashboard
+          </NavigationButton>
+        </Navigation>
       }
       actions={<Actions sidebar />}
     />

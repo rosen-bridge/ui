@@ -65,6 +65,8 @@ export * from './menuGroup';
 export * from './menuGroupLabel';
 export * from './menuItem';
 export * from './menuTrigger';
+export * from './navigation';
+export * from './navigationButton';
 export * from './network';
 export * from './pageHeading';
 export * from './qrCodeDialog';

@@ -49,6 +49,8 @@ import type {
   MenuItemProps,
   MenuProps,
   MenuTriggerProps,
+  NavigationButtonProps,
+  NavigationProps,
   NetworkProps,
   PageHeadingProps,
   QrCodeDialogProps,
@@ -127,6 +129,8 @@ export type Components = {
   MenuBody: MenuBodyProps;
   MenuGroup: MenuGroupProps;
   MenuGroupLabel: MenuGroupLabelProps;
+  Navigation: NavigationProps;
+  NavigationButton: NavigationButtonProps;
   MenuItem: MenuItemProps;
   MenuTrigger: MenuTriggerProps;
   Network: NetworkProps;
