@@ -1,22 +1,31 @@
-import { type CSSProperties, useMemo, useRef } from 'react';
-
-import { Skeleton } from '@/components';
+import {
+  DateTime,
+  Divider,
+  Label,
+  Popover,
+  PopoverBody,
+  PopoverTrigger,
+  Skeleton,
+  Stack,
+  Typography,
+} from '@/components';
 import { useConfig } from '@/hooks';
 import type { ElementBaseProps, OverridableType } from '@/types';
-
-import { StepExtra } from './stepExtra';
-import { Step, type StepProps } from './steps';
 
 import './styles.css';
 
 export interface EventProcessesOverrides {}
 
 export type EventProcessesOwnProps = {
-  items?: StepProps[];
+  items?: {
+    title: string;
+    subtitle?: string;
+    description?: string;
+    datetime?: Date;
+    state: 'done' | 'warning' | 'error' | 'pending' | 'disabled' | 'progress';
+    subs?: EventProcessesOwnProps['items'];
+  }[];
   loading?: boolean;
-  orientation?: 'horizontal' | 'vertical';
-  value?: string;
-  onChange?: (value?: string) => void;
 };
 
 export type EventProcessesBaseProps = ElementBaseProps<'div', EventProcessesOwnProps>;
@@ -28,66 +37,81 @@ export type EventProcessesProps = OverridableType<
 >;
 
 export const EventProcesses = (props: EventProcessesProps) => {
-  const {
-    items,
-    loading,
-    orientation = 'horizontal',
-    value,
-    onChange,
-    style,
-    ...rest
-  } = useConfig('EventProcesses', props);
+  const { items = [], loading, ...rest } = useConfig('EventProcesses', props);
 
-  const ref = useRef<HTMLDivElement>(null);
-
-  const timeout = useRef<number>(-1);
-
-  const gridTemplateColumns = useMemo(() => {
-    if (!items?.length) return '';
-
-    return items
-      .map((item) => {
-        if (item.line) {
-          return 'minmax(0, 0)';
-        }
-        return 'minmax(0, 1fr)';
-      })
-      .join(' ');
-  }, [items]);
-
-  const styles = useMemo(() => {
-    return {
-      gridTemplateColumns: gridTemplateColumns,
-      ...style,
-    } as CSSProperties;
-  }, [gridTemplateColumns, style]);
-
-  const handleSetActive = (newValue?: string) => {
-    onChange?.(newValue);
-
-    window.clearTimeout(timeout.current);
-
-    if (!value || !newValue || value === newValue || !ref.current) return;
-
-    const height = getComputedStyle(ref.current).height;
-
-    ref.current.style.minHeight = height;
-
-    timeout.current = window.setTimeout(() => {
-      if (ref.current) {
-        ref.current.style.minHeight = '';
-      }
-    }, 250);
-  };
+  if (loading) return <Skeleton variant="rounded" height="102px" />;
 
   return (
-    <div data-orientation={orientation} ref={ref} style={{ ...styles }} {...rest}>
-      {items?.map((item, index) => {
-        if (item.line) return <StepExtra {...item} key={index.toString()} />;
+    <div style={{ gridTemplateColumns: `repeat(${items.length}, 1fr)` }} {...rest}>
+      {items.map((item) => {
+        const hasDetails = Boolean(item.description || item.datetime || item.subs?.length);
 
-        return <Step key={index.toString()} active={value} setActive={handleSetActive} {...item} />;
+        const chevron = (
+          <div className={`RosenEventProcesses-chevron RosenEventProcesses-chevron--${item.state}`}>
+            <span className="RosenEventProcesses-title">{item.title}</span>
+            <span className="RosenEventProcesses-subtitle">{item.subtitle}</span>
+            {!!item.subs?.length && (
+              <div className="RosenEventProcesses-steps">
+                {item.subs.map((sub) => (
+                  <span
+                    key={sub.title}
+                    className={`RosenEventProcesses-step RosenEventProcesses-step--${sub.state}`}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+        );
+
+        return (
+          <div className="RosenEventProcesses-slot" key={item.title}>
+            {hasDetails ? (
+              <Popover>
+                <PopoverTrigger as="div" className="RosenEventProcesses-anchor" openOnHover>
+                  {chevron}
+                </PopoverTrigger>
+                <PopoverBody offset={[0, 8]} style={{ width: '280px' }}>
+                  <Stack spacing="4px">
+                    <Typography variant="h5" color="text-primary">
+                      {item.title}
+                    </Typography>
+                    {item.description && (
+                      <Typography variant="body2" color="text-secondary">
+                        {item.description}
+                      </Typography>
+                    )}
+                    {item.datetime && (
+                      <DateTime timestamp={item.datetime.getTime()} color="text-disabled" />
+                    )}
+                    {!!item.subs?.length && (
+                      <>
+                        <Divider />
+                        <div>
+                          {item.subs.map((sub) => (
+                            <Label key={sub.title} label={sub.title} orientation="horizontal" dense>
+                              {sub.datetime ? (
+                                <DateTime
+                                  timestamp={sub.datetime?.getTime()}
+                                  color="text-disabled"
+                                  style={{ fontSize: '12px' }}
+                                />
+                              ) : (
+                                '-'
+                              )}
+                            </Label>
+                          ))}
+                        </div>
+                      </>
+                    )}
+                  </Stack>
+                </PopoverBody>
+              </Popover>
+            ) : (
+              <div className="RosenEventProcesses-anchor">{chevron}</div>
+            )}
+          </div>
+        );
       })}
-      {loading && <Skeleton variant="rounded" height="104px" />}
     </div>
   );
 };
