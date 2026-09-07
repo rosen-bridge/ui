@@ -1,15 +1,13 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import useSWR from 'swr';
 
 import {
-  type Color,
   EventProcesses,
   type EventProcessesProps,
   formatDateTime,
-  type IconProps,
   Typography,
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
@@ -21,129 +19,140 @@ import { Section } from './Section';
 
 type Step = {
   key?: EventDetailsType['status'];
-  label: string;
-  status: 'DONE' | 'PENDING' | 'PROGRESS' | 'WARNING' | 'ERROR' | 'DISABLED';
+  title: string;
+  subtitle?: string;
+  status: 'done' | 'pending' | 'progress' | 'warning' | 'error' | 'disabled';
   description?: string;
-  subs?: Omit<Step, 'subs'>[];
+  subs?: Step[];
   line?: boolean;
 };
 
-type StepCandidates = Array<Omit<Step, 'subs'> & { subs?: Omit<Step, 'subs'>[][] }>;
+type StepCandidates = Array<Omit<Step, 'subs'> & { subs?: StepCandidates[] }>;
 
 const steps: StepCandidates[] = [
   [
     {
       key: 'CREATED',
-      label: 'Created',
-      status: 'DONE',
+      title: 'Creation',
+      subtitle: 'Created',
+      status: 'done',
     },
   ],
   [
     {
-      label: 'Trigger',
-      status: 'PENDING',
+      title: 'Trigger',
+      subtitle: 'Pending',
+      status: 'pending',
     },
     {
       key: 'TRIGGERED',
-      label: 'Triggered',
-      status: 'DONE',
+      title: 'Trigger',
+      subtitle: 'Triggered',
+      status: 'done',
       description: 'The event has been reported by a sufficient number of watchers',
     },
   ],
   [
     {
       key: 'REACHED_LIMIT',
-      label: 'Reached Limit',
-      status: 'ERROR',
+      title: 'Error',
+      subtitle: 'Reached Limit',
+      status: 'error',
       line: true,
     },
     {
       key: 'REJECTED',
-      label: 'Rejected',
-      status: 'ERROR',
+      title: 'Error',
+      subtitle: 'Rejected',
+      status: 'error',
       line: true,
     },
     {
       key: 'TIMEOUT',
-      label: 'Timeout',
-      status: 'ERROR',
+      title: 'Error',
+      subtitle: 'Timeout',
+      status: 'error',
       line: true,
     },
   ],
   [
     {
-      label: 'Payment',
-      status: 'PENDING',
+      title: 'Payment',
+      subtitle: 'Pending',
+      status: 'pending',
     },
     {
       key: 'PAYMENT_STALLED',
-      label: 'Payment Stalled',
-      status: 'WARNING',
+      title: 'Payment',
+      subtitle: 'Stalled',
+      status: 'warning',
       description:
         'Insufficient assets are available in the lock address for guards to generate the payment transaction',
     },
     {
-      label: 'In Payment',
-      status: 'PROGRESS',
+      title: 'Payment',
+      subtitle: 'In Payment',
+      status: 'progress',
       subs: [
         [
           {
             key: 'PAYMENT_APPROVED',
-            label: 'Approved',
-            status: 'DONE',
+            title: 'Approved',
+            status: 'done',
           },
         ],
         [
           {
-            label: 'Sign',
-            status: 'PENDING',
+            title: 'Sign',
+            status: 'pending',
           },
           {
             key: 'PAYMENT_SIGNING',
-            label: 'Signing',
-            status: 'PROGRESS',
+            title: 'Signing',
+            status: 'progress',
           },
           {
             key: 'PAYMENT_SIGNED',
-            label: 'Signed',
-            status: 'DONE',
+            title: 'Signed',
+            status: 'done',
           },
         ],
         [
           {
-            label: 'Send',
-            status: 'PENDING',
+            title: 'Send',
+            status: 'pending',
           },
           {
             key: 'PAYMENT_SENT',
-            label: 'Sent',
-            status: 'DONE',
+            title: 'Sent',
+            status: 'done',
           },
         ],
       ],
     },
     {
       key: 'PAID',
-      label: 'Paid',
-      status: 'DONE',
+      title: 'Payment',
+      subtitle: 'Paid',
+      status: 'done',
       description: 'The transaction reached enough confirmation on blockchain',
       subs: [
         [
           {
-            label: 'Approved',
-            status: 'DONE',
+            title: 'Approved',
+            status: 'done',
           },
         ],
         [
           {
-            label: 'Signed',
-            status: 'DONE',
+            title: 'Signed',
+            status: 'done',
           },
         ],
         [
           {
-            label: 'Sent',
-            status: 'DONE',
+            title: 'Sent',
+            status: 'done',
           },
         ],
       ],
@@ -151,77 +160,81 @@ const steps: StepCandidates[] = [
   ],
   [
     {
-      label: 'Reward',
-      status: 'PENDING',
+      title: 'Reward',
+      subtitle: 'Pending',
+      status: 'pending',
     },
     {
       key: 'REWARD_STALLED',
-      label: 'Reward Stalled',
-      status: 'WARNING',
+      title: 'Reward',
+      subtitle: 'Stalled',
+      status: 'warning',
       description:
         'Insufficient assets are available in the lock address for guards to generate the reward distribution transaction',
     },
     {
-      label: 'In Reward',
-      status: 'PROGRESS',
+      title: 'Reward',
+      subtitle: 'In Reward',
+      status: 'progress',
       subs: [
         [
           {
             key: 'REWARD_APPROVED',
-            label: 'Approved',
-            status: 'DONE',
+            title: 'Approved',
+            status: 'done',
           },
         ],
         [
           {
-            label: 'Sign',
-            status: 'PENDING',
+            title: 'Sign',
+            status: 'pending',
           },
           {
             key: 'REWARD_SIGNING',
-            label: 'Signing',
-            status: 'PROGRESS',
+            title: 'Signing',
+            status: 'progress',
           },
           {
             key: 'REWARD_SIGNED',
-            label: 'Signed',
-            status: 'DONE',
+            title: 'Signed',
+            status: 'done',
           },
         ],
         [
           {
-            label: 'Send',
-            status: 'PENDING',
+            title: 'Send',
+            status: 'pending',
           },
           {
             key: 'REWARD_SENT',
-            label: 'Sent',
-            status: 'DONE',
+            title: 'Sent',
+            status: 'done',
           },
         ],
       ],
     },
     {
       key: 'REWARDED',
-      label: 'Rewarded',
-      status: 'DONE',
+      title: 'Reward',
+      subtitle: 'Rewarded',
+      status: 'done',
       subs: [
         [
           {
-            label: 'Approved',
-            status: 'DONE',
+            title: 'Approved',
+            status: 'done',
           },
         ],
         [
           {
-            label: 'Signed',
-            status: 'DONE',
+            title: 'Signed',
+            status: 'done',
           },
         ],
         [
           {
-            label: 'Sent',
-            status: 'DONE',
+            title: 'Sent',
+            status: 'done',
           },
         ],
       ],
@@ -229,18 +242,21 @@ const steps: StepCandidates[] = [
   ],
   [
     {
-      label: 'Completion',
-      status: 'PENDING',
+      title: 'Completion',
+      subtitle: 'Pending',
+      status: 'pending',
     },
     {
       key: 'COMPLETED',
-      label: 'Completed',
-      status: 'DONE',
+      title: 'Completion',
+      subtitle: 'Completed',
+      status: 'done',
     },
     {
       key: 'FRAUD',
-      label: 'Fraud',
-      status: 'ERROR',
+      title: 'Completion',
+      subtitle: 'Fraud',
+      status: 'error',
     },
   ],
 ];
@@ -294,63 +310,37 @@ const toItems = (
   timestamps: EventStatusType['timestamps'],
 ): EventProcessesProps['items'] => {
   return steps.map((step) => {
+    const subs = step.subs ? toItems(step.subs, timestamps) : undefined;
+
+    const overrideSubtitle =
+      step.status === 'progress'
+        ? subs?.toReversed().find((sub) => ['progress', 'done'].includes(sub.state))?.title
+        : undefined;
+
     const description = step.description;
 
-    const label = step.label;
+    const title = step.title;
 
-    const line = step.line;
+    const subtitle = overrideSubtitle || step.subtitle;
 
-    const sub = step.subs ? toItems(step.subs, timestamps) : undefined;
+    const datetimeRaw = timestamps[step.key as keyof typeof timestamps];
 
-    const timestampRaw = timestamps[step.key as keyof typeof timestamps];
+    const datetime = typeof datetimeRaw === 'number' ? new Date(datetimeRaw * 1000) : undefined;
 
-    const timestamp = typeof timestampRaw === 'number' ? timestampRaw * 1000 : undefined;
+    const state = step.status;
 
-    const value = crypto.randomUUID();
-
-    const color: Color = (() => {
-      switch (step.status) {
-        case 'DISABLED':
-          return 'neutral-light';
-        case 'DONE':
-          return 'success';
-        case 'ERROR':
-          return 'error';
-        case 'PENDING':
-          return 'neutral';
-        case 'PROGRESS':
-          return 'info';
-        case 'WARNING':
-          return 'warning';
-        default:
-          return 'neutral';
-      }
-    })();
-
-    const icon: IconProps['name'] = (() => {
-      switch (step.status) {
-        case 'DISABLED':
-          return 'CircleFill';
-        case 'DONE':
-          return 'Check';
-        case 'ERROR':
-          return step.line ? 'ExclamationTriangleFill' : 'Times';
-        case 'PENDING':
-          return 'CircleFill';
-        case 'PROGRESS':
-          return 'Hourglass';
-        case 'WARNING':
-          return 'ExclamationCircle';
-      }
-    })();
-
-    return { color, description, icon, label, line, sub, timestamp, value };
+    return {
+      state,
+      subtitle,
+      title,
+      datetime,
+      description,
+      subs,
+    };
   });
 };
 
 export const Process = ({ id, flowId }: { id: string; flowId: string | undefined }) => {
-  const [active, setActive] = useState<string | undefined>();
-
   const [guardPublicKey, setGuardPublicKey] = useState<string | undefined>();
 
   const {
@@ -398,8 +388,9 @@ export const Process = ({ id, flowId }: { id: string; flowId: string | undefined
 
     if (isException) {
       info.slice(3).forEach((item) => {
+        item.subtitle = 'Not Reached';
         item.description = undefined;
-        item.status = 'DISABLED';
+        item.status = 'disabled';
         item.subs = undefined;
       });
     }
@@ -412,8 +403,9 @@ export const Process = ({ id, flowId }: { id: string; flowId: string | undefined
 
     if (data.status === 'FRAUD') {
       info.slice(2, 4).forEach((item) => {
+        item.subtitle = 'Not Reached';
         item.description = undefined;
-        item.status = 'DISABLED';
+        item.status = 'disabled';
         item.subs = undefined;
       });
     }
@@ -422,14 +414,6 @@ export const Process = ({ id, flowId }: { id: string; flowId: string | undefined
 
     return items;
   }, [data]);
-
-  useEffect(() => {
-    const value = items?.find((item) => item.label?.startsWith('In '))?.value;
-
-    if (!value) return;
-
-    setActive(value);
-  }, [items]);
 
   return (
     <Section
@@ -449,7 +433,7 @@ export const Process = ({ id, flowId }: { id: string; flowId: string | undefined
           The reason for this exception is noted above.
         </Typography>
       ) : (
-        <EventProcesses items={items} loading={isLoading} value={active} onChange={setActive} />
+        <EventProcesses items={items} loading={isLoading} />
       )}
     </Section>
   );
