@@ -1,5 +1,11 @@
 # @rosen-bridge/rosen-service
 
+## 4.4.2
+
+### Patch Changes
+
+- Change RSN token on binance, ethereum and cardano
+
 ## 4.4.1
 
 ### Patch Changes
