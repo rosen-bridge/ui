@@ -139,18 +139,21 @@ const steps: StepCandidates[] = [
       subs: [
         [
           {
+            key: 'PAYMENT_APPROVED',
             title: 'Approved',
             status: 'done',
           },
         ],
         [
           {
+            key: 'PAYMENT_SIGNED',
             title: 'Signed',
             status: 'done',
           },
         ],
         [
           {
+            key: 'PAYMENT_SENT',
             title: 'Sent',
             status: 'done',
           },
@@ -221,18 +224,21 @@ const steps: StepCandidates[] = [
       subs: [
         [
           {
+            key: 'REWARD_APPROVED',
             title: 'Approved',
             status: 'done',
           },
         ],
         [
           {
+            key: 'REWARD_SIGNED',
             title: 'Signed',
             status: 'done',
           },
         ],
         [
           {
+            key: 'REWARD_SENT',
             title: 'Sent',
             status: 'done',
           },
@@ -363,7 +369,7 @@ export const Process = ({ id, flowId }: { id: string; flowId: string | undefined
   );
 
   const error = eventsError || statusError;
-  const isLoading = eventsIsLoading || statusIsLoading || !flowId;
+  const isLoading = eventsIsLoading || statusIsLoading || (!!events?.length && !flowId);
   const mutate = eventsError ? eventMutate : statusMutate;
 
   const data = guardPublicKey ? status : events?.find((event) => event.txId === flowId);
