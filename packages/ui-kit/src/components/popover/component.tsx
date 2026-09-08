@@ -25,9 +25,20 @@ export type PopoverBaseProps = ElementBaseProps<'div', PopoverOwnProps>;
 export type PopoverProps = OverridableType<PopoverBaseProps, PopoverOverrides, never>;
 
 export const Popover = (props: PopoverProps) => {
-  const { ...rest } = useConfig('Popover', props);
+  const { onOpenChange, ...rest } = useConfig('Popover', props);
 
-  return <PopoverBaseUI.Root {...rest} />;
+  return (
+    <PopoverBaseUI.Root
+      {...rest}
+      onOpenChange={(open, eventDetails) => {
+        if (eventDetails.reason === 'trigger-press') {
+          eventDetails.cancel();
+          return;
+        }
+        onOpenChange?.(open);
+      }}
+    />
+  );
 };
 
 Popover.displayName = 'Popover';
