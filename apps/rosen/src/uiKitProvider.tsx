@@ -4,14 +4,21 @@ import NextImage from 'next/image';
 import NextLink from 'next/link';
 
 import * as icons from '@rosen-bridge/icons';
-import * as tokens from '@rosen-bridge/token-icons';
-import type { TokenMap } from '@rosen-bridge/tokens';
-import { type ConfigContextType, ConfigProvider, type DefaultColor } from '@rosen-bridge/ui-kit';
+import * as tokenIcons from '@rosen-bridge/token-icons';
+import {
+  type ConfigContextType,
+  ConfigProvider,
+  type DefaultColor,
+  type TokenMeta,
+  type TokenProps,
+} from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 import type { Network } from '@rosen-ui/types';
+import { batch } from '@rosen-ui/utils';
 
 import { Actions } from './app/(main)/Actions';
-import { useTokenMap } from './hooks';
+import { getTokensByIds } from './backend/tokens/actions';
+import { unwrap } from './safeServerAction';
 
 declare module '@rosen-bridge/ui-kit' {
   interface ColorOverrides extends Record<DefaultColor, true> {
@@ -31,7 +38,23 @@ declare module '@rosen-bridge/ui-kit' {
   }
 }
 
-const getUiKitConfig: (tokenMap: TokenMap) => ConfigContextType = (tokenMap) => ({
+const resolveToken: TokenProps['resolver'] = batch<string, TokenMeta>(async (ids) => {
+  const data = await unwrap(getTokensByIds)(ids);
+
+  const result: Record<string, TokenMeta> = {};
+
+  for (const token of data) {
+    result[token.id] = {
+      label: token.name,
+      // biome-ignore lint/performance/noDynamicNamespaceImportAccess: Keep it
+      logo: tokenIcons[`Token_${token.ergoSideTokenId}` as keyof typeof tokenIcons],
+    };
+  }
+
+  return result;
+});
+
+const getUiKitConfig: () => ConfigContextType = () => ({
   components: {
     Connector: {
       defaultProps: {
@@ -90,27 +113,13 @@ const getUiKitConfig: (tokenMap: TokenMap) => ConfigContextType = (tokenMap) => 
     },
     Token: {
       defaultProps: {
-        tokens: Object.fromEntries(
-          tokenMap.getConfig().flatMap((items) =>
-            Object.entries(items).map(([, token]) => [
-              token.tokenId,
-              {
-                label: token.name,
-                // biome-ignore lint/performance/noDynamicNamespaceImportAccess: Keep it
-                logo: tokens[`Token_${items.ergo.tokenId}` as keyof typeof tokens],
-              },
-            ]),
-          ),
-        ),
+        resolver: resolveToken,
       },
     },
   },
 });
 
 export const UIKitProvider = ({ children }: PropsWithChildren) => {
-  const tokenMap = useTokenMap();
-
-  const config = useMemo(() => getUiKitConfig(tokenMap), [tokenMap]);
-
+  const config = useMemo(() => getUiKitConfig(), []);
   return <ConfigProvider configs={config}>{children}</ConfigProvider>;
 };
