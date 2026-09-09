@@ -96,7 +96,7 @@ const filterParser = new FilterParser({
     },
     offset: {
       min: 0,
-      max: 1000,
+      max: Infinity,
       default: 0,
     },
   },
