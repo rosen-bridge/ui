@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import {
   Avatar,
@@ -124,10 +124,7 @@ export const Token = (props: TokenProps) => {
     };
   }, [resolver, value]);
 
-  const resolved = useMemo(
-    () => Object.assign({}, DEFAULT_NETWORK, fallback, meta),
-    [fallback, meta],
-  );
+  const resolved = Object.assign({}, DEFAULT_NETWORK, fallback, meta);
 
   const displayLabel = label || resolved.label;
 

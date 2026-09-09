@@ -1,4 +1,4 @@
-import { type ReactNode, useCallback, useEffect, useMemo } from 'react';
+import { type ReactNode, useEffect } from 'react';
 
 import { Alert as AlertMUI } from '@mui/material';
 
@@ -37,24 +37,17 @@ export const Alert = (props: AlertProps) => {
     ...rest
   } = useConfig('Alert', props);
 
-  const icon = useMemo<IconProps['name']>(() => {
-    switch (severity) {
-      case 'success':
-        return 'CheckCircle';
-      case 'warning':
-        return 'InfoCircle';
-      case 'error':
-        return 'ExclamationTriangle';
-      default:
-        return 'InfoCircle';
-    }
-  }, [severity]);
+  const icons: Record<string, IconProps['name']> = {
+    success: 'CheckCircle',
+    warning: 'InfoCircle',
+    error: 'ExclamationTriangle',
+  };
 
-  const close = useCallback(() => {
-    onClose?.();
-  }, [onClose]);
+  const icon = icons[severity] ?? 'InfoCircle';
 
   useEffect(() => {
+    if (!open) return;
+
     if (typeof timeout !== 'number' || timeout <= 0 || !Number.isFinite(timeout)) {
       return;
     }
@@ -64,7 +57,7 @@ export const Alert = (props: AlertProps) => {
     }, timeout);
 
     return () => clearTimeout(timer);
-  }, [timeout, onClose]);
+  }, [timeout, onClose, open]);
 
   void icon;
 
@@ -76,7 +69,7 @@ export const Alert = (props: AlertProps) => {
           <>
             {action}
             {dismissible && (
-              <IconButton size="small" onClick={close}>
+              <IconButton size="small" onClick={() => onClose?.()}>
                 <Icon name="Times" size="small" />
               </IconButton>
             )}

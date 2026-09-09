@@ -1,4 +1,4 @@
-import { createContext, type ReactNode, useMemo, useState } from 'react';
+import { createContext, type ReactNode, useEffect, useState } from 'react';
 
 import { CssBaseline, type Theme, useMediaQuery } from '@mui/material';
 import { createTheme, ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
@@ -35,15 +35,16 @@ export const ThemeProvider = ({ children, theme: input }: ThemeProviderProps) =>
     window.localStorage.setItem('rosen:theme', nextMode);
   };
 
-  const final = useMemo(() => {
+  useEffect(() => {
     document.body.setAttribute('data-theme', theme.palette.mode);
-    return createTheme({
-      cssVariables: {
-        cssVarPrefix: 'rosen',
-      },
-      ...theme,
-    });
-  }, [theme]);
+  }, [theme.palette.mode]);
+
+  const final = createTheme({
+    cssVariables: {
+      cssVarPrefix: 'rosen',
+    },
+    ...theme,
+  });
 
   return (
     <ThemeTogglerContext.Provider value={{ mode, toggle }}>

@@ -1,10 +1,4 @@
-import {
-  createContext,
-  type PropsWithChildren,
-  type ReactNode,
-  useCallback,
-  useState,
-} from 'react';
+import { createContext, type PropsWithChildren, type ReactNode, useState } from 'react';
 
 import {
   Button,
@@ -38,13 +32,13 @@ export const ConfirmProvider = ({ children }: PropsWithChildren) => {
     reject: (reason?: unknown) => void;
   } | null>(null);
 
-  const confirm = useCallback((opts: ConfirmOptions): Promise<boolean> => {
+  const confirm = (opts: ConfirmOptions): Promise<boolean> => {
     setOptions(opts);
     setLoading(false);
     return new Promise<boolean>((resolve, reject) => {
       setResolver({ resolve, reject });
     });
-  }, []);
+  };
 
   const handleConfirm = async () => {
     setLoading(true);

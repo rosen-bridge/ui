@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 
 /**
  * Represents the possible states of a disclosure component
@@ -58,7 +58,7 @@ export const useDisclosure = ({
 
   const [state, setState] = useState<DisclosureState>(initialState);
 
-  const close = useCallback(async () => {
+  const close = async () => {
     setState('loading');
     setError(undefined);
     try {
@@ -68,9 +68,9 @@ export const useDisclosure = ({
       setError(error);
       setState('error');
     }
-  }, [onClose]);
+  };
 
-  const open = useCallback(async () => {
+  const open = async () => {
     setState('loading');
     setError(undefined);
     try {
@@ -80,9 +80,9 @@ export const useDisclosure = ({
       setError(error);
       setState('error');
     }
-  }, [onOpen]);
+  };
 
-  const toggle = useCallback(async () => {
+  const toggle = async () => {
     switch (state) {
       case 'close':
         await open();
@@ -97,7 +97,7 @@ export const useDisclosure = ({
         await close();
         break;
     }
-  }, [state, open, close]);
+  };
 
   return {
     state,

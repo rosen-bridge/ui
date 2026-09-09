@@ -1,5 +1,3 @@
-import { useMemo } from 'react';
-
 import { useConfig } from '@/hooks';
 import type { Color, ElementBaseProps, OverridableType } from '@/types';
 import { toCSSColor } from '@/utils';
@@ -32,13 +30,10 @@ export const Link = (props: LinkProps) => {
     ...rest
   } = useConfig('Link', props);
 
-  const styles = useMemo(
-    () => ({
-      color: toCSSColor(color),
-      ...style,
-    }),
-    [color, style],
-  );
+  const styles = {
+    color: toCSSColor(color),
+    ...style,
+  };
 
   return <Component data-underline={underline} style={styles} {...rest} />;
 };

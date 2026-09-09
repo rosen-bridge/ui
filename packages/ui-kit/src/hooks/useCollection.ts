@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { OPERATORS, type Selected, type SortValue, type ViewToggleType } from '../components';
 import { useFramework } from './useFramework';
@@ -119,41 +119,37 @@ export const useCollection = (options?: Options) => {
 
   const [fragment, setFragment] = useState<string>();
 
-  const query = useMemo<string | undefined>(() => {
-    const params: Record<string, string> = {};
+  const params: Record<string, string> = {};
 
-    for (const field of fields || []) {
-      const operator = OPERATORS.find((OPERATOR) => OPERATOR.value === field.operator);
+  for (const field of fields || []) {
+    const operator = OPERATORS.find((OPERATOR) => OPERATOR.value === field.operator);
 
-      if (!operator) continue;
+    if (!operator) continue;
 
-      const key = `${field.flow}${operator.symbol}`;
+    const key = `${field.flow}${operator.symbol}`;
 
-      const value = Array.isArray(field.value)
-        ? [field.value].flat().join(',')
-        : String(field.value);
+    const value = Array.isArray(field.value) ? [field.value].flat().join(',') : String(field.value);
 
-      params[key] = value;
-    }
+    params[key] = value;
+  }
 
-    if (typeof pageSize === 'number') {
-      params.limit = String(pageSize);
-    }
+  if (typeof pageSize === 'number') {
+    params.limit = String(pageSize);
+  }
 
-    if (typeof pageSize === 'number' && typeof pageIndex === 'number') {
-      params.offset = String(pageSize * pageIndex);
-    }
+  if (typeof pageSize === 'number' && typeof pageIndex === 'number') {
+    params.offset = String(pageSize * pageIndex);
+  }
 
-    if (sort?.key) {
-      params.sorts = sort.order ? `${sort.key}-${sort.order}` : sort.key;
-    }
+  if (sort?.key) {
+    params.sorts = sort.order ? `${sort.key}-${sort.order}` : sort.key;
+  }
 
-    if (!Object.keys(params).length) return;
-
-    return Object.keys(params)
-      .map((key) => `${key}=${params[key]}`)
-      .join('&');
-  }, [fields, pageIndex, pageSize, sort]);
+  const query = Object.keys(params).length
+    ? Object.keys(params)
+        .map((key) => `${key}=${params[key]}`)
+        .join('&')
+    : undefined;
 
   useEffect(() => {
     syncing.current = true;
@@ -183,17 +179,17 @@ export const useCollection = (options?: Options) => {
     options?.localStorageKey,
   ]);
 
-  const handleFieldsChange = useCallback((fields?: Selected[]) => {
+  const handleFieldsChange = (fields?: Selected[]) => {
     setFields(fields);
     setPageIndex(0);
-  }, []);
+  };
 
-  const handlePageSizeChange = useCallback((size?: number) => {
+  const handlePageSizeChange = (size?: number) => {
     setPageSize(size);
     setPageIndex(0);
-  }, []);
+  };
 
-  const scrollIntoView = useCallback(() => {
+  const scrollIntoView = () => {
     if (!fragment) return;
 
     const element = document.getElementById(fragment);
@@ -211,7 +207,7 @@ export const useCollection = (options?: Options) => {
     if (inViewport) return;
 
     element.scrollIntoView({ behavior: 'smooth' });
-  }, [fragment]);
+  };
 
   useEffect(() => {
     if (syncing.current) return;
@@ -271,50 +267,29 @@ export const useCollection = (options?: Options) => {
     return () => window.removeEventListener('hashchange', update);
   }, []);
 
-  useEffect(scrollIntoView, [scrollIntoView]);
+  useEffect(scrollIntoView, [fragment]);
 
-  return useMemo(
-    () => ({
-      query,
+  return {
+    query,
 
-      scrollIntoView,
+    scrollIntoView,
 
-      fields,
-      setFields: handleFieldsChange,
+    fields,
+    setFields: handleFieldsChange,
 
-      fragment,
-      setFragment,
+    fragment,
+    setFragment,
 
-      pageIndex,
-      setPageIndex,
+    pageIndex,
+    setPageIndex,
 
-      pageSize,
-      setPageSize: handlePageSizeChange,
+    pageSize,
+    setPageSize: handlePageSizeChange,
 
-      sort,
-      setSort,
+    sort,
+    setSort,
 
-      view,
-      setView,
-    }),
-    [
-      query,
-
-      scrollIntoView,
-
-      fields,
-      handleFieldsChange,
-
-      fragment,
-
-      pageIndex,
-
-      pageSize,
-      handlePageSizeChange,
-
-      sort,
-
-      view,
-    ],
-  );
+    view,
+    setView,
+  };
 };

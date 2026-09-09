@@ -1,4 +1,4 @@
-import { type CSSProperties, useMemo } from 'react';
+import type { CSSProperties } from 'react';
 
 import { useConfig } from '@/hooks';
 import type { ElementBaseProps, Gap, OverridableType } from '@/types';
@@ -71,19 +71,15 @@ export const Stack = (props: StackProps) => {
     ...rest
   } = useConfig('Stack', props);
 
-  const styles = useMemo(
-    () =>
-      ({
-        display: inline ? 'inline-flex' : 'flex',
-        flexDirection: direction,
-        flexWrap: wrap ? 'wrap' : 'nowrap',
-        alignItems: align ? ALIGN_MAP[align] : undefined,
-        justifyContent: justify ? JUSTIFY_MAP[justify] : undefined,
-        gap: toCSSUnit('gap', spacing),
-        ...style,
-      }) as CSSProperties,
-    [align, direction, spacing, inline, justify, wrap, style],
-  );
+  const styles = {
+    display: inline ? 'inline-flex' : 'flex',
+    flexDirection: direction,
+    flexWrap: wrap ? 'wrap' : 'nowrap',
+    alignItems: align ? ALIGN_MAP[align] : undefined,
+    justifyContent: justify ? JUSTIFY_MAP[justify] : undefined,
+    gap: toCSSUnit('gap', spacing),
+    ...style,
+  } as CSSProperties;
 
   return <div style={styles} {...rest} />;
 };

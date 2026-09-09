@@ -1,5 +1,3 @@
-import { useMemo } from 'react';
-
 import { useConfig } from '@/hooks';
 import type { Color, ElementBaseProps, OverridableType } from '@/types';
 import { toCSSColor } from '@/utils';
@@ -45,13 +43,10 @@ export const Card = (props: CardProps) => {
     ...rest
   } = useConfig('Card', props);
 
-  const styles = useMemo(
-    () => ({
-      backgroundColor: toCSSColor(backgroundColor),
-      ...style,
-    }),
-    [backgroundColor, style],
-  );
+  const styles = {
+    backgroundColor: toCSSColor(backgroundColor),
+    ...style,
+  };
 
   return (
     <div

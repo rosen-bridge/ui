@@ -1,4 +1,4 @@
-import { type FC, type SVGAttributes, useMemo } from 'react';
+import type { FC, SVGAttributes } from 'react';
 
 import { Icon, type IconProps, Typography, type TypographyProps } from '@/components';
 import { useConfig } from '@/hooks';
@@ -61,10 +61,7 @@ export const Network = (props: NetworkProps) => {
 
   const showLogo = variant !== 'label';
 
-  const { logo: Logo, label } = useMemo(
-    () => Object.assign({}, DEFAULT_NETWORK, fallback, networks?.[value]),
-    [fallback, networks, value],
-  );
+  const { logo: Logo, label } = Object.assign({}, DEFAULT_NETWORK, fallback, networks?.[value]);
 
   return (
     <div data-variant={variant} {...rest}>

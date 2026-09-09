@@ -1,4 +1,4 @@
-import { type FC, type SVGAttributes, useMemo } from 'react';
+import type { FC, SVGAttributes } from 'react';
 
 import type * as Icons from '@rosen-bridge/icons';
 
@@ -40,14 +40,11 @@ export const Icon = (props: IconProps) => {
 
   const Icon = as || icons?.[name as keyof typeof icons] || icons?.[fallback as keyof typeof icons];
 
-  const styles = useMemo(
-    () => ({
-      '--rosen-icon-color': toCSSColor(color),
-      '--rosen-icon-size': toCSSUnit('icon-size', size),
-      ...style,
-    }),
-    [color, size, style],
-  );
+  const styles = {
+    '--rosen-icon-color': toCSSColor(color),
+    '--rosen-icon-size': toCSSUnit('icon-size', size),
+    ...style,
+  };
 
   if (loading) {
     return (
