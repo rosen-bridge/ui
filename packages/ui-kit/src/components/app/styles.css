@@ -3,6 +3,9 @@
   height: 100vh;
   display: flex;
 
+  container-type: inline-size;
+  container-name: app;
+
   &[data-orientation='horizontal'] {
     flex-direction: row;
   }

@@ -1,0 +1,23 @@
+.RosenNavigation {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  justify-content: center;
+  align-items: center;
+  gap: var(--rosen-spacing);
+  z-index: 4;
+
+  @container app (max-width: 640px) {
+    gap: 0;
+    height: 64px;
+    overflow: hidden;
+    flex-direction: row;
+    align-items: self-end;
+    position: fixed;
+    z-index: 4;
+    border: 1px solid var(--rosen-palette-primary-light);
+    border-radius: calc(var(--rosen-spacing) * 2);
+    background: var(--rosen-palette-background-paper);
+    inset: auto 8px calc(6px + env(safe-area-inset-bottom, 0px)) 8px;
+  }
+}
