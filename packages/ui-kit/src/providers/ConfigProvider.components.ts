@@ -68,6 +68,7 @@ import type {
   TabsPanelProps,
   TabsProps,
   TabsTabProps,
+  TextProps,
   ThemeToggleButtonProps,
   TokenProps,
   TokensCardProps,
@@ -150,6 +151,7 @@ export type Components = {
   TabsList: TabsListProps;
   TabsPanel: TabsPanelProps;
   TabsTab: TabsTabProps;
+  Text: TextProps;
   ThemeToggleButton: ThemeToggleButtonProps;
   Token: TokenProps;
   TokensCard: TokensCardProps;
