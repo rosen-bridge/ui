@@ -57,6 +57,7 @@ export { default as Doge } from './networks/doge.svg';
 export { default as Ergo } from './networks/ergo.svg';
 export { default as Ethereum } from './networks/ethereum.svg';
 export { default as Firo } from './networks/firo.svg';
+export { default as Handshake } from './networks/handshake.svg';
 export { default as Newspaper } from './newspaper.svg';
 export { default as Pause } from './pause.svg';
 export { default as PauseCircle } from './pause-circle.svg';

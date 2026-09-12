@@ -6,11 +6,13 @@ import { registerDogeExtractor } from './chains/doge';
 import { registerErgoExtractor } from './chains/ergo';
 import { registerEthereumExtractor } from './chains/ethereum';
 import { registerFiroExtractor } from './chains/firo';
+import { registerHandshakeExtractor } from './chains/handshake';
 
 const observationService = {
   registerBitcoinExtractor,
   registerBitcoinRunesExtractor,
   registerDogeExtractor,
+  registerHandshakeExtractor,
   registerCardanoExtractor,
   registerErgoExtractor,
   registerEthereumExtractor,

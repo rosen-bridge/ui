@@ -89,6 +89,17 @@ firo:
     host:
     port:
     reconnectDelay:
+handshake:
+  addresses:
+    lock:
+    eventTrigger:
+    permit:
+    fraud:
+    commitment:
+  tokens:
+    rwt:
+  initialHeight:
+  rpcUrl: https://hsd.ergexplorer.com
 ethereum:
   addresses:
     lock:
@@ -124,6 +135,7 @@ calculator:
     bitcoin: []
     bitcoin-runes: []
     doge: []
+    handshake: []
     ethereum: []
     binance: []
     firo: []
@@ -142,6 +154,8 @@ healthCheck:
   binanceScannerCriticalDiff: 5
   firoScannerWarnDiff: 3
   firoScannerCriticalDiff: 5
+  handshakeScannerWarnDiff: 3
+  handshakeScannerCriticalDiff: 5
   interval: 60 # health check update interval (in seconds)
   duration: 600 # log duration time check (in seconds)
   maxAllowedErrorCount: 1 # maximum allowed error log lines

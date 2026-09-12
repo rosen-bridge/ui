@@ -10,6 +10,7 @@ const baseTokenURLs: { [key in Network]: string } = {
   [NETWORKS.ethereum.key]: 'https://etherscan.io/token',
   [NETWORKS.doge.key]: '',
   [NETWORKS.firo.key]: '',
+  [NETWORKS.handshake.key]: '',
 };
 
 export const getTokenUrl = (network?: Network, tokenId?: string): string | undefined => {

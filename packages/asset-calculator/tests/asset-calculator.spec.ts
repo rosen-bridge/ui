@@ -38,6 +38,7 @@ describe('AssetCalculator', () => {
           addresses: ['hotAddr', 'coldAddr'],
           explorerUrl: 'firoExplorerUrl',
         },
+        { addresses: ['hotAddr', 'coldAddr'], rpcUrl: 'handshakeRpcUrl' },
         dataSource,
       );
     });
@@ -129,6 +130,7 @@ describe('AssetCalculator', () => {
           addresses: ['hotAddr', 'coldAddr'],
           explorerUrl: 'firoExplorerUrl',
         },
+        { addresses: ['hotAddr', 'coldAddr'], rpcUrl: 'handshakeRpcUrl' },
         dataSource,
       );
     });
@@ -202,6 +204,7 @@ describe('AssetCalculator', () => {
         { addresses: ['Addr'], rpcUrl: 'bnbRpcUrl' },
         { addresses: ['Addr'], blockcypherUrl: 'blockcypherUrl' },
         { addresses: ['Addr'], explorerUrl: 'firoExplorerUrl' },
+        { addresses: ['Addr'], rpcUrl: 'handshakeRpcUrl' },
         dataSource,
       );
       assetCalculator['totalSupplyInit'] = true;
@@ -305,6 +308,7 @@ describe('AssetCalculator', () => {
         { addresses: ['Addr'], rpcUrl: 'bnbRpcUrl' },
         { addresses: ['Addr'], blockcypherUrl: 'blockcypherUrl' },
         { addresses: ['Addr'], explorerUrl: 'firoExplorerUrl' },
+        { addresses: ['Addr'], rpcUrl: 'handshakeRpcUrl' },
         dataSource,
       );
       assetCalculator['totalSupplyInit'] = true;
@@ -402,6 +406,7 @@ describe('AssetCalculator', () => {
           addresses: ['hotAddr', 'coldAddr'],
           explorerUrl: 'firoExplorerUrl',
         },
+        { addresses: ['hotAddr', 'coldAddr'], rpcUrl: 'handshakeRpcUrl' },
         dataSource,
       );
     });
