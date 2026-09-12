@@ -1,5 +1,11 @@
 # @rosen-bridge/icons
 
+## 4.0.0
+
+### Major Changes
+
+- Remove token-specific icons from the package
+
 ## 3.7.1
 
 ### Patch Changes

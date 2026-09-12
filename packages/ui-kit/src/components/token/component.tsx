@@ -38,14 +38,13 @@ export type TokenOwnProps = {
 
   logo?: string;
 
+  resolver?: (value: NonNullable<TokenProps['value']>) => Promise<TokenMeta | undefined>;
+
   slots?: {
     fallback?: AvatarProps;
     label?: TypographyProps;
     logo?: ImageProps;
   };
-
-  /** Static registry */
-  tokens?: Record<NonNullable<TokenProps['value']>, TokenMeta>;
 
   /**
    * The name of the token to display.
@@ -77,8 +76,8 @@ export const Token = (props: TokenProps) => {
     label,
     loading,
     logo,
+    resolver,
     slots,
-    tokens,
     value = '',
     variant = 'both',
     ...rest
@@ -93,16 +92,48 @@ export const Token = (props: TokenProps) => {
 
   const ref = useRef<HTMLDivElement | null>(null);
 
+  const [meta, setMeta] = useState<TokenMeta>();
+
+  const [resolving, setResolving] = useState(false);
+
+  useEffect(() => {
+    setMeta(undefined);
+
+    if (!resolver || !value) {
+      setResolving(false);
+      return;
+    }
+
+    let active = true;
+
+    setResolving(true);
+
+    Promise.resolve(resolver(value))
+      .then((result) => {
+        if (active) setMeta(result ?? undefined);
+      })
+      .catch(() => {
+        if (active) setMeta(undefined);
+      })
+      .finally(() => {
+        if (active) setResolving(false);
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [resolver, value]);
+
   const resolved = useMemo(
-    () => Object.assign({}, DEFAULT_NETWORK, fallback, tokens?.[value]),
-    [fallback, tokens, value],
+    () => Object.assign({}, DEFAULT_NETWORK, fallback, meta),
+    [fallback, meta],
   );
 
   const displayLabel = label || resolved.label;
 
   const displayLogo = logo || resolved.logo;
 
-  const isLoading = loading || (!!displayLogo && !isLoaded);
+  const isLoading = loading || resolving || (!!displayLogo && !isLoaded);
 
   useEffect(() => {
     if (!ref.current) return;
@@ -163,7 +194,7 @@ export const Token = (props: TokenProps) => {
       {showLabel && (
         <Typography
           as="div"
-          loading={loading}
+          loading={loading || resolving}
           noWrap
           variant="inherit"
           style={{ minWidth: 0 }}

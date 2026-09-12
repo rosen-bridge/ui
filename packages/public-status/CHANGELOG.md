@@ -1,5 +1,11 @@
 # @rosen-ui/public-status
 
+## 0.3.0
+
+### Minor Changes
+
+- Implement `EventStatusOverrideEntity` and its migrations to the package
+
 ## 0.2.0
 
 ### Minor Changes

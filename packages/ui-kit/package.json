@@ -1,6 +1,6 @@
 {
   "name": "@rosen-bridge/ui-kit",
-  "version": "5.9.0",
+  "version": "6.0.0",
   "private": true,
   "description": "ui kit for Rosen projects",
   "repository": {
@@ -31,7 +31,7 @@
     "@base-ui/react": "^1.5.0",
     "@mui/material": "^7.3.9",
     "@radix-ui/react-slot": "^1.2.4",
-    "@rosen-bridge/icons": "^3.7.1",
+    "@rosen-bridge/icons": "^4.0.0",
     "@rosen-ui/swr-helpers": "^0.2.2",
     "@rosen-ui/utils": "^1.0.4",
     "embla-carousel-react": "^8.5.2",

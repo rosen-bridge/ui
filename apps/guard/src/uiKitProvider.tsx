@@ -79,11 +79,6 @@ const getUiKitConfig: () => ConfigContextType = () => ({
         actions: <Actions />,
       },
     },
-    Token: {
-      defaultProps: {
-        tokens: {},
-      },
-    },
   },
 });
 
