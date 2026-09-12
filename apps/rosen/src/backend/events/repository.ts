@@ -12,6 +12,8 @@ import {
   AggregateEventStatus,
   AggregateTxStatus,
   EventStatusOverrideEntity,
+  EventStatus as GuardReportedStatus,
+  TxStatus as GuardReportedTxStatus,
   GuardStatusChangedEntity,
   GuardStatusEntity,
 } from '@rosen-ui/public-status';
@@ -645,4 +647,113 @@ export const getEventStatus = async (
   }
 
   return result;
+};
+
+export type EventGuardStatusType = {
+  guardPublicKey: string;
+  status:
+    | 'COMPLETED'
+    | 'PAID'
+    | 'PAYMENT_APPROVED'
+    | 'PAYMENT_PENDING'
+    | 'PAYMENT_SENT'
+    | 'PAYMENT_SIGN_FAILED'
+    | 'PAYMENT_SIGNED'
+    | 'PAYMENT_SIGNING'
+    | 'PAYMENT_STALLED'
+    | 'REACHED_LIMIT'
+    | 'REJECTED'
+    | 'REWARDED'
+    | 'REWARD_APPROVED'
+    | 'REWARD_PENDING'
+    | 'REWARD_SENT'
+    | 'REWARD_SIGN_FAILED'
+    | 'REWARD_SIGNED'
+    | 'REWARD_SIGNING'
+    | 'REWARD_STALLED'
+    | 'TIMEOUT'
+    | 'UNKNOWN'
+    | 'SPENT';
+};
+
+const guardStatusToEventStatus = (
+  status?: GuardReportedStatus,
+  txStatus?: GuardReportedTxStatus,
+): EventGuardStatusType['status'] => {
+  switch (status) {
+    case GuardReportedStatus.completed:
+      return 'COMPLETED';
+    case GuardReportedStatus.inPayment: {
+      switch (txStatus) {
+        case GuardReportedTxStatus.approved:
+          return 'PAYMENT_APPROVED';
+        case GuardReportedTxStatus.completed:
+          return 'PAID';
+        case GuardReportedTxStatus.inSign:
+          return 'PAYMENT_SIGNING';
+        case GuardReportedTxStatus.invalid:
+          return 'PAYMENT_SIGNING';
+        case GuardReportedTxStatus.sent:
+          return 'PAYMENT_SENT';
+        case GuardReportedTxStatus.signFailed:
+          return 'PAYMENT_SIGN_FAILED';
+        case GuardReportedTxStatus.signed:
+          return 'PAYMENT_SIGNED';
+        default:
+          return 'UNKNOWN';
+      }
+    }
+    case GuardReportedStatus.inReward: {
+      switch (txStatus) {
+        case GuardReportedTxStatus.approved:
+          return 'REWARD_APPROVED';
+        case GuardReportedTxStatus.completed:
+          return 'REWARDED';
+        case GuardReportedTxStatus.inSign:
+          return 'REWARD_SIGNING';
+        case GuardReportedTxStatus.invalid:
+          return 'REWARD_SIGNING';
+        case GuardReportedTxStatus.sent:
+          return 'REWARD_SENT';
+        case GuardReportedTxStatus.signFailed:
+          return 'REWARD_SIGNING';
+        case GuardReportedTxStatus.signed:
+          return 'REWARD_SIGNED';
+        default:
+          return 'UNKNOWN';
+      }
+    }
+    case GuardReportedStatus.paymentWaiting:
+      return 'PAYMENT_STALLED';
+    case GuardReportedStatus.pendingPayment:
+      return 'PAYMENT_PENDING';
+    case GuardReportedStatus.pendingReward:
+      return 'REWARD_PENDING';
+    case GuardReportedStatus.reachedLimit:
+      return 'REACHED_LIMIT';
+    case GuardReportedStatus.rejected:
+      return 'REJECTED';
+    case GuardReportedStatus.rewardWaiting:
+      return 'REWARD_STALLED';
+    case GuardReportedStatus.spent:
+      return 'SPENT';
+    case GuardReportedStatus.timeout:
+      return 'TIMEOUT';
+    default:
+      return 'UNKNOWN';
+  }
+};
+
+export const getEventGuardsStatus = async (
+  eventId: string,
+  triggerTxId: string,
+): Promise<EventGuardStatusType[]> => {
+  const rows = await dataSource.getRepository(GuardStatusEntity).findBy({
+    eventId,
+    triggerTxId,
+  });
+  return rows.map((row) => ({
+    guardPublicKey: row.guardPk,
+    status: guardStatusToEventStatus(row.status, row.txStatus || undefined),
+  }));
 };

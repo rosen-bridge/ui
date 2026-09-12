@@ -1,0 +1,140 @@
+.RosenRail {
+  --RosenRail-arrow: 10px;
+  --RosenRail-gap: 1px;
+  gap: 0;
+  display: flex;
+  align-items: flex-start;
+}
+
+.RosenRail-stage {
+  --RosenRail-stage-steps: calc(var(--RosenRail-stage-end, 1) - var(--RosenRail-stage-start, 0));
+  gap: 6px;
+  flex: var(--RosenRail-stage-steps, 1) 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.RosenRail-stage > .RosenRail-label,
+.RosenRail-step {
+  padding: 7px calc(var(--RosenRail-arrow) + 8px);
+  text-align: center;
+  color: var(--rosen-palette-text-primary);
+  clip-path: polygon(
+    0 0,
+    calc(100% - var(--RosenRail-arrow)) 0,
+    100% 50%,
+    calc(100% - var(--RosenRail-arrow)) 100%,
+    0 100%,
+    var(--RosenRail-arrow) 50%
+  );
+}
+
+.RosenRail-stage > .RosenRail-label,
+.RosenRail-steps .RosenRail-step {
+  margin-left: calc(var(--RosenRail-gap) - var(--RosenRail-arrow));
+}
+
+.RosenRail-stage:first-child > .RosenRail-label,
+.RosenRail-stage:first-child .RosenRail-steps .RosenRail-step:first-child {
+  margin-left: 0;
+}
+
+.RosenRail-stage:first-child > .RosenRail-label,
+.RosenRail-stage:first-child .RosenRail-step:first-child {
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+  clip-path: polygon(
+    0 0,
+    calc(100% - var(--RosenRail-arrow)) 0,
+    100% 50%,
+    calc(100% - var(--RosenRail-arrow)) 100%,
+    0 100%
+  );
+}
+
+.RosenRail-steps {
+  gap: 0;
+  display: flex;
+}
+
+.RosenRail-step {
+  flex: 1 1 0;
+  min-width: 0;
+  background: linear-gradient(
+    to right,
+    color-mix(
+      in srgb,
+      var(--rosen-palette-success-main)
+        calc(
+          8% +
+          (
+            (
+              var(--RosenRail-stage-start, 0) +
+              calc((sibling-index() - 1) / sibling-count()) *
+              (var(--RosenRail-stage-end, 0) - var(--RosenRail-stage-start, 0))
+            ) /
+            var(--RosenRail-step-count, 1)
+          ) *
+          42%
+        ),
+      transparent
+    ),
+    color-mix(
+      in srgb,
+      var(--rosen-palette-success-main)
+        calc(
+          8% +
+          (
+            (
+              var(--RosenRail-stage-start, 0) +
+              calc(sibling-index() / sibling-count()) *
+              (var(--RosenRail-stage-end, 0) - var(--RosenRail-stage-start, 0))
+            ) /
+            var(--RosenRail-step-count, 1)
+          ) *
+          42%
+        ),
+      transparent
+    )
+  );
+}
+
+.RosenRail-tags {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.RosenRail-more {
+  cursor: default;
+  font-style: italic;
+  opacity: 0.8;
+}
+
+.RosenRail-tooltip {
+  gap: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.RosenRail-stage > .RosenRail-label {
+  background: linear-gradient(
+    to right,
+    color-mix(
+      in srgb,
+      var(--rosen-palette-neutral-main)
+        calc(8% + (var(--RosenRail-stage-start, 0) / var(--RosenRail-step-count, 1)) * 42%),
+      transparent
+    ),
+    color-mix(
+      in srgb,
+      var(--rosen-palette-neutral-main)
+        calc(8% + (var(--RosenRail-stage-end, 0) / var(--RosenRail-step-count, 1)) * 42%),
+      transparent
+    )
+  );
+}

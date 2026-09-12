@@ -73,6 +73,7 @@ export * from './popover';
 export * from './popoverBody';
 export * from './popoverTrigger';
 export * from './qrCodeDialog';
+export * from './rail';
 export * from './relativeTime';
 export * from './skeleton';
 export * from './stack';
