@@ -1,4 +1,4 @@
-import { type PropsWithChildren, useCallback, useEffect, useState } from 'react';
+import { type PropsWithChildren, useEffect, useState } from 'react';
 
 import useEmblaCarousel from 'embla-carousel-react';
 
@@ -14,25 +14,23 @@ export const CarouselProvider = ({ children }: PropsWithChildren) => {
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [canScrollNext, setCanScrollNext] = useState(false);
 
-  const update = useCallback(() => {
-    if (!api) return;
+  const scrollPrev = () => api?.scrollPrev();
 
-    setCount(api.slideNodes().length || 0);
+  const scrollNext = () => api?.scrollNext();
 
-    setCurrent(api.selectedScrollSnap());
-
-    setCanScrollPrev(api.canScrollPrev());
-    setCanScrollNext(api.canScrollNext());
-  }, [api]);
-
-  const scrollPrev = useCallback(() => api?.scrollPrev(), [api]);
-
-  const scrollNext = useCallback(() => api?.scrollNext(), [api]);
-
-  const scrollTo = useCallback((index: number) => api?.scrollTo(index), [api]);
+  const scrollTo = (index: number) => api?.scrollTo(index);
 
   useEffect(() => {
     if (!api) return;
+
+    const update = () => {
+      setCount(api.slideNodes().length || 0);
+
+      setCurrent(api.selectedScrollSnap());
+
+      setCanScrollPrev(api.canScrollPrev());
+      setCanScrollNext(api.canScrollNext());
+    };
 
     update();
 
@@ -45,7 +43,7 @@ export const CarouselProvider = ({ children }: PropsWithChildren) => {
       api.off('select', update);
       api.destroy();
     };
-  }, [api, update]);
+  }, [api]);
 
   const state = {
     count,

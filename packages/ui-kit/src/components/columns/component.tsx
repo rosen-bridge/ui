@@ -1,5 +1,3 @@
-import { useMemo } from 'react';
-
 import { useConfig } from '@/hooks';
 import type { ElementBaseProps, Gap, OverridableType, Width } from '@/types';
 import { toCSSUnit } from '@/utils';
@@ -46,15 +44,12 @@ export type ColumnsProps = OverridableType<ColumnsBaseProps, ColumnsOverrides, '
 export const Columns = (props: ColumnsProps) => {
   const { count, gap, rule, style, width, ...rest } = useConfig('Columns', props);
 
-  const styles = useMemo(
-    () => ({
-      columnWidth: toCSSUnit('width', width),
-      columnGap: toCSSUnit('gap', gap),
-      columnCount: count || 'auto',
-      ...style,
-    }),
-    [count, gap, style, width],
-  );
+  const styles = {
+    columnWidth: toCSSUnit('width', width),
+    columnGap: toCSSUnit('gap', gap),
+    columnCount: count || 'auto',
+    ...style,
+  };
 
   return <div data-rule={!!rule} style={styles} {...rest} />;
 };

@@ -1,4 +1,4 @@
-import { Children, cloneElement, type ReactElement, type ReactNode, useMemo } from 'react';
+import { Children, cloneElement, type ReactElement, type ReactNode } from 'react';
 
 import { mergeProps } from '@base-ui/react/merge-props';
 import { Tooltip as TooltipBaseUI } from '@base-ui/react/tooltip';
@@ -23,15 +23,12 @@ export type TooltipProps = OverridableType<TooltipBaseProps, TooltipOverrides, n
 export const Tooltip = (props: TooltipProps) => {
   const { children, disabled, title, ...rest } = useConfig('Tooltip', props);
 
-  const child = useMemo(
-    /**
-     * TODO: remove the inline Biome comment
-     * local:ergo/rosen-bridge/ui#441
-     */
-    // biome-ignore lint/suspicious/noExplicitAny: Use a better type
-    () => Children.only(children) as ReactElement<any, any>,
-    [children],
-  );
+  /**
+   * TODO: remove the inline Biome comment
+   * local:ergo/rosen-bridge/ui#441
+   */
+  // biome-ignore lint/suspicious/noExplicitAny: Use a better type
+  const child = Children.only(children) as ReactElement<any, any>;
 
   if (disabled) return children;
 
