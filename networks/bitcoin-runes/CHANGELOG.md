@@ -1,5 +1,12 @@
 # @rosen-network/bitcoin-runes
 
+## 1.0.9
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-network/base@0.5.5
+
 ## 1.0.8
 
 ### Patch Changes

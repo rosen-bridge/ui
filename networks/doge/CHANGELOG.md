@@ -1,5 +1,12 @@
 # @rosen-network/doge
 
+## 0.4.9
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-network/base@0.5.5
+
 ## 0.4.8
 
 ### Patch Changes
