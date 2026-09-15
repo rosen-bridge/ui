@@ -1,5 +1,23 @@
 # @rosen-bridge/ui-kit
 
+## 6.1.0
+
+### Minor Changes
+
+- Implement Popover component
+- Replace the `Token` component's static `tokens` registry prop with an async `resolver` prop that resolves token metadata on demand and shows a loading state while it is pending
+- Refactor `NavigationButton` and `Navigation` components
+
+### Patch Changes
+
+- Fix `Dialog` backdrop z-index conflict with `Navigation Bar`
+- Fix `NOT` filter request loop in useCollection
+- Fix SmartSearch dropdown items not being clickable by setting an explicit z-index on the picker popup.
+- Remove the 1000 limit on the offset in assets and events apis
+- Refactor EventProcesses component to align with the new design
+- Update dependencies
+  - @rosen-ui/utils@1.1.0
+
 ## 6.0.0
 
 ### Major Changes
