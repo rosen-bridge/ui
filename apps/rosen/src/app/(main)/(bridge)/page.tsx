@@ -87,6 +87,14 @@ const RosenBridge = () => {
                     </Alert>
                   </div>
                 )}
+                {methods.watch('source') === NETWORKS.firo.key && (
+                  <div className="rosen-bridge-page-alert">
+                    <Alert severity="warning">
+                      Use only the latest version of Campfire, Stack Wallet, or Firo-Qt to bridge
+                      from Firo. Other wallets are not supported and may result in loss of funds.
+                    </Alert>
+                  </div>
+                )}
                 <div className="rosen-bridge-page-action">
                   <SubmitButton />
                 </div>
