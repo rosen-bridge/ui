@@ -39,7 +39,7 @@ const runKnipConditional = (files) => {
 
 const configs = {
   '*': runKnipConditional,
-  '*.{js,jsx,mjs,ts,tsx}': 'biome check --write',
+  '*.{js,jsx,mjs,ts,tsx,json}': 'biome check --write',
   '**/*.{ts,tsx}': perPackage((directory) => {
     return `npm run type-check --workspace ${path.relative(process.cwd(), directory)}`;
   }),

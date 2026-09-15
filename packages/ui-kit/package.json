@@ -1,6 +1,6 @@
 {
   "name": "@rosen-bridge/ui-kit",
-  "version": "6.0.0",
+  "version": "6.1.0",
   "private": true,
   "description": "ui kit for Rosen projects",
   "repository": {
@@ -33,7 +33,7 @@
     "@radix-ui/react-slot": "^1.2.4",
     "@rosen-bridge/icons": "^4.0.0",
     "@rosen-ui/swr-helpers": "^0.2.2",
-    "@rosen-ui/utils": "^1.0.4",
+    "@rosen-ui/utils": "^1.1.0",
     "embla-carousel-react": "^8.5.2",
     "qrcode.react": "^4.2.0",
     "react-hook-form": "^7.71.2",

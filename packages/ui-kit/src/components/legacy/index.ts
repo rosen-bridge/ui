@@ -7,7 +7,6 @@ export * from './EnhancedTable';
 export * from './EnhancedTableCell';
 export * from './HealthParamCard';
 export * from './Mui';
-export * from './navigationBar';
 export * from './Pagination';
 export * from './SortField';
 export * from './smartSearch';

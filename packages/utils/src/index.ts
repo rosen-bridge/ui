@@ -1,3 +1,4 @@
+export * from './batch';
 export * from './bigint';
 export * from './decimals';
 export * from './getAddressUrl';

@@ -12,6 +12,10 @@ type Options = {
   localStorageKey?: string;
 };
 
+const normalizeSearch = (value: string) => {
+  return new URLSearchParams(value.replace(/^\?/, '')).toString();
+};
+
 const getInitialState = (search: string, options?: Options) => {
   const searchParams = new URLSearchParams(search);
 
@@ -234,8 +238,8 @@ export const useCollection = (options?: Options) => {
       return;
     }
 
-    const currentSearch = framework.router.search?.replace(/^\?/, '') || '';
-    const nextSearch = query || '';
+    const currentSearch = normalizeSearch(framework.router.search || '');
+    const nextSearch = normalizeSearch(query || '');
 
     const currentHash = window.location.hash || '';
     const nextHash = fragment ? `#${fragment}` : '';
