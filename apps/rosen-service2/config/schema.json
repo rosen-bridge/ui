@@ -403,6 +403,65 @@
             ]
           }
         }
+      },
+      "watcherCountMetrics": {
+        "type": "object",
+        "children": {
+          "interval": {
+            "type": "number",
+            "default": 86400,
+            "description": "watcher count metrics update interval threshold in seconds",
+            "validations": [
+              {
+                "required": true,
+                "error": "watcher count metrics update interval must be specified (in seconds)"
+              }
+            ]
+          },
+          "nodeUrl": {
+            "type": "string",
+            "default": "https://node.ergopool.io/",
+            "description": "watcher count metrics node url",
+            "validations": [
+              {
+                "required": true,
+                "error": "watcher count metrics node url must be specified"
+              }
+            ]
+          }
+        }
+      },
+      "bridgeFeeMetrics": {
+        "type": "object",
+        "children": {
+          "interval": {
+            "type": "number",
+            "default": 86400,
+            "description": "bridge fee metrics update interval threshold in seconds",
+            "validations": [
+              {
+                "required": true,
+                "error": "bridge fee metrics update interval must be specified (in seconds)"
+              }
+            ]
+          }
+        }
+      },
+      "bridgeAmountMetrics": {
+        "type": "object",
+        "children": {
+          "interval": {
+            "type": "number",
+            "default": 86400,
+            "description": "bridge amount metrics update interval threshold in seconds",
+            "validations": [
+              {
+                "required": true,
+                "error": "bridge amount metrics update interval must be specified (in seconds)"
+              }
+            ]
+          }
+        }
       }
   }
 },

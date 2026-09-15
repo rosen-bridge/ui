@@ -13,6 +13,10 @@ import {
 } from '@rosen-bridge/address-extractor';
 import { DataSource } from '@rosen-bridge/extended-typeorm';
 import {
+  TokenPriceEntity,
+  migrations as tokenPriceMigrations,
+} from '@rosen-bridge/token-price-entity';
+import {
   EventTriggerEntity,
   migrations as eventTriggerExtractorMigrations,
 } from '@rosen-bridge/watcher-data-extractor';
@@ -22,6 +26,15 @@ import {
   LockedAssetEntity,
   TokenEntity,
 } from '@rosen-ui/asset-aggregator';
+import {
+  BridgedAmountEntity,
+  BridgeFeeEntity,
+  EventCountEntity,
+  MetricEntity,
+  migrations as statisticsMigrations,
+  UserEventEntity,
+  WatcherCountEntity,
+} from '@rosen-ui/rosen-statistics-entity';
 
 import { configs } from './configs';
 
@@ -36,6 +49,13 @@ export default new DataSource({
     LockedAssetEntity,
     ExtractorStatusEntity,
     BoxEntity,
+    BridgeFeeEntity,
+    BridgedAmountEntity,
+    MetricEntity,
+    WatcherCountEntity,
+    EventCountEntity,
+    UserEventEntity,
+    TokenPriceEntity,
   ],
   migrations: [
     ...scannerMigrations.postgres,
@@ -43,6 +63,8 @@ export default new DataSource({
     ...observationExtractorMigrations.postgres,
     ...assetAggregatorMigrations.postgres,
     ...addressExtractorMigrations.postgres,
+    ...statisticsMigrations.postgres,
+    ...tokenPriceMigrations.postgres,
   ],
   host: configs.db.host,
   port: configs.db.port,

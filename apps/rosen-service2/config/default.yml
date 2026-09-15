@@ -35,6 +35,13 @@ statistics:
     interval: 86400
   userEventsMetric:
     interval: 86400
+  watcherCountMetrics:
+    nodeUrl: https://node.ergopool.io/
+    interval: 86400
+  bridgeFeeMetrics:
+    interval: 86400
+  bridgeAmountMetrics:
+    interval: 86400
 chains:
   ergo:
     initialHeight: 1

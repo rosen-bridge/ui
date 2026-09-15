@@ -1,5 +1,7 @@
 export * from './abstractAssetAggregatorService';
 export * from './abstractAssetDataAdapterService';
+export * from './abstractBridgeAmountMetricService';
+export * from './abstractBridgeFeeMetricService';
 export * from './abstractErgoExtractorService';
 export * from './abstractErgoScannerService';
 export * from './abstractEventCountMetricService';
@@ -9,4 +11,5 @@ export * from './abstractLockedAssetsMetricService';
 export * from './abstractScannerService';
 export * from './abstractTokenMapService';
 export * from './abstractUserEventsMetricService';
+export * from './abstractWatcherCountMetricService';
 export * from './abstrctDBService';
