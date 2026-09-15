@@ -41,5 +41,5 @@ export const FrameworkProvider = ({ children, router }: FrameworkProviderProps) 
     [router.pathname, router.search, router.push],
   );
 
-  return <FrameworkContext.Provider value={value}>{children}</FrameworkContext.Provider>;
+  return <FrameworkContext value={value}>{children}</FrameworkContext>;
 };
