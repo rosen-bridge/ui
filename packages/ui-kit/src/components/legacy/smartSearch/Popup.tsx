@@ -65,6 +65,7 @@ export const Popup = ({ anchorEl, children, open, onFocusOut }: PopupProps) => {
       anchorEl={anchorEl}
       open={!!open}
       placement="bottom-start"
+      sx={{ zIndex: 1000 }}
       modifiers={[
         {
           name: 'offset',
