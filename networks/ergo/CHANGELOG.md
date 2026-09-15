@@ -1,5 +1,12 @@
 # @rosen-network/ergo
 
+## 2.5.10
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-network/base@0.5.5
+
 ## 2.5.9
 
 ### Patch Changes

@@ -1,5 +1,13 @@
 # @rosen-bridge/watcher-app
 
+## 4.5.1
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-bridge/ui-kit@6.1.0
+  - @rosen-ui/utils@1.1.0
+
 ## 4.5.0
 
 ### Minor Changes

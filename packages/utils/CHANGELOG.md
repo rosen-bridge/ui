@@ -1,5 +1,11 @@
 # @rosen-ui/utils
 
+## 1.1.0
+
+### Minor Changes
+
+- Add `batch` helper that merges concurrent single-key async lookups into one batched call and caches results per key
+
 ## 1.0.4
 
 ### Patch Changes
