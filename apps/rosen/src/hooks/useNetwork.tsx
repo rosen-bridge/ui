@@ -173,5 +173,5 @@ export const NetworkProvider = ({ children }: { children: ReactNode }) => {
     availableTokens,
   };
 
-  return <NetworkContext.Provider value={state}>{children}</NetworkContext.Provider>;
+  return <NetworkContext value={state}>{children}</NetworkContext>;
 };

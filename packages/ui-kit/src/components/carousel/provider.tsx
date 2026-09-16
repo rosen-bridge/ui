@@ -58,5 +58,5 @@ export const CarouselProvider = ({ children }: PropsWithChildren) => {
     ref,
   };
 
-  return <CarouselContext.Provider value={state}>{children}</CarouselContext.Provider>;
+  return <CarouselContext value={state}>{children}</CarouselContext>;
 };

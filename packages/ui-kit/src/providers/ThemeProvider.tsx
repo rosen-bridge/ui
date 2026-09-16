@@ -46,12 +46,12 @@ export const ThemeProvider = ({ children, theme: input }: ThemeProviderProps) =>
   }, [theme]);
 
   return (
-    <ThemeTogglerContext.Provider value={{ mode, toggle }}>
+    <ThemeTogglerContext value={{ mode, toggle }}>
       <MuiThemeProvider theme={final}>
         <CssBaseline />
         {children}
       </MuiThemeProvider>
-    </ThemeTogglerContext.Provider>
+    </ThemeTogglerContext>
   );
 };
 
