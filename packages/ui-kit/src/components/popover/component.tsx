@@ -1,3 +1,5 @@
+import { useRef } from 'react';
+
 import { Popover as PopoverBaseUI } from '@base-ui/react/popover';
 
 import { useConfig } from '@/hooks';
@@ -24,17 +26,25 @@ export type PopoverBaseProps = ElementBaseProps<'div', PopoverOwnProps>;
 
 export type PopoverProps = OverridableType<PopoverBaseProps, PopoverOverrides, never>;
 
+let close: (() => void) | undefined;
+
 export const Popover = (props: PopoverProps) => {
   const { onOpenChange, ...rest } = useConfig('Popover', props);
+
+  const actionsRef = useRef<PopoverBaseUI.Root.Actions>(null);
 
   return (
     <PopoverBaseUI.Root
       {...rest}
-      onOpenChange={(open, eventDetails) => {
-        if (eventDetails.reason === 'trigger-press') {
-          eventDetails.cancel();
-          return;
+      actionsRef={actionsRef}
+      onOpenChange={(open) => {
+        if (open) {
+          close?.();
+          close = actionsRef.current?.close;
+        } else {
+          close = undefined;
         }
+
         onOpenChange?.(open);
       }}
     />

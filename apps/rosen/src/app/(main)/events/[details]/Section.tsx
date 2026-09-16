@@ -9,6 +9,7 @@ import {
   CardAction,
   CardBody,
   CardHeader,
+  type CardProps,
   CardTitle,
   Center,
   Collapsible,
@@ -19,7 +20,7 @@ import {
   useDisclosure,
 } from '@rosen-bridge/ui-kit';
 
-export type SectionProps = {
+export type SectionProps = CardProps & {
   action?: ReactNode;
   badge?: string;
   children?: ReactNode;
@@ -39,6 +40,7 @@ export const Section = ({
   load,
   title,
   onOpenChange,
+  ...rest
 }: SectionProps) => {
   const disclosure = useDisclosure({
     onClose: async () => {
@@ -51,7 +53,7 @@ export const Section = ({
   });
 
   return (
-    <Card variant="section">
+    <Card variant="section" {...rest}>
       <CardHeader>
         <CardTitle variant="h2" color="text-secondary">
           {badge ? <Badge content={badge}>{title}</Badge> : title}
