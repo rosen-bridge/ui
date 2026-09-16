@@ -16,6 +16,7 @@
     "lint:check": "biome check",
     "start": "next start",
     "tauri": "tauri",
+    "test": "vitest run",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {

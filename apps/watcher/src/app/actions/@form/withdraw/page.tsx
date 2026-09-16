@@ -32,6 +32,7 @@ import type {
   ApiWithdrawRequestBody,
   ApiWithdrawResponse,
 } from '@/types/api';
+import { fetchAllAddressAssets } from '@/utils/fetchAllAddressAssets';
 
 import {
   type TokenAmountCompatibleFormSchema,
@@ -48,9 +49,8 @@ const WithdrawForm = () => {
   const toast = useToast();
 
   const { data, isLoading: isTokensListLoading } = useSWR<ApiAddressAssetsResponse>(
-    '/address/assets',
-    fetcher,
-    {},
+    ['/address/assets', { all: true }],
+    () => fetchAllAddressAssets(fetcher),
   );
 
   const { token: ergToken, isLoading: isErgTokenLoading } = useToken('erg');
