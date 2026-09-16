@@ -67,6 +67,14 @@ export const NETWORKS = {
     id: '',
     hasTokenSupport: false,
   },
+  'handshake': {
+    index: 8,
+    key: 'handshake',
+    label: 'Handshake',
+    nativeToken: 'hns',
+    id: '',
+    hasTokenSupport: false,
+  },
 } as const;
 
 export const NETWORKS_KEYS = Object.values(NETWORKS).map((network) => network.key);
