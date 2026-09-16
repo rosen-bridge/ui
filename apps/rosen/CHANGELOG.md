@@ -1,5 +1,11 @@
 # @rosen-bridge/rosen-app
 
+## 5.7.2
+
+### Patch Changes
+
+- Warn users bridging from Firo to use the latest Campfire, Stack Wallet, or Firo-Qt wallet to avoid losing funds with unsupported wallets.
+
 ## 5.7.1
 
 ### Patch Changes
