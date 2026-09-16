@@ -1,22 +1,21 @@
 import type { NextRequest } from 'next/server';
 
-import Joi from 'joi';
+import { z } from 'zod';
 
-export type GetEventGuardsStatusParams = {
-  id: string;
-  triggerTxId: string;
-};
+const ParamsSchema = z
+  .object({
+    id: z.string().min(1),
+    triggerTxId: z.string().min(1),
+  })
+  .strict();
 
-const ParamsSchema = Joi.object<GetEventGuardsStatusParams>().keys({
-  id: Joi.string().required(),
-  triggerTxId: Joi.string().required(),
-});
+export type GetEventGuardsStatusParams = z.infer<typeof ParamsSchema>;
 
 export const validateGet = async (
   request: NextRequest,
   context: { params: Promise<GetEventGuardsStatusParams> },
 ) => {
-  return ParamsSchema.validate(
+  return ParamsSchema.safeParse(
     Object.assign({}, await context.params, Object.fromEntries(request.nextUrl.searchParams)),
   );
 };
