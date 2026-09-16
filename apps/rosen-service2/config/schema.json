@@ -420,7 +420,6 @@
           },
           "nodeUrl": {
             "type": "string",
-            "default": "https://node.ergopool.io/",
             "description": "watcher count metrics node url",
             "validations": [
               {
@@ -463,8 +462,8 @@
           }
         }
       }
-  }
-},
+    }
+  },
   "chains": {
     "type": "object",
     "children": {

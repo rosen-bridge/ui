@@ -66,6 +66,8 @@ export class BridgeFeeMetricService extends AbstractBridgeFeeMetricService {
    * @returns {Promise<void>}
    */
   private bridgeFeeCalculation = async (): Promise<void> => {
+    this.logger.info(`Running ${this.getName()} job`);
+
     try {
       await bridgeFeeMetric(this.dataSource, this.logger.child('bridgeFeeMetric'));
 
@@ -100,15 +102,13 @@ export class BridgeFeeMetricService extends AbstractBridgeFeeMetricService {
    * @returns {Task[]}
    */
   protected getTasks = () => {
-    const tasks = [];
-
-    tasks.push({
-      fn: async () => {
-        this.logger.info(`Running ${this.getName()} job`);
-        await this.bridgeFeeCalculation();
+    return [
+      {
+        fn: async () => {
+          await this.bridgeFeeCalculation();
+        },
+        interval: configs.statistics.bridgeFeeMetrics.interval * 1000,
       },
-      interval: configs.statistics.watcherCountMetrics.interval * 1000,
-    });
-    return tasks;
+    ];
   };
 }

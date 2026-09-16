@@ -66,6 +66,8 @@ export class UserEventsMetricService extends AbstractUserEventsMetricService {
    * @returns {Promise<void>}
    */
   private userEventsCalculation = async (): Promise<void> => {
+    this.logger.info(`Running ${this.getName()} job`);
+
     try {
       await userEventMetric(this.dataSource, this.logger.child('userEventMetric'));
 
@@ -100,15 +102,13 @@ export class UserEventsMetricService extends AbstractUserEventsMetricService {
    * @returns {Task[]}
    */
   protected getTasks = () => {
-    const tasks = [];
-
-    tasks.push({
-      fn: async () => {
-        this.logger.info(`Running ${this.getName()} job`);
-        await this.userEventsCalculation();
+    return [
+      {
+        fn: async () => {
+          await this.userEventsCalculation();
+        },
+        interval: configs.statistics.userEventsMetric.interval * 1000,
       },
-      interval: configs.statistics.userEventsMetric.interval * 1000,
-    });
-    return tasks;
+    ];
   };
 }

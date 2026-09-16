@@ -66,6 +66,8 @@ export class EventCountMetricService extends AbstractEventCountMetricService {
    * @returns {Promise<void>}
    */
   private eventCountCalculation = async (): Promise<void> => {
+    this.logger.info(`Running ${this.getName()} job`);
+
     try {
       await eventCountMetric(this.dataSource, this.logger.child('eventCountMetric'));
 
@@ -100,12 +102,11 @@ export class EventCountMetricService extends AbstractEventCountMetricService {
    * @returns {Task[]}
    */
   protected getTasks = () => {
-    const tasks = [];
-
-    tasks.push({
-      fn: async () => await this.eventCountCalculation(),
-      interval: configs.statistics.eventCountMetrics.interval * 1000,
-    });
-    return tasks;
+    return [
+      {
+        fn: async () => await this.eventCountCalculation(),
+        interval: configs.statistics.eventCountMetrics.interval * 1000,
+      },
+    ];
   };
 }

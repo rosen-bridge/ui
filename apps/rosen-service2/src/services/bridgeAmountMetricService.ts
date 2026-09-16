@@ -66,6 +66,8 @@ export class BridgeAmountMetricService extends AbstractBridgeAmountMetricService
    * @returns {Promise<void>}
    */
   private bridgeAmountCalculation = async (): Promise<void> => {
+    this.logger.info(`Running ${this.getName()} job`);
+
     try {
       await bridgeAmountMetric(this.dataSource, this.logger.child('bridgeAmountMetric'));
 
@@ -100,15 +102,13 @@ export class BridgeAmountMetricService extends AbstractBridgeAmountMetricService
    * @returns {Task[]}
    */
   protected getTasks = () => {
-    const tasks = [];
-
-    tasks.push({
-      fn: async () => {
-        this.logger.info(`Running ${this.getName()} job`);
-        await this.bridgeAmountCalculation();
+    return [
+      {
+        fn: async () => {
+          await this.bridgeAmountCalculation();
+        },
+        interval: configs.statistics.bridgeAmountMetrics.interval * 1000,
       },
-      interval: configs.statistics.watcherCountMetrics.interval * 1000,
-    });
-    return tasks;
+    ];
   };
 }

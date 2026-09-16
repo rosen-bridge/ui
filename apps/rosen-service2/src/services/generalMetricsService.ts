@@ -66,6 +66,8 @@ export class GeneralMetricsService extends AbstractGeneralMetricsService {
    * @returns {Promise<void>}
    */
   private generalMetricsCalculation = async (): Promise<void> => {
+    this.logger.info(`Running ${this.getName()} job`);
+
     const tokenMap = AbstractTokenMapService.getInstance().getTokenMap();
     const rsnTokenId = configs.contracts.tokens.RSN;
 
@@ -108,22 +110,13 @@ export class GeneralMetricsService extends AbstractGeneralMetricsService {
    * @returns {Task[]}
    */
   protected getTasks = () => {
-    const tasks = [];
-
-    tasks.push({
-      fn: async () => {
-        try {
-          this.logger.info(`Running ${this.getName()} job`);
+    return [
+      {
+        fn: async () => {
           await this.generalMetricsCalculation();
-        } catch (err) {
-          this.logger.error(`${this.getName()} job failed: ${err}`);
-          if (err instanceof Error && err.stack) {
-            this.logger.debug(err.stack);
-          }
-        }
+        },
+        interval: configs.statistics.generalMetrics.interval * 1000,
       },
-      interval: configs.statistics.generalMetrics.interval * 1000,
-    });
-    return tasks;
+    ];
   };
 }

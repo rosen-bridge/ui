@@ -59,6 +59,8 @@ export class WatcherCountMetricService extends AbstractWatcherCountMetricService
    * @returns {Promise<void>}
    */
   private watcherCountCalculation = async (): Promise<void> => {
+    this.logger.info(`Running ${this.getName()} job`);
+
     const rwtRepoNFT = configs.contracts.tokens.RWTRepoNFT;
     const url = configs.statistics.watcherCountMetrics.nodeUrl;
     const rwtTokenMap = new Map<string, string>();
@@ -110,15 +112,13 @@ export class WatcherCountMetricService extends AbstractWatcherCountMetricService
    * @returns {Task[]}
    */
   protected getTasks = () => {
-    const tasks = [];
-
-    tasks.push({
-      fn: async () => {
-        this.logger.info(`Running ${this.getName()} job`);
-        await this.watcherCountCalculation();
+    return [
+      {
+        fn: async () => {
+          await this.watcherCountCalculation();
+        },
+        interval: configs.statistics.watcherCountMetrics.interval * 1000,
       },
-      interval: configs.statistics.watcherCountMetrics.interval * 1000,
-    });
-    return tasks;
+    ];
   };
 }
