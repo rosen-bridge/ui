@@ -36,7 +36,7 @@ statistics:
   userEventsMetric:
     interval: 86400
   watcherCountMetrics:
-    nodeUrl: https://node.ergopool.io/
+    nodeUrl: 
     interval: 86400
   bridgeFeeMetrics:
     interval: 86400
