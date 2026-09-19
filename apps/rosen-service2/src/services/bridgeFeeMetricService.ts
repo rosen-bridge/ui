@@ -1,17 +1,17 @@
 import type { AbstractLogger } from '@rosen-bridge/abstract-logger';
 import type { DataSource } from '@rosen-bridge/extended-typeorm';
 import { type Dependency, ServiceAction, ServiceStatus } from '@rosen-bridge/service-manager';
-import { generalMetrics } from '@rosen-ui/rosen-statistics';
+import { bridgeFeeMetric } from '@rosen-ui/rosen-statistics';
 
 import { configs } from '../configs';
 import {
+  AbstractBridgeFeeMetricService,
   AbstractDBService,
-  AbstractGeneralMetricsService,
-  AbstractTokenMapService,
+  AbstractScannerService,
 } from './abstracts';
 
-export class GeneralMetricsService extends AbstractGeneralMetricsService {
-  static serviceName = AbstractGeneralMetricsService.name;
+export class BridgeFeeMetricService extends AbstractBridgeFeeMetricService {
+  static serviceName = AbstractBridgeFeeMetricService.name;
   private dataSource: DataSource;
   protected dependencies: Dependency[] = [
     {
@@ -20,11 +20,19 @@ export class GeneralMetricsService extends AbstractGeneralMetricsService {
       action: ServiceAction.assemble,
     },
     {
-      serviceName: AbstractTokenMapService.name,
-      allowedStatuses: [ServiceStatus.running, ServiceStatus.started],
+      serviceName: AbstractScannerService.name,
+      allowedStatuses: [ServiceStatus.running],
       action: ServiceAction.start,
     },
   ];
+
+  /**
+   * Protected constructor
+   * @param {AbstractLogger} [logger] - Optional logger instance for recording service operations.
+   */
+  protected constructor(logger?: AbstractLogger) {
+    super(logger);
+  }
 
   /**
    * Assembles the service by initializing dependencies
@@ -38,50 +46,34 @@ export class GeneralMetricsService extends AbstractGeneralMetricsService {
   };
 
   /**
-   * Protected constructor
-   * @param {AbstractLogger} [logger] - Optional logger instance for recording service operations.
-   */
-  protected constructor(logger?: AbstractLogger) {
-    super(logger);
-  }
-
-  /**
-   * Initializes the singleton instance of MetricsService
+   * Initializes the singleton instance of BridgeFeeMetricService
    *
    * @static
    * @param {AbstractLogger} [logger] - Optional logger instance
-   * @memberof GeneralMetricsService
+   * @memberof BridgeFeeMetricService
    */
   static init = (logger?: AbstractLogger) => {
-    if (AbstractGeneralMetricsService.instance != undefined) {
+    if (AbstractBridgeFeeMetricService.instance != undefined) {
       return;
     }
-    AbstractGeneralMetricsService.instance = new GeneralMetricsService(logger);
+    AbstractBridgeFeeMetricService.instance = new BridgeFeeMetricService(logger);
   };
 
   /**
-   * Executes the general metrics calculation job
+   * Executes the bridge fee calculation logic
    *
    * @private
    * @returns {Promise<void>}
    */
-  private generalMetricsCalculation = async (): Promise<void> => {
+  private bridgeFeeCalculation = async (): Promise<void> => {
     this.logger.info(`Running ${this.getName()} job`);
 
-    const tokenMap = AbstractTokenMapService.getInstance().getTokenMap();
-    const rsnTokenId = configs.contracts.tokens.RSN;
-
     try {
-      await generalMetrics(
-        this.dataSource,
-        tokenMap,
-        rsnTokenId,
-        this.logger.child('generalMetricsJob'),
-      );
+      await bridgeFeeMetric(this.dataSource, this.logger.child('bridgeFeeMetric'));
 
-      this.logger.info('General metrics calculation job completed successfully');
+      this.logger.info('Bridge fee calculation job completed successfully');
     } catch (error) {
-      this.logger.error(`General metrics calculation job failed: ${error}`);
+      this.logger.error(`Bridge fee calculation job failed: ${error}`);
       if (error instanceof Error && error.stack) {
         this.logger.debug(error.stack);
       }
@@ -105,15 +97,15 @@ export class GeneralMetricsService extends AbstractGeneralMetricsService {
   protected postStop = async (): Promise<void> => {};
 
   /**
-   * Builds a list of asynchronous tasks for all metric jobs.
+   * Builds a list of asynchronous tasks for bridge fee calculation.
    *
    * @returns {Task[]}
    */
   protected getTasks = () => {
     return [
       {
-        fn: this.generalMetricsCalculation,
-        interval: configs.statistics.generalMetrics.interval * 1000,
+        fn: this.bridgeFeeCalculation,
+        interval: configs.statistics.bridgeFeeMetrics.interval * 1000,
       },
     ];
   };

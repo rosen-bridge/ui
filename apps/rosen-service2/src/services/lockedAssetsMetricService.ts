@@ -66,6 +66,8 @@ export class LockedAssetsMetricService extends AbstractLockedAssetsMetricService
    * @returns {Promise<void>}
    */
   private lockedAssetsCalculation = async (): Promise<void> => {
+    this.logger.info(`Running ${this.getName()} job`);
+
     try {
       await lockedAssetsMetric(this.dataSource, this.logger.child('lockedAssetsMetric'));
 
@@ -94,12 +96,11 @@ export class LockedAssetsMetricService extends AbstractLockedAssetsMetricService
    * @returns {Task[]}
    */
   protected getTasks = () => {
-    const tasks = [];
-
-    tasks.push({
-      fn: async () => await this.lockedAssetsCalculation(),
-      interval: configs.statistics.lockedAssetsMetrics.interval * 1000,
-    });
-    return tasks;
+    return [
+      {
+        fn: this.lockedAssetsCalculation,
+        interval: configs.statistics.lockedAssetsMetrics.interval * 1000,
+      },
+    ];
   };
 }

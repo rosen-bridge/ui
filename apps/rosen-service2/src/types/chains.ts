@@ -32,6 +32,7 @@ export type AllChainsConfigs = {
   version: string;
   tokens: {
     RSN: string;
+    RWTRepoNFT: string;
   };
 } & {
   [K in ChainChoices]: ChainConfigs;

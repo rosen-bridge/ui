@@ -1,4 +1,7 @@
+import { BridgeAmountMetricService } from 'services/bridgeAmountMetricService';
+import { BridgeFeeMetricService } from 'services/bridgeFeeMetricService';
 import { RedisService } from 'services/redisService';
+import { WatcherCountMetricService } from 'services/watcherCountMetricService';
 
 import { DefaultLogger } from '@rosen-bridge/abstract-logger';
 import { ServiceManager } from '@rosen-bridge/service-manager';
@@ -79,6 +82,21 @@ const startApp = async () => {
   serviceManager.register(UserEventsMetricService.getInstance());
   logger.debug('UserEventsMetricService registered to the service manager');
 
+  logger.debug('Initializing WatcherCountMetricService');
+  WatcherCountMetricService.init(DefaultLogger.getInstance().child('watcherCountMetricsService'));
+  serviceManager.register(WatcherCountMetricService.getInstance());
+  logger.debug('WatcherCountMetricsService registered to the service manager');
+
+  logger.debug('Initializing BridgeFeeMetricsService');
+  BridgeFeeMetricService.init(DefaultLogger.getInstance().child('bridgeFeeMetricsService'));
+  serviceManager.register(BridgeFeeMetricService.getInstance());
+  logger.debug('BridgeFeeMetricsService registered to the service manager');
+
+  logger.debug('Initializing BridgeAmountMetricsService');
+  BridgeAmountMetricService.init(DefaultLogger.getInstance().child('bridgeAmountMetricsService'));
+  serviceManager.register(BridgeAmountMetricService.getInstance());
+  logger.debug('BridgeAmountMetricsService registered to the service manager');
+
   logger.debug('Initializing HealthService');
   HealthService.init(DefaultLogger.getInstance().child('healthService'));
   serviceManager.register(HealthService.getInstance());
@@ -90,6 +108,13 @@ const startApp = async () => {
   await serviceManager.start(ScannerService.getInstance().getName());
   await serviceManager.start(HealthService.getInstance().getName());
   await serviceManager.start(AssetAggregatorService.getInstance().getName());
+  await serviceManager.start(BridgeAmountMetricService.getInstance().getName());
+  await serviceManager.start(BridgeFeeMetricService.getInstance().getName());
+  await serviceManager.start(EventCountMetricService.getInstance().getName());
+  await serviceManager.start(GeneralMetricsService.getInstance().getName());
+  await serviceManager.start(LockedAssetsMetricService.getInstance().getName());
+  await serviceManager.start(UserEventsMetricService.getInstance().getName());
+  await serviceManager.start(WatcherCountMetricService.getInstance().getName());
 
   await Promise.resolve(() => {});
 };

@@ -76,6 +76,9 @@ export interface Statistics {
   generalMetrics: StatisticsGeneralMetrics;
   eventCountMetrics: StatisticsEventCountMetrics;
   userEventsMetric: StatisticsUserEventsMetric;
+  watcherCountMetrics: StatisticsWatcherCountMetrics;
+  bridgeFeeMetrics: StatisticsBridgeFeeMetrics;
+  bridgeAmountMetrics: StatisticsBridgeAmountMetrics;
 }
 
 export interface StatisticsUserEventsMetric {
@@ -91,6 +94,19 @@ export interface StatisticsGeneralMetrics {
 }
 
 export interface StatisticsLockedAssetsMetrics {
+  interval: number;
+}
+
+export interface StatisticsWatcherCountMetrics {
+  nodeUrl: string;
+  interval: number;
+}
+
+export interface StatisticsBridgeFeeMetrics {
+  interval: number;
+}
+
+export interface StatisticsBridgeAmountMetrics {
   interval: number;
 }
 

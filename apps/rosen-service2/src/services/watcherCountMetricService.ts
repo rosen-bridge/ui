@@ -1,28 +1,20 @@
 import type { AbstractLogger } from '@rosen-bridge/abstract-logger';
 import type { DataSource } from '@rosen-bridge/extended-typeorm';
 import { type Dependency, ServiceAction, ServiceStatus } from '@rosen-bridge/service-manager';
-import { userEventMetric } from '@rosen-ui/rosen-statistics';
+import { type WatcherCountConfig, watcherCountMetric } from '@rosen-ui/rosen-statistics';
 
 import { configs } from '../configs';
-import {
-  AbstractDBService,
-  AbstractScannerService,
-  AbstractUserEventsMetricService,
-} from './abstracts';
+import type { ChainConfigs } from '../types';
+import { AbstractDBService, AbstractWatcherCountMetricService } from './abstracts';
 
-export class UserEventsMetricService extends AbstractUserEventsMetricService {
-  static serviceName = AbstractUserEventsMetricService.name;
+export class WatcherCountMetricService extends AbstractWatcherCountMetricService {
+  static serviceName = AbstractWatcherCountMetricService.name;
   private dataSource: DataSource;
   protected dependencies: Dependency[] = [
     {
       serviceName: AbstractDBService.name,
       allowedStatuses: [ServiceStatus.running, ServiceStatus.started, ServiceStatus.dormant],
       action: ServiceAction.assemble,
-    },
-    {
-      serviceName: AbstractScannerService.name,
-      allowedStatuses: [ServiceStatus.running],
-      action: ServiceAction.start,
     },
   ];
 
@@ -46,34 +38,51 @@ export class UserEventsMetricService extends AbstractUserEventsMetricService {
   };
 
   /**
-   * Initializes the singleton instance of UserEventsMetricService
+   * Initializes the singleton instance of WatcherCountMetricService
    *
    * @static
    * @param {AbstractLogger} [logger] - Optional logger instance
-   * @memberof UserEventsMetricService
+   * @memberof WatcherCountMetricService
    */
   static init = (logger?: AbstractLogger) => {
-    if (AbstractUserEventsMetricService.instance != undefined) {
+    if (AbstractWatcherCountMetricService.instance != undefined) {
       return;
     }
-    AbstractUserEventsMetricService.instance = new UserEventsMetricService(logger);
+    AbstractWatcherCountMetricService.instance = new WatcherCountMetricService(logger);
   };
 
   /**
-   * Executes the user events calculation logic
+   * Executes the watcher count calculation logic
    *
    * @private
    * @returns {Promise<void>}
    */
-  private userEventsCalculation = async (): Promise<void> => {
+  private watcherCountCalculation = async (): Promise<void> => {
     this.logger.info(`Running ${this.getName()} job`);
 
+    const rwtRepoNFT = configs.contracts.tokens.RWTRepoNFT;
+    const url = configs.statistics.watcherCountMetrics.nodeUrl;
+    const rwtTokenMap = new Map<string, string>();
+    for (const [chain, chainConfig] of Object.entries(configs.contracts)) {
+      if (chain === 'version' || chain === 'tokens') continue;
+      const rwtId = (chainConfig as ChainConfigs).tokens.RWTId;
+      rwtTokenMap.set(rwtId, chain);
+    }
+    const watcherCountConfig: WatcherCountConfig = {
+      url,
+      rwtRepoNFT,
+      rwtTokenMap,
+    };
     try {
-      await userEventMetric(this.dataSource, this.logger.child('userEventMetric'));
+      await watcherCountMetric(
+        this.dataSource,
+        watcherCountConfig,
+        this.logger.child('watcherCountMetric'),
+      );
 
-      this.logger.info('User events calculation job completed successfully');
+      this.logger.info('Watcher count calculation job completed successfully');
     } catch (error) {
-      this.logger.error(`User events calculation job failed: ${error}`);
+      this.logger.error(`Watcher count calculation job failed: ${error}`);
       if (error instanceof Error && error.stack) {
         this.logger.debug(error.stack);
       }
@@ -97,15 +106,15 @@ export class UserEventsMetricService extends AbstractUserEventsMetricService {
   protected postStop = async (): Promise<void> => {};
 
   /**
-   * Builds a list of asynchronous tasks for user events calculation.
+   * Builds a list of asynchronous tasks for watcher count calculation.
    *
    * @returns {Task[]}
    */
   protected getTasks = () => {
     return [
       {
-        fn: this.userEventsCalculation,
-        interval: configs.statistics.userEventsMetric.interval * 1000,
+        fn: this.watcherCountCalculation,
+        interval: configs.statistics.watcherCountMetrics.interval * 1000,
       },
     ];
   };
