@@ -8,6 +8,7 @@ import { Stack } from '@rosen-bridge/ui-kit';
 import { Banner } from './Banner';
 import { Overview } from './Overview';
 import { Process } from './Process';
+import { ProcessGuard } from './ProcessGuard';
 import { SourceTx } from './SourceTx';
 import { TransactionsAndFees } from './TransactionsAndFees';
 import { Watchers } from './Watchers';
@@ -23,6 +24,7 @@ const Page = () => {
       <Overview id={id} flowId={flowId} onFlowIdChange={setFlowId} />
       <TransactionsAndFees id={id} flowId={flowId} />
       <Process id={id} flowId={flowId} />
+      <ProcessGuard id={id} flowId={flowId} />
       <Watchers />
       <SourceTx />
     </Stack>

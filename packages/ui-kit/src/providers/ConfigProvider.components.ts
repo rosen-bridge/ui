@@ -54,6 +54,7 @@ import type {
   NetworkProps,
   PageHeadingProps,
   QrCodeDialogProps,
+  RailProps,
   RelativeTimeProps,
   SkeletonProps,
   StackProps,
@@ -136,6 +137,7 @@ export type Components = {
   Network: NetworkProps;
   PageHeading: PageHeadingProps;
   QrCodeDialog: QrCodeDialogProps;
+  Rail: RailProps;
   RelativeTime: RelativeTimeProps;
   Skeleton: SkeletonProps;
   Stack: StackProps;

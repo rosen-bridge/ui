@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 
 import useSWR from 'swr';
 
@@ -15,7 +15,6 @@ import { fetcher } from '@rosen-ui/swr-helpers';
 
 import type { EventDetailsType, EventStatusType } from '@/backend/events/repository';
 
-import { ProcessSelect } from './ProcessSelect';
 import { Section } from './Section';
 
 type Step = {
@@ -348,8 +347,6 @@ const toItems = (
 };
 
 export const Process = ({ id, flowId }: { id: string; flowId: string | undefined }) => {
-  const [guardPublicKey, setGuardPublicKey] = useState<string | undefined>();
-
   const orientation = useResponsive({
     mobile: 'vertical',
     laptop: 'horizontal',
@@ -357,28 +354,14 @@ export const Process = ({ id, flowId }: { id: string; flowId: string | undefined
 
   const {
     data: events,
-    error: eventsError,
-    isLoading: eventsIsLoading,
-    mutate: eventMutate,
+    error,
+    isLoading,
+    mutate,
   } = useSWR<EventDetailsType[]>(`/v1/events/${id}`, fetcher);
 
-  const {
-    data: status,
-    error: statusError,
-    isLoading: statusIsLoading,
-    mutate: statusMutate,
-  } = useSWR<EventStatusType>(
-    flowId && guardPublicKey
-      ? `/v1/events/${id}/status?triggerTxId=${flowId}&guardPublicKey=${guardPublicKey}`
-      : null,
-    fetcher,
-  );
+  const data = events?.find((event) => event.txId === flowId);
 
-  const error = eventsError || statusError;
-  const isLoading = eventsIsLoading || statusIsLoading || (!!events?.length && !flowId);
-  const mutate = eventsError ? eventMutate : statusMutate;
-
-  const data = guardPublicKey ? status : events?.find((event) => event.txId === flowId);
+  const loading = isLoading || (!!events?.length && !flowId);
 
   const isCustomStatus = typeof data?.status === 'object';
 
@@ -428,24 +411,14 @@ export const Process = ({ id, flowId }: { id: string; flowId: string | undefined
   }, [data]);
 
   return (
-    <Section
-      action={
-        !isCustomStatus && (
-          <ProcessSelect disabled={isLoading} value={guardPublicKey} onChange={setGuardPublicKey} />
-        )
-      }
-      error={error}
-      load={mutate}
-      badge="New"
-      title="Progress"
-    >
+    <Section error={error} load={mutate} badge="New" title="Progress">
       {isCustomStatus ? (
         <Typography>
           No progress chart is available because this event deviated from the standard lifecycle.
           The reason for this exception is noted above.
         </Typography>
       ) : (
-        <EventProcesses items={items} loading={isLoading} orientation={orientation} />
+        <EventProcesses items={items} loading={loading} orientation={orientation} />
       )}
     </Section>
   );
