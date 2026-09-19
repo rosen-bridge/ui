@@ -104,9 +104,7 @@ export class UserEventsMetricService extends AbstractUserEventsMetricService {
   protected getTasks = () => {
     return [
       {
-        fn: async () => {
-          await this.userEventsCalculation();
-        },
+        fn: this.userEventsCalculation,
         interval: configs.statistics.userEventsMetric.interval * 1000,
       },
     ];

@@ -112,9 +112,7 @@ export class GeneralMetricsService extends AbstractGeneralMetricsService {
   protected getTasks = () => {
     return [
       {
-        fn: async () => {
-          await this.generalMetricsCalculation();
-        },
+        fn: this.generalMetricsCalculation,
         interval: configs.statistics.generalMetrics.interval * 1000,
       },
     ];

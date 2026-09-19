@@ -104,7 +104,7 @@ export class EventCountMetricService extends AbstractEventCountMetricService {
   protected getTasks = () => {
     return [
       {
-        fn: async () => await this.eventCountCalculation(),
+        fn: this.eventCountCalculation,
         interval: configs.statistics.eventCountMetrics.interval * 1000,
       },
     ];

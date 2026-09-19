@@ -1,11 +1,10 @@
-import type { ChainConfigs } from 'types';
-
 import type { AbstractLogger } from '@rosen-bridge/abstract-logger';
 import type { DataSource } from '@rosen-bridge/extended-typeorm';
 import { type Dependency, ServiceAction, ServiceStatus } from '@rosen-bridge/service-manager';
 import { type WatcherCountConfig, watcherCountMetric } from '@rosen-ui/rosen-statistics';
 
 import { configs } from '../configs';
+import type { ChainConfigs } from '../types';
 import { AbstractDBService, AbstractWatcherCountMetricService } from './abstracts';
 
 export class WatcherCountMetricService extends AbstractWatcherCountMetricService {
@@ -114,9 +113,7 @@ export class WatcherCountMetricService extends AbstractWatcherCountMetricService
   protected getTasks = () => {
     return [
       {
-        fn: async () => {
-          await this.watcherCountCalculation();
-        },
+        fn: this.watcherCountCalculation,
         interval: configs.statistics.watcherCountMetrics.interval * 1000,
       },
     ];

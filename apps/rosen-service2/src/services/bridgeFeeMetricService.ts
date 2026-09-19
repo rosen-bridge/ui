@@ -104,9 +104,7 @@ export class BridgeFeeMetricService extends AbstractBridgeFeeMetricService {
   protected getTasks = () => {
     return [
       {
-        fn: async () => {
-          await this.bridgeFeeCalculation();
-        },
+        fn: this.bridgeFeeCalculation,
         interval: configs.statistics.bridgeFeeMetrics.interval * 1000,
       },
     ];

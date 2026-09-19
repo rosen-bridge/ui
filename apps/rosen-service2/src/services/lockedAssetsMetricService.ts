@@ -98,7 +98,7 @@ export class LockedAssetsMetricService extends AbstractLockedAssetsMetricService
   protected getTasks = () => {
     return [
       {
-        fn: async () => await this.lockedAssetsCalculation(),
+        fn: this.lockedAssetsCalculation,
         interval: configs.statistics.lockedAssetsMetrics.interval * 1000,
       },
     ];
