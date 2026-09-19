@@ -3,8 +3,8 @@
  * local:ergo/rosen-bridge/ui#441
  */
 /** biome-ignore-all lint/suspicious/noExplicitAny: Use a better type */
-import type { Schema } from 'joi';
 import { addKnownErrorConstructor, deserializeError, serializeError } from 'serialize-error';
+import type { ZodType } from 'zod';
 
 import { fromSafeData, toSafeData } from './safeData';
 
@@ -19,7 +19,7 @@ type CreateSafeActionConfig = {
 
 type WrapOptions = {
   cache?: number;
-  schema?: Schema;
+  schema?: ZodType;
   traceKey?: string;
 };
 
@@ -81,9 +81,9 @@ export const createSafeAction = (config: CreateSafeActionConfig) => {
   const wrap: Wrap = (action, options) => {
     return async (...args) => {
       try {
-        const validation = options?.schema?.validate(args);
+        const validation = options?.schema?.safeParse(args);
 
-        if (validation?.error) throw validation.error;
+        if (validation && !validation.success) throw validation.error;
 
         return {
           cache: options?.cache,

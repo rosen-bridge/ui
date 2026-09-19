@@ -6,7 +6,7 @@
 import type { NextRequest } from 'next/server';
 
 import * as Sentry from '@sentry/nextjs';
-import type { ValidationResult } from 'joi';
+import type { ZodSafeParseResult } from 'zod';
 
 export class AccessDeniedError extends Error {
   constructor(message: string) {
@@ -28,7 +28,7 @@ export const withValidation =
     validator: (
       request: NextRequest,
       context: { params: Promise<any> },
-    ) => Promise<ValidationResult<TSchema> | TSchema>,
+    ) => Promise<ZodSafeParseResult<TSchema> | TSchema>,
     handler: (value: TSchema) => Promise<any>,
   ) =>
   async (request: NextRequest, context: { params: Promise<any> }) => {
@@ -37,12 +37,12 @@ export const withValidation =
     try {
       const result = await validator(request, context);
 
-      if (result && typeof result === 'object' && ('error' in result || 'value' in result)) {
-        const { error, value: data } = result as ValidationResult<TSchema>;
+      if (result && typeof result === 'object' && 'success' in result) {
+        const parsed = result as ZodSafeParseResult<TSchema>;
 
-        if (error) throw error;
+        if (!parsed.success) throw parsed.error;
 
-        value = data;
+        value = parsed.data;
       } else {
         value = result;
       }

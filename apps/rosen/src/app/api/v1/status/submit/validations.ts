@@ -1,6 +1,6 @@
 import type { NextRequest } from 'next/server';
 
-import Joi from 'joi';
+import { z } from 'zod';
 
 import {
   type EventStatus,
@@ -11,50 +11,39 @@ import {
   txTypes,
 } from '@rosen-ui/public-status';
 
-export interface TxParams {
-  txId: string;
-  chain: string;
-  txType: TxType;
-  txStatus: TxStatus;
-}
+const TxSchema = z
+  .object({
+    txId: z.string().regex(/^(?:0x)?[a-fA-F0-9]{64}$/),
+    chain: z.string().min(1).max(20),
+    txType: z.enum(txTypes as [TxType, ...TxType[]]),
+    txStatus: z.enum(txStatuses as [TxStatus, ...TxStatus[]]),
+  })
+  .strict();
 
-export interface Params {
-  date: Date;
-  triggerTxId: string;
-  eventId: string;
-  status: EventStatus;
-  pk: string;
-  signature: string;
-  tx?: TxParams;
-}
+export type TxParams = z.infer<typeof TxSchema>;
 
-const TxSchema = Joi.object<TxParams>().keys({
-  txId: Joi.string()
-    .pattern(/^(?:0x)?[a-fA-F0-9]{64}$/)
-    .required(),
-  chain: Joi.string().min(1).max(20).required(),
-  txType: Joi.string()
-    .valid(...txTypes)
-    .required(),
-  txStatus: Joi.string()
-    .valid(...txStatuses)
-    .required(),
-});
+const ParamsSchema = z
+  .object({
+    date: z.preprocess((value) => {
+      if (typeof value === 'number' && Number.isFinite(value)) return new Date(value * 1000);
+      if (typeof value === 'string' && value.trim() !== '' && Number.isFinite(Number(value))) {
+        return new Date(Number(value) * 1000);
+      }
+      return value;
+    }, z.date()),
+    triggerTxId: z.hex().length(64),
+    eventId: z.hex().length(64),
+    status: z.enum(eventStatuses as [EventStatus, ...EventStatus[]]),
+    tx: TxSchema.optional(),
+    pk: z.hex().length(66),
+    signature: z.hex().length(128),
+  })
+  .strict();
 
-const ParamsSchema = Joi.object<Params>().keys({
-  date: Joi.date().timestamp('unix').required(),
-  triggerTxId: Joi.string().hex().length(64).required(),
-  eventId: Joi.string().hex().length(64).required(),
-  status: Joi.string()
-    .valid(...eventStatuses)
-    .required(),
-  tx: TxSchema.optional(),
-  pk: Joi.string().hex().length(66).required(),
-  signature: Joi.string().hex().length(128).required(),
-});
+export type Params = z.infer<typeof ParamsSchema>;
 
 export const validator = async (request: NextRequest) => {
-  return ParamsSchema.validate(await request.json());
+  return ParamsSchema.safeParse(await request.json());
 };
 
 export const paramsToSignMessage = (params: Params, timestampSeconds: number): string => {

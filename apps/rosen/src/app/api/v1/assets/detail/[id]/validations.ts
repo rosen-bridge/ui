@@ -1,14 +1,14 @@
 import type { NextRequest } from 'next/server';
 
-import Joi from 'joi';
+import { z } from 'zod';
 
-interface GETPositionalParams {
-  id: string;
-}
+const getQueryParamsSchema = z
+  .object({
+    id: z.string().min(1),
+  })
+  .strict();
 
-const getQueryParamsSchema = Joi.object<GETPositionalParams>().keys({
-  id: Joi.string().required(),
-});
+type GETPositionalParams = z.infer<typeof getQueryParamsSchema>;
 
 /**
  * validate get requests
@@ -18,5 +18,5 @@ export const validateGet = async (
   _: NextRequest,
   context: { params: Promise<GETPositionalParams> },
 ) => {
-  return getQueryParamsSchema.validate(await context.params);
+  return getQueryParamsSchema.safeParse(await context.params);
 };
