@@ -102,7 +102,7 @@ export const ViewRow = ({ current, items, isLoading, setCurrent }: ViewRowProps)
                         <Amount value={item.coldAmount} />
                       </Label>
                     )}
-                    {isLaptopUp && (
+                    {!isLaptopUp && (
                       <Label label="Bridged" orientation="horizontal">
                         <Amount value={item.bridgedAmount} />
                       </Label>
