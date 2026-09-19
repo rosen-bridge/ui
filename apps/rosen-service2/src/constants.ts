@@ -4,6 +4,7 @@ export const BITCOIN_BLOCK_TIME = 600; // ~ 10 minutes
 export const DOGE_BLOCK_TIME = 60; // ~ 1 minute
 export const ETHEREUM_BLOCK_TIME = 12; // ~ 12 seconds
 export const BINANCE_BLOCK_TIME = 3; // ~ 3 seconds
+export const FIRO_BLOCK_TIME = 150;
 
 export const ERGO_METHOD_EXPLORER = 'explorer';
 export const ERGO_METHOD_NODE = 'node';

@@ -102,8 +102,24 @@ export interface Chains {
   'doge': ChainsDoge;
   'ethereum': ChainsEthereum;
   'binance': ChainsBinance;
+  'firo': ChainsFiro;
 }
-
+export interface ChainsFiro {
+  active: boolean;
+  initialHeight: number;
+  scanInterval: number;
+  adapter: ChainsFiroAdapter;
+  electrumx: ChainsFiroElectrumX;
+}
+export interface ChainsFiroAdapter {
+  extraAddresses?: string[];
+}
+export interface ChainsFiroElectrumX {
+  host: string;
+  port: number;
+  reconnectDelay: number;
+  timeout: number;
+}
 export interface ChainsBinance {
   active: boolean;
   initialHeight: number;

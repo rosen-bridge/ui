@@ -3,3 +3,4 @@ export { getBitcoinScanner } from './bitcoin';
 export { getCardanoScanner } from './cardano';
 export { getDogeScanner } from './doge';
 export { getEthereumScanner } from './ethereum';
+export { getFiroScanner } from './firo';

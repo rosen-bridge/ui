@@ -1376,6 +1376,116 @@
             }
           }
         }
+      },
+      "firo": {
+        "type": "object",
+        "children": {
+          "active": {
+            "type": "boolean",
+            "description": "firo activation state",
+            "default": false,
+            "validations": [
+              {
+                "required": true,
+                "error": "firo activation state must be set"
+              }
+            ]
+          },
+          "initialHeight": {
+            "type": "number",
+            "default": 1,
+            "description": "firo initial height",
+            "validations": [
+              {
+                "required": true,
+                "error": "firo initial height must be specified"
+              }
+            ]
+          },
+          "scanInterval": {
+            "type": "number",
+            "default": 60,
+            "description": "firo scanInterval threshold in seconds",
+            "validations": [
+              {
+                "required": true,
+                "error": "firo scanInterval must be specified (in seconds)"
+              }
+            ]
+          },
+          "adapter": {
+            "type": "object",
+            "children": {
+              "extraAddresses": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "electrumx": {
+            "type" : "object",
+            "children": {
+              "host": {
+                "type": "string",
+                "description": "firo electrumx host",
+                "validations": [
+                  {
+                    "required": true,
+                    "when": {
+                      "path": "chains.firo.active",
+                      "value": true
+                    },
+                    "error": "firo electrumx host must be specified"
+                  }
+                ]
+              },
+              "port": {
+                "type": "number",
+                "description": "firo electrumx port",
+                "validations": [
+                  {
+                    "required": true,
+                    "when": {
+                      "path": "chains.firo.active",
+                      "value": true
+                    },
+                    "error": "firo electrumx port must be specified"
+                  }
+                ]
+              },
+              "reconnectDelay": {
+                "type": "number",
+                "description": "firo electrumx reconnect delay in seconds",
+                "validations": [
+                  {
+                    "required": true,
+                    "when": {
+                      "path": "chains.firo.active",
+                      "value": true
+                    },
+                    "error": "firo electrumx reconnect delay must be specified (in seconds)"
+                  }
+                ]
+              },
+              "timeout": {
+                "type": "number",
+                "description": "firo electrumx timeout in seconds",
+                "validations": [
+                  {
+                    "required": true,
+                    "when": {
+                      "path": "chains.firo.active",
+                      "value": true
+                    },
+                    "error": "firo electrumx timeout must be specified (in seconds)"
+                  }
+                ]
+              }
+            }
+          }
+        }
       }
     }
   },
