@@ -9,6 +9,7 @@ import {
   type EventProcessesProps,
   formatDateTime,
   Typography,
+  useResponsive,
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 
@@ -346,6 +347,11 @@ const toItems = (
 };
 
 export const Process = ({ id, flowId }: { id: string; flowId: string | undefined }) => {
+  const orientation = useResponsive({
+    mobile: 'vertical',
+    laptop: 'horizontal',
+  } as const);
+
   const {
     data: events,
     error,
@@ -412,7 +418,7 @@ export const Process = ({ id, flowId }: { id: string; flowId: string | undefined
           The reason for this exception is noted above.
         </Typography>
       ) : (
-        <EventProcesses items={items} loading={loading} />
+        <EventProcesses items={items} loading={loading} orientation={orientation} />
       )}
     </Section>
   );

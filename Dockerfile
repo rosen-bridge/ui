@@ -26,8 +26,8 @@ FROM node:22.18 AS prepare
 WORKDIR /app
 COPY . .
 RUN --mount=type=cache,target=/root/.npm npm i -g npm@11.6.2
-RUN --mount=type=cache,target=/root/.npm npm install turbo --no-save --ignore-scripts --no-package-lock
-RUN npm exec -- turbo prune @rosen-bridge/rosen-service --docker
+RUN TURBO_VERSION=$(node -p "require('./package-lock.json').packages['node_modules/turbo'].version") && \
+    npx --yes turbo@$TURBO_VERSION prune @rosen-bridge/rosen-service --docker
 
 FROM node:22.18 AS builder
 WORKDIR /app

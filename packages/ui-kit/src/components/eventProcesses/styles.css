@@ -5,14 +5,33 @@
   z-index: 0;
 }
 
+.RosenEventProcesses[data-orientation='horizontal'] {
+  grid-template-columns: repeat(var(--EventProcesses-item-count), 1fr);
+  grid-template-rows: 1fr;
+}
+
+.RosenEventProcesses[data-orientation='vertical'] {
+  grid-template-columns: 1fr;
+  grid-template-rows: repeat(var(--EventProcesses-item-count), auto);
+}
+
 .RosenEventProcesses-slot {
   display: flex;
   min-width: 0;
-  margin-left: -14px;
 }
 
-.RosenEventProcesses-slot:first-child {
-  margin-left: 0;
+.RosenEventProcesses[data-orientation='horizontal'] .RosenEventProcesses-slot {
+  margin-left: -14px;
+  &:first-child {
+    margin-left: 0;
+  }
+}
+
+.RosenEventProcesses[data-orientation='vertical'] .RosenEventProcesses-slot {
+  margin-top: -14px;
+  &:first-child {
+    margin-top: 0;
+  }
 }
 
 .RosenEventProcesses-anchor {
@@ -31,24 +50,54 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
+}
+
+.RosenEventProcesses[data-orientation='horizontal'] .RosenEventProcesses-chevron {
   padding: 32px 20px 32px 22px;
   clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 50%, calc(100% - 16px) 100%, 0 100%, 16px 50%);
 }
 
-.RosenEventProcesses-slot:first-child .RosenEventProcesses-chevron {
-  padding-right: 20px;
-  padding-left: 8px;
-  border-top-left-radius: calc(var(--rosen-spacing) * 2);
-  border-bottom-left-radius: calc(var(--rosen-spacing) * 2);
-  clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 50%, calc(100% - 16px) 100%, 0 100%);
+.RosenEventProcesses[data-orientation='vertical'] .RosenEventProcesses-chevron {
+  padding: 36px 22px 28px 22px;
+  clip-path: polygon(0 0, 0 calc(100% - 16px), 50% 100%, 100% calc(100% - 16px), 100% 0, 50% 16px);
 }
 
-.RosenEventProcesses-slot:last-child .RosenEventProcesses-chevron {
-  padding-right: 8px;
-  padding-left: 20px;
-  border-top-right-radius: calc(var(--rosen-spacing) * 2);
-  border-bottom-right-radius: calc(var(--rosen-spacing) * 2);
-  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 16px 50%);
+.RosenEventProcesses[data-orientation='horizontal'] {
+  .RosenEventProcesses-slot {
+    &:first-child .RosenEventProcesses-chevron {
+      padding-right: 20px;
+      padding-left: 8px;
+      border-top-left-radius: calc(var(--rosen-spacing) * 2);
+      border-bottom-left-radius: calc(var(--rosen-spacing) * 2);
+      clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 50%, calc(100% - 16px) 100%, 0 100%);
+    }
+    &:last-child .RosenEventProcesses-chevron {
+      padding-right: 8px;
+      padding-left: 20px;
+      border-top-right-radius: calc(var(--rosen-spacing) * 2);
+      border-bottom-right-radius: calc(var(--rosen-spacing) * 2);
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 16px 50%);
+    }
+  }
+}
+
+.RosenEventProcesses[data-orientation='vertical'] {
+  .RosenEventProcesses-slot {
+    &:first-child .RosenEventProcesses-chevron {
+      padding-bottom: 34px;
+      padding-top: 30px;
+      border-top-left-radius: calc(var(--rosen-spacing) * 2);
+      border-top-right-radius: calc(var(--rosen-spacing) * 2);
+      clip-path: polygon(0 0, 0 calc(100% - 16px), 50% 100%, 100% calc(100% - 16px), 100% 0);
+    }
+    &:last-child .RosenEventProcesses-chevron {
+      padding-bottom: 24px;
+      padding-top: 40px;
+      border-bottom-left-radius: calc(var(--rosen-spacing) * 2);
+      border-bottom-right-radius: calc(var(--rosen-spacing) * 2);
+      clip-path: polygon(0 0, 0 100%, 100% 100%, 100% 0, 50% 16px);
+    }
+  }
 }
 
 .RosenEventProcesses-title {

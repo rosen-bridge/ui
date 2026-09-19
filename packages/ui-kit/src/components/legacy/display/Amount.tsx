@@ -216,6 +216,11 @@ const AmountBase = ({
     return formatted;
   }, [splittedValue, price]);
 
+  const isIntegerDominant = useMemo(() => {
+    if (!parts) return false;
+    return parts.number === '0';
+  }, [parts]);
+
   return (
     <Stack
       inline
@@ -246,9 +251,20 @@ const AmountBase = ({
               >
                 {!!parts && (
                   <>
-                    {parts.number}
+                    <span
+                      style={{
+                        fontSize: isIntegerDominant ? '75%' : 'inherit',
+                        opacity: isIntegerDominant ? 0.7 : 1,
+                      }}
+                    >
+                      {parts.number}
+                    </span>
                     {parts.fraction && (
-                      <Typography component="span" fontSize="75%" style={{ opacity: 0.7 }}>
+                      <Typography
+                        component="span"
+                        fontSize={!isIntegerDominant ? '75%' : 'inherit'}
+                        style={{ opacity: !isIntegerDominant ? 0.7 : 1 }}
+                      >
                         .{!!parts.zeros && '0'}
                         {!!parts.zeros && <sub style={{ fontSize: '0.75em' }}>{parts.zeros}</sub>}
                         {parts.fraction}

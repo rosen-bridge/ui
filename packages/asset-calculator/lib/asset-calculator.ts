@@ -20,6 +20,7 @@ import { DogeCalculator } from './calculator/chains/doge-calculator';
 import { ErgoCalculator } from './calculator/chains/ergo-calculator';
 import { EvmCalculator } from './calculator/chains/evm-calculator';
 import { FiroCalculator } from './calculator/chains/firo-calculator';
+import { HandshakeCalculator } from './calculator/chains/handshake-calculator';
 import { BridgedAssetModel } from './database/bridgedAsset/BridgedAssetModel';
 import type { LockedAssetEntity } from './database/lockedAsset/LockedAssetEntity';
 import { LockedAssetModel } from './database/lockedAsset/LockedAssetModel';
@@ -32,6 +33,7 @@ import type {
   ErgoCalculatorInterface,
   EvmCalculatorInterface,
   FiroCalculatorInterface,
+  HandshakeCalculatorInterface,
 } from './interfaces';
 
 class AssetCalculator {
@@ -53,6 +55,7 @@ class AssetCalculator {
     binanceCalculator: EvmCalculatorInterface,
     dogeCalculator: DogeCalculatorInterface,
     firoCalculator: FiroCalculatorInterface,
+    handshakeCalculator: HandshakeCalculatorInterface,
     dataSource: DataSource,
     protected readonly logger: AbstractLogger = new DummyLogger(),
   ) {
@@ -111,6 +114,12 @@ class AssetCalculator {
       firoCalculator.explorerUrl,
       logger.child('firoCalculator'),
     );
+    const handshakeAssetCalculator = new HandshakeCalculator(
+      this.tokens,
+      handshakeCalculator.addresses,
+      handshakeCalculator.rpcUrl,
+      logger.child('handshakeCalculator'),
+    );
     this.calculatorMap.set(NETWORKS.ergo.key, ergoAssetCalculator);
     this.calculatorMap.set(NETWORKS.cardano.key, cardanoAssetCalculator);
     this.calculatorMap.set(NETWORKS.bitcoin.key, bitcoinAssetCalculator);
@@ -119,6 +128,7 @@ class AssetCalculator {
     this.calculatorMap.set(NETWORKS.binance.key, binanceAssetCalculator);
     this.calculatorMap.set(NETWORKS.doge.key, dogeAssetCalculator);
     this.calculatorMap.set(NETWORKS.firo.key, firoAssetCalculator);
+    this.calculatorMap.set(NETWORKS.handshake.key, handshakeAssetCalculator);
     this.bridgedAssetModel = new BridgedAssetModel(dataSource, logger.child('bridgedAssetModel'));
     this.lockedAssetModel = new LockedAssetModel(dataSource, logger.child('lockedAssetModel'));
     this.tokenModel = new TokenModel(dataSource, logger.child('tokenModel'));

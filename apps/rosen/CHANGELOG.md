@@ -1,5 +1,36 @@
 # @rosen-bridge/rosen-app
 
+## 5.7.1
+
+### Patch Changes
+
+- Fix token icon validation logic to correctly detect existing icons
+- Update Process section on the Event Details page to be compatible with the new design
+- Update `Successfully` label to `Completed` in Event List filters
+- Fix the event details progress section, which stayed stuck on the loading state when the event had no flow and did not show the Payment and Reward step times
+- Update dependencies
+  - @rosen-ui/utils@1.1.0
+  - @rosen-bridge/ui-kit@6.1.0
+  - @rosen-network/base@0.5.5
+  - @rosen-network/cardano@2.5.9
+  - @rosen-ui/eternl-wallet@3.1.11
+  - @rosen-ui/firo-wallet@0.1.3
+  - @rosen-ui/lace-wallet@3.1.11
+  - @rosen-network/binance@0.4.10
+  - @rosen-network/bitcoin@2.4.9
+  - @rosen-network/bitcoin-runes@1.0.9
+  - @rosen-network/doge@0.4.9
+  - @rosen-network/ergo@2.5.10
+  - @rosen-network/ethereum@0.4.10
+  - @rosen-network/firo@0.1.3
+  - @rosen-ui/wallet-api@3.2.2
+  - @rosen-ui/metamask-wallet@2.2.4
+  - @rosen-ui/wallet-connect@0.3.4
+  - @rosen-ui/okx-wallet@2.2.6
+  - @rosen-ui/xverse-wallet@0.5.4
+  - @rosen-ui/my-doge-wallet@1.1.13
+  - @rosen-ui/nautilus-wallet@3.1.11
+
 ## 5.7.0
 
 ### Minor Changes

@@ -17,7 +17,7 @@ export const CarouselProvider = ({ children }: PropsWithChildren) => {
   const update = useCallback(() => {
     if (!api) return;
 
-    setCount(api.slideNodes().length || 0);
+    setCount(api.scrollSnapList().length || 0);
 
     setCurrent(api.selectedScrollSnap());
 
@@ -58,5 +58,5 @@ export const CarouselProvider = ({ children }: PropsWithChildren) => {
     ref,
   };
 
-  return <CarouselContext.Provider value={state}>{children}</CarouselContext.Provider>;
+  return <CarouselContext value={state}>{children}</CarouselContext>;
 };

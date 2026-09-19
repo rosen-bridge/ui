@@ -1,6 +1,6 @@
 {
   "name": "@rosen-ui/metamask-wallet",
-  "version": "2.2.3",
+  "version": "2.2.4",
   "private": true,
   "description": "This is a private package utilized within Rosen Bridge UI app",
   "repository": {
@@ -21,12 +21,12 @@
     "@metamask/providers": "^16.1.0",
     "@metamask/sdk": "^0.34.0",
     "@rosen-bridge/tokens": "^6.0.2",
-    "@rosen-network/binance": "^0.4.9",
-    "@rosen-network/ethereum": "^0.4.9",
+    "@rosen-network/binance": "^0.4.10",
+    "@rosen-network/ethereum": "^0.4.10",
     "@rosen-network/evm": "^0.3.8",
     "@rosen-ui/constants": "^1.1.0",
     "@rosen-ui/types": "^0.5.1",
-    "@rosen-ui/wallet-api": "^3.2.1",
+    "@rosen-ui/wallet-api": "^3.2.2",
     "ethers": "6.16.0"
   },
   "engines": {

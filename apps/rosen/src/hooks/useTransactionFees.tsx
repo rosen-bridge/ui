@@ -191,7 +191,5 @@ export const TransactionFeesProvider = ({ children }: PropsWithChildren) => {
     setFeesInfo(undefined);
   }, [sourceValue, targetValue, tokenValue]);
 
-  return (
-    <TransactionFeesContext.Provider value={state}>{children}</TransactionFeesContext.Provider>
-  );
+  return <TransactionFeesContext value={state}>{children}</TransactionFeesContext>;
 };
