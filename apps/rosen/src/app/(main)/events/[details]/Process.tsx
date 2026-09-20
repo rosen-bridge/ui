@@ -82,6 +82,18 @@ const steps: StepCandidates[] = [
       status: 'pending',
     },
     {
+      key: 'PAYMENT_PENDING',
+      title: 'Payment',
+      subtitle: 'Pending',
+      status: 'pending',
+    },
+    {
+      key: 'PAYMENT_ABORTED',
+      title: 'Payment',
+      subtitle: 'Aborted',
+      status: 'error',
+    },
+    {
       key: 'PAYMENT_STALLED',
       title: 'Payment',
       subtitle: 'Stalled',
@@ -166,6 +178,18 @@ const steps: StepCandidates[] = [
       title: 'Reward',
       subtitle: 'Pending',
       status: 'pending',
+    },
+    {
+      key: 'REWARD_PENDING',
+      title: 'Reward',
+      subtitle: 'Pending',
+      status: 'pending',
+    },
+    {
+      key: 'REWARD_ABORTED',
+      title: 'Reward',
+      subtitle: 'Aborted',
+      status: 'error',
     },
     {
       key: 'REWARD_STALLED',

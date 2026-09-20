@@ -51,6 +51,16 @@ export const STATUS_MAP: Record<string, EventStatusMeta> = {
     severity: 'warning',
     icon: 'ExclamationCircle',
   },
+  PAYMENT_ABORTED: {
+    label: 'Payment Aborted',
+    severity: 'error',
+    icon: 'ExclamationCircle',
+  },
+  PAYMENT_PENDING: {
+    label: 'Payment Pending',
+    severity: 'info',
+    icon: 'Coins',
+  },
   REACHED_LIMIT: {
     label: 'Reached Limit',
     severity: 'error',
@@ -60,6 +70,11 @@ export const STATUS_MAP: Record<string, EventStatusMeta> = {
     label: 'Rejected',
     severity: 'error',
     icon: 'CloseCircle',
+  },
+  REWARDED: {
+    label: 'Rewarded',
+    severity: 'info',
+    icon: 'Gift',
   },
   REWARD_APPROVED: {
     label: 'Reward Approved',
@@ -85,6 +100,16 @@ export const STATUS_MAP: Record<string, EventStatusMeta> = {
     label: 'Reward Stalled',
     severity: 'warning',
     icon: 'ExclamationCircle',
+  },
+  REWARD_ABORTED: {
+    label: 'Reward Aborted',
+    severity: 'error',
+    icon: 'ExclamationCircle',
+  },
+  REWARD_PENDING: {
+    label: 'Reward Pending',
+    severity: 'info',
+    icon: 'Gift',
   },
   TIMEOUT: {
     label: 'Timeout',
