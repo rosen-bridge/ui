@@ -1,8 +1,9 @@
 import type { AbstractLogger } from '@rosen-bridge/abstract-logger';
+import type { TokenMap } from '@rosen-bridge/extended-tokens';
 import type { DataSource } from '@rosen-bridge/extended-typeorm';
 import JsonBigInt from '@rosen-bridge/json-bigint';
 import { ErgoNetworkType } from '@rosen-bridge/scanner-interfaces';
-import { EventTriggerExtractor } from '@rosen-bridge/watcher-data-extractor';
+import { CommitmentExtractor, EventTriggerExtractor } from '@rosen-bridge/watcher-data-extractor';
 
 import { configs } from './configs';
 import { ERGO_METHOD_EXPLORER } from './constants';
@@ -80,5 +81,32 @@ export const createEventTrigger = (
     chianConfigs.addresses.WatcherPermit,
     chianConfigs.addresses.Fraud,
     logger.child(`${formatChainName(chain, 'camel')}EventTriggerExtractor`),
+  );
+};
+
+/**
+ * Creates a commitment extractor
+ * @param chain
+ * @param dataSource
+ * @param chianConfigs
+ * @param tokenMap
+ * @param logger
+ * @returns CommitmentExtractor
+ */
+export const createCommitmentExtractor = (
+  chain: string,
+  dataSource: DataSource,
+  chianConfigs: ChainConfigs,
+  tokenMap: TokenMap,
+  logger: AbstractLogger,
+) => {
+  logger.debug(`starting commitment extractor for ${chain}`);
+  return new CommitmentExtractor(
+    `${chain}-commitment-extractor`,
+    [chianConfigs.addresses.Commitment],
+    chianConfigs.tokens.RWTId,
+    dataSource,
+    tokenMap,
+    logger.child(`${chain}CommitmentExtractor`),
   );
 };
