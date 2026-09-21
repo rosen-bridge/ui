@@ -141,7 +141,7 @@ const Page = () => {
             : items.map((item) => (
                 <EventCard
                   id={item.id.toString()}
-                  key={`${item.id}:${item.eventTriggerId}`}
+                  key={`${item.id}:${item.triggerTxId}`}
                   active={current === item}
                   value={{
                     amount: item.amount,

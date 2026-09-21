@@ -359,7 +359,7 @@ export const Process = ({ id, flowId }: { id: string; flowId: string | undefined
     mutate,
   } = useSWR<EventDetailsType[]>(`/v1/events/${id}`, fetcher);
 
-  const data = events?.find((event) => event.txId === flowId);
+  const data = events?.find((event) => event.triggerTxId === flowId);
 
   const loading = isLoading || (!!events?.length && !flowId);
 

@@ -48,10 +48,10 @@ export const Overview = ({
   } = useSWR<EventDetailsType[]>(`/v1/events/${id}`, fetcher);
 
   useEffect(() => {
-    onFlowIdChange(events?.at(0)?.txId);
+    onFlowIdChange(events?.at(0)?.triggerTxId ?? undefined);
   }, [events, onFlowIdChange]);
 
-  const data = events?.find((event) => event.txId === flowId);
+  const data = events?.find((event) => event.triggerTxId === flowId);
 
   const multipleFLow = events && events.length > 1;
 
@@ -94,17 +94,17 @@ export const Overview = ({
                       cursor: 'pointer',
                     }}
                   >
-                    <Identifier loading={isLoading} value={data?.txId} />
+                    <Identifier loading={isLoading} value={data?.triggerTxId ?? undefined} />
                     <Icon name="AngleDown" />
                   </MenuTrigger>
                   <MenuBody offset={[0, 4]} placement="bottom-end">
                     {events.map((event) => (
                       <MenuItem
-                        key={event.txId}
-                        selected={event.txId === data?.txId}
-                        onClick={() => onFlowIdChange(event.txId)}
+                        key={event.triggerTxId}
+                        selected={event.triggerTxId === data?.triggerTxId}
+                        onClick={() => onFlowIdChange(event.triggerTxId ?? undefined)}
                       >
-                        {event.txId}
+                        {event.triggerTxId}
                       </MenuItem>
                     ))}
                   </MenuBody>

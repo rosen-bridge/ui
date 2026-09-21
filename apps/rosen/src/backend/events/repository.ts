@@ -38,7 +38,7 @@ const guardStatusChangedRepository = dataSource.getRepository(GuardStatusChanged
 type EventListItem = Omit<ObservationEntity, 'requestId'> &
   Pick<EventTriggerEntity, 'WIDsCount' | 'paymentTxId' | 'spendTxId'> & {
     eventId: string;
-    eventTriggerId: number;
+    triggerTxId: string | null;
     timestamp: number;
     flows: number;
     status: EventStatusValue;
@@ -85,7 +85,6 @@ type EventStatusOverride = {
 type EventStatusValue = EventStatus | EventStatusOverride;
 
 export type EventDetailsType = EventListItem & {
-  txId: string;
   price?: number;
   totalFee: string;
   timestamps: EventStatusType['timestamps'];
@@ -200,7 +199,7 @@ export const getEvents = async (filters: Filter): Promise<EventListItemWithTotal
     .leftJoin(
       EventStatusOverrideEntity,
       'esoe',
-      'esoe.eventId = oe.requestId AND (esoe.eventTriggerId IS NULL OR esoe.eventTriggerId = ete.id)',
+      'esoe.eventId = oe.requestId AND (esoe.triggerTxId IS NULL OR esoe.triggerTxId = ete.txId)',
     )
     .select([
       'oe.id AS "id"',
@@ -219,7 +218,7 @@ export const getEvents = async (filters: Filter): Promise<EventListItemWithTotal
       'COALESCE(ete."WIDsCount", 0) AS "WIDsCount"',
       'ete.paymentTxId AS "paymentTxId"',
       'ete.spendTxId AS "spendTxId"',
-      'ete.id AS "eventTriggerId"',
+      'ete.txId AS "triggerTxId"',
       'to_jsonb(te) AS "lockToken"',
       'esoe.status AS "statusOverrideStatus"',
       'esoe.reason AS "statusOverrideReason"',
@@ -297,7 +296,7 @@ export const getEvent = async (id: string): Promise<EventDetailsType[]> => {
     .leftJoin(
       EventStatusOverrideEntity,
       'esoe',
-      'esoe.eventId = oe.requestId AND (esoe.eventTriggerId IS NULL OR esoe.eventTriggerId = ete.id)',
+      'esoe.eventId = oe.requestId AND (esoe.triggerTxId IS NULL OR esoe.triggerTxId = ete.txId)',
     )
     .select([
       'oe.id AS "id"',
@@ -316,7 +315,7 @@ export const getEvent = async (id: string): Promise<EventDetailsType[]> => {
       'COALESCE(ete."WIDsCount", 0) AS "WIDsCount"',
       'ete.paymentTxId AS "paymentTxId"',
       'ete.spendTxId AS "spendTxId"',
-      'ete.txId AS "txId"',
+      'ete.txId AS "triggerTxId"',
       'to_jsonb(te) AS "lockToken"',
       'esoe.status AS "statusOverrideStatus"',
       'esoe.reason AS "statusOverrideReason"',
@@ -356,7 +355,7 @@ export const getEvent = async (id: string): Promise<EventDetailsType[]> => {
           severity: statusOverrideSeverity,
         };
       } else {
-        const eventStatus = await getEventStatus(id, event.txId);
+        const eventStatus = await getEventStatus(id, event.triggerTxId ?? undefined);
         status = eventStatus.status;
         timestamps = eventStatus.timestamps;
       }
