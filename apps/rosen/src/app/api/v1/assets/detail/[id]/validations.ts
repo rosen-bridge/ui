@@ -4,7 +4,7 @@ import { z } from 'zod';
 
 const getQueryParamsSchema = z
   .object({
-    id: z.string().min(1),
+    id: z.hex().length(64),
   })
   .strict();
 
