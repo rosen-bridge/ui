@@ -3,13 +3,13 @@ import { Column, Entity, PrimaryGeneratedColumn, Unique } from '@rosen-bridge/ex
 import type { EventStatusOverrideSeverity } from '../constants';
 
 @Entity('event_status_override_entity')
-@Unique(['eventId', 'eventTriggerId'])
+@Unique(['eventId', 'triggerTxId'])
 export class EventStatusOverrideEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column('integer')
-  eventTriggerId: number;
+  @Column('varchar', { nullable: true })
+  triggerTxId: string | null;
 
   @Column('varchar')
   eventId: string;

@@ -30,7 +30,7 @@ export const TransactionsAndFees = ({ id, flowId }: { id: string; flowId: string
     mutate,
   } = useSWR<EventDetailsType[]>(`/v1/events/${id}`, fetcher);
 
-  const data = events?.find((event) => event.txId === flowId);
+  const data = events?.find((event) => event.triggerTxId === flowId);
 
   const isCustomStatus = typeof data?.status === 'object';
 
@@ -61,7 +61,7 @@ export const TransactionsAndFees = ({ id, flowId }: { id: string; flowId: string
         type: 'trigger',
         label: 'Trigger Tx',
         chain: NETWORKS.ergo.key,
-        txId: data?.txId,
+        txId: data?.triggerTxId || undefined,
         isInvalid: false,
       },
     ] as const;
