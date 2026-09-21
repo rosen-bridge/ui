@@ -4,6 +4,7 @@ import { createClient } from '@vercel/kv';
 
 import type { RosenTokens } from '@rosen-bridge/tokens';
 
+import { env } from '@/env';
 import { wrap } from '@/safeServerAction';
 
 /**
@@ -11,8 +12,8 @@ import { wrap } from '@/safeServerAction';
  */
 export const getOnChainRosenTokens = async () => {
   const redis = createClient({
-    url: process.env.KV_REST_API_URL,
-    token: process.env.KV_REST_API_TOKEN,
+    url: env.KV_REST_API_URL,
+    token: env.KV_REST_API_TOKEN,
   });
 
   const storedTokenMap: {

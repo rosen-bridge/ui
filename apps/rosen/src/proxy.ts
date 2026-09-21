@@ -4,26 +4,24 @@ import { Ratelimit } from '@upstash/ratelimit';
 import { ipAddress } from '@vercel/functions';
 import { kv } from '@vercel/kv';
 
+import { env } from '@/env';
+
 type Duration = Parameters<typeof Ratelimit.slidingWindow>[1];
 
-/** Upstash sliding-window rate limiter, enabled if APPLY_RATE_LIMIT='true' using env tokens and window. */
-const rateLimit =
-  process.env.APPLY_RATE_LIMIT === 'true'
-    ? new Ratelimit({
-        redis: kv,
-        limiter: Ratelimit.slidingWindow(
-          +process.env.RATE_LIMIT_TOKENS!,
-          process.env.RATE_LIMIT_WINDOW! as Duration,
-        ),
-      })
-    : undefined;
+const rateLimit = (() => {
+  if (!env.APPLY_RATE_LIMIT || !env.RATE_LIMIT_TOKENS || !env.RATE_LIMIT_WINDOW) return;
+  return new Ratelimit({
+    redis: kv,
+    limiter: Ratelimit.slidingWindow(env.RATE_LIMIT_TOKENS, env.RATE_LIMIT_WINDOW as Duration),
+  });
+})();
 
 /**
  * check if origin is an allowed origin from CORS perspective
  * @param origin
  */
 const isOriginAllowed = (origin: string) =>
-  process.env.ALLOWED_ORIGINS?.includes('*') || process.env.ALLOWED_ORIGINS?.includes(origin);
+  env.ALLOWED_ORIGINS?.includes('*') || env.ALLOWED_ORIGINS?.includes(origin);
 
 /**
  * get a headers object through which CORS can be enabled

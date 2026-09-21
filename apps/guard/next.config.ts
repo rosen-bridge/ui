@@ -1,5 +1,7 @@
 import type { NextConfig } from 'next';
 
+import { env } from './src/env';
+
 const nextConfig: NextConfig = {
   typedRoutes: true,
   output: 'export',
@@ -8,7 +10,7 @@ const nextConfig: NextConfig = {
   },
   staticPageGenerationTimeout: 600,
   env: {
-    API_BASE_URL: process.env.API_BASE_URL,
+    API_BASE_URL: env.API_BASE_URL,
   },
 };
 

@@ -13,6 +13,7 @@ import type { Network } from '@rosen-network/base';
 import { NETWORKS } from '@rosen-ui/constants';
 import type { Network as NetworkKey } from '@rosen-ui/types';
 
+import { env } from '@/env';
 import * as networks from '@/networks';
 
 import { useBridgeForm } from './useBridgeForm';
@@ -60,7 +61,7 @@ export const NetworkProvider = ({ children }: { children: ReactNode }) => {
 
   const blacklist = useMemo(
     () =>
-      (process.env.NEXT_PUBLIC_BLOCKED_TOKENS || '')
+      (env.NEXT_PUBLIC_BLOCKED_TOKENS || '')
         .split(';')
         .map((raw) => raw.trim())
         .filter(Boolean)

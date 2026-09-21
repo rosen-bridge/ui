@@ -6,6 +6,7 @@ import { Alert, Link } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 import type { RosenAmountValue } from '@rosen-ui/types';
 
+import { env } from '@/env';
 import { NetworkProvider, TransactionFeesProvider, WalletProvider } from '@/hooks';
 
 import { BridgeForm as BridgeFormComponent } from './BridgeForm';
@@ -42,7 +43,7 @@ const RosenBridge = () => {
           <WalletProvider>
             <TransactionFeesProvider>
               <div className="rosen-bridge-page-main">
-                {!!process.env.NEXT_PUBLIC_BRIDGE_WARNING_MESSAGE && (
+                {!!env.NEXT_PUBLIC_BRIDGE_WARNING_MESSAGE && (
                   <Alert
                     severity="error"
                     style={{
@@ -50,7 +51,7 @@ const RosenBridge = () => {
                       gridColumn: '1 / -1',
                     }}
                   >
-                    {process.env.NEXT_PUBLIC_BRIDGE_WARNING_MESSAGE}
+                    {env.NEXT_PUBLIC_BRIDGE_WARNING_MESSAGE}
                   </Alert>
                 )}
                 <div className="rosen-bridge-page-form">

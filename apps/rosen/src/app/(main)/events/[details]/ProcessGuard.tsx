@@ -8,13 +8,9 @@ import { type Color, Rail } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 
 import type { EventGuardStatusType } from '@/backend/events/repository';
+import { env } from '@/env';
 
 import { Section } from './Section';
-
-const guards = JSON.parse(process.env.NEXT_PUBLIC_ALLOWED_PKS ?? '[]') as Array<{
-  key: string;
-  label: string;
-}>;
 
 const layout: Array<{
   label: string;
@@ -196,20 +192,18 @@ export const ProcessGuard = ({ id, flowId }: { id: string; flowId: string | unde
       label: stage.label,
       steps: stage.steps.map((step) => ({
         label: step.label,
-        tags: guards
-          .map((guard) => {
-            const status = data?.find((item) => item.guardPublicKey === guard.key)?.status;
+        tags: env.NEXT_PUBLIC_ALLOWED_PKS.map((guard) => {
+          const status = data?.find((item) => item.guardPublicKey === guard.key)?.status;
 
-            const slot = step.statuses.find((slot) => slot.key === status);
+          const slot = step.statuses.find((slot) => slot.key === status);
 
-            if (!slot) return undefined;
+          if (!slot) return undefined;
 
-            return {
-              label: guard.label,
-              color: slot.color,
-            };
-          })
-          .filter((guard) => guard !== undefined),
+          return {
+            label: guard.label,
+            color: slot.color,
+          };
+        }).filter((guard) => guard !== undefined),
       })),
     }));
   }, [data]);

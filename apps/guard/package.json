@@ -24,13 +24,15 @@
     "@rosen-ui/constants": "^1.1.0",
     "@rosen-ui/swr-helpers": "^0.2.2",
     "@rosen-ui/utils": "^1.1.0",
+    "@t3-oss/env-nextjs": "^0.13.11",
     "moment": "^2.29.4",
     "next": "^16.3.2",
     "react": "^19.2.6",
     "react-apexcharts": "^1.4.0",
     "react-dom": "^19.2.6",
     "react-hook-form": "^7.71.2",
-    "swr": "^2.4.1"
+    "swr": "^2.4.1",
+    "zod": "^4.6.5"
   },
   "devDependencies": {
     "@rosen-ui/types": "^0.5.1",
