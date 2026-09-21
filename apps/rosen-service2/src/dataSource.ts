@@ -17,8 +17,9 @@ import {
   migrations as tokenPriceMigrations,
 } from '@rosen-bridge/token-price-entity';
 import {
+  CommitmentEntity,
   EventTriggerEntity,
-  migrations as eventTriggerExtractorMigrations,
+  migrations as watcherDataMigrations,
 } from '@rosen-bridge/watcher-data-extractor';
 import {
   migrations as assetAggregatorMigrations,
@@ -56,10 +57,11 @@ export default new DataSource({
     EventCountEntity,
     UserEventEntity,
     TokenPriceEntity,
+    CommitmentEntity,
   ],
   migrations: [
     ...scannerMigrations.postgres,
-    ...eventTriggerExtractorMigrations.postgres,
+    ...watcherDataMigrations.postgres,
     ...observationExtractorMigrations.postgres,
     ...assetAggregatorMigrations.postgres,
     ...addressExtractorMigrations.postgres,

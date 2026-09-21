@@ -16,6 +16,7 @@ export interface ChainConfigs {
   addresses: {
     lock: string;
     cold: string;
+    Commitment: string;
     WatcherTriggerEvent: string;
     WatcherPermit: string;
     Fraud: string;

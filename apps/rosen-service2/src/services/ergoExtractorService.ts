@@ -10,7 +10,7 @@ import { NETWORKS } from '@rosen-ui/constants';
 
 import { configs } from '../configs';
 import type { ChainChoices, ChainConfigs } from '../types';
-import { createEventTrigger, resolveErgoNetworkConfig } from '../utils';
+import { createCommitmentExtractor, createEventTrigger, resolveErgoNetworkConfig } from '../utils';
 import {
   AbstractDBService,
   AbstractErgoExtractorsService,
@@ -70,6 +70,15 @@ export class ErgoExtractorService extends AbstractErgoExtractorsService {
         this.logger,
       ),
     );
+    this.extractors.push(
+      createCommitmentExtractor(
+        NETWORKS.ergo.key,
+        this.dataSource,
+        configs.contracts.ergo,
+        this.tokenMap,
+        this.logger,
+      ),
+    );
     Object.keys(configs.chains).map(async (chain) => {
       const chainConfig = configs.chains[chain as ChainChoices];
       if ('active' in chainConfig && chainConfig.active) {
@@ -77,6 +86,15 @@ export class ErgoExtractorService extends AbstractErgoExtractorsService {
         const contract = configs.contracts[chain as keyof typeof configs.contracts] as ChainConfigs;
         this.extractors.push(
           createEventTrigger(network.key, networkType, url, this.dataSource, contract, this.logger),
+        );
+        this.extractors.push(
+          createCommitmentExtractor(
+            network.key,
+            this.dataSource,
+            contract,
+            this.tokenMap,
+            this.logger,
+          ),
         );
       }
     });
