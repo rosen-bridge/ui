@@ -58,7 +58,9 @@ type EventStatus =
   | 'FRAUD'
   | 'MULTIPLE_FLOWS'
   | 'PAID'
+  | 'PAYMENT_ABORTED'
   | 'PAYMENT_APPROVED'
+  | 'PAYMENT_PENDING'
   | 'PAYMENT_SENT'
   | 'PAYMENT_SIGNED'
   | 'PAYMENT_SIGNING'
@@ -66,7 +68,9 @@ type EventStatus =
   | 'REACHED_LIMIT'
   | 'REJECTED'
   | 'REWARDED'
+  | 'REWARD_ABORTED'
   | 'REWARD_APPROVED'
+  | 'REWARD_PENDING'
   | 'REWARD_SENT'
   | 'REWARD_SIGNED'
   | 'REWARD_SIGNING'
@@ -376,7 +380,7 @@ export const getEventStatus = async (
   guardPublicKey?: string,
 ): Promise<EventStatusType> => {
   const result: EventStatusType = {
-    status: 'CREATED',
+    status: 'UNKNOWN',
     timestamps: {},
   };
 
@@ -399,7 +403,7 @@ export const getEventStatus = async (
     });
   }
 
-  const observation = observations[0];
+  const observation = observations.at(0) as ObservationEntity;
 
   const blocks = await blockRepository.findBy({
     hash: observation.sourceBlockId,
@@ -417,10 +421,8 @@ export const getEventStatus = async (
     });
   }
 
-  const block = blocks[0];
-
   result.status = 'CREATED';
-  result.timestamps.CREATED = block.timestamp;
+  result.timestamps.CREATED = blocks.at(0)?.timestamp;
 
   if (!triggerTxId) return result;
 
@@ -477,9 +479,9 @@ export const getEventStatus = async (
     });
   }
 
-  if (eventTrigger.result === null) {
-    let aggregatedStatus: AggregatedStatusEntity | GuardStatusEntity | null;
+  let aggregatedStatus: AggregatedStatusEntity | GuardStatusEntity | null;
 
+  if (!eventTrigger.result) {
     if (guardPublicKey) {
       aggregatedStatus = await guardStatusRepository.findOneBy({
         triggerTxId: triggerTxId,
@@ -491,98 +493,37 @@ export const getEventStatus = async (
       });
     }
 
-    switch (aggregatedStatus?.status) {
-      case null:
-      case undefined:
-      case AggregateEventStatus.pendingPayment:
-      case AggregateEventStatus.waitingForConfirmation:
-        result.status = 'TRIGGERED';
-        break;
+    if (
+      !aggregatedStatus?.status ||
+      aggregatedStatus.status === AggregateEventStatus.waitingForConfirmation
+    ) {
+      result.status = 'TRIGGERED';
+    }
 
-      case AggregateEventStatus.finished:
-        result.status = 'COMPLETED';
-        break;
-
-      case AggregateEventStatus.paymentWaiting:
-        result.status = 'PAYMENT_STALLED';
-        break;
-
-      case AggregateEventStatus.pendingReward:
-        result.status = 'PAID';
-        break;
-
-      case AggregateEventStatus.reachedLimit:
-        result.status = 'REACHED_LIMIT';
-        break;
-
-      case AggregateEventStatus.rejected:
-        result.status = 'REJECTED';
-        break;
-
-      case AggregateEventStatus.rewardWaiting:
-        result.status = 'REWARD_STALLED';
-        break;
-
-      case AggregateEventStatus.timeout:
-        result.status = 'TIMEOUT';
-        break;
-
-      case AggregateEventStatus.inPayment:
-        switch (aggregatedStatus.txStatus) {
-          case AggregateTxStatus.completed:
-            result.status = 'PAID';
-            break;
-
-          case AggregateTxStatus.inSign:
-            result.status = 'PAYMENT_SIGNING';
-            break;
-
-          case AggregateTxStatus.sent:
-            result.status = 'PAYMENT_SENT';
-            break;
-
-          case AggregateTxStatus.signed:
-            result.status = 'PAYMENT_SIGNED';
-            break;
-
-          default:
-            result.status = 'PAYMENT_APPROVED';
-            break;
-        }
-        break;
-
-      case AggregateEventStatus.inReward:
-        switch (aggregatedStatus.txStatus) {
-          case AggregateTxStatus.inSign:
-            result.status = 'REWARD_SIGNING';
-            break;
-
-          case AggregateTxStatus.sent:
-            result.status = 'REWARD_SENT';
-            break;
-
-          case AggregateTxStatus.signed:
-            result.status = 'REWARD_SIGNED';
-            break;
-
-          default:
-            result.status = 'REWARD_APPROVED';
-            break;
-        }
-        break;
+    if (aggregatedStatus?.status === AggregateEventStatus.finished) {
+      result.status = 'COMPLETED';
     }
   }
 
   const TIMESTAMP_EXTRACTION_MAP: {
     [key in EventStatus]?: [AggregateEventStatus, AggregateTxStatus | undefined];
   } = {
-    PAYMENT_APPROVED: [AggregateEventStatus.inPayment, AggregateTxStatus.inSign],
+    PAYMENT_APPROVED: [AggregateEventStatus.inPayment, undefined],
     PAYMENT_SIGNED: [AggregateEventStatus.inPayment, AggregateTxStatus.signed],
     PAYMENT_SENT: [AggregateEventStatus.inPayment, AggregateTxStatus.sent],
-    PAID: [AggregateEventStatus.inPayment, AggregateTxStatus.sent],
-    REWARD_APPROVED: [AggregateEventStatus.inReward, AggregateTxStatus.inSign],
+    PAID: [AggregateEventStatus.inPayment, AggregateTxStatus.completed],
+    PAYMENT_ABORTED: [AggregateEventStatus.inPayment, AggregateTxStatus.invalid],
+    PAYMENT_PENDING: [AggregateEventStatus.pendingPayment, undefined],
+    PAYMENT_SIGNING: [AggregateEventStatus.inPayment, AggregateTxStatus.inSign],
+    PAYMENT_STALLED: [AggregateEventStatus.paymentWaiting, undefined],
+    REWARD_APPROVED: [AggregateEventStatus.inReward, undefined],
     REWARD_SIGNED: [AggregateEventStatus.inReward, AggregateTxStatus.signed],
     REWARD_SENT: [AggregateEventStatus.inReward, AggregateTxStatus.sent],
+    REWARDED: [AggregateEventStatus.inReward, AggregateTxStatus.completed],
+    REWARD_ABORTED: [AggregateEventStatus.inReward, AggregateTxStatus.invalid],
+    REWARD_PENDING: [AggregateEventStatus.pendingReward, undefined],
+    REWARD_SIGNING: [AggregateEventStatus.inReward, AggregateTxStatus.inSign],
+    REWARD_STALLED: [AggregateEventStatus.rewardWaiting, undefined],
     REJECTED: [AggregateEventStatus.rejected, undefined],
     REACHED_LIMIT: [AggregateEventStatus.reachedLimit, undefined],
     TIMEOUT: [AggregateEventStatus.timeout, undefined],
@@ -596,6 +537,13 @@ export const getEventStatus = async (
     result.timestamps[key] = aggregatedStatusChangedItems.find(
       (item) => item.status === status && (txStatus ? item.txStatus === txStatus : true),
     )?.insertedAt;
+
+    if (
+      aggregatedStatus?.status === status &&
+      (txStatus ? aggregatedStatus?.txStatus === txStatus : true)
+    ) {
+      result.status = key;
+    }
   });
 
   if (eventTrigger.result === 'successful' && eventTrigger.spendBlock) {
@@ -615,9 +563,7 @@ export const getEventStatus = async (
       });
     }
 
-    const block = blocks[0];
-
-    result.timestamps.REWARDED = block?.timestamp;
+    result.timestamps.COMPLETED = blocks.at(0)?.timestamp;
   }
 
   if (observation.toChain === NETWORKS.ergo.key) {
