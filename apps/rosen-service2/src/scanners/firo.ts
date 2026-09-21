@@ -67,9 +67,8 @@ export const getFiroScanner = async (dataSource: DataSource, tokenMap: TokenMap)
 
     logger.debug('Registering observation extractor with scanner...');
     await firoScanner.registerExtractor(observationExtractor);
-    logger.info('Firo observation extractor registered successfully');
+    logger.info('Firo scanner initialized successfully: observation extractor registered');
 
-    logger.info('Firo scanner initialization completed successfully');
     return firoScanner;
   } catch (error) {
     logger.error(
