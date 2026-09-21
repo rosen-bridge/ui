@@ -3,23 +3,24 @@ import path from 'node:path';
 import { exit } from 'node:process';
 import { fileURLToPath } from 'node:url';
 
+import { configs } from 'configs';
+
 import { ConfigValidator } from '@rosen-bridge/config';
 import JsonBigInt from '@rosen-bridge/json-bigint';
 import type { TransportOptions } from '@rosen-bridge/winston-logger';
 
-import type { AllChainsConfigs, Logs, RosenService2Configs } from '../types';
+import type { AllChainsConfigs, RosenService2Configs } from '../types';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 /**
  * Converts log configurations to an array of TransportOptions based on their type.
  *
- * @param configs - Configuration object with log settings.
  * @returns List of TransportOptions for logger setup.
  */
-export const getLogOptions = (logConfigs: Logs[] = []): TransportOptions[] => {
+export const getLogOptions = (): TransportOptions[] => {
   const logOptions: TransportOptions[] = [];
-  for (const log of logConfigs) {
+  for (const log of configs.logs ?? []) {
     switch (log.type) {
       case 'console':
         logOptions.push({
