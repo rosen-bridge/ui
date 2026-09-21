@@ -3,13 +3,12 @@ import path from 'node:path';
 import { exit } from 'node:process';
 import { fileURLToPath } from 'node:url';
 
-import { configs } from 'configs';
-
 import { ConfigValidator } from '@rosen-bridge/config';
 import JsonBigInt from '@rosen-bridge/json-bigint';
 import type { TransportOptions } from '@rosen-bridge/winston-logger';
 
 import type { AllChainsConfigs, RosenService2Configs } from '../types';
+import { configs } from '.';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
