@@ -4,8 +4,8 @@ import { z } from 'zod';
 
 const ParamsSchema = z
   .object({
-    id: z.string().min(1),
-    triggerTxId: z.string().min(1).optional(),
+    id: z.hex().length(64),
+    triggerTxId: z.hex().length(64),
     guardPublicKey: z.hex().length(66).optional(),
   })
   .strict();
