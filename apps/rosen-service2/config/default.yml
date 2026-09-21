@@ -75,7 +75,6 @@ chains:
     scanInterval: 10
   firo:
     active: false
-    initialHeight: 1
     scanInterval: 60
 paths:
   contracts: config/contracts.json

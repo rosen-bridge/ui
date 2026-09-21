@@ -1393,7 +1393,6 @@
           },
           "initialHeight": {
             "type": "number",
-            "default": 1,
             "description": "firo initial height",
             "validations": [
               {
@@ -1426,6 +1425,7 @@
           },
           "electrumx": {
             "type" : "object",
+            "description": "firo electrumx connection settings",
             "children": {
               "host": {
                 "type": "string",

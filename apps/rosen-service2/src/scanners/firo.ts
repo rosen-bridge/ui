@@ -23,17 +23,18 @@ export const createFiroNetworkConnectorManager = () => {
     new FailoverStrategy(),
     logger.child('firoNetworkConnector'),
   );
-
-  const network = new FiroElectrumXNetwork(
-    configs.chains.firo.electrumx.host,
-    configs.chains.firo.electrumx.port,
-    configs.chains.firo.electrumx.reconnectDelay,
-    configs.chains.firo.electrumx.timeout / 1000,
-    logger.child(`firoElectrumXNetwork`),
-  );
-  network.setupSocket();
-  networkConnectorManager.addConnector(network);
-
+  const networkConfigs = configs.chains.firo.electrumx;
+  if (networkConfigs.host && networkConfigs.port) {
+    const network = new FiroElectrumXNetwork(
+      networkConfigs.host,
+      networkConfigs.port,
+      networkConfigs.reconnectDelay,
+      networkConfigs.timeout,
+      logger.child(`firoElectrumXNetwork`),
+    );
+    network.setupSocket();
+    networkConnectorManager.addConnector(network);
+  }
   return networkConnectorManager;
 };
 

@@ -95,31 +95,35 @@ export interface StatisticsLockedAssetsMetrics {
 }
 
 export interface Chains {
-  'ergo': ChainsErgo;
-  'cardano': ChainsCardano;
-  'bitcoin': ChainsBitcoin;
+  ergo: ChainsErgo;
+  cardano: ChainsCardano;
+  bitcoin: ChainsBitcoin;
   'bitcoin-runes': ChainsBitcoinRunes;
-  'doge': ChainsDoge;
-  'ethereum': ChainsEthereum;
-  'binance': ChainsBinance;
-  'firo': ChainsFiro;
+  doge: ChainsDoge;
+  ethereum: ChainsEthereum;
+  binance: ChainsBinance;
+  firo: ChainsFiro;
 }
+
 export interface ChainsFiro {
   active: boolean;
   initialHeight: number;
   scanInterval: number;
   adapter: ChainsFiroAdapter;
-  electrumx: ChainsFiroElectrumX;
+  electrumx: ChainsFiroElectrumx;
 }
+
+export interface ChainsFiroElectrumx {
+  host?: string;
+  port?: number;
+  reconnectDelay?: number;
+  timeout?: number;
+}
+
 export interface ChainsFiroAdapter {
   extraAddresses?: string[];
 }
-export interface ChainsFiroElectrumX {
-  host: string;
-  port: number;
-  reconnectDelay: number;
-  timeout: number;
-}
+
 export interface ChainsBinance {
   active: boolean;
   initialHeight: number;
