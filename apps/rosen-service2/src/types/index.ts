@@ -1,7 +1,7 @@
 import type { ErgoNetworkType } from '@rosen-bridge/scanner-interfaces';
 
 import type { AllChainsConfigs } from './chains';
-import type { RosenService2BaseConfig } from './configs';
+import type { LogsOption0, LogsOption1, LogsOption2, RosenService2BaseConfig } from './configs';
 
 export * from './chains';
 export * from './configs';
@@ -15,3 +15,5 @@ export interface ErgoNetworkConfig {
   networkType: ErgoNetworkType;
   url: string;
 }
+
+export type Logs = LogsOption0 | LogsOption1 | LogsOption2;

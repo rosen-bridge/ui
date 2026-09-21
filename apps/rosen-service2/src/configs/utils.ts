@@ -31,9 +31,9 @@ export const getLogOptions = (logConfigs: Logs[] = []): TransportOptions[] => {
         logOptions.push({
           type: log.type,
           level: log.level,
-          path: log.path!,
-          maxSize: log.maxSize!,
-          maxFiles: log.maxFiles!,
+          path: log.path,
+          maxSize: log.maxSize,
+          maxFiles: log.maxFiles,
           format: log.format,
           serviceName: log.serviceName,
           createSymlink: log.createSymlink,
@@ -45,7 +45,7 @@ export const getLogOptions = (logConfigs: Logs[] = []): TransportOptions[] => {
           type: log.type,
           level: log.level,
           serviceName: log.serviceName,
-          host: log.host!,
+          host: log.host,
           basicAuth: log.basicAuth,
         });
         break;
@@ -79,9 +79,8 @@ export const readContractConfigs = (contractsPath: string): AllChainsConfigs => 
  */
 export const validateConfigs = (): RosenService2Configs => {
   const confValidator = ConfigValidator.fromFile(path.join(__dirname, '../../config/schema.json'));
-  const configs = confValidator.buildConfigs();
-  configs.contracts = {};
+  const configs = confValidator.buildConfigs<RosenService2Configs>();
   configs.contracts = readContractConfigs(configs.paths.contracts);
 
-  return configs as unknown as RosenService2Configs;
+  return configs;
 };

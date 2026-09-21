@@ -15,122 +15,170 @@
       }
     ],
     "items": {
-      "type": "object",
-      "children": {
-        "type": {
-          "type": "string",
-          "description": "options: file, console, loki",
-          "default": "file",
-          "validations": [
-            {
-              "required": true,
-              "error": "log type must be specified"
+      "type": "union",
+      "children": [
+        {
+          "type": "object",
+          "children": {
+            "type": {
+              "type": "string",
+              "description": "options: file",
+              "default": "file",
+              "validations": [
+                {
+                  "required": true,
+                  "error": "log type must be specified"
+                },
+                {
+                  "choices": [
+                    "file"
+                  ]
+                }
+              ]
             },
-            {
-              "choices": [
-                "file",
-                "console",
-                "loki"
+            "maxSize": {
+              "type": "string",
+              "validations": [
+                {
+                  "required": true,
+                  "error": "maxSize for file log type must be specified"
+                }
+              ]
+            },
+            "maxFiles": {
+              "type": "string",
+              "validations": [
+                {
+                  "required": true,
+                  "error": "maxFiles for file log type must be specified"
+                }
+              ]
+            },
+            "path": {
+              "type": "string",
+              "validations": [
+                {
+                  "required": true,
+                  "error": "path for file log type must be specified"
+                }
+              ]
+            },
+            "level": {
+              "type": "string",
+              "default": "info",
+              "validations": [
+                {
+                  "required": true,
+                  "error": "log level must be specified"
+                }
+              ]
+            },
+            "format": {
+              "type": "string",
+              "validations": [
+                {
+                  "choices": [
+                    "plain",
+                    "json"
+                  ]
+                }
+              ]
+            },
+            "serviceName": {
+              "type": "string"
+            },
+            "createSymlink": {
+              "type": "boolean"
+            },
+            "symlinkName": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "children": {
+            "type": {
+              "type": "string",
+              "description": "options: console",
+              "default": "file",
+              "validations": [
+                {
+                  "required": true,
+                  "error": "log type must be specified"
+                },
+                {
+                  "choices": [
+                    "console"
+                  ]
+                }
+              ]
+            },
+            "level": {
+              "type": "string",
+              "default": "info",
+              "validations": [
+                {
+                  "required": true,
+                  "error": "log level must be specified"
+                }
               ]
             }
-          ]
+          }
         },
-        "maxSize": {
-          "type": "string",
-          "validations": [
-            {
-              "required": true,
-              "error": "maxSize for file log type must be specified",
-              "when": {
-                "path": "logs.type",
-                "value": "file"
-              }
-            }
-          ]
-        },
-        "maxFiles": {
-          "type": "string",
-          "validations": [
-            {
-              "required": true,
-              "error": "maxFiles for file log type must be specified",
-              "when": {
-                "path": "logs.type",
-                "value": "file"
-              }
-            }
-          ]
-        },
-        "path": {
-          "type": "string",
-          "validations": [
-            {
-              "required": true,
-              "error": "path for file log type must be specified",
-              "when": {
-                "path": "logs.type",
-                "value": "file"
-              }
-            }
-          ]
-        },
-        "level": {
-          "type": "string",
-          "default": "info",
-          "validations": [
-            {
-              "required": true,
-              "error": "log level must be specified"
-            }
-          ]
-        },
-        "serviceName": {
-          "type": "string",
-          "validations": [
-            {
-              "required": true,
-              "error": "serviceName for the \"loki\" log type must be specified",
-              "when": {
-                "path": "logs.type",
-                "value": "loki"
-              }
-            }
-          ]
-        },
-        "host": {
-          "type": "string",
-          "validations": [
-            {
-              "required": true,
-              "error": "host for the \"loki\" log type must be specified",
-              "when": {
-                "path": "logs.type",
-                "value": "loki"
-              }
-            }
-          ]
-        },
-        "basicAuth": {
-          "type": "string"
-        },
-        "format": {
-          "type": "string",
-          "validations": [
-            {
-              "choices": [
-                "plain",
-                "json"
+        {
+          "type": "object",
+          "children": {
+            "type": {
+              "type": "string",
+              "description": "options: loki",
+              "default": "file",
+              "validations": [
+                {
+                  "required": true,
+                  "error": "log type must be specified"
+                },
+                {
+                  "choices": [
+                    "loki"
+                  ]
+                }
+              ]
+            },
+            "serviceName": {
+              "type": "string",
+              "validations": [
+                {
+                  "required": true,
+                  "error": "serviceName for the \"loki\" log type must be specified"
+                }
+              ]
+            },
+            "host": {
+              "type": "string",
+              "validations": [
+                {
+                  "required": true,
+                  "error": "host for the \"loki\" log type must be specified"
+                }
+              ]
+            },
+            "basicAuth": {
+              "type": "string"
+            },
+            "level": {
+              "type": "string",
+              "default": "info",
+              "validations": [
+                {
+                  "required": true,
+                  "error": "log level must be specified"
+                }
               ]
             }
-          ]
-        },
-        "createSymlink": {
-          "type": "boolean"
-        },
-        "symlinkName": {
-          "type": "string"
+          }
         }
-      }
+      ]
     }
   },
   "db": {
