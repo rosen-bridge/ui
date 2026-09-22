@@ -12,7 +12,6 @@
         "maxSize": "20m",
         "maxFiles": "14d",
         "level": "info",
-        "serviceName": "rosen-service2",
         "format": "json",
         "createSymlink": true
       }
@@ -89,8 +88,7 @@
               ]
             },
             "serviceName": {
-              "type": "string",
-              "default": "rosen-service2"
+              "type": "string"
             },
             "createSymlink": {
               "type": "boolean",
@@ -153,7 +151,6 @@
             },
             "serviceName": {
               "type": "string",
-              "default": "rosen-service2",
               "validations": [
                 {
                   "required": true,

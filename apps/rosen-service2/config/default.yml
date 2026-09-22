@@ -6,7 +6,6 @@ logs:
     maxSize: 20m
     maxFiles: 14d
     level: info
-    serviceName: rosen-service2
     format: json
     createSymlink: true
 db:
