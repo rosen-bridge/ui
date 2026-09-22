@@ -11,7 +11,10 @@
         "path": "./logs/",
         "maxSize": "20m",
         "maxFiles": "14d",
-        "level": "info"
+        "level": "info",
+        "serviceName": "rosen-service2",
+        "format": "json",
+        "createSymlink": true
       }
     ],
     "items": {
@@ -75,6 +78,7 @@
             },
             "format": {
               "type": "string",
+              "default": "json",
               "validations": [
                 {
                   "choices": [
@@ -85,10 +89,12 @@
               ]
             },
             "serviceName": {
-              "type": "string"
+              "type": "string",
+              "default": "rosen-service2"
             },
             "createSymlink": {
-              "type": "boolean"
+              "type": "boolean",
+              "default": false
             },
             "symlinkName": {
               "type": "string"
@@ -147,6 +153,7 @@
             },
             "serviceName": {
               "type": "string",
+              "default": "rosen-service2",
               "validations": [
                 {
                   "required": true,
