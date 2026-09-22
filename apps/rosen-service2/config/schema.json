@@ -105,7 +105,7 @@
             "type": {
               "type": "string",
               "description": "options: console",
-              "default": "file",
+              "default": "console",
               "validations": [
                 {
                   "required": true,
@@ -136,7 +136,7 @@
             "type": {
               "type": "string",
               "description": "options: loki",
-              "default": "file",
+              "default": "loki",
               "validations": [
                 {
                   "required": true,
