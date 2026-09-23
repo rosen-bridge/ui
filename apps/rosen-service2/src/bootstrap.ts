@@ -6,9 +6,9 @@ import { AddressManager } from '@rosen-bridge/address-manager';
 import CallbackLogger from '@rosen-bridge/callback-logger';
 import WinstonLogger from '@rosen-bridge/winston-logger';
 
-import { configs, getLogOptions } from './configs';
+import { configs } from './configs';
 
-DefaultLogger.init(new CallbackLogger(WinstonLogger.createLogger(getLogOptions(configs.logs))));
+DefaultLogger.init(new CallbackLogger(WinstonLogger.createLogger(configs.logs)));
 
 AddressManager.init(
   chainValidators,

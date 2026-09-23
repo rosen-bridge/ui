@@ -2,10 +2,12 @@ logs:
   - type: console
     level: info
   - type: file
-    level: info
     path: ./logs/
     maxSize: 20m
     maxFiles: 14d
+    level: info
+    format: json
+    createSymlink: true
 db:
   host: localhost
   port: 5432
@@ -36,7 +38,6 @@ statistics:
   userEventsMetric:
     interval: 86400
   watcherCountMetrics:
-    nodeUrl: ''
     interval: 86400
   bridgeFeeMetrics:
     interval: 86400
