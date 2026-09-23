@@ -1,5 +1,20 @@
 # @rosen-bridge/rosen-app
 
+## 5.7.3
+
+### Patch Changes
+
+- Add a MetaMask warning to disable "Added protection" and "Smart account" for Rosen transfers
+- Update Next.js to 16.3.6 to address the vulnerability
+- Update dependencies
+  - @rosen-ui/metamask-wallet@2.2.5
+
+## 5.7.2
+
+### Patch Changes
+
+- Warn users bridging from Firo to use the latest Campfire, Stack Wallet, or Firo-Qt wallet to avoid losing funds with unsupported wallets.
+
 ## 5.7.1
 
 ### Patch Changes
