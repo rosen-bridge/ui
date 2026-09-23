@@ -4,6 +4,7 @@ import {
   getCardanoScanner,
   getDogeScanner,
   getEthereumScanner,
+  getFiroScanner,
 } from 'scanners';
 
 import type { AbstractLogger } from '@rosen-bridge/abstract-logger';
@@ -90,6 +91,7 @@ export class ScannerService extends AbstractScannerService {
    * - Doge
    * - Ethereum
    * - Binance
+   * - Firo
    *
    * Each scanner will be initialized with its event extractors
    * and stored in the `scanners` registry for later use.
@@ -138,6 +140,11 @@ export class ScannerService extends AbstractScannerService {
         case NETWORKS.doge.key:
           if (configs.chains.doge.active) {
             this.scanners[NETWORKS.doge.key] = await getDogeScanner(this.dataSource, this.tokenMap);
+          }
+          break;
+        case NETWORKS.firo.key:
+          if (configs.chains.firo.active) {
+            this.scanners[NETWORKS.firo.key] = await getFiroScanner(this.dataSource, this.tokenMap);
           }
           break;
       }

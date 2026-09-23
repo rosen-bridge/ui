@@ -8,6 +8,8 @@ chains:
   ethereum:
     adapter:
       chunkSize: 1
+  firo:
+    initialHeight: 1
 tokenMap:
   onChainTokenMapEnabled: false
   path: tests/config/tokensMap.json

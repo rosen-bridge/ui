@@ -70,6 +70,21 @@ const RosenBridge = () => {
                   methods.getValues().source === NETWORKS.ethereum.key) && (
                   <div className="rosen-bridge-page-alert">
                     <Alert
+                      severity="error"
+                      style={{
+                        textAlign: 'justify',
+                        marginBottom: '8px',
+                      }}
+                    >
+                      On the MetaMask confirmation screen, uncheck <b>Added protection</b> if it
+                      appears. Rosen cannot yet detect transfers sent with that option, and your
+                      tokens will reach the bridge address without the transfer being processed
+                      recovering them then requires manual support. For the same reason, do not
+                      enable <b>Smart account</b> for this network in MetaMask. Everything else in
+                      MetaMask, including its scam and phishing warnings, should stay on. We are
+                      working on support for both features.
+                    </Alert>
+                    <Alert
                       severity="warning"
                       style={{
                         textAlign: 'justify',

@@ -1,6 +1,6 @@
 {
   "name": "@rosen-bridge/watcher-app",
-  "version": "4.5.1",
+  "version": "4.5.2",
   "private": true,
   "repository": {
     "type": "git",
@@ -27,7 +27,7 @@
     "@t3-oss/env-nextjs": "^0.13.11",
     "lodash-es": "^4.17.21",
     "moment": "^2.29.4",
-    "next": "^16.3.2",
+    "next": "^16.3.6",
     "react": "^19.2.6",
     "react-apexcharts": "^1.4.0",
     "react-dom": "^19.2.6",
