@@ -14,6 +14,7 @@ import {
   UnsupportedChainError,
   UserDeniedTransactionSignatureError,
   Wallet,
+  WalletError,
   type WalletTransferParams,
 } from '@rosen-ui/wallet-api';
 
@@ -65,6 +66,33 @@ export class MetaMaskWallet extends Wallet<MetaMaskWalletConfig> {
       method: 'wallet_getPermissions',
       params: [],
     })) as { caveats: { type: string; value: string[] }[] }[];
+  };
+
+  private requireStandardAccount = async (): Promise<void> => {
+    const address = await this.fetchAddress();
+
+    if (!address) return;
+
+    const code = await this.provider.request<string>({
+      method: 'eth_getCode',
+      params: [address, 'latest'],
+    });
+
+    if (!code?.toLowerCase().startsWith('0xef0100')) return;
+
+    try {
+      await this.api.disconnect();
+    } catch {
+      //
+    }
+
+    throw new WalletError(
+      [
+        "This account is a MetaMask Smart Account and can't be used right now",
+        "Rosen can't yet process transfers sent from smart accounts (EIP-7702). If you continue, your tokens will reach the bridge address but the transfer will not be detected, and recovering them will require manual support.",
+        'To continue, switch this account back to a standard account in MetaMask: Account menu (⋮) → Account details → Smart account → turn off the toggle for this network, then reload this page. Your address, funds and Secret Recovery Phrase do not change.',
+      ].join('\n'),
+    );
   };
 
   initialize = async (): Promise<void> => {
@@ -167,6 +195,8 @@ export class MetaMaskWallet extends Wallet<MetaMaskWalletConfig> {
           throw error;
       }
     }
+
+    await this.requireStandardAccount();
   };
 
   performTransfer = async (params: WalletTransferParams): Promise<string> => {
@@ -176,6 +206,8 @@ export class MetaMaskWallet extends Wallet<MetaMaskWalletConfig> {
     ) {
       throw new UnsupportedChainError(this.name, this.currentChain);
     }
+
+    await this.requireStandardAccount();
 
     const address = await this.getAddress();
 

@@ -1,5 +1,11 @@
 # @rosen-bridge/watcher-app
 
+## 4.5.2
+
+### Patch Changes
+
+- Update Next.js to 16.3.6 to address the vulnerability
+
 ## 4.5.1
 
 ### Patch Changes
