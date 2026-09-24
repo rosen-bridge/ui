@@ -1,5 +1,6 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 
+import { serializeError } from 'serialize-error';
 import useSWR from 'swr';
 
 import {
@@ -10,6 +11,7 @@ import {
   GridContainer,
   Identifier,
   Network,
+  useToast,
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import { getTokenUrl } from '@rosen-ui/utils';
@@ -23,7 +25,9 @@ export interface BridgedListProps {
 }
 
 export const BridgedList = ({ value }: BridgedListProps) => {
-  const { data, isLoading } = useSWR<ApiAssetResponse>(
+  const toast = useToast();
+
+  const { data, isLoading, error } = useSWR<ApiAssetResponse>(
     `/v1/assets/detail/${value?.id.toLowerCase()}`,
     fetcher,
     {
@@ -36,6 +40,16 @@ export const BridgedList = ({ value }: BridgedListProps) => {
     if (!isLoading) return data?.bridged || [];
     return Array(2).fill({});
   }, [data, isLoading]);
+
+  useEffect(() => {
+    if (error) {
+      toast.add({
+        type: 'error',
+        description: error.message,
+        more: () => JSON.stringify(serializeError(error), null, 2),
+      });
+    }
+  }, [error, toast.add]);
 
   return (
     <GridContainer minWidth="220px" gap="0.5rem">
