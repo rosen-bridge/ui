@@ -20,10 +20,11 @@
   "dependencies": {
     "@rosen-bridge/abstract-observation-extractor": "^1.0.10",
     "@rosen-bridge/abstract-scanner": "^2.0.3",
+    "@rosen-bridge/address-extractor": "^7.0.8",
     "@rosen-bridge/extended-typeorm": "^1.1.0",
     "@rosen-bridge/token-price-entity": "^0.2.2",
     "@rosen-bridge/watcher-data-extractor": "^13.0.10",
-    "@rosen-ui/asset-calculator": "^2.4.0",
+    "@rosen-ui/asset-aggregator": "^0.1.0",
     "@rosen-ui/public-status": "^0.3.0",
     "@rosen-ui/rosen-statistics-entity": "^0.4.2"
   },

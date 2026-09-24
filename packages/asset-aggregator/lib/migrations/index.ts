@@ -4,6 +4,7 @@ import {
   Migration1716290617188,
   Migration1719839526564,
   Migration1757426014448,
+  Migration1762606291770,
   Migration1767778012669,
 } from './postgres';
 import {
@@ -22,6 +23,7 @@ export const migrations = {
     Migration1716290617188,
     Migration1719839526564,
     Migration1757426014448,
+    Migration1762606291770,
     Migration1767778012669,
   ],
   sqlite: [

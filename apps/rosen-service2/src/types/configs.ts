@@ -36,11 +36,9 @@ export interface LogsOption2 {
 }
 
 export interface Db {
-  host: string;
-  port: number;
-  username?: string;
-  password?: string;
-  name: string;
+  url: string;
+  logging?: boolean;
+  useSSL?: boolean;
 }
 
 export interface Redis {

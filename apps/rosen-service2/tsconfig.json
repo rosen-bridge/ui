@@ -12,6 +12,7 @@
   "references": [
     { "path": "../../packages/asset-aggregator/" },
     { "path": "../../packages/constants" },
+    { "path": "../../packages/data-source" },
     { "path": "../../packages/asset-data-adapter/" },
     { "path": "../../packages/rosen-statistics/" }
   ]

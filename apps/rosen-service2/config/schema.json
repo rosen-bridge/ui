@@ -188,43 +188,25 @@
   "db": {
     "type": "object",
     "children": {
-      "host": {
+      "url": {
         "type": "string",
-        "default": "localhost",
+        "description": "postgres connection url, e.g. postgresql://username:password@host:port/databasename",
         "validations": [
           {
             "required": true,
-            "error": "host for the \"postgres\" database address must be specified"
+            "error": "postgres connection url must be specified"
           }
         ]
       },
-      "port": {
-        "type": "number",
-        "default": 5432,
-        "validations": [
-          {
-            "required": true,
-            "error": "postgres port must be set"
-          }
-        ]
+      "logging": {
+        "type": "boolean",
+        "default": false,
+        "description": "enable TypeORM query logging"
       },
-      "username": {
-        "type": "string",
-        "default": "postgres"
-      },
-      "password": {
-        "type": "string",
-        "default": ""
-      },
-      "name": {
-        "type": "string",
-        "default": "rosen_service",
-        "validations": [
-          {
-            "required": true,
-            "error": "postgres database name must be specified"
-          }
-        ]
+      "useSSL": {
+        "type": "boolean",
+        "default": false,
+        "description": "use SSL for the postgres connection"
       }
     }
   },

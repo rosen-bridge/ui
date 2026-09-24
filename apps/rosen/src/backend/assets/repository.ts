@@ -1,5 +1,5 @@
 import type { Filter } from '@rosen-bridge/query-params';
-import { BridgedAssetEntity, LockedAssetEntity, TokenEntity } from '@rosen-ui/asset-calculator';
+import { BridgedAssetEntity, LockedAssetEntity, TokenEntity } from '@rosen-ui/asset-aggregator';
 import type { Network } from '@rosen-ui/types';
 
 import { filtersToTypeorm } from '@/filters';

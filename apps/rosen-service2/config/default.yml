@@ -9,11 +9,8 @@ logs:
     format: json
     createSymlink: true
 db:
-  host: localhost
-  port: 5432
-  username: postgres
-  password: ''
-  name: rosen_service
+  logging: false
+  useSSL: false
 healthCheck:
   logging:
     maxErrors: 10

@@ -5,7 +5,7 @@ import { BlockEntity } from '@rosen-bridge/abstract-scanner';
 import type { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
 import { TokenPriceEntity } from '@rosen-bridge/token-price-entity';
 import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
-import { TokenEntity } from '@rosen-ui/asset-calculator';
+import { TokenEntity } from '@rosen-ui/asset-aggregator';
 import { BridgeFeeEntity, METRIC_KEYS, MetricEntity } from '@rosen-ui/rosen-statistics-entity';
 
 import { bridgeFeeMetric } from '../../lib';

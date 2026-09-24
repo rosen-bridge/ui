@@ -1,3 +1,5 @@
+db:
+  url: postgresql://postgres:postgres@localhost:5432/rosen_service
 redis:
   address: http://kv
   token: 'kv-token'

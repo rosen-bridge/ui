@@ -4,7 +4,7 @@ import { ArrayContains, In, Not } from '@rosen-bridge/extended-typeorm';
 import type { Filter, StringArrayFilterField } from '@rosen-bridge/query-params';
 import { TokenPriceAction } from '@rosen-bridge/token-price-entity';
 import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
-import { TokenEntity } from '@rosen-ui/asset-calculator';
+import { TokenEntity } from '@rosen-ui/asset-aggregator';
 import { NETWORKS } from '@rosen-ui/constants';
 import {
   AggregatedStatusChangedEntity,
