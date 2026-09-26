@@ -1,0 +1,12 @@
+{
+  "name": "rosen-zcash-zallet-companion",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": "22.18.0"
+  },
+  "dependencies": {
+    "@rosen-bridge/address-codec-ergo": "0.1.0"
+  }
+}

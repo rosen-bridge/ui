@@ -51,7 +51,7 @@ export const BridgeForm = () => {
     formState: { isValidating },
   } = useTransactionFormData();
 
-  const { sources, availableSources, availableTargets, availableTokens } = useNetwork();
+  const { sources, targets, availableSources, availableTargets, availableTokens } = useNetwork();
 
   const { isLoading, raw: balanceRaw, amount: balanceAmount } = useBalance();
 
@@ -65,7 +65,9 @@ export const BridgeForm = () => {
   });
 
   const renderSelectedNetwork = (value: unknown) => {
-    const network = sources.find((network) => network.name === value);
+    const network =
+      sources.find((network) => network.name === value) ??
+      targets.find((network) => network.name === value);
     return <Network value={network?.name} slots={{ logo: { size: 'medium' } }} />;
   };
 
@@ -222,6 +224,12 @@ export const BridgeForm = () => {
           Only Native SegWit (P2WPKH or P2WSH) addresses are supported.
         </Alert>
       )}
+      {targetField.value === NETWORKS.zcash.key && (
+        <Alert severity="warning">
+          Transparent Zcash P2PKH addresses are supported. Orchard Unified Addresses are available only on the
+          configured local regtest.
+        </Alert>
+      )}
       <Autocomplete
         aria-label="token input"
         disabled={!availableTokens.length}
@@ -246,17 +254,21 @@ export const BridgeForm = () => {
         helperText={errors.amount?.message?.toString()}
         InputProps={{
           disableUnderline: true,
-          endAdornment: tokenField.value && selectedWallet && balanceAmount >= 0n && (
-            <UseAllAmount
-              disabled={!addressField.value || !!errors?.walletAddress}
-              error={!!error}
-              loading={isLoading || isMaxLoading}
-              value={balanceRaw}
-              unit={(tokenValue as RosenChainToken)?.name}
-              onClick={handleSelectMax}
-              onRetry={load}
-            />
-          ),
+          endAdornment:
+            sourceField.value !== NETWORKS.zcash.key &&
+            tokenField.value &&
+            selectedWallet &&
+            balanceAmount >= 0n && (
+              <UseAllAmount
+                disabled={!addressField.value || !!errors?.walletAddress}
+                error={!!error}
+                loading={isLoading || isMaxLoading}
+                value={balanceRaw}
+                unit={(tokenValue as RosenChainToken)?.name}
+                onClick={handleSelectMax}
+                onRetry={load}
+              />
+            ),
         }}
         inputProps={{
           'style': { fontSize: '2rem' },

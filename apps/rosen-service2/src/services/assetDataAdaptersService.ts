@@ -10,6 +10,7 @@ import {
   DogeBlockCypherDataAdapter,
   ErgoExplorerDataAdapter,
   EthereumEvmRpcDataAdapter,
+  ZcashRpcDataAdapter,
 } from '@rosen-ui/asset-data-adapter';
 import type { AssetBalance, ChainsAdapters } from '@rosen-ui/asset-data-adapter/dist/types';
 import { NETWORKS, NETWORKS_KEYS } from '@rosen-ui/constants';
@@ -180,6 +181,14 @@ export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
                 blockCypherUrl: configs.chains.doge.adapter.blockCypher.url,
               },
               this.logger.child('dogeBlockCypherDataAdapter'),
+            );
+            break;
+          case NETWORKS.zcash.key:
+            this.adapters[NETWORKS[chain].key] = new ZcashRpcDataAdapter(
+              addresses,
+              tokenMap,
+              configs.chains.zcash.rpc,
+              this.logger.child('zcashRpcDataAdapter'),
             );
             break;
         }

@@ -75,6 +75,14 @@ export const NETWORKS = {
     id: '',
     hasTokenSupport: false,
   },
+  'zcash': {
+    index: 10,
+    key: 'zcash',
+    label: 'Zcash',
+    nativeToken: 'zec',
+    id: '',
+    hasTokenSupport: false,
+  },
 } as const;
 
 export const NETWORKS_KEYS = Object.values(NETWORKS).map((network) => network.key);

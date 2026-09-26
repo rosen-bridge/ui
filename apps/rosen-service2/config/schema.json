@@ -1487,6 +1487,51 @@
           }
         }
       },
+      "zcash": {
+        "type": "object",
+        "children": {
+          "active": { "type": "boolean", "default": false },
+          "initialHeight": { "type": "number", "default": 1 },
+          "scanInterval": { "type": "number", "default": 75 },
+          "network": { "type": "string", "default": "mainnet" },
+          "genesisHash": { "type": "string" },
+          "branches": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "children": {
+                "height": { "type": "number" },
+                "branchId": { "type": "string" }
+              }
+            }
+          },
+          "inspector": {
+            "type": "object",
+            "children": {
+              "path": { "type": "string" },
+              "sha256": { "type": "string" }
+            }
+          },
+          "adapter": {
+            "type": "object",
+            "children": {
+              "extraAddresses": { "type": "array", "items": { "type": "string" } }
+            }
+          },
+          "rpc": {
+            "type": "object",
+            "children": {
+              "url": {
+                "type": "string",
+                "validations": [{ "required": true, "when": { "path": "chains.zcash.active", "value": true } }]
+              },
+              "timeout": { "type": "number", "default": 30 },
+              "username": { "type": "string" },
+              "password": { "type": "string" }
+            }
+          }
+        }
+      },
       "firo": {
         "type": "object",
         "children": {

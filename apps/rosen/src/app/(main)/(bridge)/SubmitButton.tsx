@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { type ChangeEvent, useState } from 'react';
 
 import type { RosenChainToken } from '@rosen-bridge/tokens';
+import { NETWORKS } from '@rosen-ui/constants';
 import {
   Alert,
   Amount,
@@ -25,6 +26,7 @@ import {
   Stack,
   Typography,
   useIsDarkMode,
+  useToast,
 } from '@rosen-bridge/ui-kit';
 
 import {
@@ -35,11 +37,27 @@ import {
   useTransactionFormData,
   useWallet,
 } from '@/hooks';
+import { zcash } from '@/networks/zcash/client';
+import { verifyZcashLockReceipt } from '@/networks/zcash/verifyReceipt';
 
 export const SubmitButton = () => {
   const [open, setOpen] = useState(false);
 
   const [qrCode, setQrCode] = useState('');
+
+  const [zcashIntentJson, setZcashIntentJson] = useState('');
+
+  const [zcashReceiptJson, setZcashReceiptJson] = useState('');
+
+  const [zcashResumeJson, setZcashResumeJson] = useState('');
+
+  const [zcashResumeMode, setZcashResumeMode] = useState(false);
+
+  const [zcashIntentFromResume, setZcashIntentFromResume] = useState(false);
+
+  const [isCheckingReceipt, setIsCheckingReceipt] = useState(false);
+
+  const toast = useToast();
 
   const tokenMap = useTokenMap();
 
@@ -70,6 +88,7 @@ export const SubmitButton = () => {
 
   const close = () => {
     setOpen(false);
+    setZcashResumeMode(false);
     setTimeout(() => setQrCode(''), 500);
   };
 
@@ -80,13 +99,65 @@ export const SubmitButton = () => {
        * local:ergo/rosen-bridge/ui#1191
        */
       const isQrCode = !!result?.startsWith('qrcode:');
-      if (result && isQrCode) {
+      const isFileIntent = !!result?.startsWith('file-intent:');
+      if (result && isFileIntent) {
+        setZcashIntentJson(result.slice('file-intent:'.length));
+        setZcashIntentFromResume(false);
+      } else if (result && isQrCode) {
         setQrCode(result.replace('qrcode:', ''));
       } else {
         close();
       }
     });
   });
+
+  const downloadZcashIntent = () => {
+    if (!zcashIntentJson || zcashIntentFromResume) return;
+    const intent = JSON.parse(zcashIntentJson) as { requestId: string };
+    const blob = new Blob([zcashIntentJson], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = `rosen-zcash-lock-${intent.requestId}.json`;
+    anchor.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const verifyZcashReceipt = async (receiptJson: string) => {
+    if (!zcashIntentJson) return;
+    setIsCheckingReceipt(true);
+    try {
+      const { txid, confirmations } = await verifyZcashLockReceipt(
+        zcashIntentJson,
+        receiptJson,
+      );
+      toast.add({
+        type: 'success',
+        description: `Zcash lock ${txid} verified on-chain with ${confirmations} confirmation(s).`,
+      });
+      setZcashIntentJson('');
+      setZcashReceiptJson('');
+      close();
+    } catch (error) {
+      toast.add({
+        type: 'error',
+        description: error instanceof Error ? error.message : 'Zcash receipt verification failed',
+      });
+    } finally {
+      setIsCheckingReceipt(false);
+    }
+  };
+
+  const importZcashReceipt = async (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    event.target.value = '';
+    if (!file) return;
+    if (file.size > 4_096) {
+      toast.add({ type: 'error', description: 'Zcash receipt is too large' });
+      return;
+    }
+    await verifyZcashReceipt(await file.text());
+  };
 
   const { availableSources } = useNetwork();
 
@@ -129,8 +200,115 @@ export const SubmitButton = () => {
       >
         SUBMIT
       </Button>
+      {sourceValue === NETWORKS.zcash.key && zcash.isConfigured() && (
+        <Button
+          color="secondary"
+          variant="contained"
+          onClick={() => {
+            setZcashResumeMode(true);
+            setOpen(true);
+          }}
+        >
+          Verify saved Zcash deposit
+        </Button>
+      )}
       <Dialog open={open} unstick="tablet" width="small" onClose={() => close()}>
-        {qrCode ? (
+        {zcashIntentJson && !zcashResumeMode ? (
+          <>
+            <DialogHeader>
+              <DialogIcon name="FileAlt" />
+              <DialogTitle>Complete Zcash deposit with Zallet</DialogTitle>
+              <DialogCloseButton />
+            </DialogHeader>
+            <DialogBody>
+              <Stack spacing={2}>
+                <DialogDescription>
+                  Download the lock request and open it with the local Rosen Zallet companion.
+                  Review the reserve, amount, Ergo destination, and network fee before approving
+                  the transaction in Zallet. Import its receipt after the deposit confirms.
+                </DialogDescription>
+                <Alert severity="warning">
+                  This deposit uses transparent Zcash transactions. Addresses and amounts are
+                  visible on Zcash. The local companion shares your transparent address and
+                  confirmed spendable ZEC with this page, but keeps wallet keys and RPC
+                  credentials local; review and sign in the local companion.
+                </Alert>
+                {!zcashIntentFromResume && (
+                  <Button variant="contained" onClick={downloadZcashIntent}>
+                    Download lock request
+                  </Button>
+                )}
+                <label htmlFor="zcash-lock-receipt">Import confirmed receipt</label>
+                <input
+                  id="zcash-lock-receipt"
+                  type="file"
+                  accept="application/json,.json"
+                  disabled={isCheckingReceipt}
+                  onChange={importZcashReceipt}
+                />
+                <textarea
+                  aria-label="Zcash receipt JSON"
+                  placeholder="Or paste the companion receipt JSON"
+                  rows={4}
+                  maxLength={4_096}
+                  value={zcashReceiptJson}
+                  onChange={(event) => setZcashReceiptJson(event.target.value)}
+                />
+                <Button
+                  variant="contained"
+                  disabled={!zcashReceiptJson || isCheckingReceipt}
+                  onClick={() => verifyZcashReceipt(zcashReceiptJson)}
+                >
+                  Verify pasted receipt
+                </Button>
+                {isCheckingReceipt && <Typography>Checking Zcash chain confirmation…</Typography>}
+              </Stack>
+            </DialogBody>
+            <DialogFooter>
+              <Button color="secondary" variant="contained" onClick={close}>
+                Close
+              </Button>
+            </DialogFooter>
+          </>
+        ) : zcashResumeMode ? (
+          <>
+            <DialogHeader>
+              <DialogIcon name="FileAlt" />
+              <DialogTitle>Verify saved Zcash deposit</DialogTitle>
+              <DialogCloseButton />
+            </DialogHeader>
+            <DialogBody>
+              <Stack spacing={2}>
+                <DialogDescription>
+                  Paste the exact lock request JSON you saved before submitting the deposit.
+                </DialogDescription>
+                <textarea
+                  aria-label="Saved Zcash lock request JSON"
+                  rows={5}
+                  maxLength={16_384}
+                  value={zcashResumeJson}
+                  onChange={(event) => setZcashResumeJson(event.target.value)}
+                />
+                <Button
+                  variant="contained"
+                  disabled={!zcashResumeJson}
+                  onClick={() => {
+                    setZcashIntentJson(zcashResumeJson);
+                    setZcashIntentFromResume(true);
+                    setZcashResumeMode(false);
+                  }}
+                >
+                  Continue to receipt verification
+                </Button>
+              </Stack>
+            </DialogBody>
+            <DialogFooter>
+              <Button color="secondary" variant="contained" onClick={close}>
+                Close
+              </Button>
+            </DialogFooter>
+          </>
+        ) : qrCode ? (
           <>
             <DialogHeader>
               <DialogIcon name="QrcodeScan" />

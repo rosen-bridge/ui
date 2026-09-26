@@ -1,0 +1,7 @@
+node_modules/
+runtime/
+sessions/
+config.local.json
+*.b64
+*.hex
+*.sqlite
