@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { Icon, IconButton, type IconProps, Tooltip } from '@/components';
 import { useConfig } from '@/hooks';
@@ -28,6 +28,13 @@ export type CopyButtonBaseProps = ElementBaseProps<typeof IconButton, CopyButton
 
 export type CopyButtonProps = OverridableType<CopyButtonBaseProps, CopyButtonOverrides, never>;
 
+const defaultIcons: Record<CopyButtonStatus, IconProps['name']> = {
+  idle: 'Copy',
+  copying: 'Copy',
+  copied: 'Check',
+  failed: 'CloseCircle',
+} as const;
+
 /**
  * A button that copies text to the clipboard and shows the status with an icon.
  */
@@ -43,22 +50,11 @@ export const CopyButton = (props: CopyButtonProps) => {
     };
   }, []);
 
-  const icon = useMemo(() => {
-    switch (status) {
-      case 'idle':
-        return icons?.idle || 'Copy';
-      case 'copying':
-        return icons?.copying || 'Copy';
-      case 'copied':
-        return icons?.copied || 'Check';
-      case 'failed':
-        return icons?.failed || 'CloseCircle';
-    }
-  }, [icons, status]);
+  const icon: IconProps['name'] = icons?.[status] || defaultIcons[status];
 
   const isDisabled = Boolean(disabled || value === undefined || value === '');
 
-  const handleCopy = useCallback(() => {
+  const handleCopy = () => {
     const text = typeof value === 'function' ? value() : value;
 
     if (isDisabled || !text) return;
@@ -83,7 +79,7 @@ export const CopyButton = (props: CopyButtonProps) => {
         setStatus('failed');
         timeoutRef.current = window.setTimeout(() => setStatus('idle'), 5000);
       });
-  }, [value, isDisabled]);
+  };
 
   return (
     <Tooltip

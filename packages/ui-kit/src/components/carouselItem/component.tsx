@@ -1,5 +1,3 @@
-import { useMemo } from 'react';
-
 import { useConfig } from '@/hooks';
 import type { ElementBaseProps, OverridableType } from '@/types';
 
@@ -26,10 +24,7 @@ export type CarouselItemProps = OverridableType<
 export const CarouselItem = (props: CarouselItemProps) => {
   const { size, style, ...rest } = useConfig('CarouselItem', props);
 
-  const styles = useMemo(() => {
-    if (!size) return style;
-    return { flex: `0 0 ${size}`, ...style };
-  }, [size, style]);
+  const styles = !size ? style : { flex: `0 0 ${size}`, ...style };
 
   return <div style={styles} {...rest} />;
 };
