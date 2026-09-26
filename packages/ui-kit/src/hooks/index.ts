@@ -7,6 +7,7 @@ export * from './useDisclosure';
 export * from './useFramework';
 export * from './useIsDarkMode';
 export * from './useMenu';
+export * from './usePagination';
 export * from './useResponsive';
 export * from './useTablePagination';
 export * from './useTheme';
