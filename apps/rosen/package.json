@@ -24,8 +24,9 @@
     "validate-token-icons": "tsx ./scripts/validateTokenIcons"
   },
   "dependencies": {
-    "@rosen-bridge/abstract-observation-extractor": "^1.0.10",
+    "@rosen-bridge/abstract-observation-extractor": "1.0.10",
     "@rosen-bridge/abstract-scanner": "^2.0.3",
+    "@rosen-bridge/address-codec-zcash": "^0.1.0",
     "@rosen-bridge/encryption": "^1.0.1",
     "@rosen-bridge/extended-typeorm": "^1.1.0",
     "@rosen-bridge/icons": "^4.0.0",

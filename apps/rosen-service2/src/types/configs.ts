@@ -130,6 +130,24 @@ export interface Chains {
   ethereum: ChainsEthereum;
   binance: ChainsBinance;
   firo: ChainsFiro;
+  zcash: ChainsZcash;
+}
+
+export interface ChainsZcash {
+  active: boolean;
+  initialHeight: number;
+  scanInterval: number;
+  network: 'mainnet' | 'testnet' | 'regtest';
+  genesisHash: string;
+  branches: { height: number; branchId: string }[];
+  inspector: { path: string; sha256: string };
+  adapter: { extraAddresses: string[] };
+  rpc: {
+    url: string;
+    timeout?: number;
+    username?: string;
+    password?: string;
+  };
 }
 
 export interface ChainsFiro {

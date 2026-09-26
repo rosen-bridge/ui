@@ -17,7 +17,7 @@ import type { Network } from '@rosen-ui/types';
 import { batch } from '@rosen-ui/utils';
 
 import { Actions } from './app/(main)/Actions';
-import { getTokensByIds } from './backend/tokens/actions';
+import { TOKENS } from '../configs';
 import { unwrap } from './safeServerAction';
 
 declare module '@rosen-bridge/ui-kit' {
@@ -39,9 +39,28 @@ declare module '@rosen-bridge/ui-kit' {
 }
 
 const resolveToken: TokenProps['resolver'] = batch<string, TokenMeta>(async (ids) => {
-  const data = await unwrap(getTokensByIds)(ids);
-
   const result: Record<string, TokenMeta> = {};
+
+  // The Zcash deposit's configured token pair is available before the asset DB is populated.
+  for (const pair of TOKENS) {
+    if (!pair.zcash || !pair.ergo) continue;
+    for (const tokenId of [pair.zcash.tokenId, pair.ergo.tokenId]) {
+      if (!ids.includes(tokenId)) continue;
+      result[tokenId] = {
+        label: pair.zcash.name,
+        logo: tokenIcons[`Token_${pair.ergo.tokenId}` as keyof typeof tokenIcons],
+      };
+    }
+  }
+
+  const remainingIds = ids.filter((id) => !result[id]);
+  if (!remainingIds.length) return result;
+  if (process.env.NEXT_PUBLIC_ZCASH_NETWORK === 'regtest') {
+    for (const id of remainingIds) result[id] = { label: id };
+    return result;
+  }
+  const { getTokensByIds } = await import('./backend/tokens/actions');
+  const data = await unwrap(getTokensByIds)(remainingIds);
 
   for (const token of data) {
     result[token.id] = {

@@ -84,6 +84,12 @@ chains:
   firo:
     active: false
     scanInterval: 60
+  zcash:
+    active: false
+    initialHeight: 1
+    scanInterval: 75
+    network: mainnet
+    branches: []
 paths:
   contracts: config/contracts.json
   healthReport: healthReport.json

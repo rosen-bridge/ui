@@ -48,4 +48,5 @@ export const BLOCK_TIMES: Record<ChainsWithScanner, number> = {
   ethereum: ETHEREUM_BLOCK_TIME,
   binance: BINANCE_BLOCK_TIME,
   firo: FIRO_BLOCK_TIME,
+  zcash: 75,
 };

@@ -1,0 +1,37 @@
+[package]
+name = "pczt"
+version = "0.9.3"
+edition = "2024"
+rust-version = "1.85"
+description = "Pinned PCZT 0.9.3 source from librustzcash 1f6bb207 with Rosen output-effect extension"
+license = "MIT OR Apache-2.0"
+
+[dependencies]
+zcash_protocol = { version = "=0.10.5", default-features = false }
+postcard = { version = "=1.1.3", default-features = false, features = ["alloc"] }
+serde = { version = "=1.0.229", default-features = false, features = ["derive"] }
+serde_with = { version = "=3.23.0", default-features = false, features = ["alloc", "macros"] }
+getset = "=0.1.7"
+secp256k1 = { version = "=0.29.1", default-features = false, features = ["alloc"], optional = true }
+transparent = { package = "zcash_transparent", version = "=0.10.0", default-features = false, optional = true }
+zcash_script = { version = "=0.4.5", default-features = false, optional = true }
+
+[features]
+default = []
+std = []
+zip-233 = []
+orchard = []
+sapling = []
+io-finalizer = []
+prover = []
+signer = []
+spend-finalizer = []
+tx-extractor = []
+zcp-builder = []
+internal-tests = []
+transparent = [
+  "dep:secp256k1",
+  "dep:transparent",
+  "dep:zcash_script",
+  "transparent/transparent-inputs",
+]
