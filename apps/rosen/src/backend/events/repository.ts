@@ -702,3 +702,27 @@ export const getEventGuardsStatus = async (
     status: guardStatusToEventStatus(row.status, row.txStatus || undefined),
   }));
 };
+
+export type EventGuardTimestampsType = Partial<Record<EventGuardStatusType['status'], number>>;
+
+export const getEventGuardStatus = async (
+  triggerTxId: string,
+  guardPublicKey: string,
+): Promise<EventGuardTimestampsType> => {
+  const timestamps: EventGuardTimestampsType = {};
+
+  const changes = await guardStatusChangedRepository.find({
+    where: { triggerTxId, guardPk: guardPublicKey },
+    order: { insertedAt: 'ASC' },
+  });
+
+  for (const change of changes) {
+    const status = guardStatusToEventStatus(change.status, change.txStatus || undefined);
+
+    if (status === 'UNKNOWN') continue;
+
+    timestamps[status] ??= change.insertedAt;
+  }
+
+  return timestamps;
+};

@@ -33,7 +33,7 @@ const steps: StepCandidates[] = [
   [
     {
       key: 'CREATED',
-      title: 'Creation',
+      title: 'Registration',
       subtitle: 'Created',
       status: 'done',
     },
@@ -272,19 +272,19 @@ const steps: StepCandidates[] = [
   ],
   [
     {
-      title: 'Completion',
+      title: 'Outcome',
       subtitle: 'Pending',
       status: 'pending',
     },
     {
       key: 'COMPLETED',
-      title: 'Completion',
+      title: 'Outcome',
       subtitle: 'Completed',
       status: 'done',
     },
     {
       key: 'FRAUD',
-      title: 'Completion',
+      title: 'Outcome',
       subtitle: 'Fraud',
       status: 'error',
     },
@@ -383,9 +383,9 @@ export const Process = ({ id, flowId }: { id: string; flowId: string | undefined
     mutate,
   } = useSWR<EventDetailsType[]>(`/v1/events/${id}`, fetcher);
 
-  const data = events?.find((event) => event.triggerTxId === flowId);
+  const data = events?.find((event) => !flowId || event.triggerTxId === flowId);
 
-  const loading = isLoading || (!!events?.length && !flowId);
+  const loading = isLoading || !data;
 
   const isCustomStatus = typeof data?.status === 'object';
 

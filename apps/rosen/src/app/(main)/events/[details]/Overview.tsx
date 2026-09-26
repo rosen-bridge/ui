@@ -51,7 +51,7 @@ export const Overview = ({
     onFlowIdChange(events?.at(0)?.triggerTxId ?? undefined);
   }, [events, onFlowIdChange]);
 
-  const data = events?.find((event) => event.triggerTxId === flowId);
+  const data = events?.find((event) => !flowId || event.triggerTxId === flowId);
 
   const multipleFLow = events && events.length > 1;
 
