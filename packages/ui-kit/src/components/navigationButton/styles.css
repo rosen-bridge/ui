@@ -10,6 +10,7 @@
   opacity: 0.8;
   cursor: pointer;
   color: white;
+  width: 64px;
 
   & .RosenNavigationButton-label {
     margin: 0;
