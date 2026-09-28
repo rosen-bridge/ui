@@ -14,6 +14,7 @@ import { NETWORKS } from '@rosen-ui/constants';
 import type { Network as NetworkKey } from '@rosen-ui/types';
 
 import * as networks from '@/networks';
+import { zcash } from '@/networks/zcash/client';
 
 import { useBridgeForm } from './useBridgeForm';
 import { useTokenMap } from './useTokenMap';
@@ -86,6 +87,9 @@ export const NetworkProvider = ({ children }: { children: ReactNode }) => {
   const sources = useMemo(() => {
     return (tokenMap.getAllChains() as NetworkKey[])
       .filter((chain) => !!NETWORKS[chain])
+      .filter(
+        (chain) => chain !== NETWORKS.zcash.key || zcash.isDepositAvailable(),
+      )
       .map((chain) => getNetwork(chain))
       .filter((chain) => !!chain);
   }, [tokenMap, getNetwork]);
@@ -97,6 +101,8 @@ export const NetworkProvider = ({ children }: { children: ReactNode }) => {
   const targets = useMemo(() => {
     return (tokenMap.getSupportedChains(sourceField.value) as NetworkKey[])
       .filter((chain) => !!NETWORKS[chain])
+      .filter((chain) => sourceField.value !== NETWORKS.zcash.key || chain === NETWORKS.ergo.key)
+      .filter((chain) => chain !== NETWORKS.zcash.key || sourceField.value === NETWORKS.ergo.key)
       .map((chain) => getNetwork(chain))
       .filter((chain) => !!chain);
   }, [sourceField.value, tokenMap, getNetwork]);
@@ -126,6 +132,9 @@ export const NetworkProvider = ({ children }: { children: ReactNode }) => {
 
       for (const toChain of tokenMap.getSupportedChains(fromChain)) {
         if (!NETWORKS[toChain as NetworkKey]) continue;
+        if (fromChain === NETWORKS.zcash.key && toChain !== NETWORKS.ergo.key) continue;
+        if (toChain === NETWORKS.zcash.key && fromChain !== NETWORKS.ergo.key) continue;
+        if (fromChain === NETWORKS.zcash.key && !zcash.isDepositAvailable()) continue;
 
         for (const token of tokenMap.getTokens(fromChain, toChain)) {
           const isBlocked = blacklist.some(

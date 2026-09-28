@@ -77,8 +77,9 @@ export const useTransaction = () => {
       const result = await selectedWallet.transfer(parameters);
 
       const isQrCode = result.startsWith('qrcode:');
+      const isFileIntent = result.startsWith('file-intent:');
 
-      if (isQrCode) {
+      if (isQrCode || isFileIntent) {
         setIsSubmitting(false);
         return result;
       }

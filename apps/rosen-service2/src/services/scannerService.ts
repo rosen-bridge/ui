@@ -5,6 +5,7 @@ import {
   getDogeScanner,
   getEthereumScanner,
   getFiroScanner,
+  getZcashScanner,
 } from 'scanners';
 
 import type { AbstractLogger } from '@rosen-bridge/abstract-logger';
@@ -13,6 +14,7 @@ import type { TokenMap } from '@rosen-bridge/extended-tokens';
 import type { DataSource } from '@rosen-bridge/extended-typeorm';
 import { type Dependency, ServiceAction, ServiceStatus } from '@rosen-bridge/service-manager';
 import { NETWORKS } from '@rosen-ui/constants';
+import type { FailClosedScannerLogger } from '@rosen-bridge/zcash-scanner';
 
 import { configs } from '../configs';
 import type { ChainChoices, ChainScannersType, ChainsKeys, ChainsWithScanner } from '../types';
@@ -28,6 +30,7 @@ export class ScannerService extends AbstractScannerService {
   protected scanners: { [k1 in ChainsKeys]?: ChainScannersType } = {};
   private dataSource: DataSource;
   private tokenMap: TokenMap;
+  private zcashErrorLogger?: FailClosedScannerLogger;
   protected dependencies: Dependency[] = [
     {
       serviceName: AbstractDBService.name,
@@ -92,6 +95,7 @@ export class ScannerService extends AbstractScannerService {
    * - Ethereum
    * - Binance
    * - Firo
+   * - Zcash
    *
    * Each scanner will be initialized with its event extractors
    * and stored in the `scanners` registry for later use.
@@ -147,6 +151,13 @@ export class ScannerService extends AbstractScannerService {
             this.scanners[NETWORKS.firo.key] = await getFiroScanner(this.dataSource, this.tokenMap);
           }
           break;
+        case NETWORKS.zcash.key:
+          if (configs.chains.zcash.active) {
+            const { scanner, errorLogger } = await getZcashScanner(this.dataSource, this.tokenMap);
+            this.scanners[NETWORKS.zcash.key] = scanner;
+            this.zcashErrorLogger = errorLogger;
+          }
+          break;
       }
     }
   };
@@ -192,6 +203,7 @@ export class ScannerService extends AbstractScannerService {
         fn: async () => {
           if (!(scanner instanceof WebSocketScanner)) {
             await scanner.update();
+            if (chain === NETWORKS.zcash.key) this.zcashErrorLogger?.assertNoErrors();
           }
         },
         interval: configs.chains[chain as ChainsWithScanner].scanInterval * 1000,

@@ -19,7 +19,7 @@ import {
 } from '@/components';
 import { useConfig } from '@/hooks';
 import type { ElementBaseProps, OverridableType } from '@/types';
-import { formatDateTime } from '@/utils';
+import { formatDateTime, getSourceIdentifier } from '@/utils';
 
 export interface EventDetailsOverrides {}
 
@@ -62,6 +62,7 @@ export type EventDetailsProps = OverridableType<
 
 export const EventDetails = (props: EventDetailsProps) => {
   const { loading, value, ...rest } = useConfig('EventDetails', props);
+  const source = getSourceIdentifier(value.fromChain, value.fromAddress, value.fromAddressUrl);
 
   return (
     <Columns gap={4} width="20rem" rule {...rest}>
@@ -142,12 +143,13 @@ export const EventDetails = (props: EventDetailsProps) => {
       )}
       {'fromAddress' in value && 'toAddress' in value && (
         <div>
-          <Label label="Address" />
+          <Label label={source.inputReference ? 'Source and destination' : 'Address'} />
           <LabelGroup>
-            <Label label="From" inset>
+            <Label label={source.inputReference ? source.label : 'From'} inset>
               <Identifier
                 copyable
-                href={value.fromAddressUrl}
+                href={source.href}
+                title={source.description}
                 loading={loading}
                 value={value.fromAddress}
               />

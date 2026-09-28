@@ -7,6 +7,7 @@ import { NETWORKS } from '@rosen-ui/constants';
 import type { Network, RosenAmountValue } from '@rosen-ui/types';
 
 import { fee, minBoxValue } from './constants';
+import { getDevnetMinerFee, isolatedDevnetEnabled } from './devnet';
 import type { AssetBalance, ErgoBoxProxy, UnsignedErgoTxProxy } from './types';
 import { unsignedTransactionToProxy } from './unsignedTransactionToProxy';
 import { createChangeBox, createLockBox, getHeight } from './utils';
@@ -39,6 +40,7 @@ export const generateUnsignedTx =
     ).amount;
 
     const networkHeight = await getHeight();
+    const minerFee = isolatedDevnetEnabled() ? getDevnetMinerFee() : fee;
 
     /**
      * Determine the transaction creation height according to EIP-0039:
@@ -91,7 +93,7 @@ export const generateUnsignedTx =
       ergoBoxes.values(),
       minBoxValue,
       undefined,
-      () => fee,
+      () => minerFee,
     );
     if (!inputs.covered) {
       handleUncoveredAssets(tokenMap, NETWORKS.ergo.key, inputs.uncoveredAssets);

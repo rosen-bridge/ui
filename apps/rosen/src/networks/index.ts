@@ -7,3 +7,4 @@ export * from './ergo';
 export * from './ethereum';
 export * from './firo';
 export * from './handshake';
+export * from './zcash';

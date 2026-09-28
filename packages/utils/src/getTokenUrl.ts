@@ -11,6 +11,7 @@ const baseTokenURLs: { [key in Network]: string } = {
   [NETWORKS.doge.key]: '',
   [NETWORKS.firo.key]: '',
   [NETWORKS.handshake.key]: '',
+  [NETWORKS.zcash.key]: '',
 };
 
 export const getTokenUrl = (network?: Network, tokenId?: string): string | undefined => {

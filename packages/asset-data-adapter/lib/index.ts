@@ -6,4 +6,5 @@ export { CardanoKoiosDataAdapter } from './cardanoKoiosDataAdapter';
 export { DogeBlockCypherDataAdapter } from './dogeBlockCypherDataAdapter';
 export { ErgoExplorerDataAdapter } from './ergoExplorerDataAdapter';
 export { EthereumEvmRpcDataAdapter } from './ethereumEvmRpcDataAdapter';
+export { ZcashRpcDataAdapter } from './zcashRpcDataAdapter';
 export * from './types';

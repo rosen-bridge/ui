@@ -1,0 +1,8 @@
+{
+  "name": "rosen-ergo-devnet-companion",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node companion.mjs"
+  }
+}

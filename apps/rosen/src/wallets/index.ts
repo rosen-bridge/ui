@@ -10,3 +10,5 @@ export * from './okx';
 export * from './shake';
 export * from './walletConnect';
 export * from './xverse';
+export { zalletWallet } from './zallet';
+export { ergoDevnetWallet } from './ergoDevnet';

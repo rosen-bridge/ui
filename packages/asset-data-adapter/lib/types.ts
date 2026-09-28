@@ -7,6 +7,7 @@ import type { CardanoKoiosDataAdapter } from './cardanoKoiosDataAdapter';
 import type { DogeBlockCypherDataAdapter } from './dogeBlockCypherDataAdapter';
 import type { ErgoExplorerDataAdapter } from './ergoExplorerDataAdapter';
 import type { EthereumEvmRpcDataAdapter } from './ethereumEvmRpcDataAdapter';
+import type { ZcashRpcDataAdapter } from './zcashRpcDataAdapter';
 
 export type AssetBalance = { [assetId: string]: AddressBalance[] };
 
@@ -36,7 +37,15 @@ export type ChainsAdapters =
   | BinanceEvmRpcDataAdapter
   | BitcoinRunesDataAdapter
   | CardanoKoiosDataAdapter
-  | DogeBlockCypherDataAdapter;
+  | DogeBlockCypherDataAdapter
+  | ZcashRpcDataAdapter;
+
+export interface ZcashRpcDataAdapterAuthParams {
+  url: string;
+  timeout?: number;
+  username?: string;
+  password?: string;
+}
 
 export interface ErgoExplorerDataAdapterAuthParams {
   explorerUrl: string;

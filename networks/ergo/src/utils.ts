@@ -10,6 +10,7 @@ import { NETWORKS } from '@rosen-ui/constants';
 import type { Network } from '@rosen-ui/types';
 
 import { minBoxValue } from './constants';
+import { calculateDevnetFee, getDevnetHeight, isolatedDevnetEnabled } from './devnet';
 import type { AssetBalance, BoxInfo, CoveringBoxes, ErgoBoxProxy, TokenInfo } from './types';
 
 /**
@@ -17,6 +18,7 @@ import type { AssetBalance, BoxInfo, CoveringBoxes, ErgoBoxProxy, TokenInfo } fr
  * @returns
  */
 export const getHeight = async (): Promise<number> => {
+  if (isolatedDevnetEnabled()) return getDevnetHeight();
   const explorerClient = ergoExplorerClientFactory('https://api.ergoplatform.com');
   return Number((await explorerClient.v1.getApiV1Networkstate()).height);
 };
@@ -306,6 +308,8 @@ export const getBoxAssets = (box: ErgoBoxProxy): AssetBalance => {
   };
 };
 
-export const calculateFee: CalculateFee = calculateFeeCreator(NETWORKS.ergo.key, getHeight);
+const calculateExplorerFee = calculateFeeCreator(NETWORKS.ergo.key, getHeight);
+export const calculateFee: CalculateFee = (...args) =>
+  isolatedDevnetEnabled() ? calculateDevnetFee(...args) : calculateExplorerFee(...args);
 
 export const getMinTransferCreator = getMinTransferCreatorBase(NETWORKS.ergo.key, calculateFee);

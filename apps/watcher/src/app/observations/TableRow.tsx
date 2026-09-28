@@ -1,7 +1,14 @@
 import { type FC, useMemo, useState } from 'react';
 
 import { AngleDown, AngleUp } from '@rosen-bridge/icons';
-import { Amount, Button, EnhancedTableCell, Identifier, TableRow } from '@rosen-bridge/ui-kit';
+import {
+  Amount,
+  Button,
+  EnhancedTableCell,
+  getSourceIdentifier,
+  Identifier,
+  TableRow,
+} from '@rosen-bridge/ui-kit';
 import { getTxURL } from '@rosen-ui/utils';
 
 import type { Observation } from '@/types/api';
@@ -41,7 +48,7 @@ export const tabletHeader = [
     },
   },
   {
-    title: 'From Address',
+    title: 'From',
     cellProps: {
       width: 150,
       align: 'center' as const,
@@ -93,6 +100,7 @@ export const tabletHeader = [
 
 export const MobileRow: FC<RowProps> = (props) => {
   const { isLoading, ...row } = props;
+  const source = getSourceIdentifier(row.fromChain, row.fromAddress);
   const [expand, setExpand] = useState(false);
 
   const rowStyles = useMemo(() => (isLoading ? { opacity: 0.3 } : {}), [isLoading]);
@@ -120,8 +128,8 @@ export const MobileRow: FC<RowProps> = (props) => {
       {expand && (
         <>
           <TableRow style={rowStyles}>
-            <EnhancedTableCell>From Address</EnhancedTableCell>
-            <EnhancedTableCell>
+            <EnhancedTableCell>{source.label}</EnhancedTableCell>
+            <EnhancedTableCell title={source.description}>
               <Identifier value={row.fromAddress} variant="legacy" />
             </EnhancedTableCell>
           </TableRow>
@@ -180,6 +188,7 @@ export const MobileRow: FC<RowProps> = (props) => {
 
 export const TabletRow: FC<RowProps> = (props) => {
   const { isLoading, ...row } = props;
+  const source = getSourceIdentifier(row.fromChain, row.fromAddress);
 
   const rowStyles = useMemo(() => (isLoading ? { opacity: 0.3 } : {}), [isLoading]);
 
@@ -194,7 +203,8 @@ export const TabletRow: FC<RowProps> = (props) => {
         />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">{row.lockToken.name}</EnhancedTableCell>
-      <EnhancedTableCell align="center">
+      <EnhancedTableCell align="center" title={source.description}>
+        {source.inputReference && <span>Input reference: </span>}
         <Identifier value={row.fromAddress} variant="legacy" />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">

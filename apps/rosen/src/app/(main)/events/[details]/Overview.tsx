@@ -10,6 +10,7 @@ import {
   Connector,
   DateTime,
   EventStatus,
+  getSourceIdentifier,
   Icon,
   Identifier,
   Label,
@@ -52,6 +53,11 @@ export const Overview = ({
   }, [events, onFlowIdChange]);
 
   const data = events?.find((event) => event.triggerTxId === flowId);
+  const source = getSourceIdentifier(
+    data?.fromChain,
+    data?.fromAddress,
+    getAddressUrl(data?.fromChain, data?.fromAddress),
+  );
 
   const multipleFLow = events && events.length > 1;
 
@@ -163,12 +169,13 @@ export const Overview = ({
         </Label>
       </Columns>
       <Columns count={3} width="320px" gap="24px">
-        <Label label="From Address" orientation={labelOrientation}>
+        <Label label={source.label} orientation={labelOrientation}>
           <Identifier
             style={identifierStyle}
             loading={isLoading}
             value={data?.fromAddress}
-            href={getAddressUrl(data?.fromChain, data?.fromAddress)}
+            href={source.href}
+            title={source.description}
             copyable
           />
         </Label>
