@@ -61,8 +61,7 @@ export const NetworkProvider = ({ children }: { children: ReactNode }) => {
 
   const blacklist = useMemo(
     () =>
-      (env.NEXT_PUBLIC_BLOCKED_TOKENS || '')
-        .split(';')
+      env.NEXT_PUBLIC_BLOCKED_TOKENS.split(';')
         .map((raw) => raw.trim())
         .filter(Boolean)
         .map((raw) => {

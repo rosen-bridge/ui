@@ -9,10 +9,10 @@ import { env } from '@/env';
 type Duration = Parameters<typeof Ratelimit.slidingWindow>[1];
 
 const rateLimit = (() => {
-  if (!env.APPLY_RATE_LIMIT || !env.RATE_LIMIT_TOKENS || !env.RATE_LIMIT_WINDOW) return;
+  if (!env.RATE_LIMIT_REQUESTS || !env.RATE_LIMIT_WINDOW) return;
   return new Ratelimit({
     redis: kv,
-    limiter: Ratelimit.slidingWindow(env.RATE_LIMIT_TOKENS, env.RATE_LIMIT_WINDOW as Duration),
+    limiter: Ratelimit.slidingWindow(env.RATE_LIMIT_REQUESTS, env.RATE_LIMIT_WINDOW as Duration),
   });
 })();
 
@@ -21,7 +21,7 @@ const rateLimit = (() => {
  * @param origin
  */
 const isOriginAllowed = (origin: string) =>
-  env.ALLOWED_ORIGINS?.includes('*') || env.ALLOWED_ORIGINS?.includes(origin);
+  env.ALLOWED_ORIGINS.includes('*') || env.ALLOWED_ORIGINS.includes(origin);
 
 /**
  * get a headers object through which CORS can be enabled
