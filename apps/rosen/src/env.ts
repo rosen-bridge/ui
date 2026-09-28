@@ -128,7 +128,7 @@ export const env = createEnv({
     POSTGRES_URL: process.env.POSTGRES_URL,
     POSTGRES_USE_SSL: process.env.POSTGRES_USE_SSL,
 
-    RATE_LIMIT_REQUESTS: 't5',
+    RATE_LIMIT_REQUESTS: '5',
     RATE_LIMIT_WINDOW: '1s',
 
     KV_REST_API_URL: process.env.KV_REST_API_URL,
