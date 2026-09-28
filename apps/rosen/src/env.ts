@@ -21,7 +21,9 @@ const jsonEnv = <T extends z.ZodMiniType>(schema: T) =>
 
       const result = schema.safeParse(parsed);
       if (!result.success) {
-        ctx.issues.push({ code: 'custom', message: result.error.message, input: undefined });
+        result.error.issues.forEach(({ path, message }) =>
+          ctx.issues.push({ code: 'custom', path, message, input: undefined }),
+        );
         return z.NEVER;
       }
 
@@ -31,6 +33,13 @@ const jsonEnv = <T extends z.ZodMiniType>(schema: T) =>
 
 export const env = createEnv({
   emptyStringAsUndefined: true,
+  onValidationError: (issues) => {
+    console.error(
+      '❌ Invalid environment variables:',
+      issues.map(({ path, message }) => ({ path, message })),
+    );
+    throw new Error('Invalid environment variables');
+  },
   server: {
     TIMEOUT_THRESHOLD_SECONDS: z._default(z.coerce.number(), 30),
     EVENT_STATUS_THRESHOLDS: jsonEnv(
@@ -119,7 +128,7 @@ export const env = createEnv({
     POSTGRES_URL: process.env.POSTGRES_URL,
     POSTGRES_USE_SSL: process.env.POSTGRES_USE_SSL,
 
-    RATE_LIMIT_REQUESTS: '5',
+    RATE_LIMIT_REQUESTS: 't5',
     RATE_LIMIT_WINDOW: '1s',
 
     KV_REST_API_URL: process.env.KV_REST_API_URL,
