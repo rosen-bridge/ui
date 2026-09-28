@@ -134,7 +134,7 @@ export const env = createEnv({
     KV_REST_API_URL: process.env.KV_REST_API_URL,
     KV_REST_API_TOKEN: process.env.KV_REST_API_TOKEN,
 
-    ALLOWED_ORIGINS: process.env.ALLOWED_ORIGINS,
+    ALLOWED_ORIGINS: 'https://git.ergopool.io',
 
     SENTRY_ORG: process.env.SENTRY_ORG,
     SENTRY_PROJECT: process.env.SENTRY_PROJECT,
