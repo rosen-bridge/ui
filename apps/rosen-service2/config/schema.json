@@ -506,7 +506,6 @@
         "children": {
           "initialHeight": {
             "type": "number",
-            "default": 1,
             "description": "ergo initial height",
             "validations": [
               {
@@ -607,6 +606,34 @@
                 }
               }
             }
+          },
+          "blockCleanupConfig": {
+            "type": "object",
+            "description": "ergo block cleanup configuration",
+            "children": {
+              "blockCleanupThresholdDuration": {
+                "type": "number",
+                "default": 86400,
+                "description": "ergo duration threshold in seconds",
+                "validations": [
+                  {
+                    "required": true,
+                    "error": "ergo blockCleanupConfig blockCleanupThresholdDuration must be specified (in seconds)"
+                  }
+                ]
+              },
+              "blockTrimCountInRound": {
+                "type": "number",
+                "default": 500,
+                "description": "number of blocks to trim per cleanup round",
+                "validations": [
+                  {
+                    "required": true,
+                    "error": "blockCleanupConfig blockTrimCountInRound must be specified"
+                  }
+                ]
+              }
+            }
           }
         }
       },
@@ -673,7 +700,6 @@
           },
           "initialHeight": {
             "type": "number",
-            "default": 1,
             "description": "cardano koios initial height",
             "validations": [
               {
@@ -844,6 +870,34 @@
                 }
               }
             }
+          },
+          "blockCleanupConfig": {
+            "type": "object",
+            "description": "cardano block cleanup configuration",
+            "children": {
+              "blockCleanupThresholdDuration": {
+                "type": "number",
+                "default": 86400,
+                "description": "cardano duration threshold in seconds",
+                "validations": [
+                  {
+                    "required": true,
+                    "error": "cardano blockCleanupConfig blockCleanupThresholdDuration must be specified (in seconds)"
+                  }
+                ]
+              },
+              "blockTrimCountInRound": {
+                "type": "number",
+                "default": 500,
+                "description": "number of blocks to trim per cleanup round",
+                "validations": [
+                  {
+                    "required": true,
+                    "error": "blockCleanupConfig blockTrimCountInRound must be specified"
+                  }
+                ]
+              }
+            }
           }
         }
       },
@@ -863,11 +917,14 @@
           },
           "initialHeight": {
             "type": "number",
-            "default": 1,
             "description": "bitcoin initial height",
             "validations": [
               {
                 "required": true,
+                "when": {
+                  "path": "chains.bitcoin.active",
+                  "value": true
+                },
                 "error": "bitcoin initial height must be specified"
               }
             ]
@@ -1014,6 +1071,34 @@
                 }
               }
             }
+          },
+          "blockCleanupConfig": {
+            "type": "object",
+            "description": "bitcoin block cleanup configuration",
+            "children": {
+              "blockCleanupThresholdDuration": {
+                "type": "number",
+                "default": 86400,
+                "description": "bitcoin duration threshold in seconds",
+                "validations": [
+                  {
+                    "required": true,
+                    "error": "bitcoin blockCleanupConfig blockCleanupThresholdDuration must be specified (in seconds)"
+                  }
+                ]
+              },
+              "blockTrimCountInRound": {
+                "type": "number",
+                "default": 500,
+                "description": "number of blocks to trim per cleanup round",
+                "validations": [
+                  {
+                    "required": true,
+                    "error": "blockCleanupConfig blockTrimCountInRound must be specified"
+                  }
+                ]
+              }
+            }
           }
         }
       },
@@ -1022,12 +1107,12 @@
         "children": {
           "active": {
             "type": "boolean",
-            "description": "bitcoin activation state",
+            "description": "bitcoin runes activation state",
             "default": false,
             "validations": [
               {
                 "required": true,
-                "error": "bitcoin activation state must be set"
+                "error": "bitcoin runes activation state must be set"
               }
             ]
           },
@@ -1089,11 +1174,14 @@
           },
           "initialHeight": {
             "type": "number",
-            "default": 1,
             "description": "doge initial height",
             "validations": [
               {
                 "required": true,
+                "when": {
+                  "path": "chains.doge.active",
+                  "value": true
+                },
                 "error": "doge initial height must be specified"
               }
             ]
@@ -1251,6 +1339,34 @@
                 }
               }
             }
+          },
+          "blockCleanupConfig": {
+            "type": "object",
+            "description": "doge block cleanup configuration",
+            "children": {
+              "blockCleanupThresholdDuration": {
+                "type": "number",
+                "default": 86400,
+                "description": "doge duration threshold in seconds",
+                "validations": [
+                  {
+                    "required": true,
+                    "error": "doge blockCleanupConfig blockCleanupThresholdDuration must be specified (in seconds)"
+                  }
+                ]
+              },
+              "blockTrimCountInRound": {
+                "type": "number",
+                "default": 500,
+                "description": "number of blocks to trim per cleanup round",
+                "validations": [
+                  {
+                    "required": true,
+                    "error": "blockCleanupConfig blockTrimCountInRound must be specified"
+                  }
+                ]
+              }
+            }
           }
         }
       },
@@ -1270,11 +1386,14 @@
           },
           "initialHeight": {
             "type": "number",
-            "default": 1,
             "description": "ethereum initial height",
             "validations": [
               {
                 "required": true,
+                "when": {
+                  "path": "chains.ethereum.active",
+                  "value": true
+                },
                 "error": "ethereum initial height must be specified"
               }
             ]
@@ -1359,6 +1478,34 @@
                 }
               }
             }
+          },
+          "blockCleanupConfig": {
+            "type": "object",
+            "description": "ethereum block cleanup configuration",
+            "children": {
+              "blockCleanupThresholdDuration": {
+                "type": "number",
+                "default": 86400,
+                "description": "ethereum duration threshold in seconds",
+                "validations": [
+                  {
+                    "required": true,
+                    "error": "ethereum blockCleanupConfig blockCleanupThresholdDuration must be specified (in seconds)"
+                  }
+                ]
+              },
+              "blockTrimCountInRound": {
+                "type": "number",
+                "default": 500,
+                "description": "number of blocks to trim per cleanup round",
+                "validations": [
+                  {
+                    "required": true,
+                    "error": "blockCleanupConfig blockTrimCountInRound must be specified"
+                  }
+                ]
+              }
+            }
           }
         }
       },
@@ -1378,11 +1525,14 @@
           },
           "initialHeight": {
             "type": "number",
-            "default": 1,
             "description": "binance initial height",
             "validations": [
               {
                 "required": true,
+                "when": {
+                  "path": "chains.binance.active",
+                  "value": true
+                },
                 "error": "binance initial height must be specified"
               }
             ]
@@ -1466,6 +1616,34 @@
                 }
               }
             }
+          },
+          "blockCleanupConfig": {
+            "type": "object",
+            "description": "binance block cleanup configuration",
+            "children": {
+              "blockCleanupThresholdDuration": {
+                "type": "number",
+                "default": 86400,
+                "description": "binance duration threshold in seconds",
+                "validations": [
+                  {
+                    "required": true,
+                    "error": "binance blockCleanupConfig blockCleanupThresholdDuration must be specified (in seconds)"
+                  }
+                ]
+              },
+              "blockTrimCountInRound": {
+                "type": "number",
+                "default": 500,
+                "description": "number of blocks to trim per cleanup round",
+                "validations": [
+                  {
+                    "required": true,
+                    "error": "blockCleanupConfig blockTrimCountInRound must be specified"
+                  }
+                ]
+              }
+            }
           }
         }
       },
@@ -1489,6 +1667,10 @@
             "validations": [
               {
                 "required": true,
+                "when": {
+                  "path": "chains.firo.active",
+                  "value": true
+                },
                 "error": "firo initial height must be specified"
               }
             ]
@@ -1515,8 +1697,80 @@
               }
             }
           },
+          "blockRetrieveGap": {
+            "type": "number",
+            "description": "firo blockRetrieveGap threshold in seconds"
+          },
+          "method": {
+            "type": "string",
+            "description": "firo network connection method",
+            "validations": [
+              {
+                "required": true,
+                "error": "firo network connection method must be set",
+                "when": {
+                  "path": "chains.firo.active",
+                  "value": true
+                }
+              },
+              {
+                "choices": [
+                  "rpc",
+                  "electrumx"
+                ]
+              }
+            ]
+          },
+          "rpc": {
+            "type": "object",
+            "children": {
+              "connections": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "children": {
+                    "url": {
+                      "type": "string",
+                      "description": "firo rpc url",
+                      "validations": [
+                        {
+                          "required": true,
+                          "error": "firo rpc url must be specified",
+                          "when": {
+                            "path": "chains.firo.method",
+                            "value": "rpc"
+                          }
+                        }
+                      ]
+                    },
+                    "timeout": {
+                      "type": "number",
+                      "default": 100,
+                      "description": "firo rpc timeout threshold in seconds",
+                      "validations": [
+                        {
+                          "required": true,
+                          "error": "firo rpc timeout must be specified (in seconds)",
+                          "when": {
+                            "path": "chains.firo.method",
+                            "value": "rpc"
+                          }
+                        }
+                      ]
+                    },
+                    "username": {
+                      "type": "string"
+                    },
+                    "password": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
           "electrumx": {
-            "type" : "object",
+            "type": "object",
             "description": "firo electrumx connection settings",
             "children": {
               "host": {
@@ -1572,6 +1826,166 @@
                       "value": true
                     },
                     "error": "firo electrumx timeout must be specified (in seconds)"
+                  }
+                ]
+              }
+            }
+          },
+          "blockCleanupConfig": {
+            "type": "object",
+            "description": "firo block cleanup configuration",
+            "children": {
+              "blockCleanupThresholdDuration": {
+                "type": "number",
+                "default": 86400,
+                "description": "firo duration threshold in seconds",
+                "validations": [
+                  {
+                    "required": true,
+                    "error": "firo blockCleanupConfig blockCleanupThresholdDuration must be specified (in seconds)"
+                  }
+                ]
+              },
+              "blockTrimCountInRound": {
+                "type": "number",
+                "default": 500,
+                "description": "number of blocks to trim per cleanup round",
+                "validations": [
+                  {
+                    "required": true,
+                    "error": "blockCleanupConfig blockTrimCountInRound must be specified"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "handshake": {
+        "type": "object",
+        "children": {
+          "active": {
+            "type": "boolean",
+            "description": "handshake activation state",
+            "default": false,
+            "validations": [
+              {
+                "required": true,
+                "error": "handshake activation state must be set"
+              }
+            ]
+          },
+          "initialHeight": {
+            "type": "number",
+            "description": "handshake initial height",
+            "validations": [
+              {
+                "required": true,
+                "when": {
+                  "path": "chains.handshake.active",
+                  "value": true
+                },
+                "error": "handshake initial height must be specified"
+              }
+            ]
+          },
+          "scanInterval": {
+            "type": "number",
+            "default": 600,
+            "description": "handshake scanInterval threshold in seconds",
+            "validations": [
+              {
+                "required": true,
+                "error": "handshake scanInterval must be specified (in seconds)"
+              }
+            ]
+          },
+          "adapter": {
+            "type": "object",
+            "children": {
+              "extraAddresses": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "blockRetrieveGap": {
+            "type": "number",
+            "description": "handshake blockRetrieveGap threshold in seconds"
+          },
+          "rpc": {
+            "type": "object",
+            "children": {
+              "connections": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "children": {
+                    "url": {
+                      "type": "string",
+                      "description": "handshake rpc url",
+                      "validations": [
+                        {
+                          "required": true,
+                          "when": {
+                            "path": "chains.handshake.active",
+                            "value": true
+                          },
+                          "error": "handshake rpc url must be specified"
+                        }
+                      ]
+                    },
+                    "timeout": {
+                      "type": "number",
+                      "default": 100,
+                      "description": "handshake rpc timeout threshold in seconds",
+                      "validations": [
+                        {
+                          "required": true,
+                          "when": {
+                            "path": "chains.handshake.active",
+                            "value": true
+                          },
+                          "error": "handshake rpc timeout must be specified (in seconds)"
+                        }
+                      ]
+                    },
+                    "username": {
+                      "type": "string"
+                    },
+                    "password": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "blockCleanupConfig": {
+            "type": "object",
+            "description": "handshake block cleanup configuration",
+            "children": {
+              "blockCleanupThresholdDuration": {
+                "type": "number",
+                "default": 86400,
+                "description": "handshake duration threshold in seconds",
+                "validations": [
+                  {
+                    "required": true,
+                    "error": "handshake blockCleanupConfig blockCleanupThresholdDuration must be specified (in seconds)"
+                  }
+                ]
+              },
+              "blockTrimCountInRound": {
+                "type": "number",
+                "default": 500,
+                "description": "number of blocks to trim per cleanup round",
+                "validations": [
+                  {
+                    "required": true,
+                    "error": "blockCleanupConfig blockTrimCountInRound must be specified"
                   }
                 ]
               }

@@ -60,9 +60,10 @@ const buildBitcoinRpcScannerWithExtractors = async (dataSource: DataSource, toke
   });
   const bitcoinScanner = new BitcoinRpcScanner({
     dataSource: dataSource,
-    initialHeight: configs.chains.bitcoin.initialHeight,
+    initialHeight: configs.chains.bitcoin.initialHeight || 1,
     network: networkConnectorManager,
     blockRetrieveGap: configs.chains.bitcoin.blockRetrieveGap,
+    blockCleanupConfig: configs.chains.bitcoin.blockCleanupConfig,
     logger: logger.child('bitcoinRpcScannerLogger'),
   });
 
@@ -142,9 +143,10 @@ const buildBitcoinEsploraScannerWithExtractors = async (
   });
   const bitcoinScanner = new BitcoinEsploraScanner({
     dataSource: dataSource,
-    initialHeight: configs.chains.bitcoin.initialHeight,
+    initialHeight: configs.chains.bitcoin.initialHeight || 1,
     network: networkConnectorManager,
     blockRetrieveGap: configs.chains.bitcoin.blockRetrieveGap,
+    blockCleanupConfig: configs.chains.bitcoin.blockCleanupConfig,
     logger: logger.child('bitcoinEsploraScannerLogger'),
   });
 

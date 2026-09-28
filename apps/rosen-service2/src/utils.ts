@@ -101,12 +101,21 @@ export const createCommitmentExtractor = (
   logger: AbstractLogger,
 ) => {
   logger.debug(`starting commitment extractor for ${chain}`);
+  const { networkType, url } = resolveErgoNetworkConfig();
+
   return new CommitmentExtractor(
     `${chain}-commitment-extractor`,
     [chianConfigs.addresses.Commitment],
     chianConfigs.tokens.RWTId,
     dataSource,
     tokenMap,
+    {
+      active: true,
+      type: networkType,
+      url,
+      address: chianConfigs.addresses.Commitment,
+      maxParallelRequests: 1,
+    },
     logger.child(`${chain}CommitmentExtractor`),
   );
 };

@@ -54,9 +54,10 @@ const buildDogeRpcScannerWithExtractors = async (dataSource: DataSource, tokenMa
   });
   const dogeScanner = new DogeRpcScanner({
     dataSource: dataSource,
-    initialHeight: configs.chains.doge.initialHeight,
+    initialHeight: configs.chains.doge.initialHeight || 1,
     network: networkConnectorManager,
     blockRetrieveGap: configs.chains.doge.blockRetrieveGap,
+    blockCleanupConfig: configs.chains.doge.blockCleanupConfig,
     logger: logger.child('dogeRpcScannerLogger'),
   });
 
@@ -113,9 +114,10 @@ const buildDogeEsploraScannerWithExtractors = async (
   });
   const dogeScanner = new DogeEsploraScanner({
     dataSource: dataSource,
-    initialHeight: configs.chains.doge.initialHeight,
+    initialHeight: configs.chains.doge.initialHeight || 1,
     network: networkConnectorManager,
     blockRetrieveGap: configs.chains.doge.blockRetrieveGap,
+    blockCleanupConfig: configs.chains.doge.blockCleanupConfig,
     logger: logger.child('dogeEsploraScannerLogger'),
   });
 

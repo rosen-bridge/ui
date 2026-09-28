@@ -57,6 +57,7 @@ const buildCardanoKoiosScannerWithExtractors = async (
     initialHeight: configs.chains.cardano.initialHeight || 0,
     network: networkConnectorManager,
     blockRetrieveGap: configs.chains.cardano.blockRetrieveGap,
+    blockCleanupConfig: configs.chains.cardano.blockCleanupConfig,
     logger: logger.child('cardanoKoiosScannerLogger'),
   });
 
@@ -116,6 +117,7 @@ const buildCardanoBlockFrostScannerWithExtractors = async (
     initialHeight: configs.chains.cardano.initialHeight || 0,
     network: networkConnectorManager,
     blockRetrieveGap: configs.chains.cardano.blockRetrieveGap,
+    blockCleanupConfig: configs.chains.cardano.blockCleanupConfig,
     logger: logger.child('cardanoBlockFrostScannerLogger'),
   });
 
@@ -167,6 +169,7 @@ const buildCardanoOgmiosScannerWithExtractors = async (
       nodePort: configs.chains.cardano.ogmios.connection.port || 0,
       initialSlot: configs.chains.cardano.ogmios.connection.initialSlot || 0,
       initialHash: configs.chains.cardano.ogmios.connection.initialHash || '',
+      blockCleanupConfig: configs.chains.cardano.blockCleanupConfig,
     },
     logger.child('cardanoOgmiosScannerLogger'),
   );

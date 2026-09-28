@@ -35,9 +35,10 @@ export const getEthereumScanner = async (dataSource: DataSource, tokenMap: Token
   });
   const ethereumScanner = new EvmRpcScanner('ethereum', {
     dataSource: dataSource,
-    initialHeight: configs.chains.ethereum.initialHeight,
+    initialHeight: configs.chains.ethereum.initialHeight || 1,
     network: networkConnectorManager,
     blockRetrieveGap: configs.chains.ethereum.blockRetrieveGap,
+    blockCleanupConfig: configs.chains.ethereum.blockCleanupConfig,
     logger: logger.child('ethereumScannerLogger'),
   });
 

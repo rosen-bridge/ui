@@ -4,7 +4,8 @@ export const BITCOIN_BLOCK_TIME = 600; // ~ 10 minutes
 export const DOGE_BLOCK_TIME = 60; // ~ 1 minute
 export const ETHEREUM_BLOCK_TIME = 12; // ~ 12 seconds
 export const BINANCE_BLOCK_TIME = 3; // ~ 3 seconds
-export const FIRO_BLOCK_TIME = 150;
+export const FIRO_BLOCK_TIME = 150; // ~ 2.5 minutes
+export const HANDSHAKE_BLOCK_TIME = 600; // ~ 10 minutes
 
 export const ERGO_METHOD_EXPLORER = 'explorer';
 export const ERGO_METHOD_NODE = 'node';
@@ -18,6 +19,9 @@ export const BITCOIN_METHOD_ESPLORA = 'esplora';
 
 export const DOGE_METHOD_RPC = 'rpc';
 export const DOGE_METHOD_ESPLORA = 'esplora';
+
+export const FIRO_METHOD_RPC = 'rpc';
+export const FIRO_METHOD_ELECTRUMX = 'electrumx';
 
 export const BITCOIN_RUNES_NETWORKS_KEY = 'bitcoin-runes';
 

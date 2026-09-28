@@ -135,6 +135,7 @@ export class ErgoScannerService extends AbstractErgoScannerService {
       initialHeight: configs.chains.ergo.initialHeight,
       network: networkConnectorManager,
       blockRetrieveGap: configs.chains.ergo.blockRetrieveGap,
+      blockCleanupConfig: configs.chains.ergo.blockCleanupConfig,
       logger: this.logger.child('ergoScanner'),
     });
   };
