@@ -13,15 +13,17 @@ const jsonEnv = <T extends z.ZodMiniType>(schema: T) =>
       } catch {
         ctx.issues.push({
           code: 'custom',
-          message: `must be valid JSON, received: ${raw}`,
-          input: raw,
+          message: 'must be valid JSON',
+          input: undefined,
         });
         return z.NEVER;
       }
 
       const result = schema.safeParse(parsed);
       if (!result.success) {
-        ctx.issues.push({ code: 'custom', message: result.error.message, input: raw });
+        result.error.issues.forEach(({ path, message }) =>
+          ctx.issues.push({ code: 'custom', path, message, input: undefined }),
+        );
         return z.NEVER;
       }
 
@@ -31,8 +33,15 @@ const jsonEnv = <T extends z.ZodMiniType>(schema: T) =>
 
 export const env = createEnv({
   emptyStringAsUndefined: true,
+  onValidationError: (issues) => {
+    console.error(
+      '❌ Invalid environment variables:',
+      issues.map(({ path, message }) => ({ path, message })),
+    );
+    throw new Error('Invalid environment variables');
+  },
   server: {
-    TIMEOUT_THRESHOLD_SECONDS: z.coerce.number(),
+    TIMEOUT_THRESHOLD_SECONDS: z._default(z.coerce.number(), 30),
     EVENT_STATUS_THRESHOLDS: jsonEnv(
       z.array(
         z.object({
@@ -49,9 +58,9 @@ export const env = createEnv({
         }),
       ),
     ),
-    REQUIRED_PARTICIPANTS: z.coerce.number(),
-    MINIMUM_PARTICIPANTS: z.coerce.number(),
-    VETO_NUMBER: z.coerce.number(),
+    REQUIRED_PARTICIPANTS: z._default(z.coerce.number(), 6),
+    MINIMUM_PARTICIPANTS: z._default(z.coerce.number(), 1),
+    VETO_NUMBER: z._default(z.coerce.number(), 5),
 
     POSTGRES_URL: z.string().check(z.minLength(1)),
     POSTGRES_USE_SSL: z.pipe(
@@ -59,11 +68,7 @@ export const env = createEnv({
       z.transform((value) => value === 'true'),
     ),
 
-    APPLY_RATE_LIMIT: z.pipe(
-      z.optional(z.string()),
-      z.transform((value) => value === 'true'),
-    ),
-    RATE_LIMIT_TOKENS: z.optional(z.coerce.number()),
+    RATE_LIMIT_REQUESTS: z.optional(z.coerce.number()),
     RATE_LIMIT_WINDOW: z.optional(
       z
         .string()
@@ -73,7 +78,7 @@ export const env = createEnv({
     KV_REST_API_URL: z.optional(z.string()),
     KV_REST_API_TOKEN: z.optional(z.string()),
 
-    ALLOWED_ORIGINS: z.optional(z.string()),
+    ALLOWED_ORIGINS: jsonEnv(z.array(z.string())),
 
     SENTRY_ORG: z.optional(z.string()),
     SENTRY_PROJECT: z.optional(z.string()),
@@ -103,7 +108,7 @@ export const env = createEnv({
         }),
       ),
     ),
-    NEXT_PUBLIC_BLOCKED_TOKENS: z.optional(z.string()),
+    NEXT_PUBLIC_BLOCKED_TOKENS: z._default(z.string(), ''),
     NEXT_PUBLIC_REOWN_PROJECT_ID: z.string().check(z.minLength(1)),
     NEXT_PUBLIC_SENTRY_DSN: z.optional(z.string()),
     NEXT_PUBLIC_BRIDGE_WARNING_MESSAGE: z.optional(z.string()),
@@ -123,8 +128,7 @@ export const env = createEnv({
     POSTGRES_URL: process.env.POSTGRES_URL,
     POSTGRES_USE_SSL: process.env.POSTGRES_USE_SSL,
 
-    APPLY_RATE_LIMIT: process.env.APPLY_RATE_LIMIT,
-    RATE_LIMIT_TOKENS: process.env.RATE_LIMIT_TOKENS,
+    RATE_LIMIT_REQUESTS: process.env.RATE_LIMIT_REQUESTS,
     RATE_LIMIT_WINDOW: process.env.RATE_LIMIT_WINDOW,
 
     KV_REST_API_URL: process.env.KV_REST_API_URL,
@@ -161,16 +165,17 @@ export const env = createEnv({
   createFinalSchema: (shape) =>
     z.object(shape).check(
       z.superRefine((value, ctx) => {
-        if (
-          value.APPLY_RATE_LIMIT &&
-          (value.RATE_LIMIT_TOKENS === undefined || value.RATE_LIMIT_WINDOW === undefined)
-        ) {
+        const hasRequests = value.RATE_LIMIT_REQUESTS !== undefined;
+        const hasWindow = value.RATE_LIMIT_WINDOW !== undefined;
+        if (hasRequests !== hasWindow) {
+          const [missing, present] = hasRequests
+            ? ['RATE_LIMIT_WINDOW', 'RATE_LIMIT_REQUESTS']
+            : ['RATE_LIMIT_REQUESTS', 'RATE_LIMIT_WINDOW'];
           ctx.issues.push({
             code: 'custom',
-            message:
-              'RATE_LIMIT_TOKENS and RATE_LIMIT_WINDOW must be set when APPLY_RATE_LIMIT is true',
-            path: ['APPLY_RATE_LIMIT'],
-            input: value,
+            message: `${missing} must be set when ${present} is set (set both to enable rate limiting, or remove ${present})`,
+            path: [missing],
+            input: undefined,
           });
         }
       }),
