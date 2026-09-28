@@ -4,6 +4,8 @@ redis:
   address: http://kv
   token: 'kv-token'
 chains:
+  ergo:
+    initialHeight: 1
   binance:
     adapter:
       chunkSize: 1
