@@ -25,11 +25,11 @@ import {
 import { fetcher } from '@rosen-ui/swr-helpers';
 
 import type { EventGuardTimestampsType } from '@/backend/events/repository';
+import { env } from '@/env';
 
 export type ProcessGuardDetailsProps = {
   id: string;
   flowId: string | undefined;
-  guards: { key: string; label: string }[];
   guardKey: string | undefined;
   open: boolean;
   onClose: () => void;
@@ -39,7 +39,6 @@ export type ProcessGuardDetailsProps = {
 export const ProcessGuardDetails = ({
   id,
   flowId,
-  guards,
   guardKey,
   open,
   onClose,
@@ -87,10 +86,10 @@ export const ProcessGuardDetails = ({
               endIcon={<Icon name="AngleDown" size="small" />}
               style={{ marginRight: '-1rem' }}
             >
-              {guards.find((guard) => guard.key === guardKey)?.label}
+              {env.NEXT_PUBLIC_ALLOWED_PKS.find((guard) => guard.key === guardKey)?.label}
             </MenuTrigger>
             <MenuBody offset={[0, 4]} placement="bottom-start">
-              {guards.map((guard) => (
+              {env.NEXT_PUBLIC_ALLOWED_PKS.map((guard) => (
                 <MenuItem
                   key={guard.key}
                   selected={guard.key === guardKey}

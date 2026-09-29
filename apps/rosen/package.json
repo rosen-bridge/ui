@@ -65,6 +65,7 @@
     "@rosen-ui/wallet-connect": "^0.3.4",
     "@rosen-ui/xverse-wallet": "^0.5.4",
     "@sentry/nextjs": "^10.53.1",
+    "@t3-oss/env-nextjs": "^0.13.11",
     "@upstash/ratelimit": "^1.2.1",
     "@vercel/functions": "^3.4.2",
     "@vercel/kv": "^3.0.0",

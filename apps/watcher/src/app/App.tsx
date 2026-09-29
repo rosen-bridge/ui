@@ -18,6 +18,7 @@ import {
 import { mockMiddlewareFactory } from '@rosen-ui/swr-helpers';
 
 import { Favicon } from '@/components';
+import { env } from '@/env';
 import { mockedData } from '@/mock/mockedData';
 import { theme } from '@/theme/theme';
 import { UIKitProvider } from '@/uiKitProvider';
@@ -49,10 +50,9 @@ export const App = ({ children }: PropsWithChildren) => {
                     <Favicon />
                     <SWRConfig
                       value={{
-                        use:
-                          process.env.NEXT_PUBLIC_USE_MOCKED_APIS === 'true'
-                            ? [mockMiddlewareFactory(mockedData)]
-                            : [],
+                        use: env.NEXT_PUBLIC_USE_MOCKED_APIS
+                          ? [mockMiddlewareFactory(mockedData)]
+                          : [],
                       }}
                     >
                       {children}

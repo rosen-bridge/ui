@@ -3,6 +3,8 @@ import type { NextConfig } from 'next';
 import type { SentryBuildOptions } from '@sentry/nextjs';
 import { withSentryConfig } from '@sentry/nextjs';
 
+import { env } from './src/env';
+
 const nextConfig: NextConfig = {
   typedRoutes: true,
   serverExternalPackages: [
@@ -26,9 +28,9 @@ const nextConfig: NextConfig = {
 };
 
 const sentryOptions: SentryBuildOptions = {
-  org: process.env.SENTRY_ORG,
-  project: process.env.SENTRY_PROJECT,
-  authToken: process.env.SENTRY_AUTH_TOKEN,
+  org: env.SENTRY_ORG,
+  project: env.SENTRY_PROJECT,
+  authToken: env.SENTRY_AUTH_TOKEN,
   silent: !process.env.CI,
   tunnelRoute: '/monitoring',
   debug: false,

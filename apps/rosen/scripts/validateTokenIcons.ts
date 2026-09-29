@@ -1,10 +1,10 @@
 import * as icons from '@rosen-bridge/token-icons';
 
+import { env } from '@/env';
+
 import { TOKENS } from '../configs';
 
-const ignores: string[] = process.env.IGNORE_TOKEN_ICONS?.split(',').map((key) => key.trim()) || [];
-
-if (ignores.includes('*')) {
+if (env.IGNORE_TOKEN_ICONS.includes('*')) {
   console.log('✓ Token icon validation skipped.');
   process.exit(0);
 }
@@ -12,7 +12,9 @@ if (ignores.includes('*')) {
 const iconIds = new Set(Object.keys(icons));
 
 const missingTokens = TOKENS.filter(
-  (token) => !ignores.includes(token.ergo.tokenId) && !iconIds.has(`Token_${token.ergo.tokenId}`),
+  (token) =>
+    !env.IGNORE_TOKEN_ICONS.includes(token.ergo.tokenId) &&
+    !iconIds.has(`Token_${token.ergo.tokenId}`),
 ).map((token) => token.ergo);
 
 if (missingTokens.length === 0) {
