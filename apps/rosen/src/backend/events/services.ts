@@ -1,5 +1,6 @@
 import {
   getEvent,
+  getEventGuardStatus as getEventGuardStatusBase,
   getEventGuardsStatus as getEventGuardsStatusBase,
   getEventStatus,
   getEvents,
@@ -24,3 +25,5 @@ export const getEventStatusByTriggerTxId = async (
 };
 
 export const getEventGuardsStatus = getEventGuardsStatusBase;
+
+export const getEventGuardStatus = getEventGuardStatusBase;
