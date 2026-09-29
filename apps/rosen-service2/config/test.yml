@@ -15,3 +15,6 @@ tokenMap:
   path: tests/config/tokensMap.json
 paths:
   contracts: tests/config/contracts.json
+statistics:
+  watcherCountMetrics:
+    nodeUrl: "http://localhost:8080"

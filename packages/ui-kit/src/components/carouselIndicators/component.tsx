@@ -1,5 +1,3 @@
-import { useMemo } from 'react';
-
 import { useCarousel } from '@/components';
 import { useConfig } from '@/hooks';
 import type { ElementBaseProps, OverridableType } from '@/types';
@@ -23,9 +21,7 @@ export const CarouselIndicators = (props: CarouselIndicatorsProps) => {
 
   const api = useCarousel();
 
-  const items = useMemo(() => {
-    return Array.from(Array(api.count).keys());
-  }, [api.count]);
+  const items = Array.from(Array(api.count).keys());
 
   return (
     <div {...rest}>

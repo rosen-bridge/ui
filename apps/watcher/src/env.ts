@@ -8,7 +8,7 @@ export const env = createEnv({
   },
   client: {
     NEXT_PUBLIC_USE_MOCKED_APIS: z.pipe(
-      z.optional(z.string()),
+      z.optional(z.enum(['true', 'false'])),
       z.transform((value) => value === 'true'),
     ),
   },

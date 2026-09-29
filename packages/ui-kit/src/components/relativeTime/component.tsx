@@ -1,5 +1,3 @@
-import { useMemo } from 'react';
-
 import { Skeleton, Typography } from '@/components';
 import { useConfig } from '@/hooks';
 import type { ElementBaseProps, OverridableType } from '@/types';
@@ -35,10 +33,7 @@ export type RelativeTimeProps = OverridableType<
 export const RelativeTime = (props: RelativeTimeProps) => {
   const { loading, value, ...rest } = useConfig('RelativeTime', props);
 
-  const { prefix, number, unit, suffix, displayText } = useMemo(
-    () => calculateRelativeTime(value),
-    [value],
-  );
+  const { prefix, number, unit, suffix, displayText } = calculateRelativeTime(value);
 
   return (
     <div {...rest}>

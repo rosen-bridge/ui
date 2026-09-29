@@ -1,5 +1,3 @@
-import { useMemo } from 'react';
-
 import { useConfig } from '@/hooks';
 import type { ElementBaseProps, OverridableType } from '@/types';
 
@@ -28,14 +26,11 @@ export const Skeleton = (props: SkeletonProps) => {
     ...rest
   } = useConfig('Skeleton', props);
 
-  const styles = useMemo(
-    () => ({
-      height: typeof height === 'number' ? `${height}px` : height,
-      width: typeof width === 'number' ? `${width}px` : width,
-      ...style,
-    }),
-    [height, width, style],
-  );
+  const styles = {
+    height: typeof height === 'number' ? `${height}px` : height,
+    width: typeof width === 'number' ? `${width}px` : width,
+    ...style,
+  };
 
   return (
     <>

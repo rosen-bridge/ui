@@ -64,7 +64,7 @@ export const env = createEnv({
 
     POSTGRES_URL: z.string().check(z.minLength(1)),
     POSTGRES_USE_SSL: z.pipe(
-      z.optional(z.string()),
+      z.optional(z.enum(['true', 'false'])),
       z.transform((value) => value === 'true'),
     ),
 
@@ -113,7 +113,7 @@ export const env = createEnv({
     NEXT_PUBLIC_SENTRY_DSN: z.optional(z.string()),
     NEXT_PUBLIC_BRIDGE_WARNING_MESSAGE: z.optional(z.string()),
     NEXT_PUBLIC_USE_OCTM: z.pipe(
-      z.optional(z.string()),
+      z.optional(z.enum(['true', 'false'])),
       z.transform((value) => value === 'true'),
     ),
   },

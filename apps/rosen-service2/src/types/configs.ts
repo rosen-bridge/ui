@@ -7,21 +7,32 @@ export interface RosenService2BaseConfig {
   healthCheck: HealthCheck;
   redis: Redis;
   db: Db;
-  logs: Logs[];
+  logs: (LogsOption0 | LogsOption1 | LogsOption2)[];
 }
 
-export interface Logs {
-  type: 'file' | 'console' | 'loki';
-  maxSize?: string;
-  maxFiles?: string;
-  path?: string;
+export interface LogsOption0 {
+  type: 'file';
+  maxSize: string;
+  maxFiles: string;
+  path: string;
   level: string;
-  serviceName?: string;
-  host?: string;
-  basicAuth?: string;
   format?: 'plain' | 'json';
+  serviceName?: string;
   createSymlink?: boolean;
   symlinkName?: string;
+}
+
+export interface LogsOption1 {
+  type: 'console';
+  level: string;
+}
+
+export interface LogsOption2 {
+  type: 'loki';
+  serviceName: string;
+  host: string;
+  basicAuth?: string;
+  level: string;
 }
 
 export interface Db {
@@ -81,6 +92,19 @@ export interface Statistics {
   bridgeAmountMetrics: StatisticsBridgeAmountMetrics;
 }
 
+export interface StatisticsBridgeAmountMetrics {
+  interval: number;
+}
+
+export interface StatisticsBridgeFeeMetrics {
+  interval: number;
+}
+
+export interface StatisticsWatcherCountMetrics {
+  interval: number;
+  nodeUrl: string;
+}
+
 export interface StatisticsUserEventsMetric {
   interval: number;
 }
@@ -94,19 +118,6 @@ export interface StatisticsGeneralMetrics {
 }
 
 export interface StatisticsLockedAssetsMetrics {
-  interval: number;
-}
-
-export interface StatisticsWatcherCountMetrics {
-  nodeUrl: string;
-  interval: number;
-}
-
-export interface StatisticsBridgeFeeMetrics {
-  interval: number;
-}
-
-export interface StatisticsBridgeAmountMetrics {
   interval: number;
 }
 
@@ -137,7 +148,7 @@ export interface ChainsFiroElectrumx {
 }
 
 export interface ChainsFiroAdapter {
-  extraAddresses?: string[];
+  extraAddresses: string[];
 }
 
 export interface ChainsBinance {
@@ -160,7 +171,7 @@ export interface ChainsBinanceRpcConnections {
 }
 
 export interface ChainsBinanceAdapter {
-  extraAddresses?: string[];
+  extraAddresses: string[];
   chunkSize: number;
 }
 
@@ -184,7 +195,7 @@ export interface ChainsEthereumRpcConnections {
 }
 
 export interface ChainsEthereumAdapter {
-  extraAddresses?: string[];
+  extraAddresses: string[];
   chunkSize: number;
 }
 
@@ -221,7 +232,7 @@ export interface ChainsDogeRpcConnections {
 }
 
 export interface ChainsDogeAdapter {
-  extraAddresses?: string[];
+  extraAddresses: string[];
   blockCypher: ChainsDogeAdapterBlockCypher;
 }
 
@@ -237,7 +248,7 @@ export interface ChainsBitcoinRunes {
 }
 
 export interface ChainsBitcoinRunesAdapter {
-  extraAddresses?: string[];
+  extraAddresses: string[];
 }
 
 export interface ChainsBitcoin {
@@ -273,7 +284,7 @@ export interface ChainsBitcoinRpcConnections {
 }
 
 export interface ChainsBitcoinAdapter {
-  extraAddresses?: string[];
+  extraAddresses: string[];
 }
 
 export interface ChainsCardano {
@@ -321,7 +332,7 @@ export interface ChainsCardanoKoiosConnections {
 }
 
 export interface ChainsCardanoAdapter {
-  extraAddresses?: string[];
+  extraAddresses: string[];
 }
 
 export interface ChainsErgo {
@@ -351,7 +362,7 @@ export interface ChainsErgoNodeConnections {
 }
 
 export interface ChainsErgoAdapter {
-  extraAddresses?: string[];
+  extraAddresses: string[];
 }
 
 export interface Paths {

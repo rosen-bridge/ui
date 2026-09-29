@@ -1,5 +1,3 @@
-import { useMemo } from 'react';
-
 import { useConfig } from '@/hooks';
 import type { ElementBaseProps, OverridableType, Width } from '@/types';
 import { toCSSUnit } from '@/utils';
@@ -23,7 +21,7 @@ export type TableGridCellProps = OverridableType<
 export const TableGridCell = (props: TableGridCellProps) => {
   const { width, ...rest } = useConfig('TableGridCell', props);
 
-  const size = useMemo(() => toCSSUnit('width', width), [width]);
+  const size = toCSSUnit('width', width);
 
   return <div data-width={size} {...rest} />;
 };

@@ -1,5 +1,3 @@
-import { useMemo } from 'react';
-
 import { useConfig } from '@/hooks';
 import type { ElementBaseProps, Gap, OverridableType, Width } from '@/types';
 import { toCSSUnit } from '@/utils';
@@ -53,14 +51,11 @@ export type GridContainerProps = OverridableType<
 export const GridContainer = (props: GridContainerProps) => {
   const { gap, minWidth, style, ...rest } = useConfig('GridContainer', props);
 
-  const styles = useMemo(
-    () => ({
-      gap: toCSSUnit('gap', gap),
-      gridTemplateColumns: `repeat(auto-fill, minmax(${toCSSUnit('width', minWidth)}, 1fr))`,
-      ...style,
-    }),
-    [gap, minWidth, style],
-  );
+  const styles = {
+    gap: toCSSUnit('gap', gap),
+    gridTemplateColumns: `repeat(auto-fill, minmax(${toCSSUnit('width', minWidth)}, 1fr))`,
+    ...style,
+  };
 
   return <div style={styles} {...rest} />;
 };
