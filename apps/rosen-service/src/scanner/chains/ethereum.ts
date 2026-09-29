@@ -47,6 +47,7 @@ export const startEthereumScanner = async () => {
     const scanner = new EvmRpcScanner('ethereum', {
       dataSource,
       initialHeight: config.ethereum.initialHeight,
+      blockCleanupConfig: config.ethereum.blockCleanupConfig,
       logger: scannerLogger,
       network: createEthereumNetworkConnectorManager(),
     });

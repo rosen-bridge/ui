@@ -55,6 +55,7 @@ export const startDogeScanner = async () => {
     const scanner = new DogeRpcScanner({
       dataSource,
       initialHeight: config.doge.initialHeight,
+      blockCleanupConfig: config.doge.blockCleanupConfig,
       logger: scannerLogger,
       network: createDogeRpcNetworkConnectorManager(),
     });

@@ -54,6 +54,7 @@ export const startBitcoinScanner = async () => {
     const scanner = new BitcoinRpcScanner({
       dataSource,
       initialHeight: config.bitcoin.initialHeight,
+      blockCleanupConfig: config.bitcoin.blockCleanupConfig,
       logger: scannerLogger,
       network: createBitcoinNetworkConnectorManager(),
     });

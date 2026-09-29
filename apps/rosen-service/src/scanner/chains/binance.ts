@@ -47,6 +47,7 @@ export const startBinanceScanner = async () => {
     const scanner = new EvmRpcScanner('binance', {
       dataSource,
       initialHeight: config.binance.initialHeight,
+      blockCleanupConfig: config.binance.blockCleanupConfig,
       logger: scannerLogger,
       network: createBinanceNetworkConnectorManager(),
     });

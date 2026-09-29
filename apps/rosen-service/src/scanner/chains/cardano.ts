@@ -49,6 +49,7 @@ export const startCardanoScanner = async () => {
     const scanner = new CardanoKoiosScanner({
       dataSource,
       initialHeight: config.cardano.initialHeight,
+      blockCleanupConfig: config.cardano.blockCleanupConfig,
       logger: scannerLogger,
       network: createCardanoNetworkConnectorManager(),
     });

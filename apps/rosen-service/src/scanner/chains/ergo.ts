@@ -36,6 +36,7 @@ export const startErgoScanner = async () => {
     const scanner = new ErgoScanner({
       dataSource,
       initialHeight: config.ergo.initialHeight,
+      blockCleanupConfig: config.ergo.blockCleanupConfig,
       network: createErgoNodeNetworkConnectorManager(),
       logger: scannerLogger,
     });

@@ -45,6 +45,7 @@ export const startHandshakeScanner = async () => {
     const scanner = new HandshakeRpcScanner({
       dataSource,
       initialHeight: config.handshake.initialHeight,
+      blockCleanupConfig: config.handshake.blockCleanupConfig,
       logger: scannerLogger,
       network: createHandshakeNetworkConnectorManager(),
     });

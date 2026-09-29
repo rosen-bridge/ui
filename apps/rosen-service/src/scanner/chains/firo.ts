@@ -51,6 +51,7 @@ export const startFiroScanner = async () => {
     const scanner = new FiroElectrumXScanner({
       dataSource,
       initialHeight: config.firo.initialHeight,
+      blockCleanupConfig: config.firo.blockCleanupConfig,
       logger: scannerLogger,
       network: createFiroNetworkConnectorManager(),
     });

@@ -17,6 +17,9 @@ ergo:
     rwt:
   initialHeight:
   explorerUrl: https://api.ergoplatform.com
+  blockCleanupConfig:
+    blockCleanupThresholdDuration: 86400
+    blockTrimCountInRound: 500
 cardano:
   addresses:
     lock:
@@ -29,6 +32,9 @@ cardano:
   initialHeight:
   koiosUrl: https://api.koios.rest/api/v1
   koiosAuthToken:
+  blockCleanupConfig:
+    blockCleanupThresholdDuration: 86400
+    blockTrimCountInRound: 500
 bitcoin:
   addresses:
     lock:
@@ -44,6 +50,9 @@ bitcoin:
     url:
     username:
     password:
+  blockCleanupConfig:
+    blockCleanupThresholdDuration: 86400
+    blockTrimCountInRound: 500
 bitcoin-runes:
   addresses:
     lock:
@@ -74,6 +83,9 @@ doge:
     # - url:
     #   username:
     #   password:
+  blockCleanupConfig:
+    blockCleanupThresholdDuration: 86400
+    blockTrimCountInRound: 500
 firo:
   addresses:
     lock:
@@ -89,6 +101,9 @@ firo:
     host:
     port:
     reconnectDelay:
+  blockCleanupConfig:
+    blockCleanupThresholdDuration: 86400
+    blockTrimCountInRound: 500
 handshake:
   addresses:
     lock:
@@ -100,6 +115,9 @@ handshake:
     rwt:
   initialHeight:
   rpcUrl: https://hsd.ergexplorer.com
+  blockCleanupConfig:
+    blockCleanupThresholdDuration: 86400
+    blockTrimCountInRound: 500
 ethereum:
   addresses:
     lock:
@@ -111,6 +129,9 @@ ethereum:
     rwt:
   initialHeight:
   rpcUrl: https://eth-mainnet.public.blastapi.io
+  blockCleanupConfig:
+    blockCleanupThresholdDuration: 86400
+    blockTrimCountInRound: 500
 binance:
   addresses:
     lock:
@@ -123,6 +144,9 @@ binance:
   initialHeight:
   rpcUrl: https://bsc-mainnet.public.blastapi.io/
   # rpcAuthToken:
+  blockCleanupConfig:
+    blockCleanupThresholdDuration: 86400
+    blockTrimCountInRound: 500
 postgres:
   url: # postgresql://username:password@host:port/databasename
   logging: false
