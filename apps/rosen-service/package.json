@@ -59,9 +59,9 @@
     "@rosen-ui/public-status": "^0.3.0",
     "@rosen-ui/rosen-statistics-entity": "^0.4.2",
     "config": "^3.3.12",
-    "ethers": "^6.16.0",
-    "pg": "^8.23.0",
-    "tsx": "^4.23.15"
+    "ethers": "6.16.0",
+    "pg": "^8.11.3",
+    "tsx": "^4.19.2"
   },
   "devDependencies": {
     "@types/config": "^0.0.41"
