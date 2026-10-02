@@ -43,13 +43,14 @@ export const BridgeForm = () => {
     tokenField,
     amountField,
     addressField,
+    isAddressValidating,
+    handleAddressChange,
+    isAmountValidating,
+    handleAmountChange,
     formState: { errors },
   } = useBridgeForm();
 
-  const {
-    tokenValue,
-    formState: { isValidating },
-  } = useTransactionFormData();
+  const { tokenValue } = useTransactionFormData();
 
   const { sources, availableSources, availableTargets, availableTokens } = useNetwork();
 
@@ -113,20 +114,9 @@ export const BridgeForm = () => {
     [reset, sourceField, targetField],
   );
 
-  const handleAmountChange = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => {
-      amountField.onChange(event);
-    },
-    [amountField],
-  );
-
   const handleSelectMax = useCallback(() => {
-    setValue('amount', raw, {
-      shouldDirty: true,
-      shouldTouch: true,
-      shouldValidate: true,
-    });
-  }, [raw, setValue]);
+    handleAmountChange(raw, true);
+  }, [raw, handleAmountChange]);
 
   return (
     <>
@@ -181,41 +171,37 @@ export const BridgeForm = () => {
           endAdornment: (
             <InputAdornment position="end">
               <IconButton
+                disabled={!targetField.value}
                 onClick={async () => {
                   try {
-                    const clipboardText = await navigator.clipboard.readText();
-                    setValue('walletAddress', clipboardText.trim(), {
-                      shouldDirty: true,
-                      shouldTouch: true,
-                      shouldValidate: true,
-                    });
+                    handleAddressChange(await navigator.clipboard.readText(), true);
                   } catch (err) {
                     console.error('Failed to read clipboard: ', err);
                   }
                 }}
               >
-                <Icon color="text-disabled" name="ClipboardNotes" />
+                {isAddressValidating ? (
+                  <CircularProgress color="inherit" size={24} />
+                ) : (
+                  <Icon color="text-disabled" name="ClipboardNotes" />
+                )}
               </IconButton>
             </InputAdornment>
           ),
         }}
         variant="filled"
-        error={!!errors?.walletAddress}
-        helperText={
-          isValidating ? <CircularProgress size={10} /> : errors.walletAddress?.message?.toString()
-        }
+        error={!isAddressValidating && !!errors.walletAddress?.message}
+        helperText={!isAddressValidating && errors.walletAddress?.message?.toString()}
         disabled={!targetField.value}
         autoComplete="off"
         {...addressField}
         value={addressField.value ?? ''}
-        onBlur={(e) => {
-          const trimmed = e.target.value.trim();
-          setValue('walletAddress', trimmed, {
-            shouldDirty: true,
-            shouldTouch: true,
-            shouldValidate: true,
-          });
-        }}
+        onChange={(e) =>
+          handleAddressChange(
+            e.target.value,
+            (e.nativeEvent as InputEvent).inputType === 'insertFromPaste',
+          )
+        }
       />
       {targetField.value === NETWORKS.bitcoin.key && (
         <Alert severity="warning">
@@ -242,15 +228,15 @@ export const BridgeForm = () => {
         size="medium"
         label="Amount"
         placeholder="0.0"
-        error={!!errors?.amount}
-        helperText={errors.amount?.message?.toString()}
+        error={!isAmountValidating && !!errors.amount?.message}
+        helperText={!isAmountValidating && errors.amount?.message?.toString()}
         InputProps={{
           disableUnderline: true,
           endAdornment: tokenField.value && selectedWallet && balanceAmount >= 0n && (
             <UseAllAmount
               disabled={!addressField.value || !!errors?.walletAddress}
               error={!!error}
-              loading={isLoading || isMaxLoading}
+              loading={isLoading || isMaxLoading || isAmountValidating}
               value={balanceRaw}
               unit={(tokenValue as RosenChainToken)?.name}
               onClick={handleSelectMax}
@@ -265,7 +251,12 @@ export const BridgeForm = () => {
         variant="filled"
         {...amountField}
         value={amountField.value ?? ''}
-        onChange={handleAmountChange}
+        onChange={(e) =>
+          handleAmountChange(
+            e.target.value,
+            (e.nativeEvent as InputEvent).inputType === 'insertFromPaste',
+          )
+        }
         disabled={!tokenField.value}
         autoComplete="off"
       />

@@ -26,7 +26,7 @@ export interface BridgeForm {
 
 const RosenBridge = () => {
   const methods = useForm<BridgeForm>({
-    mode: 'onBlur',
+    mode: 'onChange',
     defaultValues: {
       source: '',
       target: '',
