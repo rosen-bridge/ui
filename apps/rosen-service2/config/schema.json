@@ -625,11 +625,11 @@
               "blockTrimCountInRound": {
                 "type": "number",
                 "default": 500,
-                "description": "number of blocks to trim per cleanup round",
+                "description": "ergo number of blocks to trim per cleanup round",
                 "validations": [
                   {
                     "required": true,
-                    "error": "blockCleanupConfig blockTrimCountInRound must be specified"
+                    "error": "ergo blockCleanupConfig blockTrimCountInRound must be specified"
                   }
                 ]
               }
@@ -889,11 +889,11 @@
               "blockTrimCountInRound": {
                 "type": "number",
                 "default": 500,
-                "description": "number of blocks to trim per cleanup round",
+                "description": "cardano number of blocks to trim per cleanup round",
                 "validations": [
                   {
                     "required": true,
-                    "error": "blockCleanupConfig blockTrimCountInRound must be specified"
+                    "error": "cardano blockCleanupConfig blockTrimCountInRound must be specified"
                   }
                 ]
               }
@@ -1090,11 +1090,11 @@
               "blockTrimCountInRound": {
                 "type": "number",
                 "default": 500,
-                "description": "number of blocks to trim per cleanup round",
+                "description": "bitcoin number of blocks to trim per cleanup round",
                 "validations": [
                   {
                     "required": true,
-                    "error": "blockCleanupConfig blockTrimCountInRound must be specified"
+                    "error": "bitcoin blockCleanupConfig blockTrimCountInRound must be specified"
                   }
                 ]
               }
@@ -1358,11 +1358,11 @@
               "blockTrimCountInRound": {
                 "type": "number",
                 "default": 500,
-                "description": "number of blocks to trim per cleanup round",
+                "description": "doge number of blocks to trim per cleanup round",
                 "validations": [
                   {
                     "required": true,
-                    "error": "blockCleanupConfig blockTrimCountInRound must be specified"
+                    "error": "doge blockCleanupConfig blockTrimCountInRound must be specified"
                   }
                 ]
               }
@@ -1423,7 +1423,11 @@
                 "validations": [
                   {
                     "required": true,
-                    "error": "binance adapter chunk-size must be specified"
+                    "when": {
+                      "path": "chains.ethereum.active",
+                      "value": true
+                    },
+                    "error": "ethereum adapter chunk-size must be specified"
                   }
                 ]
               }
@@ -1497,11 +1501,11 @@
               "blockTrimCountInRound": {
                 "type": "number",
                 "default": 500,
-                "description": "number of blocks to trim per cleanup round",
+                "description": "ethereum number of blocks to trim per cleanup round",
                 "validations": [
                   {
                     "required": true,
-                    "error": "blockCleanupConfig blockTrimCountInRound must be specified"
+                    "error": "ethereum blockCleanupConfig blockTrimCountInRound must be specified"
                   }
                 ]
               }
@@ -1562,6 +1566,10 @@
                 "validations": [
                   {
                     "required": true,
+                    "when": {
+                      "path": "chains.binance.active",
+                      "value": true
+                    },
                     "error": "binance adapter chunk-size must be specified"
                   }
                 ]
@@ -1635,11 +1643,11 @@
               "blockTrimCountInRound": {
                 "type": "number",
                 "default": 500,
-                "description": "number of blocks to trim per cleanup round",
+                "description": "binance number of blocks to trim per cleanup round",
                 "validations": [
                   {
                     "required": true,
-                    "error": "blockCleanupConfig blockTrimCountInRound must be specified"
+                    "error": "binance blockCleanupConfig blockTrimCountInRound must be specified"
                   }
                 ]
               }
@@ -1849,11 +1857,11 @@
               "blockTrimCountInRound": {
                 "type": "number",
                 "default": 500,
-                "description": "number of blocks to trim per cleanup round",
+                "description": "firo number of blocks to trim per cleanup round",
                 "validations": [
                   {
                     "required": true,
-                    "error": "blockCleanupConfig blockTrimCountInRound must be specified"
+                    "error": "firo blockCleanupConfig blockTrimCountInRound must be specified"
                   }
                 ]
               }
@@ -1981,11 +1989,11 @@
               "blockTrimCountInRound": {
                 "type": "number",
                 "default": 500,
-                "description": "number of blocks to trim per cleanup round",
+                "description": "handshake number of blocks to trim per cleanup round",
                 "validations": [
                   {
                     "required": true,
-                    "error": "blockCleanupConfig blockTrimCountInRound must be specified"
+                    "error": "handshake blockCleanupConfig blockTrimCountInRound must be specified"
                   }
                 ]
               }

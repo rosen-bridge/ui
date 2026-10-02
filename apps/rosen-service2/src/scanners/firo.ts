@@ -75,14 +75,14 @@ export const createFiroRpcNetworkConnectorManager = () => {
  *
  * @param dataSource - TypeORM DataSource for DB connection
  * @param tokenMap
- * @returns Configured and ready-to-use BitcoinScanner instance
+ * @returns Configured and ready-to-use FiroScanner instance
  * @throws Error if observation extractor creation or registration fails
  */
 const buildFiroElectrumxScannerWithExtractors = async (
   dataSource: DataSource,
   tokenMap: TokenMap,
 ) => {
-  logger.info('Starting Firo scanner initialization...');
+  logger.info('Starting Firo electrumx scanner initialization...');
 
   const firoScanner = new FiroElectrumXScanner({
     dataSource,
@@ -121,11 +121,11 @@ const buildFiroElectrumxScannerWithExtractors = async (
  *
  * @param dataSource - TypeORM DataSource for DB connection
  * @param tokenMap
- * @returns Configured and ready-to-use BitcoinScanner instance
+ * @returns Configured and ready-to-use FiroScanner instance
  * @throws Error if observation extractor creation or registration fails
  */
 const buildFiroRpcScannerWithExtractors = async (dataSource: DataSource, tokenMap: TokenMap) => {
-  logger.info('Starting Firo scanner initialization...');
+  logger.info('Starting Firo rpc scanner initialization...');
 
   const firoScanner = new FiroRpcScanner({
     dataSource,
@@ -177,6 +177,6 @@ export const getFiroScanner = async (
     case FIRO_METHOD_RPC:
       return await buildFiroRpcScannerWithExtractors(dataSource, tokenMap);
     default:
-      throw new Error(`Unsupported or missing Bitcoin scanner method`);
+      throw new Error(`Unsupported or missing Firo scanner method`);
   }
 };

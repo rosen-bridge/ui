@@ -227,7 +227,7 @@ export interface ChainsBinanceRpcConnections {
 
 export interface ChainsBinanceAdapter {
   extraAddresses: string[];
-  chunkSize: number;
+  chunkSize?: number;
 }
 
 export interface ChainsEthereum {
@@ -257,7 +257,7 @@ export interface ChainsEthereumRpcConnections {
 
 export interface ChainsEthereumAdapter {
   extraAddresses: string[];
-  chunkSize: number;
+  chunkSize?: number;
 }
 
 export interface ChainsDoge {
