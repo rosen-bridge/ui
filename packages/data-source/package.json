@@ -16,6 +16,7 @@
     "lint": "biome check --write",
     "lint:check": "biome check",
     "test": "vitest run",
+    "test:postgres": "node -e \"if (!process.env.ROSEN_UI_TEST_POSTGRES_URL) throw new Error('ROSEN_UI_TEST_POSTGRES_URL is required')\" && vitest run tests/postgresUpgrade.spec.ts",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
