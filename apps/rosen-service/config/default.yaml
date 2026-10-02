@@ -6,6 +6,8 @@ logs:
     path: './logs/'
     maxSize: '20m'
     maxFiles: '14d'
+bitcoin-cash:
+  enabled: false
 ergo:
   addresses:
     lock:

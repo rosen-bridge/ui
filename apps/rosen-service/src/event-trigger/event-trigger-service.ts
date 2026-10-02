@@ -17,6 +17,7 @@ const binanceEventTriggerExtractorLogger = logger.child('binanceEventTriggerExtr
 const dogeEventTriggerExtractorLogger = logger.child('dogeEventTriggerExtractor');
 const firoEventTriggerExtractorLogger = logger.child('firoEventTriggerExtractor');
 const handshakeEventTriggerExtractorLogger = logger.child('handshakeEventTriggerExtractor');
+const bitcoinCashEventTriggerExtractorLogger = logger.child('bitcoinCashEventTriggerExtractor');
 
 /**
  * register event trigger extractors for all chains
@@ -123,6 +124,19 @@ export const registerExtractors = async (scanner: ErgoScanner) => {
       configs.handshake.addresses.fraud,
       handshakeEventTriggerExtractorLogger,
     );
+    const bitcoinCashEventTriggerExtractor = configs.bitcoinCash.enabled
+      ? new EventTriggerExtractor(
+          'bitcoin-cash-extractor',
+          dataSource,
+          ErgoNetworkType.Explorer,
+          configs.ergo.explorerUrl,
+          configs.bitcoinCash.eventTrigger.address,
+          configs.bitcoinCash.commitment.rwt,
+          configs.bitcoinCash.eventTrigger.permitAddress,
+          configs.bitcoinCash.eventTrigger.fraudAddress,
+          bitcoinCashEventTriggerExtractorLogger,
+        )
+      : undefined;
     await scanner.registerExtractor(ergoEventTriggerExtractor);
     await scanner.registerExtractor(cardanoEventTriggerExtractor);
     await scanner.registerExtractor(bitcoinEventTriggerExtractor);
@@ -132,6 +146,9 @@ export const registerExtractors = async (scanner: ErgoScanner) => {
     await scanner.registerExtractor(binanceEventTriggerExtractor);
     await scanner.registerExtractor(firoEventTriggerExtractor);
     await scanner.registerExtractor(handshakeEventTriggerExtractor);
+    if (bitcoinCashEventTriggerExtractor) {
+      await scanner.registerExtractor(bitcoinCashEventTriggerExtractor);
+    }
 
     logger.debug('event trigger extractors registered', {
       scannerName: scanner.name(),
@@ -145,6 +162,7 @@ export const registerExtractors = async (scanner: ErgoScanner) => {
         binanceEventTriggerExtractor.getId(),
         firoEventTriggerExtractor.getId(),
         handshakeEventTriggerExtractor.getId(),
+        ...(bitcoinCashEventTriggerExtractor ? [bitcoinCashEventTriggerExtractor.getId()] : []),
       ],
     });
   } catch (error) {

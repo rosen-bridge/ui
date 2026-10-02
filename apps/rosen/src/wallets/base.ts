@@ -1,10 +1,11 @@
-import { createElement, type FC, type SVGAttributes } from 'react';
+import { createElement, type SVGProps } from 'react';
 
+import type { SVGIcon } from '@rosen-bridge/icons';
 import { Wallet } from '@rosen-ui/wallet-api';
 
 declare module '@rosen-ui/wallet-api' {
   interface Wallet {
-    iconReact: FC<SVGAttributes<SVGElement>>;
+    iconReact: SVGIcon;
   }
 }
 
@@ -25,7 +26,7 @@ Object.defineProperty(Wallet.prototype, 'iconReact', {
       };
     }
 
-    return (props: SVGAttributes<SVGElement>) =>
+    return (props: SVGProps<SVGSVGElement>) =>
       createElement('svg', {
         ...props,
         viewBox: this._iconReactCache.viewBox,

@@ -1,3 +1,4 @@
+import type { SVGIcon } from '@rosen-bridge/icons';
 import type { Network as NetworkName, RosenAmountValue } from '@rosen-ui/types';
 
 import type { CalculateFee } from './calculateFeeCreator';
@@ -27,7 +28,7 @@ export interface Network {
 
   lockAddress: string;
 
-  logo: string;
+  logo: string | SVGIcon;
 
   name: NetworkName;
 

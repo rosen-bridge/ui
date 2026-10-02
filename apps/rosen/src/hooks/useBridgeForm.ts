@@ -5,7 +5,7 @@ import { useController } from 'react-hook-form';
 import type { Network, RosenAmountValue } from '@rosen-ui/types';
 import { getNonDecimalString } from '@rosen-ui/utils';
 
-import * as networks from '@/networks';
+import networks from '@/networks';
 
 import { FEE_CONFIG_TOKEN_ID } from '../../configs';
 import { useTokenMap } from './useTokenMap';

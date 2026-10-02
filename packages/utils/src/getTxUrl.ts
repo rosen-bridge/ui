@@ -15,6 +15,7 @@ const baseTxURLs: { [key in Network]: HttpsURL } = {
   [NETWORKS.ergo.key]: 'https://explorer.ergoplatform.com/transactions',
   [NETWORKS.cardano.key]: 'https://cardanoscan.io/transaction',
   [NETWORKS.bitcoin.key]: 'https://mempool.space/tx',
+  [NETWORKS['bitcoin-cash'].key]: 'https://blockchair.com/bitcoin-cash/transaction',
   [NETWORKS['bitcoin-runes'].key]: 'https://uniscan.cc/tx',
   [NETWORKS.ethereum.key]: 'https://etherscan.io/tx',
   [NETWORKS.doge.key]: 'https://blockexplorer.one/dogecoin/mainnet/tx',
@@ -22,6 +23,11 @@ const baseTxURLs: { [key in Network]: HttpsURL } = {
   [NETWORKS.handshake.key]: 'https://e.hnsfans.com/tx',
 };
 
+/**
+ * Returns an explorer transaction link without implying route availability.
+ * @param network Registered chain key.
+ * @param tx Transaction identifier.
+ */
 export const getTxURL = (network?: Network, tx?: string): HttpsURL | undefined => {
   if (!network || !tx) return;
 

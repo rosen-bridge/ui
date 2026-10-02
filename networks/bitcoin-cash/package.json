@@ -1,0 +1,65 @@
+{
+  "name": "@rosen-network/bitcoin-cash",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Native Bitcoin Cash network logic for Rosen Bridge UI",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rosen-bridge/ui.git"
+  },
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./client": {
+      "types": "./dist/client.d.ts",
+      "default": "./dist/client.js"
+    },
+    "./server": {
+      "types": "./dist/server/index.d.ts",
+      "default": "./dist/server/index.js"
+    },
+    "./server/submitter": {
+      "types": "./dist/server/bitcoinCashElectrumSubmitter.d.ts",
+      "default": "./dist/server/bitcoinCashElectrumSubmitter.js"
+    }
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "client": [
+        "dist/client.d.ts"
+      ],
+      "server": [
+        "dist/server/index.d.ts"
+      ],
+      "server/submitter": [
+        "dist/server/bitcoinCashElectrumSubmitter.d.ts"
+      ]
+    }
+  },
+  "scripts": {
+    "build": "tsc --build",
+    "coverage": "vitest run --coverage",
+    "lint:check": "biome check",
+    "test": "vitest run",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@bitauth/libauth": "3.0.0",
+    "@rosen-bridge/address-codec": "^2.1.0",
+    "@rosen-bridge/icons": "^4.0.0",
+    "@rosen-bridge/tokens": "^6.0.2",
+    "@rosen-network/base": "^0.5.5",
+    "@rosen-ui/constants": "^1.1.0",
+    "@rosen-ui/types": "^0.5.1"
+  },
+  "engines": {
+    "node": ">=22.18.0",
+    "npm": "11.6.2"
+  }
+}

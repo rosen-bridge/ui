@@ -1,5 +1,6 @@
 import { registerBinanceExtractor } from './chains/binance';
 import { registerBitcoinExtractor } from './chains/bitcoin';
+import { registerBitcoinCashExtractor } from './chains/bitcoin-cash';
 import { registerBitcoinRunesExtractor } from './chains/bitcoin-runes';
 import { registerCardanoExtractor } from './chains/cardano';
 import { registerDogeExtractor } from './chains/doge';
@@ -10,6 +11,7 @@ import { registerHandshakeExtractor } from './chains/handshake';
 
 const observationService = {
   registerBitcoinExtractor,
+  registerBitcoinCashExtractor,
   registerBitcoinRunesExtractor,
   registerDogeExtractor,
   registerHandshakeExtractor,

@@ -1,15 +1,85 @@
-import { beforeEach, describe, expect, it, vitest } from 'vitest';
+import { beforeEach, describe, expect, it, vi, vitest } from 'vitest';
 
+import type { DataSource } from '@rosen-bridge/extended-typeorm';
 import { TokenMap } from '@rosen-bridge/tokens';
 import { NETWORKS } from '@rosen-ui/constants';
 
 import { AssetCalculator } from '../lib';
 import type AbstractCalculator from '../lib/calculator/abstract-calculator';
+import type { BitcoinCashCalculatorInterface } from '../lib/interfaces';
+import { addresses } from './calculator/chains/mocked/bitcoin-cash.mock';
 import { initDatabase } from './database/bridgedAsset/BridgedAssetModel.mock';
 import { bridgedAssets, lockedAssets, tokens } from './database/test-data';
 import { tokenMapData } from './test-data';
 
+/** Construct legacy calculators with inert ports and an optional BCH configuration. */
+const createCalculator = (bitcoinCash?: BitcoinCashCalculatorInterface) => {
+  const dataSource = { getRepository: vi.fn(() => ({})) } as unknown as DataSource;
+  return new AssetCalculator(
+    new TokenMap(),
+    { addresses: [], explorerUrl: 'https://example.invalid' },
+    { addresses: [] },
+    { addresses: [] },
+    { addresses: [] },
+    { addresses: [], rpcUrl: 'https://example.invalid' },
+    { addresses: [], rpcUrl: 'https://example.invalid' },
+    { addresses: [], blockcypherUrl: 'https://example.invalid' },
+    { addresses: [] },
+    { addresses: [], rpcUrl: 'https://example.invalid' },
+    dataSource,
+    undefined,
+    bitcoinCash,
+  );
+};
+
 describe('AssetCalculator', () => {
+  describe('constructor', () => {
+    /**
+     * @target Existing calls preserve calculator registration.
+     * @dependencies Inert repository and client configuration.
+     * @scenario Construct using the original constructor arguments.
+     * @expected Existing nine calculators and no BCH activation.
+     */
+    it('preserves existing calculators when BCH is not configured', () => {
+      expect([...createCalculator()['calculatorMap'].keys()]).toEqual([
+        'ergo',
+        'cardano',
+        'bitcoin',
+        'bitcoin-runes',
+        'ethereum',
+        'binance',
+        'doge',
+        'firo',
+        'handshake',
+      ]);
+    });
+    /**
+     * @target BCH accounting requires explicit optional configuration.
+     * @dependencies Mock read-only provider.
+     * @scenario Add a valid provider and treasury as the final argument.
+     * @expected One BCH calculator without provider requests during construction.
+     */
+    it('registers BCH accounting only with explicit configuration', () => {
+      const getAddressAssets = vi.fn();
+      const calculator = createCalculator({ addresses, provider: { getAddressAssets } });
+      expect(calculator['calculatorMap'].size).toEqual(10);
+      expect(calculator['calculatorMap'].get('bitcoin-cash')?.chain).toEqual('bitcoin-cash');
+      expect(getAddressAssets).not.toHaveBeenCalled();
+    });
+    /**
+     * @target Invalid explicit configuration fails before requests.
+     * @dependencies Mock read-only provider.
+     * @scenario Supply a malformed treasury through the public constructor.
+     * @expected Failure rather than silently dropping the requested calculator.
+     */
+    it('rejects invalid explicit BCH configuration', () => {
+      const getAddressAssets = vi.fn();
+      expect(() =>
+        createCalculator({ addresses: ['invalid'], provider: { getAddressAssets } }),
+      ).toThrow();
+      expect(getAddressAssets).not.toHaveBeenCalled();
+    });
+  });
   describe('calculateEmissionForChain', () => {
     /**
      * Mock database and create the AssetCalculator instance before each test
@@ -443,13 +513,13 @@ describe('AssetCalculator', () => {
       // Verify totalSupplyMap contains entries for wrapped tokens
       // Token 3 on ergo has wrapped residency, so it should be stored
       const ergoToken3Key = `${NETWORKS.ergo.key}-tokenId`;
-      expect(assetCalculator['totalSupplyMap'].get(ergoToken3Key)).toBe(1000n);
+      expect(assetCalculator['totalSupplyMap'].get(ergoToken3Key)).toEqual(1000n);
 
       // Cardano wrapped tokens (token1 and token2) should be stored
       const cardanoToken1Key = `${NETWORKS.cardano.key}-${tokenMapData[0].cardano.tokenId}`;
       const cardanoToken2Key = `${NETWORKS.cardano.key}-${tokenMapData[1].cardano.tokenId}`;
-      expect(assetCalculator['totalSupplyMap'].get(cardanoToken1Key)).toBe(2000n);
-      expect(assetCalculator['totalSupplyMap'].get(cardanoToken2Key)).toBe(2000n);
+      expect(assetCalculator['totalSupplyMap'].get(cardanoToken1Key)).toEqual(2000n);
+      expect(assetCalculator['totalSupplyMap'].get(cardanoToken2Key)).toEqual(2000n);
 
       // Verify totalSupply was called for wrapped tokens
       expect(ergoCalculator.totalSupply).toHaveBeenCalled();
