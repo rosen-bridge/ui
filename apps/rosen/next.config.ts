@@ -12,7 +12,6 @@ const nextConfig: NextConfig = {
     '@emurgo/cardano-serialization-lib-nodejs',
     '@coinbase/cdp-sdk',
     'typeorm',
-    '@rosen-bridge/extended-typeorm',
   ],
   /** Load shared address-codec browser WASM through webpack's asynchronous module graph. */
   webpack(config, { isServer }) {
