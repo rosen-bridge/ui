@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest';
 
 import { decodeAddress } from '@rosen-bridge/address-codec';
+import {
+  BITCOIN_CASH_RPC_HARD_LIMITS,
+  BITCOIN_CASH_RPC_LIMITS,
+} from '@rosen-bridge/bitcoin-cash-scanner';
 
 import { readBitcoinCashConfig } from '../../src/bitcoin-cash/config';
 
@@ -32,12 +36,14 @@ describe('readBitcoinCashConfig', () => {
    * @scenario Read absence or disabled configuration containing unfinished operator values.
    * @expected Disabled result without invented endpoints, addresses, or thresholds.
    */
-  it.each([undefined, { enabled: false }, { enabled: false, rpc: null }])(
-    'keeps BCH disabled %#',
-    (value) => {
-      expect(readBitcoinCashConfig(value)).toEqual({ enabled: false });
-    },
-  );
+  it.each([
+    undefined,
+    { enabled: false },
+    { enabled: false, rpc: null },
+    { enabled: false, rpc: { url: 'http://remote.invalid', limits: { responseBytes: Infinity } } },
+  ])('keeps BCH disabled %#', (value) => {
+    expect(readBitcoinCashConfig(value)).toEqual({ enabled: false });
+  });
 
   /**
    * @target readBitcoinCashConfig: BCH startup requires Rosen index assignment.
@@ -69,8 +75,96 @@ describe('readBitcoinCashConfig', () => {
     );
     expect(config).toEqual({
       ...valid,
-      rpc: { ...valid.rpc, username: 'operator', password: 'synthetic' },
+      rpc: {
+        ...valid.rpc,
+        url: 'https://example.invalid/',
+        username: 'operator',
+        password: 'synthetic',
+        limits: BITCOIN_CASH_RPC_LIMITS,
+      },
     });
+  });
+
+  /**
+   * @target readBitcoinCashConfig: Shared scanner budgets resolve without broadening their caps.
+   * @dependencies Actual scanner policy exports; no mocked limit resolver.
+   * @scenario Set one resource to its minimum or hard maximum and leave all others absent.
+   * @expected Override is retained, other defaults survive, and resolved limits are immutable.
+   */
+  it.each(
+    Object.entries(BITCOIN_CASH_RPC_HARD_LIMITS).flatMap(([name, maximum]) =>
+      [1, maximum].map((value) => [name, value] as const),
+    ),
+  )('accepts bounded %s=%s', (name, value) => {
+    const config = readBitcoinCashConfig(
+      { ...valid, rpc: { ...valid.rpc, limits: { [name]: value } } },
+      fixtureIndex,
+    );
+    if (!config.enabled) throw Error('Expected enabled fixture');
+    expect(config.rpc.limits).toEqual({ ...BITCOIN_CASH_RPC_LIMITS, [name]: value });
+    expect(Object.isFrozen(config.rpc.limits)).toEqual(true);
+  });
+
+  /**
+   * @target readBitcoinCashConfig: Every resource rejects malformed or excessive work budgets.
+   * @dependencies Actual shared scanner bounds and complete service fixture.
+   * @scenario Change one budget to zero, fractional, unsafe, string or above its hard maximum.
+   * @expected Reject with the sanitized service error before a scanner can be created.
+   */
+  it.each(
+    Object.entries(BITCOIN_CASH_RPC_HARD_LIMITS).flatMap(([name, maximum]) =>
+      [0, -1, 1.5, maximum + 1, Number.MAX_SAFE_INTEGER + 1, '1000'].map(
+        (value) => [name, value] as const,
+      ),
+    ),
+  )('rejects invalid resource %s=%s', (name, value) => {
+    expect(() =>
+      readBitcoinCashConfig(
+        { ...valid, rpc: { ...valid.rpc, limits: { [name]: value } } },
+        fixtureIndex,
+      ),
+    ).toThrow(/^Invalid BCH service configuration$/);
+  });
+
+  /**
+   * @target readBitcoinCashConfig: RPC endpoint policy is the scanner's actual shared policy.
+   * @dependencies Actual shared URL validator and assigned fixture index.
+   * @scenario Use HTTPS or literal IPv4/IPv6 loopback, including normalized IPv6 notation.
+   * @expected Accept and preserve the shared canonical URL consumed by the connector.
+   */
+  it.each([
+    ['HTTPS://EXAMPLE.INVALID:443/wallet/test', 'https://example.invalid/wallet/test'],
+    ['http://127.0.0.2:18443', 'http://127.0.0.2:18443/'],
+    ['http://[0:0:0:0:0:0:0:1]:18443', 'http://[::1]:18443/'],
+  ])('accepts endpoint %s', (url, expected) => {
+    const config = readBitcoinCashConfig({ ...valid, rpc: { ...valid.rpc, url } }, fixtureIndex);
+    if (!config.enabled) throw Error('Expected enabled fixture');
+    expect(config.rpc.url).toEqual(expected);
+  });
+
+  /**
+   * @target readBitcoinCashConfig: Credential bounds are enforced by the shared transport policy.
+   * @dependencies Actual shared credential validator.
+   * @scenario Corrupt exactly one member of an otherwise complete credential pair.
+   * @expected Reject empty, long, whitespace/control and ambiguous username values.
+   */
+  it.each([
+    ...['username', 'password'].flatMap((key) =>
+      ['', 'a'.repeat(1025), ' leading', 'trailing ', 'line\nbreak', 12].map(
+        (value) => [key, value] as const,
+      ),
+    ),
+    ['username', 'user:name'],
+  ])('rejects invalid credential member %#', (key, value) => {
+    expect(() =>
+      readBitcoinCashConfig(
+        {
+          ...valid,
+          rpc: { ...valid.rpc, username: 'operator', password: 'synthetic', [key]: value },
+        },
+        fixtureIndex,
+      ),
+    ).toThrow(/^Invalid BCH service configuration$/);
   });
 
   /**
@@ -92,7 +186,22 @@ describe('readBitcoinCashConfig', () => {
     { ...valid, rpc: { ...valid.rpc, url: 'ftp://example.invalid' } },
     { ...valid, rpc: { ...valid.rpc, url: 'https://secret:synthetic@example.invalid' } },
     { ...valid, rpc: { ...valid.rpc, url: 'https://example.invalid/#private' } },
+    ...[
+      'http://remote.invalid',
+      'http://localhost',
+      'http://127.1',
+      'http://[::ffff:127.0.0.1]',
+      'https://@example.invalid',
+      'https://example.invalid/#',
+      'https:///example.invalid',
+      'https://example.invalid\\@127.0.0.1',
+    ].map((url) => ({ ...valid, rpc: { ...valid.rpc, url } })),
+    ...[null, [], 1, { unknownLimit: 1 }].map((limits) => ({
+      ...valid,
+      rpc: { ...valid.rpc, limits },
+    })),
     { ...valid, rpc: { ...valid.rpc, username: 'operator' } },
+    { ...valid, rpc: { ...valid.rpc, password: 'synthetic' } },
     { ...valid, rpc: { ...valid.rpc, username: '', password: '' } },
     { ...valid, scanner: null },
     { ...valid, scanner: { ...valid.scanner, intervalMs: 0 } },

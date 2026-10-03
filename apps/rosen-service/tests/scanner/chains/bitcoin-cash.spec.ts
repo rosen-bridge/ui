@@ -19,13 +19,15 @@ const mocks = vi.hoisted(() => ({
 vi.mock('@rosen-bridge/abstract-logger', () => ({
   DefaultLogger: { getInstance: () => mocks.logger },
 }));
-vi.mock('@rosen-bridge/abstract-scanner', () => ({
+vi.mock('@rosen-bridge/abstract-scanner', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('@rosen-bridge/abstract-scanner')>()),
   FailoverStrategy: class {},
   NetworkConnectorManager: class {
     addConnector = mocks.addConnector;
   },
 }));
-vi.mock('@rosen-bridge/bitcoin-cash-scanner', () => ({
+vi.mock('@rosen-bridge/bitcoin-cash-scanner', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('@rosen-bridge/bitcoin-cash-scanner')>()),
   BitcoinCashRpcNetwork: class {
     constructor(...args: unknown[]) {
       mocks.network(...args);
@@ -110,10 +112,16 @@ describe('startBitcoinCashScanner', () => {
    */
   it('registers native extraction before starting the configured interval', async () => {
     expect(await startBitcoinCashScanner(options)).toBeDefined();
-    expect(mocks.network).toHaveBeenCalledWith(options.rpc.url, 10000, 'main', {
-      username: 'operator',
-      password: 'synthetic',
-    });
+    expect(mocks.network).toHaveBeenCalledWith(
+      options.rpc.url,
+      10000,
+      'main',
+      {
+        username: 'operator',
+        password: 'synthetic',
+      },
+      options.rpc.limits,
+    );
     expect(mocks.scanner).toHaveBeenCalledWith(
       expect.objectContaining({ dataSource: mocks.dataSource, initialHeight: 800000 }),
     );
@@ -143,7 +151,44 @@ describe('startBitcoinCashScanner', () => {
    */
   it('does not invent RPC authentication', async () => {
     await startBitcoinCashScanner({ ...options, rpc: { url: options.rpc.url, timeoutMs: 10000 } });
-    expect(mocks.network).toHaveBeenCalledWith(options.rpc.url, 10000, 'main', undefined);
+    expect(mocks.network).toHaveBeenCalledWith(
+      options.rpc.url,
+      10000,
+      'main',
+      undefined,
+      undefined,
+    );
+  });
+
+  /**
+   * @target startBitcoinCashScanner: Validated operator work budgets reach the RPC connector.
+   * @dependencies Actual shared policy resolver and mocked network construction boundary.
+   * @scenario Read an override configuration through the production service parser and start it.
+   * @expected The fifth constructor argument includes overrides plus every remaining default.
+   */
+  it('forwards shared resolved resource budgets to the RPC constructor', async () => {
+    const configured = readBitcoinCashConfig(
+      {
+        ...options,
+        rpc: { ...options.rpc, limits: { transactionIO: 8192, responseBytes: 96000000 } },
+      },
+      10,
+    );
+    if (!configured.enabled) throw Error('Expected enabled fixture');
+    await startBitcoinCashScanner(configured);
+    expect(mocks.network).toHaveBeenCalledExactlyOnceWith(
+      configured.rpc.url,
+      10000,
+      'main',
+      { username: 'operator', password: 'synthetic' },
+      {
+        transactionBytes: 1000000,
+        transactionIO: 8192,
+        blockTransactions: 10000,
+        blockTransactionBytes: 32000000,
+        responseBytes: 96000000,
+      },
+    );
   });
 
   /**

@@ -1,4 +1,10 @@
 import { encodeAddress, validateAddress } from '@rosen-bridge/address-codec';
+import {
+  type BitcoinCashRpcLimits,
+  resolveBitcoinCashRpcLimits,
+  validateBitcoinCashRpcCredentials,
+  validateBitcoinCashRpcUrl,
+} from '@rosen-bridge/bitcoin-cash-scanner';
 import { NETWORKS } from '@rosen-ui/constants';
 
 /** Operator configuration required before BCH scanner activation. */
@@ -6,7 +12,13 @@ export interface EnabledBitcoinCashConfig {
   enabled: true;
   lockAddress: string;
   initialHeight: number;
-  rpc: { url: string; timeoutMs: number; username?: string; password?: string };
+  rpc: {
+    url: string;
+    timeoutMs: number;
+    username?: string;
+    password?: string;
+    limits?: Readonly<BitcoinCashRpcLimits>;
+  };
   scanner: { intervalMs: number; warnDiff: number; criticalDiff: number };
   cleanup: { thresholdSeconds: number; trimCount: number };
   commitment: { address: string; rwt: string };
@@ -111,35 +123,28 @@ export const readBitcoinCashConfig = (
       scanner.warnDiff > scanner.criticalDiff
     )
       throw new Error();
-    const url = new URL(rpc.url);
-    if (
-      !['https:', 'http:'].includes(url.protocol) ||
-      !url.hostname ||
-      url.username ||
-      url.password ||
-      url.hash
-    )
-      throw new Error();
+    const url = validateBitcoinCashRpcUrl(rpc.url);
     const hasUsername = rpc.username !== undefined;
     const hasPassword = rpc.password !== undefined;
-    if (
-      hasUsername !== hasPassword ||
-      (hasUsername &&
-        (typeof rpc.username !== 'string' ||
-          rpc.username.length === 0 ||
-          typeof rpc.password !== 'string' ||
-          rpc.password.length === 0))
-    )
-      throw new Error();
+    if (hasUsername !== hasPassword) throw new Error();
+    validateBitcoinCashRpcCredentials(
+      hasUsername
+        ? { username: rpc.username as string, password: rpc.password as string }
+        : undefined,
+    );
+    const limits = resolveBitcoinCashRpcLimits(
+      rpc.limits as Partial<BitcoinCashRpcLimits> | undefined,
+    );
     return {
       enabled: true,
       lockAddress: value.lockAddress.toLowerCase(),
       initialHeight: value.initialHeight as number,
       rpc: {
-        url: rpc.url,
+        url,
         timeoutMs: rpc.timeoutMs,
         username: rpc.username as string | undefined,
         password: rpc.password as string | undefined,
+        limits,
       },
       scanner: {
         intervalMs: scanner.intervalMs,

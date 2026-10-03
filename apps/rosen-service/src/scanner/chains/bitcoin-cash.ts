@@ -36,6 +36,7 @@ export const startBitcoinCashScanner = async (
         options.rpc.username !== undefined && options.rpc.password !== undefined
           ? { username: options.rpc.username, password: options.rpc.password }
           : undefined,
+        options.rpc.limits,
       ),
     );
     const scanner = new BitcoinCashRpcScanner({
