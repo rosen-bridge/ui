@@ -2,6 +2,7 @@ import nodeConfig from 'config';
 
 import type { TransportOptions } from '@rosen-bridge/winston-logger';
 
+import { readBitcoinCashConfig } from './bitcoin-cash/config';
 import AppError from './errors/AppError';
 
 /**
@@ -20,6 +21,9 @@ const getOptionalNumber = (path: string): number | undefined => {
 const getConfig = () => {
   try {
     return {
+      bitcoinCash: readBitcoinCashConfig(
+        nodeConfig.has('bitcoin-cash') ? nodeConfig.get<unknown>('bitcoin-cash') : undefined,
+      ),
       logs: nodeConfig.get<TransportOptions[]>('logs'),
       ergo: {
         addresses: {

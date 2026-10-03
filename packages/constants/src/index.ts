@@ -19,6 +19,15 @@ export const NETWORKS = {
     id: '',
     hasTokenSupport: false,
   },
+  'bitcoin-cash': {
+    // Rosen owns the production assignment; a candidate fixture index is not activation.
+    index: -1,
+    key: 'bitcoin-cash',
+    label: 'Bitcoin Cash',
+    nativeToken: 'bch',
+    id: '',
+    hasTokenSupport: false,
+  },
   'bitcoin-runes': {
     index: 6,
     key: 'bitcoin-runes',
@@ -77,4 +86,17 @@ export const NETWORKS = {
   },
 } as const;
 
-export const NETWORKS_KEYS = Object.values(NETWORKS).map((network) => network.key);
+/**
+ * Whether a chain has an assigned Rosen index and can enter network selection.
+ * @param network Untrusted chain key from configuration or token metadata.
+ * @returns False for unknown keys and chains awaiting Rosen index assignment.
+ * @remarks Assigned identity alone does not establish operator configuration,
+ * wallet availability or deployment approval; consumers must check those too.
+ */
+export const isNetworkAvailable = (network: string): network is keyof typeof NETWORKS =>
+  Object.hasOwn(NETWORKS, network) && NETWORKS[network as keyof typeof NETWORKS].index >= 0;
+
+// Operational selectors and service loops must not consume an unassigned chain.
+export const NETWORKS_KEYS = Object.values(NETWORKS)
+  .filter((network) => isNetworkAvailable(network.key))
+  .map((network) => network.key);

@@ -19,7 +19,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "node ./generate.js && tsdown && npm run lint",
+    "build": "node ./generate.js && tsdown && node ./generate.js --declarations && npm run lint",
     "lint": "biome check --write",
     "lint:check": "biome check",
     "release": "echo 'this package should not be published due to the license constraints'",
