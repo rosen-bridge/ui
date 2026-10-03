@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from 'next/server';
 
+import * as Sentry from '@sentry/nextjs';
 import { Ratelimit } from '@upstash/ratelimit';
 import { ipAddress } from '@vercel/functions';
 import { kv } from '@vercel/kv';
@@ -13,6 +14,10 @@ const rateLimit = (() => {
   return new Ratelimit({
     redis: kv,
     limiter: Ratelimit.slidingWindow(env.RATE_LIMIT_REQUESTS, env.RATE_LIMIT_WINDOW as Duration),
+    /**
+     * Pass the request through rather than wait out the 5s default.
+     */
+    timeout: 1000,
   });
 })();
 
@@ -39,14 +44,27 @@ const getCORSHeaders = (origin: string) => {
 export async function proxy(request: NextRequest) {
   const ip = ipAddress(request) ?? '127.0.0.1';
 
-  const success = (await rateLimit?.limit(ip))?.success ?? true;
+  try {
+    const success = (await rateLimit?.limit(ip))?.success ?? true;
 
-  if (!success) {
-    return Response.json('Too many requests', { status: 429 });
+    if (!success) {
+      return Response.json('Too many requests', { status: 429 });
+    }
+  } catch (error) {
+    /**
+     * Fail open. This runs on every API route, so an error here would take
+     * the whole API down, and a broken rate limiter is no reason to stop
+     * serving requests.
+     */
+    Sentry.withScope((scope) => {
+      scope.setTag('layer', 'rate-limit');
+      scope.setLevel('warning');
+      Sentry.captureException(error);
+    });
   }
 
   const origin = request.headers.get('Origin');
-  if (request.url.includes('/api') && origin && isOriginAllowed(origin)) {
+  if (origin && isOriginAllowed(origin)) {
     return NextResponse.next({ headers: getCORSHeaders(origin) });
   }
 
@@ -54,5 +72,5 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!_next/static|_next/image|favicon.ico).*)'],
+  matcher: ['/api/:path*'],
 };

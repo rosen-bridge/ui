@@ -8,6 +8,8 @@ import type { NextRequest } from 'next/server';
 import * as Sentry from '@sentry/nextjs';
 import type { ZodSafeParseResult } from 'zod';
 
+import { env } from '@/env';
+
 export class AccessDeniedError extends Error {
   constructor(message: string) {
     super(message);
@@ -52,7 +54,16 @@ export const withValidation =
 
     try {
       const response = await handler(value);
-      return Response.json(response);
+      return Response.json(
+        response,
+        request.method === 'GET'
+          ? {
+              headers: env.API_CACHE_SECONDS
+                ? { 'Cache-Control': `public, max-age=0, s-maxage=${env.API_CACHE_SECONDS}` }
+                : undefined,
+            }
+          : undefined,
+      );
     } catch (error) {
       if (error instanceof ReferenceError) {
         return Response.json({ message: error.message }, { status: 404 });
@@ -76,9 +87,6 @@ export const withValidation =
         Sentry.captureException(error);
       });
 
-      if (error instanceof Error) {
-        return Response.json({ message: error.message }, { status: 500 });
-      }
-      return Response.json(JSON.stringify(error), { status: 500 });
+      return Response.json({ message: 'Internal server error' }, { status: 500 });
     }
   };

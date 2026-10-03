@@ -328,7 +328,7 @@ export const getEvent = async (id: string): Promise<EventDetailsType[]> => {
     .where('oe.requestId = :id', { id })
     .getRawMany();
 
-  if (!events.length) throw new Error(`Not found`);
+  if (!events.length) throw new ReferenceError(`Event with id [${id}] not found`);
 
   const ergoSideTokenIds = events.map((event) => event.lockToken?.ergoSideTokenId).filter(Boolean);
 
@@ -341,11 +341,13 @@ export const getEvent = async (id: string): Promise<EventDetailsType[]> => {
 
   const result = events.map(
     async ({ statusOverrideStatus, statusOverrideReason, statusOverrideSeverity, ...event }) => {
-      if (!event.lockToken) throw new Error(`Not found`);
+      if (!event.lockToken) throw new Error(`Event [${event.eventId}] has no lock token`);
 
       const token = tokensByErgoSideTokenId.get(event.lockToken.ergoSideTokenId);
 
-      if (!token) throw new Error(`Not found`);
+      if (!token) {
+        throw new Error(`Lock token for event [${event.eventId}] not found in the token table`);
+      }
 
       const price = await tokenPriceAction.getLatestTokenPrice(token.id, event.timestamp);
 
@@ -388,7 +390,7 @@ export const getEventStatus = async (
   });
 
   if (!observations.length) {
-    throw new Error('Not found');
+    throw new ReferenceError(`Event with id [${eventId}] not found`);
   }
 
   if (observations.length > 1) {
