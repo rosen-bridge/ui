@@ -47,9 +47,7 @@ chains:
     explorer:
       connections:
         - url: https://api.ergoplatform.com/
-    blockCleanupConfig:
-      blockCleanupThresholdDuration: 86400
-      blockTrimCountInRound: 500
+    blockCleanupActive: false
   cardano:
     active: false
     scanInterval: 30
@@ -57,15 +55,11 @@ chains:
       connections:
         - url: https://api.koios.rest/api/v1/
           timeout: 100
-    blockCleanupConfig:
-      blockCleanupThresholdDuration: 86400
-      blockTrimCountInRound: 500
+    blockCleanupActive: true
   bitcoin:
     active: false
     scanInterval: 600
-    blockCleanupConfig:
-      blockCleanupThresholdDuration: 86400
-      blockTrimCountInRound: 500
+    blockCleanupActive: true
   bitcoin-runes:
     active: false
     unisatUrl: https://open-api.unisat.io
@@ -75,33 +69,27 @@ chains:
     adapter:
       blockCypher:
         url: https://api.blockcypher.com
-    blockCleanupConfig:
-      blockCleanupThresholdDuration: 86400
-      blockTrimCountInRound: 500
+    blockCleanupActive: true
   ethereum:
     active: false
     scanInterval: 60
-    blockCleanupConfig:
-      blockCleanupThresholdDuration: 86400
-      blockTrimCountInRound: 500
+    blockCleanupActive: true
   binance:
     active: false
     scanInterval: 10
-    blockCleanupConfig:
-      blockCleanupThresholdDuration: 86400
-      blockTrimCountInRound: 500
+    blockCleanupActive: true
   firo:
     active: false
     scanInterval: 60
-    blockCleanupConfig:
-      blockCleanupThresholdDuration: 86400
-      blockTrimCountInRound: 500
+    blockCleanupActive: true
   handshake:
     active: false
     scanInterval: 600
-    blockCleanupConfig:
-      blockCleanupThresholdDuration: 86400
-      blockTrimCountInRound: 500
+    blockCleanupActive: true
+commitmentExtractor:
+  active: false
+eventTriggerExtractor:
+  active: false
 paths:
   contracts: config/contracts.json
   healthReport: healthReport.json

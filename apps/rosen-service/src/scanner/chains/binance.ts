@@ -8,6 +8,8 @@ import config from '../../configs';
 import {
   BINANCE_SCANNER_INTERVAL,
   BINANCE_SCANNER_LOGGER_NAME,
+  BLOCK_CLEANUP_THRESHOLD_DURATION,
+  BLOCK_CLEANUP_TRIM_COUNT_IN_ROUND,
   SCANNER_API_TIMEOUT,
 } from '../../constants';
 import dataSource from '../../data-source';
@@ -47,7 +49,16 @@ export const startBinanceScanner = async () => {
     const scanner = new EvmRpcScanner('binance', {
       dataSource,
       initialHeight: config.binance.initialHeight,
-      blockCleanupConfig: config.binance.blockCleanupConfig,
+      blockCleanupConfig:
+        config.binance.blockCleanupActive === true
+          ? {
+              blockCleanupThresholdDuration: BLOCK_CLEANUP_THRESHOLD_DURATION,
+              blockTrimCountInRound: BLOCK_CLEANUP_TRIM_COUNT_IN_ROUND,
+            }
+          : {
+              blockCleanupThresholdDuration: BLOCK_CLEANUP_THRESHOLD_DURATION,
+              blockTrimCountInRound: 0,
+            },
       logger: scannerLogger,
       network: createBinanceNetworkConnectorManager(),
     });

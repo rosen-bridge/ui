@@ -28,11 +28,11 @@ export const registerExtractors = async (scanner: ErgoScanner) => {
         dataSource,
         await getTokenMap(),
         {
-          active: true,
+          active: configs.commitmentExtractor.active,
           type: ErgoNetworkType.Explorer,
           url: configs.ergo.explorerUrl,
           address: chainConfig.addresses.commitment,
-          maxParallelRequests: 1,
+          maxParallelRequests: configs.commitmentExtractor.maxParallelRequests,
         },
         logger.child(`${chain}CommitmentExtractor`),
       );

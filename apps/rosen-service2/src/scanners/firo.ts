@@ -12,7 +12,12 @@ import {
 } from '@rosen-bridge/firo-scanner';
 
 import { configs } from '../configs';
-import { FIRO_METHOD_ELECTRUMX, FIRO_METHOD_RPC } from '../constants';
+import {
+  BLOCK_CLEANUP_THRESHOLD_DURATION,
+  BLOCK_CLEANUP_TRIM_COUNT_IN_ROUND,
+  FIRO_METHOD_ELECTRUMX,
+  FIRO_METHOD_RPC,
+} from '../constants';
 
 const logger = DefaultLogger.getInstance().child(import.meta.url);
 
@@ -86,10 +91,19 @@ const buildFiroElectrumxScannerWithExtractors = async (
 
   const firoScanner = new FiroElectrumXScanner({
     dataSource,
-    initialHeight: configs.chains.firo.initialHeight ?? 1,
+    initialHeight: configs.chains.firo.initialHeight || 1,
     network: createFiroElectrumxNetworkConnectorManager(),
     blockRetrieveGap: configs.chains.firo.blockRetrieveGap,
-    blockCleanupConfig: configs.chains.firo.blockCleanupConfig,
+    blockCleanupConfig:
+      configs.chains.firo.blockCleanupActive === true
+        ? {
+            blockCleanupThresholdDuration: BLOCK_CLEANUP_THRESHOLD_DURATION,
+            blockTrimCountInRound: BLOCK_CLEANUP_TRIM_COUNT_IN_ROUND,
+          }
+        : {
+            blockCleanupThresholdDuration: BLOCK_CLEANUP_THRESHOLD_DURATION,
+            blockTrimCountInRound: 0,
+          },
     logger: logger.child('firoScannerLogger'),
   });
   try {
@@ -129,10 +143,19 @@ const buildFiroRpcScannerWithExtractors = async (dataSource: DataSource, tokenMa
 
   const firoScanner = new FiroRpcScanner({
     dataSource,
-    initialHeight: configs.chains.firo.initialHeight ?? 1,
+    initialHeight: configs.chains.firo.initialHeight || 1,
     network: createFiroRpcNetworkConnectorManager(),
     blockRetrieveGap: configs.chains.firo.blockRetrieveGap,
-    blockCleanupConfig: configs.chains.firo.blockCleanupConfig,
+    blockCleanupConfig:
+      configs.chains.firo.blockCleanupActive === true
+        ? {
+            blockCleanupThresholdDuration: BLOCK_CLEANUP_THRESHOLD_DURATION,
+            blockTrimCountInRound: BLOCK_CLEANUP_TRIM_COUNT_IN_ROUND,
+          }
+        : {
+            blockCleanupThresholdDuration: BLOCK_CLEANUP_THRESHOLD_DURATION,
+            blockTrimCountInRound: 0,
+          },
     logger: logger.child('firoScannerLogger'),
   });
   try {

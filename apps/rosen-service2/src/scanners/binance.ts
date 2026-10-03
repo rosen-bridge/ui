@@ -8,6 +8,7 @@ import type { TokenMap } from '@rosen-bridge/extended-tokens';
 import type { DataSource } from '@rosen-bridge/extended-typeorm';
 
 import { configs } from '../configs';
+import { BLOCK_CLEANUP_THRESHOLD_DURATION, BLOCK_CLEANUP_TRIM_COUNT_IN_ROUND } from '../constants';
 
 const logger = DefaultLogger.getInstance().child(import.meta.url);
 
@@ -39,7 +40,16 @@ export const getBinanceScanner = async (dataSource: DataSource, tokenMap: TokenM
     initialHeight: configs.chains.binance.initialHeight || 1,
     network: networkConnectorManager,
     blockRetrieveGap: configs.chains.binance.blockRetrieveGap,
-    blockCleanupConfig: configs.chains.binance.blockCleanupConfig,
+    blockCleanupConfig:
+      configs.chains.binance.blockCleanupActive === true
+        ? {
+            blockCleanupThresholdDuration: BLOCK_CLEANUP_THRESHOLD_DURATION,
+            blockTrimCountInRound: BLOCK_CLEANUP_TRIM_COUNT_IN_ROUND,
+          }
+        : {
+            blockCleanupThresholdDuration: BLOCK_CLEANUP_THRESHOLD_DURATION,
+            blockTrimCountInRound: 0,
+          },
     logger: logger.child('binanceScannerLogger'),
   });
 

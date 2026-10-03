@@ -19,6 +19,8 @@ import type { DataSource } from '@rosen-bridge/extended-typeorm';
 
 import { configs } from '../configs';
 import {
+  BLOCK_CLEANUP_THRESHOLD_DURATION,
+  BLOCK_CLEANUP_TRIM_COUNT_IN_ROUND,
   CARDANO_METHOD_BLOCKFROST,
   CARDANO_METHOD_KOIOS,
   CARDANO_METHOD_OGMIOS,
@@ -57,7 +59,16 @@ const buildCardanoKoiosScannerWithExtractors = async (
     initialHeight: configs.chains.cardano.initialHeight || 0,
     network: networkConnectorManager,
     blockRetrieveGap: configs.chains.cardano.blockRetrieveGap,
-    blockCleanupConfig: configs.chains.cardano.blockCleanupConfig,
+    blockCleanupConfig:
+      configs.chains.cardano.blockCleanupActive === true
+        ? {
+            blockCleanupThresholdDuration: BLOCK_CLEANUP_THRESHOLD_DURATION,
+            blockTrimCountInRound: BLOCK_CLEANUP_TRIM_COUNT_IN_ROUND,
+          }
+        : {
+            blockCleanupThresholdDuration: BLOCK_CLEANUP_THRESHOLD_DURATION,
+            blockTrimCountInRound: 0,
+          },
     logger: logger.child('cardanoKoiosScannerLogger'),
   });
 
@@ -117,7 +128,16 @@ const buildCardanoBlockFrostScannerWithExtractors = async (
     initialHeight: configs.chains.cardano.initialHeight || 0,
     network: networkConnectorManager,
     blockRetrieveGap: configs.chains.cardano.blockRetrieveGap,
-    blockCleanupConfig: configs.chains.cardano.blockCleanupConfig,
+    blockCleanupConfig:
+      configs.chains.cardano.blockCleanupActive === true
+        ? {
+            blockCleanupThresholdDuration: BLOCK_CLEANUP_THRESHOLD_DURATION,
+            blockTrimCountInRound: BLOCK_CLEANUP_TRIM_COUNT_IN_ROUND,
+          }
+        : {
+            blockCleanupThresholdDuration: BLOCK_CLEANUP_THRESHOLD_DURATION,
+            blockTrimCountInRound: 0,
+          },
     logger: logger.child('cardanoBlockFrostScannerLogger'),
   });
 
@@ -169,7 +189,16 @@ const buildCardanoOgmiosScannerWithExtractors = async (
       nodePort: configs.chains.cardano.ogmios.connection.port || 0,
       initialSlot: configs.chains.cardano.ogmios.connection.initialSlot || 0,
       initialHash: configs.chains.cardano.ogmios.connection.initialHash || '',
-      blockCleanupConfig: configs.chains.cardano.blockCleanupConfig,
+      blockCleanupConfig:
+        configs.chains.cardano.blockCleanupActive === true
+          ? {
+              blockCleanupThresholdDuration: BLOCK_CLEANUP_THRESHOLD_DURATION,
+              blockTrimCountInRound: BLOCK_CLEANUP_TRIM_COUNT_IN_ROUND,
+            }
+          : {
+              blockCleanupThresholdDuration: BLOCK_CLEANUP_THRESHOLD_DURATION,
+              blockTrimCountInRound: 0,
+            },
     },
     logger.child('cardanoOgmiosScannerLogger'),
   );

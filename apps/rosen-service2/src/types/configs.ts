@@ -1,5 +1,7 @@
 export interface RosenService2BaseConfig {
   paths: Paths;
+  eventTriggerExtractor: EventTriggerExtractor;
+  commitmentExtractor: CommitmentExtractor;
   chains: Chains;
   statistics: Statistics;
   tokenMap: TokenMap;
@@ -138,12 +140,7 @@ export interface ChainsHandshake {
   adapter: ChainsHandshakeAdapter;
   blockRetrieveGap?: number;
   rpc: ChainsHandshakeRpc;
-  blockCleanupConfig: ChainsHandshakeBlockCleanupConfig;
-}
-
-export interface ChainsHandshakeBlockCleanupConfig {
-  blockCleanupThresholdDuration: number;
-  blockTrimCountInRound: number;
+  blockCleanupActive?: boolean;
 }
 
 export interface ChainsHandshakeRpc {
@@ -170,12 +167,7 @@ export interface ChainsFiro {
   method?: 'rpc' | 'electrumx';
   rpc: ChainsFiroRpc;
   electrumx: ChainsFiroElectrumx;
-  blockCleanupConfig: ChainsFiroBlockCleanupConfig;
-}
-
-export interface ChainsFiroBlockCleanupConfig {
-  blockCleanupThresholdDuration: number;
-  blockTrimCountInRound: number;
+  blockCleanupActive?: boolean;
 }
 
 export interface ChainsFiroElectrumx {
@@ -207,12 +199,7 @@ export interface ChainsBinance {
   adapter: ChainsBinanceAdapter;
   blockRetrieveGap?: number;
   rpc: ChainsBinanceRpc;
-  blockCleanupConfig: ChainsBinanceBlockCleanupConfig;
-}
-
-export interface ChainsBinanceBlockCleanupConfig {
-  blockCleanupThresholdDuration: number;
-  blockTrimCountInRound: number;
+  blockCleanupActive?: boolean;
 }
 
 export interface ChainsBinanceRpc {
@@ -237,12 +224,7 @@ export interface ChainsEthereum {
   adapter: ChainsEthereumAdapter;
   blockRetrieveGap?: number;
   rpc: ChainsEthereumRpc;
-  blockCleanupConfig: ChainsEthereumBlockCleanupConfig;
-}
-
-export interface ChainsEthereumBlockCleanupConfig {
-  blockCleanupThresholdDuration: number;
-  blockTrimCountInRound: number;
+  blockCleanupActive?: boolean;
 }
 
 export interface ChainsEthereumRpc {
@@ -269,12 +251,7 @@ export interface ChainsDoge {
   method?: 'rpc' | 'esplora';
   rpc: ChainsDogeRpc;
   esplora: ChainsDogeEsplora;
-  blockCleanupConfig: ChainsDogeBlockCleanupConfig;
-}
-
-export interface ChainsDogeBlockCleanupConfig {
-  blockCleanupThresholdDuration: number;
-  blockTrimCountInRound: number;
+  blockCleanupActive?: boolean;
 }
 
 export interface ChainsDogeEsplora {
@@ -327,12 +304,7 @@ export interface ChainsBitcoin {
   method?: 'rpc' | 'esplora';
   rpc: ChainsBitcoinRpc;
   esplora: ChainsBitcoinEsplora;
-  blockCleanupConfig: ChainsBitcoinBlockCleanupConfig;
-}
-
-export interface ChainsBitcoinBlockCleanupConfig {
-  blockCleanupThresholdDuration: number;
-  blockTrimCountInRound: number;
+  blockCleanupActive?: boolean;
 }
 
 export interface ChainsBitcoinEsplora {
@@ -370,12 +342,7 @@ export interface ChainsCardano {
   koios: ChainsCardanoKoios;
   blockfrost: ChainsCardanoBlockfrost;
   ogmios: ChainsCardanoOgmios;
-  blockCleanupConfig: ChainsCardanoBlockCleanupConfig;
-}
-
-export interface ChainsCardanoBlockCleanupConfig {
-  blockCleanupThresholdDuration: number;
-  blockTrimCountInRound: number;
+  blockCleanupActive?: boolean;
 }
 
 export interface ChainsCardanoOgmios {
@@ -422,12 +389,7 @@ export interface ChainsErgo {
   method?: 'explorer' | 'node';
   node: ChainsErgoNode;
   explorer: ChainsErgoExplorer;
-  blockCleanupConfig: ChainsErgoBlockCleanupConfig;
-}
-
-export interface ChainsErgoBlockCleanupConfig {
-  blockCleanupThresholdDuration: number;
-  blockTrimCountInRound: number;
+  blockCleanupActive: boolean;
 }
 
 export interface ChainsErgoExplorer {
@@ -448,6 +410,15 @@ export interface ChainsErgoNodeConnections {
 
 export interface ChainsErgoAdapter {
   extraAddresses: string[];
+}
+
+export interface CommitmentExtractor {
+  active: boolean;
+  maxParallelRequests?: number;
+}
+
+export interface EventTriggerExtractor {
+  active: boolean;
 }
 
 export interface Paths {

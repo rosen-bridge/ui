@@ -8,6 +8,8 @@ import {
 
 import config from '../../configs';
 import {
+  BLOCK_CLEANUP_THRESHOLD_DURATION,
+  BLOCK_CLEANUP_TRIM_COUNT_IN_ROUND,
   CARDANO_SCANNER_INTERVAL,
   CARDANO_SCANNER_LOGGER_NAME,
   SCANNER_API_TIMEOUT,
@@ -49,7 +51,16 @@ export const startCardanoScanner = async () => {
     const scanner = new CardanoKoiosScanner({
       dataSource,
       initialHeight: config.cardano.initialHeight,
-      blockCleanupConfig: config.cardano.blockCleanupConfig,
+      blockCleanupConfig:
+        config.cardano.blockCleanupActive === true
+          ? {
+              blockCleanupThresholdDuration: BLOCK_CLEANUP_THRESHOLD_DURATION,
+              blockTrimCountInRound: BLOCK_CLEANUP_TRIM_COUNT_IN_ROUND,
+            }
+          : {
+              blockCleanupThresholdDuration: BLOCK_CLEANUP_THRESHOLD_DURATION,
+              blockTrimCountInRound: 0,
+            },
       logger: scannerLogger,
       network: createCardanoNetworkConnectorManager(),
     });

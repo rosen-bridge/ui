@@ -34,14 +34,14 @@ const getConfig = () => {
           rwt: nodeConfig.get<string>('ergo.tokens.rwt'),
         },
         explorerUrl: nodeConfig.get<string>('ergo.explorerUrl'),
-        blockCleanupConfig: {
-          blockCleanupThresholdDuration: nodeConfig.get<number>(
-            'ergo.blockCleanupConfig.blockCleanupThresholdDuration',
-          ),
-          blockTrimCountInRound: nodeConfig.get<number>(
-            'ergo.blockCleanupConfig.blockTrimCountInRound',
-          ),
-        },
+        blockCleanupActive: nodeConfig.get<boolean>('ergo.blockCleanupActive'),
+      },
+      eventTriggerExtractor: {
+        active: nodeConfig.get<boolean>('eventTriggerExtractor.active'),
+      },
+      commitmentExtractor: {
+        active: nodeConfig.get<boolean>('commitmentExtractor.active'),
+        maxParallelRequests: nodeConfig.get<number>('commitmentExtractor.maxParallelRequests'),
       },
       cardano: {
         addresses: {
@@ -57,14 +57,7 @@ const getConfig = () => {
         },
         koiosUrl: nodeConfig.get<string>('cardano.koiosUrl'),
         koiosAuthToken: nodeConfig.get<string>('cardano.koiosAuthToken'),
-        blockCleanupConfig: {
-          blockCleanupThresholdDuration: nodeConfig.get<number>(
-            'cardano.blockCleanupConfig.blockCleanupThresholdDuration',
-          ),
-          blockTrimCountInRound: nodeConfig.get<number>(
-            'cardano.blockCleanupConfig.blockTrimCountInRound',
-          ),
-        },
+        blockCleanupActive: nodeConfig.get<boolean>('cardano.blockCleanupActive'),
       },
       bitcoin: {
         addresses: {
@@ -82,14 +75,7 @@ const getConfig = () => {
         rpcUrl: nodeConfig.get<string>('bitcoin.rpc.url'),
         rpcUsername: getOptionalString('bitcoin.rpc.username'),
         rpcPassword: getOptionalString('bitcoin.rpc.password'),
-        blockCleanupConfig: {
-          blockCleanupThresholdDuration: nodeConfig.get<number>(
-            'bitcoin.blockCleanupConfig.blockCleanupThresholdDuration',
-          ),
-          blockTrimCountInRound: nodeConfig.get<number>(
-            'bitcoin.blockCleanupConfig.blockTrimCountInRound',
-          ),
-        },
+        blockCleanupActive: nodeConfig.get<boolean>('bitcoin.blockCleanupActive'),
       },
       bitcoinRunes: {
         addresses: {
@@ -119,14 +105,7 @@ const getConfig = () => {
         },
         rpcUrl: nodeConfig.get<string>('ethereum.rpcUrl'),
         rpcAuthToken: getOptionalString('ethereum.rpcAuthToken'),
-        blockCleanupConfig: {
-          blockCleanupThresholdDuration: nodeConfig.get<number>(
-            'ethereum.blockCleanupConfig.blockCleanupThresholdDuration',
-          ),
-          blockTrimCountInRound: nodeConfig.get<number>(
-            'ethereum.blockCleanupConfig.blockTrimCountInRound',
-          ),
-        },
+        blockCleanupActive: nodeConfig.get<boolean>('ethereum.blockCleanupActive'),
       },
       binance: {
         addresses: {
@@ -142,14 +121,7 @@ const getConfig = () => {
         },
         rpcUrl: nodeConfig.get<string>('binance.rpcUrl'),
         rpcAuthToken: getOptionalString('binance.rpcAuthToken'),
-        blockCleanupConfig: {
-          blockCleanupThresholdDuration: nodeConfig.get<number>(
-            'binance.blockCleanupConfig.blockCleanupThresholdDuration',
-          ),
-          blockTrimCountInRound: nodeConfig.get<number>(
-            'binance.blockCleanupConfig.blockTrimCountInRound',
-          ),
-        },
+        blockCleanupActive: nodeConfig.get<boolean>('binance.blockCleanupActive'),
       },
       doge: {
         addresses: {
@@ -172,14 +144,7 @@ const getConfig = () => {
               password?: string;
             }>
           >('doge.rpcConnections'),
-        blockCleanupConfig: {
-          blockCleanupThresholdDuration: nodeConfig.get<number>(
-            'doge.blockCleanupConfig.blockCleanupThresholdDuration',
-          ),
-          blockTrimCountInRound: nodeConfig.get<number>(
-            'doge.blockCleanupConfig.blockTrimCountInRound',
-          ),
-        },
+        blockCleanupActive: nodeConfig.get<boolean>('doge.blockCleanupActive'),
       },
       firo: {
         addresses: {
@@ -197,14 +162,7 @@ const getConfig = () => {
         electrumxHost: nodeConfig.get<string>('firo.electrumx.host'),
         electrumxPort: nodeConfig.get<number>('firo.electrumx.port'),
         electrumxReconnectDelay: nodeConfig.get<number>('firo.electrumx.reconnectDelay'),
-        blockCleanupConfig: {
-          blockCleanupThresholdDuration: nodeConfig.get<number>(
-            'firo.blockCleanupConfig.blockCleanupThresholdDuration',
-          ),
-          blockTrimCountInRound: nodeConfig.get<number>(
-            'firo.blockCleanupConfig.blockTrimCountInRound',
-          ),
-        },
+        blockCleanupActive: nodeConfig.get<boolean>('firo.blockCleanupActive'),
       },
       handshake: {
         addresses: {
@@ -219,14 +177,7 @@ const getConfig = () => {
           rwt: nodeConfig.get<string>('handshake.tokens.rwt'),
         },
         rpcUrl: nodeConfig.get<string>('handshake.rpcUrl'),
-        blockCleanupConfig: {
-          blockCleanupThresholdDuration: nodeConfig.get<number>(
-            'handshake.blockCleanupConfig.blockCleanupThresholdDuration',
-          ),
-          blockTrimCountInRound: nodeConfig.get<number>(
-            'handshake.blockCleanupConfig.blockTrimCountInRound',
-          ),
-        },
+        blockCleanupActive: nodeConfig.get<boolean>('handshake.blockCleanupActive'),
       },
       postgres: {
         url: nodeConfig.get<string>('postgres.url'),

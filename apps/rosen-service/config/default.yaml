@@ -20,6 +20,11 @@ ergo:
   blockCleanupConfig:
     blockCleanupThresholdDuration: 86400
     blockTrimCountInRound: 500
+commitmentExtractor:
+  active: false
+  maxParallelRequests: 1
+eventTriggerExtractor:
+  active: false
 cardano:
   addresses:
     lock:

@@ -10,6 +10,8 @@ import config from '../../configs';
 import {
   BITCOIN_SCANNER_INTERVAL,
   BITCOIN_SCANNER_LOGGER_NAME,
+  BLOCK_CLEANUP_THRESHOLD_DURATION,
+  BLOCK_CLEANUP_TRIM_COUNT_IN_ROUND,
   SCANNER_API_TIMEOUT,
 } from '../../constants';
 import dataSource from '../../data-source';
@@ -54,7 +56,16 @@ export const startBitcoinScanner = async () => {
     const scanner = new BitcoinRpcScanner({
       dataSource,
       initialHeight: config.bitcoin.initialHeight,
-      blockCleanupConfig: config.bitcoin.blockCleanupConfig,
+      blockCleanupConfig:
+        config.bitcoin.blockCleanupActive === true
+          ? {
+              blockCleanupThresholdDuration: BLOCK_CLEANUP_THRESHOLD_DURATION,
+              blockTrimCountInRound: BLOCK_CLEANUP_TRIM_COUNT_IN_ROUND,
+            }
+          : {
+              blockCleanupThresholdDuration: BLOCK_CLEANUP_THRESHOLD_DURATION,
+              blockTrimCountInRound: 0,
+            },
       logger: scannerLogger,
       network: createBitcoinNetworkConnectorManager(),
     });

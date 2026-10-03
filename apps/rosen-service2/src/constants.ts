@@ -7,6 +7,9 @@ export const BINANCE_BLOCK_TIME = 3; // ~ 3 seconds
 export const FIRO_BLOCK_TIME = 150; // ~ 2.5 minutes
 export const HANDSHAKE_BLOCK_TIME = 600; // ~ 10 minutes
 
+export const BLOCK_CLEANUP_THRESHOLD_DURATION = 24 * 60 * 60; // 24 hours in seconds
+export const BLOCK_CLEANUP_TRIM_COUNT_IN_ROUND = 2000;
+
 export const ERGO_METHOD_EXPLORER = 'explorer';
 export const ERGO_METHOD_NODE = 'node';
 

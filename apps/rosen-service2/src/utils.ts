@@ -81,6 +81,7 @@ export const createEventTrigger = (
     chianConfigs.addresses.WatcherPermit,
     chianConfigs.addresses.Fraud,
     logger.child(`${formatChainName(chain, 'camel')}EventTriggerExtractor`),
+    configs.eventTriggerExtractor.active,
   );
 };
 
@@ -110,11 +111,11 @@ export const createCommitmentExtractor = (
     dataSource,
     tokenMap,
     {
-      active: true,
+      active: configs.commitmentExtractor.active,
       type: networkType,
       url,
       address: chianConfigs.addresses.Commitment,
-      maxParallelRequests: 1,
+      maxParallelRequests: configs.commitmentExtractor.maxParallelRequests,
     },
     logger.child(`${chain}CommitmentExtractor`),
   );
