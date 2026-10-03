@@ -4,7 +4,7 @@ import * as z from 'zod/v4-mini';
 export const env = createEnv({
   emptyStringAsUndefined: true,
   server: {
-    API_BASE_URL: z.url(),
+    API_BASE_URL: z.optional(z.url()),
   },
   client: {
     NEXT_PUBLIC_USE_MOCKED_APIS: z.pipe(
