@@ -75,6 +75,8 @@ export const env = createEnv({
         .check(z.regex(/^\d+ ?(ms|s|m|h|d)$/, 'must be a duration like "10 s", "10s" or "500ms"')),
     ),
 
+    API_CACHE_SECONDS: z.optional(z.coerce.number().check(z.gt(0))),
+
     KV_REST_API_URL: z.optional(z.string()),
     KV_REST_API_TOKEN: z.optional(z.string()),
 
@@ -130,6 +132,8 @@ export const env = createEnv({
 
     RATE_LIMIT_REQUESTS: process.env.RATE_LIMIT_REQUESTS,
     RATE_LIMIT_WINDOW: process.env.RATE_LIMIT_WINDOW,
+
+    API_CACHE_SECONDS: process.env.API_CACHE_SECONDS,
 
     KV_REST_API_URL: process.env.KV_REST_API_URL,
     KV_REST_API_TOKEN: process.env.KV_REST_API_TOKEN,
