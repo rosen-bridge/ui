@@ -10,7 +10,7 @@ import {
 
 import type { RosenChainToken } from '@rosen-bridge/tokens';
 import type { Network } from '@rosen-network/base';
-import { isNetworkAvailable } from '@rosen-ui/constants';
+import { NETWORKS } from '@rosen-ui/constants';
 import type { Network as NetworkKey } from '@rosen-ui/types';
 
 import { env } from '@/env';
@@ -76,7 +76,6 @@ export const NetworkProvider = ({ children }: { children: ReactNode }) => {
   );
 
   const getNetwork = useCallback((name: NetworkKey) => {
-    if (!isNetworkAvailable(name)) return;
     return Object.values<Network>(networks).find((wallet) => wallet.name === name);
   }, []);
 
@@ -86,7 +85,7 @@ export const NetworkProvider = ({ children }: { children: ReactNode }) => {
    */
   const sources = useMemo(() => {
     return (tokenMap.getAllChains() as NetworkKey[])
-      .filter(isNetworkAvailable)
+      .filter((chain) => !!NETWORKS[chain])
       .map((chain) => getNetwork(chain))
       .filter((chain) => !!chain);
   }, [tokenMap, getNetwork]);
@@ -97,7 +96,7 @@ export const NetworkProvider = ({ children }: { children: ReactNode }) => {
    */
   const targets = useMemo(() => {
     return (tokenMap.getSupportedChains(sourceField.value) as NetworkKey[])
-      .filter(isNetworkAvailable)
+      .filter((chain) => !!NETWORKS[chain])
       .map((chain) => getNetwork(chain))
       .filter((chain) => !!chain);
   }, [sourceField.value, tokenMap, getNetwork]);
@@ -106,7 +105,7 @@ export const NetworkProvider = ({ children }: { children: ReactNode }) => {
    * a list of available tokens in the selected network
    */
   const tokens = useMemo(() => {
-    if (!isNetworkAvailable(targetField.value) || !isNetworkAvailable(sourceField.value)) return [];
+    if (!targetField.value || !sourceField.value) return [];
 
     return tokenMap.getTokens(sourceField.value, targetField.value);
   }, [targetField.value, sourceField.value, tokenMap]);
@@ -123,10 +122,10 @@ export const NetworkProvider = ({ children }: { children: ReactNode }) => {
       tokens = new Set<RosenChainToken>();
 
     for (const fromChain of tokenMap.getAllChains()) {
-      if (!isNetworkAvailable(fromChain)) continue;
+      if (!NETWORKS[fromChain as NetworkKey]) continue;
 
       for (const toChain of tokenMap.getSupportedChains(fromChain)) {
-        if (!isNetworkAvailable(toChain)) continue;
+        if (!NETWORKS[toChain as NetworkKey]) continue;
 
         for (const token of tokenMap.getTokens(fromChain, toChain)) {
           const isBlocked = blacklist.some(

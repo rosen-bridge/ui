@@ -84,6 +84,5 @@ export { default as Swatchbook } from './swatchbook.svg';
 export { default as SyncExclamation } from './sync-exclamation.svg';
 export { default as ThumbsUp } from './thumbs-up.svg';
 export { default as Times } from './times.svg';
-export type { SVGIcon } from './types';
 export { default as Unlock } from './unlock.svg';
 export { default as Wallet } from './wallet.svg';

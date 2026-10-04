@@ -11,17 +11,7 @@ const nextConfig: NextConfig = {
     'ergo-lib-wasm-nodejs',
     '@emurgo/cardano-serialization-lib-nodejs',
     '@coinbase/cdp-sdk',
-    'typeorm',
   ],
-  /** Load shared address-codec browser WASM through webpack's asynchronous module graph. */
-  webpack(config, { isServer }) {
-    if (!isServer) {
-      config.experiments = { ...config.experiments, asyncWebAssembly: true };
-      // Next 16's supported browsers implement async functions used by these modules.
-      config.output.environment = { ...config.output.environment, asyncFunction: true };
-    }
-    return config;
-  },
   async headers() {
     return [
       {

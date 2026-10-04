@@ -3,6 +3,7 @@ import type SignClient from '@walletconnect/sign-client';
 
 import type { BitcoinCashUnsignedLockRequest } from '@rosen-network/bitcoin-cash';
 
+import { validateCashonizeConnectionConfig } from './config.js';
 import { createCashonizeSigningRequest, validateCashonizeSigningResponse } from './signing.js';
 
 const CHAIN = 'bch:bitcoincash';
@@ -364,14 +365,7 @@ export const createCashonizeSession = async (options: {
   selectAccount: (addresses: readonly string[]) => Promise<string>;
 }) => {
   const deadline = Date.now() + options.timeoutMs;
-  if (!/^[0-9a-f]{32}$/.test(options.projectId))
-    throw new Error('Invalid WalletConnect project ID');
-  if (
-    !Number.isSafeInteger(options.timeoutMs) ||
-    options.timeoutMs < 1 ||
-    options.timeoutMs > 30000
-  )
-    throw new Error('Invalid BCH wallet deadline');
+  validateCashonizeConnectionConfig(options);
   if (
     !options.metadata ||
     typeof options.metadata.name !== 'string' ||

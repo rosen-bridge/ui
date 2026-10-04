@@ -19,7 +19,7 @@ const destinationMetadata = {
 
 describe('generateBitcoinCashLockMetadata', () => {
   /**
-   * @target Resolve Ethereum through the shared chain registry and address codec.
+   * @target generateBitcoinCashLockMetadata resolves the shared registry and address codec before serialization
    * @dependencies Shared Rosen address codec and UI registry; neither mocked.
    * @scenario Generate BCH lock metadata for a valid EVM destination.
    * @expected Chain index three, 20 codec bytes and exact Rosen-normalized fee fields.
@@ -36,7 +36,7 @@ describe('generateBitcoinCashLockMetadata', () => {
   });
 
   /**
-   * @target Refuse BCH candidate and unknown destination identities.
+   * @target generateBitcoinCashLockMetadata refuses unavailable destination %s
    * @dependencies Shared UI registry; no mocks.
    * @scenario Change only the destination chain to each unassigned/unknown key.
    * @expected RangeError, without consuming a provisional chain index.
@@ -51,7 +51,7 @@ describe('generateBitcoinCashLockMetadata', () => {
   );
 
   /**
-   * @target Preserve shared-codec rejection of malformed destination addresses.
+   * @target generateBitcoinCashLockMetadata rejects an address rejected by the shared codec
    * @dependencies Shared Rosen Ethereum codec; no mocks.
    * @scenario Change only the address to a short value.
    * @expected Error before OP_RETURN serialization succeeds.
@@ -65,7 +65,7 @@ describe('generateBitcoinCashLockMetadata', () => {
 
 describe('generateBitcoinCashOpReturn', () => {
   /**
-   * @target Preserve the shared Rosen byte order and canonical short push.
+   * @target generateBitcoinCashOpReturn preserves the shared Rosen byte order and canonical short push
    * @dependencies None.
    * @scenario Serialize a 25-byte destination script and distinct uint64 fees.
    * @expected Exact chain/bridge/network/length/address bytes, without padding.
@@ -77,7 +77,7 @@ describe('generateBitcoinCashOpReturn', () => {
   });
 
   /**
-   * @target Select the canonical push opcode at each payload-size boundary.
+   * @target generateBitcoinCashOpReturn selects canonical push at %i payload bytes
    * @dependencies None.
    * @scenario Serialize 75-, 76- and 80-byte payloads.
    * @expected Direct push through 75 bytes, OP_PUSHDATA1 for 76 and 80 bytes.
@@ -94,7 +94,7 @@ describe('generateBitcoinCashOpReturn', () => {
   });
 
   /**
-   * @target Preserve both uint64 fee endpoints without numeric coercion.
+   * @target generateBitcoinCashOpReturn preserves uint64 fee endpoints without numeric coercion
    * @dependencies None.
    * @scenario Serialize zero bridge fee and maximum network fee.
    * @expected Eight zero bytes and eight FF bytes in their respective fields.
@@ -110,7 +110,7 @@ describe('generateBitcoinCashOpReturn', () => {
   });
 
   /**
-   * @target Reject isolated invalid chain-index encodings.
+   * @target generateBitcoinCashOpReturn rejects chain index %s
    * @dependencies None.
    * @scenario Change only the chain index to negative, overflow or noninteger.
    * @expected RangeError before a script is returned.
@@ -120,7 +120,7 @@ describe('generateBitcoinCashOpReturn', () => {
   });
 
   /**
-   * @target Reject each fee independently when outside uint64.
+   * @target generateBitcoinCashOpReturn rejects an out-of-range fee %s
    * @dependencies None.
    * @scenario Change one fee field while retaining the other valid fields.
    * @expected RangeError for negative and overflowing bridge or network fees.
@@ -135,7 +135,7 @@ describe('generateBitcoinCashOpReturn', () => {
   });
 
   /**
-   * @target Reject malformed and oversized destination-byte encodings.
+   * @target generateBitcoinCashOpReturn rejects invalid destination bytes %s
    * @dependencies None.
    * @scenario Change only encoded destination bytes to each invalid case.
    * @expected RangeError for empty, odd, nonhex and 81-byte payload cases.

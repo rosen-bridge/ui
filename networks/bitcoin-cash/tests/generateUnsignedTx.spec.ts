@@ -86,7 +86,7 @@ const request = (
 
 describe('generateBitcoinCashUnsignedLock', () => {
   /**
-   * @target Construct the exact treasury, metadata and source change body.
+   * @target generateBitcoinCashUnsignedLock authenticates prevouts and preserves the exact deposit intent
    * @dependencies Real libauth, shared registry/address codec; no mocks.
    * @scenario Spend one authenticated native parent at two satoshis per byte.
    * @expected Exact outputs, conservative signed fee and frozen signing intent.
@@ -125,7 +125,7 @@ describe('generateBitcoinCashUnsignedLock', () => {
   });
 
   /**
-   * @target Select enough inputs without changing their deterministic order.
+   * @target generateBitcoinCashUnsignedLock selects multiple independently authenticated parents
    * @dependencies Real parent serialization; no mocks.
    * @scenario The first output cannot cover the deposit, fee and nondust change.
    * @expected Two inputs in supplied order and a fee covering both unlock scripts.
@@ -140,7 +140,7 @@ describe('generateBitcoinCashUnsignedLock', () => {
   });
 
   /**
-   * @target Enforce every authenticated parent field independently.
+   * @target generateBitcoinCashUnsignedLock rejects a changed prevout claim %#
    * @dependencies One canonical parent; no mocks.
    * @scenario Alter exactly one claimed output field.
    * @expected Rejection before an unsigned signing intent is returned.
@@ -168,7 +168,7 @@ describe('generateBitcoinCashUnsignedLock', () => {
   });
 
   /**
-   * @target Exclude a CashToken-bearing native-looking source output.
+   * @target generateBitcoinCashUnsignedLock rejects tokens on the selected source output
    * @dependencies Canonical libauth CashToken parent bytes; no mocks.
    * @scenario The target output includes fungible token data.
    * @expected Rejection even though source script and satoshis match.
@@ -180,7 +180,7 @@ describe('generateBitcoinCashUnsignedLock', () => {
   });
 
   /**
-   * @target Derive coinbase status from raw bytes and enforce 100 confirmations.
+   * @target generateBitcoinCashUnsignedLock enforces coinbase maturity from the authenticated parent
    * @dependencies Canonical coinbase fixture; no mocks.
    * @scenario Use the same raw parent at 99 and 100 confirmations.
    * @expected The immature output fails and the mature output succeeds.
@@ -196,7 +196,7 @@ describe('generateBitcoinCashUnsignedLock', () => {
   });
 
   /**
-   * @target Reject duplicate outpoints and mixed reported tips.
+   * @target generateBitcoinCashUnsignedLock rejects duplicate and inconsistent snapshots
    * @dependencies Two independent parent fixtures; no mocks.
    * @scenario Duplicate one output, then separately alter only the second height.
    * @expected Both inconsistent snapshots fail before selection.
@@ -214,7 +214,7 @@ describe('generateBitcoinCashUnsignedLock', () => {
   });
 
   /**
-   * @target Bound deposit amounts and fee authorization independently.
+   * @target generateBitcoinCashUnsignedLock rejects an invalid deposit intent %#
    * @dependencies Valid native parent and shared metadata codec; no mocks.
    * @scenario Alter one amount, fee-rate, fee-cap or route parameter.
    * @expected Every invalid request fails without producing signing bytes.
@@ -237,7 +237,7 @@ describe('generateBitcoinCashUnsignedLock', () => {
   });
 
   /**
-   * @target Preserve fee and nondust change without silent output removal.
+   * @target generateBitcoinCashUnsignedLock refuses insufficient funds for fee and nondust change
    * @dependencies Valid raw parent; no mocks.
    * @scenario Attempt to deposit the entire source balance.
    * @expected Insufficient-balance error instead of fee or change mutation.
@@ -249,7 +249,7 @@ describe('generateBitcoinCashUnsignedLock', () => {
   });
 
   /**
-   * @target Bound provider snapshots and transaction input growth.
+   * @target generateBitcoinCashUnsignedLock bounds snapshot and selected input counts
    * @dependencies Real small parents with distinct transaction identities.
    * @scenario Supply 1001 rows, then 101 insufficient inputs in a bounded snapshot.
    * @expected Snapshot and input-limit failures remain distinct.
@@ -265,7 +265,7 @@ describe('generateBitcoinCashUnsignedLock', () => {
   });
 
   /**
-   * @target Reject unbounded and noncanonical raw parent bytes.
+   * @target generateBitcoinCashUnsignedLock bounds parent bytes and requires canonical transaction encoding
    * @dependencies Real transaction hash and decoder; no mocks.
    * @scenario Exceed the raw-byte cap, then append a byte and recompute its hash.
    * @expected Both failures occur before a parent can authorize a deposit.
@@ -294,7 +294,7 @@ describe('generateBitcoinCashUnsignedLock', () => {
   });
 
   /**
-   * @target Bound returned signing context when raw parents are repeated in JSON.
+   * @target generateBitcoinCashUnsignedLock bounds repeated raw parent context in the returned signing intent
    * @dependencies One canonical large parent with three small native targets.
    * @scenario Input selection needs all targets sharing the same bounded parent.
    * @expected Rejection of aggregate copied context without allocating huge JSON.
@@ -321,7 +321,7 @@ describe('generateBitcoinCashUnsignedLock', () => {
     ).toThrow('returned byte bound');
   });
   /**
-   * @target Bound aggregate balance separately from each parent output value.
+   * @target generateBitcoinCashUnsignedLock rejects an aggregate balance above native supply
    * @dependencies Two individually valid canonical parents; no mocks.
    * @scenario Their distinct native outputs sum beyond the maximum BCH supply.
    * @expected Aggregate-balance rejection before input selection.
@@ -337,7 +337,7 @@ describe('generateBitcoinCashUnsignedLock', () => {
   });
 
   /**
-   * @target Bound unique parent bytes independently of each one-megabyte cap.
+   * @target generateBitcoinCashUnsignedLock rejects excessive aggregate unique parent bytes
    * @dependencies Canonical synthetic parents with many small outputs; no mocks.
    * @scenario Three individually bounded parents exceed the aggregate hex cap.
    * @expected Aggregate-parent rejection instead of authorizing a signing intent.
@@ -363,7 +363,7 @@ describe('generateBitcoinCashUnsignedLock', () => {
   });
 
   /**
-   * @target Reuse one authenticated parent while excluding tokens only on targets.
+   * @target generateBitcoinCashUnsignedLock accepts multiple native outputs sharing a parent with a token sibling
    * @dependencies Canonical parent with two native outputs and one token sibling.
    * @scenario Both native outputs are required to cover the deposit.
    * @expected Both native targets selected, with the unrelated token output untouched.
@@ -396,7 +396,7 @@ describe('generateBitcoinCashUnsignedLock', () => {
 
 describe('generateBitcoinCashLockFee', () => {
   /**
-   * @target Bound estimates independently of wallet and provider behavior.
+   * @target generateBitcoinCashLockFee rejects invalid estimate %#
    * @dependencies Actual shared metadata codec; no mocks.
    * @scenario Alter one count or integer fee-rate bound.
    * @expected Rejection before an invalid fee can reach min/max calculations.

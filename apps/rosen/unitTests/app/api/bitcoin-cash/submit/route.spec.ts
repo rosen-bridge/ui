@@ -3,12 +3,13 @@ import { NextRequest } from 'next/server';
 import { hashTransaction, hexToBin } from '@bitauth/libauth';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
+import { encodeBitcoinCashSubmission } from '@rosen-network/bitcoin-cash/submission';
+
 import {
   signIntent,
   signingIntent,
 } from '../../../../../../../networks/bitcoin-cash/tests/mocked/signing.mock';
 import { POST } from '../../../../../src/app/api/bitcoin-cash/submit/route';
-import { encodeBitcoinCashSubmission } from '../../../../../src/networks/bitcoin-cash/submissionCodec';
 
 const { state, getRuntime, submit } = vi.hoisted(() => ({
   state: { enabled: true },
@@ -45,7 +46,7 @@ afterEach(() => {
 
 describe('POST', () => {
   /**
-   * @target Actual Next route forwards the configured server-owned deadline and bounded signed body.
+   * @target POST joins the actual Next request to the bounded submission handler
    * @dependencies NextRequest, real handler/body/codec and local submission port.
    * @scenario Submit one same-origin signed lock to the production POST export.
    * @expected Return its exact transaction ID and forward absolute deadline 1100 plus a live abort signal.
@@ -71,7 +72,7 @@ describe('POST', () => {
     );
   });
   /**
-   * @target Disabled route does not construct server ports even when a valid body is supplied.
+   * @target POST rejects disabled availability before server construction
    * @dependencies Production POST export and no enabled public configuration.
    * @scenario Submit the valid native fixture with BCH disabled.
    * @expected Return exact unavailable 503 without constructing runtime or invoking submit.
@@ -92,7 +93,7 @@ describe('POST', () => {
     expect(submit).not.toHaveBeenCalled();
   });
   /**
-   * @target Production route enforces same-origin, HTTP byte bound and original request cancellation.
+   * @target POST rejects Next request %s before submission
    * @dependencies Actual NextRequest with one independently changed request boundary.
    * @scenario Change origin, declare 5000001 bytes or abort before route entry.
    * @expected Return exact 403/413/400 respectively without submitting any signed transaction.

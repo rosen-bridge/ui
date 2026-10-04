@@ -9,7 +9,9 @@ const { state, initialize } = vi.hoisted(() => ({
   initialize:
     vi.fn<
       (
-        options: Parameters<typeof import('@rosen-ui/cashonize-wallet').createCashonizeSession>[0],
+        ...args: Parameters<
+          typeof import('@rosen-ui/cashonize-wallet').createCashonizeWalletSession
+        >
       ) => Promise<import('@rosen-ui/cashonize-wallet').CashonizeWalletSession>
     >(),
 }));
@@ -17,7 +19,7 @@ vi.mock('@rosen-ui/cashonize-wallet', async () => ({
   ...(await vi.importActual<typeof import('@rosen-ui/cashonize-wallet')>(
     '@rosen-ui/cashonize-wallet',
   )),
-  createCashonizeSession: initialize,
+  createCashonizeWalletSession: initialize,
 }));
 vi.mock('@rosen-ui/constants', async () => {
   const actual = await vi.importActual<typeof import('@rosen-ui/constants')>('@rosen-ui/constants');
@@ -85,10 +87,10 @@ afterEach(() => {
 
 describe('cashonize', () => {
   /**
-   * @target App import does not initialize a relay SDK and disabled configuration creates no wallet.
-   * @dependencies Actual CashonizeWallet/BitcoinCashNetwork constructors with explicit synthetic configuration.
-   * @scenario Import an enabled candidate, then a disabled app registration.
-   * @expected Offer the configured wallet without initializing SDK; omit the disabled instance entirely.
+   * @target cashonize
+   * @dependencies Actual wallet and network constructors with a mocked package session factory.
+   * @scenario initializes the SDK only after a user connection
+   * @expected App import creates no session and disabled configuration creates no wallet.
    */
   it('initializes the SDK only after a user connection', async () => {
     const first = await import('../../src/wallets/cashonize');
@@ -100,44 +102,29 @@ describe('cashonize', () => {
     expect(second.cashonize).toEqual(undefined);
     expect(initialize).not.toHaveBeenCalled();
   });
+
   /**
-   * @target The production app factory binds explicit account confirmation to one real wallet lifecycle.
-   * @dependencies Actual wallet/network classes and pairing store; only the relay session factory is mocked.
-   * @scenario User connects, SDK presents its approved first account, and user confirms it.
-   * @expected Pass actual public metadata/project/deadline, wait for confirmation and clear pairing state.
+   * @target cashonize
+   * @dependencies Actual wallet constructor and a mocked package-owned session factory.
+   * @scenario passes public configuration and pairing to the wallet package
+   * @expected Map app settings to the package without owning session lifecycle behavior.
    */
-  it('connects through explicit pairing confirmation', async () => {
+  it('passes public configuration and pairing to the wallet package', async () => {
     vi.stubGlobal('window', { location: { origin: 'https://bridge.example' } });
-    const address = signingIntent().fromAddress;
-    let shown: (() => void) | undefined;
-    const displayed = new Promise<void>((resolve) => {
-      shown = resolve;
-    });
-    const disconnect = vi.fn(async () => undefined);
-    const dispose = vi.fn();
-    initialize.mockImplementation(async (options) => ({
-      connect: async (signal) => {
-        expect(signal?.aborted).toEqual(false);
-        options.showUri('wc:fixture');
-        const selected = options.selectAccount([address]);
-        shown?.();
-        expect(await selected).toEqual(address);
-      },
-      disconnect,
-      dispose,
-      getAddress: () => address,
+    initialize.mockResolvedValue({
+      connect: async () => undefined,
+      disconnect: async () => undefined,
+      dispose: () => undefined,
+      getAddress: () => signingIntent().fromAddress,
       sign: async () => {
         throw new Error('Unused test signing port');
       },
-    }));
-    const { cashonize } = await import('../../src/wallets/cashonize');
-    const { bitcoinCashPairing } = await import('../../src/networks/bitcoin-cash/pairing');
+    });
+    const { cashonize, cashonizePairing } = await import('../../src/wallets/cashonize');
     if (!cashonize) throw new Error('Missing assigned wallet fixture');
-    const connected = cashonize.performConnect();
-    await displayed;
-    expect(bitcoinCashPairing.getSnapshot()).toEqual({ address });
-    expect(initialize.mock.calls[0][0]).toEqual(
-      expect.objectContaining({
+    await cashonize.performConnect();
+    expect(initialize.mock.calls[0]).toEqual([
+      {
         projectId: '12'.repeat(16),
         timeoutMs: 1000,
         metadata: {
@@ -146,57 +133,9 @@ describe('cashonize', () => {
           url: 'https://bridge.example',
           icons: [],
         },
-      }),
-    );
-    bitcoinCashPairing.confirm();
-    await connected;
-    expect(bitcoinCashPairing.getSnapshot()).toEqual({});
-    await cashonize.performDisconnect();
-    expect(disconnect).toHaveBeenCalledOnce();
-    expect(dispose).toHaveBeenCalledOnce();
-  });
-  /**
-   * @target UI cancellation aborts pending approval instead of leaving the wallet connecting until timeout.
-   * @dependencies Actual wallet/network/store join and an abort-aware mocked SDK connect port.
-   * @scenario Cancel after a pairing URI appears while approval remains pending.
-   * @expected Abort the original connection signal, reject the wallet connection and erase pairing material.
-   */
-  it('aborts the pending SDK connection when pairing is cancelled', async () => {
-    vi.stubGlobal('window', { location: { origin: 'https://bridge.example' } });
-    let shown: (() => void) | undefined;
-    const displayed = new Promise<void>((resolve) => {
-      shown = resolve;
-    });
-    let connectionSignal: AbortSignal | undefined;
-    const dispose = vi.fn();
-    initialize.mockImplementation(async (options) => ({
-      connect: async (signal) => {
-        connectionSignal = signal;
-        options.showUri('wc:fixture');
-        shown?.();
-        await new Promise<void>((_resolve, reject) => {
-          signal?.addEventListener('abort', () => reject(new Error('Cancelled SDK fixture')), {
-            once: true,
-          });
-        });
       },
-      disconnect: async () => undefined,
-      dispose,
-      getAddress: () => signingIntent().fromAddress,
-      sign: async () => {
-        throw new Error('Unused test signing port');
-      },
-    }));
-    const { cashonize } = await import('../../src/wallets/cashonize');
-    const { bitcoinCashPairing } = await import('../../src/networks/bitcoin-cash/pairing');
-    if (!cashonize) throw new Error('Missing assigned wallet fixture');
-    const pending = cashonize.performConnect();
-    const rejected = expect(pending).rejects.toThrow(/^Cashonize connection failed$/);
-    await displayed;
-    await bitcoinCashPairing.cancel();
-    await rejected;
-    expect(connectionSignal?.aborted).toEqual(true);
-    expect(bitcoinCashPairing.getSnapshot()).toEqual({});
-    expect(dispose).toHaveBeenCalled();
+      cashonizePairing,
+      expect.any(Function),
+    ]);
   });
 });

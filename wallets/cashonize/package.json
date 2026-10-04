@@ -9,8 +9,25 @@
   },
   "license": "MIT",
   "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./config": {
+      "types": "./dist/config.d.ts",
+      "default": "./dist/config.js"
+    }
+  },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "config": [
+        "dist/config.d.ts"
+      ]
+    }
+  },
   "scripts": {
     "build": "tsc --build",
     "coverage": "vitest run --coverage",

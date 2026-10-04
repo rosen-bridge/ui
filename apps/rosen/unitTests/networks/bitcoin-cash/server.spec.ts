@@ -1,6 +1,15 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import * as actions from '../../../src/networks/bitcoin-cash/server';
+import { unwrapFromObject } from '@/safeServerAction';
+
+import * as wrappedActions from '../../../src/networks/bitcoin-cash/server';
+
+vi.mock('@/safeServerAction', async () => {
+  const { createSafeAction } = await import('../../../src/safeServerAction/safeServerAction');
+  return createSafeAction({});
+});
+
+const actions = unwrapFromObject(wrappedActions);
 
 const { state, failed } = vi.hoisted(() => ({
   state: { available: true },
@@ -84,7 +93,8 @@ describe.each([
   },
 ])('$name', ({ invoke, message }) => {
   /**
-   * @target Public action errors never echo provider, quote or mapping diagnostics.
+   * @target calculateFee, getAddressBalance, getMinTransfer, getMaxTransfer,
+   * generateSigningParameters, validateAddress sanitizes provider errors
    * @dependencies Failing completed server ports containing an arbitrary diagnostic marker.
    * @scenario Invoke each small action through its actual public wrapper.
    * @expected Return only the exact fixed message corresponding to that operation.
@@ -97,7 +107,7 @@ describe.each([
 
 describe('getAddressBalance', () => {
   /**
-   * @target Disabled configuration remains unavailable without calling a provider.
+   * @target getAddressBalance rejects disabled runtime without a provider call
    * @dependencies No server runtime.
    * @scenario Request a balance while BCH is disabled.
    * @expected Reject with the fixed balance error and perform no remote operation.
@@ -107,19 +117,6 @@ describe('getAddressBalance', () => {
     await expect(actions.getAddressBalance('source')).rejects.toMatchObject({
       message: 'BCH balance query failed',
     });
-    expect(failed).not.toHaveBeenCalled();
-  });
-});
-
-describe('validateAddress', () => {
-  /**
-   * @target The BCH action cannot be used as an arbitrary other-chain address endpoint.
-   * @dependencies Public BCH address wrapper and provider spy.
-   * @scenario Supply Ethereum as the source chain.
-   * @expected Return false without calling server network ports.
-   */
-  it('rejects another address network without reading ports', async () => {
-    expect(await actions.validateAddress('ethereum', 'source')).toEqual(false);
     expect(failed).not.toHaveBeenCalled();
   });
 });

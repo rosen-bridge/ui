@@ -1,9 +1,12 @@
+import {
+  createBitcoinCashServerRuntime,
+  parseBitcoinCashServerConfig,
+} from '@rosen-network/bitcoin-cash/server';
+
 import { FEE_CONFIG_TOKEN_ID } from '../../../configs';
 import { env } from '../../env';
 import { getTokenMap } from '../../tokenMap/getServerTokenMap';
-import { parseBitcoinCashServerConfig } from './config';
 import { bitcoinCashPublicConfig } from './publicConfig';
-import { createBitcoinCashServerRuntime } from './runtime';
 
 let runtime: ReturnType<typeof createBitcoinCashServerRuntime> | undefined;
 

@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { type FC, type SVGAttributes, useMemo } from 'react';
 
 import type * as Icons from '@rosen-bridge/icons';
 
@@ -11,12 +11,11 @@ import './styles.css';
 
 export interface IconOverrides {}
 
-/** SVG root components share the actual generated icon props, including SVGSVGElement handlers. */
 export type IconOwnProps = {
-  as?: Icons.SVGIcon;
+  as?: FC<SVGAttributes<SVGElement>>;
   color?: Color;
   fallback?: keyof typeof Icons;
-  icons?: Record<NonNullable<IconProps['name']>, Icons.SVGIcon>;
+  icons?: Record<NonNullable<IconProps['name']>, FC<SVGAttributes<SVGElement>>>;
   loading?: boolean;
   name?: keyof typeof Icons;
   size?: 'small' | 'medium' | 'large' | (number & {}) | (string & {});

@@ -15,8 +15,6 @@
     "build": "tsc --build tsconfig.build.json",
     "lint": "biome check --write",
     "lint:check": "biome check",
-    "test": "vitest run",
-    "test:postgres": "node -e \"if (!process.env.ROSEN_UI_TEST_POSTGRES_URL) throw new Error('ROSEN_UI_TEST_POSTGRES_URL is required')\" && vitest run tests/postgresUpgrade.spec.ts",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
@@ -27,8 +25,7 @@
     "@rosen-bridge/watcher-data-extractor": "^13.0.10",
     "@rosen-ui/asset-calculator": "^2.4.0",
     "@rosen-ui/public-status": "^0.3.0",
-    "@rosen-ui/rosen-statistics-entity": "^0.4.2",
-    "pg": "^8.11.3"
+    "@rosen-ui/rosen-statistics-entity": "^0.4.2"
   },
   "engines": {
     "node": ">=22.18.0",

@@ -42,37 +42,11 @@ import {
   WatcherCountEntity,
 } from '@rosen-ui/rosen-statistics-entity';
 
-import { type DatabaseMigration, mergeDatabaseMigrations } from './migrations';
-
-/** Additional entity identities and a qualified compatible migration history. */
-export interface DataSourceExtension {
-  entities: readonly (new () => object)[];
-  migrations: readonly DatabaseMigration[];
-}
-
-/**
- * Create shared PostgreSQL storage, optionally registering newer scanner entities.
- * @param postgresUrl Operator PostgreSQL connection URL.
- * @param postgresUseSSL Whether the driver requires SSL.
- * @param postgresLogging Whether query logging is enabled.
- * @param extension Qualified entity identities and migration history for an optional chain.
- * @returns An uninitialized data source; no connection or migration is started.
- */
 export const getDataSource = (
   postgresUrl: string,
   postgresUseSSL: boolean,
   postgresLogging: boolean,
-  extension?: DataSourceExtension,
 ) => {
-  const migrations = [
-    ...watcherDataMigrations.postgres,
-    ...observationExtractorMigrations.postgres,
-    ...scannerMigrations.postgres,
-    ...assetCalculatorMigrations.postgres,
-    ...publicStatusMigrations.postgres,
-    ...TokenPriceMigrations.postgres,
-    ...statisticsMigrations.postgres,
-  ];
   return new DataSource({
     type: 'postgres',
     url: postgresUrl,
@@ -101,8 +75,15 @@ export const getDataSource = (
       MetricEntity,
       UserEventEntity,
       WatcherCountEntity,
-      ...(extension?.entities ?? []),
     ],
-    migrations: extension ? mergeDatabaseMigrations(migrations, extension.migrations) : migrations,
+    migrations: [
+      ...watcherDataMigrations.postgres,
+      ...observationExtractorMigrations.postgres,
+      ...scannerMigrations.postgres,
+      ...assetCalculatorMigrations.postgres,
+      ...publicStatusMigrations.postgres,
+      ...TokenPriceMigrations.postgres,
+      ...statisticsMigrations.postgres,
+    ],
   });
 };

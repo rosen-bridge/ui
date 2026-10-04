@@ -163,7 +163,7 @@ afterEach(() => vi.useRealTimers());
 describe('createBitcoinCashElectrumProvider', () => {
   describe('getHeight', () => {
     /**
-     * @target createBitcoinCashElectrumProvider.getHeight
+     * @target getHeight authenticates the real Axion header before reading height
      * @dependencies TLS socket mocked; real crypto and captured offline header.
      * @scenario Negotiate Electrum1.5 and authenticate the BCH Axion checkpoint.
      * @expected Native double-SHA256 equals BCHN's fixed hash before a height read.
@@ -181,7 +181,7 @@ describe('createBitcoinCashElectrumProvider', () => {
     });
 
     /**
-     * @target createBitcoinCashElectrumProvider.getHeight
+     * @target getHeight rejects a different chain checkpoint
      * @dependencies TLS mocked; native hash implementation unchanged.
      * @scenario Flip one checkpoint-header byte while preserving80-byte framing.
      * @expected Chain identity fails before any UTXO, parent or tip read.
@@ -197,7 +197,7 @@ describe('createBitcoinCashElectrumProvider', () => {
     });
 
     /**
-     * @target createBitcoinCashElectrumProvider.getHeight
+     * @target getHeight rejects unsupported protocol %s
      * @dependencies TLS mocked.
      * @scenario Change only negotiated protocol to a version lacking token_filter.
      * @expected Rejection before checkpoint or balance reads, with no fallback.
@@ -210,7 +210,7 @@ describe('createBitcoinCashElectrumProvider', () => {
     });
 
     /**
-     * @target createBitcoinCashElectrumProvider.getHeight
+     * @target getHeight accepts offered protocol %s
      * @dependencies TLS mocked; exact offered protocol range unchanged.
      * @scenario Select a1.5 patch or the zero-padded1.6.0 upper boundary.
      * @expected Versions inside1.5..1.6 are accepted without widening the range.
@@ -222,7 +222,7 @@ describe('createBitcoinCashElectrumProvider', () => {
     });
 
     /**
-     * @target createBitcoinCashElectrumProvider.getHeight
+     * @target getHeight rejects malformed tip %#
      * @dependencies TLS mocked.
      * @scenario Supply one malformed tip field after a valid handshake.
      * @expected A safe height and exactly80 bytes of header are required.
@@ -243,7 +243,7 @@ describe('createBitcoinCashElectrumProvider', () => {
 
   describe('getSpendableUtxos', () => {
     /**
-     * @target createBitcoinCashElectrumProvider.getSpendableUtxos
+     * @target getSpendableUtxos joins bounded TLS reads to authenticated parent outputs
      * @dependencies TLS mocked; real JSON framing, crypto and libauth3 decoder.
      * @scenario Read a confirmed native parent, then re-read its list and tip.
      * @expected Exact satoshis/script/parent, explicit token exclusion, stable snapshot.
@@ -281,7 +281,7 @@ describe('createBitcoinCashElectrumProvider', () => {
     });
 
     /**
-     * @target createBitcoinCashElectrumProvider.getSpendableUtxos
+     * @target getSpendableUtxos rejects an unsupported source address %#
      * @dependencies TLS mocked; real libauth address validation.
      * @scenario Change source to testnet, token-aware, P2SH or malformed CashAddr.
      * @expected The source is refused before a TLS socket is created.
@@ -299,7 +299,7 @@ describe('createBitcoinCashElectrumProvider', () => {
     });
 
     /**
-     * @target createBitcoinCashElectrumProvider.getSpendableUtxos
+     * @target getSpendableUtxos applies native confirmation policy %#
      * @dependencies TLS mocked; canonical raw parents retained.
      * @scenario Change only confirmation height or coinbase maturity.
      * @expected Mempool and99-confirmation coinbase are excluded;100 is accepted.
@@ -317,7 +317,7 @@ describe('createBitcoinCashElectrumProvider', () => {
     });
 
     /**
-     * @target createBitcoinCashElectrumProvider.getSpendableUtxos
+     * @target getSpendableUtxos rejects malformed native list row %#
      * @dependencies TLS mocked.
      * @scenario Change one listed amount, height, index, hash or token field.
      * @expected Malformed metadata is rejected before any raw parent is fetched.
@@ -344,7 +344,7 @@ describe('createBitcoinCashElectrumProvider', () => {
     });
 
     /**
-     * @target createBitcoinCashElectrumProvider.getSpendableUtxos
+     * @target getSpendableUtxos rejects duplicate listed outpoints
      * @dependencies TLS mocked.
      * @scenario Return the same otherwise valid outpoint twice.
      * @expected Duplicate rejection before balance aggregation or parent lookup.
@@ -356,7 +356,7 @@ describe('createBitcoinCashElectrumProvider', () => {
     });
 
     /**
-     * @target createBitcoinCashElectrumProvider.getSpendableUtxos
+     * @target getSpendableUtxos rejects an oversized UTXO list
      * @dependencies TLS mocked;1001 individually valid distinct outpoints.
      * @scenario Exceed the supported UTXO cardinality by one.
      * @expected Explicit bound exhaustion without silently truncating the balance.
@@ -369,7 +369,7 @@ describe('createBitcoinCashElectrumProvider', () => {
     });
 
     /**
-     * @target createBitcoinCashElectrumProvider.getSpendableUtxos
+     * @target getSpendableUtxos authenticates the parent transaction hash
      * @dependencies TLS mocked; original canonical parent unchanged.
      * @scenario Change only the listed txid to another valid64-character hash.
      * @expected The returned raw transaction cannot authenticate that outpoint.
@@ -382,7 +382,7 @@ describe('createBitcoinCashElectrumProvider', () => {
     });
 
     /**
-     * @target createBitcoinCashElectrumProvider.getSpendableUtxos
+     * @target getSpendableUtxos authenticates claimed output field %#
      * @dependencies TLS mocked; hash-correct canonical parent unchanged.
      * @scenario Change only the claimed amount or output index.
      * @expected Each parent-output binding is independently authenticated.
@@ -398,7 +398,7 @@ describe('createBitcoinCashElectrumProvider', () => {
     );
 
     /**
-     * @target createBitcoinCashElectrumProvider.getSpendableUtxos
+     * @target getSpendableUtxos authenticates the exact source script
      * @dependencies TLS mocked; alternative canonical parent with correct txid.
      * @scenario Change only the output script relative to the requested source.
      * @expected Foreign-address output rejection despite a matching parent hash.
@@ -410,7 +410,7 @@ describe('createBitcoinCashElectrumProvider', () => {
     });
 
     /**
-     * @target createBitcoinCashElectrumProvider.getSpendableUtxos
+     * @target getSpendableUtxos rejects CashTokens hidden by indexer metadata
      * @dependencies TLS mocked; libauth encodes and decodes a real CashToken prefix.
      * @scenario The list hides token_data but the authenticated raw output has a token.
      * @expected Raw-byte token rejection even with exclude_tokens requested.
@@ -422,7 +422,7 @@ describe('createBitcoinCashElectrumProvider', () => {
     });
 
     /**
-     * @target createBitcoinCashElectrumProvider.getSpendableUtxos
+     * @target getSpendableUtxos allows an unrelated sibling CashToken output
      * @dependencies TLS mocked; actual libauth token encoding and decoding.
      * @scenario A native target output shares a parent with an unrelated token output.
      * @expected The native source output remains eligible; only its own token matters.
@@ -441,7 +441,7 @@ describe('createBitcoinCashElectrumProvider', () => {
     });
 
     /**
-     * @target createBitcoinCashElectrumProvider.getSpendableUtxos
+     * @target getSpendableUtxos decodes a shared large parent once per transaction id
      * @dependencies TLS mocked; real918kB parent decoder instrumented only for count.
      * @scenario Two listed outputs share one27000-output canonical parent.
      * @expected The authenticated parent is fetched and decoded once, with exact assets.
@@ -475,7 +475,7 @@ describe('createBitcoinCashElectrumProvider', () => {
     });
 
     /**
-     * @target createBitcoinCashElectrumProvider.getSpendableUtxos
+     * @target getSpendableUtxos bounds returned parent copies separately from the decoded cache
      * @dependencies TLS mocked; one real918kB parent and three listed native outputs.
      * @scenario Repeating authenticated parent hex exceeds the returned-context cap.
      * @expected The snapshot fails before returned copies can amplify serialized JSON.
@@ -511,7 +511,7 @@ describe('createBitcoinCashElectrumProvider', () => {
     });
 
     /**
-     * @target createBitcoinCashElectrumProvider.getSpendableUtxos
+     * @target getSpendableUtxos checks the operation deadline after parent parsing
      * @dependencies TLS mocked; real decoder, with deterministic wall-clock expiry.
      * @scenario One large parent decode crosses the operation deadline before24 rows.
      * @expected Expiry stops the loop after one parse and releases the session.
@@ -556,7 +556,7 @@ describe('createBitcoinCashElectrumProvider', () => {
     });
 
     /**
-     * @target createBitcoinCashElectrumProvider.getSpendableUtxos
+     * @target getSpendableUtxos rejects %s parent encoding
      * @dependencies TLS mocked; hash corresponds to the deliberately malformed raw.
      * @scenario Supply a hash-correct incomplete parent or noncanonical CompactSize.
      * @expected Decoder/canonicality failure independently of the hash binding.
@@ -568,7 +568,7 @@ describe('createBitcoinCashElectrumProvider', () => {
     });
 
     /**
-     * @target createBitcoinCashElectrumProvider.getSpendableUtxos
+     * @target getSpendableUtxos bounds raw parent bytes independently of frame size
      * @dependencies TLS mocked; reply remains below the transport frame maximum.
      * @scenario Exceed raw-parent byte policy by one byte.
      * @expected Size failure before hashing or decoding the oversized parent.
@@ -581,7 +581,7 @@ describe('createBitcoinCashElectrumProvider', () => {
     });
 
     /**
-     * @target createBitcoinCashElectrumProvider.getSpendableUtxos
+     * @target getSpendableUtxos bounds the aggregate native balance
      * @dependencies TLS mocked; real decoded multi-output parent.
      * @scenario Two individually valid maximum outputs exceed the aggregate money cap.
      * @expected Balance aggregation fails before an impossible native total escapes.
@@ -619,7 +619,7 @@ describe('createBitcoinCashElectrumProvider', () => {
     });
 
     /**
-     * @target createBitcoinCashElectrumProvider.getSpendableUtxos
+     * @target getSpendableUtxos rejects final %s drift
      * @dependencies TLS mocked; first list and tip remain fully valid.
      * @scenario Change only the final list, tip height, or tip header hash.
      * @expected No snapshot is returned across mempool or chain drift.
@@ -649,7 +649,7 @@ describe('createBitcoinCashElectrumProvider', () => {
 
   describe('getAddressAssets', () => {
     /**
-     * @target createBitcoinCashElectrumProvider.getAddressAssets
+     * @target getAddressAssets returns exact authenticated native satoshis
      * @dependencies TLS mocked; actual UTXO reader, crypto and decoder.
      * @scenario Aggregate the authenticated source outputs for the asset read port.
      * @expected Exact bigint satoshis and the native-only empty token collection.
@@ -662,7 +662,7 @@ describe('createBitcoinCashElectrumProvider', () => {
     });
 
     /**
-     * @target createBitcoinCashElectrumProvider.getAddressAssets
+     * @target getAddressAssets preserves the exact maximum satoshi amount
      * @dependencies TLS mocked; real native decoder and safe-integer JSON amount.
      * @scenario Read exactly the maximum BCH money amount through numeric JSON.
      * @expected No rounding occurs when the safe integer is converted to bigint.

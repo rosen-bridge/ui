@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import * as url from 'node:url';
 
-import { NETWORKS } from '@rosen-ui/constants';
+import { NETWORKS_KEYS } from '@rosen-ui/constants';
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
@@ -27,7 +27,7 @@ const content = [
   `export const FEE_CONFIG_TOKEN_ID = '${contracts.tokens.MinFeeNFT || ''}';`,
   '',
   `export const LOCK_ADDRESSES: { [key in keyof typeof NETWORKS]: string } = {`,
-  ...Object.keys(NETWORKS).map(
+  ...NETWORKS_KEYS.map(
     (network) => `  '${network}': '${contracts[network]?.addresses?.lock || ''}',`,
   ),
   `};`,

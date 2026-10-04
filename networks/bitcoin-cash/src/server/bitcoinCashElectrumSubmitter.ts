@@ -1,9 +1,10 @@
 import { binToHex, decodeTransactionBCH, hexToBin } from '@bitauth/libauth';
 
-import { isNetworkAvailable, NETWORKS } from '@rosen-ui/constants';
+import { NETWORKS } from '@rosen-ui/constants';
 
 import { type BitcoinCashUnsignedLock, generateBitcoinCashLockFee } from '../generateUnsignedTx.js';
 import { type BitcoinCashLockMetadata, generateBitcoinCashLockMetadata } from '../metadata.js';
+import { isBitcoinCashRouteAvailable } from '../registry.js';
 import { validateBitcoinCashSignedLock } from '../validateSignedTx.js';
 import {
   authenticateBitcoinCashElectrumSession,
@@ -36,10 +37,7 @@ const submissionPolicy = (
       policy.allowedDestinationChains.length < 1 ||
       policy.allowedDestinationChains.length > Object.keys(NETWORKS).length ||
       new Set(policy.allowedDestinationChains).size !== policy.allowedDestinationChains.length ||
-      policy.allowedDestinationChains.some(
-        (chain) =>
-          typeof chain !== 'string' || !isNetworkAvailable(chain) || NETWORKS[chain].key !== chain,
-      )
+      policy.allowedDestinationChains.some((chain) => !isBitcoinCashRouteAvailable(chain))
     )
       throw new Error('Invalid policy fields');
     return Object.freeze({

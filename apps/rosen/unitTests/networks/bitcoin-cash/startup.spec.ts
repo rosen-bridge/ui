@@ -17,8 +17,6 @@ vi.mock('@rosen-ui/constants', async () => {
         },
       },
     },
-    isNetworkAvailable: (key: string) =>
-      key === 'bitcoin-cash' ? candidate.index >= 0 : actual.isNetworkAvailable(key),
   };
 });
 
@@ -44,7 +42,7 @@ afterEach(() => {
 
 describe('validateBitcoinCashStartup', () => {
   /**
-   * @target Disabled BCH does not require any new operator settings.
+   * @target validateBitcoinCashStartup preserves disabled startup server=%s
    * @dependencies Actual public and server parsers with unassigned source registry.
    * @scenario Disable BCH and omit all generated/public/server values.
    * @expected Permit both server and browser startup without creating provider ports.
@@ -65,7 +63,7 @@ describe('validateBitcoinCashStartup', () => {
     ).not.toThrow();
   });
   /**
-   * @target Enabled server registration requires complete trusted provider and fee configuration.
+   * @target validateBitcoinCashStartup rejects missing server %s
    * @dependencies Actual parsers and one independently omitted operator field.
    * @scenario Remove hostname, port, timeout, miner fee policy, destination policy or quote NFT.
    * @expected Reject each incomplete enabled server startup before any wallet can be offered.
@@ -83,7 +81,7 @@ describe('validateBitcoinCashStartup', () => {
     expect(() => validateBitcoinCashStartup({ ...config, [field]: undefined }, true)).toThrow();
   });
   /**
-   * @target Browser startup validates public authority without requiring or exposing server fields.
+   * @target validateBitcoinCashStartup accepts public-only browser and complete server configuration
    * @dependencies Actual public parser and no operator-only values.
    * @scenario Supply valid assigned public settings alone.
    * @expected Permit browser startup and complete explicit server startup.
@@ -105,7 +103,7 @@ describe('validateBitcoinCashStartup', () => {
     expect(() => validateBitcoinCashStartup(config, true)).not.toThrow();
   });
   /**
-   * @target Rosen assignment is required independently of complete operator values.
+   * @target validateBitcoinCashStartup rejects unassigned startup server=%s
    * @dependencies Actual public parser with source chain index minus one.
    * @scenario Enable BCH with all explicit values while index remains unassigned.
    * @expected Reject startup for browser and server.

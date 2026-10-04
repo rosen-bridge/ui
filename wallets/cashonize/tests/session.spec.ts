@@ -111,10 +111,15 @@ const client = () => ({
 
 describe('validateCashonizeSession', () => {
   /**
-   * @target Only bounded mainnet permissions and native ordinary accounts are accepted.
-   * @dependencies Real source-address fixture and independent malformed authorization fields.
-   * @scenario Change namespace, chain, methods, events, account, expiry or topic.
-   * @expected Reject each single invalid session field before any wallet request.
+   * @target validateCashonizeSession rejects unauthorized %s
+   * @dependencies Real source-address fixture and independent malformed
+   *   authorization fields.
+   * @scenario
+   * - Create an approved session
+   * - Alter one authorization field
+   * - Validate it and check rejection.
+   * @expected Reject each single invalid session field before any wallet
+   *   request.
    */
   it.each([
     'namespace',
@@ -139,10 +144,15 @@ describe('validateCashonizeSession', () => {
   });
 
   /**
-   * @target CashToken-aware address variants never enter ordinary native authorization.
+   * @target validateCashonizeSession rejects token-aware P2PKH CashAddr in the
+   * session
    * @dependencies Real libauth CashAddr encoding of the ordinary source hash.
-   * @scenario Encode the same valid P2PKH script using tokenSupport true.
-   * @expected Reject token-aware authorization despite a valid mainnet checksum.
+   * @scenario
+   * - Encode the source as a token-aware CashAddr
+   * - Replace the approved account
+   * - Check rejection.
+   * @expected Reject token-aware authorization despite a valid mainnet
+   *   checksum.
    */
   it('rejects token-aware P2PKH CashAddr in the session', () => {
     const token = lockingBytecodeToCashAddress({
@@ -160,10 +170,17 @@ describe('validateCashonizeSession', () => {
 describe('CashonizeSession', () => {
   describe('connect', () => {
     /**
-     * @target HD sessions permit explicit selection without requiring one account.
-     * @dependencies Two approved mainnet addresses and wallet-returned approved subset.
-     * @scenario Approve two HD addresses and confirm the first, which Cashonize actually signs.
-     * @expected Only the signable first account is offered; the deposit still signs successfully.
+     * @target CashonizeSession.connect requires explicit selection among
+     * approved HD accounts
+     * @dependencies Two approved mainnet addresses and wallet-returned approved
+     *   subset.
+     * @scenario
+     * - Add a second approved account
+     * - Connect
+     * - Check the offered account and address
+     * - Sign the deposit.
+     * @expected Only the signable first account is offered; the deposit still
+     *   signs successfully.
      */
     it('requires explicit selection among approved HD accounts', async () => {
       const { adapter, session, select } = fixture();
@@ -176,10 +193,15 @@ describe('CashonizeSession', () => {
     });
 
     /**
-     * @target Selected account authorization cannot be invented by the UI callback.
+     * @target CashonizeSession.connect rejects an unapproved explicit account
+     * selection
      * @dependencies Approved session and explicit account-selection callback.
-     * @scenario Choose an ordinary account absent from the wallet's approved list.
-     * @expected Reject connection, clear authorization and disconnect the approval.
+     * @scenario
+     * - Make selection return an unapproved address
+     * - Connect
+     * - Check rejection, address clearing and disconnect.
+     * @expected Reject connection, clear authorization and disconnect the
+     *   approval.
      */
     it('rejects an unapproved explicit account selection', async () => {
       const { adapter, select, client } = fixture();
@@ -191,10 +213,16 @@ describe('CashonizeSession', () => {
     });
 
     /**
-     * @target Pinned Cashonize signs only the first approved account, even with HD namespaces.
-     * @dependencies Primary-shaped approved account ordering and signability selection.
-     * @scenario UI selects the second approved ordinary mainnet account.
-     * @expected Reject before any sign request instead of claiming second-account interoperability.
+     * @target CashonizeSession.connect rejects the approved but unsupported
+     * second HD signing account
+     * @dependencies Primary-shaped approved account ordering and signability
+     *   selection.
+     * @scenario
+     * - Add a second approved account
+     * - Select it
+     * - Connect and check rejection before wallet requests.
+     * @expected Reject before any sign request instead of claiming
+     *   second-account interoperability.
      */
     it('rejects the approved but unsupported second HD signing account', async () => {
       const { adapter, session, select, client } = fixture();
@@ -206,10 +234,15 @@ describe('CashonizeSession', () => {
     });
 
     /**
-     * @target Cancelled/disposed pending proposals are cleaned up without showing stale prompts.
+     * @target CashonizeSession.connect cleans up a late proposal after %s
      * @dependencies Delayed fake SDK proposal and approval promises.
-     * @scenario Abort or dispose before connect resolves, then return a valid proposal/session.
-     * @expected Reject locally, show no URI/account prompt and disconnect any late approval.
+     * @scenario
+     * - Delay the proposal
+     * - Abort or dispose the adapter
+     * - Resolve the proposal
+     * - Check late cleanup and absent prompts.
+     * @expected Reject locally, show no URI/account prompt and disconnect any
+     *   late approval.
      */
     it.each(['abort', 'dispose'])('cleans up a late proposal after %s', async (mutation) => {
       const { adapter, client, session, showUri, select } = fixture();
@@ -235,10 +268,16 @@ describe('CashonizeSession', () => {
     });
 
     /**
-     * @target Timeout/cancellation must discard a late approval and release local availability.
+     * @target CashonizeSession.connect disconnects late approval after a
+     * connection timeout
      * @dependencies Fake timers and manually delayed session approval.
-     * @scenario Approval arrives after the local operation deadline.
-     * @expected Reject connect, remotely disconnect the late session and retain no address.
+     * @scenario
+     * - Delay approval with fake timers
+     * - Expire connect
+     * - Resolve approval
+     * - Check remote disconnect and cleared address.
+     * @expected Reject connect, remotely disconnect the late session and retain
+     *   no address.
      */
     it('disconnects late approval after a connection timeout', async () => {
       vi.useFakeTimers();
@@ -268,9 +307,12 @@ describe('CashonizeSession', () => {
 
   describe('sign', () => {
     /**
-     * @target Raw relay failures never leak SDK details into public wallet errors.
+     * @target CashonizeSession.sign sanitizes relay request failures
      * @dependencies Connected fake client with an arbitrary SDK error marker.
-     * @scenario The next relay request rejects with an arbitrary detail.
+     * @scenario
+     * - Connect the fixture
+     * - Reject the next relay request with SDK detail
+     * - Sign and check the fixed public error.
      * @expected Return a fixed public error without echoing that detail.
      */
     it('sanitizes relay request failures', async () => {
@@ -280,9 +322,15 @@ describe('CashonizeSession', () => {
       await expect(adapter.sign(parameters())).rejects.toThrow(/^BCH wallet request failed$/);
     });
     /**
-     * @target A single signing deadline covers all relay phases rather than resetting per await.
-     * @dependencies Real signed fixture and controlled clock without timer dispatch.
-     * @scenario Address and signing responses each take 60ms within a total 100ms budget.
+     * @target CashonizeSession.sign rejects combined phases exceeding the
+     * shared signing deadline
+     * @dependencies Real signed fixture and controlled clock without timer
+     *   dispatch.
+     * @scenario
+     * - Connect
+     * - Advance the clock in both signing phases
+     * - Sign
+     * - Check deadline rejection and cancellation.
      * @expected Reject the valid response at 120ms and request cancellation.
      */
     it('rejects combined phases exceeding the shared signing deadline', async () => {
@@ -302,10 +350,17 @@ describe('CashonizeSession', () => {
     });
 
     /**
-     * @target Actual SignClient-shaped connection and signing stay on the authorized chain/account.
-     * @dependencies Fake relay methods, real builder and real Schnorr verification.
-     * @scenario Connect with the real approved four-method shape and sign a native deposit.
-     * @expected Necessary three-method proposal, explicit account selection and broadcast false.
+     * @target CashonizeSession.sign connects, selects an account and returns
+     * validated signed bytes
+     * @dependencies Fake relay methods, real builder and real Schnorr
+     *   verification.
+     * @scenario
+     * - Connect and inspect the namespace proposal and prompts
+     * - Sign
+     * - Inspect validated bytes and broadcast flag
+     * - Disconnect.
+     * @expected Necessary three-method proposal, explicit account selection and
+     *   broadcast false.
      */
     it('connects, selects an account and returns validated signed bytes', async () => {
       const { adapter, client, select, showUri } = fixture();
@@ -332,10 +387,17 @@ describe('CashonizeSession', () => {
     });
 
     /**
-     * @target Absolute operation deadlines reject overdue microtasks before timers dispatch.
-     * @dependencies Controlled clock with immediately resolving fake relay responses.
-     * @scenario Advance the clock past the shared deadline during address or signature response.
-     * @expected Reject late results; address-phase expiry never sends signTransaction.
+     * @target CashonizeSession.sign rejects overdue %s response before timer
+     * dispatch
+     * @dependencies Controlled clock with immediately resolving fake relay
+     *   responses.
+     * @scenario
+     * - Connect
+     * - Advance the clock in the selected response phase
+     * - Sign
+     * - Check rejection and absent signing after address expiry.
+     * @expected Reject late results; address-phase expiry never sends
+     *   signTransaction.
      */
     it.each(['address', 'signature'])(
       'rejects overdue %s response before timer dispatch',
@@ -364,10 +426,17 @@ describe('CashonizeSession', () => {
     );
 
     /**
-     * @target Session mutation while a signature is pending invalidates the returned result.
+     * @target CashonizeSession.sign rejects valid signed bytes returned after
+     * session deletion
      * @dependencies Connected fake SDK and manually delayed signing response.
-     * @scenario Delete the active session before a genuine signed response arrives.
-     * @expected Reject the otherwise valid response and request wallet cancellation.
+     * @scenario
+     * - Connect
+     * - Hold the signing response
+     * - Emit session deletion
+     * - Release valid bytes
+     * - Check rejection and cancellation.
+     * @expected Reject the otherwise valid response and request wallet
+     *   cancellation.
      */
     it('rejects valid signed bytes returned after session deletion', async () => {
       const { adapter, client, handlers, session } = fixture();
@@ -401,10 +470,16 @@ describe('CashonizeSession', () => {
     });
 
     /**
-     * @target An account mismatch is rejected before the sign request.
+     * @target CashonizeSession.sign rejects wallet address response mismatch
+     * before asking for a signature
      * @dependencies Connected session and fake wallet getAddresses response.
-     * @scenario Wallet returns an address absent from the approved selected account.
-     * @expected No signTransaction call; cancellation method is used after failure.
+     * @scenario
+     * - Connect
+     * - Return a different wallet address
+     * - Sign
+     * - Check rejection and the address/cancel request sequence.
+     * @expected No signTransaction call; cancellation method is used after
+     *   failure.
      */
     it('rejects wallet address response mismatch before asking for a signature', async () => {
       const { adapter, client } = fixture();
@@ -418,9 +493,15 @@ describe('CashonizeSession', () => {
     });
 
     /**
-     * @target User cancellation invalidates pending signature results and requests wallet cancellation.
+     * @target CashonizeSession.sign cancels a pending signature without
+     * accepting late bytes
      * @dependencies Connected fake SDK and abort controller.
-     * @scenario Abort a pending sign request after getAddresses succeeds.
+     * @scenario
+     * - Connect
+     * - Hold a signature request
+     * - Abort it
+     * - Release late bytes
+     * - Check rejection and the authorized cancellation.
      * @expected Reject locally and send only the authorized cancel method.
      */
     it('cancels a pending signature without accepting late bytes', async () => {
@@ -451,9 +532,13 @@ describe('CashonizeSession', () => {
 
   describe('getAddress', () => {
     /**
-     * @target Missing SDK storage records become fixed disconnected errors.
+     * @target CashonizeSession.getAddress sanitizes session lookup failures
      * @dependencies Connected fake SDK and an isolated record lookup failure.
-     * @scenario Session store throws an arbitrary SDK detail.
+     * @scenario
+     * - Connect
+     * - Make stored-session lookup fail
+     * - Read the address
+     * - Check the fixed public error.
      * @expected Report disconnection without exposing storage diagnostics.
      */
     it('sanitizes session lookup failures', async () => {
@@ -465,9 +550,13 @@ describe('CashonizeSession', () => {
       expect(() => adapter.getAddress()).toThrow(/^BCH wallet is disconnected$/);
     });
     /**
-     * @target Stored permissions are checked anew without relying only on SDK events.
+     * @target CashonizeSession.getAddress rejects an expired stored session
+     * even without an expiry event
      * @dependencies Connected adapter and mutable fake SDK session record.
-     * @scenario Expire the SDK record after connection without delivering an event.
+     * @scenario
+     * - Connect
+     * - Expire the stored session without emitting an event
+     * - Read the address and check rejection.
      * @expected Reject cached address retrieval.
      */
     it('rejects an expired stored session even without an expiry event', async () => {
@@ -478,10 +567,14 @@ describe('CashonizeSession', () => {
     });
 
     /**
-     * @target Session changes invalidate account authorization during use.
+     * @target CashonizeSession.getAddress invalidates authorization on %s
      * @dependencies Fake SDK event delivery and connected authorization.
-     * @scenario Deliver update, deletion, expiry or account-change events for the active topic.
-     * @expected Reject subsequent address retrieval without using cached authorization.
+     * @scenario
+     * - Connect
+     * - Emit each authorization-invalidating event for the session
+     * - Read the address and check rejection.
+     * @expected Reject subsequent address retrieval without using cached
+     *   authorization.
      */
     it.each(['session_update', 'session_delete', 'session_expire', 'session_event'])(
       'invalidates authorization on %s',
@@ -496,9 +589,14 @@ describe('CashonizeSession', () => {
 
   describe('disconnect', () => {
     /**
-     * @target Failed relay disconnect cannot preserve local spending authorization.
+     * @target CashonizeSession.disconnect clears local authorization even when
+     * relay disconnect fails
      * @dependencies Connected fake SDK and isolated disconnect rejection.
-     * @scenario SDK disconnect rejects after the local account has been cleared.
+     * @scenario
+     * - Connect
+     * - Reject remote disconnect
+     * - Disconnect locally
+     * - Check the address remains unavailable.
      * @expected Propagate failure while address retrieval remains disconnected.
      */
     it('clears local authorization even when relay disconnect fails', async () => {
@@ -512,9 +610,15 @@ describe('CashonizeSession', () => {
 
   describe('dispose', () => {
     /**
-     * @target Disposed session listeners and future connections are unavailable.
+     * @target CashonizeSession.dispose removes listeners and rejects operations
+     * after disposal
      * @dependencies Connected fake client and listener removal tracking.
-     * @scenario Dispose a connected adapter and attempt a new connection.
+     * @scenario
+     * - Connect
+     * - Dispose the adapter
+     * - Inspect listener removal
+     * - Attempt connection and address reads
+     * - Check rejection.
      * @expected Four listeners removed and no authorization retained.
      */
     it('removes listeners and rejects operations after disposal', async () => {
@@ -530,9 +634,11 @@ describe('CashonizeSession', () => {
 
 describe('createCashonizeSession', () => {
   /**
-   * @target SDK startup failures never expose arbitrary initialization diagnostics.
+   * @target createCashonizeSession sanitizes SDK initialization failures
    * @dependencies Isolated rejected SDK initializer without relay access.
-   * @scenario SDK initialization rejects with an arbitrary detail marker.
+   * @scenario
+   * - Reject SDK initialization with private detail
+   * - Create a session and check the fixed public error.
    * @expected Reject with the fixed public initialization failure.
    */
   it('sanitizes SDK initialization failures', async () => {
@@ -542,9 +648,14 @@ describe('createCashonizeSession', () => {
     );
   });
   /**
-   * @target Factory checks the absolute deadline before accepting an SDK client.
-   * @dependencies Clock jump inside an immediately resolving SDK initialization.
-   * @scenario SDK returns after elapsed deadline before a timer callback can dispatch.
+   * @target createCashonizeSession rejects overdue SDK completion before timer
+   * dispatch
+   * @dependencies Clock jump inside an immediately resolving SDK
+   *   initialization.
+   * @scenario
+   * - Advance the clock during SDK initialization
+   * - Create a session
+   * - Check timeout rejection and late transport closure.
    * @expected Reject startup and close the otherwise valid late transport.
    */
   it('rejects overdue SDK completion before timer dispatch', async () => {
@@ -561,10 +672,15 @@ describe('createCashonizeSession', () => {
   });
 
   /**
-   * @target Production construction initializes the actual SDK interface with explicit app configuration.
+   * @target createCashonizeSession initializes the pinned SDK interface without
+   * an implicit session
    * @dependencies Mocked SDK initialization only; no relay connection.
-   * @scenario Supply bounded project ID, app metadata and lifecycle callbacks.
-   * @expected Pass exact SDK options and return a disconnected session with registered listeners.
+   * @scenario
+   * - Resolve SDK initialization
+   * - Create a session
+   * - Inspect exact init options, listener count and unavailable address.
+   * @expected Pass exact SDK options and return a disconnected session with
+   *   registered listeners.
    */
   it('initializes the pinned SDK interface without an implicit session', async () => {
     const sdk = client();
@@ -580,9 +696,12 @@ describe('createCashonizeSession', () => {
   });
 
   /**
-   * @target Invalid operator connection settings never initialize network resources.
+   * @target createCashonizeSession rejects invalid %s before initializing
    * @dependencies SDK mock and independently invalid configuration fields.
-   * @scenario Supply malformed project ID, unbounded deadline or invalid metadata URL.
+   * @scenario
+   * - Alter one initialization setting
+   * - Create a session
+   * - Check rejection and absent SDK initialization.
    * @expected Reject each field before SDK initialization.
    */
   it.each(['project', 'timeout', 'metadata'])(
@@ -598,9 +717,14 @@ describe('createCashonizeSession', () => {
   );
 
   /**
-   * @target SDK startup cannot expose a session after its local deadline.
+   * @target createCashonizeSession closes a late SDK transport after
+   * initialization timeout
    * @dependencies Fake timers and manually delayed SDK initialization.
-   * @scenario Initialize after the local deadline has rejected the operation.
+   * @scenario
+   * - Delay SDK initialization with fake timers
+   * - Expire the factory
+   * - Resolve the client
+   * - Check late transport closure.
    * @expected Reject the factory and close the late client's relay transport.
    */
   it('closes a late SDK transport after initialization timeout', async () => {

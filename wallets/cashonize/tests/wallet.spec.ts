@@ -127,9 +127,12 @@ afterEach(() => {
 describe('CashonizeWallet', () => {
   describe('isAvailable', () => {
     /**
-     * @target Unassigned chain registration never offers a usable wallet.
+     * @target CashonizeWallet.isAvailable rejects unassigned availability
      * @dependencies Candidate-only network fixture.
-     * @scenario Change the registry to its real unassigned value after constructing test ports.
+     * @scenario
+     * - Create the candidate wallet
+     * - Remove its network index
+     * - Check availability and connection rejection without session creation.
      * @expected Availability is false and no relay initialization occurs.
      */
     it('rejects unassigned availability', async () => {
@@ -142,10 +145,16 @@ describe('CashonizeWallet', () => {
   });
   describe('connect', () => {
     /**
-     * @target Relay initialization is lazy and local authorization follows explicit connection.
+     * @target CashonizeWallet.connect joins the wallet lifecycle
      * @dependencies Typed session factory and lifecycle spies.
-     * @scenario Connect, retrieve the authorized address, then disconnect.
-     * @expected Initialize once and clear connection before closing and disposing the session.
+     * @scenario
+     * - Create the wallet
+     * - Inspect disconnected state
+     * - Connect and read its address
+     * - Disconnect
+     * - Inspect cleared state and session cleanup.
+     * @expected Initialize once and clear connection before closing and
+     *   disposing the session.
      */
     it('joins the wallet lifecycle', async () => {
       const { wallet, session, createSession } = await fixture();
@@ -159,10 +168,16 @@ describe('CashonizeWallet', () => {
       expect(session.dispose).toHaveBeenCalledOnce();
     });
     /**
-     * @target A late session factory cannot reconnect after local disconnection.
+     * @target CashonizeWallet.connect rejects a late factory after disconnect
      * @dependencies Controlled pending factory and session lifecycle spies.
-     * @scenario Disconnect before the factory resolves and then release the result.
-     * @expected Dispose the late session without prompting connection or retaining authorization.
+     * @scenario
+     * - Hold session creation
+     * - Start connecting
+     * - Disconnect
+     * - Release the session
+     * - Check rejection, absent prompt and disposal.
+     * @expected Dispose the late session without prompting connection or
+     *   retaining authorization.
      */
     it('rejects a late factory after disconnect', async () => {
       const { wallet, session, createSession } = await fixture();
@@ -185,9 +200,13 @@ describe('CashonizeWallet', () => {
   });
   describe('getBalance', () => {
     /**
-     * @target Balance conversion copies enforce bounded mapping primitives before provider reads.
+     * @target CashonizeWallet.getBalance rejects conversion bound %s
      * @dependencies Real shared map with one independently invalid set field.
-     * @scenario Exceed chain count, use negative decimals or an oversized token name.
+     * @scenario
+     * - Alter one token-map conversion bound
+     * - Connect
+     * - Read balance
+     * - Check rejection before the provider read.
      * @expected Reject without reading an address balance.
      */
     it.each(['count', 'decimal', 'name'])('rejects conversion bound %s', async (mutation) => {
@@ -203,9 +222,14 @@ describe('CashonizeWallet', () => {
       expect(config.getAddressBalance).not.toHaveBeenCalled();
     });
     /**
-     * @target Native balance conversion retains its mapping across the provider await.
+     * @target CashonizeWallet.getBalance snapshots conversion before the
+     * balance read
      * @dependencies Real TokenMap updated in place by the balance port.
-     * @scenario Change the shared Ergo decimals from three to eight during the read.
+     * @scenario
+     * - Update token mapping during the provider read
+     * - Connect
+     * - Read balance
+     * - Compare the result with the original mapping.
      * @expected Return the original two wrapped units rather than raw satoshis.
      */
     it('snapshots conversion before the balance read', async () => {
@@ -220,10 +244,16 @@ describe('CashonizeWallet', () => {
       expect(await wallet.getBalance(token)).toEqual(2n);
     });
     /**
-     * @target Wallet-base amounts use the shared Rosen wrapping and explicit native mapping.
-     * @dependencies Real TokenMap eight-to-three-decimal conversion and read-only port.
-     * @scenario Read 100001 satoshis through the wallet facade.
-     * @expected Return two wrapped units without changing the raw provider balance.
+     * @target CashonizeWallet.getBalance wraps native balance with shared
+     * ceiling semantics
+     * @dependencies Real TokenMap eight-to-three-decimal conversion and
+     *   read-only port.
+     * @scenario
+     * - Connect the mixed-decimal fixture
+     * - Read balance
+     * - Check ceiling conversion and one provider read.
+     * @expected Return two wrapped units without changing the raw provider
+     *   balance.
      */
     it('wraps native balance with shared ceiling semantics', async () => {
       const { wallet, config } = await fixture();
@@ -232,9 +262,13 @@ describe('CashonizeWallet', () => {
       expect(config.getAddressBalance).toHaveBeenCalledOnce();
     });
     /**
-     * @target Unsupported assets never reach native balance reads.
+     * @target CashonizeWallet.getBalance rejects unsupported asset %j
      * @dependencies Native fixture with one independently changed token field.
-     * @scenario Change identifier, type or decimals.
+     * @scenario
+     * - Connect
+     * - Alter one requested asset field
+     * - Read balance
+     * - Check rejection and absent provider reads.
      * @expected Reject before provider reads.
      */
     it.each([{ tokenId: 'other' }, { type: 'token' }, { decimals: 3 }])(
@@ -251,10 +285,17 @@ describe('CashonizeWallet', () => {
   });
   describe('transfer', () => {
     /**
-     * @target Disconnect cancels the same transfer signal passed through signing and browser submission.
-     * @dependencies Actual native builder/signature validation and a controlled pending HTTP port.
-     * @scenario Start submission, attempt a concurrent transfer, then disconnect the wallet.
-     * @expected Reject concurrency without replacing authority; abort the original pending submit signal.
+     * @target CashonizeWallet.transfer cancels pending submission on disconnect
+     * and retains single-transfer authority
+     * @dependencies Actual native builder/signature validation and a controlled
+     *   pending HTTP port.
+     * @scenario
+     * - Hold HTTP submission and start transfer
+     * - Attempt a second transfer
+     * - Inspect rejection and shared abort signal
+     * - Disconnect and check the original submission aborts.
+     * @expected Reject concurrency without replacing authority; abort the
+     *   original pending submit signal.
      */
     it('cancels pending submission on disconnect and retains single-transfer authority', async () => {
       const { wallet, config, session, transfer } = await fixture();
@@ -287,9 +328,15 @@ describe('CashonizeWallet', () => {
       await rejected;
     });
     /**
-     * @target Both public and direct transfer entry preserve intent during an awaited mapping lookup.
-     * @dependencies Controlled wallet TokenMap wait and actual builder/signature validation.
-     * @scenario Wait until mapping lookup starts, mutate caller amount, then release the original map.
+     * @target CashonizeWallet.transfer snapshots %s before mapping awaits
+     * @dependencies Controlled wallet TokenMap wait and actual
+     *   builder/signature validation.
+     * @scenario
+     * - Hold token-map retrieval
+     * - Call the selected transfer entry point
+     * - Mutate the request amount
+     * - Release mapping
+     * - Inspect the original signed amount.
      * @expected Sign the original 300000 satoshis through either entry point.
      */
     it.each(['transfer', 'performTransfer'] as const)(
@@ -319,9 +366,15 @@ describe('CashonizeWallet', () => {
       },
     );
     /**
-     * @target Disconnection before prepared parameters arrive starts no wallet signing operation.
-     * @dependencies Controlled server preparation and current session lifecycle.
-     * @scenario Disconnect while preparation waits, then release otherwise valid parameters.
+     * @target CashonizeWallet.transfer rejects disconnect before signing starts
+     * @dependencies Controlled server preparation and current session
+     *   lifecycle.
+     * @scenario
+     * - Hold signing-parameter preparation
+     * - Start transfer
+     * - Disconnect
+     * - Release preparation
+     * - Check rejection before signing or submission.
      * @expected Reject the stale operation before calling sign or submission.
      */
     it('rejects disconnect before signing starts', async () => {
@@ -351,10 +404,16 @@ describe('CashonizeWallet', () => {
       expect(config.submitTransaction).not.toHaveBeenCalled();
     });
     /**
-     * @target Public transfer snapshots primitive intent and nested token identity before any await.
-     * @dependencies Actual mixed-decimal transfer, real signature validation and caller-owned request.
-     * @scenario Independently mutate amount, nested token, destination or fee immediately after starting transfer.
-     * @expected Sign only the original 300000-satoshi deposit with original destination and Rosen fee units.
+     * @target CashonizeWallet.transfer preserves original transfer %s
+     * @dependencies Actual mixed-decimal transfer, real signature validation
+     *   and caller-owned request.
+     * @scenario
+     * - Start transfer with a copied request
+     * - Mutate one caller-owned field
+     * - Await completion
+     * - Inspect original amount, destination and fees.
+     * @expected Sign only the original 300000-satoshi deposit with original
+     *   destination and Rosen fee units.
      */
     it.each(['amount', 'token', 'destination', 'fee'])(
       'preserves original transfer %s',
@@ -382,9 +441,13 @@ describe('CashonizeWallet', () => {
       },
     );
     /**
-     * @target Native transfer rejects mismatched custody/source or an unsupported asset before signing.
+     * @target CashonizeWallet.transfer rejects transfer mismatch %s
      * @dependencies Connected native wallet fixture and signing/server spies.
-     * @scenario Independently change source chain, treasury or token identifier.
+     * @scenario
+     * - Connect
+     * - Alter one transfer chain, treasury or token field
+     * - Transfer
+     * - Check rejection before signing and submission.
      * @expected Reject each invalid transfer without signing or submitting.
      */
     it.each(['chain', 'treasury', 'token'])('rejects transfer mismatch %s', async (mutation) => {
@@ -399,10 +462,17 @@ describe('CashonizeWallet', () => {
       expect(config.submitTransaction).not.toHaveBeenCalled();
     });
     /**
-     * @target Local disconnection during signing prevents submission even if late bytes are valid.
-     * @dependencies Real verified signature held behind a controlled signing promise.
-     * @scenario Disconnect after signing starts then return the previously valid response.
-     * @expected Reject the stale operation and never invoke the submit callback.
+     * @target CashonizeWallet.transfer rejects a signed result after disconnect
+     * @dependencies Real verified signature held behind a controlled signing
+     *   promise.
+     * @scenario
+     * - Hold a verified signature
+     * - Start transfer
+     * - Disconnect
+     * - Release signing
+     * - Check rejection and absent submission.
+     * @expected Reject the stale operation and never invoke the submit
+     *   callback.
      */
     it('rejects a signed result after disconnect', async () => {
       const { wallet, config, session, transfer } = await fixture();
@@ -425,10 +495,17 @@ describe('CashonizeWallet', () => {
       expect(config.submitTransaction).not.toHaveBeenCalled();
     });
     /**
-     * @target Only wrapped deposit amount is unwrapped; Rosen metadata fees retain their exact quoted units.
-     * @dependencies Real TokenMap, builder, Schnorr signature validator and typed server callback.
-     * @scenario Transfer three wrapped units with one unit of each Rosen fee.
-     * @expected Sign 300000 native satoshis with unchanged fees and submit only verified bytes.
+     * @target CashonizeWallet.transfer unwraps amount only and submits verified
+     * signed bytes
+     * @dependencies Real TokenMap, builder, Schnorr signature validator and
+     *   typed server callback.
+     * @scenario
+     * - Connect
+     * - Transfer the mixed-decimal deposit
+     * - Inspect native amount, unchanged fee units, signing/submission calls
+     *   and returned transaction hash.
+     * @expected Sign 300000 native satoshis with unchanged fees and submit only
+     *   verified bytes.
      */
     it('unwraps amount only and submits verified signed bytes', async () => {
       const { wallet, config, session, transfer } = await fixture();
@@ -447,9 +524,13 @@ describe('CashonizeWallet', () => {
       expect(txId).toEqual(hashTransaction(hexToBin(config.submitTransaction.mock.calls[0][0])));
     });
     /**
-     * @target Wrapped fee coverage rejects a raw-funded but Rosen-underfunded deposit before signing.
-     * @dependencies Real mixed-decimal TokenMap and native signing/submit spies.
-     * @scenario Transfer two wrapped units with total Rosen fees of two units.
+     * @target CashonizeWallet.transfer rejects fee equality in wrapped units
+     * @dependencies Real mixed-decimal TokenMap and native signing/submit
+     *   spies.
+     * @scenario
+     * - Connect
+     * - Transfer an amount equal to wrapped fees
+     * - Check rejection before preparation, signing or submission.
      * @expected Reject despite 200000 raw satoshis and never sign or submit.
      */
     it('rejects fee equality in wrapped units', async () => {

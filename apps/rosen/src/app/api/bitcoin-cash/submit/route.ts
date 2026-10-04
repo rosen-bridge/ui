@@ -1,6 +1,7 @@
+import { createBitcoinCashSubmissionHandler } from '@rosen-network/bitcoin-cash/server/submission';
+
 import { bitcoinCashPublicConfig } from '../../../../networks/bitcoin-cash/publicConfig';
 import { getBitcoinCashServerRuntime } from '../../../../networks/bitcoin-cash/serverConfig';
-import { createBitcoinCashSubmissionHandler } from '../../../../networks/bitcoin-cash/submissionHandler';
 
 export const runtime = 'nodejs';
 

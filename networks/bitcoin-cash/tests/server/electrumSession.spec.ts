@@ -44,7 +44,7 @@ afterEach(() => vi.useRealTimers());
 describe('BitcoinCashElectrumSession', () => {
   describe('open', () => {
     /**
-     * @target BitcoinCashElectrumSession.open
+     * @target BitcoinCashElectrumSession.open rejects invalid enclosing deadline %s
      * @dependencies trusted deadline validation and mocked TLS
      * @scenario supply one malformed absolute enclosing deadline
      * @expected rejection occurs before socket acquisition
@@ -60,7 +60,7 @@ describe('BitcoinCashElectrumSession', () => {
     );
 
     /**
-     * @target BitcoinCashElectrumSession.open
+     * @target BitcoinCashElectrumSession.open rejects an expired enclosing read budget
      * @dependencies actual clock moved without dispatching timers and mocked TLS
      * @scenario an enclosing request budget expired during the preceding quote
      * @expected no read socket is acquired
@@ -75,7 +75,7 @@ describe('BitcoinCashElectrumSession', () => {
     });
 
     /**
-     * @target BitcoinCashElectrumSession.open
+     * @target BitcoinCashElectrumSession.open rechecks the enclosing deadline after socket acquisition
      * @dependencies offline socket acquisition and Date-only advancement
      * @scenario the enclosing budget expires inside socket acquisition
      * @expected readiness rejects and the acquired socket and timers are released
@@ -96,7 +96,7 @@ describe('BitcoinCashElectrumSession', () => {
     });
 
     /**
-     * @target BitcoinCashElectrumSession.open
+     * @target BitcoinCashElectrumSession.open rejects expiry between validation and constructor entry without acquiring TLS
      * @dependencies two distinct Date samples and mocked TLS
      * @scenario the budget expires between factory validation and constructor entry
      * @expected the constructor rejects its already-expired budget before acquiring TLS
@@ -118,7 +118,7 @@ describe('BitcoinCashElectrumSession', () => {
     });
 
     /**
-     * @target BitcoinCashElectrumSession.open
+     * @target BitcoinCashElectrumSession.open clamps the operation timer to the remaining enclosing budget
      * @dependencies offline ready TLS and fake timers
      * @scenario the enclosing deadline leaves less time than the endpoint timeout
      * @expected the owned operation timer expires at the remaining enclosing budget
@@ -136,7 +136,7 @@ describe('BitcoinCashElectrumSession', () => {
     });
 
     /**
-     * @target BitcoinCashElectrumSession.open
+     * @target BitcoinCashElectrumSession.open keeps the shorter endpoint deadline
      * @dependencies Date-only expiry and a shorter configured local timeout
      * @scenario a later enclosing deadline is supplied to a bounded endpoint
      * @expected the enclosing deadline cannot extend the endpoint operation limit
@@ -155,7 +155,7 @@ describe('BitcoinCashElectrumSession', () => {
       expect(vi.getTimerCount()).toEqual(0);
     });
     /**
-     * @target BitcoinCashElectrumSession.open
+     * @target BitcoinCashElectrumSession.open rejects cancellation after TLS readiness before publishing the session
      * @dependencies native cancellation and a verified offline TLS socket
      * @scenario secureConnect resolves readiness then aborts in the same microtask
      * @expected open rejects before publishing the closed session and cleanup is complete
@@ -178,7 +178,7 @@ describe('BitcoinCashElectrumSession', () => {
       expect(vi.getTimerCount()).toEqual(0);
     });
     /**
-     * @target BitcoinCashElectrumSession.open
+     * @target BitcoinCashElectrumSession.open rejects pre-cancelled work before acquiring a socket
      * @dependencies native AbortController and mocked TLS
      * @scenario cancel before opening the configured endpoint
      * @expected no socket is acquired and the caller reason is hidden
@@ -193,7 +193,7 @@ describe('BitcoinCashElectrumSession', () => {
     });
 
     /**
-     * @target BitcoinCashElectrumSession.open
+     * @target BitcoinCashElectrumSession.open closes a socket cancelled during acquisition
      * @dependencies native AbortController, mocked TLS and fake timers
      * @scenario cancellation occurs inside socket acquisition before listener attachment
      * @expected readiness rejects and all acquired resources are released once
@@ -214,7 +214,7 @@ describe('BitcoinCashElectrumSession', () => {
     });
 
     /**
-     * @target BitcoinCashElectrumSession.open
+     * @target BitcoinCashElectrumSession.open rejects an invalid cancellation signal
      * @dependencies server option validation and mocked TLS
      * @scenario supply a plain object instead of a native cancellation signal
      * @expected the malformed signal is rejected before socket acquisition
@@ -226,7 +226,7 @@ describe('BitcoinCashElectrumSession', () => {
       expect(mocked.connect).not.toHaveBeenCalled();
     });
     /**
-     * @target BitcoinCashElectrumSession.open
+     * @target BitcoinCashElectrumSession.open requires verified TLS and cleans up its owned resources
      * @dependencies TLS connect mocked; no socket or network traffic.
      * @scenario Open an authorized endpoint and then release its session.
      * @expected TLS CA/hostname verification, TLS1.2 minimum, and cleanup.
@@ -249,7 +249,7 @@ describe('BitcoinCashElectrumSession', () => {
     });
 
     /**
-     * @target BitcoinCashElectrumSession.open
+     * @target BitcoinCashElectrumSession.open rejects an unauthorized TLS socket
      * @dependencies TLS connect mocked; no request is permitted.
      * @scenario Change only certificate authorization to false.
      * @expected Connection rejection before any RPC, followed by cleanup.
@@ -262,7 +262,7 @@ describe('BitcoinCashElectrumSession', () => {
     });
 
     /**
-     * @target BitcoinCashElectrumSession.open
+     * @target BitcoinCashElectrumSession.open bounds the TLS connection deadline
      * @dependencies TLS connect mocked and fake timers.
      * @scenario The connection never emits secureConnect.
      * @expected The finite connection deadline rejects and destroys the socket.
@@ -279,7 +279,7 @@ describe('BitcoinCashElectrumSession', () => {
     });
 
     /**
-     * @target BitcoinCashElectrumSession.open
+     * @target BitcoinCashElectrumSession.open rejects overdue TLS readiness before its timer dispatches
      * @dependencies TLS mocked and Date advanced without dispatching timeout callbacks.
      * @scenario A verified secureConnect event arrives after the5s connection limit.
      * @expected Its absolute deadline rejects readiness before any RPC can be sent.
@@ -297,7 +297,7 @@ describe('BitcoinCashElectrumSession', () => {
     });
 
     /**
-     * @target BitcoinCashElectrumSession.open
+     * @target BitcoinCashElectrumSession.open rejects malformed server configuration %#
      * @dependencies TLS connect mocked.
      * @scenario Supply one invalid endpoint or deadline field.
      * @expected Configuration rejection without constructing a TLS socket.
@@ -319,7 +319,7 @@ describe('BitcoinCashElectrumSession', () => {
 
   describe('request', () => {
     /**
-     * @target BitcoinCashElectrumSession.request
+     * @target BitcoinCashElectrumSession.request checks the enclosing deadline at the final frame write boundary
      * @dependencies actual JSON serialization and Date-only expiry without timer dispatch
      * @scenario the enclosing deadline expires while a frame is serialized
      * @expected the final synchronous deadline check prevents every socket write
@@ -340,7 +340,7 @@ describe('BitcoinCashElectrumSession', () => {
       expect(vi.getTimerCount()).toEqual(0);
     });
     /**
-     * @target BitcoinCashElectrumSession.request
+     * @target BitcoinCashElectrumSession.request cancels a pending read and removes its abort listener
      * @dependencies native cancellation, mocked TLS and fake timers
      * @scenario cancel the sole pending read and then deliver a late response
      * @expected the read rejects, late data is ignored and resources are released once
@@ -363,7 +363,7 @@ describe('BitcoinCashElectrumSession', () => {
     });
 
     /**
-     * @target BitcoinCashElectrumSession.request
+     * @target BitcoinCashElectrumSession.request rechecks cancellation immediately before writing a frame
      * @dependencies native cancellation and real frame serialization
      * @scenario a parameter getter cancels while JSON serialization runs
      * @expected the final pre-write check prevents any socket emission
@@ -386,7 +386,7 @@ describe('BitcoinCashElectrumSession', () => {
     });
 
     /**
-     * @target BitcoinCashElectrumSession.request
+     * @target BitcoinCashElectrumSession.request rejects cancellation during response decoding
      * @dependencies real JSON decoder and native cancellation
      * @scenario cancel after JSON parsing succeeds but before the response is accepted
      * @expected the parsed response cannot resolve the cancelled request
@@ -411,7 +411,7 @@ describe('BitcoinCashElectrumSession', () => {
       expect(socket.destroy).toHaveBeenCalledOnce();
     });
     /**
-     * @target BitcoinCashElectrumSession.request
+     * @target BitcoinCashElectrumSession.request accepts a matching response split across bounded frames
      * @dependencies TLS socket mocked; real JSON framing and parser.
      * @scenario Deliver one matching response across two data events.
      * @expected Complete result, exact JSON-RPC request and newline framing.
@@ -430,7 +430,7 @@ describe('BitcoinCashElectrumSession', () => {
     });
 
     /**
-     * @target BitcoinCashElectrumSession.request
+     * @target BitcoinCashElectrumSession.request accepts a bounded reply fragmented into single-byte chunks
      * @dependencies TLS mocked; real linear framing over100k single-byte chunks.
      * @scenario A valid reply arrives in extreme fragmentation within its deadline.
      * @expected Exact result, bounded storage and cleanup without prefix recopying.
@@ -452,7 +452,7 @@ describe('BitcoinCashElectrumSession', () => {
     });
 
     /**
-     * @target BitcoinCashElectrumSession.request
+     * @target BitcoinCashElectrumSession.request enforces the absolute operation deadline during a fragment burst
      * @dependencies TLS mocked and deterministic Date expiry without timer dispatch.
      * @scenario A single-byte fragment burst crosses the100ms operation deadline.
      * @expected A data-event deadline guard stops work and destroys the socket.
@@ -479,7 +479,7 @@ describe('BitcoinCashElectrumSession', () => {
     });
 
     /**
-     * @target BitcoinCashElectrumSession.request
+     * @target BitcoinCashElectrumSession.request rejects a late reply even if the request timer has not run
      * @dependencies TLS mocked and Date advanced without dispatching timer callbacks.
      * @scenario A matching response arrives after10s but before the30s operation cap.
      * @expected The absolute per-request deadline rejects it before parsing/resolution.
@@ -496,7 +496,7 @@ describe('BitcoinCashElectrumSession', () => {
     });
 
     /**
-     * @target BitcoinCashElectrumSession.request
+     * @target BitcoinCashElectrumSession.request permits only one outstanding request
      * @dependencies TLS socket mocked; no response to the first call.
      * @scenario Attempt a second read while the first remains outstanding.
      * @expected The second call cannot overwrite the first request identity.
@@ -513,7 +513,7 @@ describe('BitcoinCashElectrumSession', () => {
     });
 
     /**
-     * @target BitcoinCashElectrumSession.request
+     * @target BitcoinCashElectrumSession.request rejects mutation methods at runtime
      * @dependencies TLS socket mocked; runtime method type deliberately bypassed.
      * @scenario Attempt a broadcast through the read-only transport.
      * @expected No write occurs and the allowlist rejects the method.
@@ -528,7 +528,7 @@ describe('BitcoinCashElectrumSession', () => {
     });
 
     /**
-     * @target BitcoinCashElectrumSession.request
+     * @target BitcoinCashElectrumSession.request rejects malformed response identity %#
      * @dependencies TLS socket mocked; real envelope validation.
      * @scenario Change one response identity or result/error invariant.
      * @expected The pending call fails closed and its socket is destroyed.
@@ -550,7 +550,7 @@ describe('BitcoinCashElectrumSession', () => {
     });
 
     /**
-     * @target BitcoinCashElectrumSession.request
+     * @target BitcoinCashElectrumSession.request does not expose remote error messages
      * @dependencies TLS socket mocked; remote error contains a secret marker.
      * @scenario Deliver a well-formed RPC error.
      * @expected Only a fixed error is exposed, and source text never escapes.
@@ -567,7 +567,7 @@ describe('BitcoinCashElectrumSession', () => {
     });
 
     /**
-     * @target BitcoinCashElectrumSession.request
+     * @target BitcoinCashElectrumSession.request rejects malformed frame %#
      * @dependencies TLS socket mocked; real byte accounting and fatal UTF8 decode.
      * @scenario Supply malformed JSON, UTF8, or a second frame in one response.
      * @expected Parsing/framing rejection with cleanup.
@@ -586,7 +586,7 @@ describe('BitcoinCashElectrumSession', () => {
     });
 
     /**
-     * @target BitcoinCashElectrumSession.request
+     * @target BitcoinCashElectrumSession.request bounds incomplete frames before concatenation
      * @dependencies TLS socket mocked and a small per-response limit.
      * @scenario An unterminated reply crosses the allowed byte count in chunks.
      * @expected Rejection before an oversized frame can be concatenated or parsed.
@@ -602,7 +602,7 @@ describe('BitcoinCashElectrumSession', () => {
     });
 
     /**
-     * @target BitcoinCashElectrumSession.request
+     * @target BitcoinCashElectrumSession.request accepts the exact frame byte boundary
      * @dependencies TLS mocked; exact framed response length.
      * @scenario Return a valid frame exactly at its maximum before the newline.
      * @expected The delimiter does not incorrectly consume the payload allowance.
@@ -617,7 +617,7 @@ describe('BitcoinCashElectrumSession', () => {
     });
 
     /**
-     * @target BitcoinCashElectrumSession.request
+     * @target BitcoinCashElectrumSession.request bounds aggregate bytes across successful requests
      * @dependencies TLS socket mocked; two individually allowed large replies.
      * @scenario The aggregate operation bytes exceed their independent limit.
      * @expected The second reply fails despite satisfying its per-frame limit.
@@ -643,7 +643,7 @@ describe('BitcoinCashElectrumSession', () => {
     });
 
     /**
-     * @target BitcoinCashElectrumSession.request
+     * @target BitcoinCashElectrumSession.request times out a pending read and cleans up
      * @dependencies TLS socket mocked and fake timers.
      * @scenario A request receives no reply.
      * @expected Its finite deadline rejects and clears every timer.
@@ -660,7 +660,7 @@ describe('BitcoinCashElectrumSession', () => {
     });
 
     /**
-     * @target BitcoinCashElectrumSession.request
+     * @target BitcoinCashElectrumSession.request rejects transport %s during a read
      * @dependencies TLS socket mocked.
      * @scenario The server closes or emits an error during an outstanding read.
      * @expected Rejection contains only a fixed error and resources are released.
@@ -677,7 +677,7 @@ describe('BitcoinCashElectrumSession', () => {
 
   describe('openForSubmission', () => {
     /**
-     * @target BitcoinCashElectrumSession.openForSubmission
+     * @target BitcoinCashElectrumSession.openForSubmission rejects an expired enclosing submission budget
      * @dependencies actual clock moved without dispatching timers and mocked TLS
      * @scenario an enclosing request budget expired during the preceding quote
      * @expected no submission socket is acquired
@@ -694,7 +694,7 @@ describe('BitcoinCashElectrumSession', () => {
 
   describe('checkDeadline', () => {
     /**
-     * @target BitcoinCashElectrumSession.checkDeadline
+     * @target BitcoinCashElectrumSession.checkDeadline checks an absolute deadline even before its timer executes
      * @dependencies TLS socket mocked and the wall-clock moved synchronously.
      * @scenario Parsing delays timer execution beyond the absolute operation deadline.
      * @expected An overdue operation cannot return a result or start another read.
@@ -711,7 +711,7 @@ describe('BitcoinCashElectrumSession', () => {
 
   describe('broadcastValidated', () => {
     /**
-     * @target BitcoinCashElectrumSession.broadcastValidated
+     * @target BitcoinCashElectrumSession.broadcastValidated keeps cancellation after emission ambiguous without retrying
      * @dependencies native cancellation and real signed bytes on a mocked socket
      * @scenario cancel after the single broadcast write while its reply is pending
      * @expected an ambiguous outcome is reported and no second write is possible
@@ -731,7 +731,7 @@ describe('BitcoinCashElectrumSession', () => {
       expect(vi.getTimerCount()).toEqual(0);
     });
     /**
-     * @target BitcoinCashElectrumSession.broadcastValidated
+     * @target BitcoinCashElectrumSession.broadcastValidated guards generic/read broadcast; submission=%s
      * @dependencies Explicit modes, TLS mocked and real builder/signature fixture.
      * @scenario Attempt broadcast on a read session or through generic request in either mode.
      * @expected Every generic/read mutation attempt fails without a socket write.
@@ -754,7 +754,7 @@ describe('BitcoinCashElectrumSession', () => {
     });
 
     /**
-     * @target BitcoinCashElectrumSession.broadcastValidated
+     * @target BitcoinCashElectrumSession.broadcastValidated consumes the capability exactly once
      * @dependencies Explicit submission socket, real signed bytes and exact native hash.
      * @scenario Broadcast succeeds, then the same capability is invoked again.
      * @expected The second invocation fails before writing a second request.
@@ -777,7 +777,7 @@ describe('BitcoinCashElectrumSession', () => {
     });
 
     /**
-     * @target BitcoinCashElectrumSession.broadcastValidated
+     * @target BitcoinCashElectrumSession.broadcastValidated rejects unvalidated bytes %s
      * @dependencies Explicit submission socket, real signed fixture and bounded hex/hash checks.
      * @scenario Change only local hash or provide malformed/oversized signed bytes.
      * @expected Identity and frame failures occur before any mutation request.

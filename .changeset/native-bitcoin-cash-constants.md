@@ -2,4 +2,4 @@
 '@rosen-ui/constants': minor
 ---
 
-Register Bitcoin Cash with an unassigned chain index and exclude unavailable chains from operational selectors.
+Register Bitcoin Cash with an unassigned chain index pending Rosen's assignment.

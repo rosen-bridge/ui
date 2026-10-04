@@ -33,10 +33,15 @@ const parameters = () => {
 
 describe('createCashonizeSigningRequest', () => {
   /**
-   * @target Strict Cashonize wire fields preserve exact native signing context.
+   * @target createCashonizeSigningRequest serializes exact strict-schema source
+   * outputs without broadcasting
    * @dependencies Real BCH builder, libauth decoder and public parent fixture.
-   * @scenario Serialize an authenticated deposit intent into JSON-safe WC2-BCH fields.
-   * @expected Explicit broadcast false, complete outpoint/value/script, no token/contract/parent payload.
+   * @scenario
+   * - Build signing parameters
+   * - Decode the unsigned transaction
+   * - Compare source-output fields, broadcast flag and frozen values.
+   * @expected Explicit broadcast false, complete outpoint/value/script, no
+   *   token/contract/parent payload.
    */
   it('serializes exact strict-schema source outputs without broadcasting', () => {
     const result = createCashonizeSigningRequest(parameters());
@@ -61,9 +66,12 @@ describe('createCashonizeSigningRequest', () => {
   });
 
   /**
-   * @target No untrusted parent becomes a wallet signing request.
+   * @target createCashonizeSigningRequest rejects forged parent %s before
+   * serialization
    * @dependencies Real builder parent authentication.
-   * @scenario Change a parent value or raw transaction before request creation.
+   * @scenario
+   * - Alter the parent value or bytes in signing parameters
+   * - Build the request and check rejection.
    * @expected Fail before producing any wire request.
    */
   it.each(['value', 'parent'])('rejects forged parent %s before serialization', (mutation) => {
@@ -76,9 +84,14 @@ describe('createCashonizeSigningRequest', () => {
 
 describe('validateCashonizeSigningResponse', () => {
   /**
-   * @target Response ID and signed bytes are verified together.
+   * @target validateCashonizeSigningResponse checks the wallet claimed hash
+   * against cryptographically verified bytes
    * @dependencies Real Schnorr signature and shared signed validator.
-   * @scenario Validate a genuine response and independently change hash or signature.
+   * @scenario
+   * - Build and sign an intent
+   * - Validate genuine bytes and hash
+   * - Alter the claimed hash and signature independently
+   * - Check rejection.
    * @expected Accept the genuine response and reject each altered result.
    */
   it('checks the wallet claimed hash against cryptographically verified bytes', () => {
@@ -108,9 +121,12 @@ describe('validateCashonizeSigningResponse', () => {
   });
 
   /**
-   * @target Response framing remains fail closed for non-object or malformed fields.
+   * @target validateCashonizeSigningResponse rejects malformed response %#
    * @dependencies Authenticated deposit fixture.
-   * @scenario Return null, arrays, empty object, wrong field types or nonhex hash.
+   * @scenario
+   * - Pass each malformed response with an authenticated intent to the
+   *   validator
+   * - Check rejection.
    * @expected Reject each response without SDK or wallet access.
    */
   it.each([

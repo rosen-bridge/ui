@@ -107,7 +107,7 @@ afterEach(() => {
 describe('BitcoinCashNetwork', () => {
   describe('constructor', () => {
     /**
-     * @target An unassigned production registry cannot instantiate an operational BCH network.
+     * @target BitcoinCashNetwork.constructor rejects an unassigned chain
      * @dependencies Isolated candidate index fixture and complete action configuration.
      * @scenario Restore the unassigned -1 index before construction.
      * @expected Reject construction without invoking a server action.
@@ -119,7 +119,7 @@ describe('BitcoinCashNetwork', () => {
       expect(config.getAddressBalance).not.toHaveBeenCalled();
     });
     /**
-     * @target Required operational ports and native custody configuration are fail closed.
+     * @target BitcoinCashNetwork.constructor rejects invalid %s
      * @dependencies Complete config with isolated malformed port/address/interval.
      * @scenario Remove balance action or supply invalid treasury/height interval.
      * @expected Reject instead of registering an incomplete Network.
@@ -133,7 +133,7 @@ describe('BitcoinCashNetwork', () => {
       expect(() => new BitcoinCashNetwork(config)).toThrow();
     });
     /**
-     * @target Public SVG declaration matches the actual bundled BCH React component.
+     * @target BitcoinCashNetwork.constructor uses the real typed SVG icon export
      * @dependencies Real icons artifact and typed Network consumer.
      * @scenario Invoke the BCH logo export using valid SVG props.
      * @expected Produce an SVG element rather than an implicit-any string declaration.
@@ -147,7 +147,7 @@ describe('BitcoinCashNetwork', () => {
   });
   describe('getAddressBalance', () => {
     /**
-     * @target Native balance port preserves satoshi values and rejects invalid responses.
+     * @target BitcoinCashNetwork.getAddressBalance checks balance %s
      * @dependencies Typed callback and canonical mainnet source address.
      * @scenario Return valid, negative or above-supply balances.
      * @expected Preserve the valid bigint and reject out-of-range results.
@@ -164,7 +164,7 @@ describe('BitcoinCashNetwork', () => {
         );
     });
     /**
-     * @target Token-aware CashAddr never reaches native wallet read actions.
+     * @target BitcoinCashNetwork.getAddressBalance rejects token-aware source addresses before reading
      * @dependencies Real libauth tokenSupport address variant.
      * @scenario Encode the ordinary source script with tokenSupport true.
      * @expected Reject before requesting a balance.
@@ -185,7 +185,7 @@ describe('BitcoinCashNetwork', () => {
   });
   describe('generateSigningParameters', () => {
     /**
-     * @target Caller mutation during TokenMap lookup cannot replace previously validated request fields.
+     * @target BitcoinCashNetwork.generateSigningParameters snapshots a caller request before awaiting TokenMap
      * @dependencies Controlled map lookup and action returning the original parameters.
      * @scenario Mutate source address and amount after starting the operation but before releasing the map.
      * @expected Preserve the original validated address and amount in the action request and result.
@@ -215,7 +215,7 @@ describe('BitcoinCashNetwork', () => {
       });
     });
     /**
-     * @target A server-action port cannot mutate its request to bypass the immutable comparison.
+     * @target BitcoinCashNetwork.generateSigningParameters rejects action mutation of request authority
      * @dependencies Action callback attempting to replace the original amount.
      * @scenario Increment the action argument and return corresponding signing parameters.
      * @expected Reject mutation and preserve the caller's original amount.
@@ -233,7 +233,7 @@ describe('BitcoinCashNetwork', () => {
       expect(request.amount).toEqual(parameters().amount);
     });
     /**
-     * @target Wrapped Rosen fees cannot be compared against raw eight-decimal satoshis.
+     * @target BitcoinCashNetwork.generateSigningParameters checks mixed-decimal fee coverage %s
      * @dependencies Real TokenMap with an eight-to-three-decimal mapping and server-action spy.
      * @scenario Raw amount exceeds fee sum but its wrapped value is equal to or below fees.
      * @expected Reject both underfunded cases before requesting UTXOs; preserve quoted fees when funded.
@@ -265,7 +265,7 @@ describe('BitcoinCashNetwork', () => {
       }
     });
     /**
-     * @target TokenMap's unknown-asset fallback never authorizes a native bridge deposit.
+     * @target BitcoinCashNetwork.generateSigningParameters rejects an absent asset mapping
      * @dependencies Empty real TokenMap and signing action spy.
      * @scenario Request an otherwise valid native deposit with no configured bridge mapping.
      * @expected Reject before the signing action.
@@ -279,7 +279,7 @@ describe('BitcoinCashNetwork', () => {
       expect(config.generateSigningParameters).not.toHaveBeenCalled();
     });
     /**
-     * @target Server-provided signing parameters preserve the reviewed user request and treasury.
+     * @target BitcoinCashNetwork.generateSigningParameters checks signing parameters %s
      * @dependencies Typed action returning real builder parameters.
      * @scenario Return valid parameters or independently change treasury, amount or destination.
      * @expected Accept exact parameters and reject each mismatch.
@@ -312,7 +312,7 @@ describe('BitcoinCashNetwork', () => {
   });
   describe('submitTransaction', () => {
     /**
-     * @target Cancellation prevents submission before entry or after an awaited mapping lookup.
+     * @target BitcoinCashNetwork.submitTransaction rejects cancelled submission %s
      * @dependencies Valid signed native intent and a controlled TokenMap wait.
      * @scenario Abort before validation or while mapping is pending.
      * @expected Reject with fixed cancellation text and never invoke the submit port.
@@ -343,7 +343,7 @@ describe('BitcoinCashNetwork', () => {
       expect(config.submitTransaction).not.toHaveBeenCalled();
     });
     /**
-     * @target The browser submit port receives the original cancellation authority.
+     * @target BitcoinCashNetwork.submitTransaction forwards the active signal without altering intent
      * @dependencies Valid signed intent and typed optional-signal port.
      * @scenario Submit with an active signal.
      * @expected Pass exactly that signal with the immutable validated intent and fee metadata.
@@ -372,7 +372,7 @@ describe('BitcoinCashNetwork', () => {
       );
     });
     /**
-     * @target Intent and expected metadata remain immutable while current TokenMap is pending.
+     * @target BitcoinCashNetwork.submitTransaction snapshots submission %s before awaiting
      * @dependencies Mutable copies of a valid signed intent and controlled mapping lookup.
      * @scenario Change caller amount, parent value and fee metadata after starting submission.
      * @expected Pass the original signed intent and metadata to the action, never mutated authority.
@@ -409,7 +409,7 @@ describe('BitcoinCashNetwork', () => {
       },
     );
     /**
-     * @target Submission context bounds reject before any asynchronous mapping or action.
+     * @target BitcoinCashNetwork.submitTransaction rejects oversized signing context %s
      * @dependencies Valid intent with independently oversized input count or copied parent budget.
      * @scenario Supply 101 selected inputs or more than 4000000 copied parent characters.
      * @expected Reject without querying TokenMap or invoking submission.
@@ -437,7 +437,7 @@ describe('BitcoinCashNetwork', () => {
       expect(config.submitTransaction).not.toHaveBeenCalled();
     });
     /**
-     * @target A signed deposit remains subject to current wrapped fee coverage before submission.
+     * @target BitcoinCashNetwork.submitTransaction rejects wrapped fee underfunding before submission
      * @dependencies Actual signed bytes and real eight-to-three-decimal TokenMap.
      * @scenario Change the mapping after construction so raw amount is greater than fees but wrapped amount is not.
      * @expected Reject before the submission callback even though all signatures are valid.
@@ -456,7 +456,7 @@ describe('BitcoinCashNetwork', () => {
       expect(config.submitTransaction).not.toHaveBeenCalled();
     });
     /**
-     * @target Invalid signed bytes never reach the submission port and returned IDs must match bytes.
+     * @target BitcoinCashNetwork.submitTransaction checks submit boundary %s
      * @dependencies Actual Schnorr signature, shared validator and typed submission callback.
      * @scenario Submit valid bytes, invalid bytes or receive a wrong server ID.
      * @expected Accept exact ID only; reject malformed bytes locally or mismatched server response.
@@ -478,7 +478,7 @@ describe('BitcoinCashNetwork', () => {
   });
   describe('getMaxTransfer', () => {
     /**
-     * @target Unsupported tokens cannot request a native maximum-transfer calculation.
+     * @target BitcoinCashNetwork.getMaxTransfer excludes non-native assets
      * @dependencies Typed maximum-transfer port and explicit token type.
      * @scenario Request a maximum for a non-native asset.
      * @expected Return zero without invoking native UTXO actions.
@@ -502,7 +502,7 @@ describe('BitcoinCashNetwork', () => {
   });
   describe('getMinTransfer', () => {
     /**
-     * @target Native minimum-transfer actions cannot be applied to tokens or wrong decimals.
+     * @target BitcoinCashNetwork.getMinTransfer checks asset %s
      * @dependencies Typed minimum-transfer port and eight-decimal native BCH asset.
      * @scenario Use valid BCH or independently change token type, identifier or decimals.
      * @expected Delegate valid native BCH and reject every unsupported asset first.

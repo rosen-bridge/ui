@@ -19,7 +19,6 @@ import {
 import { NETWORKS } from '@rosen-ui/constants';
 
 import { useNetwork, useTransactionFormData, useWallet } from '@/hooks';
-import { BitcoinCashPairingDialog } from '@/networks/bitcoin-cash/PairingDialog';
 
 export type WalletModalProps = {
   open: boolean;
@@ -58,71 +57,68 @@ export const WalletModal = ({ open, onClose }: WalletModalProps) => {
   }, [open, wallet.wallets]);
 
   return (
-    <>
-      <BitcoinCashPairingDialog />
-      <Dialog open={open} unstick="tablet" width="large" onClose={onClose}>
-        <DialogHeader>
-          <DialogIcon name="Wallet" />
-          <DialogTitle>Choose Wallet</DialogTitle>
-          <DialogCloseButton />
-        </DialogHeader>
-        <DialogBody>
-          <DialogDescription>
-            Please choose any of the supported wallets for {network.selectedSource?.name} chain.
-          </DialogDescription>
-          <Stack spacing={2} style={{ margin: '1rem 0' }}>
+    <Dialog open={open} unstick="tablet" width="large" onClose={onClose}>
+      <DialogHeader>
+        <DialogIcon name="Wallet" />
+        <DialogTitle>Choose Wallet</DialogTitle>
+        <DialogCloseButton />
+      </DialogHeader>
+      <DialogBody>
+        <DialogDescription>
+          Please choose any of the supported wallets for {network.selectedSource?.name} chain.
+        </DialogDescription>
+        <Stack spacing={2} style={{ margin: '1rem 0' }}>
+          <Alert severity="warning">
+            It may be necessary to reload this page after the following extensions have been
+            installed in order to connect to them.
+          </Alert>
+          {transactionFormData.sourceValue === NETWORKS.bitcoin.key && (
             <Alert severity="warning">
-              It may be necessary to reload this page after the following extensions have been
-              installed in order to connect to them.
+              We only support native SegWit addresses (P2WPKH or P2WSH) for the source address.
             </Alert>
-            {transactionFormData.sourceValue === NETWORKS.bitcoin.key && (
-              <Alert severity="warning">
-                We only support native SegWit addresses (P2WPKH or P2WSH) for the source address.
-              </Alert>
-            )}
-          </Stack>
-          <Stack direction="row" justify="center" spacing={2} wrap>
-            {wallet.wallets.map((item) => {
-              const isConnected = wallet.selected?.name === item.name;
+          )}
+        </Stack>
+        <Stack direction="row" justify="center" spacing={2} wrap>
+          {wallet.wallets.map((item) => {
+            const isConnected = wallet.selected?.name === item.name;
 
-              const handleClick = async (event: MouseEvent) => {
-                event.preventDefault();
+            const handleClick = async (event: MouseEvent) => {
+              event.preventDefault();
 
-                if (isConnected) {
-                  wallet.disconnect();
-                } else if (item.isAvailable() && wallet.select) {
-                  await wallet.select(item);
-                }
+              if (isConnected) {
+                wallet.disconnect();
+              } else if (item.isAvailable() && wallet.select) {
+                await wallet.select(item);
+              }
 
-                onClose();
-              };
+              onClose();
+            };
 
-              return (
-                <Card key={item.label}>
-                  <CardBody>
-                    <Tooltip title={item.name}>
-                      <Stack align="center" spacing={3}>
-                        <Icon as={item.iconReact} size={13} />
-                        <Button
-                          variant="contained"
-                          size="small"
-                          style={{ width: '100%' }}
-                          disabled={!item.isInitialized || !item.isAvailable()}
-                          color={isConnected ? 'inherit' : 'primary'}
-                          loading={!item.isInitialized}
-                          onClick={handleClick}
-                        >
-                          {isConnected ? 'Disconnect' : 'Connect'}
-                        </Button>
-                      </Stack>
-                    </Tooltip>
-                  </CardBody>
-                </Card>
-              );
-            })}
-          </Stack>
-        </DialogBody>
-      </Dialog>
-    </>
+            return (
+              <Card key={item.label}>
+                <CardBody>
+                  <Tooltip title={item.name}>
+                    <Stack align="center" spacing={3}>
+                      <Icon as={item.iconReact} size={13} />
+                      <Button
+                        variant="contained"
+                        size="small"
+                        style={{ width: '100%' }}
+                        disabled={!item.isInitialized || !item.isAvailable()}
+                        color={isConnected ? 'inherit' : 'primary'}
+                        loading={!item.isInitialized}
+                        onClick={handleClick}
+                      >
+                        {isConnected ? 'Disconnect' : 'Connect'}
+                      </Button>
+                    </Stack>
+                  </Tooltip>
+                </CardBody>
+              </Card>
+            );
+          })}
+        </Stack>
+      </DialogBody>
+    </Dialog>
   );
 };

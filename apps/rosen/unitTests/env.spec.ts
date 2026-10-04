@@ -5,8 +5,15 @@ vi.mock('@rosen-ui/constants', async () => {
   const actual = await vi.importActual<typeof import('@rosen-ui/constants')>('@rosen-ui/constants');
   return {
     ...actual,
-    isNetworkAvailable: (key: string) =>
-      key === 'bitcoin-cash' ? candidate.index >= 0 : actual.isNetworkAvailable(key),
+    NETWORKS: {
+      ...actual.NETWORKS,
+      'bitcoin-cash': {
+        ...actual.NETWORKS['bitcoin-cash'],
+        get index() {
+          return candidate.index;
+        },
+      },
+    },
   };
 });
 vi.mock('../configs', async () => {
@@ -57,7 +64,7 @@ afterEach(() => {
 
 describe('env', () => {
   /**
-   * @target Actual server env startup enforces complete BCH operator configuration before registration.
+   * @target env validates enabled server settings through the actual final-schema hook
    * @dependencies Real env-nextjs/Zod final-schema hook and synthetic generated treasury/NFT.
    * @scenario Enable an assigned fixture network, then independently omit its provider hostname.
    * @expected Complete configuration succeeds; missing hostname rejects module initialization with fixed text.
@@ -72,7 +79,7 @@ describe('env', () => {
     await expect(import('../src/env')).rejects.toThrow(/^Invalid environment variables$/);
   });
   /**
-   * @target Disabled legacy startup remains valid with no BCH provider fields or assigned index.
+   * @target env preserves disabled startup through the actual env module
    * @dependencies Actual env validator and synthetic required legacy settings.
    * @scenario Disable BCH, remove its provider settings and restore unassigned registry state.
    * @expected Initialize the env module without requiring BCH operator values.
@@ -93,5 +100,17 @@ describe('env', () => {
     const { env } = await import('../src/env');
     expect(env.NEXT_PUBLIC_BCH_ENABLED).toEqual(false);
     expect(env.BCH_ELECTRUM_HOSTNAME).toEqual(undefined);
+  });
+
+  /**
+   * @target env rejects enabled startup before Rosen assigns the BCH index
+   * @dependencies Actual final-schema hook and otherwise complete configuration.
+   * @scenario Enable BCH with all required settings, leaving only its index -1.
+   * @expected Reject module initialization with the fixed configuration error.
+   */
+  it('rejects enabled startup before Rosen assigns the BCH index', async () => {
+    configure();
+    candidate.index = -1;
+    await expect(import('../src/env')).rejects.toThrow(/^Invalid environment variables$/);
   });
 });

@@ -22,7 +22,6 @@
   "dependencies": {
     "@rosen-bridge/address-codec": "^2.1.0",
     "@rosen-bridge/extended-minimum-fee": "^0.1.1",
-    "@rosen-bridge/icons": "^4.0.0",
     "@rosen-bridge/selection-types": "^1.0.1",
     "@rosen-bridge/tokens": "^6.0.2",
     "@rosen-ui/constants": "^1.1.0",

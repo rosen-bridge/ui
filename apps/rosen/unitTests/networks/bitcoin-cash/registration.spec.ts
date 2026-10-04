@@ -3,14 +3,20 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { withBitcoinCash } from '../../../src/networks/bitcoin-cash/registration';
 
 const { state } = vi.hoisted(() => ({ state: { assigned: false } }));
-vi.mock('@rosen-ui/constants', () => ({ isNetworkAvailable: () => state.assigned }));
+vi.mock('@rosen-ui/constants', () => ({
+  NETWORKS: {
+    get 'bitcoin-cash'() {
+      return { index: state.assigned ? 9 : -1 };
+    },
+  },
+}));
 afterEach(() => {
   state.assigned = false;
 });
 
 describe('withBitcoinCash', () => {
   /**
-   * @target Optional app construction preserves every legacy registry consumer and disabled BCH availability.
+   * @target withBitcoinCash preserves legacy registration for %s
    * @dependencies Existing Bitcoin/EVM/Ergo instance identities and explicit optional candidate.
    * @scenario Independently omit configuration, omit assignment or supply both.
    * @expected Keep legacy object identities and append BCH only when both prerequisites are supplied.

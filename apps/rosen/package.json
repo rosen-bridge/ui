@@ -9,11 +9,11 @@
   "license": "MIT",
   "scripts": {
     "bootstrap": "turbo build --filter=@rosen-bridge/rosen-app^...",
-    "build": "next build --webpack",
+    "build": "next build",
     "build:vercel": "npm run bootstrap && npm run generate && npm run validate-token-icons && npm run db:migration && npm run build",
     "coverage": "npm run test -- --run --coverage",
     "db:migration": "node --import tsx ./scripts/migration.js",
-    "dev": "next dev --webpack",
+    "dev": "next dev",
     "generate": "node ./configs/generate.mjs",
     "get-config": "npx @rosen-bridge/cli download-assets --chain-type public-launch --out configs --include-prereleases && npm run generate",
     "lint": "biome check --write",
@@ -24,7 +24,6 @@
     "validate-token-icons": "tsx ./scripts/validateTokenIcons"
   },
   "dependencies": {
-    "@bitauth/libauth": "3.0.0",
     "@rosen-bridge/abstract-observation-extractor": "^1.0.10",
     "@rosen-bridge/abstract-scanner": "^2.0.3",
     "@rosen-bridge/encryption": "^1.0.1",
@@ -80,6 +79,9 @@
     "serialize-error": "^12.0.0",
     "swr": "^2.4.1",
     "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@bitauth/libauth": "3.0.0"
   },
   "engines": {
     "node": ">=22.18.0",

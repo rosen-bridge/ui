@@ -1,4 +1,4 @@
-import { isNetworkAvailable } from '@rosen-ui/constants';
+import { NETWORKS } from '@rosen-ui/constants';
 
 /** Preserve legacy registry entries and append only a constructed, assigned BCH consumer. */
 export const withBitcoinCash = <T>(
@@ -7,5 +7,7 @@ export const withBitcoinCash = <T>(
 ): Readonly<Record<string, T>> =>
   Object.freeze({
     ...legacy,
-    ...(bitcoinCash !== undefined && isNetworkAvailable('bitcoin-cash') ? { bitcoinCash } : {}),
+    ...(bitcoinCash !== undefined && Number(NETWORKS['bitcoin-cash'].index) >= 0
+      ? { bitcoinCash }
+      : {}),
   });

@@ -5,6 +5,8 @@ import type { NetworkMaxTransferParams } from '@rosen-network/base';
 import type { BitcoinCashDepositRequest } from '@rosen-network/bitcoin-cash/client';
 import type { Network } from '@rosen-ui/types';
 
+import { wrap } from '@/safeServerAction';
+
 import { getBitcoinCashServerRuntime } from './serverConfig';
 
 /** Return completed configured ports or a fixed public availability error. */
@@ -15,7 +17,7 @@ const requiredRuntime = () => {
 };
 
 /** Query only server-authorized route, token, interval and minimum-fee NFT. */
-export const calculateFee = async (
+const calculateFeeCore = async (
   target: Network,
   tokenId: string,
   interval: number,
@@ -29,7 +31,7 @@ export const calculateFee = async (
 };
 
 /** Read authenticated raw native balance without exposing provider endpoints. */
-export const getAddressBalance = async (address: string) => {
+const getAddressBalanceCore = async (address: string) => {
   try {
     return await requiredRuntime().getAddressBalance(address);
   } catch {
@@ -38,7 +40,7 @@ export const getAddressBalance = async (address: string) => {
 };
 
 /** Calculate the wrapped minimum using the trusted current fee query. */
-export const getMinTransfer = async (token: RosenChainToken, target: Network, nft: string) => {
+const getMinTransferCore = async (token: RosenChainToken, target: Network, nft: string) => {
   try {
     return await requiredRuntime().getMinTransfer(token, target, nft);
   } catch {
@@ -47,7 +49,7 @@ export const getMinTransfer = async (token: RosenChainToken, target: Network, nf
 };
 
 /** Calculate spendable maximum from authenticated native parents and server policy. */
-export const getMaxTransfer = async (parameters: NetworkMaxTransferParams) => {
+const getMaxTransferCore = async (parameters: NetworkMaxTransferParams) => {
   try {
     return await requiredRuntime().getMaxTransfer(parameters);
   } catch {
@@ -56,7 +58,7 @@ export const getMaxTransfer = async (parameters: NetworkMaxTransferParams) => {
 };
 
 /** Prepare native lock parents only after matching a fresh server-owned Rosen quote. */
-export const generateSigningParameters = async (request: BitcoinCashDepositRequest) => {
+const generateSigningParametersCore = async (request: BitcoinCashDepositRequest) => {
   try {
     return await requiredRuntime().generateSigningParameters(request);
   } catch {
@@ -65,11 +67,23 @@ export const generateSigningParameters = async (request: BitcoinCashDepositReque
 };
 
 /** Validate an address through the shared network codec with a fixed error boundary. */
-export const validateAddress = async (chain: Network, address: string) => {
+const validateAddressCore = async (chain: Network, address: string) => {
   try {
-    if (chain !== 'bitcoin-cash') return false;
     return await requiredRuntime().validateAddress(chain, address);
   } catch {
     throw new Error('BCH address validation failed');
   }
 };
+
+export const calculateFee = wrap(calculateFeeCore, { traceKey: 'bitcoin-cash:calculateFee' });
+export const getAddressBalance = wrap(getAddressBalanceCore, {
+  traceKey: 'bitcoin-cash:getAddressBalance',
+});
+export const getMinTransfer = wrap(getMinTransferCore, { traceKey: 'bitcoin-cash:getMinTransfer' });
+export const getMaxTransfer = wrap(getMaxTransferCore, { traceKey: 'bitcoin-cash:getMaxTransfer' });
+export const generateSigningParameters = wrap(generateSigningParametersCore, {
+  traceKey: 'bitcoin-cash:generateSigningParameters',
+});
+export const validateAddress = wrap(validateAddressCore, {
+  traceKey: 'bitcoin-cash:validateAddress',
+});

@@ -18,6 +18,14 @@
       "types": "./dist/client.d.ts",
       "default": "./dist/client.js"
     },
+    "./config": {
+      "types": "./dist/config.d.ts",
+      "default": "./dist/config.js"
+    },
+    "./submission": {
+      "types": "./dist/submission.d.ts",
+      "default": "./dist/submission.js"
+    },
     "./server": {
       "types": "./dist/server/index.d.ts",
       "default": "./dist/server/index.js"
@@ -25,6 +33,10 @@
     "./server/submitter": {
       "types": "./dist/server/bitcoinCashElectrumSubmitter.d.ts",
       "default": "./dist/server/bitcoinCashElectrumSubmitter.js"
+    },
+    "./server/submission": {
+      "types": "./dist/server/submissionHandler.d.ts",
+      "default": "./dist/server/submissionHandler.js"
     }
   },
   "main": "dist/index.js",
@@ -34,11 +46,20 @@
       "client": [
         "dist/client.d.ts"
       ],
+      "config": [
+        "dist/config.d.ts"
+      ],
+      "submission": [
+        "dist/submission.d.ts"
+      ],
       "server": [
         "dist/server/index.d.ts"
       ],
       "server/submitter": [
         "dist/server/bitcoinCashElectrumSubmitter.d.ts"
+      ],
+      "server/submission": [
+        "dist/server/submissionHandler.d.ts"
       ]
     }
   },

@@ -137,7 +137,7 @@ afterEach(() => vi.useRealTimers());
 describe('createBitcoinCashElectrumSubmitter', () => {
   describe('policy', () => {
     /**
-     * @target createBitcoinCashElectrumSubmitter
+     * @target createBitcoinCashElectrumSubmitter rejects invalid policy %s
      * @dependencies Real canonical CashAddr/registry validation; TLS mocked.
      * @scenario Independently alter treasury spelling, fee rate, max fee or assigned route list.
      * @expected Each invalid server policy fails before acquiring any socket.
@@ -180,7 +180,7 @@ describe('createBitcoinCashElectrumSubmitter', () => {
 
   describe('submit', () => {
     /**
-     * @target createBitcoinCashElectrumSubmitter.submit
+     * @target submit copies server policy before callers can mutate it
      * @dependencies Cloned real operator policy and offline valid signed intent.
      * @scenario Mutate original policy fields and its route array after factory creation.
      * @expected The original copied treasury/fee/routes continue governing submission.
@@ -198,7 +198,7 @@ describe('createBitcoinCashElectrumSubmitter', () => {
       expect(broadcasts()).toHaveLength(1);
     });
     /**
-     * @target createBitcoinCashElectrumSubmitter.submit
+     * @target submit rejects an expired trusted deadline before authorization
      * @dependencies real signed intent and Date-only enclosing expiry
      * @scenario an earlier quote exhausted the enclosing request budget
      * @expected submission rejects without socket acquisition or broadcast
@@ -220,7 +220,7 @@ describe('createBitcoinCashElectrumSubmitter', () => {
     });
 
     /**
-     * @target createBitcoinCashElectrumSubmitter.submit
+     * @target submit preserves the trusted deadline through authorization
      * @dependencies intent snapshot getter and real signed authorization
      * @scenario the enclosing deadline expires during synchronous authorization
      * @expected the session acquisition check rejects before TLS and broadcast
@@ -249,7 +249,7 @@ describe('createBitcoinCashElectrumSubmitter', () => {
     });
 
     /**
-     * @target createBitcoinCashElectrumSubmitter.submit
+     * @target submit keeps the enclosing deadline through final UTXO authentication
      * @dependencies actual authenticated UTXO reads and Date-only deadline expiry
      * @scenario the enclosing deadline expires during the final source snapshot
      * @expected the original deadline reaches the session and prevents broadcast
@@ -278,7 +278,7 @@ describe('createBitcoinCashElectrumSubmitter', () => {
       expect(vi.getTimerCount()).toEqual(0);
     });
     /**
-     * @target createBitcoinCashElectrumSubmitter.submit
+     * @target submit rejects cancellation before acquiring a submission socket
      * @dependencies real signed intent and native cancellation; TLS mocked
      * @scenario cancel before submission authorization starts
      * @expected no connection or broadcast is attempted
@@ -299,7 +299,7 @@ describe('createBitcoinCashElectrumSubmitter', () => {
     });
 
     /**
-     * @target createBitcoinCashElectrumSubmitter.submit
+     * @target submit cancels before broadcast during%s
      * @dependencies real authorization and native cancellation on an offline TLS socket
      * @scenario cancel during authentication or the final unspent snapshot read
      * @expected pending work rejects, the socket closes and no broadcast is emitted
@@ -336,7 +336,7 @@ describe('createBitcoinCashElectrumSubmitter', () => {
     );
 
     /**
-     * @target createBitcoinCashElectrumSubmitter.submit
+     * @target submit forwards cancellation to the final session emission boundary
      * @dependencies real session and validator with an intercepted emission boundary
      * @scenario cancel after the fresh snapshot when broadcastValidated is entered
      * @expected the underlying session prevents the broadcast write
@@ -372,7 +372,7 @@ describe('createBitcoinCashElectrumSubmitter', () => {
     });
 
     /**
-     * @target createBitcoinCashElectrumSubmitter.submit
+     * @target submit does not retry when cancellation follows the broadcast write
      * @dependencies real authorization and one offline broadcast write
      * @scenario caller cancellation arrives after the mutation request is emitted
      * @expected ambiguous failure, one write and no reconnection or retry
@@ -399,7 +399,7 @@ describe('createBitcoinCashElectrumSubmitter', () => {
       expect(sockets[0].destroy).toHaveBeenCalledOnce();
     });
     /**
-     * @target createBitcoinCashElectrumSubmitter.submit
+     * @target submit authenticates and broadcasts once; multiple=%s
      * @dependencies Real builder, Schnorr signatures, raw parents and offline BCH header.
      * @scenario Fresh confirmations advance; all inputs remain eligible in one stable snapshot.
      * @expected Exact local transaction ID after one broadcast on the same socket, then cleanup.
@@ -430,7 +430,7 @@ describe('createBitcoinCashElectrumSubmitter', () => {
     });
 
     /**
-     * @target createBitcoinCashElectrumSubmitter.submit
+     * @target submit rejects unauthorized %s before TLS
      * @dependencies Valid signed bytes, separately configured policy and trusted metadata.
      * @scenario Change only treasury, fee rate, maximum fee, allowed route, destination or Rosen fee.
      * @expected A valid signature never authorizes altered server policy or metadata; no TLS.
@@ -455,7 +455,7 @@ describe('createBitcoinCashElectrumSubmitter', () => {
     );
 
     /**
-     * @target createBitcoinCashElectrumSubmitter.submit
+     * @target submit rejects signed mutation %s
      * @dependencies Genuine signature fixture with one altered unsigned body field.
      * @scenario Change version, locktime, outpoint, sequence, treasury, change or metadata bytes.
      * @expected The shared validator rejects every body mutation before TLS/broadcast.
@@ -491,7 +491,7 @@ describe('createBitcoinCashElectrumSubmitter', () => {
     });
 
     /**
-     * @target createBitcoinCashElectrumSubmitter.submit
+     * @target submit rejects forged intent %s
      * @dependencies Real immutable intent plus independently forged parent assertions.
      * @scenario Alter value, script, raw parent, coinbase or maturity in the submitted context.
      * @expected Reject forged prevouts before opening a session.
@@ -517,7 +517,7 @@ describe('createBitcoinCashElectrumSubmitter', () => {
     );
 
     /**
-     * @target createBitcoinCashElectrumSubmitter.submit
+     * @target submit rejects current snapshot %s
      * @dependencies Real valid signed intent and single changed current-indexer assertion.
      * @scenario Supply foreign checkpoint, missing/spent outpoint, unconfirmed/future row or forged raw/value.
      * @expected Fresh authentication fails and closes once, with zero broadcast calls.
@@ -546,7 +546,7 @@ describe('createBitcoinCashElectrumSubmitter', () => {
     );
 
     /**
-     * @target createBitcoinCashElectrumSubmitter.submit
+     * @target submit rejects final snapshot drift %s
      * @dependencies Stable initial snapshot with one changed final relist or tip.
      * @scenario Remove an outpoint on relist or change tip height/header before broadcast.
      * @expected Drift aborts the operation without submitting or reconnecting.
@@ -575,7 +575,7 @@ describe('createBitcoinCashElectrumSubmitter', () => {
     });
 
     /**
-     * @target createBitcoinCashElectrumSubmitter.submit
+     * @target submit uses current coinbase maturity; immature=%s
      * @dependencies Synthetic coinbase parent and real builder/Schnorr verifier.
      * @scenario Initial signing maturity is100; fresh maturity is102 or falls to99.
      * @expected Fresh eligible coinbase succeeds despite advanced confirmations; immature fails.
@@ -619,7 +619,7 @@ describe('createBitcoinCashElectrumSubmitter', () => {
     });
 
     /**
-     * @target createBitcoinCashElectrumSubmitter.submit
+     * @target submit copies intent before the first await
      * @dependencies Mutable caller copy, real validator and asynchronous TLS handshake.
      * @scenario Caller alters source, selected prevout and signed bytes after submit begins.
      * @expected The copied validated intent and primitive bytes remain the submitted identity.
@@ -642,7 +642,7 @@ describe('createBitcoinCashElectrumSubmitter', () => {
     });
 
     /**
-     * @target createBitcoinCashElectrumSubmitter.submit
+     * @target submit rejects broadcast result %s
      * @dependencies Valid signed transaction and one altered broadcast result.
      * @scenario Return another hash, uppercase identity, malformed type or object.
      * @expected Fixed ambiguous-outcome failure, one emission, one cleanup and no retries.
@@ -670,7 +670,7 @@ describe('createBitcoinCashElectrumSubmitter', () => {
     );
 
     /**
-     * @target createBitcoinCashElectrumSubmitter.submit
+     * @target submit does not retry ambiguous %s
      * @dependencies Offline socket and fake deadline/transport events after the one write.
      * @scenario Broadcast reply is lost, closes, fails, carries wrong RPC ID or remote error.
      * @expected Unknown/rejected outcome closes once, hides remote detail and never resubmits.

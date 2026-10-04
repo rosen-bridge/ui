@@ -1,5 +1,7 @@
 import { encodeAddress } from '@rosen-bridge/address-codec';
-import { isNetworkAvailable, NETWORKS } from '@rosen-ui/constants';
+import { NETWORKS } from '@rosen-ui/constants';
+
+import { isBitcoinCashRouteAvailable } from './registry.js';
 
 /** Native BCH lock metadata limits shared with the Rosen BCH extractor. */
 export const MAX_BITCOIN_CASH_OP_RETURN_PAYLOAD_BYTES = 80;
@@ -71,7 +73,7 @@ export interface BitcoinCashLockMetadata {
  * @remarks This does not enable BCH as a source route or approve operator config.
  */
 export const generateBitcoinCashLockMetadata = (metadata: BitcoinCashLockMetadata): Uint8Array => {
-  if (!isNetworkAvailable(metadata.toChain)) {
+  if (!isBitcoinCashRouteAvailable(metadata.toChain)) {
     throw new RangeError('Destination chain is unknown or has no assigned Rosen index');
   }
   return generateBitcoinCashOpReturn({

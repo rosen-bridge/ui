@@ -513,13 +513,13 @@ describe('AssetCalculator', () => {
       // Verify totalSupplyMap contains entries for wrapped tokens
       // Token 3 on ergo has wrapped residency, so it should be stored
       const ergoToken3Key = `${NETWORKS.ergo.key}-tokenId`;
-      expect(assetCalculator['totalSupplyMap'].get(ergoToken3Key)).toEqual(1000n);
+      expect(assetCalculator['totalSupplyMap'].get(ergoToken3Key)).toBe(1000n);
 
       // Cardano wrapped tokens (token1 and token2) should be stored
       const cardanoToken1Key = `${NETWORKS.cardano.key}-${tokenMapData[0].cardano.tokenId}`;
       const cardanoToken2Key = `${NETWORKS.cardano.key}-${tokenMapData[1].cardano.tokenId}`;
-      expect(assetCalculator['totalSupplyMap'].get(cardanoToken1Key)).toEqual(2000n);
-      expect(assetCalculator['totalSupplyMap'].get(cardanoToken2Key)).toEqual(2000n);
+      expect(assetCalculator['totalSupplyMap'].get(cardanoToken1Key)).toBe(2000n);
+      expect(assetCalculator['totalSupplyMap'].get(cardanoToken2Key)).toBe(2000n);
 
       // Verify totalSupply was called for wrapped tokens
       expect(ergoCalculator.totalSupply).toHaveBeenCalled();

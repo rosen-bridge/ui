@@ -24,6 +24,7 @@ const derived = secp256k1.derivePublicKeyCompressed(scalar);
 if (typeof derived === 'string') throw new Error(derived);
 export const publicKey = derived;
 const sourceScript = `76a914${binToHex(ripemd160.hash(sha256.hash(publicKey)))}88ac`;
+/** Encode a fixture locking script as a checksummed mainnet CashAddr. */
 const address = (script: string) => {
   const result = lockingBytecodeToCashAddress({
     bytecode: hexToBin(script),

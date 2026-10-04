@@ -12,7 +12,7 @@ import { signIntent, signingIntent } from './mocked/signing.mock';
 
 describe('validateBitcoinCashSignedLock', () => {
   /**
-   * @target Canonical Cashonize-style native Schnorr signatures validate on every input.
+   * @target validateBitcoinCashSignedLock validates the exact signed deposit, multiple inputs=%s
    * @dependencies Real builder, authenticated synthetic parents and libauth signatures.
    * @scenario Sign a one-input and a two-input native deposit intent.
    * @expected Frozen byte identity and exact native fee without network or wallet access.
@@ -39,7 +39,7 @@ describe('validateBitcoinCashSignedLock', () => {
   });
 
   /**
-   * @target Every input requires its own valid signature, including later inputs.
+   * @target validateBitcoinCashSignedLock rejects an invalid second signature
    * @dependencies Two-input signed fixture and reference BCH virtual machine.
    * @scenario Corrupt only the second signature while retaining the first signature and body.
    * @expected Both independent verification paths reject the transaction.
@@ -64,7 +64,7 @@ describe('validateBitcoinCashSignedLock', () => {
   });
 
   /**
-   * @target Returned signature pushes and identity are independently verified.
+   * @target validateBitcoinCashSignedLock rejects invalid unlocking %s
    * @dependencies Real signed fixture and single-field byte mutations.
    * @scenario Alter a signature byte, sighash flag, key, key prefix or push encoding.
    * @expected Reject each mutation even when the unsigned transaction body is unchanged.
@@ -90,7 +90,7 @@ describe('validateBitcoinCashSignedLock', () => {
   );
 
   /**
-   * @target Signed body changes cannot be hidden by valid unlocking scripts.
+   * @target validateBitcoinCashSignedLock rejects changed body %s
    * @dependencies Real signed fixture and independent unsigned field changes.
    * @scenario Change version, locktime, outpoint, sequence, treasury value, change, metadata, or outputs count.
    * @expected Reject each body mutation before accepting signatures.
@@ -122,7 +122,7 @@ describe('validateBitcoinCashSignedLock', () => {
   });
 
   /**
-   * @target Untrusted intent and prevout records are reconstructed from raw parents.
+   * @target validateBitcoinCashSignedLock rejects forged intent %s
    * @dependencies Real builder intent with independently forged metadata fields.
    * @scenario Change intent amount, fee, source, parent bytes, output value, maturity or add a duplicate input.
    * @expected Reject rather than relying on freezing or TypeScript types as authority.
@@ -148,7 +148,7 @@ describe('validateBitcoinCashSignedLock', () => {
   );
 
   /**
-   * @target Byte framing is bounded and canonical before transaction decoding.
+   * @target validateBitcoinCashSignedLock rejects malformed signed bytes %#
    * @dependencies Native signing intent.
    * @scenario Supply empty, odd, nonhex, oversized or trailing transaction data.
    * @expected Reject every malformed frame before signature validation.
