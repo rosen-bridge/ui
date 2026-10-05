@@ -7,6 +7,7 @@ export * from './metaMask';
 export * from './myDoge';
 export * from './nautilus';
 export * from './okx';
+export * from './oneAm';
 export * from './shake';
 export * from './walletConnect';
 export * from './xverse';
