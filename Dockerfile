@@ -45,7 +45,7 @@ RUN npm run bootstrap --workspace=@rosen-bridge/${APP_NAME} && \
 FROM node:22.18 AS rosen-service
 ARG APP_NAME
 LABEL maintainer="rosen-bridge team <team@rosen.tech>"
-LABEL description="Docker image for the ${APP_NAME} owned by rosen-bridge organization."
+LABEL description="Docker image for the rosen-service owned by rosen-bridge organization."
 LABEL org.label-schema.vcs-url="https://github.com/rosen-bridge/ui"
 RUN adduser --disabled-password --home /app --gecos "ErgoPlatform" ergo && \
     install -m 0740 -o ergo -g ergo -d /app/apps/${APP_NAME}/logs \
