@@ -1,5 +1,30 @@
 # @rosen-bridge/rosen-app
 
+## 5.8.0
+
+### Minor Changes
+
+- Implement guard progress details and improve labels and loading state
+- Remove unnecessary Event Status tooltip in event details page
+- Improve dynamic route ID validation to enforce hex format
+- Improve the address and amount input fields in the Bridge form to provide a smoother and more intuitive user experience
+- Update React contexts to use the new Provider syntax
+- Add support for all event statuses and improve status details display
+
+### Patch Changes
+
+- Add strongly-typed, validated environment variables using `zod/v4-mini` and `@t3-oss/env-nextjs`
+- Replace the current `Joi` validation implementation with the `Zod` npm package
+- Fix `Bridged` cell responsive behavior in `Assets page` in row view
+- Warn users bridging from Firo to use the latest Campfire, Stack Wallet, or Firo-Qt wallet to avoid losing funds with unsupported wallets.
+- Fix Asset Details API route ID validation for different token ID formats
+- Add guards progress rail to event details page
+- Improve API error handling and reduce request overhead
+- Update dependencies
+  - @rosen-bridge/ui-kit@6.2.0
+  - @rosen-ui/public-status@0.4.0
+  - @rosen-ui/data-source@0.3.1
+
 ## 5.7.3
 
 ### Patch Changes

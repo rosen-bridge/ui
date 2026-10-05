@@ -1,5 +1,16 @@
 # @rosen-bridge/watcher-app
 
+## 4.5.3
+
+### Patch Changes
+
+- Add strongly-typed, validated environment variables using `zod/v4-mini` and `@t3-oss/env-nextjs`
+- Fix start script for static export builds
+- Make `API_BASE_URL` env variable optional
+- Fix Nginx configuration to support the new Nextjs build structure
+- Update dependencies
+  - @rosen-bridge/ui-kit@6.2.0
+
 ## 4.5.2
 
 ### Patch Changes

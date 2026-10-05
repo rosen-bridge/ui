@@ -1,5 +1,23 @@
 # @rosen-bridge/ui-kit
 
+## 6.2.0
+
+### Minor Changes
+
+- Refine `Amount` component logic to emphasize integer or fractional part based on numeric value
+- Implement `Pagination` component
+- Add `React Compiler`
+- Update React contexts to use the new Provider syntax
+- Add support for all event statuses
+- Add Rail component for rendering a chevron-style, gradient progress timeline
+- Make the Rail component labels clickable
+
+### Patch Changes
+
+- Make EventProcesses component responsive
+- Fix sidebar width on tablet and larger screens
+- Fix carousel indicator behavior when changing slides
+
 ## 6.1.0
 
 ### Minor Changes
