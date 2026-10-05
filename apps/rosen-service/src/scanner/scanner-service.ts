@@ -1,4 +1,5 @@
 import { DefaultLogger } from '@rosen-bridge/abstract-logger';
+import type { BitcoinCashRpcScanner } from '@rosen-bridge/bitcoin-cash-scanner';
 import type { BitcoinRpcScanner, DogeRpcScanner } from '@rosen-bridge/bitcoin-scanner';
 import type { CardanoKoiosScanner } from '@rosen-bridge/cardano-scanner';
 import type { ErgoScanner } from '@rosen-bridge/ergo-scanner';
@@ -9,6 +10,7 @@ import type { HandshakeRpcScanner } from '@rosen-bridge/handshake-scanner';
 import { handleError } from '../utils';
 import { startBinanceScanner } from './chains/binance';
 import { startBitcoinScanner } from './chains/bitcoin';
+import { startBitcoinCashScanner } from './chains/bitcoin-cash';
 import { startCardanoScanner } from './chains/cardano';
 import { startDogeScanner } from './chains/doge';
 import { startErgoScanner } from './chains/ergo';
@@ -27,6 +29,7 @@ let binanceScanner: EvmRpcScanner;
 let dogeScanner: DogeRpcScanner;
 let firoScanner: FiroElectrumXScanner;
 let handshakeScanner: HandshakeRpcScanner;
+let bitcoinCashScanner: BitcoinCashRpcScanner | undefined;
 
 /**
  * start all scanners and register their extractors
@@ -42,6 +45,7 @@ const start = async () => {
       dogeScanner,
       firoScanner,
       handshakeScanner,
+      bitcoinCashScanner,
     ] = await Promise.all([
       startErgoScanner(),
       startCardanoScanner(),
@@ -51,6 +55,7 @@ const start = async () => {
       startDogeScanner(),
       startFiroScanner(),
       startHandshakeScanner(),
+      startBitcoinCashScanner(),
     ]);
 
     logger.debug('all scanners started and their extractors registered', {
@@ -63,6 +68,7 @@ const start = async () => {
         dogeScanner.name(),
         firoScanner.name(),
         handshakeScanner.name(),
+        ...(bitcoinCashScanner ? [bitcoinCashScanner.name()] : []),
       ],
     });
   } catch (error) {
@@ -81,6 +87,7 @@ const scannerService = {
   getDogeScanner: () => dogeScanner,
   getFiroScanner: () => firoScanner,
   getHandshakeScanner: () => handshakeScanner,
+  getBitcoinCashScanner: () => bitcoinCashScanner,
 };
 
 export default scannerService;

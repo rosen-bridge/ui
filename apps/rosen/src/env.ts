@@ -1,6 +1,9 @@
 import { createEnv } from '@t3-oss/env-nextjs';
 import * as z from 'zod/v4-mini';
 
+import { FEE_CONFIG_TOKEN_ID, LOCK_ADDRESSES } from '../configs';
+import { validateBitcoinCashStartup } from './networks/bitcoin-cash/startup';
+
 const jsonEnv = <T extends z.ZodMiniType>(schema: T) =>
   z.pipe(
     z.optional(z.string()),
@@ -100,6 +103,12 @@ export const env = createEnv({
     BITCOIN_RUNES_API: z.url(),
     BITCOIN_RUNES_SECRET: z.string().check(z.minLength(1)),
     HANDSHAKE_RPC_API: z.url(),
+    BCH_ELECTRUM_HOSTNAME: z.optional(z.string()),
+    BCH_ELECTRUM_PORT: z.optional(z.string()),
+    BCH_ELECTRUM_TIMEOUT_MS: z.optional(z.string()),
+    BCH_FEE_RATE: z.optional(z.string()),
+    BCH_MAX_FEE_SATOSHIS: z.optional(z.string()),
+    BCH_ALLOWED_DESTINATION_CHAINS: jsonEnv(z.array(z.string())),
   },
   client: {
     NEXT_PUBLIC_ALLOWED_PKS: jsonEnv(
@@ -112,6 +121,12 @@ export const env = createEnv({
     ),
     NEXT_PUBLIC_BLOCKED_TOKENS: z._default(z.string(), ''),
     NEXT_PUBLIC_REOWN_PROJECT_ID: z.string().check(z.minLength(1)),
+    NEXT_PUBLIC_BCH_ENABLED: z.pipe(
+      z.optional(z.enum(['true', 'false'])),
+      z.transform((value) => value === 'true'),
+    ),
+    NEXT_PUBLIC_BCH_NEXT_HEIGHT_INTERVAL: z.optional(z.string()),
+    NEXT_PUBLIC_BCH_WALLET_TIMEOUT_MS: z.optional(z.string()),
     NEXT_PUBLIC_SENTRY_DSN: z.optional(z.string()),
     NEXT_PUBLIC_BRIDGE_WARNING_MESSAGE: z.optional(z.string()),
     NEXT_PUBLIC_USE_OCTM: z.pipe(
@@ -158,17 +173,52 @@ export const env = createEnv({
     BITCOIN_RUNES_API: process.env.BITCOIN_RUNES_API,
     BITCOIN_RUNES_SECRET: process.env.BITCOIN_RUNES_SECRET,
     HANDSHAKE_RPC_API: process.env.HANDSHAKE_RPC_API,
+    BCH_ELECTRUM_HOSTNAME: process.env.BCH_ELECTRUM_HOSTNAME,
+    BCH_ELECTRUM_PORT: process.env.BCH_ELECTRUM_PORT,
+    BCH_ELECTRUM_TIMEOUT_MS: process.env.BCH_ELECTRUM_TIMEOUT_MS,
+    BCH_FEE_RATE: process.env.BCH_FEE_RATE,
+    BCH_MAX_FEE_SATOSHIS: process.env.BCH_MAX_FEE_SATOSHIS,
+    BCH_ALLOWED_DESTINATION_CHAINS: process.env.BCH_ALLOWED_DESTINATION_CHAINS,
 
     NEXT_PUBLIC_ALLOWED_PKS: process.env.NEXT_PUBLIC_ALLOWED_PKS,
     NEXT_PUBLIC_BLOCKED_TOKENS: process.env.NEXT_PUBLIC_BLOCKED_TOKENS,
     NEXT_PUBLIC_REOWN_PROJECT_ID: process.env.NEXT_PUBLIC_REOWN_PROJECT_ID,
+    NEXT_PUBLIC_BCH_ENABLED: process.env.NEXT_PUBLIC_BCH_ENABLED,
+    NEXT_PUBLIC_BCH_NEXT_HEIGHT_INTERVAL: process.env.NEXT_PUBLIC_BCH_NEXT_HEIGHT_INTERVAL,
+    NEXT_PUBLIC_BCH_WALLET_TIMEOUT_MS: process.env.NEXT_PUBLIC_BCH_WALLET_TIMEOUT_MS,
     NEXT_PUBLIC_SENTRY_DSN: process.env.NEXT_PUBLIC_SENTRY_DSN,
     NEXT_PUBLIC_BRIDGE_WARNING_MESSAGE: process.env.NEXT_PUBLIC_BRIDGE_WARNING_MESSAGE,
     NEXT_PUBLIC_USE_OCTM: process.env.NEXT_PUBLIC_USE_OCTM,
   },
-  createFinalSchema: (shape) =>
+  createFinalSchema: (shape, isServer) =>
     z.object(shape).check(
       z.superRefine((value, ctx) => {
+        try {
+          validateBitcoinCashStartup(
+            {
+              enabled: value.NEXT_PUBLIC_BCH_ENABLED,
+              lockAddress: LOCK_ADDRESSES['bitcoin-cash'],
+              nextHeightInterval: value.NEXT_PUBLIC_BCH_NEXT_HEIGHT_INTERVAL,
+              walletTimeoutMs: value.NEXT_PUBLIC_BCH_WALLET_TIMEOUT_MS,
+              projectId: value.NEXT_PUBLIC_REOWN_PROJECT_ID,
+              hostname: value.BCH_ELECTRUM_HOSTNAME,
+              port: value.BCH_ELECTRUM_PORT,
+              timeoutMs: value.BCH_ELECTRUM_TIMEOUT_MS,
+              feeRate: value.BCH_FEE_RATE,
+              maxFeeSatoshis: value.BCH_MAX_FEE_SATOSHIS,
+              allowedDestinationChains: value.BCH_ALLOWED_DESTINATION_CHAINS,
+              minimumFeeNFT: FEE_CONFIG_TOKEN_ID,
+            },
+            isServer,
+          );
+        } catch {
+          ctx.issues.push({
+            code: 'custom',
+            message: 'Enabled BCH requires assigned chain and complete bridge configuration',
+            path: ['NEXT_PUBLIC_BCH_ENABLED'],
+            input: undefined,
+          });
+        }
         const hasRequests = value.RATE_LIMIT_REQUESTS !== undefined;
         const hasWindow = value.RATE_LIMIT_WINDOW !== undefined;
         if (hasRequests !== hasWindow) {

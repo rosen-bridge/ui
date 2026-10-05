@@ -1,0 +1,21 @@
+import { BitcoinCashNetwork } from '@rosen-network/bitcoin-cash/client';
+import { createBitcoinCashSubmissionClient } from '@rosen-network/bitcoin-cash/submission';
+
+import { unwrapFromObject } from '@/safeServerAction';
+
+import { getTokenMap } from '../../tokenMap/getClientTokenMap';
+import { bitcoinCashPublicConfig } from './publicConfig';
+import * as actions from './server';
+
+/** Public settings plus completed typed app ports; no endpoint or treasury default is manufactured. */
+export const bitcoinCash = bitcoinCashPublicConfig
+  ? new BitcoinCashNetwork({
+      lockAddress: bitcoinCashPublicConfig.lockAddress,
+      nextHeightInterval: bitcoinCashPublicConfig.nextHeightInterval,
+      getTokenMap,
+      ...unwrapFromObject(actions),
+      submitTransaction: createBitcoinCashSubmissionClient({
+        timeoutMs: bitcoinCashPublicConfig.walletTimeoutMs,
+      }),
+    })
+  : undefined;

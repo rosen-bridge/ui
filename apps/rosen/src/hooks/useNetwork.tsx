@@ -14,7 +14,7 @@ import { NETWORKS } from '@rosen-ui/constants';
 import type { Network as NetworkKey } from '@rosen-ui/types';
 
 import { env } from '@/env';
-import * as networks from '@/networks';
+import networks from '@/networks';
 
 import { useBridgeForm } from './useBridgeForm';
 import { useTokenMap } from './useTokenMap';

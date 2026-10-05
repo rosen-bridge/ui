@@ -14,6 +14,7 @@ import type { Network } from '@rosen-ui/types';
 
 import type AbstractCalculator from './calculator/abstract-calculator';
 import { BitcoinCalculator } from './calculator/chains/bitcoin-calculator';
+import { BitcoinCashCalculator } from './calculator/chains/bitcoin-cash-calculator';
 import { BitcoinRunesCalculator } from './calculator/chains/bitcoin-runes';
 import { CardanoCalculator } from './calculator/chains/cardano-calculator';
 import { DogeCalculator } from './calculator/chains/doge-calculator';
@@ -27,6 +28,7 @@ import { LockedAssetModel } from './database/lockedAsset/LockedAssetModel';
 import { TokenModel } from './database/token/TokenModel';
 import type {
   BitcoinCalculatorInterface,
+  BitcoinCashCalculatorInterface,
   BitcoinRunesCalculatorInterface,
   CardanoCalculatorInterface,
   DogeCalculatorInterface,
@@ -58,6 +60,7 @@ class AssetCalculator {
     handshakeCalculator: HandshakeCalculatorInterface,
     dataSource: DataSource,
     protected readonly logger: AbstractLogger = new DummyLogger(),
+    bitcoinCashCalculator?: BitcoinCashCalculatorInterface,
   ) {
     this.tokens = tokens;
     const ergoAssetCalculator = new ErgoCalculator(
@@ -129,6 +132,17 @@ class AssetCalculator {
     this.calculatorMap.set(NETWORKS.doge.key, dogeAssetCalculator);
     this.calculatorMap.set(NETWORKS.firo.key, firoAssetCalculator);
     this.calculatorMap.set(NETWORKS.handshake.key, handshakeAssetCalculator);
+    if (bitcoinCashCalculator) {
+      this.calculatorMap.set(
+        NETWORKS['bitcoin-cash'].key,
+        new BitcoinCashCalculator(
+          this.tokens,
+          bitcoinCashCalculator.addresses,
+          bitcoinCashCalculator.provider,
+          logger.child('bitcoinCashCalculator'),
+        ),
+      );
+    }
     this.bridgedAssetModel = new BridgedAssetModel(dataSource, logger.child('bridgedAssetModel'));
     this.lockedAssetModel = new LockedAssetModel(dataSource, logger.child('lockedAssetModel'));
     this.tokenModel = new TokenModel(dataSource, logger.child('tokenModel'));

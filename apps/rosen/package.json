@@ -38,6 +38,7 @@
     "@rosen-network/base": "^0.5.5",
     "@rosen-network/binance": "^0.4.10",
     "@rosen-network/bitcoin": "^2.4.9",
+    "@rosen-network/bitcoin-cash": "^0.0.0",
     "@rosen-network/bitcoin-runes": "^1.0.9",
     "@rosen-network/cardano": "^2.5.9",
     "@rosen-network/doge": "^0.4.9",
@@ -47,6 +48,7 @@
     "@rosen-network/firo": "^0.1.3",
     "@rosen-network/handshake": "^0.0.0",
     "@rosen-ui/asset-calculator": "^2.4.0",
+    "@rosen-ui/cashonize-wallet": "^0.0.0",
     "@rosen-ui/constants": "^1.1.0",
     "@rosen-ui/data-source": "^0.3.0",
     "@rosen-ui/eternl-wallet": "^3.1.11",
@@ -77,6 +79,9 @@
     "serialize-error": "^12.0.0",
     "swr": "^2.4.1",
     "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@bitauth/libauth": "3.0.0"
   },
   "engines": {
     "node": ">=22.18.0",
