@@ -66,7 +66,9 @@
     "@rosen-ui/rosen-statistics": "^0.0.0",
     "@vercel/kv": "^3.0.0",
     "ergo-lib-wasm-nodejs": "^0.24.1",
-    "ethers": "6.16.0"
+    "ethers": "6.16.0",
+    "pg": "^8.11.3",
+    "tsx": "^4.19.2"
   },
   "engines": {
     "node": ">=22.18.0",
