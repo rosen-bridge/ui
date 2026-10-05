@@ -1,7 +1,7 @@
 import { BitcoinCash } from '@rosen-bridge/icons';
 import type { Network } from '@rosen-network/base';
 
-import type { BitcoinCashNetwork } from '../../src/client';
+import type { BitcoinCashNetwork } from '../src/client';
 
 /** Compile-time consumer of the existing icon export and network interface. */
 export const assertPublicIconTypes = (): void => {

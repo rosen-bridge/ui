@@ -15,6 +15,13 @@ const mocks = vi.hoisted(() => ({
   dataSource: {},
   extractor: vi.fn(),
   logger: { child: vi.fn() },
+  scannerInterval: 123456,
+  scannerLoggerName: 'fixtureBitcoinCashScanner',
+}));
+vi.mock('../../../src/constants', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('../../../src/constants')>()),
+  BITCOIN_CASH_SCANNER_INTERVAL: mocks.scannerInterval,
+  BITCOIN_CASH_SCANNER_LOGGER_NAME: mocks.scannerLoggerName,
 }));
 vi.mock('@rosen-bridge/abstract-logger', () => ({
   DefaultLogger: { getInstance: () => mocks.logger },
@@ -65,7 +72,6 @@ const options = readBitcoinCashConfig(
       username: 'operator',
       password: 'synthetic',
     },
-    scanner: { intervalMs: 600000, warnDiff: 3, criticalDiff: 6 },
     cleanup: { thresholdSeconds: 86400, trimCount: 100 },
     commitment: {
       address: '9iMjQx8PzwBKXRvsFUJFJAPoy31znfEeBUGz8DRkcnJX4rJYjVd',
@@ -91,7 +97,7 @@ describe('startBitcoinCashScanner', () => {
   });
 
   /**
-   * @target startBitcoinCashScanner: Disabled BCH scanning causes no transport or extractor side effects.
+   * @target startBitcoinCashScanner does not construct clients while disabled
    * @dependencies Mock scanner, RPC connector and lifecycle functions.
    * @scenario Start using the default disabled configuration.
    * @expected Undefined scanner and no client, extractor or interval construction.
@@ -105,7 +111,8 @@ describe('startBitcoinCashScanner', () => {
   });
 
   /**
-   * @target startBitcoinCashScanner: Explicit BCH configuration flows into its RPC scanner and native extractor.
+   * @target startBitcoinCashScanner registers native extraction before
+   * starting the configured interval
    * @dependencies Mock constructor boundaries and lifecycle functions.
    * @scenario Start with validated operator values under an assigned fixture index.
    * @expected Explicit main chain and millisecond timeout, shared tokens, correct treasury and registration before interval start.
@@ -137,14 +144,19 @@ describe('startBitcoinCashScanner', () => {
       mocks.logger,
     );
     expect(mocks.registerExtractor).toHaveBeenCalledOnce();
-    expect(mocks.startScanner).toHaveBeenCalledWith(expect.anything(), expect.any(String), 600000);
+    expect(mocks.logger.child).toHaveBeenCalledWith(mocks.scannerLoggerName);
+    expect(mocks.startScanner).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.any(String),
+      mocks.scannerInterval,
+    );
     expect(mocks.registerExtractor.mock.invocationCallOrder[0]).toBeLessThan(
       mocks.startScanner.mock.invocationCallOrder[0],
     );
   });
 
   /**
-   * @target startBitcoinCashScanner: Optional RPC authentication remains absent when not configured.
+   * @target startBitcoinCashScanner does not invent RPC authentication
    * @dependencies Mock connector constructor.
    * @scenario Start with explicit unauthenticated endpoint configuration.
    * @expected Pass undefined auth rather than invented credentials.
@@ -161,7 +173,8 @@ describe('startBitcoinCashScanner', () => {
   });
 
   /**
-   * @target startBitcoinCashScanner: Validated operator work budgets reach the RPC connector.
+   * @target startBitcoinCashScanner forwards shared resolved resource budgets
+   * to the RPC constructor
    * @dependencies Actual shared policy resolver and mocked network construction boundary.
    * @scenario Read an override configuration through the production service parser and start it.
    * @expected The fifth constructor argument includes overrides plus every remaining default.
@@ -192,7 +205,8 @@ describe('startBitcoinCashScanner', () => {
   });
 
   /**
-   * @target startBitcoinCashScanner: Failed extractor registration prevents the scanner interval.
+   * @target startBitcoinCashScanner rejects failed registration without
+   * starting the interval
    * @dependencies Mock registration rejection.
    * @scenario Reject registration with diagnostic text.
    * @expected Fixed initialization error and no interval start.
@@ -206,7 +220,7 @@ describe('startBitcoinCashScanner', () => {
   });
 
   /**
-   * @target startBitcoinCashScanner: Failed scanner lifecycle initialization does not return an active scanner.
+   * @target startBitcoinCashScanner rejects failed interval initialization
    * @dependencies Mock lifecycle rejection.
    * @scenario Reject initialization after successful registration.
    * @expected Fixed initialization error without provider diagnostic leakage.

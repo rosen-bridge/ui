@@ -13,6 +13,7 @@ const { initialize } = vi.hoisted(() => ({
 }));
 vi.mock('../src/session', () => ({ createCashonizeSession: initialize }));
 
+/** Explicit relay project and public wallet metadata for lazy connection tests. */
 const options = {
   projectId: '12'.repeat(16),
   timeoutMs: 1000,
@@ -23,6 +24,7 @@ const options = {
     icons: [],
   },
 };
+/** Confirmed account sentinel used to verify the session address delegation. */
 const address = 'bitcoincash:fixture';
 
 afterEach(() => vi.clearAllMocks());

@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { TokenMap } from '@rosen-bridge/tokens';
 
-import { signingIntent } from '../../../../networks/bitcoin-cash/tests/mocked/signing.mock';
+import { signingIntent } from '../../../../networks/bitcoin-cash/tests/testUtils';
 
 const { state, initialize } = vi.hoisted(() => ({
   state: { enabled: true },
@@ -87,9 +87,11 @@ afterEach(() => {
 
 describe('cashonize', () => {
   /**
-   * @target cashonize
+   * @target CashonizeWallet.constructor (cashonize app factory) initializes
+   * the SDK only after a user connection
    * @dependencies Actual wallet and network constructors with a mocked package session factory.
-   * @scenario initializes the SDK only after a user connection
+   * @scenario Import the wallet with BCH enabled, inspect its name and session
+   * factory calls, then reload with BCH disabled and inspect the absent wallet.
    * @expected App import creates no session and disabled configuration creates no wallet.
    */
   it('initializes the SDK only after a user connection', async () => {
@@ -104,9 +106,11 @@ describe('cashonize', () => {
   });
 
   /**
-   * @target cashonize
+   * @target CashonizeWallet.performConnect (cashonize app factory) passes
+   * public configuration and pairing to the wallet package
    * @dependencies Actual wallet constructor and a mocked package-owned session factory.
-   * @scenario passes public configuration and pairing to the wallet package
+   * @scenario Stub the browser origin and session factory, import the wallet,
+   * connect it, then inspect the session factory configuration and pairing port.
    * @expected Map app settings to the package without owning session lifecycle behavior.
    */
   it('passes public configuration and pairing to the wallet package', async () => {

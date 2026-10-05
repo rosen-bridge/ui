@@ -6,7 +6,7 @@ import * as extractor from '@rosen-bridge/bitcoin-cash-observation-extractor';
 import * as scanner from '@rosen-bridge/bitcoin-cash-scanner';
 import type { DataSource, EntityManager, ObjectLiteral } from '@rosen-bridge/extended-typeorm';
 
-import { createPostgresFixture } from './postgresFixture';
+import { createPostgresFixture } from './postgresTestUtils';
 
 const postgresUrl = process.env.ROSEN_UI_TEST_POSTGRES_URL;
 

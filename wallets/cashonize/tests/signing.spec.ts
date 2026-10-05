@@ -11,7 +11,7 @@ import {
   parentOutput,
   signIntent,
   signingIntent,
-} from '../../../networks/bitcoin-cash/tests/mocked/signing.mock';
+} from '../../../networks/bitcoin-cash/tests/testUtils';
 import { createCashonizeSigningRequest, validateCashonizeSigningResponse } from '../src/signing';
 
 /** Build native request parameters matching the real authenticated fixture builder. */

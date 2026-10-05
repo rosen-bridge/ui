@@ -3,6 +3,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { HealthStatusLevel } from '@rosen-bridge/health-check';
 import { ScannerSyncHealthCheckParam } from '@rosen-bridge/scanner-sync-check';
 
+import service from '../../src/health-check/health-check-service';
+
 const state = vi.hoisted(() => ({
   enabled: true,
   registries: [] as import('@rosen-bridge/health-check').HealthCheck[],
@@ -13,6 +15,7 @@ const state = vi.hoisted(() => ({
 
 vi.mock('@rosen-bridge/abstract-logger', async (importOriginal) => {
   const original = await importOriginal<typeof import('@rosen-bridge/abstract-logger')>();
+  state.logger.child.mockReturnValue(state.logger);
   return { ...original, DefaultLogger: { getInstance: () => state.logger } };
 });
 vi.mock('@rosen-bridge/health-check', async (importOriginal) => {
@@ -30,12 +33,12 @@ vi.mock('@rosen-bridge/health-check', async (importOriginal) => {
 vi.mock('../../src/configs', () => ({
   default: {
     get bitcoinCash() {
-      return state.enabled
-        ? { enabled: true, scanner: { intervalMs: 600000, warnDiff: 3, criticalDiff: 6 } }
-        : { enabled: false };
+      return state.enabled ? { enabled: true } : { enabled: false };
     },
     notification: { discordWebHookUrl: '' },
     healthCheck: {
+      bitcoinCashScannerWarnDiff: 3,
+      bitcoinCashScannerCriticalDiff: 6,
       warnLogAllowedCount: 10,
       errorLogAllowedCount: 10,
       logDuration: 60,
@@ -95,13 +98,13 @@ describe('healthCheckService', () => {
     });
 
     /**
-     * @target healthCheckService.start: Enabled BCH reaches the real health registry.
+     * @target healthCheckService.start registers the initialized BCH scanner
+     * and binds its persistence reader
      * @dependencies Controlled scanner identities/config/reader; real BCH factory and HealthCheck.
      * @scenario Start with an initialized BCH getter while the report timer is held.
      * @expected Exactly one registered BCH parameter reads only BCH state and preserves legacy checks.
      */
     it('registers the initialized BCH scanner and binds its persistence reader', async () => {
-      const { default: service } = await import('../../src/health-check/health-check-service');
       await service.start();
       expect(state.logger.error).not.toHaveBeenCalled();
       expect(state.registries).toHaveLength(1);
@@ -114,14 +117,15 @@ describe('healthCheckService', () => {
       expect(state.read).not.toHaveBeenCalled();
       await registry.updateParam('bitcoin-cash_scanner');
       expect(state.read).toHaveBeenCalledExactlyOnceWith('bitcoin-cash');
-      expect(check?.getHealthStatus()).toBe(HealthStatusLevel.HEALTHY);
+      expect(check?.getHealthStatus()).toEqual(HealthStatusLevel.HEALTHY);
       expect(registry.getParamById('bitcoin_scanner')).toBeDefined();
       expect(registry.getParamById('ergo_scanner')).toBeDefined();
-      expect(vi.getTimerCount()).toBe(1);
+      expect(vi.getTimerCount()).toEqual(1);
     });
 
     /**
-     * @target healthCheckService.start: Disabled BCH leaves the existing health registry unchanged.
+     * @target healthCheckService.start omits disabled BCH health without
+     * changing the existing checks
      * @dependencies Controlled disabled config/getter and reader; real registry and BCH factory.
      * @scenario Start without a BCH scanner while all eight legacy identities remain available.
      * @expected No BCH registration or persistence read; ten legacy/log checks and one held timer remain.
@@ -129,7 +133,6 @@ describe('healthCheckService', () => {
     it('omits disabled BCH health without changing the existing checks', async () => {
       state.enabled = false;
       state.bitcoinCash.mockReturnValue(undefined);
-      const { default: service } = await import('../../src/health-check/health-check-service');
       await service.start();
       expect(state.logger.error).not.toHaveBeenCalled();
       expect(state.registries).toHaveLength(1);
@@ -150,7 +153,7 @@ describe('healthCheckService', () => {
         'handshake',
       ])
         expect(registry.getParamById(`${name}_scanner`)).toBeDefined();
-      expect(vi.getTimerCount()).toBe(1);
+      expect(vi.getTimerCount()).toEqual(1);
     });
   });
 });

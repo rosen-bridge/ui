@@ -15,14 +15,16 @@ import {
 import {
   type BitcoinCashUnsignedLock,
   generateBitcoinCashUnsignedLock,
-} from '../../src/generateUnsignedTx';
-import type { BitcoinCashSpendableUtxo } from '../../src/server/bitcoinCashElectrumProvider';
+} from '../src/generateUnsignedTx';
+import type { BitcoinCashSpendableUtxo } from '../src/server/bitcoinCashElectrumProvider';
 
 /** Public secp256k1 generator scalar fixture; never wallet material. */
 const scalar = Uint8Array.from([...Array(31).fill(0), 1]);
 const derived = secp256k1.derivePublicKeyCompressed(scalar);
 if (typeof derived === 'string') throw new Error(derived);
+/** Compressed public key derived from the deterministic public fixture scalar. */
 export const publicKey = derived;
+/** Mainnet P2PKH parent-output script controlled by the public fixture scalar. */
 const sourceScript = `76a914${binToHex(ripemd160.hash(sha256.hash(publicKey)))}88ac`;
 /** Encode a fixture locking script as a checksummed mainnet CashAddr. */
 const address = (script: string) => {

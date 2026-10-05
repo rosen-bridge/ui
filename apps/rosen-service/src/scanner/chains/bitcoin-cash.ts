@@ -8,6 +8,7 @@ import {
 
 import type { BitcoinCashServiceConfig } from '../../bitcoin-cash/config';
 import config from '../../configs';
+import { BITCOIN_CASH_SCANNER_INTERVAL, BITCOIN_CASH_SCANNER_LOGGER_NAME } from '../../constants';
 import dataSource from '../../data-source';
 import { registerBitcoinCashExtractor } from '../../observation/chains/bitcoin-cash';
 import { startScanner } from '../scanner-utils';
@@ -23,7 +24,7 @@ export const startBitcoinCashScanner = async (
 ): Promise<BitcoinCashRpcScanner | undefined> => {
   if (!options.enabled) return undefined;
   try {
-    const logger = DefaultLogger.getInstance().child('bitcoinCashScanner');
+    const logger = DefaultLogger.getInstance().child(BITCOIN_CASH_SCANNER_LOGGER_NAME);
     const network = new NetworkConnectorManager<BitcoinCashRpcTransaction>(
       new FailoverStrategy(),
       logger,
@@ -50,7 +51,7 @@ export const startBitcoinCashScanner = async (
       },
     });
     await registerBitcoinCashExtractor(scanner, options);
-    await startScanner(scanner, import.meta.url, options.scanner.intervalMs);
+    await startScanner(scanner, import.meta.url, BITCOIN_CASH_SCANNER_INTERVAL);
     return scanner;
   } catch {
     throw new Error('BCH scanner initialization failed');

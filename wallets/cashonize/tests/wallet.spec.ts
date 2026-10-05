@@ -15,7 +15,7 @@ import {
   parentOutput,
   signIntent,
   signingIntent,
-} from '../../../networks/bitcoin-cash/tests/mocked/signing.mock';
+} from '../../../networks/bitcoin-cash/tests/testUtils';
 import { CashonizeWallet, type CashonizeWalletSession } from '../src/wallet';
 
 const { candidate } = vi.hoisted(() => ({ candidate: { index: 10 } }));

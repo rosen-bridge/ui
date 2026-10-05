@@ -19,7 +19,6 @@ export interface EnabledBitcoinCashConfig {
     password?: string;
     limits?: Readonly<BitcoinCashRpcLimits>;
   };
-  scanner: { intervalMs: number; warnDiff: number; criticalDiff: number };
   cleanup: { thresholdSeconds: number; trimCount: number };
   commitment: { address: string; rwt: string };
   eventTrigger: { address: string; permitAddress: string; fraudAddress: string };
@@ -62,7 +61,7 @@ export const readBitcoinCashConfig = (
       !Number.isSafeInteger(value.initialHeight) ||
       (value.initialHeight as number) < 0 ||
       !record(value.rpc) ||
-      !record(value.scanner) ||
+      'scanner' in value ||
       !record(value.cleanup) ||
       !record(value.commitment) ||
       !record(value.eventTrigger) ||
@@ -111,17 +110,7 @@ export const readBitcoinCashConfig = (
     )
       throw new Error();
     const rpc = value.rpc;
-    const scanner = value.scanner;
-    if (
-      typeof rpc.url !== 'string' ||
-      !positiveInteger(rpc.timeoutMs) ||
-      rpc.timeoutMs > 120000 ||
-      !positiveInteger(scanner.intervalMs) ||
-      scanner.intervalMs > 86400000 ||
-      !positiveInteger(scanner.warnDiff) ||
-      !positiveInteger(scanner.criticalDiff) ||
-      scanner.warnDiff > scanner.criticalDiff
-    )
+    if (typeof rpc.url !== 'string' || !positiveInteger(rpc.timeoutMs) || rpc.timeoutMs > 120000)
       throw new Error();
     const url = validateBitcoinCashRpcUrl(rpc.url);
     const hasUsername = rpc.username !== undefined;
@@ -145,11 +134,6 @@ export const readBitcoinCashConfig = (
         username: rpc.username as string | undefined,
         password: rpc.password as string | undefined,
         limits,
-      },
-      scanner: {
-        intervalMs: scanner.intervalMs,
-        warnDiff: scanner.warnDiff,
-        criticalDiff: scanner.criticalDiff,
       },
       cleanup: {
         thresholdSeconds: value.cleanup.thresholdSeconds,

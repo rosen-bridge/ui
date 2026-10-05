@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import { generateBitcoinCashLockMetadata, generateBitcoinCashOpReturn } from '../src';
 
+/** Ergo destination script and exact fee fields for the Rosen metadata codec. */
 const metadata = {
   toChainIndex: 0,
   encodedAddressHex: `76a914${'01'.repeat(20)}88ac`,

@@ -12,7 +12,7 @@ import {
   BCH_AXION_CHECKPOINT,
   createBitcoinCashElectrumProvider,
 } from '../../src/server/bitcoinCashElectrumProvider';
-import { axionHeader } from './mocked/axionHeader';
+import { axionHeader } from './axionHeaderTestData';
 
 const mocked = vi.hoisted(() => ({ connect: vi.fn() }));
 vi.mock('node:tls', () => ({ connect: mocked.connect }));
@@ -114,6 +114,7 @@ const parentHex = (
     }),
   ).toString('hex');
 
+/** Synthetic confirmed tip exactly 100 blocks after the Axion checkpoint. */
 const tipHeight = 661748;
 const tipHex = '01'.repeat(80);
 let raw: string;

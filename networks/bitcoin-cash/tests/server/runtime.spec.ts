@@ -4,9 +4,9 @@ import { TokenMap } from '@rosen-bridge/tokens';
 import type { CalculateFee } from '@rosen-network/base';
 import { validateAddress } from '@rosen-network/base';
 
-import { parseBitcoinCashServerConfig } from '../src/config';
-import { createBitcoinCashServerRuntime } from '../src/server/runtime';
-import { signingIntent } from './mocked/signing.mock';
+import { parseBitcoinCashServerConfig } from '../../src/config';
+import { createBitcoinCashServerRuntime } from '../../src/server/runtime';
+import { signingIntent } from '../testUtils';
 
 const { candidate, readAssets, readHeight, submit, provider, submitter, queryFee, feeCreator } =
   vi.hoisted(() => {
@@ -32,10 +32,10 @@ const { candidate, readAssets, readHeight, submit, provider, submitter, queryFee
       feeCreator,
     };
   });
-vi.mock('../src/server/bitcoinCashElectrumProvider', () => ({
+vi.mock('../../src/server/bitcoinCashElectrumProvider', () => ({
   createBitcoinCashElectrumProvider: provider,
 }));
-vi.mock('../src/server/bitcoinCashElectrumSubmitter', () => ({
+vi.mock('../../src/server/bitcoinCashElectrumSubmitter', () => ({
   createBitcoinCashElectrumSubmitter: submitter,
 }));
 vi.mock('@rosen-network/base', () => ({

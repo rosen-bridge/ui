@@ -5,7 +5,7 @@ import {
   readBitcoinCashSubmissionBody,
 } from '../../src/server/submissionBody';
 import { encodeBitcoinCashSubmission } from '../../src/submissionCodec';
-import { signIntent, signingIntent } from '../mocked/signing.mock';
+import { signIntent, signingIntent } from '../testUtils';
 
 /** Exact valid native JSON envelope; no server submit or network transport is initialized. */
 const fixture = () => {

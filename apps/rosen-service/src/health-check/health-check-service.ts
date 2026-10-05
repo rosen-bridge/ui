@@ -61,6 +61,12 @@ const getNotifySetup = () => {
  * Registers all health checks
  */
 const registerAllHealthChecks = (healthCheck: HealthCheck) => {
+  const bitcoinCashCheck = createBitcoinCashScannerHealthCheck(
+    config.bitcoinCash,
+    config.healthCheck,
+    scannerService.getBitcoinCashScanner(),
+    getLastSavedBlock,
+  );
   const checks = [
     {
       instance: new ScannerSyncHealthCheckParam(
@@ -150,20 +156,12 @@ const registerAllHealthChecks = (healthCheck: HealthCheck) => {
       ),
       label: 'handshake',
     },
+    ...(bitcoinCashCheck ? [{ instance: bitcoinCashCheck, label: 'bitcoin-cash' }] : []),
   ];
 
   for (const { instance, label } of checks) {
     healthCheck.register(instance);
     logger.debug(`${label} scanner-sync-check registered`);
-  }
-  const bitcoinCashCheck = createBitcoinCashScannerHealthCheck(
-    config.bitcoinCash,
-    scannerService.getBitcoinCashScanner(),
-    getLastSavedBlock,
-  );
-  if (bitcoinCashCheck) {
-    healthCheck.register(bitcoinCashCheck);
-    logger.debug('bitcoin-cash scanner-sync-check registered');
   }
 };
 

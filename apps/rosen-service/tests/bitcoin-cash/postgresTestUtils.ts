@@ -5,6 +5,7 @@ import { getDataSource } from '@rosen-ui/data-source';
 
 import { registerBitcoinCashDataSource } from '../../src/bitcoin-cash/data-source';
 
+/** Cluster catalog identity and fixture nonce used to authorize database cleanup. */
 export type DatabaseIdentity = { name: string; oid: string; marker: string | null };
 
 /** Refuses cleanup or migration when the created database identity has changed. */

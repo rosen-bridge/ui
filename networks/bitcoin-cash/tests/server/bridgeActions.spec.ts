@@ -2,12 +2,12 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { TokenMap } from '@rosen-bridge/tokens';
 
-import { generateBitcoinCashUnsignedLock } from '../src/generateUnsignedTx';
+import { generateBitcoinCashUnsignedLock } from '../../src/generateUnsignedTx';
 import {
   type BitcoinCashBridgeActionConfig,
   createBitcoinCashBridgeActions,
-} from '../src/server/bridgeActions';
-import { parentOutput, signIntent, signingIntent } from './mocked/signing.mock';
+} from '../../src/server/bridgeActions';
+import { parentOutput, signIntent, signingIntent } from '../testUtils';
 
 const { candidate } = vi.hoisted(() => ({ candidate: { index: 10 } }));
 vi.mock('@rosen-ui/constants', async () => {

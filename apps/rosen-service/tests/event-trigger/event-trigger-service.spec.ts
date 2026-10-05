@@ -76,7 +76,7 @@ describe('registerExtractors', () => {
   });
 
   /**
-   * @target registerExtractors: Preserve existing event-trigger consumers while BCH is disabled.
+   * @target registerExtractors preserves all nine existing extractors
    * @dependencies Mock persistence and configuration; real registration loop.
    * @scenario Start event-trigger registration with the default disabled branch.
    * @expected Nine original extractor identities with no BCH registration.
@@ -101,7 +101,8 @@ describe('registerExtractors', () => {
   });
 
   /**
-   * @target registerExtractors: Connect BCH events to explicitly configured Ergo contract addresses.
+   * @target registerExtractors registers the exact BCH contract and RWT
+   * configuration
    * @dependencies Fixture operator config and mocked persistent extractor.
    * @scenario Enable the assigned fixture branch through the real registration loop.
    * @expected Tenth extractor with exact event, permit, fraud and shared RWT fields.
@@ -131,7 +132,8 @@ describe('registerExtractors', () => {
   });
 
   /**
-   * @target registerExtractors: Propagate BCH registration failure without logging successful completion.
+   * @target registerExtractors fails startup when BCH persistence registration
+   * fails
    * @dependencies One rejected persistence call after nine successful registrations.
    * @scenario The enabled BCH extractor cannot be registered.
    * @expected Startup rejection and no completion log.

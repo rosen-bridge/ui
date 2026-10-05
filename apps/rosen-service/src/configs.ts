@@ -20,10 +20,27 @@ const getOptionalNumber = (path: string): number | undefined => {
 
 const getConfig = () => {
   try {
+    const bitcoinCash = readBitcoinCashConfig(
+      nodeConfig.has('bitcoin-cash') ? nodeConfig.get<unknown>('bitcoin-cash') : undefined,
+    );
+    let bitcoinCashScannerWarnDiff: number | undefined;
+    let bitcoinCashScannerCriticalDiff: number | undefined;
+    if (bitcoinCash.enabled) {
+      bitcoinCashScannerWarnDiff = nodeConfig.get<number>('healthCheck.bitcoinCashScannerWarnDiff');
+      bitcoinCashScannerCriticalDiff = nodeConfig.get<number>(
+        'healthCheck.bitcoinCashScannerCriticalDiff',
+      );
+      if (
+        !Number.isSafeInteger(bitcoinCashScannerWarnDiff) ||
+        bitcoinCashScannerWarnDiff <= 0 ||
+        !Number.isSafeInteger(bitcoinCashScannerCriticalDiff) ||
+        bitcoinCashScannerCriticalDiff <= 0 ||
+        bitcoinCashScannerWarnDiff > bitcoinCashScannerCriticalDiff
+      )
+        throw new Error('Invalid BCH scanner health configuration');
+    }
     return {
-      bitcoinCash: readBitcoinCashConfig(
-        nodeConfig.has('bitcoin-cash') ? nodeConfig.get<unknown>('bitcoin-cash') : undefined,
-      ),
+      bitcoinCash,
       logs: nodeConfig.get<TransportOptions[]>('logs'),
       ergo: {
         addresses: {
@@ -188,6 +205,8 @@ const getConfig = () => {
         interval: nodeConfig.get<number>('calculator.interval'),
       },
       healthCheck: {
+        bitcoinCashScannerWarnDiff,
+        bitcoinCashScannerCriticalDiff,
         ergoScannerWarnDiff: nodeConfig.get<number>('healthCheck.ergoScannerWarnDiff'),
         ergoScannerCriticalDiff: nodeConfig.get<number>('healthCheck.ergoScannerCriticalDiff'),
         cardanoScannerWarnDiff: nodeConfig.get<number>('healthCheck.cardanoScannerWarnDiff'),

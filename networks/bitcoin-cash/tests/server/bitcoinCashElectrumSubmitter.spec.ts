@@ -14,8 +14,8 @@ import {
   createBitcoinCashElectrumSubmitter,
 } from '../../src/server/bitcoinCashElectrumSubmitter';
 import { BitcoinCashElectrumSession } from '../../src/server/electrumSession';
-import { signIntent, signingIntent } from '../mocked/signing.mock';
-import { axionHeader } from './mocked/axionHeader';
+import { signIntent, signingIntent } from '../testUtils';
+import { axionHeader } from './axionHeaderTestData';
 
 const mocked = vi.hoisted(() => ({ connect: vi.fn() }));
 vi.mock('node:tls', () => ({ connect: mocked.connect }));
@@ -54,7 +54,9 @@ class MockSocket extends EventEmitter {
   });
 }
 
+/** Explicit TLS Electrum endpoint whose requests are handled by offline mocks. */
 const options = { hostname: 'bch-indexer.example', port: 50002 };
+/** Ethereum destination and exact Rosen fees committed by the signed fixture. */
 const metadata: BitcoinCashLockMetadata = {
   toChain: 'ethereum',
   toAddress: `0x${'12'.repeat(20)}`,

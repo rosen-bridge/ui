@@ -4,7 +4,7 @@ import { getTxURL } from '../src/getTxUrl';
 
 describe('getTxURL', () => {
   /**
-   * @target Produce BCH transaction links while retaining baseline links.
+   * @target getTxURL produces BCH links without changing Ethereum transaction links
    * @dependencies Shared UI chain registry; no mocks.
    * @scenario Request BCH and Ethereum transaction links and a missing txid.
    * @expected BCH Blockchair path, unchanged Etherscan path and no empty link.

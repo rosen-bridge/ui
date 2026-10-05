@@ -6,7 +6,7 @@ export const addresses = [
   'bitcoincash:qqqszqgpqyqszqgpqyqszqgpqyqszqgpqyrygcdp8p',
 ];
 
-/** Native source metadata and a synthetic wrapped three-decimal Ergo asset. */
+/** Eight-decimal BCH native source metadata with its native asset identifier. */
 export const nativeToken: RosenChainToken = {
   tokenId: 'bch',
   name: 'Bitcoin Cash',
@@ -15,6 +15,7 @@ export const nativeToken: RosenChainToken = {
   residency: 'native',
   extra: {},
 };
+/** Synthetic three-decimal Ergo token used to exercise native-to-wrapped rounding. */
 export const wrappedToken: RosenChainToken = {
   tokenId: '11'.repeat(32),
   name: 'Wrapped Bitcoin Cash',

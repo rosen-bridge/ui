@@ -2,7 +2,7 @@ import { encodeCashAddress, hexToBin, lockingBytecodeToCashAddress } from '@bita
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { parseBitcoinCashPublicConfig, parseBitcoinCashServerConfig } from '../src/config';
-import { signingIntent } from './mocked/signing.mock';
+import { signingIntent } from './testUtils';
 
 const { candidate } = vi.hoisted(() => ({ candidate: { index: 10 } }));
 vi.mock('@rosen-ui/constants', async () => {

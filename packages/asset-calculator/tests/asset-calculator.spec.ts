@@ -7,7 +7,7 @@ import { NETWORKS } from '@rosen-ui/constants';
 import { AssetCalculator } from '../lib';
 import type AbstractCalculator from '../lib/calculator/abstract-calculator';
 import type { BitcoinCashCalculatorInterface } from '../lib/interfaces';
-import { addresses } from './calculator/chains/mocked/bitcoin-cash.mock';
+import { addresses } from './calculator/chains/bitcoinCashTestData';
 import { initDatabase } from './database/bridgedAsset/BridgedAssetModel.mock';
 import { bridgedAssets, lockedAssets, tokens } from './database/test-data';
 import { tokenMapData } from './test-data';
@@ -35,7 +35,8 @@ const createCalculator = (bitcoinCash?: BitcoinCashCalculatorInterface) => {
 describe('AssetCalculator', () => {
   describe('constructor', () => {
     /**
-     * @target Existing calls preserve calculator registration.
+     * @target AssetCalculator.constructor preserves existing calculators when
+     * BCH is not configured
      * @dependencies Inert repository and client configuration.
      * @scenario Construct using the original constructor arguments.
      * @expected Existing nine calculators and no BCH activation.
@@ -54,7 +55,8 @@ describe('AssetCalculator', () => {
       ]);
     });
     /**
-     * @target BCH accounting requires explicit optional configuration.
+     * @target AssetCalculator.constructor registers BCH accounting only with
+     * explicit configuration
      * @dependencies Mock read-only provider.
      * @scenario Add a valid provider and treasury as the final argument.
      * @expected One BCH calculator without provider requests during construction.
@@ -67,7 +69,8 @@ describe('AssetCalculator', () => {
       expect(getAddressAssets).not.toHaveBeenCalled();
     });
     /**
-     * @target Invalid explicit configuration fails before requests.
+     * @target AssetCalculator.constructor rejects invalid explicit BCH
+     * configuration
      * @dependencies Mock read-only provider.
      * @scenario Supply a malformed treasury through the public constructor.
      * @expected Failure rather than silently dropping the requested calculator.

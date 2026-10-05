@@ -16,7 +16,9 @@ import {
 } from '../src';
 import type { BitcoinCashSpendableUtxo } from '../src/server/bitcoinCashElectrumProvider';
 
+/** Distinct P2PKH source script used by authenticated native parent fixtures. */
 const sourceScript = `76a914${'11'.repeat(20)}88ac`;
+/** Distinct P2PKH treasury script used to verify exact deposit destination. */
 const treasuryScript = `76a914${'22'.repeat(20)}88ac`;
 
 /** Convert a fixture locking script into an ordinary mainnet address. */

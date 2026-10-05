@@ -4,14 +4,16 @@ import { TokenMap } from '@rosen-bridge/tokens';
 
 import { BitcoinCashCalculator } from '../../../lib/calculator/chains/bitcoin-cash-calculator';
 import type { BitcoinCashBalanceProvider } from '../../../lib/interfaces';
-import { addresses, nativeToken, wrappedToken } from './mocked/bitcoin-cash.mock';
+import { addresses, nativeToken, wrappedToken } from './bitcoinCashTestData';
 
+/** Maximum native BCH issuance in exact satoshis, used at the accounting cap. */
 const maxSatoshis = 2_100_000_000_000_000n;
 
 describe('BitcoinCashCalculator', () => {
   describe('constructor', () => {
     /**
-     * @target Constructor validates the bounded address and provider boundary.
+     * @target BitcoinCashCalculator.constructor rejects invalid treasury
+     * address configuration %#
      * @dependencies Shared address codec.
      * @scenario Supply empty, excessive, duplicate, nonmainnet, or malformed configuration.
      * @expected Reject before querying the provider.
@@ -31,7 +33,7 @@ describe('BitcoinCashCalculator', () => {
     });
 
     /**
-     * @target Constructor requires an explicit provider.
+     * @target BitcoinCashCalculator.constructor rejects an absent provider
      * @dependencies None.
      * @scenario Omit the provider at the runtime boundary.
      * @expected Reject without creating an endpoint default.
@@ -50,7 +52,8 @@ describe('BitcoinCashCalculator', () => {
 
   describe('getRawLockedAmountsPerAddress', () => {
     /**
-     * @target Raw accounting validates native amounts and canonicalizes addresses.
+     * @target BitcoinCashCalculator.getRawLockedAmountsPerAddress preserves
+     * exact native amounts and omits zero balances
      * @dependencies Mock read-only provider.
      * @scenario Return the maximum native balance and a zero balance to two addresses.
      * @expected Preserve exact satoshis, omit zero, and keep native wrapped accounting zero.
@@ -73,7 +76,8 @@ describe('BitcoinCashCalculator', () => {
     });
 
     /**
-     * @target Treasury accounting rejects each invalid raw asset field.
+     * @target BitcoinCashCalculator.getRawLockedAmountsPerAddress rejects
+     * malformed provider assets %#
      * @dependencies Mock read-only provider.
      * @scenario Independently inject a nonbigint, negative, excessive balance, tokens, or missing token list.
      * @expected Fixed sanitized error and no partial result.
@@ -99,7 +103,8 @@ describe('BitcoinCashCalculator', () => {
     });
 
     /**
-     * @target Distinct address totals remain within native issuance bounds.
+     * @target BitcoinCashCalculator.getRawLockedAmountsPerAddress rejects an
+     * impossible aggregate balance
      * @dependencies Mock read-only provider.
      * @scenario Return maximum issuance independently at both addresses.
      * @expected Reject the aggregate instead of double-counting impossible funds.
@@ -116,7 +121,8 @@ describe('BitcoinCashCalculator', () => {
     });
 
     /**
-     * @target Provider failure never yields partial or stale treasury accounting.
+     * @target BitcoinCashCalculator.getRawLockedAmountsPerAddress rejects
+     * partial failure after an earlier successful query
      * @dependencies Mock read-only provider.
      * @scenario Succeed once, then fail one address with sensitive diagnostic text.
      * @expected Second call rejects with fixed text and without retaining prior amounts.
@@ -142,7 +148,9 @@ describe('BitcoinCashCalculator', () => {
     '%s',
     (method) => {
       /**
-       * @target All raw accounting methods reject unsupported token metadata.
+       * @target
+       * BitcoinCashCalculator.totalRawSupply/totalRawBalance/getRawLockedAmountsPerAddress
+       * rejects unsupported metadata %j
        * @dependencies Mock read-only provider.
        * @scenario Independently change asset type, token identifier, or source decimals.
        * @expected Reject before invoking the provider.
@@ -164,7 +172,8 @@ describe('BitcoinCashCalculator', () => {
 
   describe.each(['totalRawSupply', 'totalRawBalance'] as const)('%s', (method) => {
     /**
-     * @target Native BCH cannot mint a wrapped asset on its source chain.
+     * @target BitcoinCashCalculator.totalRawSupply/totalRawBalance returns
+     * zero for wrapped assets on the native source
      * @dependencies Mock read-only provider.
      * @scenario Query native supply or balance on the native calculator.
      * @expected Exact zero without a provider request.
@@ -179,7 +188,8 @@ describe('BitcoinCashCalculator', () => {
 
   describe('getLockedAmountsPerAddress', () => {
     /**
-     * @target Locked amounts pass through the existing Rosen TokenMap conversion.
+     * @target BitcoinCashCalculator.getLockedAmountsPerAddress uses shared
+     * token wrapping without truncating raw satoshis
      * @dependencies Real TokenMap with eight-decimal BCH and three-decimal wrapped fixture.
      * @scenario Query 100001 native satoshis then use inherited wrapped accounting.
      * @expected Raw amount remains exact and wrapped amount follows shared rounding to two units.

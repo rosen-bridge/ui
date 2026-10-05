@@ -19,7 +19,7 @@
     "start": "tsx watch ./src/main.ts",
     "start:prod": "tsx ./src/main.ts",
     "test": "vitest run",
-    "test:postgres": "node -e \"if (!process.env.ROSEN_UI_TEST_POSTGRES_URL) throw new Error('ROSEN_UI_TEST_POSTGRES_URL is required')\" && vitest run tests/bitcoin-cash/postgresFixture.spec.ts tests/bitcoin-cash/postgresUpgrade.spec.ts",
+    "test:postgres": "node -e \"if (!process.env.ROSEN_UI_TEST_POSTGRES_URL) throw new Error('ROSEN_UI_TEST_POSTGRES_URL is required')\" && vitest run tests/bitcoin-cash/postgresTestUtils.spec.ts tests/bitcoin-cash/postgresUpgrade.spec.ts",
     "type-check": "tsc --noEmit",
     "typeorm": "NODE_OPTIONS='--import tsx' typeorm",
     "typeorm:generate": "npm run typeorm migration:generate ./src/db/migrations/migration -- -p -d ./src/data-source.ts",

@@ -6,7 +6,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { TokenMap } from '@rosen-bridge/tokens';
 
 import { BitcoinCashNetwork, type BitcoinCashNetworkConfig } from '../src/client';
-import { parentOutput, signIntent, signingIntent } from './mocked/signing.mock';
+import { parentOutput, signIntent, signingIntent } from './testUtils';
 
 const { candidate } = vi.hoisted(() => ({ candidate: { index: 10 } }));
 vi.mock('@rosen-ui/constants', async () => {

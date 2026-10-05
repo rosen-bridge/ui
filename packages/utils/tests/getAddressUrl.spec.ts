@@ -4,7 +4,7 @@ import { getAddressUrl } from '../src/getAddressUrl';
 
 describe('getAddressUrl', () => {
   /**
-   * @target Produce BCH explorer address links while retaining baseline links.
+   * @target getAddressUrl produces BCH links without changing Bitcoin address links
    * @dependencies Shared UI chain registry; no mocks.
    * @scenario Request BCH with a mainnet prefix and Bitcoin with a base58 value.
    * @expected Prefix-free Blockchair BCH path and unchanged Bitcoin path.

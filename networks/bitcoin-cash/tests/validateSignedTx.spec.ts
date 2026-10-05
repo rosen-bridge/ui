@@ -8,7 +8,7 @@ import {
 import { describe, expect, it } from 'vitest';
 
 import { validateBitcoinCashSignedLock } from '../src/validateSignedTx';
-import { signIntent, signingIntent } from './mocked/signing.mock';
+import { signIntent, signingIntent } from './testUtils';
 
 describe('validateBitcoinCashSignedLock', () => {
   /**

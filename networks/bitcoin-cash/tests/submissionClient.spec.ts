@@ -3,7 +3,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { createBitcoinCashSubmissionClient } from '../src/submissionClient';
 import { decodeBitcoinCashSubmission } from '../src/submissionCodec';
-import { signIntent, signingIntent } from './mocked/signing.mock';
+import { signIntent, signingIntent } from './testUtils';
 
 /** Actual signed native body and bounded HTTP success response; fetch is always local and mocked. */
 const fixture = () => {

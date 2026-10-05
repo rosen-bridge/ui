@@ -5,7 +5,7 @@ import {
   parentOutput,
   signIntent,
   signingIntent,
-} from '../../../networks/bitcoin-cash/tests/mocked/signing.mock';
+} from '../../../networks/bitcoin-cash/tests/testUtils';
 import { CashonizeSession, createCashonizeSession, validateCashonizeSession } from '../src/session';
 
 /** Build native request parameters matching the real authenticated fixture builder. */

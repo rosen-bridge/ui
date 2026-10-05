@@ -8,12 +8,12 @@ import {
 
 import { readBitcoinCashConfig } from '../../src/bitcoin-cash/config';
 
+/** Complete opt-in operator configuration used for isolated field mutations. */
 const valid = {
   enabled: true,
   lockAddress: 'bitcoincash:qpm2qsznhks23z7629mms6s4cwef74vcwvy22gdx6a',
   initialHeight: 800000,
   rpc: { url: 'https://example.invalid', timeoutMs: 10000 },
-  scanner: { intervalMs: 600000, warnDiff: 3, criticalDiff: 6 },
   cleanup: { thresholdSeconds: 86400, trimCount: 100 },
   commitment: {
     address: '9iMjQx8PzwBKXRvsFUJFJAPoy31znfEeBUGz8DRkcnJX4rJYjVd',
@@ -27,11 +27,12 @@ const valid = {
   electrum: { hostname: 'example.invalid', port: 50002, timeoutMs: 30000 },
   calculatorAddresses: ['bitcoincash:qpm2qsznhks23z7629mms6s4cwef74vcwvy22gdx6a'],
 };
+/** Synthetic assigned chain index used only by the local configuration cases. */
 const fixtureIndex = 10;
 
 describe('readBitcoinCashConfig', () => {
   /**
-   * @target readBitcoinCashConfig: Missing or explicitly disabled BCH configuration preserves existing startup.
+   * @target readBitcoinCashConfig keeps BCH disabled %#
    * @dependencies Shared registry.
    * @scenario Read absence or disabled configuration containing unfinished operator values.
    * @expected Disabled result without invented endpoints, addresses, or thresholds.
@@ -46,7 +47,7 @@ describe('readBitcoinCashConfig', () => {
   });
 
   /**
-   * @target readBitcoinCashConfig: BCH startup requires Rosen index assignment.
+   * @target readBitcoinCashConfig rejects an unassigned or invalid index %#
    * @dependencies Actual shared registry and independently invalid index fixtures.
    * @scenario Request enablement before assignment or with invalid index values.
    * @expected Reject prior to constructing any network client.
@@ -59,7 +60,8 @@ describe('readBitcoinCashConfig', () => {
   );
 
   /**
-   * @target readBitcoinCashConfig: Valid operator values retain exact millisecond units.
+   * @target readBitcoinCashConfig accepts complete operator configuration with
+   * a fixture assignment
    * @dependencies Shared CashAddr codec; assigned fixture index.
    * @scenario Read complete configuration with uppercase native mainnet address and paired RPC credentials.
    * @expected Canonical address, unchanged timeout and no registry modification.
@@ -86,7 +88,7 @@ describe('readBitcoinCashConfig', () => {
   });
 
   /**
-   * @target readBitcoinCashConfig: Shared scanner budgets resolve without broadening their caps.
+   * @target readBitcoinCashConfig accepts bounded %s=%s
    * @dependencies Actual scanner policy exports; no mocked limit resolver.
    * @scenario Set one resource to its minimum or hard maximum and leave all others absent.
    * @expected Override is retained, other defaults survive, and resolved limits are immutable.
@@ -106,7 +108,7 @@ describe('readBitcoinCashConfig', () => {
   });
 
   /**
-   * @target readBitcoinCashConfig: Every resource rejects malformed or excessive work budgets.
+   * @target readBitcoinCashConfig rejects invalid resource %s=%s
    * @dependencies Actual shared scanner bounds and complete service fixture.
    * @scenario Change one budget to zero, fractional, unsafe, string or above its hard maximum.
    * @expected Reject with the sanitized service error before a scanner can be created.
@@ -127,7 +129,7 @@ describe('readBitcoinCashConfig', () => {
   });
 
   /**
-   * @target readBitcoinCashConfig: RPC endpoint policy is the scanner's actual shared policy.
+   * @target readBitcoinCashConfig accepts endpoint %s
    * @dependencies Actual shared URL validator and assigned fixture index.
    * @scenario Use HTTPS or literal IPv4/IPv6 loopback, including normalized IPv6 notation.
    * @expected Accept and preserve the shared canonical URL consumed by the connector.
@@ -143,7 +145,7 @@ describe('readBitcoinCashConfig', () => {
   });
 
   /**
-   * @target readBitcoinCashConfig: Credential bounds are enforced by the shared transport policy.
+   * @target readBitcoinCashConfig rejects invalid credential member %#
    * @dependencies Actual shared credential validator.
    * @scenario Corrupt exactly one member of an otherwise complete credential pair.
    * @expected Reject empty, long, whitespace/control and ambiguous username values.
@@ -168,9 +170,9 @@ describe('readBitcoinCashConfig', () => {
   });
 
   /**
-   * @target readBitcoinCashConfig: Each configuration field rejects malformed values independently.
+   * @target readBitcoinCashConfig rejects malformed explicit configuration %#
    * @dependencies Assigned fixture index and shared address codec.
-   * @scenario Change one required field, RPC policy, or scanner threshold at a time.
+   * @scenario Change one required field, RPC policy, or obsolete scanner key at a time.
    * @expected A fixed error without exposing operator endpoint or credential text.
    */
   it.each([
@@ -204,10 +206,7 @@ describe('readBitcoinCashConfig', () => {
     { ...valid, rpc: { ...valid.rpc, password: 'synthetic' } },
     { ...valid, rpc: { ...valid.rpc, username: '', password: '' } },
     { ...valid, scanner: null },
-    { ...valid, scanner: { ...valid.scanner, intervalMs: 0 } },
-    { ...valid, scanner: { ...valid.scanner, intervalMs: 86400001 } },
-    { ...valid, scanner: { ...valid.scanner, warnDiff: 0 } },
-    { ...valid, scanner: { ...valid.scanner, criticalDiff: 2 } },
+    { ...valid, scanner: { intervalMs: 600000, warnDiff: 3, criticalDiff: 6 } },
     { ...valid, cleanup: undefined },
     { ...valid, cleanup: { ...valid.cleanup, thresholdSeconds: 0 } },
     { ...valid, cleanup: { ...valid.cleanup, trimCount: 0 } },

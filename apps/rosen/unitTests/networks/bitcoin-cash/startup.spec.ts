@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { signingIntent } from '../../../../../networks/bitcoin-cash/tests/mocked/signing.mock';
+import { signingIntent } from '../../../../../networks/bitcoin-cash/tests/testUtils';
 import { validateBitcoinCashStartup } from '../../../src/networks/bitcoin-cash/startup';
 
 const { candidate } = vi.hoisted(() => ({ candidate: { index: 10 } }));

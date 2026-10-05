@@ -17,9 +17,7 @@ vi.mock('@rosen-ui/constants', async () => {
   };
 });
 vi.mock('../configs', async () => {
-  const { signingIntent } = await import(
-    '../../../networks/bitcoin-cash/tests/mocked/signing.mock'
-  );
+  const { signingIntent } = await import('../../../networks/bitcoin-cash/tests/testUtils');
   return {
     LOCK_ADDRESSES: { 'bitcoin-cash': signingIntent().lockAddress },
     FEE_CONFIG_TOKEN_ID: '11'.repeat(32),

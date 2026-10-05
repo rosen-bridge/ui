@@ -3,7 +3,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { BitcoinCashSubmissionPort } from '../../src/server/submissionHandler';
 import { createBitcoinCashSubmissionHandler } from '../../src/server/submissionHandler';
 import { encodeBitcoinCashSubmission } from '../../src/submissionCodec';
-import { signIntent, signingIntent } from '../mocked/signing.mock';
+import { signIntent, signingIntent } from '../testUtils';
 
 /** Canonical signed native payload and real same-origin HTTP request; the submit port performs no network work. */
 const fixture = () => {

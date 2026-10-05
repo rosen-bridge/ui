@@ -8,7 +8,7 @@ import { encodeBitcoinCashSubmission } from '@rosen-network/bitcoin-cash/submiss
 import {
   signIntent,
   signingIntent,
-} from '../../../../../../../networks/bitcoin-cash/tests/mocked/signing.mock';
+} from '../../../../../../../networks/bitcoin-cash/tests/testUtils';
 import { POST } from '../../../../../src/app/api/bitcoin-cash/submit/route';
 
 const { state, getRuntime, submit } = vi.hoisted(() => ({

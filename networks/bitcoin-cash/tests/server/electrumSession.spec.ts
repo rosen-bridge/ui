@@ -4,7 +4,7 @@ import { EventEmitter } from 'node:events';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { BitcoinCashElectrumSession, ELECTRUM_LIMITS } from '../../src/server/electrumSession';
-import { signIntent, signingIntent } from '../mocked/signing.mock';
+import { signIntent, signingIntent } from '../testUtils';
 
 const mocked = vi.hoisted(() => ({ connect: vi.fn() }));
 vi.mock('node:tls', () => ({ connect: mocked.connect }));
@@ -18,6 +18,7 @@ class MockSocket extends EventEmitter {
   destroy = vi.fn(() => this);
 }
 
+/** Explicit TLS Electrum endpoint used by the offline socket mock. */
 const config = { hostname: 'bch-indexer.example', port: 50002 };
 let socket: MockSocket;
 

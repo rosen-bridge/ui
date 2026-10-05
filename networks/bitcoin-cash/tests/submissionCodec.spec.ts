@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import { decodeBitcoinCashSubmission, encodeBitcoinCashSubmission } from '../src/submissionCodec';
 import { validateBitcoinCashSignedLock } from '../src/validateSignedTx';
-import { signIntent, signingIntent } from './mocked/signing.mock';
+import { signIntent, signingIntent } from './testUtils';
 
 /** Actual authenticated builder/signature fixture; codec performs framing rather than signature authority. */
 const fixture = () => {

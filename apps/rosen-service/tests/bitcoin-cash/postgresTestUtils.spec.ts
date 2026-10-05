@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { assertOwnedDatabase, createPostgresFixture } from './postgresFixture';
+import { assertOwnedDatabase, createPostgresFixture } from './postgresTestUtils';
 
 describe('assertOwnedDatabase', () => {
   /**

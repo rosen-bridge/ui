@@ -84,7 +84,7 @@ describe('registerExtractors', () => {
   });
 
   /**
-   * @target registerExtractors: Existing commitment registration remains unchanged while BCH is unassigned.
+   * @target registerExtractors preserves existing commitment consumers
    * @dependencies Mock persistent extractor and original operational network keys.
    * @scenario Register through the real commitment-service loop with BCH absent.
    * @expected Nine previous extractors, including the Bitcoin Runes configuration alias.
@@ -109,7 +109,8 @@ describe('registerExtractors', () => {
   });
 
   /**
-   * @target registerExtractors: Assignment alone does not enable BCH commitment scanning.
+   * @target registerExtractors skips an assigned fixture chain while BCH
+   * remains disabled
    * @dependencies Fixture assigned key and disabled BCH configuration.
    * @scenario Include BCH in operational fixture keys without operator enablement.
    * @expected Nine previous extractors and no BCH registration.
@@ -124,7 +125,8 @@ describe('registerExtractors', () => {
   });
 
   /**
-   * @target registerExtractors: Enabled assigned BCH uses its explicit Ergo-side commitment address and RWT.
+   * @target registerExtractors registers BCH with the configured Ergo
+   * commitment and RWT
    * @dependencies Fixture assignment, operator values and mocked persistent extractor.
    * @scenario Register the optional BCH commitment through the real service loop.
    * @expected One additional extractor with BCH identity and exact operator fields.

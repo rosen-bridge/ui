@@ -6,6 +6,7 @@ const mocks = vi.hoisted(() => ({
   handleError: vi.fn(),
   logger: { child: vi.fn(), debug: vi.fn() },
 }));
+/** Record an inert legacy scanner start and expose its unchanged identity. */
 const legacy = async (name: string) => {
   mocks.started.push(name);
   return { name: () => name };
@@ -47,7 +48,8 @@ describe('scannerService', () => {
     });
 
     /**
-     * @target scannerService.start: Disabled BCH preserves the eight existing scanner starts and identities.
+     * @target scannerService.start preserves all existing scanner starts while
+     * BCH is absent
      * @dependencies Mock chain starts and logger; real scanner-service orchestration.
      * @scenario Start the service when the optional BCH factory returns undefined.
      * @expected Existing order and getters remain, with no BCH name in the startup log.
@@ -74,7 +76,8 @@ describe('scannerService', () => {
     });
 
     /**
-     * @target scannerService.start: Enabled BCH has an independent optional lifecycle identity.
+     * @target scannerService.start adds the BCH lifecycle without replacing
+     * Bitcoin
      * @dependencies Mock BCH factory and existing chain starts.
      * @scenario Return an initialized BCH scanner without replacing a Bitcoin scanner.
      * @expected Separate BCH getter and log entry with all eight previous scanners intact.
@@ -92,7 +95,8 @@ describe('scannerService', () => {
     });
 
     /**
-     * @target scannerService.start: BCH initialization failure reaches the service's fatal error boundary.
+     * @target scannerService.start forwards BCH startup failure without
+     * claiming successful startup
      * @dependencies Mock rejected BCH factory and fatal handler.
      * @scenario Reject BCH startup before initialized scanner state is assigned.
      * @expected Forward the failure to the existing handler and leave BCH unavailable.
