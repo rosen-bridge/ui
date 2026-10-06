@@ -1,5 +1,7 @@
 export interface RosenService2BaseConfig {
   paths: Paths;
+  eventTriggerExtractor: EventTriggerExtractor;
+  commitmentExtractor: CommitmentExtractor;
   chains: Chains;
   statistics: Statistics;
   tokenMap: TokenMap;
@@ -36,11 +38,9 @@ export interface LogsOption2 {
 }
 
 export interface Db {
-  host: string;
-  port: number;
-  username?: string;
-  password?: string;
-  name: string;
+  url: string;
+  logging?: boolean;
+  useSSL?: boolean;
 }
 
 export interface Redis {
@@ -130,14 +130,44 @@ export interface Chains {
   ethereum: ChainsEthereum;
   binance: ChainsBinance;
   firo: ChainsFiro;
+  handshake: ChainsHandshake;
+}
+
+export interface ChainsHandshake {
+  active: boolean;
+  initialHeight?: number;
+  scanInterval: number;
+  adapter: ChainsHandshakeAdapter;
+  blockRetrieveGap?: number;
+  rpc: ChainsHandshakeRpc;
+  blockCleanupActive?: boolean;
+}
+
+export interface ChainsHandshakeRpc {
+  connections: ChainsHandshakeRpcConnections[];
+}
+
+export interface ChainsHandshakeRpcConnections {
+  url?: string;
+  timeout?: number;
+  username?: string;
+  password?: string;
+}
+
+export interface ChainsHandshakeAdapter {
+  extraAddresses: string[];
 }
 
 export interface ChainsFiro {
   active: boolean;
-  initialHeight: number;
+  initialHeight?: number;
   scanInterval: number;
   adapter: ChainsFiroAdapter;
+  blockRetrieveGap?: number;
+  method?: 'rpc' | 'electrumx';
+  rpc: ChainsFiroRpc;
   electrumx: ChainsFiroElectrumx;
+  blockCleanupActive?: boolean;
 }
 
 export interface ChainsFiroElectrumx {
@@ -147,17 +177,30 @@ export interface ChainsFiroElectrumx {
   timeout?: number;
 }
 
+export interface ChainsFiroRpc {
+  connections: ChainsFiroRpcConnections[];
+}
+
+export interface ChainsFiroRpcConnections {
+  url?: string;
+  timeout?: number;
+  username?: string;
+  password?: string;
+}
+
 export interface ChainsFiroAdapter {
   extraAddresses: string[];
+  explorerUrl?: string;
 }
 
 export interface ChainsBinance {
   active: boolean;
-  initialHeight: number;
+  initialHeight?: number;
   scanInterval: number;
   adapter: ChainsBinanceAdapter;
   blockRetrieveGap?: number;
   rpc: ChainsBinanceRpc;
+  blockCleanupActive?: boolean;
 }
 
 export interface ChainsBinanceRpc {
@@ -172,16 +215,17 @@ export interface ChainsBinanceRpcConnections {
 
 export interface ChainsBinanceAdapter {
   extraAddresses: string[];
-  chunkSize: number;
+  chunkSize?: number;
 }
 
 export interface ChainsEthereum {
   active: boolean;
-  initialHeight: number;
+  initialHeight?: number;
   scanInterval: number;
   adapter: ChainsEthereumAdapter;
   blockRetrieveGap?: number;
   rpc: ChainsEthereumRpc;
+  blockCleanupActive?: boolean;
 }
 
 export interface ChainsEthereumRpc {
@@ -196,18 +240,19 @@ export interface ChainsEthereumRpcConnections {
 
 export interface ChainsEthereumAdapter {
   extraAddresses: string[];
-  chunkSize: number;
+  chunkSize?: number;
 }
 
 export interface ChainsDoge {
   active: boolean;
-  initialHeight: number;
+  initialHeight?: number;
   scanInterval: number;
   adapter: ChainsDogeAdapter;
   blockRetrieveGap?: number;
   method?: 'rpc' | 'esplora';
   rpc: ChainsDogeRpc;
   esplora: ChainsDogeEsplora;
+  blockCleanupActive?: boolean;
 }
 
 export interface ChainsDogeEsplora {
@@ -253,13 +298,14 @@ export interface ChainsBitcoinRunesAdapter {
 
 export interface ChainsBitcoin {
   active: boolean;
-  initialHeight: number;
+  initialHeight?: number;
   scanInterval: number;
   adapter: ChainsBitcoinAdapter;
   blockRetrieveGap?: number;
   method?: 'rpc' | 'esplora';
   rpc: ChainsBitcoinRpc;
   esplora: ChainsBitcoinEsplora;
+  blockCleanupActive?: boolean;
 }
 
 export interface ChainsBitcoinEsplora {
@@ -297,6 +343,7 @@ export interface ChainsCardano {
   koios: ChainsCardanoKoios;
   blockfrost: ChainsCardanoBlockfrost;
   ogmios: ChainsCardanoOgmios;
+  blockCleanupActive?: boolean;
 }
 
 export interface ChainsCardanoOgmios {
@@ -343,6 +390,7 @@ export interface ChainsErgo {
   method?: 'explorer' | 'node';
   node: ChainsErgoNode;
   explorer: ChainsErgoExplorer;
+  blockCleanupActive: boolean;
 }
 
 export interface ChainsErgoExplorer {
@@ -363,6 +411,23 @@ export interface ChainsErgoNodeConnections {
 
 export interface ChainsErgoAdapter {
   extraAddresses: string[];
+}
+
+export interface CommitmentExtractor {
+  initialize: CommitmentExtractorInitialize;
+}
+
+export interface CommitmentExtractorInitialize {
+  active: boolean;
+  maxParallelRequests?: number;
+}
+
+export interface EventTriggerExtractor {
+  initialize: EventTriggerExtractorInitialize;
+}
+
+export interface EventTriggerExtractorInitialize {
+  active: boolean;
 }
 
 export interface Paths {

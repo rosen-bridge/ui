@@ -1,5 +1,5 @@
 import { In } from '@rosen-bridge/extended-typeorm';
-import { TokenEntity } from '@rosen-ui/asset-calculator';
+import { TokenEntity } from '@rosen-ui/asset-aggregator';
 
 import { dataSource } from '../dataSource';
 import '../initialize-datasource-if-needed';

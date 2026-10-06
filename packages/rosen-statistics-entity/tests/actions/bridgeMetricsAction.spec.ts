@@ -4,7 +4,7 @@ import { type AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger'
 import { BlockEntity } from '@rosen-bridge/abstract-scanner';
 import type { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
 import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
-import { TokenEntity } from '@rosen-ui/asset-calculator';
+import { TokenEntity } from '@rosen-ui/asset-aggregator';
 
 import {
   BridgedAmountEntity,

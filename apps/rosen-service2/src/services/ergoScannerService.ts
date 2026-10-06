@@ -11,7 +11,11 @@ import {
 } from '@rosen-bridge/service-manager';
 
 import { configs } from '../configs';
-import { ERGO_METHOD_EXPLORER } from '../constants';
+import {
+  BLOCK_CLEANUP_THRESHOLD_DURATION,
+  BLOCK_CLEANUP_TRIM_COUNT_IN_ROUND,
+  ERGO_METHOD_EXPLORER,
+} from '../constants';
 import {
   AbstractDBService,
   AbstractErgoExtractorsService,
@@ -135,6 +139,16 @@ export class ErgoScannerService extends AbstractErgoScannerService {
       initialHeight: configs.chains.ergo.initialHeight,
       network: networkConnectorManager,
       blockRetrieveGap: configs.chains.ergo.blockRetrieveGap,
+      blockCleanupConfig:
+        configs.chains.ergo.blockCleanupActive === true
+          ? {
+              blockCleanupThresholdDuration: BLOCK_CLEANUP_THRESHOLD_DURATION,
+              blockTrimCountInRound: BLOCK_CLEANUP_TRIM_COUNT_IN_ROUND,
+            }
+          : {
+              blockCleanupThresholdDuration: BLOCK_CLEANUP_THRESHOLD_DURATION,
+              blockTrimCountInRound: 0,
+            },
       logger: this.logger.child('ergoScanner'),
     });
   };

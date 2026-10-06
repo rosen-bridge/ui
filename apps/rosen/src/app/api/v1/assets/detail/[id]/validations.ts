@@ -4,7 +4,7 @@ import { z } from 'zod';
 
 const getQueryParamsSchema = z
   .object({
-    id: z.hex().length(64),
+    id: z.string().min(1),
   })
   .strict();
 
@@ -12,7 +12,8 @@ type GETPositionalParams = z.infer<typeof getQueryParamsSchema>;
 
 /**
  * validate get requests
- * @param request
+ * @param _
+ * @param context
  */
 export const validateGet = async (
   _: NextRequest,

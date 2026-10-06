@@ -188,43 +188,25 @@
   "db": {
     "type": "object",
     "children": {
-      "host": {
+      "url": {
         "type": "string",
-        "default": "localhost",
+        "description": "postgres connection url, e.g. postgresql://username:password@host:port/databasename",
         "validations": [
           {
             "required": true,
-            "error": "host for the \"postgres\" database address must be specified"
+            "error": "postgres connection url must be specified"
           }
         ]
       },
-      "port": {
-        "type": "number",
-        "default": 5432,
-        "validations": [
-          {
-            "required": true,
-            "error": "postgres port must be set"
-          }
-        ]
+      "logging": {
+        "type": "boolean",
+        "default": false,
+        "description": "enable TypeORM query logging"
       },
-      "username": {
-        "type": "string",
-        "default": "postgres"
-      },
-      "password": {
-        "type": "string",
-        "default": ""
-      },
-      "name": {
-        "type": "string",
-        "default": "rosen_service",
-        "validations": [
-          {
-            "required": true,
-            "error": "postgres database name must be specified"
-          }
-        ]
+      "useSSL": {
+        "type": "boolean",
+        "default": false,
+        "description": "use SSL for the postgres connection"
       }
     }
   },
@@ -524,7 +506,6 @@
         "children": {
           "initialHeight": {
             "type": "number",
-            "default": 1,
             "description": "ergo initial height",
             "validations": [
               {
@@ -625,6 +606,17 @@
                 }
               }
             }
+          },
+          "blockCleanupActive": {
+            "type": "boolean",
+            "description": "ergo block cleanup activation state",
+            "default": false,
+            "validations": [
+              {
+                "required": true,
+                "error": "ergo block cleanup activation state must be set"
+              }
+            ]
           }
         }
       },
@@ -691,7 +683,6 @@
           },
           "initialHeight": {
             "type": "number",
-            "default": 1,
             "description": "cardano koios initial height",
             "validations": [
               {
@@ -862,6 +853,21 @@
                 }
               }
             }
+          },
+          "blockCleanupActive": {
+            "type": "boolean",
+            "description": "cardano block cleanup activation state",
+            "default": true,
+            "validations": [
+              {
+                "required": true,
+                "when": {
+                  "path": "chains.cardano.active",
+                  "value": "true"
+                },
+                "error": "cardano block cleanup activation state must be set"
+              }
+            ]
           }
         }
       },
@@ -881,11 +887,14 @@
           },
           "initialHeight": {
             "type": "number",
-            "default": 1,
             "description": "bitcoin initial height",
             "validations": [
               {
                 "required": true,
+                "when": {
+                  "path": "chains.bitcoin.active",
+                  "value": true
+                },
                 "error": "bitcoin initial height must be specified"
               }
             ]
@@ -1032,6 +1041,21 @@
                 }
               }
             }
+          },
+          "blockCleanupActive": {
+            "type": "boolean",
+            "description": "bitcoin block cleanup activation state",
+            "default": true,
+            "validations": [
+              {
+                "required": true,
+                "when": {
+                  "path": "chains.bitcoin.active",
+                  "value": "true"
+                },
+                "error": "bitcoin block cleanup activation state must be set"
+              }
+            ]
           }
         }
       },
@@ -1040,12 +1064,12 @@
         "children": {
           "active": {
             "type": "boolean",
-            "description": "bitcoin activation state",
+            "description": "bitcoin runes activation state",
             "default": false,
             "validations": [
               {
                 "required": true,
-                "error": "bitcoin activation state must be set"
+                "error": "bitcoin runes activation state must be set"
               }
             ]
           },
@@ -1107,11 +1131,14 @@
           },
           "initialHeight": {
             "type": "number",
-            "default": 1,
             "description": "doge initial height",
             "validations": [
               {
                 "required": true,
+                "when": {
+                  "path": "chains.doge.active",
+                  "value": true
+                },
                 "error": "doge initial height must be specified"
               }
             ]
@@ -1269,6 +1296,21 @@
                 }
               }
             }
+          },
+          "blockCleanupActive": {
+            "type": "boolean",
+            "description": "doge block cleanup activation state",
+            "default": true,
+            "validations": [
+              {
+                "required": true,
+                "when": {
+                  "path": "chains.doge.active",
+                  "value": "true"
+                },
+                "error": "doge block cleanup activation state must be set"
+              }
+            ]
           }
         }
       },
@@ -1288,11 +1330,14 @@
           },
           "initialHeight": {
             "type": "number",
-            "default": 1,
             "description": "ethereum initial height",
             "validations": [
               {
                 "required": true,
+                "when": {
+                  "path": "chains.ethereum.active",
+                  "value": true
+                },
                 "error": "ethereum initial height must be specified"
               }
             ]
@@ -1322,7 +1367,11 @@
                 "validations": [
                   {
                     "required": true,
-                    "error": "binance adapter chunk-size must be specified"
+                    "when": {
+                      "path": "chains.ethereum.active",
+                      "value": true
+                    },
+                    "error": "ethereum adapter chunk-size must be specified"
                   }
                 ]
               }
@@ -1377,6 +1426,21 @@
                 }
               }
             }
+          },
+          "blockCleanupActive": {
+            "type": "boolean",
+            "description": "ethereum block cleanup activation state",
+            "default": true,
+            "validations": [
+              {
+                "required": true,
+                "when": {
+                  "path": "chains.ethereum.active",
+                  "value": "true"
+                },
+                "error": "ethereum block cleanup activation state must be set"
+              }
+            ]
           }
         }
       },
@@ -1396,11 +1460,14 @@
           },
           "initialHeight": {
             "type": "number",
-            "default": 1,
             "description": "binance initial height",
             "validations": [
               {
                 "required": true,
+                "when": {
+                  "path": "chains.binance.active",
+                  "value": true
+                },
                 "error": "binance initial height must be specified"
               }
             ]
@@ -1430,6 +1497,10 @@
                 "validations": [
                   {
                     "required": true,
+                    "when": {
+                      "path": "chains.binance.active",
+                      "value": true
+                    },
                     "error": "binance adapter chunk-size must be specified"
                   }
                 ]
@@ -1484,6 +1555,21 @@
                 }
               }
             }
+          },
+          "blockCleanupActive": {
+            "type": "boolean",
+            "description": "binance block cleanup activation state",
+            "default": true,
+            "validations": [
+              {
+                "required": true,
+                "when": {
+                  "path": "chains.binance.active",
+                  "value": "true"
+                },
+                "error": "binance block cleanup activation state must be set"
+              }
+            ]
           }
         }
       },
@@ -1507,6 +1593,10 @@
             "validations": [
               {
                 "required": true,
+                "when": {
+                  "path": "chains.firo.active",
+                  "value": true
+                },
                 "error": "firo initial height must be specified"
               }
             ]
@@ -1530,11 +1620,98 @@
                 "items": {
                   "type": "string"
                 }
+              },
+              "explorerUrl": {
+                "type": "string",
+                "description": "firo explorer URL",
+                "default": "https://explorer.firo.org",
+                "validations": [
+                  {
+                    "required": true,
+                    "when": {
+                      "path": "chains.firo.active",
+                      "value": true
+                    },
+                    "error": "firo explorer URL must be specified"
+                  }
+                ]
+              }
+            }
+          },
+          "blockRetrieveGap": {
+            "type": "number",
+            "description": "firo blockRetrieveGap threshold in seconds"
+          },
+          "method": {
+            "type": "string",
+            "description": "firo network connection method",
+            "validations": [
+              {
+                "required": true,
+                "error": "firo network connection method must be set",
+                "when": {
+                  "path": "chains.firo.active",
+                  "value": true
+                }
+              },
+              {
+                "choices": [
+                  "rpc",
+                  "electrumx"
+                ]
+              }
+            ]
+          },
+          "rpc": {
+            "type": "object",
+            "children": {
+              "connections": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "children": {
+                    "url": {
+                      "type": "string",
+                      "description": "firo rpc url",
+                      "validations": [
+                        {
+                          "required": true,
+                          "error": "firo rpc url must be specified",
+                          "when": {
+                            "path": "chains.firo.method",
+                            "value": "rpc"
+                          }
+                        }
+                      ]
+                    },
+                    "timeout": {
+                      "type": "number",
+                      "default": 100,
+                      "description": "firo rpc timeout threshold in seconds",
+                      "validations": [
+                        {
+                          "required": true,
+                          "error": "firo rpc timeout must be specified (in seconds)",
+                          "when": {
+                            "path": "chains.firo.method",
+                            "value": "rpc"
+                          }
+                        }
+                      ]
+                    },
+                    "username": {
+                      "type": "string"
+                    },
+                    "password": {
+                      "type": "string"
+                    }
+                  }
+                }
               }
             }
           },
           "electrumx": {
-            "type" : "object",
+            "type": "object",
             "description": "firo electrumx connection settings",
             "children": {
               "host": {
@@ -1544,8 +1721,8 @@
                   {
                     "required": true,
                     "when": {
-                      "path": "chains.firo.active",
-                      "value": true
+                      "path": "chains.firo.method",
+                      "value": "electrumx"
                     },
                     "error": "firo electrumx host must be specified"
                   }
@@ -1558,8 +1735,8 @@
                   {
                     "required": true,
                     "when": {
-                      "path": "chains.firo.active",
-                      "value": true
+                      "path": "chains.firo.method",
+                      "value": "electrumx"
                     },
                     "error": "firo electrumx port must be specified"
                   }
@@ -1572,8 +1749,8 @@
                   {
                     "required": true,
                     "when": {
-                      "path": "chains.firo.active",
-                      "value": true
+                      "path": "chains.firo.method",
+                      "value": "electrumx"
                     },
                     "error": "firo electrumx reconnect delay must be specified (in seconds)"
                   }
@@ -1586,14 +1763,204 @@
                   {
                     "required": true,
                     "when": {
-                      "path": "chains.firo.active",
-                      "value": true
+                      "path": "chains.firo.method",
+                      "value": "electrumx"
                     },
                     "error": "firo electrumx timeout must be specified (in seconds)"
                   }
                 ]
               }
             }
+          },
+          "blockCleanupActive": {
+            "type": "boolean",
+            "description": "firo block cleanup activation state",
+            "default": true,
+            "validations": [
+              {
+                "required": true,
+                "when": {
+                  "path": "chains.firo.active",
+                  "value": "true"
+                },
+                "error": "firo block cleanup activation state must be set"
+              }
+            ]
+          }
+        }
+      },
+      "handshake": {
+        "type": "object",
+        "children": {
+          "active": {
+            "type": "boolean",
+            "description": "handshake activation state",
+            "default": false,
+            "validations": [
+              {
+                "required": true,
+                "error": "handshake activation state must be set"
+              }
+            ]
+          },
+          "initialHeight": {
+            "type": "number",
+            "description": "handshake initial height",
+            "validations": [
+              {
+                "required": true,
+                "when": {
+                  "path": "chains.handshake.active",
+                  "value": true
+                },
+                "error": "handshake initial height must be specified"
+              }
+            ]
+          },
+          "scanInterval": {
+            "type": "number",
+            "default": 600,
+            "description": "handshake scanInterval threshold in seconds",
+            "validations": [
+              {
+                "required": true,
+                "error": "handshake scanInterval must be specified (in seconds)"
+              }
+            ]
+          },
+          "adapter": {
+            "type": "object",
+            "children": {
+              "extraAddresses": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "blockRetrieveGap": {
+            "type": "number",
+            "description": "handshake blockRetrieveGap threshold in seconds"
+          },
+          "rpc": {
+            "type": "object",
+            "children": {
+              "connections": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "children": {
+                    "url": {
+                      "type": "string",
+                      "description": "handshake rpc url",
+                      "validations": [
+                        {
+                          "required": true,
+                          "when": {
+                            "path": "chains.handshake.active",
+                            "value": true
+                          },
+                          "error": "handshake rpc url must be specified"
+                        }
+                      ]
+                    },
+                    "timeout": {
+                      "type": "number",
+                      "default": 100,
+                      "description": "handshake rpc timeout threshold in seconds",
+                      "validations": [
+                        {
+                          "required": true,
+                          "when": {
+                            "path": "chains.handshake.active",
+                            "value": true
+                          },
+                          "error": "handshake rpc timeout must be specified (in seconds)"
+                        }
+                      ]
+                    },
+                    "username": {
+                      "type": "string"
+                    },
+                    "password": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "blockCleanupActive": {
+            "type": "boolean",
+            "description": "handshake block cleanup activation state",
+            "default": true,
+            "validations": [
+              {
+                "required": true,
+                "when": {
+                  "path": "chains.handshake.active",
+                  "value": "true"
+                },
+                "error": "handshake block cleanup activation state must be set"
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "commitmentExtractor": {
+    "type": "object",
+    "children": {
+      "initialize": {
+        "type": "object",
+        "children": {
+          "active": {
+            "type": "boolean",
+            "description": "initializer commitment extractor activation state",
+            "default": false,
+            "validations": [
+              {
+                "required": true,
+                "error": "initializer commitment extractor activation state must be set"
+              }
+            ]
+          },
+          "maxParallelRequests": {
+            "type": "number",
+            "description": "initializer commitment extractor maxParallelRequests state",
+            "validations": [
+              {
+                "required": true,
+                "when": {
+                  "path": "commitmentExtractor.initialize.active",
+                  "value": true
+                },
+                "error": "initializer commitment extractor maxParallelRequests state must be set"
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "eventTriggerExtractor": {
+    "type": "object",
+    "children": {
+      "initialize": {
+        "type": "object",
+        "children": {
+          "active": {
+            "type": "boolean",
+            "description": "initializer event trigger extractor activation state",
+            "default": false,
+            "validations": [
+              {
+                "required": true,
+                "error": "initializer event trigger extractor activation state must be set"
+              }
+            ]
           }
         }
       }

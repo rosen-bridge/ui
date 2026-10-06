@@ -6,6 +6,8 @@ import { EvmRpcNetwork, EvmRpcScanner } from '@rosen-bridge/evm-scanner';
 
 import config from '../../configs';
 import {
+  BLOCK_CLEANUP_THRESHOLD_DURATION,
+  BLOCK_CLEANUP_TRIM_COUNT_IN_ROUND,
   ETHEREUM_SCANNER_INTERVAL,
   ETHEREUM_SCANNER_LOGGER_NAME,
   SCANNER_API_TIMEOUT,
@@ -47,6 +49,12 @@ export const startEthereumScanner = async () => {
     const scanner = new EvmRpcScanner('ethereum', {
       dataSource,
       initialHeight: config.ethereum.initialHeight,
+      blockCleanupConfig: {
+        blockCleanupThresholdDuration: BLOCK_CLEANUP_THRESHOLD_DURATION,
+        blockTrimCountInRound: config.ethereum.blockCleanupActive
+          ? BLOCK_CLEANUP_TRIM_COUNT_IN_ROUND
+          : 0,
+      },
       logger: scannerLogger,
       network: createEthereumNetworkConnectorManager(),
     });

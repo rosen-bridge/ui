@@ -34,6 +34,7 @@ export const registerExtractors = async (scanner: ErgoScanner) => {
       configs.ergo.addresses.permit,
       configs.ergo.addresses.fraud,
       ergoEventTriggerExtractorLogger,
+      configs.eventTriggerExtractor.active,
     );
     const cardanoEventTriggerExtractor = new EventTriggerExtractor(
       'cardano-extractor',
@@ -45,6 +46,7 @@ export const registerExtractors = async (scanner: ErgoScanner) => {
       configs.cardano.addresses.permit,
       configs.cardano.addresses.fraud,
       cardanoEventTriggerExtractorLogger,
+      configs.eventTriggerExtractor.active,
     );
     const bitcoinEventTriggerExtractor = new EventTriggerExtractor(
       'bitcoin-extractor',
@@ -56,6 +58,7 @@ export const registerExtractors = async (scanner: ErgoScanner) => {
       configs.bitcoin.addresses.permit,
       configs.bitcoin.addresses.fraud,
       bitcoinEventTriggerExtractorLogger,
+      configs.eventTriggerExtractor.active,
     );
     const bitcoinRunesEventTriggerExtractor = new EventTriggerExtractor(
       'bitcoin-runes-extractor',
@@ -67,6 +70,7 @@ export const registerExtractors = async (scanner: ErgoScanner) => {
       configs.bitcoinRunes.addresses.permit,
       configs.bitcoinRunes.addresses.fraud,
       bitcoinRunesEventTriggerExtractorLogger,
+      configs.eventTriggerExtractor.active,
     );
     const dogeEventTriggerExtractor = new EventTriggerExtractor(
       'doge-extractor',
@@ -78,6 +82,7 @@ export const registerExtractors = async (scanner: ErgoScanner) => {
       configs.doge.addresses.permit,
       configs.doge.addresses.fraud,
       dogeEventTriggerExtractorLogger,
+      configs.eventTriggerExtractor.active,
     );
     const ethereumEventTriggerExtractor = new EventTriggerExtractor(
       'ethereum-extractor',
@@ -89,6 +94,7 @@ export const registerExtractors = async (scanner: ErgoScanner) => {
       configs.ethereum.addresses.permit,
       configs.ethereum.addresses.fraud,
       ethereumEventTriggerExtractorLogger,
+      configs.eventTriggerExtractor.active,
     );
     const binanceEventTriggerExtractor = new EventTriggerExtractor(
       'binance-extractor',
@@ -100,6 +106,7 @@ export const registerExtractors = async (scanner: ErgoScanner) => {
       configs.binance.addresses.permit,
       configs.binance.addresses.fraud,
       binanceEventTriggerExtractorLogger,
+      configs.eventTriggerExtractor.active,
     );
     const firoEventTriggerExtractor = new EventTriggerExtractor(
       'firo-extractor',
@@ -111,6 +118,7 @@ export const registerExtractors = async (scanner: ErgoScanner) => {
       configs.firo.addresses.permit,
       configs.firo.addresses.fraud,
       firoEventTriggerExtractorLogger,
+      configs.eventTriggerExtractor.active,
     );
     const handshakeEventTriggerExtractor = new EventTriggerExtractor(
       'handshake-extractor',
@@ -122,6 +130,7 @@ export const registerExtractors = async (scanner: ErgoScanner) => {
       configs.handshake.addresses.permit,
       configs.handshake.addresses.fraud,
       handshakeEventTriggerExtractorLogger,
+      configs.eventTriggerExtractor.active,
     );
     await scanner.registerExtractor(ergoEventTriggerExtractor);
     await scanner.registerExtractor(cardanoEventTriggerExtractor);

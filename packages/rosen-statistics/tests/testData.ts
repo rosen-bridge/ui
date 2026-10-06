@@ -3,7 +3,7 @@ import type { DeepPartial } from '@rosen-bridge/extended-typeorm';
 import type { TokenPriceEntity } from '@rosen-bridge/token-price-entity';
 import type { RosenTokens } from '@rosen-bridge/tokens';
 import type { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
-import type { TokenEntity } from '@rosen-ui/asset-calculator';
+import type { TokenEntity } from '@rosen-ui/asset-aggregator';
 import {
   type BridgedAmountEntity,
   type BridgeFeeEntity,

@@ -9,7 +9,7 @@
   "include": ["tests", "lib", "vitest.config.ts"],
   "references": [
     {
-      "path": "../asset-calculator"
+      "path": "../asset-aggregator"
     }
   ]
 }

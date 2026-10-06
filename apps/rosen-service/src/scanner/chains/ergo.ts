@@ -5,7 +5,12 @@ import type { Transaction } from '@rosen-bridge/scanner-interfaces';
 
 import commitmentService from '../../commitment/commitment-service';
 import config from '../../configs';
-import { ERGO_SCANNER_INTERVAL, ERGO_SCANNER_LOGGER_NAME } from '../../constants';
+import {
+  BLOCK_CLEANUP_THRESHOLD_DURATION,
+  BLOCK_CLEANUP_TRIM_COUNT_IN_ROUND,
+  ERGO_SCANNER_INTERVAL,
+  ERGO_SCANNER_LOGGER_NAME,
+} from '../../constants';
 import dataSource from '../../data-source';
 import AppError from '../../errors/AppError';
 import eventTriggerService from '../../event-trigger/event-trigger-service';
@@ -36,6 +41,12 @@ export const startErgoScanner = async () => {
     const scanner = new ErgoScanner({
       dataSource,
       initialHeight: config.ergo.initialHeight,
+      blockCleanupConfig: {
+        blockCleanupThresholdDuration: BLOCK_CLEANUP_THRESHOLD_DURATION,
+        blockTrimCountInRound: config.ergo.blockCleanupActive
+          ? BLOCK_CLEANUP_TRIM_COUNT_IN_ROUND
+          : 0,
+      },
       network: createErgoNodeNetworkConnectorManager(),
       logger: scannerLogger,
     });
