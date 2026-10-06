@@ -132,26 +132,34 @@ export class MetaMaskWallet extends Wallet<MetaMaskWalletConfig> {
   };
 
   fetchBalance = async (token: RosenChainToken): Promise<string | undefined | null> => {
-    const { BrowserProvider, Contract } = await import('ethers');
-
     const address = await this.getAddress();
 
-    let amount: string | undefined | null;
-
     if (token.type === 'native') {
-      amount = await this.provider.request<string>({
+      return await this.provider.request<string>({
         method: 'eth_getBalance',
         params: [address, 'latest'],
       });
-    } else {
-      const browserProvider = new BrowserProvider(window.ethereum!);
-
-      const contract = new Contract(token.tokenId, tokenABI, await browserProvider.getSigner());
-
-      amount = await contract.balanceOf(address);
     }
 
-    return amount;
+    /**
+     * Use the MetaMask SDK provider instead of `window.ethereum`, which may
+     * be injected by another extension (e.g. OKX) when multiple wallets exist
+     */
+    const { Interface } = await import('ethers');
+
+    const iface = new Interface(tokenABI);
+
+    const result = await this.provider.request<string>({
+      method: 'eth_call',
+      params: [
+        { to: token.tokenId, data: iface.encodeFunctionData('balanceOf', [address]) },
+        'latest',
+      ],
+    });
+
+    if (!result || result === '0x') return null;
+
+    return iface.decodeFunctionResult('balanceOf', result)[0];
   };
 
   isAvailable = (): boolean => {
