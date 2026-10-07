@@ -144,9 +144,14 @@ export class MetaMaskWallet extends Wallet<MetaMaskWalletConfig> {
         params: [address, 'latest'],
       });
     } else {
-      const browserProvider = new BrowserProvider(window.ethereum!);
+      /**
+       * Use the SDK provider rather than `window.ethereum`, which may belong
+       * to another wallet when several are installed. A read-only call also
+       * needs no signer, so avoid `getSigner` and its `eth_requestAccounts`.
+       */
+      const browserProvider = new BrowserProvider(this.provider);
 
-      const contract = new Contract(token.tokenId, tokenABI, await browserProvider.getSigner());
+      const contract = new Contract(token.tokenId, tokenABI, browserProvider);
 
       amount = await contract.balanceOf(address);
     }
