@@ -5,6 +5,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
   useTransition,
 } from 'react';
@@ -14,6 +15,7 @@ import type { RosenAmountValue } from '@rosen-ui/types';
 import { getDecimalString, getNonDecimalString } from '@rosen-ui/utils';
 
 import { FEE_CONFIG_TOKEN_ID } from '../../configs';
+import { FeeRequestTracker, getFeeRouteKey } from './feeRequest';
 import { useNetwork } from './useNetwork';
 import { useTokenMap } from './useTokenMap';
 import { useTransactionFormData } from './useTransactionFormData';
@@ -59,12 +61,21 @@ export const TransactionFeesProvider = ({ children }: PropsWithChildren) => {
   const [error, setError] = useState<unknown>();
 
   const [feesInfo, setFeesInfo] = useState<{
+    key: string;
     tokenId: string;
     bridgeFee?: RosenAmountValue;
     networkFee?: RosenAmountValue;
   }>();
 
   const [isLoading, startTransition] = useTransition();
+
+  const feeRequestTrackerRef = useRef<FeeRequestTracker>(null);
+
+  if (!feeRequestTrackerRef.current) {
+    feeRequestTrackerRef.current = new FeeRequestTracker();
+  }
+
+  const feeRequestTracker = feeRequestTrackerRef.current;
 
   const tokenId = useMemo(() => {
     if (!sourceValue || !tokenValue) return;
@@ -81,7 +92,16 @@ export const TransactionFeesProvider = ({ children }: PropsWithChildren) => {
     return tokenMap.getSignificantDecimals(tokenId) || 0;
   }, [tokenId, tokenMap]);
 
+  const feeRouteKey = useMemo(() => {
+    if (!sourceValue || !targetValue || !tokenId) return;
+
+    return getFeeRouteKey({ source: sourceValue, target: targetValue, tokenId });
+  }, [sourceValue, targetValue, tokenId]);
+
   const state = useMemo(() => {
+    const currentFeesInfo =
+      feesInfo && feeRouteKey && feesInfo.key === feeRouteKey ? feesInfo : undefined;
+
     const fees = Object.assign(
       {
         bridgeFee: 0n,
@@ -89,7 +109,7 @@ export const TransactionFeesProvider = ({ children }: PropsWithChildren) => {
         feeRatioDivisor: 1n,
         networkFee: 0n,
       },
-      feesInfo,
+      currentFeesInfo,
     );
 
     const paymentAmount = (() => {
@@ -110,7 +130,7 @@ export const TransactionFeesProvider = ({ children }: PropsWithChildren) => {
 
     const networkFeeRaw = getDecimalString(fees.networkFee, decimals);
 
-    const receivingAmount = feesInfo ? paymentAmount - (fees.networkFee + bridgeFee) : 0n;
+    const receivingAmount = currentFeesInfo ? paymentAmount - (fees.networkFee + bridgeFee) : 0n;
 
     const receivingAmountRaw =
       receivingAmount > 0 ? getDecimalString(receivingAmount, decimals) : '0';
@@ -133,16 +153,18 @@ export const TransactionFeesProvider = ({ children }: PropsWithChildren) => {
       error,
       isLoading,
     };
-  }, [amountValue, decimals, error, feesInfo, isLoading]);
+  }, [amountValue, decimals, error, feeRouteKey, feesInfo, isLoading]);
 
   const load = useCallback(() => {
-    if (isLoading) return;
-
     setError(undefined);
 
     setFeesInfo(undefined);
 
-    if (!selectedSource || !sourceValue || !targetValue || !tokenId) return;
+    if (!selectedSource || !sourceValue || !targetValue || !tokenId || !feeRouteKey) return;
+
+    const requestId = feeRequestTracker.begin(feeRouteKey);
+
+    if (requestId === undefined) return;
 
     startTransition(async () => {
       try {
@@ -152,6 +174,8 @@ export const TransactionFeesProvider = ({ children }: PropsWithChildren) => {
           selectedSource.nextHeightInterval,
           FEE_CONFIG_TOKEN_ID,
         );
+
+        if (!feeRequestTracker.isLatest(requestId)) return;
 
         if (
           parsedData.fees.bridgeFee !== parsedData.nextFees.bridgeFee ||
@@ -163,9 +187,11 @@ export const TransactionFeesProvider = ({ children }: PropsWithChildren) => {
           });
         }
 
-        setFeesInfo({ tokenId, ...parsedData.fees });
+        setFeesInfo({ key: feeRouteKey, tokenId, ...parsedData.fees });
       } catch (error) {
-        setFeesInfo({ tokenId });
+        if (!feeRequestTracker.isLatest(requestId)) return;
+
+        setFeesInfo({ key: feeRouteKey, tokenId });
 
         toast.add({
           type: 'error',
@@ -173,15 +199,25 @@ export const TransactionFeesProvider = ({ children }: PropsWithChildren) => {
         });
 
         setError(error);
+      } finally {
+        feeRequestTracker.complete(requestId, feeRouteKey);
       }
     });
-  }, [isLoading, selectedSource, sourceValue, targetValue, tokenId, toast.add]);
+  }, [
+    feeRequestTracker,
+    feeRouteKey,
+    selectedSource,
+    sourceValue,
+    targetValue,
+    tokenId,
+    toast.add,
+  ]);
 
   useEffect(() => {
-    if (tokenId && tokenId !== feesInfo?.tokenId) {
+    if (feeRouteKey && feeRouteKey !== feesInfo?.key) {
       load();
     }
-  }, [feesInfo, tokenId, load]);
+  }, [feesInfo, feeRouteKey, load]);
 
   useEffect(() => {
     void sourceValue;
