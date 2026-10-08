@@ -1,8 +1,27 @@
+import { z } from 'zod';
+
+import { defineRoute } from '@/app/api/defineRoute';
 import { getEventStatusByTriggerTxId } from '@/backend/events';
 
-import { withValidation } from '../../../withValidation';
-import { validateGet } from './validations';
+const params = z
+  .object({
+    id: z.hex().length(64),
+  })
+  .strict();
 
-export const GET = withValidation(validateGet, (value) =>
-  getEventStatusByTriggerTxId(value.id, value.triggerTxId, value.guardPublicKey),
-);
+const query = z
+  .object({
+    triggerTxId: z.hex().length(64),
+    guardPublicKey: z.hex().length(66).optional(),
+  })
+  .strict();
+
+export const GET = defineRoute({
+  schema: { params, query },
+  handler: ({ input }) =>
+    getEventStatusByTriggerTxId(
+      input.params.id,
+      input.query.triggerTxId,
+      input.query.guardPublicKey,
+    ),
+});
