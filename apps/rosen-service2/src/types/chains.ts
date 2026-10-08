@@ -7,6 +7,7 @@ import {
   ERGO_BLOCK_TIME,
   ETHEREUM_BLOCK_TIME,
   FIRO_BLOCK_TIME,
+  HANDSHAKE_BLOCK_TIME,
 } from '../constants';
 
 export type ChainsKeys = keyof (typeof configs)['chains'];
@@ -48,4 +49,5 @@ export const BLOCK_TIMES: Record<ChainsWithScanner, number> = {
   ethereum: ETHEREUM_BLOCK_TIME,
   binance: BINANCE_BLOCK_TIME,
   firo: FIRO_BLOCK_TIME,
+  handshake: HANDSHAKE_BLOCK_TIME,
 };

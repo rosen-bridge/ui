@@ -8,6 +8,8 @@ import {
 
 import config from '../../configs';
 import {
+  BLOCK_CLEANUP_THRESHOLD_DURATION,
+  BLOCK_CLEANUP_TRIM_COUNT_IN_ROUND,
   HANDSHAKE_SCANNER_INTERVAL,
   HANDSHAKE_SCANNER_LOGGER_NAME,
   SCANNER_API_TIMEOUT,
@@ -45,6 +47,12 @@ export const startHandshakeScanner = async () => {
     const scanner = new HandshakeRpcScanner({
       dataSource,
       initialHeight: config.handshake.initialHeight,
+      blockCleanupConfig: {
+        blockCleanupThresholdDuration: BLOCK_CLEANUP_THRESHOLD_DURATION,
+        blockTrimCountInRound: config.handshake.blockCleanupActive
+          ? BLOCK_CLEANUP_TRIM_COUNT_IN_ROUND
+          : 0,
+      },
       logger: scannerLogger,
       network: createHandshakeNetworkConnectorManager(),
     });

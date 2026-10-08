@@ -10,6 +10,8 @@ import {
   DogeBlockCypherDataAdapter,
   ErgoExplorerDataAdapter,
   EthereumEvmRpcDataAdapter,
+  FiroExplorerDataAdapter,
+  HandshakeExplorerDataAdapter,
 } from '@rosen-ui/asset-data-adapter';
 import type { AssetBalance, ChainsAdapters } from '@rosen-ui/asset-data-adapter/dist/types';
 import { NETWORKS, NETWORKS_KEYS } from '@rosen-ui/constants';
@@ -94,6 +96,8 @@ export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
    * - Doge
    * - Ethereum
    * - Binance
+   * - Firo
+   * - Handshake
    *
    * @async
    * @returns {Promise<void>}
@@ -145,7 +149,7 @@ export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
                 url: configs.chains.ethereum.rpc.connections.at(0)!.url || '',
                 authToken: configs.chains.ethereum.rpc.connections.at(0)?.authToken,
               },
-              configs.chains.ethereum.adapter.chunkSize,
+              configs.chains.ethereum.adapter.chunkSize || 1,
               this.logger.child('ethereumEvmRpcDataAdapter'),
             );
             break;
@@ -157,7 +161,7 @@ export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
                 url: configs.chains.binance.rpc.connections.at(0)!.url || '',
                 authToken: configs.chains.binance.rpc.connections.at(0)?.authToken,
               },
-              configs.chains.binance.adapter.chunkSize,
+              configs.chains.binance.adapter.chunkSize || 1,
               this.logger.child('binanceEvmRpcDataAdapter'),
             );
             break;
@@ -180,6 +184,22 @@ export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
                 blockCypherUrl: configs.chains.doge.adapter.blockCypher.url,
               },
               this.logger.child('dogeBlockCypherDataAdapter'),
+            );
+            break;
+          case NETWORKS.firo.key:
+            this.adapters[NETWORKS[chain].key] = new FiroExplorerDataAdapter(
+              addresses,
+              tokenMap,
+              configs.chains.firo.adapter.explorerUrl!,
+              this.logger.child('firoExplorerDataAdapter'),
+            );
+            break;
+          case NETWORKS.handshake.key:
+            this.adapters[NETWORKS[chain].key] = new HandshakeExplorerDataAdapter(
+              addresses,
+              tokenMap,
+              configs.chains.handshake.rpc.connections.at(0)!.url,
+              this.logger.child('handshakeExplorerDataAdapter'),
             );
             break;
         }

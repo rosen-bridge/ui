@@ -51,8 +51,7 @@ jobs:
 
       - name: Setup rosen-service Configs
         run: |
-          npx @rosen-bridge/cli@${{ vars.ROSEN_CLI_VERSION || 'latest' }} download-assets -c ${{ vars.RELEASE_NAME }} ${{ vars.RELEASE_TAG }} -o ./apps/rosen-service/config/
-          rm ./apps/rosen-service/config/contracts.json
+          npx @rosen-bridge/cli@${{ vars.ROSEN_CLI_VERSION || 'latest' }} download-assets -c ${{ vars.RELEASE_NAME }} ${{ vars.RELEASE_TAG }} -o ./apps/rosen-service2/config/
 
       - name: Set up QEMU
         if: contains(matrix.platform, 'arm')
@@ -93,6 +92,7 @@ jobs:
           cache-to: type=gha,mode=max
           outputs: type=image,name=ghcr.io/${{ github.repository_owner }}/${{ matrix.apps }},push-by-digest=true,name-canonical=true,push=true
           target: ${{ matrix.apps }}
+          build-args: APP_NAME=rosen-service2
 
       - name: Export digest file
         shell: bash

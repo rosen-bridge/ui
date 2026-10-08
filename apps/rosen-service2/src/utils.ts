@@ -72,7 +72,7 @@ export const createEventTrigger = (
   logger: AbstractLogger,
 ) => {
   return new EventTriggerExtractor(
-    `${chain}-extractor`,
+    `${chain}-trigger-extractor`,
     dataSource,
     networkType,
     url,
@@ -81,6 +81,7 @@ export const createEventTrigger = (
     chianConfigs.addresses.WatcherPermit,
     chianConfigs.addresses.Fraud,
     logger.child(`${formatChainName(chain, 'camel')}EventTriggerExtractor`),
+    configs.eventTriggerExtractor.initialize.active,
   );
 };
 
@@ -101,12 +102,21 @@ export const createCommitmentExtractor = (
   logger: AbstractLogger,
 ) => {
   logger.debug(`starting commitment extractor for ${chain}`);
+  const { networkType, url } = resolveErgoNetworkConfig();
+
   return new CommitmentExtractor(
     `${chain}-commitment-extractor`,
     [chianConfigs.addresses.Commitment],
     chianConfigs.tokens.RWTId,
     dataSource,
     tokenMap,
+    {
+      active: configs.commitmentExtractor.initialize.active,
+      type: networkType,
+      url,
+      address: chianConfigs.addresses.Commitment,
+      maxParallelRequests: configs.commitmentExtractor.initialize.maxParallelRequests,
+    },
     logger.child(`${chain}CommitmentExtractor`),
   );
 };

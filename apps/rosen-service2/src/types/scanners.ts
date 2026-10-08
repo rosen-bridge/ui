@@ -10,7 +10,8 @@ import type {
 } from '@rosen-bridge/cardano-scanner';
 import type { ErgoScanner } from '@rosen-bridge/ergo-scanner';
 import type { EvmRpcScanner } from '@rosen-bridge/evm-scanner';
-import type { FiroElectrumXScanner } from '@rosen-bridge/firo-scanner';
+import type { FiroElectrumXScanner, FiroRpcScanner } from '@rosen-bridge/firo-scanner';
+import type { HandshakeRpcScanner } from '@rosen-bridge/handshake-scanner';
 
 export type ChainScannersType =
   | ErgoScanner
@@ -21,4 +22,6 @@ export type ChainScannersType =
   | CardanoBlockFrostScanner
   | CardanoOgmiosScanner
   | BitcoinEsploraScanner
-  | FiroElectrumXScanner;
+  | FiroElectrumXScanner
+  | FiroRpcScanner
+  | HandshakeRpcScanner;

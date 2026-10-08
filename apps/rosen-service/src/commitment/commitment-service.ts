@@ -1,5 +1,6 @@
 import { DefaultLogger } from '@rosen-bridge/abstract-logger';
 import type { ErgoScanner } from '@rosen-bridge/ergo-scanner';
+import { ErgoNetworkType } from '@rosen-bridge/scanner-interfaces';
 import { CommitmentExtractor } from '@rosen-bridge/watcher-data-extractor';
 import { NETWORKS, NETWORKS_KEYS } from '@rosen-ui/constants';
 
@@ -26,6 +27,13 @@ export const registerExtractors = async (scanner: ErgoScanner) => {
         chainConfig.tokens.rwt,
         dataSource,
         await getTokenMap(),
+        {
+          active: configs.commitmentExtractor.active,
+          type: ErgoNetworkType.Explorer,
+          url: configs.ergo.explorerUrl,
+          address: chainConfig.addresses.commitment,
+          maxParallelRequests: configs.commitmentExtractor.maxParallelRequests,
+        },
         logger.child(`${chain}CommitmentExtractor`),
       );
       await scanner.registerExtractor(commitmentExtractor);

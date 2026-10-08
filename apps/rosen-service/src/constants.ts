@@ -27,3 +27,6 @@ export const FIRO_BLOCK_TIME = 150;
 export const HANDSHAKE_BLOCK_TIME = 600;
 
 export const BITCOIN_RUNES_CONFIG_KEY = 'bitcoinRunes';
+
+export const BLOCK_CLEANUP_THRESHOLD_DURATION = 24 * 60 * 60; // 24 hours in seconds
+export const BLOCK_CLEANUP_TRIM_COUNT_IN_ROUND = 2000;

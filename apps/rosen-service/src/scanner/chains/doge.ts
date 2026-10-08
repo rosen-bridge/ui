@@ -8,6 +8,8 @@ import {
 
 import config from '../../configs';
 import {
+  BLOCK_CLEANUP_THRESHOLD_DURATION,
+  BLOCK_CLEANUP_TRIM_COUNT_IN_ROUND,
   DOGE_SCANNER_INTERVAL,
   DOGE_SCANNER_LOGGER_NAME,
   SCANNER_API_TIMEOUT,
@@ -55,6 +57,12 @@ export const startDogeScanner = async () => {
     const scanner = new DogeRpcScanner({
       dataSource,
       initialHeight: config.doge.initialHeight,
+      blockCleanupConfig: {
+        blockCleanupThresholdDuration: BLOCK_CLEANUP_THRESHOLD_DURATION,
+        blockTrimCountInRound: config.doge.blockCleanupActive
+          ? BLOCK_CLEANUP_TRIM_COUNT_IN_ROUND
+          : 0,
+      },
       logger: scannerLogger,
       network: createDogeRpcNetworkConnectorManager(),
     });

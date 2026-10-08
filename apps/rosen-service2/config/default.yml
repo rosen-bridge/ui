@@ -42,45 +42,58 @@ statistics:
     interval: 86400
 chains:
   ergo:
-    initialHeight: 1
     scanInterval: 120
     method: explorer
     explorer:
       connections:
         - url: https://api.ergoplatform.com/
+    blockCleanupActive: false
   cardano:
     active: false
     scanInterval: 30
-    initialHeight: 1
     koios:
       connections:
         - url: https://api.koios.rest/api/v1/
           timeout: 100
+    blockCleanupActive: true
   bitcoin:
     active: false
-    initialHeight: 1
     scanInterval: 600
+    blockCleanupActive: true
   bitcoin-runes:
     active: false
     unisatUrl: https://open-api.unisat.io
   doge:
     active: false
-    initialHeight: 1
     scanInterval: 60
     adapter:
       blockCypher:
         url: https://api.blockcypher.com
+    blockCleanupActive: true
   ethereum:
     active: false
-    initialHeight: 1
     scanInterval: 60
+    blockCleanupActive: true
   binance:
     active: false
-    initialHeight: 1
     scanInterval: 10
+    blockCleanupActive: true
   firo:
     active: false
     scanInterval: 60
+    adapter:
+      explorerUrl: https://explorer.firo.org
+    blockCleanupActive: true
+  handshake:
+    active: false
+    scanInterval: 600
+    blockCleanupActive: true
+commitmentExtractor:
+  initialize:
+    active: false
+eventTriggerExtractor:
+  initialize:
+    active: false
 paths:
   contracts: config/contracts.json
   healthReport: healthReport.json

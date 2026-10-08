@@ -16,7 +16,12 @@ import type { TokenMap } from '@rosen-bridge/extended-tokens';
 import type { DataSource } from '@rosen-bridge/extended-typeorm';
 
 import { configs } from '../configs';
-import { DOGE_METHOD_ESPLORA, DOGE_METHOD_RPC } from '../constants';
+import {
+  BLOCK_CLEANUP_THRESHOLD_DURATION,
+  BLOCK_CLEANUP_TRIM_COUNT_IN_ROUND,
+  DOGE_METHOD_ESPLORA,
+  DOGE_METHOD_RPC,
+} from '../constants';
 
 const logger = DefaultLogger.getInstance().child(import.meta.url);
 
@@ -54,9 +59,15 @@ const buildDogeRpcScannerWithExtractors = async (dataSource: DataSource, tokenMa
   });
   const dogeScanner = new DogeRpcScanner({
     dataSource: dataSource,
-    initialHeight: configs.chains.doge.initialHeight,
+    initialHeight: configs.chains.doge.initialHeight || 1,
     network: networkConnectorManager,
     blockRetrieveGap: configs.chains.doge.blockRetrieveGap,
+    blockCleanupConfig: {
+      blockCleanupThresholdDuration: BLOCK_CLEANUP_THRESHOLD_DURATION,
+      blockTrimCountInRound: configs.chains.doge.blockCleanupActive
+        ? BLOCK_CLEANUP_TRIM_COUNT_IN_ROUND
+        : 0,
+    },
     logger: logger.child('dogeRpcScannerLogger'),
   });
 
@@ -113,9 +124,15 @@ const buildDogeEsploraScannerWithExtractors = async (
   });
   const dogeScanner = new DogeEsploraScanner({
     dataSource: dataSource,
-    initialHeight: configs.chains.doge.initialHeight,
+    initialHeight: configs.chains.doge.initialHeight || 1,
     network: networkConnectorManager,
     blockRetrieveGap: configs.chains.doge.blockRetrieveGap,
+    blockCleanupConfig: {
+      blockCleanupThresholdDuration: BLOCK_CLEANUP_THRESHOLD_DURATION,
+      blockTrimCountInRound: configs.chains.doge.blockCleanupActive
+        ? BLOCK_CLEANUP_TRIM_COUNT_IN_ROUND
+        : 0,
+    },
     logger: logger.child('dogeEsploraScannerLogger'),
   });
 
