@@ -15,7 +15,6 @@ import { wrap } from '@/safeServerAction';
 import { getTokenMap } from '@/tokenMap/getServerTokenMap';
 
 export const calculateFee = wrap(calculateFeeCore, {
-  cache: 10 * 60 * 1000,
   traceKey: 'ethereum:calculateFee',
 });
 
