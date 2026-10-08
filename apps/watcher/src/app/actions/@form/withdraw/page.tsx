@@ -12,7 +12,6 @@ import {
   CircularProgress,
   Identifier,
   InputAdornment,
-  Link,
   MenuItemMui,
   Stack,
   SubmitButton,
@@ -139,9 +138,11 @@ const WithdrawForm = () => {
           description: (
             <>
               Withdrawal is successful. Wait for tx [
-              <Link target="_blank" href={getTxURL(NETWORKS.ergo.key, response.txId) ?? '/'}>
-                {response.txId}
-              </Link>
+              <Identifier
+                href={getTxURL(NETWORKS.ergo.key, response.txId)}
+                value={response.txId}
+                variant="legacy"
+              />
               ] to be confirmed.
             </>
           ),

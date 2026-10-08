@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useMemo } from 'react';
-import Link from 'next/link';
 
 import { FormProvider, type SubmitHandler, useForm } from 'react-hook-form';
 import useSWR from 'swr';
@@ -10,6 +9,7 @@ import useSWRMutation from 'swr/mutation';
 import {
   ApiKeyDialogProtectedAction,
   ApiKeyDialogWarning,
+  Identifier,
   Stack,
   SubmitButton,
   useApiKey,
@@ -126,9 +126,11 @@ const UnlockForm = () => {
           description: (
             <>
               Unlock operation is in progress. Wait for tx [
-              <Link target="_blank" href={getTxURL(NETWORKS.ergo.key, response.txId) ?? '/'}>
-                {response.txId}
-              </Link>
+              <Identifier
+                href={getTxURL(NETWORKS.ergo.key, response.txId)}
+                value={response.txId}
+                variant="legacy"
+              />
               ] to be confirmed by some blocks.
             </>
           ),

@@ -10,7 +10,7 @@ import {
   Alert,
   ApiKeyDialogProtectedAction,
   ApiKeyDialogWarning,
-  Link,
+  Identifier,
   Stack,
   SubmitButton,
   Typography,
@@ -103,9 +103,11 @@ const LockForm = () => {
           description: (
             <>
               Lock operation is in progress. Wait for tx [
-              <Link target="_blank" href={getTxURL(NETWORKS.ergo.key, response.txId)}>
-                {response.txId}
-              </Link>
+              <Identifier
+                href={getTxURL(NETWORKS.ergo.key, response.txId)}
+                value={response.txId}
+                variant="legacy"
+              />
               ] to be confirmed by some blocks, so your new permits will be activated.
             </>
           ),
