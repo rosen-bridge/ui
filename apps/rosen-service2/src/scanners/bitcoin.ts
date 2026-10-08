@@ -22,12 +22,7 @@ import type { TokenMap } from '@rosen-bridge/extended-tokens';
 import type { DataSource } from '@rosen-bridge/extended-typeorm';
 
 import { configs } from '../configs';
-import {
-  BITCOIN_METHOD_ESPLORA,
-  BITCOIN_METHOD_RPC,
-  BLOCK_CLEANUP_THRESHOLD_DURATION,
-  BLOCK_CLEANUP_TRIM_COUNT_IN_ROUND,
-} from '../constants';
+import { BITCOIN_METHOD_ESPLORA, BITCOIN_METHOD_RPC } from '../constants';
 
 const logger = DefaultLogger.getInstance().child(import.meta.url);
 
@@ -68,12 +63,7 @@ const buildBitcoinRpcScannerWithExtractors = async (dataSource: DataSource, toke
     initialHeight: configs.chains.bitcoin.initialHeight || 1,
     network: networkConnectorManager,
     blockRetrieveGap: configs.chains.bitcoin.blockRetrieveGap,
-    blockCleanupConfig: {
-      blockCleanupThresholdDuration: BLOCK_CLEANUP_THRESHOLD_DURATION,
-      blockTrimCountInRound: configs.chains.bitcoin.blockCleanupActive
-        ? BLOCK_CLEANUP_TRIM_COUNT_IN_ROUND
-        : 0,
-    },
+    blockCleanupConfig: { active: configs.chains.bitcoin.blockCleanupActive === true },
     logger: logger.child('bitcoinRpcScannerLogger'),
   });
 
@@ -156,12 +146,7 @@ const buildBitcoinEsploraScannerWithExtractors = async (
     initialHeight: configs.chains.bitcoin.initialHeight || 1,
     network: networkConnectorManager,
     blockRetrieveGap: configs.chains.bitcoin.blockRetrieveGap,
-    blockCleanupConfig: {
-      blockCleanupThresholdDuration: BLOCK_CLEANUP_THRESHOLD_DURATION,
-      blockTrimCountInRound: configs.chains.bitcoin.blockCleanupActive
-        ? BLOCK_CLEANUP_TRIM_COUNT_IN_ROUND
-        : 0,
-    },
+    blockCleanupConfig: { active: configs.chains.bitcoin.blockCleanupActive === true },
     logger: logger.child('bitcoinEsploraScannerLogger'),
   });
 

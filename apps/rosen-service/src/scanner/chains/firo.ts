@@ -8,8 +8,6 @@ import {
 
 import config from '../../configs';
 import {
-  BLOCK_CLEANUP_THRESHOLD_DURATION,
-  BLOCK_CLEANUP_TRIM_COUNT_IN_ROUND,
   FIRO_SCANNER_INTERVAL,
   FIRO_SCANNER_LOGGER_NAME,
   SCANNER_API_TIMEOUT,
@@ -53,12 +51,7 @@ export const startFiroScanner = async () => {
     const scanner = new FiroElectrumXScanner({
       dataSource,
       initialHeight: config.firo.initialHeight,
-      blockCleanupConfig: {
-        blockCleanupThresholdDuration: BLOCK_CLEANUP_THRESHOLD_DURATION,
-        blockTrimCountInRound: config.firo.blockCleanupActive
-          ? BLOCK_CLEANUP_TRIM_COUNT_IN_ROUND
-          : 0,
-      },
+      blockCleanupConfig: { active: config.firo.blockCleanupActive },
       logger: scannerLogger,
       network: createFiroNetworkConnectorManager(),
     });

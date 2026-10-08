@@ -24,8 +24,8 @@
     "validate-token-icons": "tsx ./scripts/validateTokenIcons"
   },
   "dependencies": {
-    "@rosen-bridge/abstract-observation-extractor": "^2.0.0",
-    "@rosen-bridge/abstract-scanner": "^4.0.0",
+    "@rosen-bridge/abstract-observation-extractor": "^3.0.0",
+    "@rosen-bridge/abstract-scanner": "^4.1.0",
     "@rosen-bridge/encryption": "^1.0.1",
     "@rosen-bridge/extended-typeorm": "^1.1.0",
     "@rosen-bridge/icons": "^4.0.0",
@@ -34,7 +34,7 @@
     "@rosen-bridge/token-price-entity": "^0.2.2",
     "@rosen-bridge/tokens": "^6.0.2",
     "@rosen-bridge/ui-kit": "^6.1.0",
-    "@rosen-bridge/watcher-data-extractor": "^16.0.0",
+    "@rosen-bridge/watcher-data-extractor": "^16.1.0",
     "@rosen-network/base": "^0.5.5",
     "@rosen-network/binance": "^0.4.10",
     "@rosen-network/bitcoin": "^2.4.9",

@@ -114,7 +114,6 @@ export const createCommitmentExtractor = (
       active: configs.commitmentExtractor.initialize.active,
       type: networkType,
       url,
-      address: chianConfigs.addresses.Commitment,
       maxParallelRequests: configs.commitmentExtractor.initialize.maxParallelRequests,
     },
     logger.child(`${chain}CommitmentExtractor`),

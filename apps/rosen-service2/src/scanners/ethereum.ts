@@ -8,7 +8,6 @@ import type { TokenMap } from '@rosen-bridge/extended-tokens';
 import type { DataSource } from '@rosen-bridge/extended-typeorm';
 
 import { configs } from '../configs';
-import { BLOCK_CLEANUP_THRESHOLD_DURATION, BLOCK_CLEANUP_TRIM_COUNT_IN_ROUND } from '../constants';
 
 const logger = DefaultLogger.getInstance().child(import.meta.url);
 
@@ -39,12 +38,7 @@ export const getEthereumScanner = async (dataSource: DataSource, tokenMap: Token
     initialHeight: configs.chains.ethereum.initialHeight || 1,
     network: networkConnectorManager,
     blockRetrieveGap: configs.chains.ethereum.blockRetrieveGap,
-    blockCleanupConfig: {
-      blockCleanupThresholdDuration: BLOCK_CLEANUP_THRESHOLD_DURATION,
-      blockTrimCountInRound: configs.chains.ethereum.blockCleanupActive
-        ? BLOCK_CLEANUP_TRIM_COUNT_IN_ROUND
-        : 0,
-    },
+    blockCleanupConfig: { active: configs.chains.ethereum.blockCleanupActive === true },
     logger: logger.child('ethereumScannerLogger'),
   });
 

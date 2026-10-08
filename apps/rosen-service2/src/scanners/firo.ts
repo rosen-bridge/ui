@@ -12,12 +12,7 @@ import {
 } from '@rosen-bridge/firo-scanner';
 
 import { configs } from '../configs';
-import {
-  BLOCK_CLEANUP_THRESHOLD_DURATION,
-  BLOCK_CLEANUP_TRIM_COUNT_IN_ROUND,
-  FIRO_METHOD_ELECTRUMX,
-  FIRO_METHOD_RPC,
-} from '../constants';
+import { FIRO_METHOD_ELECTRUMX, FIRO_METHOD_RPC } from '../constants';
 
 const logger = DefaultLogger.getInstance().child(import.meta.url);
 
@@ -94,12 +89,7 @@ const buildFiroElectrumxScannerWithExtractors = async (
     initialHeight: configs.chains.firo.initialHeight || 1,
     network: createFiroElectrumxNetworkConnectorManager(),
     blockRetrieveGap: configs.chains.firo.blockRetrieveGap,
-    blockCleanupConfig: {
-      blockCleanupThresholdDuration: BLOCK_CLEANUP_THRESHOLD_DURATION,
-      blockTrimCountInRound: configs.chains.firo.blockCleanupActive
-        ? BLOCK_CLEANUP_TRIM_COUNT_IN_ROUND
-        : 0,
-    },
+    blockCleanupConfig: { active: configs.chains.firo.blockCleanupActive === true },
     logger: logger.child('firoScannerLogger'),
   });
   try {
@@ -142,12 +132,7 @@ const buildFiroRpcScannerWithExtractors = async (dataSource: DataSource, tokenMa
     initialHeight: configs.chains.firo.initialHeight || 1,
     network: createFiroRpcNetworkConnectorManager(),
     blockRetrieveGap: configs.chains.firo.blockRetrieveGap,
-    blockCleanupConfig: {
-      blockCleanupThresholdDuration: BLOCK_CLEANUP_THRESHOLD_DURATION,
-      blockTrimCountInRound: configs.chains.firo.blockCleanupActive
-        ? BLOCK_CLEANUP_TRIM_COUNT_IN_ROUND
-        : 0,
-    },
+    blockCleanupConfig: { active: configs.chains.firo.blockCleanupActive === true },
     logger: logger.child('firoScannerLogger'),
   });
   try {
