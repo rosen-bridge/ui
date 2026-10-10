@@ -65,6 +65,7 @@ export { default as Qrcode } from './qrcode.svg';
 export { default as QrcodeScan } from './qrcode-scan.svg';
 export { default as ReceiptAlt } from './receipt-alt.svg';
 export { default as Redo } from './redo.svg';
+export { default as Refresh } from './refresh.svg';
 export { default as Row } from './row.svg';
 export { default as Search } from './search.svg';
 export { default as Setting } from './setting.svg';
