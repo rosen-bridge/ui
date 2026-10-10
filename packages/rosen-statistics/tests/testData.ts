@@ -1273,24 +1273,27 @@ export const bridgeMetricTestData = {
         decimal: 8,
         significantDecimal: 8,
         chain: 'ergo',
+        ergoSideTokenId: 'ergo-token-1',
       }),
       createToken({
         id: 'token-2',
         decimal: 6,
         significantDecimal: 6,
         chain: 'cardano',
+        ergoSideTokenId: 'cardano-token-1',
       }),
       createToken({
         id: 'token-3',
         decimal: 18,
         significantDecimal: 18,
         chain: 'ethereum',
+        ergoSideTokenId: 'ethereum-token-1',
       }),
     ],
     tokenPriceRepo: [
-      createTokenPrice('token-1', 2.5, 1704067100),
-      createTokenPrice('token-2', 1.5, 1704153500),
-      createTokenPrice('token-3', 3.0, 1704153500),
+      createTokenPrice('ergo-token-1', 2.5, 1704067100),
+      createTokenPrice('cardano-token-1', 1.5, 1704153500),
+      createTokenPrice('ethereum-token-1', 3.0, 1704153500),
     ],
     eventTriggerRepo: [
       createEventTrigger({
@@ -1458,11 +1461,12 @@ export const bridgeMetricTestData = {
         decimal: 8,
         significantDecimal: 8,
         chain: 'ergo',
+        ergoSideTokenId: 'ergo-token-1',
       }),
     ],
     tokenPriceRepo: [
-      createTokenPrice('token-1', 2.5, 1704067199),
-      createTokenPrice('token-1', 3.0, 1704153500),
+      createTokenPrice('ergo-token-1', 2.5, 1704067199),
+      createTokenPrice('ergo-token-1', 3.0, 1704153500),
     ],
     eventTriggerRepo: [
       createEventTrigger({
@@ -1560,17 +1564,19 @@ export const bridgeMetricTestData = {
         decimal: 8,
         significantDecimal: 8,
         chain: 'ergo',
+        ergoSideTokenId: 'ergo-token-1',
       }),
       createToken({
         id: 'token-2',
         decimal: 6,
         significantDecimal: 6,
         chain: 'cardano',
+        ergoSideTokenId: 'cardano-token-1',
       }),
     ],
     tokenPriceRepo: [
-      createTokenPrice('token-1', 2.5, 1704067100),
-      // No price for token-2
+      createTokenPrice('ergo-token-1', 2.5, 1704067100),
+      // No price for cardano-token-1
     ],
     eventTriggerRepo: [
       createEventTrigger({
@@ -1640,9 +1646,10 @@ export const bridgeMetricTestData = {
         decimal: 8,
         significantDecimal: 8,
         chain: 'ergo',
+        ergoSideTokenId: 'ergo-token-1',
       }),
     ],
-    tokenPriceRepo: [createTokenPrice('token-1', 2.5, 1704067100)],
+    tokenPriceRepo: [createTokenPrice('ergo-token-1', 2.5, 1704067100)],
     eventTriggerRepo: [
       createEventTrigger({
         eventId: 'event1',
@@ -1747,12 +1754,13 @@ export const bridgeMetricTestData = {
         decimal: 8,
         significantDecimal: 8,
         chain: 'ergo',
+        ergoSideTokenId: 'ergo-token-1',
       }),
     ],
     tokenPriceRepo: [
-      createTokenPrice('token-1', 2.5, 1704067100),
-      createTokenPrice('token-1', 3.0, 1704153500),
-      createTokenPrice('token-1', 3.5, 1704239900),
+      createTokenPrice('ergo-token-1', 2.5, 1704067100),
+      createTokenPrice('ergo-token-1', 3.0, 1704153500),
+      createTokenPrice('ergo-token-1', 3.5, 1704239900),
     ],
     eventTriggerRepo: [
       // Day 1
@@ -1915,9 +1923,10 @@ export const bridgeMetricTestData = {
         decimal: 8,
         significantDecimal: 8,
         chain: 'ergo',
+        ergoSideTokenId: 'ergo-token-1',
       }),
     ],
-    tokenPriceRepo: [createTokenPrice('token-1', 2.5, 1704067199)],
+    tokenPriceRepo: [createTokenPrice('ergo-token-1', 2.5, 1704067199)],
     eventTriggerRepo: [
       createEventTrigger({
         eventId: 'event1',
@@ -1986,31 +1995,35 @@ export const bridgeMetricTestData = {
         decimal: 8,
         significantDecimal: 8,
         chain: 'ergo',
+        ergoSideTokenId: 'ergo-token-1',
       }),
       createToken({
         id: 'token-2',
         decimal: 6,
         significantDecimal: 6,
         chain: 'cardano',
+        ergoSideTokenId: 'cardano-token-1',
       }),
       createToken({
         id: 'token-3',
         decimal: 18,
         significantDecimal: 18,
         chain: 'ethereum',
+        ergoSideTokenId: 'ethereum-token-1',
       }),
       createToken({
         id: 'token-4',
         decimal: 0,
         significantDecimal: 0,
         chain: 'bitcoin',
+        ergoSideTokenId: 'bitcoin-token-1',
       }),
     ],
     tokenPriceRepo: [
-      createTokenPrice('token-1', 2.5, 1704067100),
-      createTokenPrice('token-2', 1.5, 1704067100),
-      createTokenPrice('token-3', 3.0, 1704067100),
-      createTokenPrice('token-4', 50000, 1704067100),
+      createTokenPrice('ergo-token-1', 2.5, 1704067100),
+      createTokenPrice('cardano-token-1', 1.5, 1704067100),
+      createTokenPrice('ethereum-token-1', 3.0, 1704067100),
+      createTokenPrice('bitcoin-token-1', 50000, 1704067100),
     ],
     eventTriggerRepo: [
       createEventTrigger({
@@ -2175,9 +2188,10 @@ export const bridgeMetricTestData = {
         decimal: 8,
         significantDecimal: 8,
         chain: 'ergo',
+        ergoSideTokenId: 'ergo-token-1',
       }),
     ],
-    tokenPriceRepo: [createTokenPrice('token-1', 2.5, 1704110100)],
+    tokenPriceRepo: [createTokenPrice('ergo-token-1', 2.5, 1704110100)],
     eventTriggerRepo: [
       createEventTrigger({
         eventId: 'event1',

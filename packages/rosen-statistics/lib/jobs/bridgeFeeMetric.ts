@@ -97,6 +97,7 @@ export const bridgeFeeMetric = async (
         month: event.month,
         year: event.year,
         decimal: event.decimal,
+        ergoSideTokenId: event.ergoSideTokenId,
       }));
 
       const result = await calculateBridgeData(

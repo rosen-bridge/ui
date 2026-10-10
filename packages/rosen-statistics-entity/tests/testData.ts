@@ -1468,6 +1468,7 @@ export const bridgeMetricsActionTestData = {
         month: 1,
         year: 2024,
         decimal: 8,
+        ergoSideTokenId: 'ergo-token-1',
       },
       {
         fromChain: 'cardano',
@@ -1481,6 +1482,7 @@ export const bridgeMetricsActionTestData = {
         month: 1,
         year: 2024,
         decimal: 6,
+        ergoSideTokenId: 'cardano-token-1',
       },
     ],
   },
@@ -1551,6 +1553,7 @@ export const bridgeMetricsActionTestData = {
         month: 1,
         year: 2024,
         decimal: 8,
+        ergoSideTokenId: 'ergo-token-1',
       },
     ],
   },

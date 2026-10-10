@@ -38,14 +38,14 @@ export const calculateBridgeData = async (
 
   for (const e of events) {
     const tokenUsdPrice = await tokenPriceAction.getLatestTokenPrice(
-      e.tokenId, // ignoring exact price timestamp for simplicity
+      e.ergoSideTokenId, // ignoring exact price timestamp for simplicity
       e.timestamp,
     );
     if (tokenUsdPrice === undefined) {
       logger.warn(
-        `Cannot calculate bridge data: missing price for token ${e.tokenId} at timestamp ${e.timestamp}`,
+        `Cannot calculate bridge data: missing price for token ${e.ergoSideTokenId} at timestamp ${e.timestamp}`,
       );
-      throw new Error(`Missing token price for token ${e.tokenId}`);
+      throw new Error(`Missing token price for token ${e.ergoSideTokenId}`);
     }
 
     const tokenUsdPriceString = scientificToString(tokenUsdPrice);
