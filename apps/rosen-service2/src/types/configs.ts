@@ -406,7 +406,7 @@ export interface ChainsErgoNode {
 }
 
 export interface ChainsErgoNodeConnections {
-  url?: string;
+  url: string;
 }
 
 export interface ChainsErgoAdapter {

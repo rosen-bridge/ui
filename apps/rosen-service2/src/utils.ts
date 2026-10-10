@@ -6,8 +6,7 @@ import { ErgoNetworkType } from '@rosen-bridge/scanner-interfaces';
 import { CommitmentExtractor, EventTriggerExtractor } from '@rosen-bridge/watcher-data-extractor';
 
 import { configs } from './configs';
-import { ERGO_METHOD_EXPLORER } from './constants';
-import type { ChainConfigs, ErgoNetworkConfig } from './types';
+import type { ChainConfigs } from './types';
 
 /**
  * Maps bigint value in data to string before inserting in redis
@@ -18,25 +17,17 @@ export const stringSerializer = (data: unknown): string =>
   JsonBigInt.stringify(data, (_, value) => (typeof value === 'bigint' ? value.toString() : value));
 
 /**
- * Resolves Ergo network type and connection URL based on configuration.
+ * Returns the Ergo node URL used to initialize extractors.
+ * Extractors are always initialized using the node; explorer initialization is disabled.
  *
- * @returns {{ networkType: ErgoNetworkType; url: string }} Network type and URL
+ * @returns {string} Ergo node URL
  */
-export const resolveErgoNetworkConfig = (): ErgoNetworkConfig => {
-  if (configs.chains.ergo.explorer.connections[0].url) {
-    if (configs.chains.ergo.method === ERGO_METHOD_EXPLORER) {
-      return {
-        networkType: ErgoNetworkType.Explorer,
-        url: configs.chains.ergo.explorer.connections[0].url!,
-      };
-    }
-    return {
-      networkType: ErgoNetworkType.Node,
-      url: configs.chains.ergo.node.connections[0].url!,
-    };
-  } else {
-    throw new Error('Ergo network URL is not configured.');
+export const getErgoNodeUrl = (): string => {
+  const url = configs.chains.ergo.node.connections[0]?.url;
+  if (!url) {
+    throw new Error('Ergo node URL is not configured.');
   }
+  return url;
 };
 
 /**
@@ -56,8 +47,6 @@ export const formatChainName = (chain: string, mode: 'camel' | 'pascal' = 'camel
 /**
  * Creates an event trigger extractor
  * @param chain
- * @param networkType
- * @param url
  * @param dataSource
  * @param chianConfigs
  * @param logger
@@ -65,8 +54,6 @@ export const formatChainName = (chain: string, mode: 'camel' | 'pascal' = 'camel
  */
 export const createEventTrigger = (
   chain: string,
-  networkType: ErgoNetworkType,
-  url: string,
   dataSource: DataSource,
   chianConfigs: ChainConfigs,
   logger: AbstractLogger,
@@ -74,8 +61,8 @@ export const createEventTrigger = (
   return new EventTriggerExtractor(
     `${chain}-trigger-extractor`,
     dataSource,
-    networkType,
-    url,
+    ErgoNetworkType.Node,
+    getErgoNodeUrl(),
     chianConfigs.addresses.WatcherTriggerEvent,
     chianConfigs.tokens.RWTId,
     chianConfigs.addresses.WatcherPermit,
@@ -102,8 +89,6 @@ export const createCommitmentExtractor = (
   logger: AbstractLogger,
 ) => {
   logger.debug(`starting commitment extractor for ${chain}`);
-  const { networkType, url } = resolveErgoNetworkConfig();
-
   return new CommitmentExtractor(
     `${chain}-commitment-extractor`,
     [chianConfigs.addresses.Commitment],
@@ -112,8 +97,8 @@ export const createCommitmentExtractor = (
     tokenMap,
     {
       active: configs.commitmentExtractor.initialize.active,
-      type: networkType,
-      url,
+      type: ErgoNetworkType.Node,
+      url: getErgoNodeUrl(),
       maxParallelRequests: configs.commitmentExtractor.initialize.maxParallelRequests,
     },
     logger.child(`${chain}CommitmentExtractor`),
