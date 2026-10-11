@@ -144,9 +144,9 @@ export class MetaMaskWallet extends Wallet<MetaMaskWalletConfig> {
         params: [address, 'latest'],
       });
     } else {
-      const browserProvider = new BrowserProvider(window.ethereum!);
+      const browserProvider = new BrowserProvider(this.provider);
 
-      const contract = new Contract(token.tokenId, tokenABI, await browserProvider.getSigner());
+      const contract = new Contract(token.tokenId, tokenABI, browserProvider);
 
       amount = await contract.balanceOf(address);
     }
