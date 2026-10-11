@@ -19,7 +19,8 @@ import {
 } from '@rosen-ui/public-status';
 import type { Network } from '@rosen-ui/types';
 
-import { filtersToTypeorm } from '@/filters';
+import { filtersToTypeorm } from '@/backend/filtersToTypeorm';
+import { NotFoundError } from '@/errors';
 
 import { dataSource } from '../dataSource';
 import '../initialize-datasource-if-needed';
@@ -328,7 +329,7 @@ export const getEvent = async (id: string): Promise<EventDetailsType[]> => {
     .where('oe.requestId = :id', { id })
     .getRawMany();
 
-  if (!events.length) throw new ReferenceError(`Event with id [${id}] not found`);
+  if (!events.length) throw new NotFoundError(`Event with id [${id}] not found`);
 
   const ergoSideTokenIds = events.map((event) => event.lockToken?.ergoSideTokenId).filter(Boolean);
 
@@ -390,7 +391,7 @@ export const getEventStatus = async (
   });
 
   if (!observations.length) {
-    throw new ReferenceError(`Event with id [${eventId}] not found`);
+    throw new NotFoundError(`Event with id [${eventId}] not found`);
   }
 
   if (observations.length > 1) {

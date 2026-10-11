@@ -2,7 +2,8 @@ import type { Filter } from '@rosen-bridge/query-params';
 import { BridgedAssetEntity, LockedAssetEntity, TokenEntity } from '@rosen-ui/asset-calculator';
 import type { Network } from '@rosen-ui/types';
 
-import { filtersToTypeorm } from '@/filters';
+import { filtersToTypeorm } from '@/backend/filtersToTypeorm';
+import { NotFoundError } from '@/errors';
 
 import { dataSource } from '../dataSource';
 import '../initialize-datasource-if-needed';
@@ -37,7 +38,7 @@ export const getAsset = async (id: string) => {
   });
 
   if (!token) {
-    throw new ReferenceError(`Token with id [${id}] not found`);
+    throw new NotFoundError(`Token with id [${id}] not found`);
   }
 
   const bridged: Pick<BridgedAssetEntity, 'amount' | 'chain' | 'bridgedTokenId'>[] =
