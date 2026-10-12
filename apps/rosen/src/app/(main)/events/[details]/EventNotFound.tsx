@@ -1,29 +1,50 @@
 'use client';
 
-import { Avatar, Button, Center, Icon, Stack, Toolbar, Typography } from '@rosen-bridge/ui-kit';
+import {
+  Button,
+  Center,
+  Icon,
+  NotFoundResult,
+  Stack,
+  type StackProps,
+  Typography,
+  useResponsive,
+} from '@rosen-bridge/ui-kit';
 
 export const EventNotFound = ({ onRetry }: { onRetry: () => void }) => {
+  const responsive: StackProps['direction'] = useResponsive({
+    laptop: 'row',
+    tablet: 'column',
+  });
+
   return (
     <Center style={{ minHeight: 'calc(100vh - 200px)' }}>
-      <Stack align="center" spacing={2} style={{ maxWidth: '30rem' }}>
-        <Avatar background="primary-light" color="primary" size={64}>
-          <Icon name="Search" size="32px" />
-        </Avatar>
-        <Typography align="center" variant="h3">
-          Event Not Found
-        </Typography>
-        <Typography align="center" variant="body2" color="text-secondary">
-          This event does not exist, or it has not been observed yet. New events may take a few
-          minutes to appear after the source transaction is confirmed.
-        </Typography>
-        <Toolbar>
-          <Button variant="outlined" onClick={onRetry}>
-            Check Again
-          </Button>
-          <Button variant="contained" href="/events">
+      <Stack align="center" spacing={3} style={{ maxWidth: '30rem' }}>
+        <Stack spacing={1} align="center">
+          <NotFoundResult />
+          <Typography align="center">Event Not Found</Typography>
+          <Typography align="center" variant="body2" color="text-secondary">
+            This event does not exist, or it has not been observed yet. New events may take a few
+            minutes to appear after the source transaction is confirmed.
+          </Typography>
+        </Stack>
+        <Stack spacing={2} direction={responsive}>
+          <Button
+            variant="contained"
+            href="/events"
+            startIcon={<Icon style={{ rotate: '180deg' }} name="ArrowRight" />}
+          >
             Back To Events
           </Button>
-        </Toolbar>
+          <Button
+            variant="contained"
+            color="warning"
+            startIcon={<Icon name="Refresh" />}
+            onClick={onRetry}
+          >
+            Check Again
+          </Button>
+        </Stack>
       </Stack>
     </Center>
   );
