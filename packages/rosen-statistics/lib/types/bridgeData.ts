@@ -33,5 +33,5 @@ export interface MappedBridgeEventData {
   month: number;
   year: number;
   decimal: number;
-  ergoSideTokenId: string;
+  nativeTokenId: string;
 }

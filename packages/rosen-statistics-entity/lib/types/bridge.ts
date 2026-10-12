@@ -19,5 +19,4 @@ export interface BridgeEventData {
   month: number;
   year: number;
   decimal: number;
-  ergoSideTokenId: string;
 }

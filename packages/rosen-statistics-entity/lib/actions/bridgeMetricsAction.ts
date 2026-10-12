@@ -116,7 +116,6 @@ export class BridgeMetricsAction {
         'be.month as "month"',
         'be.year as "year"',
         'te.significantDecimal as "decimal"',
-        'te.ergoSideTokenId as "ergoSideTokenId"',
       ])
       .where('et.result = :status', { status: 'successful' })
       .andWhere('be.timestamp >= :start AND be.timestamp < :end', {
