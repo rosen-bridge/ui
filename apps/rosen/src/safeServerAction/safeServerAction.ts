@@ -74,8 +74,17 @@ export const createSafeAction = (config: CreateSafeActionConfig) => {
     }
   > = {};
 
-  Object.keys(config.errors!).forEach((key) => {
-    addKnownErrorConstructor(config.errors![key]);
+  Object.entries(config.errors!).forEach(([name, ErrorClass]) => {
+    // minification renames classes, so restore the name used on deserialization
+    if (ErrorClass.name !== name) {
+      Object.defineProperty(ErrorClass, 'name', { value: name });
+    }
+
+    try {
+      addKnownErrorConstructor(ErrorClass);
+    } catch {
+      // already registered
+    }
   });
 
   const wrap: Wrap = (action, options) => {
