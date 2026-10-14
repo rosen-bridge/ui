@@ -7,13 +7,13 @@ import {
   BitcoinEsploraDataAdapter,
   BitcoinRunesDataAdapter,
   CardanoKoiosDataAdapter,
+  type ChainsAdapters,
   DogeBlockCypherDataAdapter,
   ErgoExplorerDataAdapter,
   EthereumEvmRpcDataAdapter,
   FiroExplorerDataAdapter,
   HandshakeExplorerDataAdapter,
 } from '@rosen-ui/asset-data-adapter';
-import type { AssetBalance, ChainsAdapters } from '@rosen-ui/asset-data-adapter/dist/types';
 import { NETWORKS, NETWORKS_KEYS } from '@rosen-ui/constants';
 
 import { configs } from '../configs';
@@ -235,50 +235,13 @@ export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
   };
 
   /**
-   * Updates and merges chain  data in Redis.
-   * @param {ChainChoices} chain - The chain name of data adapter
+   * Updates and merges chain data in Redis.
+   * @param {ChainChoices} adapter - The chain name of data adapter
    * @protected
    */
   protected chainDataUpdated = async (adapter: ChainsAdapters): Promise<void> => {
-    let newData = await adapter.fetch();
+    const newData = await adapter.fetch();
 
-    if (adapter.chain === NETWORKS.ethereum.key || adapter.chain === NETWORKS.binance.key) {
-      // preventing of overriding old chunks of data
-      const oldData =
-        (await AbstractRedisService.getInstance().getFromRedis<AssetBalance | null>(
-          adapter.chain,
-        )) || {};
-      const finalData = { ...oldData };
-      for (const tokenId of new Set([...Object.keys(oldData), ...Object.keys(newData)])) {
-        if (!Object.hasOwn(finalData, tokenId)) {
-          finalData[tokenId] = newData[tokenId];
-        } else if (!Object.hasOwn(newData, tokenId)) {
-          finalData[tokenId] = finalData[tokenId].map((item) => ({
-            ...item,
-            balance: 0n,
-          }));
-        } else {
-          finalData[tokenId] = finalData[tokenId].map((oldItem) => {
-            const isStillPresent = newData[tokenId].some(
-              (newItem) => newItem?.address === oldItem?.address,
-            );
-            return isStillPresent ? oldItem : { ...oldItem, balance: 0n };
-          });
-          newData[tokenId].forEach((item) => {
-            const finalItemIndex = finalData[tokenId].findIndex(
-              (addressBalance) => addressBalance?.address === item?.address,
-            );
-
-            if (finalItemIndex >= 0) {
-              finalData[tokenId][finalItemIndex] = { ...item };
-            } else {
-              finalData[tokenId].push({ ...item });
-            }
-          });
-        }
-        newData = finalData;
-      }
-    }
     await AbstractRedisService.getInstance().setToRedis(adapter.chain, stringSerializer(newData));
   };
 
