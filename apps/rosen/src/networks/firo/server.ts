@@ -21,7 +21,6 @@ export const buildPaymentUri = wrap(
 );
 
 export const calculateFee = wrap(calculateFeeCore, {
-  cache: 10 * 60 * 1000,
   traceKey: 'firo:calculateFee',
 });
 
