@@ -146,8 +146,8 @@ export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
               addresses,
               tokenMap,
               {
-                url: configs.chains.ethereum.rpc.connections.at(0)!.url || '',
-                authToken: configs.chains.ethereum.rpc.connections.at(0)?.authToken,
+                url: configs.chains.ethereum.adapter.rpc.connections.url!,
+                authToken: configs.chains.ethereum.adapter.rpc.connections.authToken,
               },
               configs.chains.ethereum.adapter.chunkSize || 1,
               this.logger.child('ethereumEvmRpcDataAdapter'),
@@ -158,8 +158,8 @@ export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
               addresses,
               tokenMap,
               {
-                url: configs.chains.binance.rpc.connections.at(0)!.url || '',
-                authToken: configs.chains.binance.rpc.connections.at(0)?.authToken,
+                url: configs.chains.binance.adapter.rpc.connections.url!,
+                authToken: configs.chains.binance.adapter.rpc.connections.authToken,
               },
               configs.chains.binance.adapter.chunkSize || 1,
               this.logger.child('binanceEvmRpcDataAdapter'),
