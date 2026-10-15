@@ -1,7 +1,6 @@
 import type { NextConfig } from 'next';
 
-import type { SentryBuildOptions } from '@sentry/nextjs';
-import { withSentryConfig } from '@sentry/nextjs';
+import { type SentryBuildOptions, withSentryConfig } from '@sentry/nextjs/config';
 
 import { env } from './src/env';
 
