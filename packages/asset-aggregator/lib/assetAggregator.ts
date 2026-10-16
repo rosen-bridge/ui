@@ -63,9 +63,9 @@ export class AssetAggregator {
   };
 
   /**
-   * Update database by considering chainAssetBalanceInfo and totalSupply
+   * Update the database by considering chainAssetBalanceInfo and totalSupply
    *
-   * @param ChainAssetBalanceInfo
+   * @param chainAssetBalanceInfo
    * @param totalSupply
    */
   update = async (

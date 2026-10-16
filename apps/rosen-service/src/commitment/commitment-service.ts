@@ -31,7 +31,6 @@ export const registerExtractors = async (scanner: ErgoScanner) => {
           active: configs.commitmentExtractor.active,
           type: ErgoNetworkType.Explorer,
           url: configs.ergo.explorerUrl,
-          address: chainConfig.addresses.commitment,
           maxParallelRequests: configs.commitmentExtractor.maxParallelRequests,
         },
         logger.child(`${chain}CommitmentExtractor`),

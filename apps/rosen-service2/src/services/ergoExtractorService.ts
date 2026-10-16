@@ -10,7 +10,7 @@ import { NETWORKS } from '@rosen-ui/constants';
 
 import { configs } from '../configs';
 import type { ChainChoices, ChainConfigs } from '../types';
-import { createCommitmentExtractor, createEventTrigger, resolveErgoNetworkConfig } from '../utils';
+import { createCommitmentExtractor, createEventTrigger } from '../utils';
 import {
   AbstractDBService,
   AbstractErgoExtractorsService,
@@ -51,7 +51,6 @@ export class ErgoExtractorService extends AbstractErgoExtractorsService {
     this.ergoScanner = AbstractErgoScannerService.getInstance().getErgoScanner();
     this.dataSource = AbstractDBService.getInstance().getDataSource();
     this.tokenMap = AbstractTokenMapService.getInstance().getTokenMap();
-    const { networkType, url } = resolveErgoNetworkConfig();
     this.extractors.push(
       new ErgoObservationExtractor(
         configs.contracts.ergo.addresses.lock,
@@ -61,14 +60,7 @@ export class ErgoExtractorService extends AbstractErgoExtractorsService {
       ),
     );
     this.extractors.push(
-      createEventTrigger(
-        NETWORKS.ergo.key,
-        networkType,
-        url,
-        this.dataSource,
-        configs.contracts.ergo,
-        this.logger,
-      ),
+      createEventTrigger(NETWORKS.ergo.key, this.dataSource, configs.contracts.ergo, this.logger),
     );
     this.extractors.push(
       createCommitmentExtractor(
@@ -85,7 +77,7 @@ export class ErgoExtractorService extends AbstractErgoExtractorsService {
         const network = NETWORKS[chain as keyof typeof NETWORKS];
         const contract = configs.contracts[chain as keyof typeof configs.contracts] as ChainConfigs;
         this.extractors.push(
-          createEventTrigger(network.key, networkType, url, this.dataSource, contract, this.logger),
+          createEventTrigger(network.key, this.dataSource, contract, this.logger),
         );
         this.extractors.push(
           createCommitmentExtractor(

@@ -10,11 +10,12 @@ import { type AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger'
 import { ErgoUTXOExtractor } from '@rosen-bridge/address-extractor';
 import type { ErgoScanner } from '@rosen-bridge/ergo-scanner';
 import { ExtendedTokenMap, type TokenMap } from '@rosen-bridge/extended-tokens';
+import { ErgoNetworkType } from '@rosen-bridge/scanner-interfaces';
 import { type Dependency, ServiceAction, ServiceStatus } from '@rosen-bridge/service-manager';
 
 import { configs } from '../configs';
 import { TOKEN_MAP_EXTRACTOR_ID, TOKEN_MAP_REDIS_KEY } from '../constants';
-import { resolveErgoNetworkConfig } from '../utils';
+import { getErgoNodeUrl } from '../utils';
 import {
   AbstractDBService,
   AbstractErgoScannerService,
@@ -48,7 +49,6 @@ export class TokenMapService extends AbstractTokenMapService {
   protected assemble = async (): Promise<boolean> => {
     this.ergoScanner = AbstractErgoScannerService.getInstance().getErgoScanner();
     this.tokenMap = new ExtendedTokenMap();
-    const { networkType, url } = resolveErgoNetworkConfig();
 
     if (configs.tokenMap.onChainTokenMapEnabled) {
       if (!configs.contracts.ergo.addresses.tokenMap || !configs.contracts.ergo.tokens.tokenMap) {
@@ -58,8 +58,8 @@ export class TokenMapService extends AbstractTokenMapService {
         AbstractDBService.getInstance().getDataSource(),
         TOKEN_MAP_EXTRACTOR_ID,
         ergoLib.NetworkPrefix.Mainnet,
-        url,
-        networkType,
+        getErgoNodeUrl(),
+        ErgoNetworkType.Node,
         configs.contracts.ergo.addresses.tokenMap,
         [configs.contracts.ergo.tokens.tokenMap],
         this.logger.child('tokenMapBoxExtractor'),

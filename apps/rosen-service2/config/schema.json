@@ -567,11 +567,7 @@
                       "validations": [
                         {
                           "required": true,
-                          "error": "ergo node url must be specified",
-                          "when": {
-                            "path": "chains.ergo.method",
-                            "value": "node"
-                          }
+                          "error": "ergo node url must be specified"
                         }
                       ]
                     }

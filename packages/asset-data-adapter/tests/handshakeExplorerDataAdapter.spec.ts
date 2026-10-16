@@ -45,13 +45,4 @@ describe('HandshakeExplorerDataAdapter', () => {
       expect(result).toEqual(expectedHnsGetAddressAssetsResult);
     });
   });
-
-  describe('getRawTotalSupply', () => {
-    /**
-     * @target should return 0n for native token
-     */
-    it<TestContext>('should return 0n', async ({ adapter }) => {
-      expect(await adapter.getRawTotalSupply()).toEqual(0n);
-    });
-  });
 });

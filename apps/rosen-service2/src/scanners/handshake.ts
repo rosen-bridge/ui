@@ -10,7 +10,6 @@ import {
 } from '@rosen-bridge/handshake-scanner';
 
 import { configs } from '../configs';
-import { BLOCK_CLEANUP_THRESHOLD_DURATION, BLOCK_CLEANUP_TRIM_COUNT_IN_ROUND } from '../constants';
 
 const logger = DefaultLogger.getInstance().child(import.meta.url);
 
@@ -60,12 +59,7 @@ export const getHandshakeScanner = async (dataSource: DataSource, tokenMap: Toke
     initialHeight: configs.chains.handshake.initialHeight ?? 1,
     network: createHandshakeNetworkConnectorManager(),
     blockRetrieveGap: configs.chains.handshake.blockRetrieveGap,
-    blockCleanupConfig: {
-      blockCleanupThresholdDuration: BLOCK_CLEANUP_THRESHOLD_DURATION,
-      blockTrimCountInRound: configs.chains.handshake.blockCleanupActive
-        ? BLOCK_CLEANUP_TRIM_COUNT_IN_ROUND
-        : 0,
-    },
+    blockCleanupConfig: { active: configs.chains.handshake.blockCleanupActive === true },
     logger: logger.child('handshakeScannerLogger'),
   });
 
