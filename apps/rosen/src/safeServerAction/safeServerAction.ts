@@ -3,10 +3,11 @@
  * local:ergo/rosen-bridge/ui#441
  */
 /** biome-ignore-all lint/suspicious/noExplicitAny: Use a better type */
+
 import { addKnownErrorConstructor, deserializeError, serializeError } from 'serialize-error';
 import type { ZodType } from 'zod';
 
-import { fromSafeData, toSafeData } from './safeData';
+import JsonBigInt from '@rosen-bridge/json-bigint';
 
 type AsyncFunction = (...args: any[]) => Promise<any>;
 
@@ -87,7 +88,7 @@ export const createSafeAction = (config: CreateSafeActionConfig) => {
 
         return {
           cache: options?.cache,
-          result: await toSafeData(action)(...args),
+          result: structuredClone(await action(...args)),
           traceKey: options?.traceKey,
         };
       } catch (error: unknown) {
@@ -106,18 +107,7 @@ export const createSafeAction = (config: CreateSafeActionConfig) => {
     }
 
     return async (...args) => {
-      const key = [
-        actions.get(action),
-        ...args.map((arg) => {
-          try {
-            return JSON.stringify(arg);
-          } catch {
-            return arg.toString();
-          }
-        }),
-      ].join('_');
-
-      const handler = fromSafeData(action);
+      const key = JsonBigInt.stringify({ action: actions.get(action), args });
 
       const isInCache = key in caches;
 
@@ -128,7 +118,7 @@ export const createSafeAction = (config: CreateSafeActionConfig) => {
       if (!isInCache || (isInitiated && isExpired)) {
         caches[key] = Object.assign({}, caches[key], {
           timestamp: Date.now(),
-          promise: handler(...args),
+          promise: action(...args),
         });
       }
 

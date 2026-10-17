@@ -1,5 +1,5 @@
 export * from './constants';
-export * from './generateUnsignedTx';
+export * from './generateLockTx';
 export * from './getMaxTransfer';
 export * from './types';
 export * from './utils';

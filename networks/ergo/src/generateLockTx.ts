@@ -13,24 +13,38 @@ import { createChangeBox, createLockBox, getHeight } from './utils';
 
 const selector = new ErgoBoxSelection();
 
+export type GenerateLockTxParams = {
+  amount: RosenAmountValue;
+  bridgeFee: RosenAmountValue;
+  fromAddress: string;
+  lockAddress: string;
+  networkFee: RosenAmountValue;
+  toAddress: string;
+  toChain: Network;
+  token: RosenChainToken;
+  walletUtxos: ErgoBoxProxy[];
+};
+
 /**
  * generates an unsigned lock transaction on Ergo
  * @param getTokenMap
  * @returns
  */
-export const generateUnsignedTx =
+export const generateLockTx =
   (getTokenMap: () => Promise<TokenMap>) =>
-  async (
-    changeAddress: string,
-    walletUtxos: ErgoBoxProxy[],
-    lockAddress: string,
-    toChain: Network,
-    toAddress: string,
-    wrappedAmount: RosenAmountValue,
-    bridgeFeeString: string,
-    networkFeeString: string,
-    token: RosenChainToken,
-  ): Promise<UnsignedErgoTxProxy> => {
+  async (params: GenerateLockTxParams): Promise<UnsignedErgoTxProxy> => {
+    const {
+      amount: wrappedAmount,
+      bridgeFee,
+      fromAddress: changeAddress,
+      lockAddress,
+      networkFee,
+      toAddress,
+      toChain,
+      token,
+      walletUtxos,
+    } = params;
+
     const tokenMap = await getTokenMap();
     const unwrappedAmount = tokenMap.unwrapAmount(
       token.tokenId,
@@ -48,9 +62,6 @@ export const generateUnsignedTx =
       networkHeight,
       ...walletUtxos.map((walletUtxo) => walletUtxo.creationHeight),
     );
-
-    const bridgeFee = BigInt(bridgeFeeString);
-    const networkFee = BigInt(networkFeeString);
 
     // generate lock box
     const lockAssets: AssetBalance = {

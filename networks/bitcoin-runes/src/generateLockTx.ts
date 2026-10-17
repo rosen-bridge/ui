@@ -8,12 +8,13 @@ import {
 import type { RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
 import { handleUncoveredAssets } from '@rosen-network/base';
 import { NETWORKS } from '@rosen-ui/constants';
-import type { RosenAmountValue } from '@rosen-ui/types';
+import type { Network, RosenAmountValue } from '@rosen-ui/types';
 
 import { MINIMUM_BTC_FOR_NATIVE_SEGWIT_OUTPUT } from './constants';
 import type { AssetBalance, UnsignedPsbtData } from './types';
 import {
   generateFeeEstimatorWithAssumptions,
+  generateOpReturnData,
   getAdditionalBoxes,
   getAddressAllBtcUtxos,
   getAddressAvailableBtcUtxos,
@@ -25,22 +26,43 @@ import {
   makeTaprootPayment,
 } from './utils';
 
+export type GenerateLockTxParams = {
+  amount: RosenAmountValue;
+  bridgeFee: RosenAmountValue;
+  fromAddress: string;
+  fromPaymentAddress: string;
+  internalPubkey: string;
+  lockAddress: string;
+  networkFee: RosenAmountValue;
+  toAddress: string;
+  toChain: Network;
+  token: RosenChainToken;
+};
+
 /**
  * generates bitcoin-runes lock tx
  * @param getTokenMap
  * @returns
  */
-export const generateUnsignedTx =
+export const generateLockTx =
   (getTokenMap: () => Promise<TokenMap>) =>
-  async (
-    lockAddress: string,
-    fromAddress: string,
-    fromPaymentAddress: string,
-    wrappedAmount: RosenAmountValue,
-    lockData: string,
-    token: RosenChainToken,
-    internalPubkey: string,
-  ): Promise<UnsignedPsbtData> => {
+  async (params: GenerateLockTxParams): Promise<UnsignedPsbtData> => {
+    const lockData = await generateOpReturnData(
+      params.toChain,
+      params.toAddress,
+      params.networkFee.toString(),
+      params.bridgeFee.toString(),
+    );
+
+    const {
+      amount: wrappedAmount,
+      fromAddress,
+      fromPaymentAddress,
+      internalPubkey,
+      lockAddress,
+      token,
+    } = params;
+
     const tokenMap = await getTokenMap();
 
     const lockDataChunks = lockData.match(/.{1,40}/g);

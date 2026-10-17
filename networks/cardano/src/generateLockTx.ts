@@ -5,14 +5,15 @@ import {
   CardanoBoxSelection,
   type CardanoUtxo,
 } from '@rosen-bridge/cardano-utxo-selection';
-import type { TokenMap } from '@rosen-bridge/tokens';
+import type { RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
 import { handleUncoveredAssets } from '@rosen-network/base';
 import { NETWORKS } from '@rosen-ui/constants';
-import type { RosenAmountValue } from '@rosen-ui/types';
+import type { Network, RosenAmountValue } from '@rosen-ui/types';
 
 import { feeAndMinBoxValue } from './constants';
 import { ADA_POLICY_ID, type CardanoProtocolParams } from './types';
 import {
+  generateLockAuxiliaryData,
   generateOutputBox,
   getCardanoProtocolParams,
   getTxBuilderConfig,
@@ -24,22 +25,44 @@ import {
 
 const selector = new CardanoBoxSelection();
 
+export type GenerateLockTxParams = {
+  amount: RosenAmountValue;
+  bridgeFee: RosenAmountValue;
+  fromAddress: string;
+  lockAddress: string;
+  networkFee: RosenAmountValue;
+  toAddress: string;
+  toChain: Network;
+  token: RosenChainToken;
+  walletUtxos: string[];
+};
+
 /**
  * generates a lock transaction on Cardano
  * @param getTokenMap
  * @returns a function that provides the hex representation of the unsigned tx upon invocation
  */
-export const generateUnsignedTx =
+export const generateLockTx =
   (getTokenMap: () => Promise<TokenMap>) =>
-  async (
-    walletUtxos: string[],
-    lockAddress: string,
-    changeAddressHex: string,
-    policyIdHex: string,
-    assetNameHex: string,
-    wrappedAmount: RosenAmountValue,
-    auxiliaryDataHex: string,
-  ): Promise<string> => {
+  async (params: GenerateLockTxParams): Promise<string> => {
+    const auxiliaryDataHex = await generateLockAuxiliaryData(
+      params.toChain,
+      params.toAddress,
+      params.fromAddress,
+      params.networkFee.toString(),
+      params.bridgeFee.toString(),
+    );
+
+    const {
+      amount: wrappedAmount,
+      fromAddress: changeAddressHex,
+      lockAddress,
+      walletUtxos,
+    } = params;
+
+    const policyIdHex = params.token.extra.policyId as string;
+    const assetNameHex = params.token.extra.assetName as string;
+
     const tokenMap = await getTokenMap();
 
     const unwrappedAmount = tokenMap.unwrapAmount(
