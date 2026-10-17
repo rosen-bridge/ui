@@ -19,6 +19,15 @@ export const NETWORKS = {
     id: '',
     hasTokenSupport: false,
   },
+  'bitcoin-cash': {
+    // Rosen owns the production assignment; a candidate fixture index is not activation.
+    index: -1,
+    key: 'bitcoin-cash',
+    label: 'Bitcoin Cash',
+    nativeToken: 'bch',
+    id: '',
+    hasTokenSupport: false,
+  },
   'bitcoin-runes': {
     index: 6,
     key: 'bitcoin-runes',
