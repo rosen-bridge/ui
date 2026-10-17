@@ -3,7 +3,6 @@
 import { useEffect, useMemo } from 'react';
 
 import { FormProvider, type SubmitHandler, useController, useForm } from 'react-hook-form';
-import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
 
 import {
@@ -23,15 +22,11 @@ import {
   useToast,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS, TOKEN_NAME_PLACEHOLDER } from '@rosen-ui/constants';
-import { fetcher, mutatorWithHeaders } from '@rosen-ui/swr-helpers';
+import { mutatorWithHeaders } from '@rosen-ui/swr-helpers';
 import { getNonDecimalString, getTxURL } from '@rosen-ui/utils';
 
-import { useInfo, useToken } from '@/hooks';
-import type {
-  ApiAddressAssetsResponse,
-  ApiWithdrawRequestBody,
-  ApiWithdrawResponse,
-} from '@/types/api';
+import { useAllAddressAssets, useInfo, useToken } from '@/hooks';
+import type { ApiWithdrawRequestBody, ApiWithdrawResponse } from '@/types/api';
 
 import {
   type TokenAmountCompatibleFormSchema,
@@ -47,16 +42,12 @@ const WithdrawForm = () => {
   const { confirm } = useConfirm();
   const toast = useToast();
 
-  const { data, isLoading: isTokensListLoading } = useSWR<ApiAddressAssetsResponse>(
-    '/address/assets',
-    fetcher,
-    {},
-  );
+  const { tokens: allTokens, isLoading: isTokensListLoading } = useAllAddressAssets();
 
   const { token: ergToken, isLoading: isErgTokenLoading } = useToken('erg');
   const { apiKey } = useApiKey();
 
-  const tokens = useMemo(() => data?.items.filter((token) => !!token.amount), [data]);
+  const tokens = useMemo(() => allTokens?.filter((token) => !!token.amount), [allTokens]);
 
   const info = useInfo();
 

@@ -1,3 +1,4 @@
+export * from './useAllAddressAssets';
 export * from './useERsnToken';
 export * from './useInfo';
 export * from './useRsnToken';

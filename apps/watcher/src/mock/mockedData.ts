@@ -390,13 +390,27 @@ export const mockedData: FakeData = {
       return revenueChart[period];
     },
 
-    '/address/assets': ({ tokenId }: { tokenId: string }) =>
+    '/address/assets': ({
+      tokenId,
+      offset,
+      limit,
+    }: {
+      tokenId?: string;
+      offset?: number;
+      limit?: number;
+    }) =>
       tokenId
         ? {
             items: addressAssets.items.filter((asset) => asset.tokenId === tokenId),
             total: 1,
           }
-        : addressAssets,
+        : {
+            ...addressAssets,
+            items:
+              offset !== undefined && limit !== undefined
+                ? addressAssets.items.slice(offset, offset + limit)
+                : addressAssets.items,
+          },
     '/observation': ({ offset, limit }) => {
       return {
         ...observations,

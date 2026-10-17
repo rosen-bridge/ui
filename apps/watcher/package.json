@@ -16,6 +16,7 @@
     "lint:check": "biome check",
     "start": "npx serve@latest out",
     "tauri": "tauri",
+    "test": "NODE_OPTIONS='--import tsx' vitest run",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
