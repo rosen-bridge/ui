@@ -193,6 +193,14 @@ const WithdrawForm = () => {
       disabled={disabled}
       {...register('address', {
         required: 'Address is required',
+        validate: async (value) => {
+          try {
+            const response = await fetcher(`/address/validate/${encodeURIComponent(value)}`);
+            return response?.valid === false ? 'Invalid Address' : true;
+          } catch {
+            return 'Invalid Address';
+          }
+        },
       })}
       error={!!formMethods.formState.errors.address}
       helperText={
