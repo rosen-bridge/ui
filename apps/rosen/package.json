@@ -46,6 +46,7 @@
     "@rosen-network/evm": "^0.3.8",
     "@rosen-network/firo": "^0.1.3",
     "@rosen-network/handshake": "^0.0.0",
+    "@rosen-ui/1am-wallet": "^0.0.0",
     "@rosen-ui/asset-calculator": "^2.4.0",
     "@rosen-ui/constants": "^1.1.0",
     "@rosen-ui/data-source": "^0.3.0",
