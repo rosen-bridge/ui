@@ -121,8 +121,12 @@ export const Overview = ({
         <Label label="Amount" orientation={labelOrientation}>
           <Amount
             loading={isLoading}
-            value={data?.amount}
-            decimal={data?.lockToken?.significantDecimal}
+            value={
+              data?.lockToken && {
+                amount: data.amount,
+                decimals: data.lockToken.significantDecimal,
+              }
+            }
             orientation="horizontal"
             unit={data?.lockToken?.name}
             price={data?.price}
@@ -155,8 +159,12 @@ export const Overview = ({
         <Label label="Fee Sum" orientation={labelOrientation}>
           <Amount
             loading={isLoading}
-            value={data?.totalFee}
-            decimal={data?.lockToken?.significantDecimal}
+            value={
+              data?.lockToken && {
+                amount: data.totalFee,
+                decimals: data.lockToken.significantDecimal,
+              }
+            }
             unit={data?.lockToken?.name}
             price={data?.price}
           />

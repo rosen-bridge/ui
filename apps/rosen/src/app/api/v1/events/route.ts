@@ -82,7 +82,7 @@ const filterParser = new FilterParser({
         operators: ['greaterThanOrEqual', 'lessThanOrEqual'],
       },
       {
-        key: 'WIDsCount',
+        key: 'reports',
         type: 'number',
         operators: ['greaterThanOrEqual', 'lessThanOrEqual'],
       },
@@ -109,7 +109,7 @@ const filterParser = new FilterParser({
         defaultOrder: 'DESC',
       },
       {
-        key: 'WIDsCount',
+        key: 'reports',
         defaultOrder: 'DESC',
       },
       {
