@@ -168,19 +168,19 @@ export const MobileRow: FC<RowProps> = (props) => {
           <TableRow style={rowStyles}>
             <EnhancedTableCell>Amount</EnhancedTableCell>
             <EnhancedTableCell>
-              <Amount value={row.sourceChainToken.amount} decimal={row.sourceChainToken.decimals} />
+              <Amount value={row.sourceChainToken} />
             </EnhancedTableCell>
           </TableRow>
           <TableRow style={rowStyles}>
             <EnhancedTableCell>Bridge Fee</EnhancedTableCell>
             <EnhancedTableCell>
-              <Amount value={row.bridgeFee} decimal={row.sourceChainToken.decimals} />
+              <Amount value={{ amount: row.bridgeFee, decimals: row.sourceChainToken.decimals }} />
             </EnhancedTableCell>
           </TableRow>
           <TableRow style={rowStyles}>
             <EnhancedTableCell>Network Fee</EnhancedTableCell>
             <EnhancedTableCell>
-              <Amount value={row.networkFee} decimal={row.sourceChainToken.decimals} />
+              <Amount value={{ amount: row.networkFee, decimals: row.sourceChainToken.decimals }} />
             </EnhancedTableCell>
           </TableRow>
           <TableRow style={rowStyles}>
@@ -240,13 +240,13 @@ export const TabletRow: FC<RowProps> = (props) => {
       </EnhancedTableCell>
       <EnhancedTableCell align="center">{row.sourceChainToken.name}</EnhancedTableCell>
       <EnhancedTableCell align="center">
-        <Amount value={row.sourceChainToken.amount} decimal={row.sourceChainToken.decimals} />
+        <Amount value={row.sourceChainToken} />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
-        <Amount value={row.bridgeFee} decimal={row.sourceChainToken.decimals} />
+        <Amount value={{ amount: row.bridgeFee, decimals: row.sourceChainToken.decimals }} />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
-        <Amount value={row.networkFee} decimal={row.sourceChainToken.decimals} />
+        <Amount value={{ amount: row.networkFee, decimals: row.sourceChainToken.decimals }} />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">{row.status}</EnhancedTableCell>
     </TableRow>

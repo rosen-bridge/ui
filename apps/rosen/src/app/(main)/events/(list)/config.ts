@@ -158,7 +158,7 @@ export const getFilters = (tokenMap: TokenMap): Filter[] => [
     },
   },
   {
-    name: 'WIDsCount',
+    name: 'reports',
     label: 'Reports',
     unique: false,
     operators: OPERATORS_COMPARATIVE,
@@ -170,7 +170,7 @@ export const getFilters = (tokenMap: TokenMap): Filter[] => [
 
 export const sorts = [
   { label: 'Timestamp', value: 'timestamp' },
-  { label: 'Reports', value: 'WIDsCount' },
+  { label: 'Reports', value: 'reports' },
   { label: 'Height', value: 'height' },
   { label: 'Amount', value: 'amount' },
 ];

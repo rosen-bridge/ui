@@ -37,10 +37,11 @@ const guardStatusRepository = dataSource.getRepository(GuardStatusEntity);
 const guardStatusChangedRepository = dataSource.getRepository(GuardStatusChangedEntity);
 
 type EventListItem = Omit<ObservationEntity, 'requestId'> &
-  Pick<EventTriggerEntity, 'WIDsCount' | 'paymentTxId' | 'spendTxId'> & {
+  Pick<EventTriggerEntity, 'paymentTxId' | 'spendTxId'> & {
     eventId: string;
     triggerTxId: string | null;
     timestamp: number;
+    reports: number;
     flows: number;
     status: EventStatusValue;
     fromChain: Network;
@@ -122,6 +123,9 @@ const fromDatabaseStatus = (status: string): EventStatus => {
   }
 };
 
+const toDecimal = (value: string) =>
+  `CAST(${value} || 'e-' || COALESCE(te.significantDecimal, 0) AS NUMERIC)`;
+
 /**
  * get paginated list of events
  * @param offset
@@ -161,7 +165,7 @@ export const getEvents = async (filters: Filter): Promise<EventListItemWithTotal
     const ergoSideTokenIds = ergoSideTokens.map((token) => token.id);
 
     const filter: StringArrayFilterField = {
-      key: 'sourceChainTokenId',
+      key: 'lockTokenId',
       type: 'stringArray',
       operator: field.operator === 'equal' ? 'includes' : 'excludes',
       values: ergoSideTokenIds,
@@ -179,7 +183,7 @@ export const getEvents = async (filters: Filter): Promise<EventListItemWithTotal
       case 'amount':
       case 'bridgeFee':
       case 'networkFee':
-        return `"${key}Normalized"`;
+        return `"${key}WithDecimal"`;
       default:
         return `"${key}"`;
     }
@@ -216,22 +220,20 @@ export const getEvents = async (filters: Filter): Promise<EventListItemWithTotal
       'oe.amount AS "amount"',
       'oe.networkFee AS "networkFee"',
       'oe.bridgeFee AS "bridgeFee"',
-      'oe.sourceChainTokenId AS "sourceChainTokenId"',
+      'oe.sourceChainTokenId AS "lockTokenId"',
       'oe.sourceTxId AS "sourceTxId"',
       'oe.requestId AS "eventId"',
       'be.timestamp AS "timestamp"',
-      'COALESCE(ete."WIDsCount", 0) AS "WIDsCount"',
+      'COALESCE(ete."WIDsCount", 0) AS "reports"',
       'ete.paymentTxId AS "paymentTxId"',
       'ete.spendTxId AS "spendTxId"',
       'ete.txId AS "triggerTxId"',
       'to_jsonb(te) AS "lockToken"',
-      'esoe.status AS "statusOverrideStatus"',
-      'esoe.reason AS "statusOverrideReason"',
-      'esoe.severity AS "statusOverrideSeverity"',
+      `CASE WHEN esoe.id IS NULL THEN NULL ELSE JSONB_BUILD_OBJECT('status', esoe.status, 'reason', esoe.reason, 'severity', esoe.severity) END AS "statusOverride"`,
       'COALESCE(ete.result, \'processing\') AS "status"',
-      '(CAST(oe.amount AS DOUBLE PRECISION) / POWER(10, COALESCE(te.significantDecimal, 0))) AS "amountNormalized"',
-      '(CAST(oe.networkFee AS DOUBLE PRECISION) / POWER(10, COALESCE(te.significantDecimal, 0))) AS "networkFeeNormalized"',
-      '(CAST(oe.bridgeFee AS DOUBLE PRECISION) / POWER(10, COALESCE(te.significantDecimal, 0))) AS "bridgeFeeNormalized"',
+      `${toDecimal('oe.amount')} AS "amountWithDecimal"`,
+      `${toDecimal('oe.networkFee')} AS "networkFeeWithDecimal"`,
+      `${toDecimal('oe.bridgeFee')} AS "bridgeFeeWithDecimal"`,
       'COUNT(ete.id) OVER (PARTITION BY oe.id) AS "flows"',
       'ARRAY_AGG(COALESCE(ete.result, \'processing\')) OVER (PARTITION BY oe.id) AS "statuses"',
     ])
@@ -273,18 +275,17 @@ export const getEvents = async (filters: Filter): Promise<EventListItemWithTotal
 
   return {
     items: items.map(
-      ({ statusOverrideStatus, statusOverrideReason, statusOverrideSeverity, ...item }) => ({
+      ({
+        lockTokenId,
+        statusOverride,
+        amountWithDecimal,
+        bridgeFeeWithDecimal,
+        networkFeeWithDecimal,
+        ...item
+      }) => ({
         ...item,
         status:
-          item.flows > 1
-            ? 'MULTIPLE_FLOWS'
-            : statusOverrideStatus
-              ? {
-                  status: statusOverrideStatus,
-                  reason: statusOverrideReason,
-                  severity: statusOverrideSeverity,
-                }
-              : fromDatabaseStatus(item.status),
+          item.flows > 1 ? 'MULTIPLE_FLOWS' : statusOverride || fromDatabaseStatus(item.status),
       }),
     ),
     total: rawItems[0]?.total ?? 0,
@@ -313,18 +314,16 @@ export const getEvent = async (id: string): Promise<EventDetailsType[]> => {
       'oe.amount AS "amount"',
       'oe.networkFee AS "networkFee"',
       'oe.bridgeFee AS "bridgeFee"',
-      'oe.sourceChainTokenId AS "sourceChainTokenId"',
+      'CAST(oe.bridgeFee AS NUMERIC) + CAST(oe.networkFee AS NUMERIC) AS "totalFee"',
       'oe.sourceTxId AS "sourceTxId"',
       'oe.requestId AS "eventId"',
       'be.timestamp AS "timestamp"',
-      'COALESCE(ete."WIDsCount", 0) AS "WIDsCount"',
+      'COALESCE(ete."WIDsCount", 0) AS "reports"',
       'ete.paymentTxId AS "paymentTxId"',
       'ete.spendTxId AS "spendTxId"',
       'ete.txId AS "triggerTxId"',
       'to_jsonb(te) AS "lockToken"',
-      'esoe.status AS "statusOverrideStatus"',
-      'esoe.reason AS "statusOverrideReason"',
-      'esoe.severity AS "statusOverrideSeverity"',
+      `CASE WHEN esoe.id IS NULL THEN NULL ELSE JSONB_BUILD_OBJECT('status', esoe.status, 'reason', esoe.reason, 'severity', esoe.severity) END AS "statusOverride"`,
     ])
     .where('oe.requestId = :id', { id })
     .getRawMany();
@@ -340,38 +339,30 @@ export const getEvent = async (id: string): Promise<EventDetailsType[]> => {
 
   const tokensByErgoSideTokenId = new Map(tokens.map((token) => [token.ergoSideTokenId, token]));
 
-  const result = events.map(
-    async ({ statusOverrideStatus, statusOverrideReason, statusOverrideSeverity, ...event }) => {
-      if (!event.lockToken) throw new Error(`Event [${event.eventId}] has no lock token`);
+  const result = events.map(async ({ statusOverride, ...event }) => {
+    if (!event.lockToken) throw new Error(`Event [${event.eventId}] has no lock token`);
 
-      const token = tokensByErgoSideTokenId.get(event.lockToken.ergoSideTokenId);
+    const token = tokensByErgoSideTokenId.get(event.lockToken.ergoSideTokenId);
 
-      if (!token) {
-        throw new Error(`Lock token for event [${event.eventId}] not found in the token table`);
-      }
+    if (!token) {
+      throw new Error(`Lock token for event [${event.eventId}] not found in the token table`);
+    }
 
-      const price = await tokenPriceAction.getLatestTokenPrice(token.id, event.timestamp);
+    const price = await tokenPriceAction.getLatestTokenPrice(token.id, event.timestamp);
 
-      let status: EventDetailsType['status'];
-      let timestamps: EventDetailsType['timestamps'] = {};
+    let status: EventDetailsType['status'];
+    let timestamps: EventDetailsType['timestamps'] = {};
 
-      if (statusOverrideStatus) {
-        status = {
-          status: statusOverrideStatus,
-          reason: statusOverrideReason,
-          severity: statusOverrideSeverity,
-        };
-      } else {
-        const eventStatus = await getEventStatus(id, event.triggerTxId ?? undefined);
-        status = eventStatus.status;
-        timestamps = eventStatus.timestamps;
-      }
+    if (statusOverride) {
+      status = statusOverride;
+    } else {
+      const eventStatus = await getEventStatus(id, event.triggerTxId ?? undefined);
+      status = eventStatus.status;
+      timestamps = eventStatus.timestamps;
+    }
 
-      const totalFee = (+event.bridgeFee + +event.networkFee).toString();
-
-      return { ...event, price, status, timestamps, totalFee };
-    },
-  );
+    return { ...event, price, status, timestamps };
+  });
 
   return await Promise.all(result);
 };
