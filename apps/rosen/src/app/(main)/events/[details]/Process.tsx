@@ -13,7 +13,7 @@ import {
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 
-import type { EventDetailsType, EventStatusType } from '@/backend/events/repository';
+import type { EventDetailsType, EventTimestamps } from '@/backend/events/repository';
 
 import { Section } from './Section';
 
@@ -335,10 +335,7 @@ const pick = (items: StepCandidates[], path: number[] = [-1]): Step[] => {
   });
 };
 
-const toItems = (
-  steps: Step[],
-  timestamps: EventStatusType['timestamps'],
-): EventProcessesProps['items'] => {
+const toItems = (steps: Step[], timestamps: EventTimestamps): EventProcessesProps['items'] => {
   return steps.map((step) => {
     const subs = step.subs ? toItems(step.subs, timestamps) : undefined;
 

@@ -54,6 +54,7 @@
     "@rosen-ui/asset-calculator": "^2.4.0",
     "@rosen-ui/constants": "^1.1.0",
     "@rosen-ui/data-source": "^0.3.0",
+    "@rosen-ui/event-list-view": "^0.0.0",
     "config": "^3.3.12",
     "ethers": "6.16.0",
     "pg": "^8.11.3",

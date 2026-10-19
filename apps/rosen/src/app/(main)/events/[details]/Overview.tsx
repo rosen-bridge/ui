@@ -122,10 +122,12 @@ export const Overview = ({
           <Amount
             loading={isLoading}
             value={
-              data?.lockToken && {
-                amount: data.amount,
-                decimals: data.lockToken.significantDecimal,
-              }
+              data?.lockToken
+                ? {
+                    amount: data.amount,
+                    decimals: data.lockToken.significantDecimal,
+                  }
+                : undefined
             }
             orientation="horizontal"
             unit={data?.lockToken?.name}
@@ -160,10 +162,12 @@ export const Overview = ({
           <Amount
             loading={isLoading}
             value={
-              data?.lockToken && {
-                amount: data.totalFee,
-                decimals: data.lockToken.significantDecimal,
-              }
+              data?.lockToken
+                ? {
+                    amount: data.totalFee,
+                    decimals: data.lockToken.significantDecimal,
+                  }
+                : undefined
             }
             unit={data?.lockToken?.name}
             price={data?.price}

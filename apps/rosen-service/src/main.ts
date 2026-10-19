@@ -1,6 +1,7 @@
 import './bootstrap';
 
 import { DefaultLogger } from '@rosen-bridge/abstract-logger';
+import { listenEventListViewRefresh } from '@rosen-ui/event-list-view';
 
 import calculatorService from './calculator/calculator-service';
 import dataSource from './data-source';
@@ -36,6 +37,11 @@ const main = async () => {
         error instanceof Error ? error.stack : undefined,
       );
     }
+
+    await listenEventListViewRefresh(dataSource, {
+      onError: (error) => logger.warn(`cannot refresh event list view due to error: ${error}`),
+    });
+    logger.info('event list view refresh listener started successfully');
 
     await scannerService.start();
     logger.info('scanner service started successfully');

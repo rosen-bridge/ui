@@ -10,6 +10,9 @@
       "path": "../asset-calculator/tsconfig.build.json"
     },
     {
+      "path": "../event-list-view/tsconfig.build.json"
+    },
+    {
       "path": "../public-status/tsconfig.build.json"
     },
     {

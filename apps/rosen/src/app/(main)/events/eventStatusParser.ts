@@ -12,6 +12,6 @@ export const eventStatusParser = (
   return {
     icon: 'ExclamationCircle',
     label: status.status,
-    severity: status.severity,
+    severity: status.severity ?? undefined,
   };
 };

@@ -2,7 +2,6 @@ import {
   getEvent,
   getEventGuardStatus as getEventGuardStatusBase,
   getEventGuardsStatus as getEventGuardsStatusBase,
-  getEventStatus,
   getEvents,
 } from './repository';
 
@@ -12,17 +11,7 @@ import {
  */
 export const getEventsWithFullTokenData = getEvents;
 
-export const getEventById = async (id: string) => {
-  return await getEvent(id);
-};
-
-export const getEventStatusByTriggerTxId = async (
-  eventId: string,
-  triggerTxId?: string,
-  guardPublicKey?: string,
-) => {
-  return await getEventStatus(eventId, triggerTxId, guardPublicKey);
-};
+export const getEventById = getEvent;
 
 export const getEventGuardsStatus = getEventGuardsStatusBase;
 
