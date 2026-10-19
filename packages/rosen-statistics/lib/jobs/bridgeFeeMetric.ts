@@ -2,6 +2,7 @@ import { type AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger'
 import { BlockDbAction } from '@rosen-bridge/abstract-scanner';
 import type { DataSource } from '@rosen-bridge/extended-typeorm';
 import { TokenPriceAction } from '@rosen-bridge/token-price-entity';
+import { NATIVE_RESIDENCY, type TokenMap } from '@rosen-bridge/tokens';
 import { BridgeMetricsAction, METRIC_KEYS, MetricAction } from '@rosen-ui/rosen-statistics-entity';
 
 import { DAY_IN_SECONDS } from '../constants';
@@ -18,10 +19,12 @@ import {
  * Calculate and persist bridge fee USD metric.
  *
  * @param dataSource DataSource instance for database operations
+ * @param tokenMap   TokenMap instance
  * @param logger     Optional logger instance
  */
 export const bridgeFeeMetric = async (
   dataSource: DataSource,
+  tokenMap: TokenMap,
   logger: AbstractLogger = new DummyLogger(),
 ): Promise<void> => {
   logger.debug('Starting bridge fee metric calculation job');
@@ -87,17 +90,24 @@ export const bridgeFeeMetric = async (
         continue;
       }
 
-      const mappedEvents: MappedBridgeEventData[] = events.map((event) => ({
-        fromChain: event.fromChain,
-        amount: event.bridgeFee, // Use bridgeFee as amount
-        tokenId: event.tokenId,
-        timestamp: event.timestamp,
-        height: event.height,
-        day: event.day,
-        month: event.month,
-        year: event.year,
-        decimal: event.decimal,
-      }));
+      const mappedEvents: MappedBridgeEventData[] = events.map((event) => {
+        const tokenSet = tokenMap.getTokenSet(event.tokenId);
+        const nativeEntry = Object.values(tokenSet ?? {}).find(
+          (t) => t.residency === NATIVE_RESIDENCY,
+        );
+        return {
+          fromChain: event.fromChain,
+          amount: event.bridgeFee, // Use bridgeFee as amount
+          tokenId: event.tokenId,
+          timestamp: event.timestamp,
+          height: event.height,
+          day: event.day,
+          month: event.month,
+          year: event.year,
+          decimal: event.decimal,
+          nativeTokenId: nativeEntry!.tokenId,
+        };
+      });
 
       const result = await calculateBridgeData(
         mappedEvents,
