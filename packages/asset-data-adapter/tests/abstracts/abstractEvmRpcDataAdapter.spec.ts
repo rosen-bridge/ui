@@ -139,6 +139,76 @@ describe('AbstractEvmRpcDataAdapter', () => {
     });
 
     /**
+     * @target should not fetch a token more than once when chunkSize exceeds supported tokens
+     * @scenario
+     * - create an adapter with chunkSize larger than the number of supported tokens
+     * - call getAddressAssets once
+     * @expected
+     * - balanceOf is called exactly once per supported ERC20 token
+     * - no token is fetched more than once
+     */
+    it<TestContext>('should not fetch a token more than once when chunkSize exceeds supported tokens', async ({
+      mockTokenMap,
+      mockedBalanceOf,
+    }) => {
+      const adapter = new TestEvmRpcAdapter(
+        ['0xAddress'],
+        mockTokenMap,
+        { url: 'http://rpc', authToken: '' },
+        10,
+      );
+
+      mockedBalanceOf.mockClear();
+
+      await adapter.getAddressAssets('0xAddress');
+
+      const erc20Count = expectedGetAddressAssetsResult.filter(
+        (item) => item.assetId !== 'ethereum_native',
+      ).length;
+
+      expect(mockedBalanceOf).toHaveBeenCalledTimes(erc20Count);
+    });
+
+    /**
+     * @target should apply fetched balance for a newly listed token in the same cycle
+     * @scenario
+     * - initialize the cache with a token map that does not include the last ethereum token
+     * - call getAddressAssets to populate the cache
+     * - update the token map to include the previously missing token
+     * - call getAddressAssets again with a chunkSize large enough to cover all tokens
+     * @expected
+     * - the newly listed token appears in the result with the fetched balance (not zero)
+     */
+    it<TestContext>('should apply fetched balance for a newly listed token in the same cycle', async ({
+      mockTokenMap,
+      mockedBalanceOf,
+    }) => {
+      const tokenMapWithoutLast = sampleTokenMapConfig.filter(
+        (tokenSet) => tokenSet.ethereum?.tokenId !== 'ethereum_token4',
+      );
+      await mockTokenMap.updateConfigByJson(tokenMapWithoutLast);
+
+      const adapter = new TestEvmRpcAdapter(
+        ['0xAddress'],
+        mockTokenMap,
+        { url: 'http://rpc', authToken: '' },
+        100,
+      );
+
+      await adapter.getAddressAssets('0xAddress');
+
+      await mockTokenMap.updateConfigByJson(sampleTokenMapConfig);
+
+      mockedBalanceOf.mockResolvedValue(5000n);
+
+      const assets = await adapter.getAddressAssets('0xAddress');
+
+      const newToken = assets.find((a) => a.assetId === 'ethereum_token4');
+      expect(newToken).toBeDefined();
+      expect(newToken?.balance).toBe(5000n);
+    });
+
+    /**
      * @target should keep the cached balance when fetching a token fails
      * @scenario
      * - fetch all balances once
@@ -398,7 +468,6 @@ describe('AbstractEvmRpcDataAdapter', () => {
     }) => {
       const wrappedToken = mockTokenMap.getTokens('ethereum', 'ethereum')[0];
 
-      // set TotalSupply mock value
       mockedTotalSupply.mockResolvedValue(9999n);
 
       const result = await adapter.getRawTotalSupply(wrappedToken);

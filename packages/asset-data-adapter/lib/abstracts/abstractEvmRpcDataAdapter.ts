@@ -104,8 +104,9 @@ export abstract class AbstractEvmRpcDataAdapter extends AbstractDataAdapter {
     if (!Object.hasOwn(this.totalAssets, address)) {
       this.initialize(address);
     }
+    this.removeUnlistedAndAddNew();
     const supportedTokens = this.tokenMap.getTokens(this.chain, this.chain);
-    let iteration = this.chunkSize;
+    let iteration = Math.min(this.chunkSize, supportedTokens.length);
     while (iteration > 0) {
       const offset = (this.fetchOffsets[address] ?? 0) % supportedTokens.length;
       const chainTokenDetails = supportedTokens[offset];
@@ -133,7 +134,6 @@ export abstract class AbstractEvmRpcDataAdapter extends AbstractDataAdapter {
         if (err instanceof Error && err.stack) this.logger.debug(err.stack);
       }
     }
-    this.removeUnlistedAndAddNew();
     return this.totalAssets[address].map((item) => ({ ...item }));
   };
 
