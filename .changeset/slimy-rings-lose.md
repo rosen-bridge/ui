@@ -1,5 +1,5 @@
 ---
-'@rosen-bridge/rosen-service2': minor
+'@rosen-bridge/rosen-service': minor
 ---
 
-Add bitcoin-runes network in rosen-service2
+Add bitcoin-runes network in rosen-service

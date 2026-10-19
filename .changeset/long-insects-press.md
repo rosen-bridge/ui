@@ -1,5 +1,5 @@
 ---
-"@rosen-bridge/rosen-service2": minor
+"@rosen-bridge/rosen-service": minor
 ---
 
-- Integrate Commitment Extractor into rosen-service2
+- Integrate Commitment Extractor into rosen-service

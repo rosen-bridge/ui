@@ -1,5 +1,5 @@
 ---
-'@rosen-bridge/rosen-service2': patch
+'@rosen-bridge/rosen-service': patch
 ---
 
 Update ChainConfigsReader to support new contracts config format

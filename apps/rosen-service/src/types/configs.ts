@@ -1,4 +1,4 @@
-export interface RosenService2BaseConfig {
+export interface RosenServiceBaseConfig {
   paths: Paths;
   eventTriggerExtractor: EventTriggerExtractor;
   commitmentExtractor: CommitmentExtractor;

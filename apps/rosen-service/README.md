@@ -1,5 +1,12 @@
-# Rosen Service
+# @rosen-bridge/rosen-service
 
-Rosen Service is the backend data provider for Rosen App.
+## Table of contents
 
-Documentation is currently in development.
+- [Introduction](#introduction)
+- [Usage](#usage)
+
+## Introduction
+
+## Usage
+
+TBD

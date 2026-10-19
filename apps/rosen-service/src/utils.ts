@@ -1,66 +1,106 @@
-import fs from 'node:fs';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-
 import type { AbstractLogger } from '@rosen-bridge/abstract-logger';
-import { TokenMap } from '@rosen-bridge/tokens';
+import type { TokenMap } from '@rosen-bridge/extended-tokens';
+import type { DataSource } from '@rosen-bridge/extended-typeorm';
+import JsonBigInt from '@rosen-bridge/json-bigint';
+import { ErgoNetworkType } from '@rosen-bridge/scanner-interfaces';
+import { CommitmentExtractor, EventTriggerExtractor } from '@rosen-bridge/watcher-data-extractor';
 
-import AppError from './errors/AppError';
+import { configs } from './configs';
+import type { ChainConfigs } from './types';
 
 /**
- * get token map instance
+ * Maps bigint value in data to string before inserting in redis
+ *
+ * @returns string
  */
-export const getTokenMap = async (): Promise<TokenMap> => {
-  const tokensMapFilePath = path.resolve(
-    path.dirname(fileURLToPath(import.meta.url)),
-    '../config/tokensMap.json',
-  );
+export const stringSerializer = (data: unknown): string =>
+  JsonBigInt.stringify(data, (_, value) => (typeof value === 'bigint' ? value.toString() : value));
 
-  if (fs.existsSync(tokensMapFilePath)) {
-    const { tokens } = JSON.parse(
-      fs.readFileSync(tokensMapFilePath, {
-        encoding: 'utf-8',
-      }),
-    );
-
-    const tokenMap = new TokenMap();
-
-    await tokenMap.updateConfigByJson(tokens);
-
-    return tokenMap;
+/**
+ * Returns the Ergo node URL used to initialize extractors.
+ * Extractors are always initialized using the node; explorer initialization is disabled.
+ *
+ * @returns {string} Ergo node URL
+ */
+export const getErgoNodeUrl = (): string => {
+  const url = configs.chains.ergo.node.connections[0]?.url;
+  if (!url) {
+    throw new Error('Ergo node URL is not configured.');
   }
-
-  throw new Error(`Tokens map file not found in the path ${tokensMapFilePath}`);
+  return url;
 };
 
-export const handleError = (
-  error: unknown,
+/**
+ * Converts chain key to camelCase or PascalCase.
+ */
+export const formatChainName = (chain: string, mode: 'camel' | 'pascal' = 'camel'): string => {
+  const parts = chain.split('-');
+
+  return parts
+    .map((part, index) => {
+      if (index === 0 && mode === 'camel') return part;
+      return part.charAt(0).toUpperCase() + part.slice(1);
+    })
+    .join('');
+};
+
+/**
+ * Creates an event trigger extractor
+ * @param chain
+ * @param dataSource
+ * @param chianConfigs
+ * @param logger
+ * @returns EventTriggerExtractor
+ */
+export const createEventTrigger = (
+  chain: string,
+  dataSource: DataSource,
+  chianConfigs: ChainConfigs,
   logger: AbstractLogger,
-  customHandler?: (error: AppError) => void,
 ) => {
-  if (!(error instanceof AppError) || !error.canBeHandled) {
-    logger.error('an error occurred that cannot be handled');
-    logger.error(`${error}`, error instanceof AppError ? error.context : undefined);
-    error instanceof Error && error.stack && logger.error(error.stack);
-    logger.error('shutting down service');
-    process.exit(1);
-  }
-
-  logger[error.severity](error.message, error.context);
-  logger.debug(error.stack);
-
-  customHandler?.(error);
+  return new EventTriggerExtractor(
+    `${chain}-trigger-extractor`,
+    dataSource,
+    ErgoNetworkType.Node,
+    getErgoNodeUrl(),
+    chianConfigs.addresses.WatcherTriggerEvent,
+    chianConfigs.tokens.RWTId,
+    chianConfigs.addresses.WatcherPermit,
+    chianConfigs.addresses.Fraud,
+    logger.child(`${formatChainName(chain, 'camel')}EventTriggerExtractor`),
+    configs.eventTriggerExtractor.initialize.active,
+  );
 };
 
 /**
- * run a job periodically, starting from now
- * @param job
- * @param interval
+ * Creates a commitment extractor
+ * @param chain
+ * @param dataSource
+ * @param chianConfigs
+ * @param tokenMap
+ * @param logger
+ * @returns CommitmentExtractor
  */
-export const runAndSetInterval = async (job: () => unknown, interval: number) => {
-  await job();
-
-  setTimeout(() => {
-    runAndSetInterval(job, interval);
-  }, interval);
+export const createCommitmentExtractor = (
+  chain: string,
+  dataSource: DataSource,
+  chianConfigs: ChainConfigs,
+  tokenMap: TokenMap,
+  logger: AbstractLogger,
+) => {
+  logger.debug(`starting commitment extractor for ${chain}`);
+  return new CommitmentExtractor(
+    `${chain}-commitment-extractor`,
+    [chianConfigs.addresses.Commitment],
+    chianConfigs.tokens.RWTId,
+    dataSource,
+    tokenMap,
+    {
+      active: configs.commitmentExtractor.initialize.active,
+      type: ErgoNetworkType.Node,
+      url: getErgoNodeUrl(),
+      maxParallelRequests: configs.commitmentExtractor.initialize.maxParallelRequests,
+    },
+    logger.child(`${chain}CommitmentExtractor`),
+  );
 };

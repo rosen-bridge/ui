@@ -1,5 +1,5 @@
 ---
-"@rosen-bridge/rosen-service2": minor
+"@rosen-bridge/rosen-service": minor
 ---
 
-- Integrate Firo into rosen-service2.
+- Integrate Firo into rosen-service.

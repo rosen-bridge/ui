@@ -1,5 +1,5 @@
 ---
-'@rosen-bridge/rosen-service2': minor
+'@rosen-bridge/rosen-service': minor
 ---
 
-Add support for AssetDataAdapter sub-service in rosen-service2
+Add support for AssetDataAdapter sub-service in rosen-service

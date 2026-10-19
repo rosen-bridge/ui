@@ -24,7 +24,7 @@ import { UserEventsMetricService } from './services/userEventsMetricService';
 const logger = DefaultLogger.getInstance().child(import.meta.url);
 
 /**
- * Main function for running the Rosen-Service2
+ * Main function for running the Rosen-Service
  *
  * @return
  */

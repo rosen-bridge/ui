@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { ConfigValidator } from '@rosen-bridge/config';
 import JsonBigInt from '@rosen-bridge/json-bigint';
 
-import type { AllChainsConfigs, RosenService2Configs } from '../types';
+import type { AllChainsConfigs, RosenServiceConfigs } from '../types';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -31,11 +31,11 @@ export const readContractConfigs = (contractsPath: string): AllChainsConfigs => 
 /**
  * validates configs using the config schema
  *
- * @return RosenService2Configs
+ * @return RosenServiceConfigs
  */
-export const validateConfigs = (): RosenService2Configs => {
+export const validateConfigs = (): RosenServiceConfigs => {
   const confValidator = ConfigValidator.fromFile(path.join(__dirname, '../../config/schema.json'));
-  const configs = confValidator.buildConfigs<RosenService2Configs>();
+  const configs = confValidator.buildConfigs<RosenServiceConfigs>();
   configs.contracts = readContractConfigs(configs.paths.contracts);
 
   return configs;

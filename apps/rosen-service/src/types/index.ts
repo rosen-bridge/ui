@@ -1,10 +1,10 @@
 import type { AllChainsConfigs } from './chains';
-import type { RosenService2BaseConfig } from './configs';
+import type { RosenServiceBaseConfig } from './configs';
 
 export * from './chains';
 export * from './configs';
 export * from './scanners';
 
-export interface RosenService2Configs extends RosenService2BaseConfig {
+export interface RosenServiceConfigs extends RosenServiceBaseConfig {
   contracts: AllChainsConfigs;
 }
