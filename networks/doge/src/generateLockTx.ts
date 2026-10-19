@@ -4,28 +4,48 @@ import { BitcoinBoxSelection, generateFeeEstimator } from '@rosen-bridge/bitcoin
 import type { RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
 import { handleUncoveredAssets } from '@rosen-network/base';
 import { NETWORKS } from '@rosen-ui/constants';
-import type { RosenAmountValue } from '@rosen-ui/types';
+import type { Network, RosenAmountValue } from '@rosen-ui/types';
 
 import { DOGE_INPUT_SIZE, DOGE_NETWORK, DOGE_OUTPUT_SIZE, DOGE_TX_BASE_SIZE } from './constants';
 import type { DogeUtxo, UnsignedPsbtData } from './types';
-import { getAddressUtxos, getFeeRatio, getMinimumMeaningfulDoge, getTxHex } from './utils';
+import {
+  generateOpReturnData,
+  getAddressUtxos,
+  getFeeRatio,
+  getMinimumMeaningfulDoge,
+  getTxHex,
+} from './utils';
 
 const selector = new BitcoinBoxSelection();
+
+export type GenerateLockTxParams = {
+  amount: RosenAmountValue;
+  bridgeFee: RosenAmountValue;
+  fromAddress: string;
+  lockAddress: string;
+  networkFee: RosenAmountValue;
+  toAddress: string;
+  toChain: Network;
+  token: RosenChainToken;
+};
 
 /**
  * generates doge lock tx
  * @param getTokenMap
  * @returns
  */
-export const generateUnsignedTx =
+export const generateLockTx =
   (getTokenMap: () => Promise<TokenMap>) =>
-  async (
-    lockAddress: string,
-    fromAddress: string,
-    wrappedAmount: RosenAmountValue,
-    opReturnData: string,
-    token: RosenChainToken,
-  ): Promise<UnsignedPsbtData> => {
+  async (params: GenerateLockTxParams): Promise<UnsignedPsbtData> => {
+    const opReturnData = await generateOpReturnData(
+      params.toChain,
+      params.toAddress,
+      params.networkFee.toString(),
+      params.bridgeFee.toString(),
+    );
+
+    const { amount: wrappedAmount, fromAddress, lockAddress, token } = params;
+
     const tokenMap = await getTokenMap();
     const unwrappedAmount = tokenMap.unwrapAmount(
       token.tokenId,

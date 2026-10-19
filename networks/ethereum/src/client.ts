@@ -1,54 +1,24 @@
 import { Ethereum as EthereumIcon } from '@rosen-bridge/icons';
-import type { Network, NetworkConfig } from '@rosen-network/base';
-import type { generateLockData, generateTxParameters } from '@rosen-network/evm';
+import { Network, type NetworkConfig } from '@rosen-network/base/dist/network';
+import type { generateLockTx } from '@rosen-network/evm';
 import { NETWORKS } from '@rosen-ui/constants';
 
 type EthereumNetworkConfig = NetworkConfig & {
-  generateLockData: typeof generateLockData;
-  generateTxParameters: ReturnType<typeof generateTxParameters>;
+  generateLockTx: ReturnType<typeof generateLockTx>;
 };
 
-export class EthereumNetwork implements Network {
+export class EthereumNetwork extends Network<EthereumNetworkConfig> {
   public label = NETWORKS.ethereum.label;
-
-  public lockAddress: string;
 
   public logo = EthereumIcon;
 
   public name = NETWORKS.ethereum.key;
 
-  public nextHeightInterval: number;
-
-  constructor(protected config: EthereumNetworkConfig) {
-    this.nextHeightInterval = config.nextHeightInterval;
-    this.lockAddress = config.lockAddress;
-  }
-
-  public calculateFee: EthereumNetworkConfig['calculateFee'] = (...args) => {
-    return this.config.calculateFee(...args);
-  };
-
-  public generateLockData: EthereumNetworkConfig['generateLockData'] = (...args) => {
-    return this.config.generateLockData(...args);
-  };
-
-  public generateTxParameters: EthereumNetworkConfig['generateTxParameters'] = (...args) => {
-    return this.config.generateTxParameters(...args);
-  };
-
-  public getMaxTransfer: EthereumNetworkConfig['getMaxTransfer'] = (...args) => {
-    return this.config.getMaxTransfer(...args);
-  };
-
-  public getMinTransfer: EthereumNetworkConfig['getMinTransfer'] = (...args) => {
-    return this.config.getMinTransfer(...args);
+  public generateLockTx: EthereumNetworkConfig['generateLockTx'] = (...args) => {
+    return this.config.generateLockTx(...args);
   };
 
   public toSafeAddress = (address: string): string => {
     return address.toLowerCase();
-  };
-
-  public validateAddress = (walletAddress: string): Promise<boolean> => {
-    return this.config.validateAddress(this.name, walletAddress);
   };
 }

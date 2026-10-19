@@ -1,4 +1,4 @@
 export * from './constants';
-export * from './generateUnsignedTx';
+export * from './generateLockTx';
 export * from './getMaxTransfer';
 export * from './utils';
