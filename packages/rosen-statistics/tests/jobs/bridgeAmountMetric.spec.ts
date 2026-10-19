@@ -4,6 +4,7 @@ import { type AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger'
 import { BlockEntity } from '@rosen-bridge/abstract-scanner';
 import type { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
 import { TokenPriceEntity } from '@rosen-bridge/token-price-entity';
+import { TokenMap } from '@rosen-bridge/tokens';
 import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
 import { TokenEntity } from '@rosen-ui/asset-aggregator';
 import { BridgedAmountEntity, METRIC_KEYS, MetricEntity } from '@rosen-ui/rosen-statistics-entity';
@@ -20,6 +21,7 @@ describe('bridgeAmountMetric', () => {
   let blockRepo: Repository<BlockEntity>;
   let tokenRepo: Repository<TokenEntity>;
   let tokenPriceRepo: Repository<TokenPriceEntity>;
+  let tokenMap: TokenMap;
   let logger: AbstractLogger;
 
   beforeEach(async () => {
@@ -30,6 +32,7 @@ describe('bridgeAmountMetric', () => {
     blockRepo = dataSource.getRepository(BlockEntity);
     tokenRepo = dataSource.getRepository(TokenEntity);
     tokenPriceRepo = dataSource.getRepository(TokenPriceEntity);
+    tokenMap = new TokenMap();
     logger = new DummyLogger();
 
     await metricRepo.clear();
@@ -62,8 +65,9 @@ describe('bridgeAmountMetric', () => {
     await tokenRepo.insert(testData.tokenRepo);
     await tokenPriceRepo.insert(testData.tokenPriceRepo);
     await eventTriggerRepo.insert(testData.eventTriggerRepo);
+    await tokenMap.updateConfigByJson(testData.tokenMap);
 
-    await bridgeAmountMetric(dataSource, logger);
+    await bridgeAmountMetric(dataSource, tokenMap, logger);
 
     const metric = await metricRepo.findOne({
       where: { key: METRIC_KEYS.TOTAL_BRIDGE_AMOUNT_USD },
@@ -102,8 +106,9 @@ describe('bridgeAmountMetric', () => {
     await tokenRepo.insert(testData.tokenRepo);
     await tokenPriceRepo.insert(testData.tokenPriceRepo);
     await eventTriggerRepo.insert(testData.eventTriggerRepo);
+    await tokenMap.updateConfigByJson(testData.tokenMap);
 
-    await bridgeAmountMetric(dataSource, logger);
+    await bridgeAmountMetric(dataSource, tokenMap, logger);
 
     const metric = await metricRepo.findOne({
       where: { key: METRIC_KEYS.TOTAL_BRIDGE_AMOUNT_USD },
@@ -139,8 +144,9 @@ describe('bridgeAmountMetric', () => {
     await tokenRepo.insert(testData.tokenRepo);
     await tokenPriceRepo.insert(testData.tokenPriceRepo);
     await eventTriggerRepo.insert(testData.eventTriggerRepo);
+    await tokenMap.updateConfigByJson(testData.tokenMap);
 
-    await bridgeAmountMetric(dataSource, logger);
+    await bridgeAmountMetric(dataSource, tokenMap, logger);
 
     const metric = await metricRepo.findOne({
       where: { key: METRIC_KEYS.TOTAL_BRIDGE_AMOUNT_USD },
@@ -172,8 +178,9 @@ describe('bridgeAmountMetric', () => {
     await tokenRepo.insert(testData.tokenRepo);
     await tokenPriceRepo.insert(testData.tokenPriceRepo);
     await eventTriggerRepo.insert(testData.eventTriggerRepo);
+    await tokenMap.updateConfigByJson(testData.tokenMap);
 
-    await bridgeAmountMetric(dataSource, logger);
+    await bridgeAmountMetric(dataSource, tokenMap, logger);
 
     const metric = await metricRepo.findOne({
       where: { key: METRIC_KEYS.TOTAL_BRIDGE_AMOUNT_USD },
@@ -209,8 +216,9 @@ describe('bridgeAmountMetric', () => {
     await tokenRepo.insert(testData.tokenRepo);
     await tokenPriceRepo.insert(testData.tokenPriceRepo);
     await eventTriggerRepo.insert(testData.eventTriggerRepo);
+    await tokenMap.updateConfigByJson(testData.tokenMap);
 
-    await bridgeAmountMetric(dataSource, logger);
+    await bridgeAmountMetric(dataSource, tokenMap, logger);
 
     const metric = await metricRepo.findOne({
       where: { key: METRIC_KEYS.TOTAL_BRIDGE_AMOUNT_USD },
@@ -239,7 +247,7 @@ describe('bridgeAmountMetric', () => {
    * - No metric created
    */
   it('should handle no events found', async () => {
-    await bridgeAmountMetric(dataSource, logger);
+    await bridgeAmountMetric(dataSource, tokenMap, logger);
 
     const bridgeAmount = await bridgeAmountRepo.find();
     expect(bridgeAmount).toHaveLength(0);
@@ -268,8 +276,9 @@ describe('bridgeAmountMetric', () => {
 
     await bridgeAmountRepo.insert(testData.bridgeAmountRepo);
     await metricRepo.insert(testData.metricRepo);
+    await tokenMap.updateConfigByJson(testData.tokenMap);
 
-    await bridgeAmountMetric(dataSource, logger);
+    await bridgeAmountMetric(dataSource, tokenMap, logger);
 
     const bridgeAmount = await bridgeAmountRepo.find({
       select: ['fromChain', 'amount', 'day', 'week', 'month', 'year', 'lastProcessedHeight'],
@@ -304,8 +313,9 @@ describe('bridgeAmountMetric', () => {
     await tokenRepo.insert(testData.tokenRepo);
     await tokenPriceRepo.insert(testData.tokenPriceRepo);
     await eventTriggerRepo.insert(testData.eventTriggerRepo);
+    await tokenMap.updateConfigByJson(testData.tokenMap);
 
-    await bridgeAmountMetric(dataSource, logger);
+    await bridgeAmountMetric(dataSource, tokenMap, logger);
 
     const metric = await metricRepo.findOne({
       where: { key: METRIC_KEYS.TOTAL_BRIDGE_AMOUNT_USD },
@@ -319,6 +329,7 @@ describe('bridgeAmountMetric', () => {
     expect(actualBridgeAmount).toHaveLength(testData.expectedResults.bridgeAmountRecords.length);
     expect(actualBridgeAmount).toEqual(testData.expectedResults.bridgeAmountRecords);
   });
+
   /**
    * @target Should store events in different days when timestamp crosses midnight
    * @dependencies
@@ -341,8 +352,9 @@ describe('bridgeAmountMetric', () => {
     await tokenRepo.insert(testData.tokenRepo);
     await tokenPriceRepo.insert(testData.tokenPriceRepo);
     await eventTriggerRepo.insert(testData.eventTriggerRepo);
+    await tokenMap.updateConfigByJson(testData.tokenMap);
 
-    await bridgeAmountMetric(dataSource, logger);
+    await bridgeAmountMetric(dataSource, tokenMap, logger);
 
     const metric = await metricRepo.findOne({
       where: { key: METRIC_KEYS.TOTAL_BRIDGE_AMOUNT_USD },

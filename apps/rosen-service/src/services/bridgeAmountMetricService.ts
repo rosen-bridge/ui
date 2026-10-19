@@ -8,6 +8,7 @@ import {
   AbstractBridgeAmountMetricService,
   AbstractDBService,
   AbstractScannerService,
+  AbstractTokenMapService,
 } from './abstracts';
 
 export class BridgeAmountMetricService extends AbstractBridgeAmountMetricService {
@@ -22,6 +23,11 @@ export class BridgeAmountMetricService extends AbstractBridgeAmountMetricService
     {
       serviceName: AbstractScannerService.name,
       allowedStatuses: [ServiceStatus.running],
+      action: ServiceAction.start,
+    },
+    {
+      serviceName: AbstractTokenMapService.name,
+      allowedStatuses: [ServiceStatus.running, ServiceStatus.started],
       action: ServiceAction.start,
     },
   ];
@@ -67,9 +73,10 @@ export class BridgeAmountMetricService extends AbstractBridgeAmountMetricService
    */
   private bridgeAmountCalculation = async (): Promise<void> => {
     this.logger.info(`Running ${this.getName()} job`);
+    const tokenMap = AbstractTokenMapService.getInstance().getTokenMap();
 
     try {
-      await bridgeAmountMetric(this.dataSource, this.logger.child('bridgeAmountMetric'));
+      await bridgeAmountMetric(this.dataSource, tokenMap, this.logger.child('bridgeAmountMetric'));
 
       this.logger.info('Bridge amount calculation job completed successfully');
     } catch (error) {
