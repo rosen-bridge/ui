@@ -384,7 +384,22 @@
             "validations": [
               {
                 "required": true,
+                "when": {
+                  "path": "statistics.lockedAssetsMetrics.active",
+                  "value": true
+                },
                 "error": "locked assets metrics update interval must be specified (in seconds)"
+              }
+            ]
+          },
+          "active": {
+            "type": "boolean",
+            "default": false,
+            "description": "locked assets metrics activation",
+            "validations": [
+              {
+                "required": true,
+                "error": "locked assets metrics active must be specified"
               }
             ]
           }
@@ -400,7 +415,22 @@
             "validations": [
               {
                 "required": true,
+                "when": {
+                  "path": "statistics.generalMetrics.active",
+                  "value": true
+                },
                 "error": "general metrics update interval must be specified (in seconds)"
+              }
+            ]
+          },
+          "active": {
+            "type": "boolean",
+            "default": false,
+            "description": "general metrics metrics activation",
+            "validations": [
+              {
+                "required": true,
+                "error": "general metrics active must be specified"
               }
             ]
           }
@@ -416,7 +446,22 @@
             "validations": [
               {
                 "required": true,
+                "when": {
+                  "path": "statistics.eventCountMetrics.active",
+                  "value": true
+                },
                 "error": "event count metrics update interval must be specified (in seconds)"
+              }
+            ]
+          },
+          "active": {
+            "type": "boolean",
+            "default": false,
+            "description": "event count metrics metrics activation",
+            "validations": [
+              {
+                "required": true,
+                "error": "event count metrics active must be specified"
               }
             ]
           }
@@ -432,7 +477,22 @@
             "validations": [
               {
                 "required": true,
+                "when": {
+                  "path": "statistics.userEventsMetric.active",
+                  "value": true
+                },
                 "error": "user events metrics update interval must be specified (in seconds)"
+              }
+            ]
+          },
+          "active": {
+            "type": "boolean",
+            "default": false,
+            "description": "user event metrics metrics activation",
+            "validations": [
+              {
+                "required": true,
+                "error": "user event metrics active must be specified"
               }
             ]
           }
@@ -448,7 +508,22 @@
             "validations": [
               {
                 "required": true,
+                "when": {
+                  "path": "statistics.watcherCountMetrics.active",
+                  "value": true
+                },
                 "error": "watcher count metrics update interval must be specified (in seconds)"
+              }
+            ]
+          },
+          "active": {
+            "type": "boolean",
+            "default": false,
+            "description": "watcher count metrics metrics activation",
+            "validations": [
+              {
+                "required": true,
+                "error": "watcher count metrics active must be specified"
               }
             ]
           },
@@ -458,6 +533,10 @@
             "validations": [
               {
                 "required": true,
+                "when": {
+                  "path": "statistics.watcherCountMetrics.active",
+                  "value": true
+                },
                 "error": "watcher count metrics node url must be specified"
               }
             ]
@@ -474,7 +553,22 @@
             "validations": [
               {
                 "required": true,
+                "when": {
+                  "path": "statistics.bridgeFeeMetrics.active",
+                  "value": true
+                },
                 "error": "bridge fee metrics update interval must be specified (in seconds)"
+              }
+            ]
+          },
+          "active": {
+            "type": "boolean",
+            "default": false,
+            "description": "bridge fee metrics metrics activation",
+            "validations": [
+              {
+                "required": true,
+                "error": "bridge fee metrics active must be specified"
               }
             ]
           }
@@ -490,7 +584,22 @@
             "validations": [
               {
                 "required": true,
+                "when": {
+                  "path": "statistics.bridgeAmountMetrics.active",
+                  "value": true
+                },
                 "error": "bridge amount metrics update interval must be specified (in seconds)"
+              }
+            ]
+          },
+          "active": {
+            "type": "boolean",
+            "default": false,
+            "description": "bridge amount metrics metrics activation",
+            "validations": [
+              {
+                "required": true,
+                "error": "bridge amount metrics active must be specified"
               }
             ]
           }

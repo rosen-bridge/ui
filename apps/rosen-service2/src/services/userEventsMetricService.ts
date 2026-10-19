@@ -105,7 +105,7 @@ export class UserEventsMetricService extends AbstractUserEventsMetricService {
     return [
       {
         fn: this.userEventsCalculation,
-        interval: configs.statistics.userEventsMetric.interval * 1000,
+        interval: configs.statistics.userEventsMetric.interval! * 1000,
       },
     ];
   };

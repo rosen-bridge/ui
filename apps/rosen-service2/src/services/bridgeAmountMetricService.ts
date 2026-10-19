@@ -105,7 +105,7 @@ export class BridgeAmountMetricService extends AbstractBridgeAmountMetricService
     return [
       {
         fn: this.bridgeAmountCalculation,
-        interval: configs.statistics.bridgeAmountMetrics.interval * 1000,
+        interval: configs.statistics.bridgeAmountMetrics.interval! * 1000,
       },
     ];
   };
