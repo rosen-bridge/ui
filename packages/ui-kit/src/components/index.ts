@@ -69,6 +69,7 @@ export * from './navigation';
 export * from './navigationButton';
 export * from './network';
 export * from './pageHeading';
+export * from './pagination';
 export * from './popover';
 export * from './popoverBody';
 export * from './popoverTrigger';

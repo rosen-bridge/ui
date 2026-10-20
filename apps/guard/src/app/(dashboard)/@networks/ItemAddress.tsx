@@ -30,8 +30,7 @@ export const ItemAddress = ({ loading, state, value }: ItemAddressProps) => {
           <Amount
             variant={state}
             loading={loading}
-            value={value?.balance.amount}
-            decimal={value?.balance.decimals}
+            value={value?.balance}
             unit={value?.balance.name}
           />
         </Typography>

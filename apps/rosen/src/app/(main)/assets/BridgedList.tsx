@@ -65,7 +65,10 @@ export const BridgedList = ({ value }: BridgedListProps) => {
               fontSize="0.875rem"
             >
               <Network loading={isLoading} value={item.chain} />
-              <Amount loading={isLoading} value={item.amount} decimal={value.significantDecimals} />
+              <Amount
+                loading={isLoading}
+                value={{ amount: item.amount, decimals: value.significantDecimals }}
+              />
             </Box>
             <Box fontSize={'0.875rem'} color="text.secondary" mb={-1}>
               <Identifier

@@ -9,9 +9,6 @@ import { Tooltip } from '../../tooltip';
 import { Typography } from '../../typography';
 
 export type AmountProps = HTMLAttributes<HTMLDivElement> & {
-  /** Number of decimal places to shift the value before formatting */
-  decimal?: number;
-
   /** Maximum fractional digits to render in the decimal part */
   decimalMaxFractionDigits?: number;
 
@@ -30,8 +27,17 @@ export type AmountProps = HTMLAttributes<HTMLDivElement> & {
   /** Layout direction of value and unit ('horizontal' | 'vertical') */
   orientation?: 'horizontal' | 'vertical';
 
-  /** Numeric value to display (bigint, number, or string) */
-  value?: bigint | number | string;
+  /**
+   * Value to display, either a ready-to-display number (number or string) or a
+   * raw integer value along with its decimals
+   */
+  value?:
+    | number
+    | string
+    | {
+        amount: bigint | number | string;
+        decimals: number;
+      };
 
   /** Unit label displayed next to the value (e.g. "USD") */
   unit?: string;
@@ -58,7 +64,6 @@ export type AmountProps = HTMLAttributes<HTMLDivElement> & {
  * Displays an amount value along with its unit, if available
  */
 const AmountBase = ({
-  decimal,
   decimalMaxFractionDigits = 3,
   decimalLeadingZeroThreshold = 3,
   fallback,
@@ -72,6 +77,12 @@ const AmountBase = ({
   price,
   ...props
 }: AmountProps) => {
+  const isRawValue = typeof value === 'object' && value !== null;
+
+  const rawValue = isRawValue ? value.amount : value;
+
+  const decimals = isRawValue ? value.decimals : undefined;
+
   /**
    * try to convert value to a valid string number with decimal if is available
    *
@@ -91,12 +102,12 @@ const AmountBase = ({
    *   - 12345n       -> '12345'
    */
   const normalizedValue = useMemo(() => {
-    switch (typeof value) {
+    switch (typeof rawValue) {
       case 'bigint':
-        return value.toString();
+        return rawValue.toString();
       case 'number':
-        if (Number.isNaN(value)) return;
-        return value
+        if (Number.isNaN(rawValue)) return;
+        return rawValue
           .toLocaleString('en', {
             useGrouping: false,
             minimumFractionDigits: 1,
@@ -104,9 +115,9 @@ const AmountBase = ({
           })
           .replace(/\.0$/, '');
       case 'string':
-        if (!value.trim()) return;
-        if (Number.isNaN(Number(value))) return;
-        return Number(value)
+        if (!rawValue.trim()) return;
+        if (Number.isNaN(Number(rawValue))) return;
+        return Number(rawValue)
           .toLocaleString('en', {
             useGrouping: false,
             minimumFractionDigits: 1,
@@ -116,27 +127,27 @@ const AmountBase = ({
       default:
         return;
     }
-  }, [value]);
+  }, [rawValue]);
 
   const splittedValue = useMemo(() => {
     if (!normalizedValue) return;
 
     let value = normalizedValue;
 
-    if (decimal !== undefined) {
-      value = getDecimalString(normalizedValue, decimal)!;
+    if (decimals !== undefined) {
+      value = getDecimalString(normalizedValue, decimals)!;
     }
 
     return {
       number: value.split('.').at(0)!,
       decimal: value.split('.').at(1),
     };
-  }, [decimal, normalizedValue]);
+  }, [decimals, normalizedValue]);
 
   const error = useMemo(() => {
-    if (value === undefined) return false;
-    return !normalizedValue || (decimal !== undefined && !!normalizedValue.split('.').at(1));
-  }, [decimal, normalizedValue, value]);
+    if (rawValue === undefined) return false;
+    return !normalizedValue || (decimals !== undefined && !!normalizedValue.split('.').at(1));
+  }, [decimals, normalizedValue, rawValue]);
 
   const tooltip = useMemo(() => {
     if (!splittedValue) return '';
@@ -276,7 +287,7 @@ const AmountBase = ({
               </Typography>
             </Tooltip>
           )}
-          {!error && !parts && !!fallback && value === undefined && !loading && <>{fallback}</>}
+          {!error && !parts && !!fallback && rawValue === undefined && !loading && <>{fallback}</>}
           {unit && (
             <Typography component="div" style={{ fontSize: '75%', opacity: 0.7 }}>
               {unit}

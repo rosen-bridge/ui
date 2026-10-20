@@ -30,7 +30,7 @@ export const TransactionsAndFees = ({ id, flowId }: { id: string; flowId: string
     mutate,
   } = useSWR<EventDetailsType[]>(`/v1/events/${id}`, fetcher);
 
-  const data = events?.find((event) => event.triggerTxId === flowId);
+  const data = events?.find((event) => !flowId || event.triggerTxId === flowId);
 
   const isCustomStatus = typeof data?.status === 'object';
 
@@ -141,8 +141,12 @@ export const TransactionsAndFees = ({ id, flowId }: { id: string; flowId: string
           <Label label="Fee Sum">
             <Amount
               loading={isLoading}
-              value={data?.totalFee}
-              decimal={data?.lockToken?.significantDecimal}
+              value={
+                data?.lockToken && {
+                  amount: data.totalFee,
+                  decimals: data.lockToken.significantDecimal,
+                }
+              }
               unit={data?.lockToken?.name}
               price={data?.price}
             />
@@ -150,8 +154,12 @@ export const TransactionsAndFees = ({ id, flowId }: { id: string; flowId: string
           <Label label="Bridge Fee" inset>
             <Amount
               loading={isLoading}
-              value={data?.bridgeFee}
-              decimal={data?.lockToken?.significantDecimal}
+              value={
+                data?.lockToken && {
+                  amount: data.bridgeFee,
+                  decimals: data.lockToken.significantDecimal,
+                }
+              }
               unit={data?.lockToken?.name}
               price={data?.price}
             />
@@ -159,8 +167,12 @@ export const TransactionsAndFees = ({ id, flowId }: { id: string; flowId: string
           <Label label="Network Fee" inset>
             <Amount
               loading={isLoading}
-              value={data?.networkFee}
-              decimal={data?.lockToken?.significantDecimal}
+              value={
+                data?.lockToken && {
+                  amount: data.networkFee,
+                  decimals: data.lockToken.significantDecimal,
+                }
+              }
               unit={data?.lockToken?.name}
               price={data?.price}
             />

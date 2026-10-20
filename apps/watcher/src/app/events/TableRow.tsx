@@ -152,19 +152,19 @@ export const MobileRow: FC<RowProps> = (props) => {
           <TableRow style={rowStyles}>
             <EnhancedTableCell>Amount</EnhancedTableCell>
             <EnhancedTableCell>
-              <Amount value={row.amount} decimal={row.lockToken.decimals} />
+              <Amount value={{ amount: row.amount, decimals: row.lockToken.decimals }} />
             </EnhancedTableCell>
           </TableRow>
           <TableRow style={rowStyles}>
             <EnhancedTableCell>Bridge Fee</EnhancedTableCell>
             <EnhancedTableCell>
-              <Amount value={row.bridgeFee} decimal={row.lockToken.decimals} />
+              <Amount value={{ amount: row.bridgeFee, decimals: row.lockToken.decimals }} />
             </EnhancedTableCell>
           </TableRow>
           <TableRow style={rowStyles}>
             <EnhancedTableCell>Network Fee</EnhancedTableCell>
             <EnhancedTableCell>
-              <Amount value={row.networkFee} decimal={row.lockToken.decimals} />
+              <Amount value={{ amount: row.networkFee, decimals: row.lockToken.decimals }} />
             </EnhancedTableCell>
           </TableRow>
           <TableRow style={rowStyles}>
@@ -224,13 +224,13 @@ export const TabletRow: FC<RowProps> = (props) => {
       </EnhancedTableCell>
       <EnhancedTableCell align="center">{row.height}</EnhancedTableCell>
       <EnhancedTableCell align="center">
-        <Amount value={row.amount} decimal={row.lockToken.decimals} />
+        <Amount value={{ amount: row.amount, decimals: row.lockToken.decimals }} />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
-        <Amount value={row.bridgeFee} decimal={row.lockToken.decimals} />
+        <Amount value={{ amount: row.bridgeFee, decimals: row.lockToken.decimals }} />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
-        <Amount value={row.networkFee} decimal={row.lockToken.decimals} />
+        <Amount value={{ amount: row.networkFee, decimals: row.lockToken.decimals }} />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
         <Identifier value={row.eventId} variant="legacy" />

@@ -1,54 +1,24 @@
 import { Binance as BinanceIcon } from '@rosen-bridge/icons';
-import type { Network, NetworkConfig } from '@rosen-network/base';
-import type { generateLockData, generateTxParameters } from '@rosen-network/evm';
+import { Network, type NetworkConfig } from '@rosen-network/base/dist/network';
+import type { generateLockTx } from '@rosen-network/evm';
 import { NETWORKS } from '@rosen-ui/constants';
 
 type BinanceNetworkConfig = NetworkConfig & {
-  generateLockData: typeof generateLockData;
-  generateTxParameters: ReturnType<typeof generateTxParameters>;
+  generateLockTx: ReturnType<typeof generateLockTx>;
 };
 
-export class BinanceNetwork implements Network {
+export class BinanceNetwork extends Network<BinanceNetworkConfig> {
   public label = NETWORKS.binance.label;
-
-  public lockAddress: string;
 
   public logo = BinanceIcon;
 
   public name = NETWORKS.binance.key;
 
-  public nextHeightInterval: number;
-
-  constructor(protected config: BinanceNetworkConfig) {
-    this.nextHeightInterval = config.nextHeightInterval;
-    this.lockAddress = config.lockAddress;
-  }
-
-  public calculateFee: BinanceNetworkConfig['calculateFee'] = (...args) => {
-    return this.config.calculateFee(...args);
-  };
-
-  public generateLockData: BinanceNetworkConfig['generateLockData'] = (...args) => {
-    return this.config.generateLockData(...args);
-  };
-
-  public generateTxParameters: BinanceNetworkConfig['generateTxParameters'] = (...args) => {
-    return this.config.generateTxParameters(...args);
-  };
-
-  public getMaxTransfer: BinanceNetworkConfig['getMaxTransfer'] = (...args) => {
-    return this.config.getMaxTransfer(...args);
-  };
-
-  public getMinTransfer: BinanceNetworkConfig['getMinTransfer'] = (...args) => {
-    return this.config.getMinTransfer(...args);
+  public generateLockTx: BinanceNetworkConfig['generateLockTx'] = (...args) => {
+    return this.config.generateLockTx(...args);
   };
 
   public toSafeAddress = (address: string): string => {
     return address.toLowerCase();
-  };
-
-  public validateAddress = (walletAddress: string): Promise<boolean> => {
-    return this.config.validateAddress(this.name, walletAddress);
   };
 }

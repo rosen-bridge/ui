@@ -4,8 +4,7 @@ import { validateAddress as validateAddressCore } from '@rosen-network/base';
 import {
   calculateFee as calculateFeeCore,
   decodeWasmValue as decodeWasmValueCore,
-  generateLockAuxiliaryData as generateLockAuxiliaryDataCore,
-  generateUnsignedTx as generateUnsignedTxCore,
+  generateLockTx as generateLockTxCore,
   getMaxTransferCreator as getMaxTransferCore,
   getMinTransferCreator,
   setTxWitnessSet as setTxWitnessSetCore,
@@ -24,12 +23,8 @@ export const decodeWasmValue = wrap(decodeWasmValueCore, {
   traceKey: 'cardano:decodeWasmValue',
 });
 
-export const generateLockAuxiliaryData = wrap(generateLockAuxiliaryDataCore, {
-  traceKey: 'cardano:generateLockAuxiliaryData',
-});
-
-export const generateUnsignedTx = wrap(generateUnsignedTxCore(getTokenMap), {
-  traceKey: 'cardano:generateUnsignedTx',
+export const generateLockTx = wrap(generateLockTxCore(getTokenMap), {
+  traceKey: 'cardano:generateLockTx',
 });
 
 export const getMaxTransfer = wrap(getMaxTransferCore(getTokenMap), {

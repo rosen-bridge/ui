@@ -5,6 +5,7 @@ import { encodeAddress } from '@rosen-bridge/address-codec';
 import {
   type CalculateFee,
   calculateFeeCreator,
+  type GetAddressBalance,
   getMinTransferCreator as getMinTransferCreatorBase,
 } from '@rosen-network/base';
 import { NETWORKS } from '@rosen-ui/constants';
@@ -88,7 +89,7 @@ export const getTxHex = async (txId: string): Promise<string> => {
  * @param address
  * @returns this is a UNWRAPPED-VALUE amount
  */
-export const getAddressBalance = async (address: string): Promise<bigint> => {
+export const getAddressBalance: GetAddressBalance = async (address) => {
   const blockcypherUrl = `${process.env.DOGE_BLOCKCYPHER_API}`;
   const GET_ADDRESS = `${blockcypherUrl}/v1/doge/main/addrs/${address}`;
   const res = await Axios.get<BlockCypherAddress>(GET_ADDRESS);
