@@ -2,14 +2,36 @@
 "@rosen-bridge/rosen-service": major
 ---
 
-Rewrite the service architecture with a service-manager-based lifecycle.
+- Rewrite the service architecture with a service-manager-based lifecycle
+- Add statistics metrics
+- Add On-chain TokenMap with Redis cache
+- Replace asset-calculator with AssetDataAdapterService and AssetAggregatorService
+- Integrate Handshake into rosen-service
+- Config via `@rosen-bridge/config` 
+- Per-chain `active` flag and multiple endpoints per method
+- Per-chain `blockCleanupActive` and `blockRetrieveGap` config
+- Per-extractor `initialize.active` flags for commitment and event trigger extractors
+- Add token map boxes extractor using `@rosen-bridge/address-extractor`
 
-- Introduce `assemble` / `start` / `stop` / `getTasks` lifecycle across all services
-- Replace plain module bootstrapping with `@rosen-bridge/service-manager` registration and dependency-ordered startup
-- Consolidate per-chain scanners, extractors, and health checks into dedicated services (`ErgoScannerService`, `ScannerService`, `ErgoExtractorService`, `HealthService`)
-- Add per-chain (`chains.<chain>.active`) and per-metric (`statistics.<metric>.active`) activation gates; inactive chains and metrics are skipped at startup
-- Add on-chain TokenMap support with Redis caching, controlled by `tokenMap.onChainTokenMapEnabled`
-- Migrate configuration to `config/schema.json` with generated TypeScript types
+Update dependencies
+
+- @rosen-bridge/abstract-scanner@4.1.0
+- @rosen-bridge/address-extractor@7.1.1
+- @rosen-bridge/bitcoin-observation-extractor@9.0.0
+- @rosen-bridge/bitcoin-runes-observation-extractor@4.0.0
+- @rosen-bridge/bitcoin-scanner@2.0.2
+- @rosen-bridge/cardano-observation-extractor@4.0.0
+- @rosen-bridge/cardano-scanner@3.0.2
+- @rosen-bridge/ergo-observation-extractor@2.0.8
+- @rosen-bridge/ergo-scanner@2.0.2
+- @rosen-bridge/evm-observation-extractor@8.0.0
+- @rosen-bridge/evm-scanner@2.0.2
+- @rosen-bridge/firo-observation-extractor@1.1.6
+- @rosen-bridge/firo-scanner@1.0.2
+- @rosen-bridge/handshake-observation-extractor@2.0.0
+- @rosen-bridge/handshake-scanner@1.0.3
+- @rosen-bridge/watcher-data-extractor@16.1.0
+- @rosen-clients/ergo-explorer@2.1.1
 
 Add dependencies
 
