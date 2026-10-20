@@ -220,10 +220,10 @@ export interface ChainsBinanceAdapter {
 }
 
 export interface ChainsBinanceAdapterRpc {
-  connections: ChainsBinanceAdapterRpcConnections;
+  connection: ChainsBinanceAdapterRpcConnection;
 }
 
-export interface ChainsBinanceAdapterRpcConnections {
+export interface ChainsBinanceAdapterRpcConnection {
   url?: string;
   authToken?: string;
 }
@@ -255,10 +255,10 @@ export interface ChainsEthereumAdapter {
 }
 
 export interface ChainsEthereumAdapterRpc {
-  connections: ChainsEthereumAdapterRpcConnections;
+  connection: ChainsEthereumAdapterRpcConnection;
 }
 
-export interface ChainsEthereumAdapterRpcConnections {
+export interface ChainsEthereumAdapterRpcConnection {
   url?: string;
   authToken?: string;
 }

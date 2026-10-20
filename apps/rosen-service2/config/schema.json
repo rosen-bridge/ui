@@ -1355,7 +1355,7 @@
               "rpc": {
                 "type": "object",
                 "children": {
-                  "connections": {
+                  "connection": {
                     "type": "object",
                     "children": {
                       "url": {
@@ -1513,7 +1513,7 @@
               "rpc": {
                 "type": "object",
                 "children": {
-                  "connections": {
+                  "connection": {
                     "type": "object",
                     "children": {
                       "url": {
