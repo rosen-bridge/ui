@@ -15,7 +15,6 @@
     "lint": "biome check --write",
     "lint:check": "biome check",
     "start": "npx serve@latest out",
-    "tauri": "tauri",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
@@ -37,7 +36,6 @@
   },
   "devDependencies": {
     "@rosen-ui/types": "^0.5.1",
-    "@tauri-apps/cli": "^1.4.0",
     "@types/lodash-es": "^4.17.12",
     "@types/moment": "^2.13.0"
   },
