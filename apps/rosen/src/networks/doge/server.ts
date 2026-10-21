@@ -3,8 +3,7 @@
 import { validateAddress as validateAddressCore } from '@rosen-network/base';
 import {
   calculateFee as calculateFeeCore,
-  generateOpReturnData as generateOpReturnDataCore,
-  generateUnsignedTx as generateUnsignedTxCore,
+  generateLockTx as generateLockTxCore,
   getAddressBalance as getAddressBalanceCore,
   getMaxTransferCreator as getMaxTransferCore,
   getMinTransferCreator,
@@ -19,12 +18,8 @@ export const calculateFee = wrap(calculateFeeCore, {
   traceKey: 'doge:calculateFee',
 });
 
-export const generateOpReturnData = wrap(generateOpReturnDataCore, {
-  traceKey: 'doge:generateOpReturnData',
-});
-
-export const generateUnsignedTx = wrap(generateUnsignedTxCore(getTokenMap), {
-  traceKey: 'doge:generateUnsignedTx',
+export const generateLockTx = wrap(generateLockTxCore(getTokenMap), {
+  traceKey: 'doge:generateLockTx',
 });
 
 export const getAddressBalance = wrap(getAddressBalanceCore, {

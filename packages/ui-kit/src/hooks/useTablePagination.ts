@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 
 import useSWR, { type Key } from 'swr';
 
@@ -21,10 +21,10 @@ export const useTableDataPagination = <T extends Paginated<unknown>>(
   const [pageSize, setPageSize] = useState<number>(initialPageSize);
   const [pageIndex, setPageIndex] = useState<number>(initialPageIndex);
 
-  const handlePageSizeChange = useCallback((newPageSize: number) => {
+  const handlePageSizeChange = (newPageSize: number) => {
     setPageSize(newPageSize);
     setPageIndex(0);
-  }, []);
+  };
 
   const { data, isLoading } = useSWR<T>(getKey(pageIndex * pageSize, pageSize), fetcher, {
     keepPreviousData: true,

@@ -1,20 +1,17 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
 import useSWR from 'swr';
 
-import { type Color, Rail } from '@rosen-bridge/ui-kit';
+import { type Color, Rail, Typography } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 
-import type { EventGuardStatusType } from '@/backend/events/repository';
+import type { EventDetailsType, EventGuardStatusType } from '@/backend/events/repository';
+import { env } from '@/env';
 
+import { ProcessGuardDetails } from './ProcessGuardDetails';
 import { Section } from './Section';
-
-const guards = JSON.parse(process.env.NEXT_PUBLIC_ALLOWED_PKS ?? '[]') as Array<{
-  key: string;
-  label: string;
-}>;
 
 const layout: Array<{
   label: string;
@@ -24,10 +21,10 @@ const layout: Array<{
   }>;
 }> = [
   {
-    label: 'Out',
+    label: 'Entry',
     steps: [
       {
-        label: 'Out',
+        label: 'Idle',
         statuses: [
           {
             key: 'UNKNOWN',
@@ -45,7 +42,7 @@ const layout: Array<{
     label: 'Payment',
     steps: [
       {
-        label: 'Pending',
+        label: 'Deliberation',
         statuses: [
           {
             key: 'PAYMENT_PENDING',
@@ -75,7 +72,7 @@ const layout: Array<{
         ],
       },
       {
-        label: 'Signing',
+        label: 'Signature',
         statuses: [
           {
             key: 'PAYMENT_SIGNING',
@@ -92,7 +89,7 @@ const layout: Array<{
         ],
       },
       {
-        label: 'Sending',
+        label: 'Submission',
         statuses: [
           {
             key: 'PAYMENT_SENT',
@@ -110,7 +107,7 @@ const layout: Array<{
     label: 'Reward',
     steps: [
       {
-        label: 'Pending',
+        label: 'Deliberation',
         statuses: [
           {
             key: 'REWARD_PENDING',
@@ -132,7 +129,7 @@ const layout: Array<{
         ],
       },
       {
-        label: 'Signing',
+        label: 'Signature',
         statuses: [
           {
             key: 'REWARD_SIGNING',
@@ -149,7 +146,7 @@ const layout: Array<{
         ],
       },
       {
-        label: 'Sending',
+        label: 'Submission',
         statuses: [
           {
             key: 'REWARD_SENT',
@@ -164,10 +161,10 @@ const layout: Array<{
     ],
   },
   {
-    label: 'Result',
+    label: 'Outcome',
     steps: [
       {
-        label: 'Done',
+        label: 'Conclusion',
         statuses: [
           {
             key: 'COMPLETED',
@@ -184,39 +181,63 @@ const layout: Array<{
 ];
 
 export const ProcessGuard = ({ id, flowId }: { id: string; flowId: string | undefined }) => {
+  const { data: events } = useSWR<EventDetailsType[]>(`/v1/events/${id}`, fetcher);
+
+  const event = events?.find((event) => !flowId || event.triggerTxId === flowId);
+
+  const isCustomStatus = typeof event?.status === 'object';
+
   const { data, error, isLoading, mutate } = useSWR<EventGuardStatusType[]>(
-    flowId ? `/v1/events/${id}/guards?triggerTxId=${flowId}` : null,
+    flowId && !isCustomStatus ? `/v1/events/${id}/guards?triggerTxId=${flowId}` : null,
     fetcher,
   );
 
-  const loading = isLoading || !flowId;
+  const [selectedGuard, setSelectedGuard] = useState<string | undefined>(undefined);
+
+  const loading = isLoading || !event;
 
   const stages = useMemo(() => {
     return layout.map((stage) => ({
       label: stage.label,
       steps: stage.steps.map((step) => ({
         label: step.label,
-        tags: guards
-          .map((guard) => {
-            const status = data?.find((item) => item.guardPublicKey === guard.key)?.status;
+        tags: env.NEXT_PUBLIC_ALLOWED_PKS.map((guard) => {
+          const status = data?.find((item) => item.guardPublicKey === guard.key)?.status;
 
-            const slot = step.statuses.find((slot) => slot.key === status);
+          const slot = step.statuses.find((slot) => slot.key === status);
 
-            if (!slot) return undefined;
+          if (!slot) return undefined;
 
-            return {
-              label: guard.label,
-              color: slot.color,
-            };
-          })
-          .filter((guard) => guard !== undefined),
+          return {
+            label: guard.label,
+            color: slot.color,
+            onClick: () => setSelectedGuard(guard.key),
+          };
+        }).filter((guard) => guard !== undefined),
       })),
     }));
   }, [data]);
 
   return (
     <Section error={error} load={mutate} title="Guards Progress" style={{ marginTop: '-40px' }}>
-      <Rail stages={stages} loading={loading} />
+      {isCustomStatus ? (
+        <Typography>
+          No progress chart is available because this event deviated from the standard lifecycle.
+          The reason for this exception is noted above.
+        </Typography>
+      ) : (
+        <>
+          <Rail stages={stages} loading={loading} />
+          <ProcessGuardDetails
+            id={id}
+            flowId={flowId}
+            guardKey={selectedGuard}
+            open={!!selectedGuard}
+            onClose={() => setSelectedGuard(undefined)}
+            onGuardChange={setSelectedGuard}
+          />
+        </>
+      )}
     </Section>
   );
 };

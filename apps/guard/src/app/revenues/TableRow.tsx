@@ -24,6 +24,17 @@ const getEmissionAmount = (info: ApiInfoResponse | undefined, row: RowProps) => 
   return getDecimalString(amount, decimals);
 };
 
+const getFeeAmount = (row: RowProps, revenueType: string) => {
+  const revenue = row.revenues.find(
+    (revenue) =>
+      revenue.revenueType === revenueType && revenue.data.tokenId === row.ergoSideTokenId,
+  );
+
+  if (!revenue) return;
+
+  return { amount: revenue.data.amount, decimals: row.lockToken.decimals };
+};
+
 interface RowProps extends Revenue {
   isLoading?: boolean;
 }
@@ -174,39 +185,19 @@ export const MobileRow: FC<RowProps> = (props) => {
           <TableRow style={rowStyles}>
             <EnhancedTableCell>Amount</EnhancedTableCell>
             <EnhancedTableCell>
-              <Amount value={row.lockToken.amount} decimal={row.lockToken.decimals} />
+              <Amount value={row.lockToken} />
             </EnhancedTableCell>
           </TableRow>
           <TableRow style={rowStyles}>
             <EnhancedTableCell>Bridge Fee (RSN)</EnhancedTableCell>
             <EnhancedTableCell>
-              <Amount
-                value={
-                  row.revenues.find(
-                    (revenue) =>
-                      revenue.revenueType === 'bridge-fee' &&
-                      revenue.data.tokenId === row.ergoSideTokenId,
-                  )?.data.amount
-                }
-                fallback="0"
-                decimal={row.lockToken.decimals}
-              />
+              <Amount value={getFeeAmount(row, 'bridge-fee')} fallback="0" />
             </EnhancedTableCell>
           </TableRow>
           <TableRow style={rowStyles}>
             <EnhancedTableCell>Network Fee (RSN)</EnhancedTableCell>
             <EnhancedTableCell>
-              <Amount
-                value={
-                  row.revenues.find(
-                    (revenue) =>
-                      revenue.revenueType === 'network-fee' &&
-                      revenue.data.tokenId === row.ergoSideTokenId,
-                  )?.data.amount
-                }
-                fallback="0"
-                decimal={row.lockToken.decimals}
-              />
+              <Amount value={getFeeAmount(row, 'network-fee')} fallback="0" />
             </EnhancedTableCell>
           </TableRow>
           <TableRow style={rowStyles}>
@@ -268,33 +259,13 @@ export const TabletRow: FC<RowProps> = (props) => {
       </EnhancedTableCell>
       <EnhancedTableCell align="center">{row.lockToken.name}</EnhancedTableCell>
       <EnhancedTableCell align="center">
-        <Amount value={row.lockToken.amount} decimal={row.lockToken.decimals} />
+        <Amount value={row.lockToken} />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
-        <Amount
-          value={
-            row.revenues.find(
-              (revenue) =>
-                revenue.revenueType === 'bridge-fee' &&
-                revenue.data.tokenId === row.ergoSideTokenId,
-            )?.data.amount
-          }
-          fallback="0"
-          decimal={row.lockToken.decimals}
-        />
+        <Amount value={getFeeAmount(row, 'bridge-fee')} fallback="0" />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
-        <Amount
-          value={
-            row.revenues.find(
-              (revenue) =>
-                revenue.revenueType === 'network-fee' &&
-                revenue.data.tokenId === row.ergoSideTokenId,
-            )?.data.amount
-          }
-          fallback="0"
-          decimal={row.lockToken.decimals}
-        />
+        <Amount value={getFeeAmount(row, 'network-fee')} fallback="0" />
       </EnhancedTableCell>
       <EnhancedTableCell style={rowStyles} align="center">
         <Amount value={getEmissionAmount(info, row)} fallback="0" loading={isInfoLoading} />

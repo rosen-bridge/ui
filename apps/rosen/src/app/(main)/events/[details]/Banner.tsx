@@ -10,7 +10,7 @@ import type { EventDetailsType } from '@/backend/events/repository';
 export const Banner = ({ id, flowId }: { id: string; flowId: string | undefined }) => {
   const { data: events } = useSWR<EventDetailsType[]>(`/v1/events/${id}`, fetcher);
 
-  const data = events?.find((event) => event.triggerTxId === flowId);
+  const data = events?.find((event) => !flowId || event.triggerTxId === flowId);
 
   const warning = typeof data?.status === 'object' ? data.status.reason : undefined;
 

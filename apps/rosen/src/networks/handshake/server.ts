@@ -3,7 +3,7 @@
 import { validateAddress as validateAddressCore } from '@rosen-network/base';
 import {
   calculateFee as calculateFeeCore,
-  generateOpReturnData as generateOpReturnDataCore,
+  generateLockTx as generateLockTxCore,
   getMinTransferCreator,
 } from '@rosen-network/handshake';
 
@@ -15,8 +15,8 @@ export const calculateFee = wrap(calculateFeeCore, {
   traceKey: 'handshake:calculateFee',
 });
 
-export const generateOpReturnData = wrap(generateOpReturnDataCore, {
-  traceKey: 'handshake:generateOpReturnData',
+export const generateLockTx = wrap(generateLockTxCore(getTokenMap), {
+  traceKey: 'handshake:generateLockTx',
 });
 
 export const getMinTransfer = wrap(getMinTransferCreator(getTokenMap), {

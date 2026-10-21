@@ -3,7 +3,8 @@ import { beforeEach, describe, expect, it, type Mock, vi } from 'vitest';
 import { BitcoinRunesBoxSelection } from '@rosen-bridge/bitcoin-runes-utxo-selection';
 import type { TokenMap } from '@rosen-bridge/tokens';
 
-import { generateUnsignedTx } from '../src';
+import { generateLockTx } from '../src';
+import { generateOpReturnData } from '../src/utils';
 import * as testData from './testData';
 
 vi.mock('../src/constants', async (importOriginal) => {
@@ -22,6 +23,7 @@ vi.mock('../src/utils', async (importOriginal) => {
 
   return {
     ...ref,
+    generateOpReturnData: vi.fn(async () => testData.lockData),
     getFeeRatio: async () => 1,
   };
 });
@@ -32,15 +34,60 @@ vi.mock(import('@rosen-bridge/bitcoin-runes-utxo-selection'), () => {
   return { BitcoinRunesBoxSelection };
 });
 
-describe('generateUnsignedTx', () => {
+describe('generateLockTx', () => {
   const getCoveringBoxesMock = BitcoinRunesBoxSelection.prototype.getCoveringBoxes as Mock;
 
   beforeEach(() => {
     getCoveringBoxesMock.mockClear();
+    (generateOpReturnData as Mock).mockClear();
   });
 
   /**
-   * @target generateUnsignedTx should perform 1 selection step to get the required amounts
+   * @target generateLockTx should build the lock data from the given transfer params
+   * @dependencies
+   * - utils.generateOpReturnData
+   * - TokenMap
+   * - BitcoinRunesBoxSelection
+   * @scenario
+   * - stub getCoveringBoxes to resolve to a mock object that covers the required amount
+   * - stub tokenMap.unwrapAmount to return a mock value
+   * - call generateLockTx
+   * @expected
+   * - generateOpReturnData should have been called once with the target chain,
+   *   target address, network fee and bridge fee
+   */
+  it('should build the lock data from the given transfer params', async () => {
+    // arrange
+    getCoveringBoxesMock.mockResolvedValueOnce(testData.selection1[0]);
+
+    const getTokenMap = async () =>
+      ({
+        unwrapAmount: vi.fn().mockImplementation(() => ({ amount: 10n, decimals: 2 })),
+      }) as unknown as TokenMap;
+
+    // act
+    await generateLockTx(getTokenMap)({
+      ...testData.lockParams,
+      amount: 100n,
+      fromAddress: testData.fromAddress,
+      fromPaymentAddress: testData.fromPaymentAddress,
+      internalPubkey: testData.internalPubkey,
+      lockAddress: testData.lockAddress,
+      token: testData.transferToken,
+    });
+
+    // assert
+    expect(generateOpReturnData).toHaveBeenCalledTimes(1);
+    expect(generateOpReturnData).toHaveBeenCalledWith(
+      testData.lockParams.toChain,
+      testData.lockParams.toAddress,
+      testData.lockParams.networkFee.toString(),
+      testData.lockParams.bridgeFee.toString(),
+    );
+  });
+
+  /**
+   * @target generateLockTx should perform 1 selection step to get the required amounts
    * @dependencies
    * - TokenMap
    * - BitcoinRunesBoxSelection
@@ -48,7 +95,7 @@ describe('generateUnsignedTx', () => {
    * - stub getCoveringBoxes to resolve to a mock object that covers the required amount
    * - stub constants to return a mock value for GET_BOX_API_LIMIT
    * - stub tokenMap.unwrapAmount to return a mock value
-   * - call generateUnsignedTx
+   * - call generateLockTx
    * - check the returned psbt
    * @expected
    * - returning inputSize should have been 1
@@ -64,15 +111,15 @@ describe('generateUnsignedTx', () => {
       }) as unknown as TokenMap;
 
     // act
-    const result = await generateUnsignedTx(getTokenMap)(
-      testData.lockAddress,
-      testData.fromAddress,
-      testData.fromPaymentAddress,
-      100n,
-      testData.lockData,
-      testData.transferToken,
-      testData.internalPubkey,
-    );
+    const result = await generateLockTx(getTokenMap)({
+      ...testData.lockParams,
+      amount: 100n,
+      fromAddress: testData.fromAddress,
+      fromPaymentAddress: testData.fromPaymentAddress,
+      internalPubkey: testData.internalPubkey,
+      lockAddress: testData.lockAddress,
+      token: testData.transferToken,
+    });
 
     // assert
     expect(result.signInputs[testData.fromAddress]).toEqual([0]);
@@ -81,7 +128,7 @@ describe('generateUnsignedTx', () => {
   });
 
   /**
-   * @target generateUnsignedTx should perform 2 selection step to get the required amounts
+   * @target generateLockTx should perform 2 selection step to get the required amounts
    * @dependencies
    * - TokenMap
    * - BitcoinRunesBoxSelection
@@ -90,7 +137,7 @@ describe('generateUnsignedTx', () => {
    *  amount on the second call
    * - stub constants to return a mock value for GET_BOX_API_LIMIT
    * - stub tokenMap.unwrapAmount to return a mock value
-   * - call generateUnsignedTx
+   * - call generateLockTx
    * - check the returned psbt
    * @expected
    * - returning inputSize should have been 2
@@ -108,15 +155,15 @@ describe('generateUnsignedTx', () => {
       }) as unknown as TokenMap;
 
     // act
-    const result = await generateUnsignedTx(getTokenMap)(
-      testData.lockAddress,
-      testData.fromAddress,
-      testData.fromPaymentAddress,
-      100n,
-      testData.lockData,
-      testData.transferToken,
-      testData.internalPubkey,
-    );
+    const result = await generateLockTx(getTokenMap)({
+      ...testData.lockParams,
+      amount: 100n,
+      fromAddress: testData.fromAddress,
+      fromPaymentAddress: testData.fromPaymentAddress,
+      internalPubkey: testData.internalPubkey,
+      lockAddress: testData.lockAddress,
+      token: testData.transferToken,
+    });
 
     // assert
     expect(result.signInputs[testData.fromAddress]).toEqual([0, 1]);
@@ -125,7 +172,7 @@ describe('generateUnsignedTx', () => {
   });
 
   /**
-   * @target generateUnsignedTx should perform 3 selection steps to get the required amounts
+   * @target generateLockTx should perform 3 selection steps to get the required amounts
    * @dependencies
    * - TokenMap
    * - BitcoinRunesBoxSelection
@@ -134,7 +181,7 @@ describe('generateUnsignedTx', () => {
    *  amount on the third call
    * - stub constants to return a mock value for GET_BOX_API_LIMIT
    * - stub tokenMap.unwrapAmount to return a mock value
-   * - call generateUnsignedTx
+   * - call generateLockTx
    * - check the returned psbt
    * @expected
    * - returning inputSize should have been 2
@@ -153,15 +200,15 @@ describe('generateUnsignedTx', () => {
       }) as unknown as TokenMap;
 
     // act
-    const result = await generateUnsignedTx(getTokenMap)(
-      testData.lockAddress,
-      testData.fromAddress,
-      testData.fromPaymentAddress,
-      100n,
-      testData.lockData,
-      testData.transferToken,
-      testData.internalPubkey,
-    );
+    const result = await generateLockTx(getTokenMap)({
+      ...testData.lockParams,
+      amount: 100n,
+      fromAddress: testData.fromAddress,
+      fromPaymentAddress: testData.fromPaymentAddress,
+      internalPubkey: testData.internalPubkey,
+      lockAddress: testData.lockAddress,
+      token: testData.transferToken,
+    });
 
     // assert
     expect(result.signInputs[testData.fromAddress]).toEqual([0]);
@@ -170,7 +217,7 @@ describe('generateUnsignedTx', () => {
   });
 
   /**
-   * @target generateUnsignedTx should perform 4 selection steps to get the required amounts
+   * @target generateLockTx should perform 4 selection steps to get the required amounts
    * @dependencies
    * - TokenMap
    * - BitcoinRunesBoxSelection
@@ -179,7 +226,7 @@ describe('generateUnsignedTx', () => {
    *  amount on the 4th call
    * - stub constants to return a mock value for GET_BOX_API_LIMIT
    * - stub tokenMap.unwrapAmount to return a mock value
-   * - call generateUnsignedTx
+   * - call generateLockTx
    * - check the returned psbt
    * @expected
    * - returning inputSize should have been 2
@@ -199,15 +246,15 @@ describe('generateUnsignedTx', () => {
       }) as unknown as TokenMap;
 
     // act
-    const result = await generateUnsignedTx(getTokenMap)(
-      testData.lockAddress,
-      testData.fromAddress,
-      testData.fromPaymentAddress,
-      100n,
-      testData.lockData,
-      testData.transferToken,
-      testData.internalPubkey,
-    );
+    const result = await generateLockTx(getTokenMap)({
+      ...testData.lockParams,
+      amount: 100n,
+      fromAddress: testData.fromAddress,
+      fromPaymentAddress: testData.fromPaymentAddress,
+      internalPubkey: testData.internalPubkey,
+      lockAddress: testData.lockAddress,
+      token: testData.transferToken,
+    });
 
     // assert
     expect(result.signInputs[testData.fromAddress]).toEqual([0, 1]);
@@ -216,7 +263,7 @@ describe('generateUnsignedTx', () => {
   });
 
   /**
-   * @target generateUnsignedTx should throw when user does not have enough runes for transfer
+   * @target generateLockTx should throw when user does not have enough runes for transfer
    * @dependencies
    * - TokenMap
    * - BitcoinRunesBoxSelection
@@ -225,9 +272,9 @@ describe('generateUnsignedTx', () => {
    *   not cover the required runes amount
    * - stub constants to return a mock value for GET_BOX_API_LIMIT
    * - stub tokenMap.unwrapAmount to return a mock value
-   * - call generateUnsignedTx
+   * - call generateLockTx
    * @expected
-   * - generateUnsignedTx should throw
+   * - generateLockTx should throw
    */
   it('should throw when user does not have enough runes for transfer', async () => {
     // arrange
@@ -240,20 +287,20 @@ describe('generateUnsignedTx', () => {
 
     // act and assert
     await expect(async () => {
-      await generateUnsignedTx(getTokenMap)(
-        testData.lockAddress,
-        testData.fromAddress,
-        testData.fromPaymentAddress,
-        1000n,
-        testData.lockData,
-        testData.transferToken,
-        testData.internalPubkey,
-      );
+      await generateLockTx(getTokenMap)({
+        ...testData.lockParams,
+        amount: 1000n,
+        fromAddress: testData.fromAddress,
+        fromPaymentAddress: testData.fromPaymentAddress,
+        internalPubkey: testData.internalPubkey,
+        lockAddress: testData.lockAddress,
+        token: testData.transferToken,
+      });
     }).rejects.toThrow();
   });
 
   /**
-   * @target generateUnsignedTx should throw when user does not have enough btc for transfer
+   * @target generateLockTx should throw when user does not have enough btc for transfer
    * @dependencies
    * - TokenMap
    * - BitcoinRunesBoxSelection
@@ -262,9 +309,9 @@ describe('generateUnsignedTx', () => {
    *   that does not cover the required btc amount
    * - stub constants to return a mock value for GET_BOX_API_LIMIT
    * - stub tokenMap.unwrapAmount to return a mock value
-   * - call generateUnsignedTx
+   * - call generateLockTx
    * @expected
-   * - generateUnsignedTx should throw
+   * - generateLockTx should throw
    */
   it('should throw when user does not have enough btc for transfer', async () => {
     // arrange
@@ -280,15 +327,15 @@ describe('generateUnsignedTx', () => {
 
     // act and assert
     await expect(async () => {
-      await generateUnsignedTx(getTokenMap)(
-        testData.lockAddress,
-        testData.fromAddress,
-        testData.fromPaymentAddress,
-        10n,
-        testData.lockData,
-        testData.transferToken,
-        testData.internalPubkey,
-      );
+      await generateLockTx(getTokenMap)({
+        ...testData.lockParams,
+        amount: 10n,
+        fromAddress: testData.fromAddress,
+        fromPaymentAddress: testData.fromPaymentAddress,
+        internalPubkey: testData.internalPubkey,
+        lockAddress: testData.lockAddress,
+        token: testData.transferToken,
+      });
     }).rejects.toThrow();
   });
 });

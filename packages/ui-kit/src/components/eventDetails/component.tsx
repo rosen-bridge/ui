@@ -28,7 +28,6 @@ export type EventDetailsOwnProps = {
   value: {
     amount?: AmountProps['value'];
     bridgeFee?: AmountProps['value'];
-    decimal?: AmountProps['decimal'];
     fromAddress?: IdentifierProps['value'];
     fromAddressUrl?: IdentifierProps['href'];
     fromChain?: NetworkProps['value'];
@@ -82,12 +81,7 @@ export const EventDetails = (props: EventDetailsProps) => {
       )}
       {'amount' in value && (
         <Label label="Amount">
-          <Amount
-            decimal={value.decimal}
-            loading={loading}
-            price={value.price}
-            value={value.amount}
-          />
+          <Amount loading={loading} price={value.price} value={value.amount} />
         </Label>
       )}
       {'fromChain' in value && 'toChain' in value && (
@@ -176,22 +170,12 @@ export const EventDetails = (props: EventDetailsProps) => {
       )}
       {'bridgeFee' in value && (
         <Label label="Bridge Fee">
-          <Amount
-            decimal={value.decimal}
-            loading={loading}
-            price={value.price}
-            value={value.bridgeFee}
-          />
+          <Amount loading={loading} price={value.price} value={value.bridgeFee} />
         </Label>
       )}
       {'networkFee' in value && (
         <Label label="Network Fee">
-          <Amount
-            decimal={value.decimal}
-            loading={loading}
-            price={value.price}
-            value={value.networkFee}
-          />
+          <Amount loading={loading} price={value.price} value={value.networkFee} />
         </Label>
       )}
       {'reports' in value && (

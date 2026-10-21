@@ -19,7 +19,7 @@ export const Carousel = (props: CarouselProps) => {
   const api = useCarousel();
 
   return (
-    <div {...rest} ref={api.ref}>
+    <div {...rest} ref={(el) => api.ref(el)}>
       <div className="RosenCarousel-container">{children}</div>
     </div>
   );
