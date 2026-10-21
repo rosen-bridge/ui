@@ -204,7 +204,7 @@ export class ScannerService extends AbstractScannerService {
             await scanner.update();
           }
         },
-        interval: configs.chains[chain as ChainsWithScanner].scanInterval * 1000,
+        interval: configs.chains[chain as ChainsWithScanner].scanInterval! * 1000,
       });
     }
     return tasks;

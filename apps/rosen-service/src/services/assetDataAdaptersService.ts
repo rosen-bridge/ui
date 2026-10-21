@@ -117,7 +117,7 @@ export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
               addresses,
               tokenMap,
               {
-                explorerUrl: configs.chains.ergo.explorer.connections.at(0)!.url,
+                explorerUrl: configs.chains.ergo.adapter.explorer.url,
               },
               this.logger.child(`ergoExplorerDataAdapter`),
             );
@@ -127,7 +127,7 @@ export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
               addresses,
               tokenMap,
               {
-                url: configs.chains.bitcoin.esplora.connections.at(0)!.url,
+                url: configs.chains.bitcoin.adapter.esplora.url,
               },
               this.logger.child('bitcoinEsploraDataAdapter'),
             );
@@ -136,8 +136,8 @@ export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
             this.adapters[NETWORKS[chain].key] = new BitcoinRunesDataAdapter(
               addresses,
               tokenMap,
-              configs.chains['bitcoin-runes'].unisatUrl,
-              configs.chains['bitcoin-runes'].unisatApiKey,
+              configs.chains['bitcoin-runes'].adapter.unisat.url,
+              configs.chains['bitcoin-runes'].adapter.unisat.apiKey,
               this.logger.child('bitcoinRunesDataAdapter'),
             );
             break;
@@ -170,8 +170,8 @@ export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
               addresses,
               tokenMap,
               {
-                koiosUrl: configs.chains.cardano.koios.connections.at(0)!.url,
-                authToken: configs.chains.cardano.koios.connections.at(0)?.authToken?.toString(),
+                koiosUrl: configs.chains.cardano.adapter.koios.url,
+                authToken: configs.chains.cardano.adapter.koios.apiKey,
               },
               this.logger.child('cardanoKoiosDataAdapter'),
             );
@@ -181,7 +181,7 @@ export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
               addresses,
               tokenMap,
               {
-                blockCypherUrl: configs.chains.doge.adapter.blockCypher.url,
+                blockCypherUrl: configs.chains.doge.adapter.blockCypher.url!,
               },
               this.logger.child('dogeBlockCypherDataAdapter'),
             );
@@ -190,7 +190,7 @@ export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
             this.adapters[NETWORKS[chain].key] = new FiroExplorerDataAdapter(
               addresses,
               tokenMap,
-              configs.chains.firo.adapter.explorerUrl!,
+              configs.chains.firo.adapter.explorer.url,
               this.logger.child('firoExplorerDataAdapter'),
             );
             break;
@@ -198,7 +198,7 @@ export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
             this.adapters[NETWORKS[chain].key] = new HandshakeExplorerDataAdapter(
               addresses,
               tokenMap,
-              configs.chains.handshake.rpc.connections.at(0)!.url,
+              configs.chains.handshake.adapter.rpc.connection.url,
               this.logger.child('handshakeExplorerDataAdapter'),
             );
             break;

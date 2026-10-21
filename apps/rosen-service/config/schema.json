@@ -642,6 +642,22 @@
                 "items": {
                   "type": "string"
                 }
+              },
+              "explorer": {
+                "type": "object",
+                "children": {
+                  "url": {
+                    "type": "string",
+                    "default": "https://api.ergoplatform.com/",
+                    "description": "ergo adapter explorer url",
+                    "validations": [
+                      {
+                        "required": true,
+                        "error": "ergo adapter explorer url must be specified"
+                      }
+                    ]
+                  }
+                }
               }
             }
           },
@@ -758,6 +774,39 @@
                 "items": {
                   "type": "string"
                 }
+              },
+              "koios": {
+                "type": "object",
+                "children": {
+                  "url": {
+                    "type": "string",
+                    "description": "cardano adapter koios url",
+                    "validations": [
+                      {
+                        "required": true,
+                        "when": {
+                          "path": "chains.cardano.active",
+                          "value": true
+                        },
+                        "error": "cardano adapter koios url must be specified"
+                      }
+                    ]
+                  },
+                  "apiKey": {
+                    "type": "string",
+                    "description": "cardano adapter ApiKey koios url",
+                    "validations": [
+                      {
+                        "required": true,
+                        "error": "cardano koios ApiKey adapter must be specified",
+                        "when": {
+                          "path": "chains.cardano.active",
+                          "value": true
+                        }
+                      }
+                    ]
+                  }
+                }
               }
             }
           },
@@ -826,6 +875,10 @@
                       "validations": [
                         {
                           "required": true,
+                          "when": {
+                            "path": "chains.cardano.method",
+                            "value": "koios"
+                          },
                           "error": "cardano koios url must be specified"
                         }
                       ]
@@ -1023,6 +1076,25 @@
                 "items": {
                   "type": "string"
                 }
+              },
+              "esplora": {
+                "type": "object",
+                "children": {
+                  "url": {
+                    "type": "string",
+                    "description": "bitcoin adapter esplora url",
+                    "validations": [
+                      {
+                        "required": true,
+                        "when": {
+                          "path": "chains.bitcoin.active",
+                          "value": true
+                        },
+                        "error": "bitcoin adapter esplora url must be specified"
+                      }
+                    ]
+                  }
+                }
               }
             }
           },
@@ -1120,6 +1192,10 @@
                       "validations": [
                         {
                           "required": true,
+                          "when": {
+                            "path": "chains.bitcoin.method",
+                            "value": "esplora"
+                          },
                           "error": "bitcoin esplora url must be specified"
                         }
                       ]
@@ -1185,6 +1261,39 @@
                 "type": "array",
                 "items": {
                   "type": "string"
+                }
+              },
+              "unisat": {
+                "type": "object",
+                "children": {
+                  "url": {
+                    "type": "string",
+                    "description": "bitcoin runes adapter unisat url",
+                    "validations": [
+                      {
+                        "required": true,
+                        "when": {
+                          "path": "chains.bitcoin-runes.active",
+                          "value": true
+                        },
+                        "error": "bitcoin runes adapter unisat url must be specified"
+                      }
+                    ]
+                  },
+                  "apiKey": {
+                    "type": "string",
+                    "description": "bitcoin runes adapter unisat ApiKey url",
+                    "validations": [
+                      {
+                        "required": true,
+                        "error": "bitcoin runs unisat ApiKey adapter must be specified",
+                        "when": {
+                          "path": "chains.bitcoin-runes.active",
+                          "value": true
+                        }
+                      }
+                    ]
+                  }
                 }
               }
             }
@@ -1255,6 +1364,10 @@
             "validations": [
               {
                 "required": true,
+                "when": {
+                  "path": "chains.doge.active",
+                  "value": true
+                },
                 "error": "doge scanInterval must be specified (in seconds)"
               }
             ]
@@ -1273,11 +1386,16 @@
                 "children": {
                   "url": {
                     "type": "string",
+                    "description": "doge adapter block cypher URL",
                     "default": "https://api.blockcypher.com",
                     "validations": [
                       {
                         "required": true,
-                        "error": "doge data-adapter blockcypher url must be specified"
+                        "when": {
+                          "path": "chains.doge.active",
+                          "value": true
+                        },
+                        "error": "doge adapter blockcypher url must be specified"
                       }
                     ]
                   }
@@ -1782,20 +1900,25 @@
                   "type": "string"
                 }
               },
-              "explorerUrl": {
-                "type": "string",
-                "description": "firo explorer URL",
-                "default": "https://explorer.firo.org",
-                "validations": [
-                  {
-                    "required": true,
-                    "when": {
-                      "path": "chains.firo.active",
-                      "value": true
-                    },
-                    "error": "firo explorer URL must be specified"
+              "explorer": {
+                "type": "object",
+                "children": {
+                  "url": {
+                    "type": "string",
+                    "description": "firo adapter explorer URL",
+                    "default": "https://explorer.firo.org",
+                    "validations": [
+                      {
+                        "required": true,
+                        "when": {
+                          "path": "chains.firo.active",
+                          "value": true
+                        },
+                        "error": "firo adapter explorer URL must be specified"
+                      }
+                    ]
                   }
-                ]
+                }
               }
             }
           },
@@ -1996,6 +2119,30 @@
                 "type": "array",
                 "items": {
                   "type": "string"
+                }
+              },
+              "rpc": {
+                "type": "object",
+                "children": {
+                  "connection": {
+                    "type": "object",
+                    "children": {
+                      "url": {
+                        "type": "string",
+                        "description": "handshake adapter rpc url",
+                        "validations": [
+                          {
+                            "required": true,
+                            "when": {
+                              "path": "chains.handshake.active",
+                              "value": true
+                            },
+                            "error": "handshake adapter rpc url must be specified"
+                          }
+                        ]
+                      }
+                    }
+                  }
                 }
               }
             }
