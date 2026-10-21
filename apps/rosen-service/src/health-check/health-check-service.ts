@@ -7,6 +7,7 @@ import { HealthCheck, HealthStatusLevel } from '@rosen-bridge/health-check';
 import { LogLevelHealthCheck } from '@rosen-bridge/log-level-check';
 import { ScannerSyncHealthCheckParam } from '@rosen-bridge/scanner-sync-check';
 
+import { createBitcoinCashScannerHealthCheck } from '../bitcoin-cash/health-check';
 import config from '../configs';
 import {
   BINANCE_BLOCK_TIME,
@@ -60,6 +61,12 @@ const getNotifySetup = () => {
  * Registers all health checks
  */
 const registerAllHealthChecks = (healthCheck: HealthCheck) => {
+  const bitcoinCashCheck = createBitcoinCashScannerHealthCheck(
+    config.bitcoinCash,
+    config.healthCheck,
+    scannerService.getBitcoinCashScanner(),
+    getLastSavedBlock,
+  );
   const checks = [
     {
       instance: new ScannerSyncHealthCheckParam(
@@ -149,6 +156,7 @@ const registerAllHealthChecks = (healthCheck: HealthCheck) => {
       ),
       label: 'handshake',
     },
+    ...(bitcoinCashCheck ? [{ instance: bitcoinCashCheck, label: 'bitcoin-cash' }] : []),
   ];
 
   for (const { instance, label } of checks) {

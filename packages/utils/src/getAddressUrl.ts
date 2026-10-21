@@ -6,6 +6,7 @@ const baseAddressURLs: { [key in Network]: string } = {
   [NETWORKS.ergo.key]: 'https://explorer.ergoplatform.com/en/addresses',
   [NETWORKS.cardano.key]: 'https://cardanoscan.io/address',
   [NETWORKS.bitcoin.key]: 'https://mempool.space/address',
+  [NETWORKS['bitcoin-cash'].key]: 'https://blockchair.com/bitcoin-cash/address',
   [NETWORKS['bitcoin-runes'].key]: 'https://uniscan.cc/address',
   [NETWORKS.ethereum.key]: 'https://etherscan.io/address',
   [NETWORKS.doge.key]: 'https://blockexplorer.one/dogecoin/mainnet/address',
@@ -13,6 +14,11 @@ const baseAddressURLs: { [key in Network]: string } = {
   [NETWORKS.handshake.key]: 'https://e.hnsfans.com/address',
 };
 
+/**
+ * Returns an explorer address link without implying route availability.
+ * @param network Registered chain key.
+ * @param address Address to display in the chain explorer.
+ */
 export const getAddressUrl = (network?: Network, address?: string): string | undefined => {
   if (!network || !address) return;
 
@@ -20,5 +26,7 @@ export const getAddressUrl = (network?: Network, address?: string): string | und
 
   if (!baseURL) return;
 
-  return `${baseURL}/${address}`;
+  const explorerAddress =
+    network === NETWORKS['bitcoin-cash'].key ? address.replace(/^bitcoincash:/i, '') : address;
+  return `${baseURL}/${explorerAddress}`;
 };

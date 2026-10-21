@@ -51,6 +51,7 @@ export { default as Moneybag } from './moneybag.svg';
 export { default as Moon } from './moon.svg';
 export { default as Binance } from './networks/binance.svg';
 export { default as Bitcoin } from './networks/bitcoin.svg';
+export { default as BitcoinCash } from './networks/bitcoin-cash.svg';
 export { default as BitcoinRunes } from './networks/bitcoin-runes.svg';
 export { default as Cardano } from './networks/cardano.svg';
 export { default as Doge } from './networks/doge.svg';

@@ -1,6 +1,7 @@
 import { DefaultLogger } from '@rosen-bridge/abstract-logger';
 import { AssetCalculator } from '@rosen-ui/asset-calculator';
 
+import { createBitcoinCashCalculatorConfig } from '../bitcoin-cash/calculator';
 import config from '../configs';
 import dataSource from '../data-source';
 import AppError from '../errors/AppError';
@@ -85,6 +86,7 @@ const start = async () => {
     },
     dataSource,
     logger,
+    createBitcoinCashCalculatorConfig(config.bitcoinCash),
   );
 
   await startUpdateJob(assetCalculator, config.calculator.interval * 1000);

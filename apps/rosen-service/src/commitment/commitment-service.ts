@@ -17,6 +17,19 @@ const logger = DefaultLogger.getInstance().child(import.meta.url);
 export const registerExtractors = async (scanner: ErgoScanner) => {
   try {
     for (const key of NETWORKS_KEYS) {
+      if (key === NETWORKS['bitcoin-cash'].key) {
+        if (!configs.bitcoinCash.enabled) continue;
+        const extractor = new CommitmentExtractor(
+          'bitcoin-cash-commitment-extractor',
+          [configs.bitcoinCash.commitment.address],
+          configs.bitcoinCash.commitment.rwt,
+          dataSource,
+          await getTokenMap(),
+          logger.child('bitcoinCashCommitmentExtractor'),
+        );
+        await scanner.registerExtractor(extractor);
+        continue;
+      }
       const chain = key === NETWORKS['bitcoin-runes'].key ? BITCOIN_RUNES_CONFIG_KEY : key;
       const chainConfig = configs[chain];
 
