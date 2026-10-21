@@ -1352,6 +1352,34 @@
           "adapter": {
             "type": "object",
             "children": {
+              "rpc": {
+                "type": "object",
+                "children": {
+                  "connection": {
+                    "type": "object",
+                    "children": {
+                      "url": {
+                        "type": "string",
+                        "description": "ethereum adapter rpc url",
+                        "validations": [
+                          {
+                            "required": true,
+                            "when": {
+                              "path": "chains.ethereum.active",
+                              "value": true
+                            },
+                            "error": "ethereum adapter rpc url must be specified"
+                          }
+                        ]
+                      },
+                      "authToken": {
+                        "type": "string",
+                        "description": "ethereum adapter rpc authToken"
+                      }
+                    }
+                  }
+                }
+              },
               "extraAddresses": {
                 "type": "array",
                 "items": {
@@ -1482,6 +1510,34 @@
           "adapter": {
             "type": "object",
             "children": {
+              "rpc": {
+                "type": "object",
+                "children": {
+                  "connection": {
+                    "type": "object",
+                    "children": {
+                      "url": {
+                        "type": "string",
+                        "description": "binance adapter rpc url",
+                        "validations": [
+                          {
+                            "required": true,
+                            "when": {
+                              "path": "chains.binance.active",
+                              "value": true
+                            },
+                            "error": "binance adapter rpc url must be specified"
+                          }
+                        ]
+                      },
+                      "authToken": {
+                        "type": "string",
+                        "description": "binance adapter rpc authToken"
+                      }
+                    }
+                  }
+                }
+              },
               "extraAddresses": {
                 "type": "array",
                 "items": {
