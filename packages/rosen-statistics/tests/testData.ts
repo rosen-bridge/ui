@@ -1241,6 +1241,62 @@ export const bridgeMetricTestData = {
    * Scenario: Calculate bridge data for multiple chains
    */
   multipleChains: {
+    tokenMap: [
+      {
+        ergo: {
+          tokenId: 'ergo-token-2',
+          extra: {},
+          name: 'ergo-token-2',
+          decimals: 8,
+          type: 'EIP-004',
+          residency: 'native',
+        },
+        cardano: {
+          tokenId: 'token-1',
+          extra: { policyId: 'p1', assetName: 'a1' },
+          name: 'token-1',
+          decimals: 8,
+          type: 'CIP26',
+          residency: 'wrapped',
+        },
+      },
+      {
+        cardano: {
+          tokenId: 'token-1',
+          extra: { policyId: 'p1b', assetName: 'a1b' },
+          name: 'token-1',
+          decimals: 6,
+          type: 'CIP26',
+          residency: 'native',
+        },
+        ergo: {
+          tokenId: 'token-2',
+          extra: {},
+          name: 'token-2',
+          decimals: 6,
+          type: 'EIP-004',
+          residency: 'wrapped',
+        },
+      },
+      {
+        ergo: {
+          tokenId: 'ergo-token-3',
+          extra: {},
+          name: 'ergo-token-3',
+          decimals: 18,
+          type: 'EIP-004',
+          residency: 'native',
+        },
+        ethereum: {
+          tokenId: 'token-3',
+          extra: {},
+          name: 'token-3',
+          decimals: 18,
+          type: 'ERC-20',
+          residency: 'wrapped',
+        },
+      },
+    ] as RosenTokens,
     blockRepo: [
       createBlock({
         hash: 'block1',
@@ -1273,24 +1329,27 @@ export const bridgeMetricTestData = {
         decimal: 8,
         significantDecimal: 8,
         chain: 'ergo',
+        ergoSideTokenId: 'ergo-token-1',
       }),
       createToken({
         id: 'token-2',
         decimal: 6,
         significantDecimal: 6,
         chain: 'cardano',
+        ergoSideTokenId: 'cardano-token-1',
       }),
       createToken({
         id: 'token-3',
         decimal: 18,
         significantDecimal: 18,
         chain: 'ethereum',
+        ergoSideTokenId: 'ethereum-token-1',
       }),
     ],
     tokenPriceRepo: [
-      createTokenPrice('token-1', 2.5, 1704067100),
-      createTokenPrice('token-2', 1.5, 1704153500),
-      createTokenPrice('token-3', 3.0, 1704153500),
+      createTokenPrice('ergo-token-2', 2.5, 1704067100),
+      createTokenPrice('token-1', 1.5, 1704153500),
+      createTokenPrice('ergo-token-3', 3.0, 1704153500),
     ],
     eventTriggerRepo: [
       createEventTrigger({
@@ -1392,6 +1451,26 @@ export const bridgeMetricTestData = {
    * Scenario: Resume from last processed record
    */
   resumeFromLastRecord: {
+    tokenMap: [
+      {
+        ergo: {
+          tokenId: 'ergo-token-1',
+          extra: {},
+          name: 'ergo-token-1',
+          decimals: 8,
+          type: 'EIP-004',
+          residency: 'native',
+        },
+        cardano: {
+          tokenId: 'token-1',
+          extra: { policyId: 'p1', assetName: 'a1' },
+          name: 'token-1',
+          decimals: 8,
+          type: 'CIP26',
+          residency: 'wrapped',
+        },
+      },
+    ] as RosenTokens,
     bridgeFeeRepo: [
       {
         fromChain: 'ergo',
@@ -1458,11 +1537,12 @@ export const bridgeMetricTestData = {
         decimal: 8,
         significantDecimal: 8,
         chain: 'ergo',
+        ergoSideTokenId: 'ergo-token-1',
       }),
     ],
     tokenPriceRepo: [
-      createTokenPrice('token-1', 2.5, 1704067199),
-      createTokenPrice('token-1', 3.0, 1704153500),
+      createTokenPrice('ergo-token-1', 2.5, 1704067199),
+      createTokenPrice('ergo-token-1', 3.0, 1704153500),
     ],
     eventTriggerRepo: [
       createEventTrigger({
@@ -1536,6 +1616,44 @@ export const bridgeMetricTestData = {
    * Scenario: Should throw error when token price is missing
    */
   missingTokenPrice: {
+    tokenMap: [
+      {
+        ergo: {
+          tokenId: 'ergo-token-1',
+          extra: {},
+          name: 'ergo-token-1',
+          decimals: 8,
+          type: 'EIP-004',
+          residency: 'native',
+        },
+        cardano: {
+          tokenId: 'token-1',
+          extra: { policyId: 'p1', assetName: 'a1' },
+          name: 'token-1',
+          decimals: 8,
+          type: 'CIP26',
+          residency: 'wrapped',
+        },
+      },
+      {
+        ergo: {
+          tokenId: 'ergo-token-2',
+          extra: {},
+          name: 'ergo-token-2',
+          decimals: 6,
+          type: 'EIP-004',
+          residency: 'native',
+        },
+        cardano: {
+          tokenId: 'token-2',
+          extra: { policyId: 'p2', assetName: 'a2' },
+          name: 'token-2',
+          decimals: 6,
+          type: 'CIP26',
+          residency: 'wrapped',
+        },
+      },
+    ] as RosenTokens,
     blockRepo: [
       createBlock({
         hash: 'block1',
@@ -1560,17 +1678,19 @@ export const bridgeMetricTestData = {
         decimal: 8,
         significantDecimal: 8,
         chain: 'ergo',
+        ergoSideTokenId: 'ergo-token-1',
       }),
       createToken({
         id: 'token-2',
         decimal: 6,
         significantDecimal: 6,
         chain: 'cardano',
+        ergoSideTokenId: 'cardano-token-1',
       }),
     ],
     tokenPriceRepo: [
-      createTokenPrice('token-1', 2.5, 1704067100),
-      // No price for token-2
+      createTokenPrice('ergo-token-1', 2.5, 1704067100),
+      // No price for cardano-token-1
     ],
     eventTriggerRepo: [
       createEventTrigger({
@@ -1600,6 +1720,26 @@ export const bridgeMetricTestData = {
    * Scenario: Aggregate multiple events per chain per day
    */
   aggregateMultipleEvents: {
+    tokenMap: [
+      {
+        ergo: {
+          tokenId: 'ergo-token-1',
+          extra: {},
+          name: 'ergo-token-1',
+          decimals: 8,
+          type: 'EIP-004',
+          residency: 'native',
+        },
+        cardano: {
+          tokenId: 'token-1',
+          extra: { policyId: 'p1', assetName: 'a1' },
+          name: 'token-1',
+          decimals: 8,
+          type: 'CIP26',
+          residency: 'wrapped',
+        },
+      },
+    ] as RosenTokens,
     blockRepo: [
       createBlock({
         hash: 'block1',
@@ -1640,9 +1780,10 @@ export const bridgeMetricTestData = {
         decimal: 8,
         significantDecimal: 8,
         chain: 'ergo',
+        ergoSideTokenId: 'ergo-token-1',
       }),
     ],
-    tokenPriceRepo: [createTokenPrice('token-1', 2.5, 1704067100)],
+    tokenPriceRepo: [createTokenPrice('ergo-token-1', 2.5, 1704067100)],
     eventTriggerRepo: [
       createEventTrigger({
         eventId: 'event1',
@@ -1707,6 +1848,26 @@ export const bridgeMetricTestData = {
    * Scenario: Process multiple days of events
    */
   processMultipleDays: {
+    tokenMap: [
+      {
+        ergo: {
+          tokenId: 'ergo-token-1',
+          extra: {},
+          name: 'ergo-token-1',
+          decimals: 8,
+          type: 'EIP-004',
+          residency: 'native',
+        },
+        cardano: {
+          tokenId: 'token-1',
+          extra: { policyId: 'p1', assetName: 'a1' },
+          name: 'token-1',
+          decimals: 8,
+          type: 'CIP26',
+          residency: 'wrapped',
+        },
+      },
+    ] as RosenTokens,
     blockRepo: [
       createBlock({
         hash: 'block1',
@@ -1747,12 +1908,13 @@ export const bridgeMetricTestData = {
         decimal: 8,
         significantDecimal: 8,
         chain: 'ergo',
+        ergoSideTokenId: 'ergo-token-1',
       }),
     ],
     tokenPriceRepo: [
-      createTokenPrice('token-1', 2.5, 1704067100),
-      createTokenPrice('token-1', 3.0, 1704153500),
-      createTokenPrice('token-1', 3.5, 1704239900),
+      createTokenPrice('ergo-token-1', 2.5, 1704067100),
+      createTokenPrice('ergo-token-1', 3.0, 1704153500),
+      createTokenPrice('ergo-token-1', 3.5, 1704239900),
     ],
     eventTriggerRepo: [
       // Day 1
@@ -1857,6 +2019,26 @@ export const bridgeMetricTestData = {
    * Scenario: Preserve existing data when no new events
    */
   preserveExistingData: {
+    tokenMap: [
+      {
+        ergo: {
+          tokenId: 'ergo-token-1',
+          extra: {},
+          name: 'ergo-token-1',
+          decimals: 8,
+          type: 'EIP-004',
+          residency: 'native',
+        },
+        cardano: {
+          tokenId: 'token-1',
+          extra: { policyId: 'p1', assetName: 'a1' },
+          name: 'token-1',
+          decimals: 8,
+          type: 'CIP26',
+          residency: 'wrapped',
+        },
+      },
+    ] as RosenTokens,
     bridgeFeeRepo: [
       {
         fromChain: 'ergo',
@@ -1915,9 +2097,10 @@ export const bridgeMetricTestData = {
         decimal: 8,
         significantDecimal: 8,
         chain: 'ergo',
+        ergoSideTokenId: 'ergo-token-1',
       }),
     ],
-    tokenPriceRepo: [createTokenPrice('token-1', 2.5, 1704067199)],
+    tokenPriceRepo: [createTokenPrice('ergo-token-1', 2.5, 1704067199)],
     eventTriggerRepo: [
       createEventTrigger({
         eventId: 'event1',
@@ -1962,6 +2145,80 @@ export const bridgeMetricTestData = {
    * Scenario: Handle tokens with different decimals
    */
   differentDecimals: {
+    tokenMap: [
+      {
+        ergo: {
+          tokenId: 'ergo-token-1',
+          extra: {},
+          name: 'ergo-token-1',
+          decimals: 8,
+          type: 'EIP-004',
+          residency: 'native',
+        },
+        cardano: {
+          tokenId: 'token-1',
+          extra: { policyId: 'p1', assetName: 'a1' },
+          name: 'token-1',
+          decimals: 8,
+          type: 'CIP26',
+          residency: 'wrapped',
+        },
+      },
+      {
+        cardano: {
+          tokenId: 'cardano-token-1',
+          extra: { policyId: 'p2', assetName: 'a2' },
+          name: 'cardano-token-1',
+          decimals: 6,
+          type: 'CIP26',
+          residency: 'native',
+        },
+        ergo: {
+          tokenId: 'token-2',
+          extra: {},
+          name: 'token-2',
+          decimals: 6,
+          type: 'EIP-004',
+          residency: 'wrapped',
+        },
+      },
+      {
+        ethereum: {
+          tokenId: 'ethereum-token-1',
+          extra: {},
+          name: 'ethereum-token-1',
+          decimals: 18,
+          type: 'ERC-20',
+          residency: 'native',
+        },
+        ergo: {
+          tokenId: 'token-3',
+          extra: {},
+          name: 'token-3',
+          decimals: 18,
+          type: 'EIP-004',
+          residency: 'wrapped',
+        },
+      },
+      {
+        bitcoin: {
+          tokenId: 'bitcoin-token-1',
+          extra: {},
+          name: 'bitcoin-token-1',
+          decimals: 0,
+          type: 'native',
+          residency: 'native',
+        },
+        ergo: {
+          tokenId: 'token-4',
+          extra: {},
+          name: 'token-4',
+          decimals: 0,
+          type: 'EIP-004',
+          residency: 'wrapped',
+        },
+      },
+    ] as RosenTokens,
     blockRepo: [
       createBlock({
         hash: 'block1',
@@ -1986,31 +2243,35 @@ export const bridgeMetricTestData = {
         decimal: 8,
         significantDecimal: 8,
         chain: 'ergo',
+        ergoSideTokenId: 'ergo-token-1',
       }),
       createToken({
         id: 'token-2',
         decimal: 6,
         significantDecimal: 6,
         chain: 'cardano',
+        ergoSideTokenId: 'cardano-token-1',
       }),
       createToken({
         id: 'token-3',
         decimal: 18,
         significantDecimal: 18,
         chain: 'ethereum',
+        ergoSideTokenId: 'ethereum-token-1',
       }),
       createToken({
         id: 'token-4',
         decimal: 0,
         significantDecimal: 0,
         chain: 'bitcoin',
+        ergoSideTokenId: 'bitcoin-token-1',
       }),
     ],
     tokenPriceRepo: [
-      createTokenPrice('token-1', 2.5, 1704067100),
-      createTokenPrice('token-2', 1.5, 1704067100),
-      createTokenPrice('token-3', 3.0, 1704067100),
-      createTokenPrice('token-4', 50000, 1704067100),
+      createTokenPrice('ergo-token-1', 2.5, 1704067100),
+      createTokenPrice('cardano-token-1', 1.5, 1704067100),
+      createTokenPrice('ethereum-token-1', 3.0, 1704067100),
+      createTokenPrice('bitcoin-token-1', 50000, 1704067100),
     ],
     eventTriggerRepo: [
       createEventTrigger({
@@ -2143,6 +2404,26 @@ export const bridgeMetricTestData = {
    * Expected: Two separate records for different days
    */
   crossMidnight: {
+    tokenMap: [
+      {
+        ergo: {
+          tokenId: 'ergo-token-1',
+          extra: {},
+          name: 'ergo-token-1',
+          decimals: 8,
+          type: 'EIP-004',
+          residency: 'native',
+        },
+        cardano: {
+          tokenId: 'token-1',
+          extra: { policyId: 'p1', assetName: 'a1' },
+          name: 'token-1',
+          decimals: 8,
+          type: 'CIP26',
+          residency: 'wrapped',
+        },
+      },
+    ] as RosenTokens,
     blockRepo: [
       createBlock({
         hash: 'block1',
@@ -2175,9 +2456,10 @@ export const bridgeMetricTestData = {
         decimal: 8,
         significantDecimal: 8,
         chain: 'ergo',
+        ergoSideTokenId: 'ergo-token-1',
       }),
     ],
-    tokenPriceRepo: [createTokenPrice('token-1', 2.5, 1704110100)],
+    tokenPriceRepo: [createTokenPrice('ergo-token-1', 2.5, 1704110100)],
     eventTriggerRepo: [
       createEventTrigger({
         eventId: 'event1',

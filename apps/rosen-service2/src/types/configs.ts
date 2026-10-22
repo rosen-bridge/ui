@@ -214,8 +214,18 @@ export interface ChainsBinanceRpcConnections {
 }
 
 export interface ChainsBinanceAdapter {
+  rpc: ChainsBinanceAdapterRpc;
   extraAddresses: string[];
   chunkSize?: number;
+}
+
+export interface ChainsBinanceAdapterRpc {
+  connection: ChainsBinanceAdapterRpcConnection;
+}
+
+export interface ChainsBinanceAdapterRpcConnection {
+  url?: string;
+  authToken?: string;
 }
 
 export interface ChainsEthereum {
@@ -239,8 +249,18 @@ export interface ChainsEthereumRpcConnections {
 }
 
 export interface ChainsEthereumAdapter {
+  rpc: ChainsEthereumAdapterRpc;
   extraAddresses: string[];
   chunkSize?: number;
+}
+
+export interface ChainsEthereumAdapterRpc {
+  connection: ChainsEthereumAdapterRpcConnection;
+}
+
+export interface ChainsEthereumAdapterRpcConnection {
+  url?: string;
+  authToken?: string;
 }
 
 export interface ChainsDoge {
