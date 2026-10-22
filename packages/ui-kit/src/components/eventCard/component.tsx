@@ -26,7 +26,6 @@ export type EventCardOwnProps = {
   loading?: boolean;
   value?: {
     amount: AmountProps['value'];
-    decimal: AmountProps['decimal'];
     fromChain: NetworkProps['value'];
     href: IdentifierProps['href'];
     id: IdentifierProps['value'];
@@ -60,7 +59,6 @@ export const EventCard = (props: EventCardProps) => {
             orientation="vertical"
             unit={value?.unit}
             value={value?.amount}
-            decimal={value?.decimal}
           />
         </div>
         <RelativeTime loading={loading} value={value?.timestamp} />

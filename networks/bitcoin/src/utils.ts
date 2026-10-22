@@ -5,6 +5,7 @@ import { encodeAddress } from '@rosen-bridge/address-codec';
 import {
   type CalculateFee,
   calculateFeeCreator,
+  type GetAddressBalance,
   getMinTransferCreator as getMinTransferCreatorBase,
 } from '@rosen-network/base';
 import { NETWORKS } from '@rosen-ui/constants';
@@ -73,7 +74,7 @@ export const getAddressUtxos = async (address: string): Promise<Array<BitcoinUtx
  * @param address
  * @returns this is a UNWRAPPED-VALUE amount
  */
-export const getAddressBalance = async (address: string): Promise<bigint> => {
+export const getAddressBalance: GetAddressBalance = async (address) => {
   const esploraUrl = process.env.BITCOIN_ESPLORA_API;
   const GET_ADDRESS = `${esploraUrl}/api/address/${address}`;
   const res = await Axios.get<EsploraAddress>(GET_ADDRESS);

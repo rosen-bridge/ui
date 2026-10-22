@@ -227,29 +227,17 @@ export class WalletConnect<Config extends WalletConnectConfig> extends Wallet<Co
 
     await this.ensureCorrectChain();
 
-    const address = await this.getAddress();
+    const userAddress = await this.getAddress();
 
-    const rosenData = await this.currentNetwork.generateLockData(
-      params.toChain,
-      params.address,
-      params.networkFee.toString(),
-      params.bridgeFee.toString(),
-    );
-
-    const transactionParameters = await this.currentNetwork.generateTxParameters(
-      params.token.tokenId,
-      params.lockAddress,
-      address,
-      params.amount,
-      rosenData,
-      params.token,
-      params.fromChain,
-    );
+    const transactionRequest = await this.currentNetwork.generateLockTx({
+      ...params,
+      fromAddress: userAddress,
+    });
 
     try {
       return await this.provider.request({
         method: 'eth_sendTransaction',
-        params: [transactionParameters],
+        params: [transactionRequest],
       });
     } catch (error) {
       throw new UserDeniedTransactionSignatureError(this.name, error);

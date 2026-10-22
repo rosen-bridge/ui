@@ -29,6 +29,12 @@ export const TokensList = (props: TokensListProps) => {
     <div {...rest}>
       {tokens.map((token) => {
         const hasCold = 'coldAmount' in token;
+
+        const coldAmount =
+          token.coldAmount === undefined
+            ? undefined
+            : { amount: token.coldAmount, decimals: token.decimals };
+
         return (
           <div className="RosenTokensList-item" key={token.tokenId}>
             <Token
@@ -48,10 +54,9 @@ export const TokensList = (props: TokensListProps) => {
             />
             <Token label={token.name} loading={loading} style={{ minWidth: 0 }} variant="label" />
             <Amount
-              decimal={token.decimals}
               loading={loading}
               reverse={hasCold}
-              value={hasCold ? token.coldAmount : token.amount}
+              value={hasCold ? coldAmount : token}
               variant={hasCold ? 'cold' : undefined}
               style={{ justifyContent: hasCold ? 'flex-start' : 'flex-end' }}
             />
@@ -61,17 +66,7 @@ export const TokensList = (props: TokensListProps) => {
               slots={{ text: { color: 'text-secondary', variant: 'body2' } }}
               value={token.tokenId}
             />
-            {hasCold ? (
-              <Amount
-                decimal={token.decimals}
-                loading={loading}
-                reverse
-                value={token.amount}
-                variant="hot"
-              />
-            ) : (
-              <div />
-            )}
+            {hasCold ? <Amount loading={loading} reverse value={token} variant="hot" /> : <div />}
           </div>
         );
       })}

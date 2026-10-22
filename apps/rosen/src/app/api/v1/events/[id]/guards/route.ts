@@ -1,8 +1,21 @@
+import { z } from 'zod';
+
+import { defineRoute } from '@/app/api/defineRoute';
 import { getEventGuardsStatus } from '@/backend/events';
 
-import { withValidation } from '../../../withValidation';
-import { validateGet } from './validations';
+const params = z
+  .object({
+    id: z.hex().length(64),
+  })
+  .strict();
 
-export const GET = withValidation(validateGet, (value) =>
-  getEventGuardsStatus(value.id, value.triggerTxId),
-);
+const query = z
+  .object({
+    triggerTxId: z.hex().length(64),
+  })
+  .strict();
+
+export const GET = defineRoute({
+  schema: { params, query },
+  handler: ({ input }) => getEventGuardsStatus(input.params.id, input.query.triggerTxId),
+});

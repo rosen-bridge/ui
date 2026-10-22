@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useMemo, useState, useTransition } from 'react';
 
+import * as Sentry from '@sentry/nextjs';
+
 import type { RosenAmountValue } from '@rosen-ui/types';
 import { getDecimalString } from '@rosen-ui/utils';
 
@@ -49,6 +51,15 @@ export const useBalance = (): BalanceState => {
         setAmount(await selectedWallet.getBalance(token));
       } catch (error) {
         setError(error);
+
+        Sentry.withScope((scope) => {
+          scope.setTag('feature', 'balance');
+          scope.setTag('wallet', selectedWallet.name);
+
+          scope.setContext('balance', { tokenId: token.tokenId });
+
+          Sentry.captureException(error);
+        });
       }
     });
   }, [selectedWallet, token]);

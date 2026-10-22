@@ -66,27 +66,10 @@ export class ShakeWallet extends Wallet<ShakeWalletConfig> {
 
     const client = await this.api.connect();
 
-    const data = await this.currentNetwork.generateOpReturnData(
-      params.toChain,
-      params.address,
-      params.networkFee.toString(),
-      params.bridgeFee.toString(),
-    );
-
-    const tokenMap = await this.config.getTokenMap();
-
-    const unwrappedAmount = tokenMap.unwrapAmount(
-      params.token.tokenId,
-      params.amount,
-      NETWORKS.handshake.key,
-    ).amount;
+    const lockTx = await this.currentNetwork.generateLockTx(params);
 
     try {
-      const tx = await client.sendRosenBridgeData({
-        receiver: params.lockAddress,
-        amount: Number(unwrappedAmount),
-        data,
-      });
+      const tx = await client.sendRosenBridgeData(lockTx);
 
       return tx.hash;
     } catch (error) {

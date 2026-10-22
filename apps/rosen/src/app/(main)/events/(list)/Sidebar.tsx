@@ -46,17 +46,25 @@ const Content = ({ value }: SidebarProps) => {
 
   const eventData = useMemo(() => {
     const result: EventDetailsProps['value'] = {
-      amount: data?.amount,
-      bridgeFee: data?.bridgeFee,
-      decimal: data?.lockToken?.significantDecimal,
+      amount: data?.lockToken && {
+        amount: data.amount,
+        decimals: data.lockToken.significantDecimal,
+      },
+      bridgeFee: data?.lockToken && {
+        amount: data.bridgeFee,
+        decimals: data.lockToken.significantDecimal,
+      },
       fromAddress: data?.fromAddress,
       fromAddressUrl: getAddressUrl(data?.fromChain, data?.fromAddress),
       fromChain: data?.fromChain,
       height: data?.height,
       id: data?.eventId,
-      networkFee: data?.networkFee,
+      networkFee: data?.lockToken && {
+        amount: data.networkFee,
+        decimals: data.lockToken.significantDecimal,
+      },
       price: data?.price,
-      reports: data?.WIDsCount,
+      reports: data?.reports,
       sourceTxId: data?.sourceTxId,
       sourceTxIdUrl: getTxURL(data?.fromChain, data?.sourceTxId),
       status: eventStatusParser(data?.status),

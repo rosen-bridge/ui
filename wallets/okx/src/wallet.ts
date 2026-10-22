@@ -74,20 +74,10 @@ export class OKXWallet extends Wallet<OKXWalletConfig> {
 
     const userAddress = await this.getAddress();
 
-    const opReturnData = await this.currentNetwork.generateOpReturnData(
-      params.toChain,
-      params.address,
-      params.networkFee.toString(),
-      params.bridgeFee.toString(),
-    );
-
-    const psbtData = await this.currentNetwork.generateUnsignedTx(
-      params.lockAddress,
-      userAddress,
-      params.amount,
-      opReturnData,
-      params.token,
-    );
+    const psbtData = await this.currentNetwork.generateLockTx({
+      ...params,
+      fromAddress: userAddress,
+    });
 
     let signedPsbtHex: string;
 

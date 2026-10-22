@@ -155,28 +155,18 @@ export class XverseWallet extends Wallet<XverseWalletConfig> {
 
     const userAddress = await this.getAddress();
 
-    const opReturnData = await this.currentNetwork.generateOpReturnData(
-      params.toChain,
-      params.address,
-      params.networkFee.toString(),
-      params.bridgeFee.toString(),
-    );
-
     let signedPsbtBase64: string;
 
     if (this.currentNetwork instanceof BitcoinRunesNetwork) {
       const { publicKey: userPublicKey } = (await this.findAddress(AddressPurpose.Ordinals))!;
       const { address: userPaymentAddress } = (await this.findAddress(AddressPurpose.Payment))!;
 
-      const { psbt, signInputs } = await this.currentNetwork.generateUnsignedTx(
-        params.lockAddress,
-        userAddress,
-        userPaymentAddress,
-        params.amount,
-        opReturnData,
-        params.token,
-        userPublicKey,
-      );
+      const { psbt, signInputs } = await this.currentNetwork.generateLockTx({
+        ...params,
+        fromAddress: userAddress,
+        fromPaymentAddress: userPaymentAddress,
+        internalPubkey: userPublicKey,
+      });
 
       try {
         const response = await request('signPsbt', {
@@ -193,13 +183,10 @@ export class XverseWallet extends Wallet<XverseWalletConfig> {
         throw new UserDeniedTransactionSignatureError(this.name, error);
       }
     } else {
-      const psbtData = await this.currentNetwork.generateUnsignedTx(
-        params.lockAddress,
-        userAddress,
-        params.amount,
-        opReturnData,
-        params.token,
-      );
+      const psbtData = await this.currentNetwork.generateLockTx({
+        ...params,
+        fromAddress: userAddress,
+      });
 
       try {
         const response = await request('signPsbt', {

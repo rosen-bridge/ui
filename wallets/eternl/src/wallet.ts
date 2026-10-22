@@ -78,29 +78,17 @@ export class EtrnlWallet extends Wallet<EtrnlWalletConfig> {
 
     const wallet = await this.api.enable();
 
-    const changeAddressHex = await this.getAddress();
-
-    const auxiliaryDataHex = await this.currentNetwork.generateLockAuxiliaryData(
-      params.toChain,
-      params.address,
-      changeAddressHex,
-      params.networkFee.toString(),
-      params.bridgeFee.toString(),
-    );
+    const userAddress = await this.getAddress();
 
     const walletUtxos = await wallet.getUtxos();
 
     if (!walletUtxos) throw new UtxoFetchError(this.name);
 
-    const unsignedTxHex = await this.currentNetwork.generateUnsignedTx(
+    const unsignedTxHex = await this.currentNetwork.generateLockTx({
+      ...params,
+      fromAddress: userAddress,
       walletUtxos,
-      params.lockAddress,
-      changeAddressHex,
-      params.token.extra.policyId as string,
-      params.token.extra.assetName as string,
-      params.amount,
-      auxiliaryDataHex,
-    );
+    });
 
     let witnessSetHex: string;
 

@@ -6,10 +6,7 @@ import {
   getMaxTransferCreator as getMaxTransferCore,
   getMinTransferCreator,
 } from '@rosen-network/ethereum';
-import {
-  generateLockData as generateLockDataCore,
-  generateTxParameters as generateTxParametersCore,
-} from '@rosen-network/evm';
+import { generateLockTx as generateLockTxCore } from '@rosen-network/evm';
 
 import { wrap } from '@/safeServerAction';
 import { getTokenMap } from '@/tokenMap/getServerTokenMap';
@@ -19,12 +16,8 @@ export const calculateFee = wrap(calculateFeeCore, {
   traceKey: 'ethereum:calculateFee',
 });
 
-export const generateLockData = wrap(generateLockDataCore, {
-  traceKey: 'ethereum:generateLockData',
-});
-
-export const generateTxParameters = wrap(generateTxParametersCore(getTokenMap), {
-  traceKey: 'ethereum:generateTxParameters',
+export const generateLockTx = wrap(generateLockTxCore(getTokenMap), {
+  traceKey: 'ethereum:generateLockTx',
 });
 
 export const getMaxTransfer = wrap(getMaxTransferCore(getTokenMap), {

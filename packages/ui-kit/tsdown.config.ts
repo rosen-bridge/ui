@@ -1,3 +1,5 @@
+import pluginBabel from '@rolldown/plugin-babel';
+import { reactCompilerPreset } from '@vitejs/plugin-react';
 import autoprefixer from 'autoprefixer';
 import { defineConfig } from 'tsdown';
 
@@ -6,9 +8,18 @@ export default defineConfig({
   platform: 'neutral',
   dts: true,
   format: ['esm'],
+
+  plugins: [
+    pluginBabel({
+      exclude: ['src/legacy/**'],
+      presets: [reactCompilerPreset()],
+    }),
+  ],
+
   deps: {
-    onlyAllowBundle: false,
+    onlyBundle: false,
   },
+
   css: {
     postcss: {
       plugins: [autoprefixer()],

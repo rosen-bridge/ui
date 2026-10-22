@@ -1,5 +1,3 @@
-import { useMemo } from 'react';
-
 import { Tabs as TabsBaseUI } from '@base-ui/react/tabs';
 
 import { useConfig } from '@/hooks';
@@ -24,7 +22,7 @@ export type TabsProps = OverridableType<TabsBaseProps, TabsOverrides, 'gap'>;
 export const Tabs = (props: TabsProps) => {
   const { gap, style, value, onChange, ...rest } = useConfig('Tabs', props);
 
-  const styles = useMemo(() => ({ gap: toCSSUnit('gap', gap), ...style }), [gap, style]);
+  const styles = { gap: toCSSUnit('gap', gap), ...style };
 
   return (
     <TabsBaseUI.Root

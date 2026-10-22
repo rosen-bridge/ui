@@ -1,4 +1,4 @@
-import type { CSSProperties } from 'react';
+import { type CSSProperties, useState } from 'react';
 
 import { Action, Popover, PopoverBody, PopoverTrigger, Skeleton, Typography } from '@/components';
 import { useConfig } from '@/hooks';
@@ -16,6 +16,7 @@ export type RailOwnProps = {
       tags: {
         label: string;
         color?: Color;
+        onClick?: () => void;
       }[];
     }[];
   }[];
@@ -29,6 +30,8 @@ export type RailProps = OverridableType<RailBaseProps, RailOverrides, never>;
 
 export const Rail = (props: RailProps) => {
   const { stages, loading, style, tagVisibleLimit = 2, ...rest } = useConfig('Rail', props);
+
+  const [openKey, setOpenKey] = useState<string>();
 
   const stepCount = stages.reduce((total, stage) => total + stage.steps.length, 0);
 
@@ -54,12 +57,18 @@ export const Rail = (props: RailProps) => {
             } as CSSProperties
           }
         >
-          <Typography className="RosenRail-label" variant="body2" align="center" fontWeight="bold">
+          <Typography
+            className="RosenRail-label"
+            variant="body2"
+            align="center"
+            fontWeight="bold"
+            noWrap
+          >
             {stage.label}
           </Typography>
           <div className="RosenRail-steps">
             {stage.steps.map((step) => (
-              <Typography key={step.label} className="RosenRail-step" variant="caption">
+              <Typography key={step.label} className="RosenRail-step" variant="caption" noWrap>
                 {step.label}
               </Typography>
             ))}
@@ -68,6 +77,7 @@ export const Rail = (props: RailProps) => {
             {stage.steps.map((step) => {
               const visibleTags = step.tags.slice(0, tagVisibleLimit);
               const hiddenCount = step.tags.length - visibleTags.length;
+              const key = `${stage.label}-${step.label}`;
               return (
                 <div key={step.label} className="RosenRail-tags">
                   {visibleTags.map((tag) => (
@@ -76,12 +86,17 @@ export const Rail = (props: RailProps) => {
                       className="RosenRail-tag"
                       variant="caption"
                       color={tag.color ?? 'text-secondary'}
+                      component={tag.onClick ? Action : 'span'}
+                      onClick={tag.onClick}
                     >
                       {tag.label}
                     </Typography>
                   ))}
                   {hiddenCount > 0 && (
-                    <Popover>
+                    <Popover
+                      open={openKey === key}
+                      onOpenChange={(open) => setOpenKey(open ? key : undefined)}
+                    >
                       <PopoverTrigger as={Action} className="RosenRail-more">
                         +{hiddenCount} more
                       </PopoverTrigger>
@@ -91,6 +106,14 @@ export const Rail = (props: RailProps) => {
                             key={tag.label}
                             variant="caption"
                             color={tag.color ?? 'text-secondary'}
+                            component={tag.onClick ? Action : 'span'}
+                            onClick={
+                              tag.onClick &&
+                              (() => {
+                                setOpenKey(undefined);
+                                tag.onClick?.();
+                              })
+                            }
                           >
                             {tag.label}
                           </Typography>

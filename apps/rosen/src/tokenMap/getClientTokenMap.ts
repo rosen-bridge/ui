@@ -7,6 +7,7 @@ import crypto from 'crypto';
 
 import { TokenMap } from '@rosen-bridge/tokens';
 
+import { env } from '@/env';
 import { unwrap } from '@/safeServerAction';
 
 import { getOnChainRosenTokensWithCache } from './getOnChainRosenTokens';
@@ -17,7 +18,7 @@ let tokenMap: TokenMap;
  * get a TokenMap instance using the Rosen TokenMapObject in the client.
  */
 export const getTokenMap = async () => {
-  if (process.env.USE_OCTM === 'true') {
+  if (env.NEXT_PUBLIC_USE_OCTM) {
     const storedTokenMap = await unwrap(getOnChainRosenTokensWithCache)();
 
     if (!tokenMap) {
