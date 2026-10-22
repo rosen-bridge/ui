@@ -61,7 +61,7 @@ export class WatcherCountMetricService extends AbstractWatcherCountMetricService
     this.logger.info(`Running ${this.getName()} job`);
 
     const rwtRepoNFT = configs.contracts.tokens.RWTRepoNFT;
-    const url = configs.statistics.watcherCountMetrics.nodeUrl;
+    const url = configs.statistics.watcherCountMetrics.nodeUrl!;
     const rwtTokenMap = new Map<string, string>();
     for (const [chain, chainConfig] of Object.entries(configs.contracts)) {
       if (chain === 'version' || chain === 'tokens') continue;
@@ -114,7 +114,7 @@ export class WatcherCountMetricService extends AbstractWatcherCountMetricService
     return [
       {
         fn: this.watcherCountCalculation,
-        interval: configs.statistics.watcherCountMetrics.interval * 1000,
+        interval: configs.statistics.watcherCountMetrics.interval! * 1000,
       },
     ];
   };

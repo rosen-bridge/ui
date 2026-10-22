@@ -93,32 +93,39 @@ export interface Statistics {
 }
 
 export interface StatisticsBridgeAmountMetrics {
-  interval: number;
+  interval?: number;
+  active: boolean;
 }
 
 export interface StatisticsBridgeFeeMetrics {
-  interval: number;
+  interval?: number;
+  active: boolean;
 }
 
 export interface StatisticsWatcherCountMetrics {
-  interval: number;
-  nodeUrl: string;
+  interval?: number;
+  active: boolean;
+  nodeUrl?: string;
 }
 
 export interface StatisticsUserEventsMetric {
-  interval: number;
+  interval?: number;
+  active: boolean;
 }
 
 export interface StatisticsEventCountMetrics {
-  interval: number;
+  interval?: number;
+  active: boolean;
 }
 
 export interface StatisticsGeneralMetrics {
-  interval: number;
+  interval?: number;
+  active: boolean;
 }
 
 export interface StatisticsLockedAssetsMetrics {
-  interval: number;
+  interval?: number;
+  active: boolean;
 }
 
 export interface Chains {

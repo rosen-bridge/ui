@@ -113,7 +113,7 @@ export class GeneralMetricsService extends AbstractGeneralMetricsService {
     return [
       {
         fn: this.generalMetricsCalculation,
-        interval: configs.statistics.generalMetrics.interval * 1000,
+        interval: configs.statistics.generalMetrics.interval! * 1000,
       },
     ];
   };

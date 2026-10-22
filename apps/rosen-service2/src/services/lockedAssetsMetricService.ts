@@ -99,7 +99,7 @@ export class LockedAssetsMetricService extends AbstractLockedAssetsMetricService
     return [
       {
         fn: this.lockedAssetsCalculation,
-        interval: configs.statistics.lockedAssetsMetrics.interval * 1000,
+        interval: configs.statistics.lockedAssetsMetrics.interval! * 1000,
       },
     ];
   };
