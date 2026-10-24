@@ -1,3 +1,4 @@
+import { configs } from 'configs';
 import { BridgeAmountMetricService } from 'services/bridgeAmountMetricService';
 import { BridgeFeeMetricService } from 'services/bridgeFeeMetricService';
 import { RedisService } from 'services/redisService';
@@ -67,40 +68,59 @@ const startApp = async () => {
   serviceManager.register(AssetAggregatorService.getInstance());
   logger.debug('AssetAggregatorService registered to the service manager');
 
-  logger.debug('Initializing LockedAssetsMetricsService');
-  LockedAssetsMetricService.init(DefaultLogger.getInstance().child('lockedAssetsMetricsService'));
-  serviceManager.register(LockedAssetsMetricService.getInstance());
-  logger.debug('LockedAssetsMetricsService registered to the service manager');
-
-  logger.debug('Initializing EventCountMetricsService');
-  EventCountMetricService.init(DefaultLogger.getInstance().child('eventCountMetricsService'));
-  serviceManager.register(EventCountMetricService.getInstance());
-  logger.debug('EventCountMetricsService registered to the service manager');
-
-  logger.debug('Initializing UserEventsMetricService');
-  UserEventsMetricService.init(DefaultLogger.getInstance().child('userEventsMetricService'));
-  serviceManager.register(UserEventsMetricService.getInstance());
-  logger.debug('UserEventsMetricService registered to the service manager');
-
-  logger.debug('Initializing WatcherCountMetricService');
-  WatcherCountMetricService.init(DefaultLogger.getInstance().child('watcherCountMetricsService'));
-  serviceManager.register(WatcherCountMetricService.getInstance());
-  logger.debug('WatcherCountMetricsService registered to the service manager');
-
-  logger.debug('Initializing BridgeFeeMetricsService');
-  BridgeFeeMetricService.init(DefaultLogger.getInstance().child('bridgeFeeMetricsService'));
-  serviceManager.register(BridgeFeeMetricService.getInstance());
-  logger.debug('BridgeFeeMetricsService registered to the service manager');
-
-  logger.debug('Initializing BridgeAmountMetricsService');
-  BridgeAmountMetricService.init(DefaultLogger.getInstance().child('bridgeAmountMetricsService'));
-  serviceManager.register(BridgeAmountMetricService.getInstance());
-  logger.debug('BridgeAmountMetricsService registered to the service manager');
-
   logger.debug('Initializing HealthService');
   HealthService.init(DefaultLogger.getInstance().child('healthService'));
   serviceManager.register(HealthService.getInstance());
   logger.debug('HealthService registered to the service manager');
+
+  const statisticMetrics = [
+    {
+      service: GeneralMetricsService,
+      logName: 'generalMetricsService',
+      active: configs.statistics.generalMetrics.active,
+    },
+    {
+      service: LockedAssetsMetricService,
+      logName: 'lockedAssetsMetricsService',
+      active: configs.statistics.lockedAssetsMetrics.active,
+    },
+    {
+      service: EventCountMetricService,
+      logName: 'eventCountMetricsService',
+      active: configs.statistics.eventCountMetrics.active,
+    },
+    {
+      service: UserEventsMetricService,
+      logName: 'userEventsMetricsService',
+      active: configs.statistics.userEventsMetric.active,
+    },
+    {
+      service: WatcherCountMetricService,
+      logName: 'watcherCountMetricsService',
+      active: configs.statistics.watcherCountMetrics.active,
+    },
+    {
+      service: BridgeFeeMetricService,
+      logName: 'bridgeFeeMetricsService',
+      active: configs.statistics.bridgeFeeMetrics.active,
+    },
+    {
+      service: BridgeAmountMetricService,
+      logName: 'bridgeAmountMetricsService',
+      active: configs.statistics.bridgeAmountMetrics.active,
+    },
+  ] as const;
+
+  for (const { service, active, logName } of statisticMetrics) {
+    logger.debug(`Initializing ${service.name}`);
+    service.init(DefaultLogger.getInstance().child(logName));
+    if (active) {
+      serviceManager.register(service.getInstance());
+      logger.debug(`${service.name} registered to the service manager`);
+    } else {
+      logger.info(`${service.name} is disabled , skipping registration`);
+    }
+  }
 
   logger.info('Starting service manager...');
 
@@ -108,13 +128,9 @@ const startApp = async () => {
   await serviceManager.start(ScannerService.getInstance().getName());
   await serviceManager.start(HealthService.getInstance().getName());
   await serviceManager.start(AssetAggregatorService.getInstance().getName());
-  await serviceManager.start(BridgeAmountMetricService.getInstance().getName());
-  await serviceManager.start(BridgeFeeMetricService.getInstance().getName());
-  await serviceManager.start(EventCountMetricService.getInstance().getName());
-  await serviceManager.start(GeneralMetricsService.getInstance().getName());
-  await serviceManager.start(LockedAssetsMetricService.getInstance().getName());
-  await serviceManager.start(UserEventsMetricService.getInstance().getName());
-  await serviceManager.start(WatcherCountMetricService.getInstance().getName());
+  for (const { service, active } of statisticMetrics) {
+    if (active) await serviceManager.start(service.getInstance().getName());
+  }
 
   await Promise.resolve(() => {});
 };

@@ -105,7 +105,7 @@ export class EventCountMetricService extends AbstractEventCountMetricService {
     return [
       {
         fn: this.eventCountCalculation,
-        interval: configs.statistics.eventCountMetrics.interval * 1000,
+        interval: configs.statistics.eventCountMetrics.interval! * 1000,
       },
     ];
   };

@@ -112,7 +112,7 @@ export class BridgeFeeMetricService extends AbstractBridgeFeeMetricService {
     return [
       {
         fn: this.bridgeFeeCalculation,
-        interval: configs.statistics.bridgeFeeMetrics.interval * 1000,
+        interval: configs.statistics.bridgeFeeMetrics.interval! * 1000,
       },
     ];
   };

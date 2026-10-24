@@ -28,18 +28,25 @@ tokenMap:
 statistics:
   lockedAssetsMetrics:
     interval: 86400
+    active: false
   generalMetrics:
     interval: 86400
+    active: false
   eventCountMetrics:
     interval: 86400
+    active: false
   userEventsMetric:
     interval: 86400
+    active: false
   watcherCountMetrics:
     interval: 86400
+    active: false
   bridgeFeeMetrics:
     interval: 86400
+    active: false
   bridgeAmountMetrics:
     interval: 86400
+    active: false
 chains:
   ergo:
     scanInterval: 120
