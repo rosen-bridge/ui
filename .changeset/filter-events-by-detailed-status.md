@@ -2,4 +2,4 @@
 '@rosen-bridge/rosen-app': patch
 ---
 
-Accept every event status in the status filter of the events API
+Support all event statuses in the Events page status filter
