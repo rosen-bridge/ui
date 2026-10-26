@@ -89,6 +89,7 @@ export * from './tabs';
 export * from './tabsList';
 export * from './tabsPanel';
 export * from './tabsTab';
+export * from './text';
 export * from './themeToggleButton';
 export * from './token';
 export * from './tokensCard';
