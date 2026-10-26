@@ -22,14 +22,14 @@ ENV SERVICE_PORT=8080
 ENV APP_NAME=guard
 ENTRYPOINT ["bash", "entrypoint.sh"]
 
-FROM node:22.18 AS prepare
+FROM node:24.22.1 AS prepare
 WORKDIR /app
 COPY . .
 RUN --mount=type=cache,target=/root/.npm npm i -g npm@11.6.2
 RUN TURBO_VERSION=$(node -p "require('./package-lock.json').packages['node_modules/turbo'].version") && \
     npx --yes turbo@$TURBO_VERSION prune @rosen-bridge/rosen-service --docker
 
-FROM node:22.18 AS builder
+FROM node:24.22.1 AS builder
 WORKDIR /app
 RUN --mount=type=cache,target=/root/.npm npm i -g npm@11.6.2
 COPY --from=prepare /app/out/json/ .
@@ -40,7 +40,7 @@ RUN npm run bootstrap --workspace=@rosen-bridge/rosen-service && \
     mkdir -p /tmp/dist && \
     find . -type d -name "dist" -not -path "*/node_modules/*" -exec cp --parents -r {} /tmp/dist/ \;
 
-FROM node:22.18 AS rosen-service
+FROM node:24.22.1 AS rosen-service
 LABEL maintainer="rosen-bridge team <team@rosen.tech>"
 LABEL description="Docker image for the rosen-service owned by rosen-bridge organization."
 LABEL org.label-schema.vcs-url="https://github.com/rosen-bridge/ui"
