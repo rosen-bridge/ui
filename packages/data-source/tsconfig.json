@@ -6,6 +6,7 @@
   },
   "references": [
     { "path": "../asset-calculator" },
+    { "path": "../event-list-view" },
     { "path": "../public-status" },
     { "path": "../rosen-statistics-entity" }
   ]

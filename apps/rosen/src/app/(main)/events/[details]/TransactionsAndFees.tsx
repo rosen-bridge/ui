@@ -142,10 +142,12 @@ export const TransactionsAndFees = ({ id, flowId }: { id: string; flowId: string
             <Amount
               loading={isLoading}
               value={
-                data?.lockToken && {
-                  amount: data.totalFee,
-                  decimals: data.lockToken.significantDecimal,
-                }
+                data?.lockToken
+                  ? {
+                      amount: data.totalFee,
+                      decimals: data.lockToken.significantDecimal,
+                    }
+                  : undefined
               }
               unit={data?.lockToken?.name}
               price={data?.price}
@@ -155,10 +157,12 @@ export const TransactionsAndFees = ({ id, flowId }: { id: string; flowId: string
             <Amount
               loading={isLoading}
               value={
-                data?.lockToken && {
-                  amount: data.bridgeFee,
-                  decimals: data.lockToken.significantDecimal,
-                }
+                data?.lockToken
+                  ? {
+                      amount: data.bridgeFee,
+                      decimals: data.lockToken.significantDecimal,
+                    }
+                  : undefined
               }
               unit={data?.lockToken?.name}
               price={data?.price}
@@ -168,10 +172,12 @@ export const TransactionsAndFees = ({ id, flowId }: { id: string; flowId: string
             <Amount
               loading={isLoading}
               value={
-                data?.lockToken && {
-                  amount: data.networkFee,
-                  decimals: data.lockToken.significantDecimal,
-                }
+                data?.lockToken
+                  ? {
+                      amount: data.networkFee,
+                      decimals: data.lockToken.significantDecimal,
+                    }
+                  : undefined
               }
               unit={data?.lockToken?.name}
               price={data?.price}

@@ -24,6 +24,10 @@ import {
   TokenEntity,
 } from '@rosen-ui/asset-calculator';
 import {
+  EventListViewEntity,
+  migrations as eventListViewMigrations,
+} from '@rosen-ui/event-list-view';
+import {
   AggregatedStatusChangedEntity,
   AggregatedStatusEntity,
   EventStatusOverrideEntity,
@@ -67,6 +71,7 @@ export const testDataSource = new DataSource({
     BridgedAmountEntity,
     BridgeFeeEntity,
     TokenPriceEntity,
+    EventListViewEntity,
   ],
   migrations: [
     ...eventTriggerExtractorMigrations.sqlite,
@@ -76,6 +81,7 @@ export const testDataSource = new DataSource({
     ...publicStatusMigrations.sqlite,
     ...statisticsMigrations.sqlite,
     ...tokenPriceMigrations.sqlite,
+    ...eventListViewMigrations.sqlite,
   ],
   synchronize: false,
   logging: false,

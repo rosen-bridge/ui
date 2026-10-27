@@ -150,11 +150,11 @@ const Page = () => {
                     fromChain: item.fromChain,
                     href: `/events/${item.eventId}`,
                     id: item.eventId,
-                    status: eventStatusParser(item.status),
+                    status: item.flows > 1 ? 'MULTIPLE_FLOWS' : eventStatusParser(item.status),
                     toChain: item.toChain,
                     token: item.lockToken?.id,
                     unit: item?.lockToken?.name,
-                    timestamp: item.timestamp,
+                    timestamp: item.timestamp ?? undefined,
                   }}
                   onClick={() => collection.setFragment(item.id.toString())}
                 />
