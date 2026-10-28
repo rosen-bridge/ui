@@ -1,4 +1,4 @@
-import { Typography } from '@/components';
+import { Text } from '@/components';
 import { useConfig } from '@/hooks';
 import type { Color, ElementBaseProps, OverridableType } from '@/types';
 import { formatDateTime } from '@/utils';
@@ -41,15 +41,9 @@ export const DateTime = (props: DateTimeProps) => {
   const parts = formatDateTime(timestamp);
 
   return (
-    <Typography
-      color="text-primary"
-      gutterBottom={loading}
-      loading={loading}
-      variant="body1"
-      {...rest}
-    >
+    <Text as="div" color="text-primary" loading={loading} {...rest}>
       {parts}
-    </Typography>
+    </Text>
   );
 };
 

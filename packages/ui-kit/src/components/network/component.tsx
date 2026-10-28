@@ -1,6 +1,6 @@
 import { type FC, type SVGAttributes, useMemo } from 'react';
 
-import { Icon, type IconProps, Typography, type TypographyProps } from '@/components';
+import { Icon, type IconProps, Text, type TextProps } from '@/components';
 import { useConfig } from '@/hooks';
 import type { ElementBaseProps, OverridableType } from '@/types';
 
@@ -26,7 +26,7 @@ export type NetworkOwnProps = {
   networks?: Record<NonNullable<NetworkProps['value']>, NetworkMeta>;
 
   slots?: {
-    label?: TypographyProps;
+    label?: TextProps;
     logo?: IconProps;
   };
 
@@ -78,16 +78,16 @@ export const Network = (props: NetworkProps) => {
         />
       )}
       {showLabel && (
-        <Typography
+        <Text
           className="RosenNetwork-label"
-          component="div"
+          as="div"
           loading={loading}
-          noWrap
           variant="inherit"
+          truncate
           {...slots?.label}
         >
           {label}
-        </Typography>
+        </Text>
       )}
     </div>
   );

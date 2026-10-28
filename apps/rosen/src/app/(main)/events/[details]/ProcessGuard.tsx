@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react';
 
 import useSWR from 'swr';
 
-import { type Color, Rail, Typography } from '@rosen-bridge/ui-kit';
+import { type Color, Rail, Text } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 
 import type { EventDetailsType, EventGuardStatusType } from '@/backend/events/repository';
@@ -221,10 +221,10 @@ export const ProcessGuard = ({ id, flowId }: { id: string; flowId: string | unde
   return (
     <Section error={error} load={mutate} title="Guards Progress" style={{ marginTop: '-40px' }}>
       {isCustomStatus ? (
-        <Typography>
+        <Text>
           No progress chart is available because this event deviated from the standard lifecycle.
           The reason for this exception is noted above.
-        </Typography>
+        </Text>
       ) : (
         <>
           <Rail stages={stages} loading={loading} />

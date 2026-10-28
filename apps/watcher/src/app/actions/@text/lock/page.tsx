@@ -2,7 +2,7 @@
 
 import useSWR from 'swr';
 
-import { CircularProgress, Typography } from '@rosen-bridge/ui-kit';
+import { CircularProgress, Text } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import { getDecimalString } from '@rosen-ui/utils';
 
@@ -19,19 +19,19 @@ const LockText = () => {
 
   return (
     <>
-      <Typography gutterBottom>
+      <Text>
         To activate a watcher, there is a need for some collateral that is fully refundable and
         safe. On top of that, you&apos;ll need reporting permits to report each event. These
         reporting permits are at risk of seizure in case of fraudulent reports. Otherwise, they will
         be returned back to you along with your reporting rewards.
-      </Typography>
+      </Text>
 
       {info && !info.permitCount.total && (
         <>
-          <Typography fontWeight="bold" sx={{ mt: 2 }}>
+          <Text variant="heading4" style={{ marginTop: '8px' }}>
             Collateral
-          </Typography>
-          <Typography sx={{ mb: 2 }}>
+          </Text>
+          <Text style={{ marginTop: '8px' }}>
             Currently, the required collateral is{' '}
             {isInfoLoading || isErgTokenLoading ? (
               <CircularProgress size={12} />
@@ -46,18 +46,18 @@ const LockText = () => {
             )}{' '}
             RSN. It is a <b>one-time</b> payment for registering as a watcher an getting a WID. This
             collateral is fully refundable with redeeming all of your locked RSN.
-          </Typography>
+          </Text>
         </>
       )}
 
-      <Typography fontWeight="bold" sx={{ mt: 2 }}>
+      <Text variant="heading4" style={{ marginTop: '8px' }}>
         RSN
-      </Typography>
-      <Typography>
+      </Text>
+      <Text>
         Currently, you should lock{' '}
         {isInfoLoading || isRsnTokenLoading ? <CircularProgress size={12} /> : requiredRSN} RSN to
         report an event.
-      </Typography>
+      </Text>
     </>
   );
 };

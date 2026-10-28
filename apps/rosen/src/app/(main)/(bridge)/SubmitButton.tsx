@@ -23,7 +23,7 @@ import {
   Network,
   QRCodeCanvas,
   Stack,
-  Typography,
+  Text,
   useIsDarkMode,
 } from '@rosen-bridge/ui-kit';
 
@@ -194,9 +194,9 @@ export const SubmitButton = () => {
                 <CardBody>
                   <Stack spacing={2}>
                     <Stack align="center" spacing={2}>
-                      <Typography variant="subtitle1">
+                      <Text variant="display2">
                         <Amount value={amountValue || 0} unit={tokenInfo?.name} />
-                      </Typography>
+                      </Text>
                       {source && target && (
                         <Connector
                           start={<Network value={source.name} />}

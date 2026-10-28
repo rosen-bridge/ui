@@ -1,3 +1,4 @@
+import { Text } from '@/components';
 import { useConfig } from '@/hooks';
 import type { ElementBaseProps, OverridableType } from '@/types';
 
@@ -29,9 +30,13 @@ export const EmptyState = (props: EmptyStateProps) => {
           <div className="RosenEmptyState-count">0</div>
         </div>
       </div>
-      <div className="RosenEmptyState-title">No results found!</div>
+      <Text variant="body1" color="inherit">
+        No results found!
+      </Text>
       {subtitle && (
-        <div className="RosenEmptyState-subtitle">Adjust your filter and try again.</div>
+        <Text as="div" color="text-secondary">
+          Adjust your filter and try again.
+        </Text>
       )}
     </div>
   );

@@ -1,15 +1,12 @@
-import { Typography, type TypographyProps } from '@/components';
+import { Text, type TextProps } from '@/components';
 import { useConfig } from '@/hooks';
 import type { ElementBaseProps, OverridableType } from '@/types';
 
 export interface DialogDescriptionOverrides {}
 
-export type DialogDescriptionOwnProps = TypographyProps & {};
+export type DialogDescriptionOwnProps = TextProps & {};
 
-export type DialogDescriptionBaseProps = ElementBaseProps<
-  typeof Typography,
-  DialogDescriptionOwnProps
->;
+export type DialogDescriptionBaseProps = ElementBaseProps<typeof Text, DialogDescriptionOwnProps>;
 
 export type DialogDescriptionProps = OverridableType<
   DialogDescriptionBaseProps,
@@ -20,7 +17,7 @@ export type DialogDescriptionProps = OverridableType<
 export const DialogDescription = (props: DialogDescriptionProps) => {
   const { ...rest } = useConfig('DialogDescription', props);
 
-  return <Typography component="p" data-surface="description" {...rest} />;
+  return <Text as="p" data-surface="description" {...rest} />;
 };
 
 DialogDescription.displayName = 'DialogDescription';

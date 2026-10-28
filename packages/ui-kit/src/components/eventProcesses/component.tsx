@@ -9,7 +9,7 @@ import {
   PopoverTrigger,
   Skeleton,
   Stack,
-  Typography,
+  Text,
 } from '@/components';
 import { useConfig } from '@/hooks';
 import type { ElementBaseProps, OverridableType } from '@/types';
@@ -85,14 +85,10 @@ export const EventProcesses = (props: EventProcessesProps) => {
                 </PopoverTrigger>
                 <PopoverBody offset={[0, 8]} style={{ width: '280px' }}>
                   <Stack spacing="4px">
-                    <Typography variant="h5" color="text-primary">
+                    <Text variant="heading4" color="text-primary">
                       {item.title}
-                    </Typography>
-                    {item.description && (
-                      <Typography variant="body2" color="text-secondary">
-                        {item.description}
-                      </Typography>
-                    )}
+                    </Text>
+                    {item.description && <Text color="text-secondary">{item.description}</Text>}
                     {item.datetime && (
                       <DateTime timestamp={item.datetime.getTime()} color="text-disabled" />
                     )}

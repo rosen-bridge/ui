@@ -7,9 +7,9 @@ import {
   Icon,
   type IconProps,
   Stack,
+  Text,
   Tooltip,
   Truncate,
-  Typography,
 } from '@rosen-bridge/ui-kit';
 
 export type InfoWidgetCardProps = {
@@ -49,24 +49,19 @@ export const InfoWidgetCard = ({
           />
           <Stack direction="column" style={{ flexGrow: 1, minWidth: 0 }}>
             <Stack direction="row" align="center" justify="between">
-              <Typography variant="h6" color="primary-contrastText" lineHeight="normal">
+              <Text variant="display2" color="primary-contrastText">
                 {isLoading && <CircularProgress size={16} color="inherit" />}
                 {!isLoading && <Truncate lines={1}>{value}</Truncate>}
-              </Typography>
+              </Text>
               {warning && (
                 <Tooltip title={<div style={{ whiteSpace: 'pre' }}>{warning}</div>}>
                   <Icon color="primary-contrastText" name="ExclamationTriangleFill" size="small" />
                 </Tooltip>
               )}
             </Stack>
-            <Typography
-              component="div"
-              variant="body2"
-              color="primary-contrastText"
-              style={{ opacity: 0.6 }}
-            >
+            <Text as="div" variant="label1" color="primary-light" weight={500}>
               <Truncate lines={1}>{title}</Truncate>
-            </Typography>
+            </Text>
           </Stack>
         </Stack>
       </CardBody>

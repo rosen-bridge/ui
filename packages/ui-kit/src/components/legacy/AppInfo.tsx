@@ -1,8 +1,6 @@
 import type React from 'react';
 import { useState } from 'react';
 
-import { Typography } from '@mui/material';
-
 import type { Network as NetworkType } from '@rosen-ui/types';
 
 import {
@@ -12,6 +10,7 @@ import {
   DialogHeader,
   DialogIcon,
   DialogTitle,
+  Text,
 } from '@/components';
 
 import { useToast } from '../../hooks';
@@ -83,17 +82,15 @@ export const AppInfo = ({ children, resolver }: AppInfoProps) => {
       <Dialog open={open} unstick="tablet" width="small" onClose={() => setOpen(false)}>
         <DialogHeader>
           <DialogIcon name="ExclamationCircle" />
-          <DialogTitle variant="h2" fontWeight="bold">
-            About Rosen Bridge
-          </DialogTitle>
+          <DialogTitle>About Rosen Bridge</DialogTitle>
           <DialogCloseButton />
         </DialogHeader>
         <DialogBody>
           <Stack spacing={1}>
             <Divider borderStyle="dashed">
-              <Typography noWrap color="text-secondary" variant="body2">
+              <Text truncate color="text-secondary" variant="heading4">
                 App Version
-              </Typography>
+              </Text>
             </Divider>
             {versions.map(({ label, icon, value }) => (
               <Stack key={label} direction="row" justify="between">
@@ -101,25 +98,29 @@ export const AppInfo = ({ children, resolver }: AppInfoProps) => {
                   <Avatar size="32px" background="neutral-contrastText">
                     <Icon name={icon} />
                   </Avatar>
-                  <Typography noWrap variant="body1">
+                  <Text truncate variant="body1">
                     {label}
-                  </Typography>
+                  </Text>
                 </Stack>
-                {value}
+                <Text color="text-secondary" variant="body1">
+                  {value}
+                </Text>
               </Stack>
             ))}
 
             {networks && (
               <>
                 <Divider borderStyle="dashed">
-                  <Typography noWrap color="text-secondary" variant="body2">
+                  <Text truncate color="text-secondary" variant="heading4">
                     Network Height
-                  </Typography>
+                  </Text>
                 </Divider>
                 {networks.map(({ network, height }) => (
                   <Stack key={network} direction="row" justify="between">
                     <Network value={network} />
-                    <Typography>{height}</Typography>
+                    <Text color="text-secondary" variant="body1">
+                      {height}
+                    </Text>
                   </Stack>
                 ))}
               </>

@@ -11,7 +11,7 @@ import {
   MenuGroupLabel,
   MenuItem,
   MenuTrigger,
-  Typography,
+  Text,
 } from '@/components';
 import { useConfig, useMenu, usePagination } from '@/hooks';
 import type { ElementBaseProps, OverridableType } from '@/types';
@@ -86,12 +86,12 @@ export const Pagination = (props: PaginationProps) => {
 
   return (
     <div ref={containerRef} {...rest}>
-      <Typography variant="body2" color="text-secondary" className="RosenPagination-info">
+      <Text color="text-secondary" className="RosenPagination-info">
         <span className="pagination-text">
           {pagination.from} to {pagination.to} of {total}{' '}
           <span className="hide"> {Number(total) <= 1 ? ' Entry' : ' Entries'}</span>
         </span>
-      </Typography>
+      </Text>
 
       <div className="RosenPagination-pages">
         <IconButton
@@ -114,7 +114,7 @@ export const Pagination = (props: PaginationProps) => {
               data-type={item.value !== '...' ? 'page' : undefined}
               data-action={item.value === currentPageIndex + 1 ? 'active' : 'default'}
             >
-              <Typography variant="body2">{item.value}</Typography>
+              <Text>{item.value}</Text>
             </IconButton>
           ))}
         </div>
@@ -151,9 +151,7 @@ export const Pagination = (props: PaginationProps) => {
             <MenuBody className="RosenPagination-menuBody">
               <MenuGroup>
                 <MenuGroupLabel>
-                  <Typography variant="body2" color="text-secondary">
-                    Items per page: {pageSizeCurrent}
-                  </Typography>
+                  <Text color="text-secondary">Items per page: {pageSizeCurrent}</Text>
                 </MenuGroupLabel>
 
                 {pageSizeOptions.map((option) => (

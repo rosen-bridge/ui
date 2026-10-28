@@ -10,7 +10,7 @@ import {
   CardTitle,
   Divider,
   PageHeading,
-  Typography,
+  Text,
   useResponsive,
 } from '@rosen-bridge/ui-kit';
 
@@ -53,9 +53,9 @@ const Actions = ({ form, text, title }: ActionsProps) => {
           <CardBody style={style}>
             <div style={{ order: wide ? '-1' : '1' }}>{form}</div>
             {wide && <Divider orientation="vertical" />}
-            <Typography component="div" color="text-secondary">
+            <Text as="div" color="text-secondary">
               {text}
-            </Typography>
+            </Text>
           </CardBody>
         </Card>
       </ActionsCore>

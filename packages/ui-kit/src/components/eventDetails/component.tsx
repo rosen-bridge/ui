@@ -12,10 +12,10 @@ import {
   type NetworkProps,
   RelativeTime,
   type RelativeTimeProps,
+  Text,
   Token,
   type TokenProps,
   Tooltip,
-  Typography,
 } from '@/components';
 import { useConfig } from '@/hooks';
 import type { ElementBaseProps, OverridableType } from '@/types';
@@ -180,16 +180,16 @@ export const EventDetails = (props: EventDetailsProps) => {
       )}
       {'reports' in value && (
         <Label label="Reports">
-          <Typography component="div" loading={loading}>
+          <Text as="div" variant="body1" loading={loading}>
             {value.reports}
-          </Typography>
+          </Text>
         </Label>
       )}
       {'height' in value && (
         <Label label="Height">
-          <Typography component="div" loading={loading}>
+          <Text as="div" variant="body1" loading={loading}>
             {value.height}
-          </Typography>
+          </Text>
         </Label>
       )}
     </Columns>

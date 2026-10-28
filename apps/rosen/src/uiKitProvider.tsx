@@ -6,9 +6,11 @@ import NextLink from 'next/link';
 import * as icons from '@rosen-bridge/icons';
 import * as tokenIcons from '@rosen-bridge/token-icons';
 import {
+  type CardTitleProps,
   type ConfigContextType,
   ConfigProvider,
   type DefaultColor,
+  type DialogTitleProps,
   type TokenMeta,
   type TokenProps,
 } from '@rosen-bridge/ui-kit';
@@ -65,10 +67,16 @@ const getUiKitConfig: () => ConfigContextType = () => ({
         },
       },
     },
+    CardTitle: {
+      defaultProps: {
+        color: 'text-secondary' as CardTitleProps['color'],
+        variant: 'heading3' as CardTitleProps['variant'],
+      },
+    },
     DialogTitle: {
       defaultProps: {
-        color: 'secondary-dark',
-        variant: 'h2',
+        color: 'secondary-dark' as DialogTitleProps['color'],
+        variant: 'heading3' as DialogTitleProps['variant'],
       },
     },
     Icon: {

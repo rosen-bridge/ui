@@ -17,8 +17,9 @@
 }
 
 .RosenTableGridHeader .RosenTableGridCell {
-  font-size: 0.75rem;
+  font-size: 14px;
+  line-height: 20px;
   font-weight: 600;
   color: var(--rosen-palette-text-secondary);
-  text-transform: uppercase;
+  text-transform: capitalize;
 }

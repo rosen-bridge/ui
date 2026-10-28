@@ -1,4 +1,4 @@
-import { Typography, type TypographyProps } from '@/components';
+import { Text, type TextProps } from '@/components';
 import { useConfig } from '@/hooks';
 import type { ElementBaseProps, OverridableType } from '@/types';
 import { formatDuration } from '@/utils';
@@ -18,9 +18,9 @@ export type DurationOwnProps = {
   loading?: boolean;
 
   slots?: {
-    fallback?: TypographyProps;
-    value?: TypographyProps;
-    unit?: TypographyProps;
+    fallback?: TextProps;
+    value?: TextProps;
+    unit?: TextProps;
   };
 
   /** Duration in milliseconds; negative, NaN, or non-finite values are errors */
@@ -45,20 +45,20 @@ export const Duration = (props: DurationProps) => {
   return (
     <div {...rest}>
       {!ready && (
-        <Typography component="div" loading={loading} {...slots?.fallback}>
+        <Text as="div" loading={loading} {...slots?.fallback}>
           {fallback || 'Invalid'}
-        </Typography>
+        </Text>
       )}
       {ready &&
         parts.map((part) => (
           <div className="RosenDuration-part" key={part.value + part.unit}>
-            <Typography component="div" {...slots?.value}>
+            <Text variant="body1" as="div" {...slots?.value}>
               {part.value}
-            </Typography>
-            <Typography color="text-disabled" component="div" variant="caption" {...slots?.unit}>
+            </Text>
+            <Text color="text-disabled" as="div" {...slots?.unit}>
               {part.unit}
               {part.value > 1 ? 's' : ''}
-            </Typography>
+            </Text>
           </div>
         ))}
     </div>

@@ -45,16 +45,3 @@
   cursor: default;
   border: 2px solid var(--rosen-palette-info-light);
 }
-.RosenEmptyState-title {
-  font-size: 1rem;
-  font-weight: 400;
-  line-height: 1.5;
-  color: inherit;
-}
-.RosenEmptyState-subtitle {
-  font-size: 0.875rem;
-  font-weight: 400;
-  line-height: 1.43;
-  color: inherit;
-  opacity: 0.7;
-}

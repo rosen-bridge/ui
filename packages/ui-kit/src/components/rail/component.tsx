@@ -1,6 +1,6 @@
 import { type CSSProperties, useState } from 'react';
 
-import { Action, Popover, PopoverBody, PopoverTrigger, Skeleton, Typography } from '@/components';
+import { Action, Popover, PopoverBody, PopoverTrigger, Skeleton, Text } from '@/components';
 import { useConfig } from '@/hooks';
 import type { Color, ElementBaseProps, OverridableType } from '@/types';
 
@@ -57,20 +57,14 @@ export const Rail = (props: RailProps) => {
             } as CSSProperties
           }
         >
-          <Typography
-            className="RosenRail-label"
-            variant="body2"
-            align="center"
-            fontWeight="bold"
-            noWrap
-          >
+          <Text className="RosenRail-label" variant="body2" align="center" weight="bold" truncate>
             {stage.label}
-          </Typography>
+          </Text>
           <div className="RosenRail-steps">
             {stage.steps.map((step) => (
-              <Typography key={step.label} className="RosenRail-step" variant="caption" noWrap>
+              <Text key={step.label} className="RosenRail-step" variant="body3" truncate>
                 {step.label}
-              </Typography>
+              </Text>
             ))}
           </div>
           <div className="RosenRail-tag-columns">
@@ -81,16 +75,16 @@ export const Rail = (props: RailProps) => {
               return (
                 <div key={step.label} className="RosenRail-tags">
                   {visibleTags.map((tag) => (
-                    <Typography
+                    <Text
                       key={tag.label}
                       className="RosenRail-tag"
-                      variant="caption"
+                      variant="body3"
                       color={tag.color ?? 'text-secondary'}
-                      component={tag.onClick ? Action : 'span'}
+                      as={tag.onClick ? Action : 'span'}
                       onClick={tag.onClick}
                     >
                       {tag.label}
-                    </Typography>
+                    </Text>
                   ))}
                   {hiddenCount > 0 && (
                     <Popover
@@ -102,11 +96,11 @@ export const Rail = (props: RailProps) => {
                       </PopoverTrigger>
                       <PopoverBody className="RosenRail-tooltip">
                         {step.tags.map((tag) => (
-                          <Typography
+                          <Text
                             key={tag.label}
-                            variant="caption"
+                            variant="body3"
                             color={tag.color ?? 'text-secondary'}
-                            component={tag.onClick ? Action : 'span'}
+                            as={tag.onClick ? Action : 'span'}
                             onClick={
                               tag.onClick &&
                               (() => {
@@ -116,7 +110,7 @@ export const Rail = (props: RailProps) => {
                             }
                           >
                             {tag.label}
-                          </Typography>
+                          </Text>
                         ))}
                       </PopoverBody>
                     </Popover>

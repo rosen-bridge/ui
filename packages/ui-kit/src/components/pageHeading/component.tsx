@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-import { Typography } from '@/components';
+import { Text } from '@/components';
 import { useConfig } from '@/hooks';
 import type { ElementBaseProps, OverridableType } from '@/types';
 
@@ -22,7 +22,7 @@ export const PageHeading = (props: PageHeadingProps) => {
 
   return (
     <div {...rest}>
-      <Typography variant="h1">{title}</Typography>
+      <Text variant="heading1">{title}</Text>
       {actions}
     </div>
   );

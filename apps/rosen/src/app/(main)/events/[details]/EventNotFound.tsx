@@ -7,7 +7,7 @@ import {
   NotFoundResult,
   Stack,
   type StackProps,
-  Typography,
+  Text,
   useResponsive,
 } from '@rosen-bridge/ui-kit';
 
@@ -22,11 +22,13 @@ export const EventNotFound = ({ onRetry }: { onRetry: () => void }) => {
       <Stack align="center" spacing={3} style={{ maxWidth: '30rem' }}>
         <Stack spacing={1} align="center">
           <NotFoundResult />
-          <Typography align="center">Event Not Found</Typography>
-          <Typography align="center" variant="body2" color="text-secondary">
+          <Text variant="body1" align="center">
+            Event Not Found
+          </Text>
+          <Text align="center" color="text-secondary">
             This event does not exist, or it has not been observed yet. New events may take a few
             minutes to appear after the source transaction is confirmed.
-          </Typography>
+          </Text>
         </Stack>
         <Stack spacing={2} direction={responsive}>
           <Button

@@ -12,7 +12,6 @@
   flex-direction: row;
   align-items: center;
   min-width: 0;
-  font-family: monospace;
 }
 
 .RosenIdentifier-overlay {
@@ -29,6 +28,8 @@
   flex-shrink: 1;
   min-width: 0;
   user-select: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .RosenIdentifier-trailing {

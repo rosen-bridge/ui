@@ -1,19 +1,19 @@
 'use client';
 
-import { Typography } from '@rosen-bridge/ui-kit';
+import { Text } from '@rosen-bridge/ui-kit';
 
 const WithdrawalText = () => {
   return (
     <>
-      <Typography gutterBottom>
+      <Text>
         All your watcher rewards are being deposited to the watcher wallet. You can withdraw your
         reward tokens to any address. Remember to maintain a sufficient balance of ERGs in your
         wallet to ensure uninterrupted operation.
-      </Typography>
-      <Typography fontWeight="bold" sx={{ mt: 2 }}>
+      </Text>
+      <Text variant="heading4" style={{ marginTop: '8px' }}>
         Caution
-      </Typography>
-      <Typography component="div" sx={{ mt: 2 }}>
+      </Text>
+      <Text as="div" style={{ marginTop: '8px' }}>
         To secure your assets, send two of your three WID tokens to another wallet (preferably a
         cold wallet) as soon as possible after setting up this Watcher.
         <ul>
@@ -28,7 +28,7 @@ const WithdrawalText = () => {
         </ul>
         To unlock permits, move one WID back here, unlock, and then immediately send it back to your
         secure wallet. This keeps your assets protected.
-      </Typography>
+      </Text>
     </>
   );
 };

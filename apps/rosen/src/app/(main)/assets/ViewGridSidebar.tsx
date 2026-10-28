@@ -16,8 +16,8 @@ import {
   DialogTitle,
   Label,
   Network,
+  Text,
   Token,
-  Typography,
   useBreakpoint,
   useStickyBox,
 } from '@rosen-bridge/ui-kit';
@@ -29,9 +29,9 @@ const Content = ({ value }: ViewGridSidebarProps) => {
   if (!value) {
     return (
       <Center style={{ minHeight: 'calc(100vh - 304px)' }}>
-        <Typography variant="body1" color="text-secondary">
+        <Text variant="body1" color="text-secondary">
           Select an event to see its details.
-        </Typography>
+        </Text>
       </Center>
     );
   }

@@ -11,13 +11,13 @@ import {
   MenuGroupLabel,
   MenuItem,
   MenuTrigger,
+  Text,
 } from '@/components';
 import { useMenu } from '@/hooks';
 
 import { Icon } from '../icon';
 import { IconButton } from '../iconButton';
 import { Stack } from '../stack';
-import { Typography } from '../typography';
 import { Divider } from './Divider';
 
 const Root = styled(Card)(({ theme }) => ({
@@ -117,12 +117,15 @@ export const SortField = ({
           }}
         >
           <Stack align="start">
-            <Typography hidden={dense} variant="caption" color="text-secondary" lineHeight="12px">
+            <Text
+              hidden={dense}
+              variant="label2"
+              color="text-secondary"
+              style={{ lineHeight: '12px' }}
+            >
               Sort by
-            </Typography>
-            <Typography variant="body1" lineHeight="24px">
-              {current?.label}
-            </Typography>
+            </Text>
+            <Text>{current?.label}</Text>
           </Stack>
         </MenuTrigger>
       )}
@@ -135,9 +138,7 @@ export const SortField = ({
                 backgroundColor: 'transparent',
               }}
             >
-              <Typography variant="caption" color="text-secondary">
-                Sort by
-              </Typography>
+              <Text color="text-secondary">Sort by</Text>
             </MenuGroupLabel>
             {options.map((item) => (
               <MenuItem

@@ -1,4 +1,4 @@
-import { InfoIcon, Typography } from '@/components';
+import { InfoIcon, Text } from '@/components';
 import { useConfig } from '@/hooks';
 import type { Color, ElementBaseProps, OverridableType } from '@/types';
 
@@ -67,17 +67,16 @@ export const Label = (props: LabelProps) => {
   return (
     <div data-dense={!!dense} data-inset={!!inset} data-orientation={orientation} {...rest}>
       <div className="RosenLabel-header">
-        <Typography
+        <Text
           color={color}
-          lineHeight="1.5rem"
-          noWrap
-          variant="body2"
-          sx={{
-            my: orientation === 'vertical' ? 0 : 0.5,
+          variant="label1"
+          style={{
+            margin: orientation === 'vertical' ? 0 : '4px 0',
           }}
+          truncate
         >
           {label}
-        </Typography>
+        </Text>
         {info && <InfoIcon color={color} info={info} />}
       </div>
       <div className="RosenLabel-content">{children}</div>

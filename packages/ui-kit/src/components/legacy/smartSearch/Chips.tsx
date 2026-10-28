@@ -1,7 +1,8 @@
 import { styled } from '@mui/material';
 
+import { Text } from '@/components';
+
 import { CloseButton } from '../../closeButton';
-import { Typography } from '../../typography';
 import type { Filter, Selected } from './types';
 import { parseFilter } from './utils';
 
@@ -69,14 +70,14 @@ export const Chips = ({ disabled, filters, value, onRemove }: ChipsProps) => {
         return (
           <div key={JSON.stringify(item)} className="items">
             {hasFlow && (
-              <Typography component="div" className="item item-start">
+              <Text as="div" variant="body1" className="item item-start">
                 {parsed.flow.label}
-              </Typography>
+              </Text>
             )}
             {hasFlow && hasOperator && (
-              <Typography component="div" className="item item-middle">
+              <Text as="div" variant="body1" className="item item-middle">
                 {parsed.operator.preview || parsed.operator.label}
-              </Typography>
+              </Text>
             )}
             {hasFlow && hasOperator && hasValue && (
               <div key={JSON.stringify(value)} className="item item-end">
@@ -95,11 +96,11 @@ export const Chips = ({ disabled, filters, value, onRemove }: ChipsProps) => {
                   }
 
                   return (
-                    <div key={content} className="value">
+                    <Text variant="body1" as="div" key={content} className="value">
                       {content}
                       {length > 2 && length >= index + 3 && ', '}
                       {length > 1 && length === index + 2 && ' and '}
-                    </div>
+                    </Text>
                   );
                 })}
                 <CloseButton

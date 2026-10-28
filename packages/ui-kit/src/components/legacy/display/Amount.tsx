@@ -5,8 +5,8 @@ import { getDecimalString } from '@rosen-ui/utils';
 import { Icon } from '../../icon';
 import { IconButton } from '../../iconButton';
 import { Stack } from '../../stack';
+import { Text } from '../../text';
 import { Tooltip } from '../../tooltip';
-import { Typography } from '../../typography';
 
 export type AmountProps = HTMLAttributes<HTMLDivElement> & {
   /** Maximum fractional digits to render in the decimal part */
@@ -255,10 +255,12 @@ const AmountBase = ({
           {!!error && <Icon name="ExclamationTriangle" style={{ fontSize: 'inherit' }} />}
           {!error && (
             <Tooltip disabled={loading} title={tooltip}>
-              <Typography
-                component="div"
+              <Text
+                as="div"
+                variant="body1"
                 loading={loading}
-                style={{ fontSize: 'inherit', whiteSpace: 'nowrap' }}
+                style={{ fontSize: 'inherit' }}
+                truncate
               >
                 {!!parts && (
                   <>
@@ -271,29 +273,31 @@ const AmountBase = ({
                       {parts.number}
                     </span>
                     {parts.fraction && (
-                      <Typography
-                        component="span"
-                        fontSize={!isIntegerDominant ? '75%' : 'inherit'}
-                        style={{ opacity: !isIntegerDominant ? 0.7 : 1 }}
+                      <Text
+                        as="span"
+                        style={{
+                          opacity: !isIntegerDominant ? 0.7 : 1,
+                          fontSize: !isIntegerDominant ? '75%' : 'inherit',
+                        }}
                       >
                         .{!!parts.zeros && '0'}
                         {!!parts.zeros && <sub style={{ fontSize: '0.75em' }}>{parts.zeros}</sub>}
                         {parts.fraction}
-                      </Typography>
+                      </Text>
                     )}
                     {!!parts.unit && ` ${parts.unit}`}
                   </>
                 )}
-              </Typography>
+              </Text>
             </Tooltip>
           )}
           {!error && !parts && !!fallback && rawValue === undefined && !loading && <>{fallback}</>}
           {unit && (
-            <Typography component="div" style={{ fontSize: '75%', opacity: 0.7 }}>
+            <Text as="div" style={{ fontSize: '75%', opacity: 0.7 }}>
               {unit}
-            </Typography>
+            </Text>
           )}
-          {formattedPrice && <Typography style={{ opacity: 0.5 }}>(${formattedPrice})</Typography>}
+          {formattedPrice && <Text style={{ opacity: 0.5 }}>(${formattedPrice})</Text>}
         </Stack>
         {href && (
           <IconButton target="_blank" rel="noopener noreferrer" size="small" href={href}>

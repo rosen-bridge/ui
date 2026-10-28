@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { Button, Card, CardBody, Icon, Typography } from '@rosen-bridge/ui-kit';
+import { Button, Card, CardBody, Icon, Text } from '@rosen-bridge/ui-kit';
 
 import { useWallet } from '@/hooks';
 
@@ -30,15 +30,17 @@ export const WalletInfo = () => {
         }}
       >
         {wallet.state === 'IDLE' && (
-          <Typography color="text-secondary" variant="body2">
-            Select source to see available wallets.
-          </Typography>
+          <Text color="text-secondary">Select source to see available wallets.</Text>
         )}
         {wallet.state === 'CONNECTING' && (
-          <Typography color="text-secondary">Connecting to wallet...</Typography>
+          <Text variant="body1" color="text-secondary">
+            Connecting to wallet...
+          </Text>
         )}
         {wallet.state === 'DISCONNECTING' && (
-          <Typography color="text-secondary">Disconnecting...</Typography>
+          <Text variant="body1" color="text-secondary">
+            Disconnecting...
+          </Text>
         )}
         {wallet.state === 'DISCONNECTED' && (
           <Button

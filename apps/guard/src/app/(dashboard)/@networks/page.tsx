@@ -7,7 +7,7 @@ import {
   CarouselItem,
   CarouselProvider,
   Stack,
-  Typography,
+  Text,
   useResponsive,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
@@ -25,9 +25,7 @@ const Networks = () => {
   return (
     <CarouselProvider>
       <Stack direction="row" align="center" justify="between">
-        <Typography variant="h2" fontWeight="300" color="text-secondary">
-          Networks
-        </Typography>
+        <Text variant="heading2">Networks</Text>
         <Stack direction="row" align="center" spacing="0.5rem">
           <CarouselButton type="prev" />
           <CarouselIndicators />

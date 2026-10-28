@@ -16,7 +16,7 @@ import {
   DisclosureButton,
   Icon,
   Stack,
-  Typography,
+  Text,
   useDisclosure,
 } from '@rosen-bridge/ui-kit';
 
@@ -55,7 +55,7 @@ export const Section = ({
   return (
     <Card variant="section" {...rest}>
       <CardHeader>
-        <CardTitle variant="h2" color="text-secondary">
+        <CardTitle variant="heading2" color="text-secondary">
           {badge ? <Badge content={badge}>{title}</Badge> : title}
         </CardTitle>
         <CardAction>
@@ -71,7 +71,9 @@ export const Section = ({
               <Button variant="text" onClick={() => load?.()}>
                 <Stack direction="column" align="center">
                   <Icon color="error" name="SyncExclamation" />
-                  <Typography color="error">TRY AGAIN!</Typography>
+                  <Text variant="button1" color="error">
+                    TRY AGAIN!
+                  </Text>
                 </Stack>
               </Button>
             </Center>

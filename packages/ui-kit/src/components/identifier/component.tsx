@@ -6,10 +6,10 @@ import {
   IconButton,
   QrCodeDialog,
   Skeleton,
+  Text,
+  type TextProps,
   Tooltip,
   type TooltipProps,
-  Typography,
-  type TypographyProps,
 } from '@/components';
 import { useConfig } from '@/hooks';
 import type { ElementBaseProps, OverridableType } from '@/types';
@@ -35,9 +35,9 @@ export type IdentifierOwnProps = {
   qrcode?: boolean;
 
   slots?: {
-    leading?: TypographyProps;
-    text?: TypographyProps;
-    trailing?: TypographyProps;
+    leading?: TextProps;
+    text?: TextProps;
+    trailing?: TextProps;
     tooltip?: TooltipProps;
   };
 
@@ -123,9 +123,9 @@ export const Identifier = (props: IdentifierProps) => {
               gap: '8px',
             }}
           >
-            <Typography noWrap variant="caption" component="span">
+            <Text style={{ whiteSpace: 'nowrap' }} as="span">
               {text}
-            </Typography>
+            </Text>
             <Icon
               color="primary"
               name="ExternalLinkAlt"
@@ -133,9 +133,7 @@ export const Identifier = (props: IdentifierProps) => {
             />
           </a>
         ) : (
-          <Typography noWrap variant="caption">
-            {text}
-          </Typography>
+          <Text style={{ whiteSpace: 'nowrap' }}>{text}</Text>
         )}
       </Tooltip>
     );
@@ -149,25 +147,25 @@ export const Identifier = (props: IdentifierProps) => {
           <span className="RosenIdentifier-overlay" aria-hidden="true">
             {value}
           </span>
-          <Typography
+          <Text
             className="RosenIdentifier-leading"
-            component="div"
-            noWrap
-            variant="inherit"
+            as="div"
+            variant="code2"
+            truncate
             {...slots?.text}
             {...slots?.leading}
           >
             {leading}
-          </Typography>
-          <Typography
+          </Text>
+          <Text
             className="RosenIdentifier-trailing"
-            component="div"
-            variant="inherit"
+            as="div"
+            variant="code2"
             {...slots?.text}
             {...slots?.trailing}
           >
             {trailing}
-          </Typography>
+          </Text>
         </div>
       </Tooltip>
       {hasActions && (

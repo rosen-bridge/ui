@@ -8,7 +8,7 @@ import {
   EventProcesses,
   type EventProcessesProps,
   formatDateTime,
-  Typography,
+  Text,
   useResponsive,
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
@@ -437,10 +437,10 @@ export const Process = ({ id, flowId }: { id: string; flowId: string | undefined
   return (
     <Section error={error} load={mutate} badge="New" title="Progress">
       {isCustomStatus ? (
-        <Typography>
+        <Text>
           No progress chart is available because this event deviated from the standard lifecycle.
           The reason for this exception is noted above.
-        </Typography>
+        </Text>
       ) : (
         <EventProcesses items={items} loading={loading} orientation={orientation} />
       )}

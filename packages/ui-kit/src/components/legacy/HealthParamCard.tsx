@@ -15,8 +15,8 @@ import {
   type IconProps,
   Skeleton,
   Stack,
+  Text,
   Tooltip,
-  Typography,
 } from '@/components';
 import type { Color } from '@/types';
 
@@ -101,7 +101,7 @@ export const HealthParamCard = ({
     >
       <CardHeader>
         <Icon color={colors.cardColor as Color} name={icon} />
-        <CardTitle color={colors.cardColor as Color} fontWeight="700">
+        <CardTitle variant="heading2" uppercase color={colors.cardColor as Color}>
           {value?.lastCheck ? value?.status : 'Unknown'}
         </CardTitle>
         {value?.lastTrialErrorTime && (
@@ -120,8 +120,8 @@ export const HealthParamCard = ({
           flex: '1 1 0%',
         }}
       >
-        <Typography gutterBottom>{value?.title}</Typography>
-        <Typography variant="body2">{value?.description}</Typography>
+        <Text variant="heading3">{value?.title}</Text>
+        <Text color="text-secondary">{value?.description}</Text>
         {value?.details && (
           <Alert
             variant="filled"
@@ -133,11 +133,13 @@ export const HealthParamCard = ({
               overflowWrap: 'break-word',
             }}
           >
-            {value.details}
+            <Text>{value.details}</Text>
           </Alert>
         )}
         <Stack align="center" direction="row" justify="between" style={{ marginTop: 'auto' }}>
-          <Typography variant="body2">Last check: {formattedLastCheck}</Typography>
+          <Text variant="body3" color="text-secondary">
+            Last check: {formattedLastCheck}
+          </Text>
           {/* Note that "Check now" feature only works with a real watcher instance and its functionality cannot be mocked now */}
           <Button
             loading={checking}

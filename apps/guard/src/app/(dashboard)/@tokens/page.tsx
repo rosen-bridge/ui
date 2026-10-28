@@ -9,8 +9,8 @@ import {
   CarouselItem,
   CarouselProvider,
   Stack,
+  Text,
   TokensCard,
-  Typography,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 import type { Network } from '@rosen-ui/types';
@@ -59,9 +59,9 @@ const Tokens = () => {
     <CarouselProvider>
       <Stack spacing="0.5rem">
         <Stack direction="row" align="center" justify="between">
-          <Typography variant="h5" fontWeight="bold">
+          <Text variant="heading2" color="text-secondary">
             Tokens
-          </Typography>
+          </Text>
           <Stack direction="row" align="center" spacing="0.5rem">
             <CarouselButton type="prev" />
             <CarouselIndicators />

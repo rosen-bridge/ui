@@ -13,7 +13,7 @@ import {
   Link,
   Stack,
   SubmitButton,
-  Typography,
+  Text,
   useApiKey,
   useConfirm,
   useToast,
@@ -165,13 +165,13 @@ const LockForm = () => {
     !info?.permitCount.total &&
     !isRsnTokenLoading && (
       <Alert severity="info" variant="filled">
-        <Typography>
+        <Text>
           An additional{' '}
           {getDecimalString(((info?.collateral.rsn ?? 0) + 1).toString(), rsnToken?.decimals ?? 0)}{' '}
           RSN and{' '}
           {getDecimalString((info?.collateral.erg ?? 0).toString(), ergToken?.decimals ?? 0)} ERG is
           required to put your collateral. (You need more ERG to pay for transaction fees.)
-        </Typography>
+        </Text>
       </Alert>
     );
 
@@ -190,25 +190,25 @@ const LockForm = () => {
       if (remainder) {
         return (
           <Alert severity="info" variant="filled">
-            <Typography>
+            <Text>
               Currently, by locking {formData.amount} RSN, you can report {reportsCount} events
               using {+formData.amount - remainder} RSN and {remainder} RSN will be reserved until
               you lock more.
-            </Typography>
+            </Text>
           </Alert>
         );
       }
       return (
         <Alert severity="info" variant="filled">
-          <Typography>
+          <Text>
             Currently, by locking {formData.amount} RSN, you can report {reportsCount} events.
-          </Typography>
+          </Text>
         </Alert>
       );
     }
     return (
       <Alert severity="info" variant="filled">
-        <Typography>
+        <Text>
           Currently, by locking {remainder} RSN, you cannot report any additional event unless you
           already have at least{' '}
           {getDecimalString(
@@ -216,7 +216,7 @@ const LockForm = () => {
             rsnToken.decimals,
           )}{' '}
           locked RSN. You can top it up later.
-        </Typography>
+        </Text>
       </Alert>
     );
   };

@@ -3,7 +3,13 @@ import type { Route } from 'next';
 import NextLink from 'next/link';
 
 import * as icons from '@rosen-bridge/icons';
-import { type ConfigContextType, ConfigProvider, type DefaultColor } from '@rosen-bridge/ui-kit';
+import {
+  type CardTitleProps,
+  type ConfigContextType,
+  ConfigProvider,
+  type DefaultColor,
+  type DialogTitleProps,
+} from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 import type { Network } from '@rosen-ui/types';
 
@@ -40,8 +46,14 @@ const getUiKitConfig: () => ConfigContextType = () => ({
     },
     DialogTitle: {
       defaultProps: {
-        color: 'secondary-dark',
-        variant: 'h2',
+        color: 'secondary-dark' as DialogTitleProps['color'],
+        variant: 'heading3' as DialogTitleProps['variant'],
+      },
+    },
+    CardTitle: {
+      defaultProps: {
+        color: 'text-secondary' as CardTitleProps['color'],
+        variant: 'heading3' as CardTitleProps['variant'],
       },
     },
     Icon: {

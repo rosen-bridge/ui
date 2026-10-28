@@ -2,10 +2,9 @@ import { type ComponentProps, forwardRef, type HtmlHTMLAttributes, useMemo } fro
 
 import { styled } from '@mui/material';
 
-import { Skeleton } from '@/components';
+import { Skeleton, Text } from '@/components';
 
 import { Icon, type IconProps } from '../icon';
-import { Typography } from '../typography';
 
 /**
  * Props for the Chip component.
@@ -78,9 +77,7 @@ const ChipBase = forwardRef<HTMLDivElement, ChipBaseProps>((props, ref) => {
 
   const hasContent = !!children || !!label;
 
-  const content = hasContent
-    ? (children ?? <Typography variant="body2">{label}</Typography>)
-    : 'Invalid';
+  const content = hasContent ? (children ?? <Text variant="label1">{label}</Text>) : 'Invalid';
 
   return (
     <ChipWrapper color={color} ref={ref} {...rest}>

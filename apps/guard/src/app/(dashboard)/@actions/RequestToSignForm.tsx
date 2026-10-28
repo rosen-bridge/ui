@@ -15,8 +15,8 @@ import {
   MenuItemMui,
   Stack,
   SubmitButton,
+  Text,
   TextField,
-  Typography,
   useApiKey,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS, NETWORKS_KEYS } from '@rosen-ui/constants';
@@ -130,9 +130,7 @@ export const RequestToSignForm = () => {
   return (
     <Card backgroundColor="transparent">
       <CardHeader>
-        <CardTitle variant="h5" fontWeight="bold">
-          Request To Sign
-        </CardTitle>
+        <CardTitle variant="heading2">Request To Sign</CardTitle>
       </CardHeader>
       <CardBody>
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -162,7 +160,7 @@ export const RequestToSignForm = () => {
             {error?.response?.status === 409 && (
               <Stack direction="row" align="center">
                 <Checkbox {...register('overwrite')} />
-                <Typography>Overwrite the already sent transaction</Typography>
+                <Text>Overwrite the already sent transaction</Text>
               </Stack>
             )}
 

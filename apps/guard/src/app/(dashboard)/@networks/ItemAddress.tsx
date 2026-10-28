@@ -1,6 +1,6 @@
 'use client';
 
-import { Amount, Identifier, Stack, Typography } from '@rosen-bridge/ui-kit';
+import { Amount, Identifier, Stack, Text } from '@rosen-bridge/ui-kit';
 import type { Network as NetworkType } from '@rosen-ui/types';
 import { getAddressUrl } from '@rosen-ui/utils';
 
@@ -21,11 +21,10 @@ export const ItemAddress = ({ loading, state, value }: ItemAddressProps) => {
         justify="start"
         style={{ fontSize: '1.5rem', width: '100%' }}
       >
-        <Typography
+        <Text
           color={`${state === 'hot' ? 'secondary-dark' : 'tertiary-dark'}`}
-          component="div"
-          fontWeight="700"
-          fontSize="1.5rem"
+          as="div"
+          variant="display1"
         >
           <Amount
             variant={state}
@@ -33,7 +32,7 @@ export const ItemAddress = ({ loading, state, value }: ItemAddressProps) => {
             value={value?.balance}
             unit={value?.balance.name}
           />
-        </Typography>
+        </Text>
       </Stack>
       <Identifier
         href={getAddressUrl(value?.chain as NetworkType, value?.address)}

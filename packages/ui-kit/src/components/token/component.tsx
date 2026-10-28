@@ -7,8 +7,8 @@ import {
   IconButton,
   Image,
   type ImageProps,
-  Typography,
-  type TypographyProps,
+  Text,
+  type TextProps,
 } from '@/components';
 import { useConfig } from '@/hooks';
 import type { ElementBaseProps, OverridableType } from '@/types';
@@ -42,7 +42,7 @@ export type TokenOwnProps = {
 
   slots?: {
     fallback?: AvatarProps;
-    label?: TypographyProps;
+    label?: TextProps;
     logo?: ImageProps;
   };
 
@@ -192,16 +192,16 @@ export const Token = (props: TokenProps) => {
         </Avatar>
       )}
       {showLabel && (
-        <Typography
-          component="div"
+        <Text
+          as="div"
           loading={loading || resolving}
-          noWrap
-          variant="inherit"
+          variant="body1"
           style={{ minWidth: 0 }}
+          truncate
           {...slots?.label}
         >
           {displayLabel}
-        </Typography>
+        </Text>
       )}
       {!!href && (
         <IconButton target="_blank" size="small" href={href}>

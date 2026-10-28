@@ -20,7 +20,7 @@ import {
   EventDetails,
   type EventDetailsProps,
   Icon,
-  Typography,
+  Text,
   useBreakpoint,
   useStickyBox,
 } from '@rosen-bridge/ui-kit';
@@ -88,7 +88,7 @@ const Content = ({ value }: SidebarProps) => {
   if (!value || value.status === 'MULTIPLE_FLOWS') {
     return (
       <Center style={{ minHeight: 'calc(100vh - 304px)', textAlign: 'center' }}>
-        <Typography variant="body1" color="text-secondary">
+        <Text variant="body1" color="text-secondary">
           {value ? (
             <>
               This event has multiple flows. Click <b>See Details</b> for more information.
@@ -96,7 +96,7 @@ const Content = ({ value }: SidebarProps) => {
           ) : (
             <>Select an event to see its details.</>
           )}
-        </Typography>
+        </Text>
       </Center>
     );
   }

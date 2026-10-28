@@ -26,6 +26,15 @@ import type {
   ConnectorProps,
   CopyButtonProps,
   DateTimeProps,
+  DialogActionProps,
+  DialogBodyProps,
+  DialogCloseButtonProps,
+  DialogDescriptionProps,
+  DialogFooterProps,
+  DialogHeaderProps,
+  DialogIconProps,
+  DialogProps,
+  DialogTitleProps,
   DurationProps,
   EmptyStateProps,
   EventCardProps,
@@ -78,7 +87,6 @@ import type {
   ToolbarProps,
   TooltipProps,
   TruncateProps,
-  TypographyProps,
   ViewToggleProps,
   VirtualScrollProps,
 } from '@/components';
@@ -111,6 +119,15 @@ export type Components = {
   Connector: ConnectorProps;
   CopyButton: CopyButtonProps;
   DateTime: DateTimeProps;
+  Dialog: DialogProps;
+  DialogAction: DialogActionProps;
+  DialogBody: DialogBodyProps;
+  DialogCloseButton: DialogCloseButtonProps;
+  DialogDescription: DialogDescriptionProps;
+  DialogFooter: DialogFooterProps;
+  DialogHeader: DialogHeaderProps;
+  DialogIcon: DialogIconProps;
+  DialogTitle: DialogTitleProps;
   Duration: DurationProps;
   EventCard: EventCardProps;
   EventDetails: EventDetailsProps;
@@ -163,7 +180,6 @@ export type Components = {
   Toolbar: ToolbarProps;
   Tooltip: TooltipProps;
   Truncate: TruncateProps;
-  Typography: TypographyProps;
   ViewToggle: ViewToggleProps;
   VirtualScroll: VirtualScrollProps;
 };

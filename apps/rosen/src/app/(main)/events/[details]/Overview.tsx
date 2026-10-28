@@ -18,8 +18,8 @@ import {
   MenuItem,
   MenuTrigger,
   Network,
+  Text,
   Token,
-  Typography,
   useResponsive,
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
@@ -191,9 +191,9 @@ export const Overview = ({
         </Label>
         {multipleFLow && (
           <Label label="Number of Flows" orientation={labelOrientation}>
-            <Typography style={identifierStyle} loading={isLoading}>
+            <Text style={identifierStyle} loading={isLoading}>
               {events?.length}
-            </Typography>
+            </Text>
           </Label>
         )}
       </Columns>

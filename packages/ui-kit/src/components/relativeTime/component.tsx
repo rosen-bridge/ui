@@ -1,4 +1,4 @@
-import { Skeleton, Typography } from '@/components';
+import { Skeleton, Text } from '@/components';
 import { useConfig } from '@/hooks';
 import type { ElementBaseProps, OverridableType } from '@/types';
 import { calculateRelativeTime } from '@/utils';
@@ -39,33 +39,24 @@ export const RelativeTime = (props: RelativeTimeProps) => {
     <div {...rest}>
       {loading && <Skeleton attached />}
       {displayText ? (
-        <Typography color="text-secondary" variant="body2">
-          {displayText}
-        </Typography>
+        <Text color="text-primary">{displayText}</Text>
       ) : (
         <>
           {prefix && (
-            <Typography color="text-secondary" variant="body2">
+            <Text color="text-secondary" variant="body3">
               {prefix}
-            </Typography>
+            </Text>
           )}
-          <Typography
-            color="text-primary"
-            sx={{
-              fontSize: '18px',
-            }}
-          >
-            {number}
-          </Typography>
+          <Text color="text-primary">{number}</Text>
           {unit && (
-            <Typography color="text-secondary" variant="body2">
+            <Text color="text-secondary" variant="body3">
               {unit}
-            </Typography>
+            </Text>
           )}
           {suffix && (
-            <Typography color="text-secondary" variant="body2">
+            <Text color="text-secondary" variant="body3">
               {suffix}
-            </Typography>
+            </Text>
           )}
         </>
       )}

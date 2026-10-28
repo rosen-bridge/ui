@@ -19,7 +19,7 @@ import {
   MenuBody,
   MenuItem,
   MenuTrigger,
-  Typography,
+  Text,
   useToast,
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
@@ -69,7 +69,7 @@ export const ProcessGuardDetails = ({
     ) : value ? (
       <DateTime timestamp={(value ?? 0) * 1000} />
     ) : (
-      <Typography color="text-disabled">—</Typography>
+      <Text color="text-disabled">—</Text>
     );
 
   return (

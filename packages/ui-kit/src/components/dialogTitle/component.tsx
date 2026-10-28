@@ -1,19 +1,19 @@
-import { Typography, type TypographyProps } from '@/components';
+import { Text, type TextProps } from '@/components';
 import { useConfig } from '@/hooks';
 import type { ElementBaseProps, OverridableType } from '@/types';
 
 export interface DialogTitleOverrides {}
 
-export type DialogTitleOwnProps = TypographyProps & {};
+export type DialogTitleOwnProps = TextProps & {};
 
-export type DialogTitleBaseProps = ElementBaseProps<typeof Typography, DialogTitleOwnProps>;
+export type DialogTitleBaseProps = ElementBaseProps<typeof Text, DialogTitleOwnProps>;
 
 export type DialogTitleProps = OverridableType<DialogTitleBaseProps, DialogTitleOverrides, never>;
 
 export const DialogTitle = (props: DialogTitleProps) => {
   const { ...rest } = useConfig('DialogTitle', props);
 
-  return <Typography component="h2" data-surface="title" {...rest} />;
+  return <Text as="h3" data-surface="title" {...rest} />;
 };
 
 DialogTitle.displayName = 'DialogTitle';
