@@ -1,14 +1,13 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "../rosen-service/dist",
-    "baseUrl": "../rosen-service/src",
+    "outDir": "./dist",
+    "baseUrl": "src",
     "emitDecoratorMetadata": true,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "types": ["node", "vitest/globals"]
   },
-  "include": ["../rosen-service/src"],
-  "types": ["node", "vitest/globals"],
-
+  "include": ["src"],
   "references": [
     { "path": "../../packages/asset-aggregator/" },
     { "path": "../../packages/constants" },

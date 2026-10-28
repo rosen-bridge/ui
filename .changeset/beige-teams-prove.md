@@ -16,7 +16,6 @@
 Update dependencies
 
 - @rosen-bridge/abstract-scanner@4.1.0
-- @rosen-bridge/address-extractor@7.1.1
 - @rosen-bridge/bitcoin-observation-extractor@9.0.0
 - @rosen-bridge/bitcoin-runes-observation-extractor@4.0.0
 - @rosen-bridge/bitcoin-scanner@2.0.2
@@ -31,28 +30,27 @@ Update dependencies
 - @rosen-bridge/handshake-observation-extractor@2.0.0
 - @rosen-bridge/handshake-scanner@1.0.3
 - @rosen-bridge/watcher-data-extractor@16.1.0
-- @rosen-clients/ergo-explorer@2.1.1
 
 Add dependencies
 
-- @rosen-bridge/service-manager
-- @rosen-bridge/config
-- @rosen-bridge/extended-tokens
-- @rosen-bridge/address-extractor
-- @rosen-bridge/abstract-extractor
-- @rosen-bridge/json-bigint
-- @rosen-clients/ergo-explorer
-- @rosen-ui/asset-aggregator
-- @rosen-ui/asset-data-adapter
-- @rosen-ui/data-source
-- @rosen-ui/rosen-statistics
-- @vercel/kv
-- ergo-lib-wasm-nodejs
+- @rosen-bridge/service-manager@3.0.0
+- @rosen-bridge/config@2.1.0
+- @rosen-bridge/extended-tokens@0.1.4
+- @rosen-bridge/address-extractor@7.1.1
+- @rosen-bridge/abstract-extractor@4.1.0
+- @rosen-bridge/json-bigint@1.1.0
+- @rosen-clients/ergo-explorer@2.1.3
+- @rosen-ui/asset-aggregator@0.1.0
+- @rosen-ui/asset-data-adapter@0.3.0
+- @rosen-ui/data-source@0.3.0
+- @rosen-ui/rosen-statistics@0.0.0
+- @vercel/kv@3.0.0
+- ergo-lib-wasm-nodejs@0.24.1
 
 Remove dependencies
 
 - @rosen-bridge/tokens
-- @rosen-bridge/rate-limited-axios
+- @rosen-clients/rate-limited-axios
 - @rosen-ui/asset-calculator
 - @rosen-ui/rosen-statistics-entity
 - @rosen-ui/public-status

@@ -50,9 +50,6 @@ const startApp = async () => {
   ScannerService.init(DefaultLogger.getInstance().child('scannerService'));
   serviceManager.register(ScannerService.getInstance());
   logger.debug('ScannerService registered to the service manager');
-  logger.debug('Initializing GeneralMetricsService');
-  GeneralMetricsService.init(DefaultLogger.getInstance().child('generalMetricsService'));
-  serviceManager.register(GeneralMetricsService.getInstance());
   logger.debug('GeneralMetricsService registered to the service manager');
   logger.debug('Initializing RedisService');
   RedisService.init(DefaultLogger.getInstance().child('redisServer'));

@@ -1,7 +1,8 @@
 {
   "name": "@rosen-bridge/rosen-service",
   "version": "4.4.2",
-  "description": "",
+  "private": true,
+  "description": "backend data provider for Rosen App",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/rosen-bridge/ui.git"
