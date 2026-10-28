@@ -1,4 +1,8 @@
 import type {
+  AccordionHeaderProps,
+  AccordionItemProps,
+  AccordionPanelProps,
+  AccordionProps,
   ActionProps,
   AlertProps,
   ApiKeyDialogButtonProps,
@@ -76,6 +80,7 @@ import type {
   TokensListProps,
   ToolbarProps,
   TooltipProps,
+  TransitionProps,
   TruncateProps,
   TypographyProps,
   ViewToggleProps,
@@ -83,6 +88,10 @@ import type {
 } from '@/components';
 
 export type Components = {
+  Accordion: AccordionProps;
+  AccordionHeader: AccordionHeaderProps;
+  AccordionItem: AccordionItemProps;
+  AccordionPanel: AccordionPanelProps;
   Action: ActionProps;
   Alert: AlertProps;
   ApiKeyDialog: ApiKeyDialogProps;
@@ -160,6 +169,7 @@ export type Components = {
   TokensList: TokensListProps;
   Toolbar: ToolbarProps;
   Tooltip: TooltipProps;
+  Transition: TransitionProps;
   Truncate: TruncateProps;
   Typography: TypographyProps;
   ViewToggle: ViewToggleProps;

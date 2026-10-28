@@ -1,14 +1,19 @@
 .RosenDialog {
   position: fixed;
   width: 100%;
-  transition: all 250ms;
   touch-action: none;
   max-height: calc(100% - 64px);
 
   z-index: 4;
+  transition-duration: var(--rosen-motion-duration-long);
+  transition-timing-function: var(--rosen-motion-easing-enter);
 
   @media (prefers-color-scheme: dark) {
     outline: 1px solid var(--color-gray-300);
+  }
+
+  &[data-ending-style] {
+    transition-timing-function: var(--rosen-motion-easing-exit);
   }
 }
 
@@ -29,30 +34,33 @@
 }
 
 .RosenDialog[data-placement='center'] {
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  inset: 0;
+  height: fit-content;
+  margin: auto;
+  transition-property: opacity, scale;
 
   &[data-starting-style],
   &[data-ending-style] {
     opacity: 0;
-    transform: translate(-50%, -50%) scale(0.9);
+    scale: 0.9;
   }
 }
 
 .RosenDialog[data-placement='bottom'] {
+  right: 0;
   bottom: 0;
-  left: 50%;
-  transform: translate(-50%, 0);
-
-  &[data-starting-style],
-  &[data-ending-style] {
-    transform: translate(-50%, 100%);
-  }
+  left: 0;
+  margin-inline: auto;
+  transition-property: translate;
 
   &[data-edge] {
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
+  }
+
+  &[data-starting-style],
+  &[data-ending-style] {
+    translate: 0 100%;
   }
 }
 
@@ -62,10 +70,12 @@
   inset: 0;
   background-color: black;
   opacity: 0.2;
-  transition: opacity 250ms cubic-bezier(0.45, 1.005, 0, 1.005);
   touch-action: none;
 
   z-index: 4;
+  transition-property: opacity;
+  transition-duration: var(--rosen-motion-duration-long);
+  transition-timing-function: var(--rosen-motion-easing-enter);
 
   /* iOS 26+: Ensure the backdrop covers the entire visible viewport. */
   @supports (-webkit-touch-callout: none) {
@@ -79,5 +89,9 @@
   &[data-starting-style],
   &[data-ending-style] {
     opacity: 0;
+  }
+
+  &[data-ending-style] {
+    transition-timing-function: var(--rosen-motion-easing-exit);
   }
 }
