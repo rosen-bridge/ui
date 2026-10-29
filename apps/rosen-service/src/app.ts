@@ -50,7 +50,6 @@ const startApp = async () => {
   ScannerService.init(DefaultLogger.getInstance().child('scannerService'));
   serviceManager.register(ScannerService.getInstance());
   logger.debug('ScannerService registered to the service manager');
-  logger.debug('GeneralMetricsService registered to the service manager');
   logger.debug('Initializing RedisService');
   RedisService.init(DefaultLogger.getInstance().child('redisServer'));
   serviceManager.register(RedisService.getInstance());
@@ -59,12 +58,10 @@ const startApp = async () => {
   AssetDataAdapterService.init(DefaultLogger.getInstance().child('assetDataAdapterService'));
   serviceManager.register(AssetDataAdapterService.getInstance());
   logger.debug('AssetDataAdapterService registered to the service manager');
-
   logger.debug('Initializing AssetAggregatorService');
   AssetAggregatorService.init(DefaultLogger.getInstance().child('assetAggregatorService'));
   serviceManager.register(AssetAggregatorService.getInstance());
   logger.debug('AssetAggregatorService registered to the service manager');
-
   logger.debug('Initializing HealthService');
   HealthService.init(DefaultLogger.getInstance().child('healthService'));
   serviceManager.register(HealthService.getInstance());
