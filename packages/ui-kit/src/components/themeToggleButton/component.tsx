@@ -1,6 +1,8 @@
-import { Icon, IconButton, type IconProps } from '@/components';
+import { Icon, IconButton, type IconProps, Transition } from '@/components';
 import { useConfig, useIsDarkMode, useThemeToggler } from '@/hooks';
 import type { ElementBaseProps, OverridableType } from '@/types';
+
+import './styles.css';
 
 export interface ThemeToggleButtonOverrides {}
 
@@ -31,11 +33,13 @@ export const ThemeToggleButton = (props: ThemeToggleButtonProps) => {
 
   return (
     <IconButton color="inherit" onClick={themeToggler.toggle} {...rest}>
-      {isDarkMode ? (
-        <Icon name="Sun" {...slots?.darkIcon} />
-      ) : (
-        <Icon name="Moon" {...slots?.lightIcon} />
-      )}
+      <Transition>
+        {isDarkMode ? (
+          <Icon key="dark" name="Sun" {...slots?.darkIcon} />
+        ) : (
+          <Icon key="light" name="Moon" {...slots?.lightIcon} />
+        )}
+      </Transition>
     </IconButton>
   );
 };

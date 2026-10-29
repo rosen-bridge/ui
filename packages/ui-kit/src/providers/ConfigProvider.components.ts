@@ -77,6 +77,7 @@ import type {
   TokensListProps,
   ToolbarProps,
   TooltipProps,
+  TransitionProps,
   TruncateProps,
   TypographyProps,
   ViewToggleProps,
@@ -162,6 +163,7 @@ export type Components = {
   TokensList: TokensListProps;
   Toolbar: ToolbarProps;
   Tooltip: TooltipProps;
+  Transition: TransitionProps;
   Truncate: TruncateProps;
   Typography: TypographyProps;
   ViewToggle: ViewToggleProps;
