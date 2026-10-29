@@ -50,6 +50,9 @@ statistics:
 chains:
   ergo:
     scanInterval: 120
+    adapter:
+      explorer:
+        url: https://api.ergoplatform.com/
     method: explorer
     explorer:
       connections:
@@ -89,11 +92,15 @@ chains:
     active: false
     scanInterval: 60
     adapter:
-      explorerUrl: https://explorer.firo.org
+      explorer:
+        url: https://explorer.firo.org
     blockCleanupActive: true
   handshake:
     active: false
     scanInterval: 600
+    adapter:
+      explorer:
+        url: https://hsd.ergexplorer.com
     blockCleanupActive: true
 commitmentExtractor:
   initialize:

@@ -163,6 +163,11 @@ export interface ChainsHandshakeRpcConnections {
 
 export interface ChainsHandshakeAdapter {
   extraAddresses: string[];
+  explorer: ChainsHandshakeAdapterExplorer;
+}
+
+export interface ChainsHandshakeAdapterExplorer {
+  url?: string;
 }
 
 export interface ChainsFiro {
@@ -197,7 +202,11 @@ export interface ChainsFiroRpcConnections {
 
 export interface ChainsFiroAdapter {
   extraAddresses: string[];
-  explorerUrl?: string;
+  explorer: ChainsFiroAdapterExplorer;
+}
+
+export interface ChainsFiroAdapterExplorer {
+  url?: string;
 }
 
 export interface ChainsBinance {
@@ -273,7 +282,7 @@ export interface ChainsEthereumAdapterRpcConnection {
 export interface ChainsDoge {
   active: boolean;
   initialHeight?: number;
-  scanInterval: number;
+  scanInterval?: number;
   adapter: ChainsDogeAdapter;
   blockRetrieveGap?: number;
   method?: 'rpc' | 'esplora';
@@ -309,7 +318,7 @@ export interface ChainsDogeAdapter {
 }
 
 export interface ChainsDogeAdapterBlockCypher {
-  url: string;
+  url?: string;
 }
 
 export interface ChainsBitcoinRunes {
@@ -321,6 +330,12 @@ export interface ChainsBitcoinRunes {
 
 export interface ChainsBitcoinRunesAdapter {
   extraAddresses: string[];
+  unisat: ChainsBitcoinRunesAdapterUnisat;
+}
+
+export interface ChainsBitcoinRunesAdapterUnisat {
+  url?: string;
+  apiKey?: string;
 }
 
 export interface ChainsBitcoin {
@@ -340,7 +355,7 @@ export interface ChainsBitcoinEsplora {
 }
 
 export interface ChainsBitcoinEsploraConnections {
-  url: string;
+  url?: string;
   timeout?: number;
   apiPrefix?: string;
 }
@@ -358,6 +373,11 @@ export interface ChainsBitcoinRpcConnections {
 
 export interface ChainsBitcoinAdapter {
   extraAddresses: string[];
+  esplora: ChainsBitcoinAdapterEsplora;
+}
+
+export interface ChainsBitcoinAdapterEsplora {
+  url?: string;
 }
 
 export interface ChainsCardano {
@@ -400,13 +420,19 @@ export interface ChainsCardanoKoios {
 }
 
 export interface ChainsCardanoKoiosConnections {
-  url: string;
+  url?: string;
   timeout?: number;
   authToken?: string;
 }
 
 export interface ChainsCardanoAdapter {
   extraAddresses: string[];
+  koios: ChainsCardanoAdapterKoios;
+}
+
+export interface ChainsCardanoAdapterKoios {
+  url?: string;
+  authToken?: string;
 }
 
 export interface ChainsErgo {
@@ -438,6 +464,11 @@ export interface ChainsErgoNodeConnections {
 
 export interface ChainsErgoAdapter {
   extraAddresses: string[];
+  explorer: ChainsErgoAdapterExplorer;
+}
+
+export interface ChainsErgoAdapterExplorer {
+  url: string;
 }
 
 export interface CommitmentExtractor {
