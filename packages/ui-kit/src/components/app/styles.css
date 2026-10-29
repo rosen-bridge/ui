@@ -27,7 +27,9 @@
   background-color: var(--rosen-palette-background-default);
   border-radius: calc(var(--rosen-shape-borderRadius) * 2);
   color: var(--rosen-palette-text-primary);
-  transition: ease-in-out 100ms;
+  transition-property: all;
+  transition-duration: var(--rosen-motion-duration-short);
+  transition-timing-function: var(--rosen-motion-easing-standard);
 }
 
 .RosenApp[data-orientation='horizontal'] .RosenApp-paper {
