@@ -98,6 +98,9 @@ chains:
   handshake:
     active: false
     scanInterval: 600
+    adapter:
+      explorer:
+        url: https://hsd.ergexplorer.com
     blockCleanupActive: true
 commitmentExtractor:
   initialize:

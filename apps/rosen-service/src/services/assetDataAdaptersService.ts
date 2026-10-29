@@ -171,7 +171,7 @@ export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
               tokenMap,
               {
                 koiosUrl: configs.chains.cardano.adapter.koios.url,
-                authToken: configs.chains.cardano.adapter.koios.apiKey,
+                authToken: configs.chains.cardano.adapter.koios.authToken,
               },
               this.logger.child('cardanoKoiosDataAdapter'),
             );
@@ -198,7 +198,7 @@ export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
             this.adapters[NETWORKS[chain].key] = new HandshakeExplorerDataAdapter(
               addresses,
               tokenMap,
-              configs.chains.handshake.adapter.rpc.connection.url,
+              configs.chains.handshake.adapter.explorer.url,
               this.logger.child('handshakeExplorerDataAdapter'),
             );
             break;

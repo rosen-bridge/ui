@@ -792,19 +792,9 @@
                       }
                     ]
                   },
-                  "apiKey": {
+                  "authToken": {
                     "type": "string",
-                    "description": "cardano adapter ApiKey koios url",
-                    "validations": [
-                      {
-                        "required": true,
-                        "error": "cardano koios ApiKey adapter must be specified",
-                        "when": {
-                          "path": "chains.cardano.active",
-                          "value": true
-                        }
-                      }
-                    ]
+                    "description": "cardano adapter authToken koios url"
                   }
                 }
               }
@@ -2121,27 +2111,23 @@
                   "type": "string"
                 }
               },
-              "rpc": {
+              "explorer": {
                 "type": "object",
                 "children": {
-                  "connection": {
-                    "type": "object",
-                    "children": {
-                      "url": {
-                        "type": "string",
-                        "description": "handshake adapter rpc url",
-                        "validations": [
-                          {
-                            "required": true,
-                            "when": {
-                              "path": "chains.handshake.active",
-                              "value": true
-                            },
-                            "error": "handshake adapter rpc url must be specified"
-                          }
-                        ]
+                  "url": {
+                    "type": "string",
+                    "description": "handshake adapter explorer URL",
+                    "default": "https://hsd.ergexplorer.com",
+                    "validations": [
+                      {
+                        "required": true,
+                        "when": {
+                          "path": "chains.handshake.active",
+                          "value": true
+                        },
+                        "error": "firo adapter handshake URL must be specified"
                       }
-                    }
+                    ]
                   }
                 }
               }

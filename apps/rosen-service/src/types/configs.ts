@@ -163,14 +163,10 @@ export interface ChainsHandshakeRpcConnections {
 
 export interface ChainsHandshakeAdapter {
   extraAddresses: string[];
-  rpc: ChainsHandshakeAdapterRpc;
+  explorer: ChainsHandshakeAdapterExplorer;
 }
 
-export interface ChainsHandshakeAdapterRpc {
-  connection: ChainsHandshakeAdapterRpcConnection;
-}
-
-export interface ChainsHandshakeAdapterRpcConnection {
+export interface ChainsHandshakeAdapterExplorer {
   url?: string;
 }
 
@@ -436,7 +432,7 @@ export interface ChainsCardanoAdapter {
 
 export interface ChainsCardanoAdapterKoios {
   url?: string;
-  apiKey?: string;
+  authToken?: string;
 }
 
 export interface ChainsErgo {
