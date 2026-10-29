@@ -2,6 +2,10 @@ import './index.css';
 
 export { QRCodeCanvas } from 'qrcode.react';
 
+export * from './accordion';
+export * from './accordionHeader';
+export * from './accordionItem';
+export * from './accordionPanel';
 export * from './action';
 export * from './alert';
 export * from './apiKeyDialog';
@@ -96,6 +100,7 @@ export * from './tokensCard';
 export * from './tokensList';
 export * from './toolbar';
 export * from './tooltip';
+export * from './transition';
 export * from './truncate';
 export * from './typography';
 export * from './viewToggle';

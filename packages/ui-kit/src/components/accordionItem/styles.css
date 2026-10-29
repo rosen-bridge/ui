@@ -1,0 +1,4 @@
+.RosenAccordionItem {
+  border-radius: calc(var(--rosen-spacing) * 2);
+  background-color: var(--rosen-palette-background-paper);
+}
