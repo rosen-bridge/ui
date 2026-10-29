@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 
-import { Icon, IconButton, type IconProps, Tooltip } from '@/components';
+import { Icon, IconButton, type IconProps, Tooltip, Transition } from '@/components';
 import { useConfig } from '@/hooks';
 import type { ElementBaseProps, OverridableType } from '@/types';
+
+import './styles.css';
 
 export interface CopyButtonOverrides {}
 
@@ -28,7 +30,7 @@ export type CopyButtonBaseProps = ElementBaseProps<typeof IconButton, CopyButton
 
 export type CopyButtonProps = OverridableType<CopyButtonBaseProps, CopyButtonOverrides, never>;
 
-const defaultIcons: Record<CopyButtonStatus, IconProps['name']> = {
+const defaultIcons: Record<CopyButtonStatus, NonNullable<IconProps['name']>> = {
   idle: 'Copy',
   copying: 'Copy',
   copied: 'Check',
@@ -50,7 +52,7 @@ export const CopyButton = (props: CopyButtonProps) => {
     };
   }, []);
 
-  const icon: IconProps['name'] = icons?.[status] || defaultIcons[status];
+  const icon = icons?.[status] || defaultIcons[status];
 
   const isDisabled = Boolean(disabled || value === undefined || value === '');
 
@@ -87,7 +89,14 @@ export const CopyButton = (props: CopyButtonProps) => {
       title="The browser does not allow access to the clipboard"
     >
       <IconButton onClick={handleCopy} disabled={isDisabled} {...rest}>
-        <Icon name={icon} color={status === 'failed' ? 'error' : undefined} {...slots?.icon} />
+        <Transition>
+          <Icon
+            key={icon}
+            name={icon}
+            color={status === 'failed' ? 'error' : undefined}
+            {...slots?.icon}
+          />
+        </Transition>
       </IconButton>
     </Tooltip>
   );

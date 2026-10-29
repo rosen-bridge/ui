@@ -96,6 +96,7 @@ export * from './tokensCard';
 export * from './tokensList';
 export * from './toolbar';
 export * from './tooltip';
+export * from './transition';
 export * from './truncate';
 export * from './typography';
 export * from './viewToggle';
