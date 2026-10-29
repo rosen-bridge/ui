@@ -473,7 +473,6 @@ const createEventTrigger = (
  * Helper function to create minimal BlockEntity for testing
  */
 const createBlock = (overrides: Partial<BlockEntity>): DeepPartial<BlockEntity> => ({
-  id: Math.floor(Math.random() * 10000),
   height: 100,
   hash: 'block1',
   parentHash: `parent-${Math.random()}`,

@@ -157,9 +157,8 @@
     },
     {
       "includes": [
-        "apps/rosen-service2/**/*",
+        "apps/rosen-service/**/*",
         "packages/asset-aggregator/**/*",
-        "packages/asset-calculator/**/*",
         "packages/asset-data-adapter/**/*"
       ],
       "linter": {
