@@ -1,10 +1,12 @@
 import { useContext } from 'react';
 
 import { ConfigContext } from '@/providers';
+import { mergeSlots } from '@/utils';
 
 type WithClassName = {
   className?: string;
   preset?: string;
+  slots?: Record<string, object | undefined>;
 };
 
 export const useConfig = <C extends string, P extends WithClassName>(
@@ -29,6 +31,12 @@ export const useConfig = <C extends string, P extends WithClassName>(
   const presetProps = config?.presets?.[preset || defaultProps?.preset];
 
   const result = { ...defaultProps, ...presetProps, ...inlineProps, className: classes };
+
+  const slots = mergeSlots(defaultProps?.slots, presetProps?.slots, inlineProps.slots);
+
+  if (slots) {
+    result.slots = slots;
+  }
 
   if (result.preset) {
     result['data-preset'] = result.preset;
