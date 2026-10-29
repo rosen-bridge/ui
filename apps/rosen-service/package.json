@@ -14,7 +14,7 @@
   "scripts": {
     "bootstrap": "turbo build --filter=@rosen-bridge/rosen-service^...",
     "coverage": "npm run test -- --run --coverage",
-    "gen-config-defaults": "NODE_OPTIONS='--import tsx' npx @rosen-bridge/config generate-default --schema ./config/schema.json --output ./config/default.yml --format yaml",
+    "gen-config-defaults": "NODE_OPTIONS='--import tsx' npx @rosen-bridge/config generate-default --schema ./config/schema.json --output ./config/default.yaml --format yaml",
     "gen-config-types": "NODE_OPTIONS='--import tsx' npx @rosen-bridge/config generate-ts-types --schema ./config/schema.json --output ./src/types/configs.ts --root-type RosenServiceBaseConfig",
     "lint": "biome check --write",
     "lint:check": "biome check",
