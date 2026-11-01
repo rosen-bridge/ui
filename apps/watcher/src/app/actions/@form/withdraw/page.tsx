@@ -32,6 +32,7 @@ import type {
   ApiWithdrawRequestBody,
   ApiWithdrawResponse,
 } from '@/types/api';
+import { validateAddress } from '@/utils/validateAddress';
 
 import {
   type TokenAmountCompatibleFormSchema,
@@ -121,7 +122,7 @@ const WithdrawForm = () => {
     try {
       const response = await trigger({
         data: {
-          address: formData.address,
+          address: formData.address.trim(),
           tokens: [
             {
               tokenId: formData.tokenId,
@@ -175,13 +176,18 @@ const WithdrawForm = () => {
   const onSubmit: SubmitHandler<Form> = async () => {
     await confirm({
       title: 'Confirm Withdraw',
-      content: `You are going to withdraw ${formData.amount} of token with id ${formData.tokenId} to address ${formData.address}.`,
+      content: `You are going to withdraw ${formData.amount} of token with id ${formData.tokenId} to address ${formData.address.trim()}.`,
       confirmText: 'Withdraw',
       onConfirm: submit,
     });
   };
 
   const disabled = isTokensListLoading || isErgTokenLoading || !ergToken?.amount;
+
+  const addressFieldRegistration = register('address', {
+    required: 'Address is required',
+    validate: validateAddress,
+  });
 
   const renderAddressTextField = () => (
     <TextField
@@ -191,24 +197,21 @@ const WithdrawForm = () => {
       }}
       label="Address"
       disabled={disabled}
-      {...register('address', {
-        required: 'Address is required',
-      })}
-      error={!!formMethods.formState.errors.address}
+      {...addressFieldRegistration}
+      error={!formState.isValidating && !!formState.errors.address}
       helperText={
-        formMethods.formState.isValidating ? (
-          <CircularProgress size={10} />
-        ) : (
-          formMethods.formState.errors.address?.message
-        )
+        formState.isValidating ? <CircularProgress size={10} /> : formState.errors.address?.message
       }
       onBlur={(e) => {
+        addressFieldRegistration.onBlur(e);
         const trimmed = e.target.value.trim();
-        formMethods.setValue('address', trimmed, {
-          shouldDirty: true,
-          shouldTouch: true,
-          shouldValidate: true,
-        });
+        if (trimmed !== e.target.value) {
+          formMethods.setValue('address', trimmed, {
+            shouldDirty: true,
+            shouldTouch: true,
+            shouldValidate: true,
+          });
+        }
       }}
     />
   );
@@ -267,7 +270,10 @@ const WithdrawForm = () => {
             {renderTokenAmountTextField()}
           </Stack>
           <ApiKeyDialogProtectedAction>
-            <SubmitButton disabled={!formState.isValid || disabled} loading={isWithdrawPending}>
+            <SubmitButton
+              disabled={!formState.isValid || formState.isValidating || disabled}
+              loading={isWithdrawPending}
+            >
               Withdraw
             </SubmitButton>
           </ApiKeyDialogProtectedAction>
