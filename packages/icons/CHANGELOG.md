@@ -1,5 +1,11 @@
 # @rosen-bridge/icons
 
+## 4.1.0
+
+### Minor Changes
+
+- Add `Plus` and `Minus` icons
+
 ## 4.0.0
 
 ### Major Changes

@@ -1,5 +1,14 @@
 # @rosen-ui/nautilus-wallet
 
+## 3.1.12
+
+### Patch Changes
+
+- Build the lock transaction with a single call to `generateLockTx` of the network client
+- Update dependencies
+  - @rosen-network/ergo@3.0.0
+  - @rosen-ui/wallet-api@3.2.3
+
 ## 3.1.11
 
 ### Patch Changes

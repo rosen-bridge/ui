@@ -1,5 +1,11 @@
 # @rosen-network/base
 
+## 0.6.0
+
+### Minor Changes
+
+- Turn `Network` into an abstract class that implements the shared members of every network client.
+
 ## 0.5.5
 
 ### Patch Changes

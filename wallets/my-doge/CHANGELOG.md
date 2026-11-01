@@ -1,5 +1,14 @@
 # @rosen-ui/my-doge-wallet
 
+## 1.1.14
+
+### Patch Changes
+
+- Build the lock transaction with a single call to `generateLockTx` of the network client
+- Update dependencies
+  - @rosen-network/doge@0.5.0
+  - @rosen-ui/wallet-api@3.2.3
+
 ## 1.1.13
 
 ### Patch Changes

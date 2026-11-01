@@ -1,5 +1,35 @@
 # @rosen-bridge/ui-kit
 
+## 6.2.0
+
+### Minor Changes
+
+- Implement `Accordion`, `AccordionItem`, `AccordionHeader` and `AccordionPanel` components
+- Add motion tokens for transition durations and easings, use them across all transitions, and honor the user's reduced-motion preference
+- Implement new Text component
+- Refine `Amount` component logic to emphasize integer or fractional part based on numeric value
+- Implement `Pagination` component
+- Add `React Compiler`
+- Update React contexts to use the new Provider syntax
+- Add refresh icon
+- Implement `Transition` component that keeps a leaving child in the DOM until its exit animation ends; it adds no styles, so the component that uses it defines the animation in its own CSS
+- Add support for all event statuses
+- Add Rail component for rendering a chevron-style, gradient progress timeline
+- Make the Rail component labels clickable
+- Add NotFoundResult illustration
+
+### Patch Changes
+
+- Animate icon changes of `ThemeToggleButton`, `CopyButton` and `DisclosureButton` using `Transition`
+- Write the animations of `MenuBody`, `PopoverBody`, `Tooltip`, `Dialog`, toasts and `Collapsible` with the motion tokens and individual transform properties
+- Replace the `decimal` prop of the `Amount` component with a raw `{ amount, decimals }` form of its `value`
+- Merge `slots` per slot in `useConfig`, so props from the global config, presets and inline usage are combined instead of replacing each other
+- Make EventProcesses component responsive
+- Fix sidebar width on tablet and larger screens
+- Fix carousel indicator behavior when changing slides
+- Update dependencies
+  - @rosen-bridge/icons@4.1.0
+
 ## 6.1.0
 
 ### Minor Changes

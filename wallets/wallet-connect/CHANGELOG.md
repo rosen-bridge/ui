@@ -1,5 +1,15 @@
 # @rosen-ui/wallet-connect
 
+## 0.3.5
+
+### Patch Changes
+
+- Build the lock transaction with a single call to `generateLockTx` of the network client
+- Update dependencies
+  - @rosen-network/binance@0.5.0
+  - @rosen-network/ethereum@0.5.0
+  - @rosen-ui/wallet-api@3.2.3
+
 ## 0.3.4
 
 ### Patch Changes

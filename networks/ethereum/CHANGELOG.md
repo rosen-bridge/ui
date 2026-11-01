@@ -1,5 +1,19 @@
 # @rosen-network/ethereum
 
+## 0.5.0
+
+### Minor Changes
+
+- Replace the separate lock data and transaction functions with a single `generateLockTx(params)`
+
+### Patch Changes
+
+- Turn `Network` into an abstract class that implements the shared members of every network client.
+- Update dependencies
+  - @rosen-network/evm@0.4.0
+  - @rosen-network/base@0.6.0
+  - @rosen-bridge/icons@4.1.0
+
 ## 0.4.10
 
 ### Patch Changes
