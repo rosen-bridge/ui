@@ -25,14 +25,15 @@ yarn.lock
 .next
 out
 build
-config
+**/config/*
 **/configs/*.json
 **/configs/*.yaml
 **/configs/*.yml
 next-env.d.ts
-!config/default.yaml
-!config/default.yml
-!config/schema.json
+!**/config/default.yaml
+!**/config/test.yaml
+!**/config/default.yml
+!**/config/schema.json
 
 .devcontainer
 

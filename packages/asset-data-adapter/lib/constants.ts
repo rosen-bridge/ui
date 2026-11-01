@@ -59,3 +59,5 @@ export const PartialERC20ABI: InterfaceAbi = [
     type: 'function',
   },
 ];
+
+export const NONE_COVENANT_TYPE = 0;

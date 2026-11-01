@@ -1,29 +1,33 @@
-export const SCANNER_API_TIMEOUT = 10_000;
+export const ERGO_BLOCK_TIME = 120; // ~ 2 minutes
+export const CARDANO_BLOCK_TIME = 20; // ~ 20 seconds
+export const BITCOIN_BLOCK_TIME = 600; // ~ 10 minutes
+export const DOGE_BLOCK_TIME = 60; // ~ 1 minute
+export const ETHEREUM_BLOCK_TIME = 12; // ~ 12 seconds
+export const BINANCE_BLOCK_TIME = 3; // ~ 3 seconds
+export const FIRO_BLOCK_TIME = 150; // ~ 2.5 minutes
+export const HANDSHAKE_BLOCK_TIME = 600; // ~ 10 minutes
 
-export const ERGO_SCANNER_INTERVAL = 2 * 60 * 1000;
-export const CARDANO_SCANNER_INTERVAL = 30 * 1000;
-export const BITCOIN_SCANNER_INTERVAL = 10 * 60 * 1000;
-export const DOGE_SCANNER_INTERVAL = 60 * 1000;
-export const ETHEREUM_SCANNER_INTERVAL = 60 * 1000;
-export const BINANCE_SCANNER_INTERVAL = 10 * 1000;
-export const FIRO_SCANNER_INTERVAL = 2 * 60 * 1000;
-export const HANDSHAKE_SCANNER_INTERVAL = 10 * 60 * 1000;
+export const ERGO_METHOD_EXPLORER = 'explorer';
+export const ERGO_METHOD_NODE = 'node';
 
-export const ERGO_SCANNER_LOGGER_NAME = 'ergoScanner';
-export const CARDANO_SCANNER_LOGGER_NAME = 'cardanoScanner';
-export const BITCOIN_SCANNER_LOGGER_NAME = 'bitcoinScanner';
-export const DOGE_SCANNER_LOGGER_NAME = 'dogeScanner';
-export const ETHEREUM_SCANNER_LOGGER_NAME = 'ethereumScanner';
-export const BINANCE_SCANNER_LOGGER_NAME = 'binanceScanner';
-export const FIRO_SCANNER_LOGGER_NAME = 'firoScanner';
-export const HANDSHAKE_SCANNER_LOGGER_NAME = 'handshakeScanner';
-export const ERGO_BLOCK_TIME = 120;
-export const CARDANO_BLOCK_TIME = 20;
-export const BITCOIN_BLOCK_TIME = 600;
-export const ETHEREUM_BLOCK_TIME = 12;
-export const BINANCE_BLOCK_TIME = 3;
-export const DOGE_BLOCK_TIME = 60;
-export const FIRO_BLOCK_TIME = 150;
-export const HANDSHAKE_BLOCK_TIME = 600;
+export const CARDANO_METHOD_KOIOS = 'koios';
+export const CARDANO_METHOD_BLOCKFROST = 'blockfrost';
+export const CARDANO_METHOD_OGMIOS = 'ogmios';
 
-export const BITCOIN_RUNES_CONFIG_KEY = 'bitcoinRunes';
+export const BITCOIN_METHOD_RPC = 'rpc';
+export const BITCOIN_METHOD_ESPLORA = 'esplora';
+
+export const DOGE_METHOD_RPC = 'rpc';
+export const DOGE_METHOD_ESPLORA = 'esplora';
+
+export const FIRO_METHOD_RPC = 'rpc';
+export const FIRO_METHOD_ELECTRUMX = 'electrumx';
+
+export const BITCOIN_RUNES_NETWORKS_KEY = 'bitcoin-runes';
+
+export const ERG_TOTAL_SUPPLY = 97_739_924_500_000_000n;
+
+export const TOKEN_MAP_EXTRACTOR_ID = 'token-map-box-extractor';
+export const TOKEN_MAP_REDIS_KEY = 'token-map';
+
+export const TOTAL_SUPPLY_REDIS_KEY = 'total_supply';
