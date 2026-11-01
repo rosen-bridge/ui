@@ -1,5 +1,11 @@
 # @rosen-ui/asset-data-adapter
 
+## 0.4.0
+
+### Minor Changes
+
+- Add FiroExplorerDataAdapter for collecting native Firo balances from the Firo explorer
+
 ## 0.3.0
 
 ### Minor Changes

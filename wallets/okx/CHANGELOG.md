@@ -1,5 +1,14 @@
 # @rosen-ui/okx-wallet
 
+## 2.2.7
+
+### Patch Changes
+
+- Build the lock transaction with a single call to `generateLockTx` of the network client
+- Update dependencies
+  - @rosen-network/bitcoin@3.0.0
+  - @rosen-ui/wallet-api@3.2.3
+
 ## 2.2.6
 
 ### Patch Changes

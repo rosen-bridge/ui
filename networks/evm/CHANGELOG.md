@@ -1,5 +1,11 @@
 # @rosen-network/evm
 
+## 0.4.0
+
+### Minor Changes
+
+- Replace the separate lock data and transaction functions with a single `generateLockTx(params)`
+
 ## 0.3.8
 
 ### Patch Changes

@@ -1,5 +1,18 @@
 # @rosen-network/bitcoin
 
+## 3.0.0
+
+### Major Changes
+
+- Replace the separate lock data and transaction functions with a single `generateLockTx(params)`
+
+### Patch Changes
+
+- Turn `Network` into an abstract class that implements the shared members of every network client.
+- Update dependencies
+  - @rosen-network/base@0.6.0
+  - @rosen-bridge/icons@4.1.0
+
 ## 2.4.9
 
 ### Patch Changes

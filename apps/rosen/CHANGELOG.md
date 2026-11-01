@@ -1,5 +1,64 @@
 # @rosen-bridge/rosen-app
 
+## 5.8.0
+
+### Minor Changes
+
+- Implement guard progress details and improve labels and loading state
+- Refactor `EventNotFound` component in event details page
+- Remove unnecessary Event Status tooltip in event details page
+- Improve dynamic route ID validation to enforce hex format
+- Improve validation and error handling of API requests, and return errors in the standard problem details format (RFC 9457) with the error description in `detail` instead of `message`
+- Improve the address and amount input fields in the Bridge form to provide a smoother and more intuitive user experience
+- Update React contexts to use the new Provider syntax
+- Add support for all event statuses and improve status details display
+
+### Patch Changes
+
+- Add strongly-typed, validated environment variables using `zod/v4-mini` and `@t3-oss/env-nextjs`
+- Replace the current `Joi` validation implementation with the `Zod` npm package
+- Fix `Bridged` cell responsive behavior in `Assets page` in row view
+- Update the usage of the `Amount` component to pass raw amounts along with their decimals as a single `{ amount, decimals }` value
+- Filter and sort events by amount and fees, and calculate the total fee, with exact decimal arithmetic, rename `WIDsCount` to `reports` and remove the internal `sourceChainTokenId` and `*Normalized` fields from the events API responses
+- Warn users bridging from Firo to use the latest Campfire, Stack Wallet, or Firo-Qt wallet to avoid losing funds with unsupported wallets.
+- Register server action errors under their names, so that minified error classes are restored on the client
+- Fix Asset Details API route ID validation for different token ID formats
+- Use asset-aggregator entities to match the shared data source
+- Add guards progress rail to event details page
+- Upgrade `@sentry/nextjs` to v11 so that client source maps are uploaded and browser errors have readable stack traces in Sentry
+- Improve API error handling and reduce request overhead
+- Update dependencies
+  - @rosen-bridge/abstract-observation-extractor@3.0.0
+  - @rosen-bridge/abstract-scanner@4.1.0
+  - @rosen-bridge/watcher-data-extractor@16.1.0
+  - @rosen-ui/asset-aggregator@0.2.0
+  - @rosen-bridge/ui-kit@6.2.0
+  - @rosen-ui/data-source@0.4.0
+  - @rosen-network/binance@0.5.0
+  - @rosen-network/bitcoin@3.0.0
+  - @rosen-network/bitcoin-runes@2.0.0
+  - @rosen-network/cardano@3.0.0
+  - @rosen-network/doge@0.5.0
+  - @rosen-network/ergo@3.0.0
+  - @rosen-network/ethereum@0.5.0
+  - @rosen-network/evm@0.4.0
+  - @rosen-network/firo@0.2.0
+  - @rosen-network/handshake@0.1.0
+  - @rosen-ui/shake-wallet@0.1.0
+  - @rosen-network/base@0.6.0
+  - @rosen-ui/metamask-wallet@2.2.6
+  - @rosen-bridge/icons@4.1.0
+  - @rosen-ui/public-status@0.4.0
+  - @rosen-ui/eternl-wallet@3.1.12
+  - @rosen-ui/firo-wallet@0.1.4
+  - @rosen-ui/lace-wallet@3.1.12
+  - @rosen-ui/my-doge-wallet@1.1.14
+  - @rosen-ui/nautilus-wallet@3.1.12
+  - @rosen-ui/okx-wallet@2.2.7
+  - @rosen-ui/wallet-connect@0.3.5
+  - @rosen-ui/xverse-wallet@0.5.5
+  - @rosen-ui/wallet-api@3.2.3
+
 ## 5.7.3
 
 ### Patch Changes
