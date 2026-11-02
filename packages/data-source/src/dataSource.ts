@@ -7,6 +7,10 @@ import {
   ExtractorStatusEntity,
   migrations as scannerMigrations,
 } from '@rosen-bridge/abstract-scanner';
+import {
+  migrations as addressExtractorMigrations,
+  BoxEntity,
+} from '@rosen-bridge/address-extractor';
 import { DataSource } from '@rosen-bridge/extended-typeorm';
 import {
   TokenPriceEntity,
@@ -18,11 +22,11 @@ import {
   migrations as watcherDataMigrations,
 } from '@rosen-bridge/watcher-data-extractor';
 import {
-  migrations as assetCalculatorMigrations,
+  migrations as assetAggregatorMigrations,
   BridgedAssetEntity,
   LockedAssetEntity,
   TokenEntity,
-} from '@rosen-ui/asset-calculator';
+} from '@rosen-ui/asset-aggregator';
 import {
   AggregatedStatusChangedEntity,
   AggregatedStatusEntity,
@@ -61,6 +65,7 @@ export const getDataSource = (
       TokenEntity,
       LockedAssetEntity,
       ExtractorStatusEntity,
+      BoxEntity,
       AggregatedStatusEntity,
       AggregatedStatusChangedEntity,
       EventStatusOverrideEntity,
@@ -80,7 +85,8 @@ export const getDataSource = (
       ...watcherDataMigrations.postgres,
       ...observationExtractorMigrations.postgres,
       ...scannerMigrations.postgres,
-      ...assetCalculatorMigrations.postgres,
+      ...assetAggregatorMigrations.postgres,
+      ...addressExtractorMigrations.postgres,
       ...publicStatusMigrations.postgres,
       ...TokenPriceMigrations.postgres,
       ...statisticsMigrations.postgres,

@@ -1,0 +1,17 @@
+.RosenAccordionPanel {
+  overflow: hidden;
+  height: var(--accordion-panel-height);
+  transition-property: height;
+  transition-duration: var(--rosen-motion-duration-medium);
+  transition-timing-function: var(--rosen-motion-easing-standard);
+
+  &[data-starting-style],
+  &[data-ending-style] {
+    height: 0;
+  }
+}
+
+.RosenAccordionPanel-content {
+  padding: 0 calc(var(--rosen-spacing) * 2) calc(var(--rosen-spacing) * 2);
+  color: var(--rosen-palette-text-secondary);
+}

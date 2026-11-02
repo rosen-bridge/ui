@@ -1,6 +1,15 @@
+import { z } from 'zod';
+
+import { defineRoute } from '@/app/api/defineRoute';
 import { getEventById } from '@/backend/events';
 
-import { withValidation } from '../../withValidation';
-import { validateGet } from './validations';
+const params = z
+  .object({
+    id: z.hex().length(64),
+  })
+  .strict();
 
-export const GET = withValidation(validateGet, (value) => getEventById(value.id));
+export const GET = defineRoute({
+  schema: { params },
+  handler: ({ input }) => getEventById(input.params.id),
+});

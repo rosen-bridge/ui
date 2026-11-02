@@ -15,6 +15,13 @@ export const lockAddress = 'bc1pvpyum6lxgrfr675wz8v9jxk2jmqvm9nzdly9p2cmvhnawhl0
 
 export const lockData = crypto.randomBytes(80).toString('hex');
 
+export const lockParams = {
+  bridgeFee: 1968503938n,
+  networkFee: 9842520n,
+  toAddress: '9iMjQx8PzwBKXRvsFUJFJAPoy31znfEeBUGz8DRkcnJX4rJYjVd',
+  toChain: 'ergo' as const,
+};
+
 export const internalPubkey = '49273bdf5b4d4594ef73377e249166579adf6f4bf18f9b23db309416ad1ee4f5';
 
 export const paymentInternalPubkey =

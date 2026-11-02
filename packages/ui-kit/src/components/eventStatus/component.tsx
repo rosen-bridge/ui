@@ -1,5 +1,3 @@
-import { useMemo } from 'react';
-
 import { Chip, type ChipProps, type IconProps } from '@/components';
 import { useConfig } from '@/hooks';
 import type { ElementBaseProps, OverridableType } from '@/types';
@@ -26,34 +24,17 @@ export type EventStatusProps = OverridableType<EventStatusBaseProps, EventStatus
 export const EventStatus = (props: EventStatusProps) => {
   const { fallback, value, ...rest } = useConfig('EventStatus', props);
 
-  const { icon, label, severity } = useMemo(
-    () =>
-      Object.assign(
-        {},
-        {
-          icon: 'ExclamationCircle',
-          label: 'Unknown',
-        },
-        fallback,
-        typeof value === 'string' ? STATUS_MAP?.[value] : value,
-      ),
-    [fallback, value],
+  const { icon, label, severity } = Object.assign(
+    {},
+    {
+      icon: 'ExclamationCircle',
+      label: 'Unknown',
+    },
+    fallback,
+    typeof value === 'string' ? STATUS_MAP?.[value] : value,
   );
 
-  const color = useMemo<ChipProps['color']>(() => {
-    switch (severity) {
-      case 'error':
-        return 'error';
-      case 'info':
-        return 'info';
-      case 'success':
-        return 'success';
-      case 'warning':
-        return 'warning';
-      default:
-        return 'neutral';
-    }
-  }, [severity]);
+  const color: ChipProps['color'] = severity || 'neutral';
 
   return <Chip color={color} icon={icon} label={label} {...rest} />;
 };

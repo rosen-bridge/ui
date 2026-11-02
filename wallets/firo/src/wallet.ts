@@ -2,7 +2,6 @@ import type { RosenChainToken } from '@rosen-bridge/tokens';
 import { FiroNetwork } from '@rosen-network/firo/dist/client';
 import { NETWORKS } from '@rosen-ui/constants';
 import type { Network } from '@rosen-ui/types';
-import { getDecimalString } from '@rosen-ui/utils';
 import { UnsupportedChainError, Wallet, type WalletTransferParams } from '@rosen-ui/wallet-api';
 
 import { ICON } from './icon';
@@ -46,18 +45,10 @@ export class FiroWallet extends Wallet<FiroWalletConfig> {
       throw new UnsupportedChainError(this.name, this.currentChain);
     }
 
-    const opReturnData = await this.currentNetwork.generateOpReturnData(
-      params.toChain,
-      params.address,
-      params.networkFee.toString(),
-      params.bridgeFee.toString(),
-    );
-
-    const uri = await this.currentNetwork.buildPaymentUri(
-      this.currentNetwork.lockAddress,
-      getDecimalString(params.amount, params.token.decimals),
-      opReturnData,
-    );
+    const uri = await this.currentNetwork.generateLockTx({
+      ...params,
+      lockAddress: this.currentNetwork.lockAddress,
+    });
 
     return `qrcode:${uri}`;
   };

@@ -1,11 +1,13 @@
 import { encodeAddress } from '@rosen-bridge/address-codec';
+import type { RosenChainToken } from '@rosen-bridge/tokens';
 import {
   type CalculateFee,
   calculateFeeCreator,
   getMinTransferCreator as getMinTransferCreatorBase,
 } from '@rosen-network/base';
 import { NETWORKS } from '@rosen-ui/constants';
-import type { Network } from '@rosen-ui/types';
+import type { Network, RosenAmountValue } from '@rosen-ui/types';
+import { getDecimalString } from '@rosen-ui/utils';
 
 /**
  * builds a firo: payment URI with amount and op_return metadata
@@ -48,6 +50,36 @@ export const generateOpReturnData = async (
 
   return Promise.resolve(
     toChainHex + bridgeFeeHex + networkFeeHex + addressLengthCode + addressHex,
+  );
+};
+
+export type GenerateLockTxParams = {
+  amount: RosenAmountValue;
+  bridgeFee: RosenAmountValue;
+  lockAddress: string;
+  networkFee: RosenAmountValue;
+  toAddress: string;
+  toChain: Network;
+  token: RosenChainToken;
+};
+
+/**
+ * generates the firo: payment URI of a lock tx, with its amount and op_return metadata
+ * @param params
+ * @returns
+ */
+export const generateLockTx = async (params: GenerateLockTxParams): Promise<string> => {
+  const opReturnData = await generateOpReturnData(
+    params.toChain,
+    params.toAddress,
+    params.networkFee.toString(),
+    params.bridgeFee.toString(),
+  );
+
+  return buildPaymentUri(
+    params.lockAddress,
+    getDecimalString(params.amount, params.token.decimals),
+    opReturnData,
   );
 };
 

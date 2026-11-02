@@ -25,5 +25,5 @@ export const ApiKeyProvider = ({ children }: PropsWithChildren) => {
 
   const state = { apiKey, setApiKey };
 
-  return <ApiKeyContext.Provider value={state}>{children}</ApiKeyContext.Provider>;
+  return <ApiKeyContext value={state}>{children}</ApiKeyContext>;
 };

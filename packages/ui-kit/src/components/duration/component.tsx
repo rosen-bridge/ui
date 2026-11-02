@@ -1,5 +1,3 @@
-import { useMemo } from 'react';
-
 import { Typography, type TypographyProps } from '@/components';
 import { useConfig } from '@/hooks';
 import type { ElementBaseProps, OverridableType } from '@/types';
@@ -40,7 +38,7 @@ export type DurationProps = OverridableType<DurationBaseProps, DurationOverrides
 export const Duration = (props: DurationProps) => {
   const { fallback, loading, slots, value, ...rest } = useConfig('Duration', props);
 
-  const { parts, error } = useMemo(() => formatDuration(value), [value]);
+  const { parts, error } = formatDuration(value);
 
   const ready = !error && !loading && !(fallback && value === undefined) && parts;
 

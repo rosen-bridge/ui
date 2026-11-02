@@ -87,23 +87,17 @@ export class NautilusWallet extends Wallet<NautilusWalletConfig> {
 
     const wallet = await this.api.getContext();
 
-    const changeAddress = await this.getAddress();
+    const userAddress = await this.getAddress();
 
     const walletUtxos = await wallet.get_utxos();
 
     if (!walletUtxos) throw new UtxoFetchError(this.name);
 
-    const unsignedTx = await this.currentNetwork.generateUnsignedTx(
-      changeAddress,
+    const unsignedTx = await this.currentNetwork.generateLockTx({
+      ...params,
+      fromAddress: userAddress,
       walletUtxos,
-      params.lockAddress,
-      params.toChain,
-      params.address,
-      params.amount,
-      params.bridgeFee.toString(),
-      params.networkFee.toString(),
-      params.token,
-    );
+    });
 
     let signedTx: ErgoTxProxy;
 

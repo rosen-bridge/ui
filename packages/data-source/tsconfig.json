@@ -5,7 +5,7 @@
     "types": ["node"]
   },
   "references": [
-    { "path": "../asset-calculator" },
+    { "path": "../asset-aggregator" },
     { "path": "../public-status" },
     { "path": "../rosen-statistics-entity" }
   ]

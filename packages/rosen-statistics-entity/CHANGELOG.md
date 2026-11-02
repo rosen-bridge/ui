@@ -1,5 +1,18 @@
 # @rosen-ui/rosen-statistics-entity
 
+## 0.5.0
+
+### Minor Changes
+
+- Replace asset-calculator entities with asset-aggregator entities and add address-extractor BoxEntity to the shared data source
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-bridge/abstract-scanner@4.1.0
+  - @rosen-bridge/watcher-data-extractor@16.1.0
+  - @rosen-ui/asset-aggregator@0.2.0
+
 ## 0.4.2
 
 ### Patch Changes

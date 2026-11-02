@@ -53,7 +53,9 @@ import type {
   NavigationProps,
   NetworkProps,
   PageHeadingProps,
+  PaginationProps,
   QrCodeDialogProps,
+  RailProps,
   RelativeTimeProps,
   SkeletonProps,
   StackProps,
@@ -68,12 +70,14 @@ import type {
   TabsPanelProps,
   TabsProps,
   TabsTabProps,
+  TextProps,
   ThemeToggleButtonProps,
   TokenProps,
   TokensCardProps,
   TokensListProps,
   ToolbarProps,
   TooltipProps,
+  TransitionProps,
   TruncateProps,
   TypographyProps,
   ViewToggleProps,
@@ -134,8 +138,10 @@ export type Components = {
   MenuItem: MenuItemProps;
   MenuTrigger: MenuTriggerProps;
   Network: NetworkProps;
+  Pagination: PaginationProps;
   PageHeading: PageHeadingProps;
   QrCodeDialog: QrCodeDialogProps;
+  Rail: RailProps;
   RelativeTime: RelativeTimeProps;
   Skeleton: SkeletonProps;
   Stack: StackProps;
@@ -150,12 +156,14 @@ export type Components = {
   TabsList: TabsListProps;
   TabsPanel: TabsPanelProps;
   TabsTab: TabsTabProps;
+  Text: TextProps;
   ThemeToggleButton: ThemeToggleButtonProps;
   Token: TokenProps;
   TokensCard: TokensCardProps;
   TokensList: TokensListProps;
   Toolbar: ToolbarProps;
   Tooltip: TooltipProps;
+  Transition: TransitionProps;
   Truncate: TruncateProps;
   Typography: TypographyProps;
   ViewToggle: ViewToggleProps;

@@ -8,10 +8,10 @@ import {
   migrations as watcherExtractorMigration,
 } from '@rosen-bridge/watcher-data-extractor';
 import {
-  migrations as assetCalculatorMigrations,
+  migrations as assetAggregatorMigrations,
   LockedAssetEntity,
   TokenEntity,
-} from '@rosen-ui/asset-calculator';
+} from '@rosen-ui/asset-aggregator';
 
 import {
   BridgedAmountEntity,
@@ -42,7 +42,7 @@ export const createDatabase = async () => {
     migrations: [
       ...statisticsMigrations.sqlite,
       ...watcherExtractorMigration.sqlite,
-      ...assetCalculatorMigrations.sqlite,
+      ...assetAggregatorMigrations.sqlite,
       ...abstractScannerMigrations.sqlite,
     ],
     synchronize: false,

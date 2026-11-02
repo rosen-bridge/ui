@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 
 import { Alert } from '@mui/material';
 
@@ -25,7 +25,7 @@ export const ApiKeyDialogWarning = (props: ApiKeyDialogWarningProps) => {
 
   const [isOpen, setIsOpen] = useState(false);
 
-  const styles = useMemo(() => ({ containerType: 'inline-size', ...style }), [style]);
+  const styles = { containerType: 'inline-size', ...style };
 
   if (apiKey) return null;
 

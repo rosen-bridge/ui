@@ -1,28 +1,18 @@
 {
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "./dist",
-    "baseUrl": ".",
+    "baseUrl": "src",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "allowJs": false,
-    "esModuleInterop": true,
-    "inlineSourceMap": true,
-    "isolatedModules": false,
-    "module": "esnext",
-    "moduleResolution": "node",
-    "noFallthroughCasesInSwitch": true,
-    "resolveJsonModule": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "target": "esnext"
+    "types": ["node", "vitest/globals"]
   },
   "include": ["src"],
   "references": [
-    {
-      "path": "../../packages/constants"
-    },
-    {
-      "path": "../../packages/asset-calculator"
-    }
+    { "path": "../../packages/asset-aggregator/" },
+    { "path": "../../packages/constants" },
+    { "path": "../../packages/data-source" },
+    { "path": "../../packages/asset-data-adapter/" },
+    { "path": "../../packages/rosen-statistics/" }
   ]
 }

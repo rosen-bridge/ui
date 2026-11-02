@@ -1,5 +1,3 @@
-import { useMemo } from 'react';
-
 import { Avatar as AvatarMUI, type SxProps, type Theme } from '@mui/material';
 
 import { Skeleton } from '@/components';
@@ -35,14 +33,12 @@ export type AvatarProps = OverridableType<
 export const Avatar = (props: AvatarProps) => {
   const { background, color, loading, size, style, ...rest } = useConfig('Avatar', props);
 
-  const sx = useMemo<SxProps<Theme>>(() => {
-    return {
-      color: toCSSColor(color),
-      width: size,
-      height: size,
-      backgroundColor: toCSSColor(background),
-    };
-  }, [color, size, background]);
+  const sx: SxProps<Theme> = {
+    color: toCSSColor(color),
+    width: size,
+    height: size,
+    backgroundColor: toCSSColor(background),
+  };
 
   if (loading) {
     return <Skeleton style={style} width={size} height={size} variant="circular" />;

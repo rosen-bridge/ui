@@ -1,6 +1,6 @@
-import { useContext } from 'react';
+import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 
-import { useController } from 'react-hook-form';
+import { useController, useFormContext } from 'react-hook-form';
 
 import type { Network, RosenAmountValue } from '@rosen-ui/types';
 import { getNonDecimalString } from '@rosen-ui/utils';
@@ -11,6 +11,44 @@ import { FEE_CONFIG_TOKEN_ID } from '../../configs';
 import { useTokenMap } from './useTokenMap';
 import { useTransactionFormData } from './useTransactionFormData';
 import { WalletContext } from './useWallet';
+
+const useDebouncedValidation = (name: string, resetDeps: unknown[]) => {
+  const { setValue, setError, trigger } = useFormContext();
+
+  const timeout = useRef<ReturnType<typeof setTimeout>>(undefined);
+
+  const queue = useRef<Promise<unknown>>(Promise.resolve());
+
+  const [isValidating, setIsValidating] = useState(false);
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: cancel pending validation when these change
+  useEffect(() => () => clearTimeout(timeout.current), resetDeps);
+
+  const handleChange = useCallback(
+    (value: string, immediate = false) => {
+      setValue(name, value.trim(), { shouldDirty: true, shouldTouch: true });
+      setError(name, { type: 'pending' });
+      clearTimeout(timeout.current);
+      const current = setTimeout(
+        async () => {
+          setIsValidating(true);
+          queue.current = queue.current.then(async () => {
+            if (timeout.current !== current) return;
+            await trigger(name);
+            if (timeout.current !== current) setError(name, { type: 'pending' });
+          });
+          await Promise.all([queue.current, new Promise((resolve) => setTimeout(resolve, 500))]);
+          if (timeout.current === current) setIsValidating(false);
+        },
+        immediate ? 0 : 1250,
+      );
+      timeout.current = current;
+    },
+    [name, setValue, setError, trigger],
+  );
+
+  return { isValidating, handleChange };
+};
 
 /**
  * handles the form field registrations and form state changes
@@ -132,6 +170,12 @@ export const useBridgeForm = () => {
     },
   });
 
+  const { handleChange: handleAddressChange, isValidating: isAddressValidating } =
+    useDebouncedValidation('walletAddress', [targetField.value]);
+
+  const { handleChange: handleAmountChange, isValidating: isAmountValidating } =
+    useDebouncedValidation('amount', [targetField.value, tokenField.value]);
+
   return {
     reset,
     setValue,
@@ -142,6 +186,10 @@ export const useBridgeForm = () => {
     tokenField,
     amountField,
     addressField,
+    isAddressValidating,
+    handleAddressChange,
+    isAmountValidating,
+    handleAmountChange,
     formState,
   };
 };

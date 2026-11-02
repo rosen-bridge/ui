@@ -68,7 +68,7 @@ export const useTransaction = () => {
         ),
         fromChain: sourceValue,
         toChain: targetValue,
-        address: selectedTarget.toSafeAddress(walletAddressValue),
+        toAddress: selectedTarget.toSafeAddress(walletAddressValue),
         bridgeFee,
         networkFee,
         lockAddress: selectedSource.lockAddress,

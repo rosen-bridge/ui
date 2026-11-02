@@ -19,6 +19,7 @@ const baseTxURLs: { [key in Network]: HttpsURL } = {
   [NETWORKS.ethereum.key]: 'https://etherscan.io/tx',
   [NETWORKS.doge.key]: 'https://blockexplorer.one/dogecoin/mainnet/tx',
   [NETWORKS.firo.key]: 'https://explorer.firo.org/tx',
+  [NETWORKS.handshake.key]: 'https://e.hnsfans.com/tx',
 };
 
 export const getTxURL = (network?: Network, tx?: string): HttpsURL | undefined => {

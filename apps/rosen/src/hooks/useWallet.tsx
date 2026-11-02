@@ -169,5 +169,5 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
     [select, selected, state, filtered, disconnect],
   );
 
-  return <WalletContext.Provider value={value}>{children}</WalletContext.Provider>;
+  return <WalletContext value={value}>{children}</WalletContext>;
 };

@@ -4,10 +4,18 @@ import { describe, expect, it, vi } from 'vitest';
 import { TokenMap } from '@rosen-bridge/tokens';
 import type { Network } from '@rosen-ui/types';
 
-import { generateUnsignedTx } from '../../src';
+import { generateLockTx } from '../../src';
 import { multiDecimalTokenMap, testTokenMap } from '../test-data';
 
 const testData = await vi.hoisted(async () => await import('./testData'));
+
+// the OP_RETURN data used in these tests is generated from these params
+const lockParams = {
+  bridgeFee: 1968503938n,
+  networkFee: 9842520n,
+  toAddress: '9iMjQx8PzwBKXRvsFUJFJAPoy31znfEeBUGz8DRkcnJX4rJYjVd',
+  toChain: 'ergo' as Network,
+};
 
 const getTokenMap = async () => {
   const tokenMap = new TokenMap();
@@ -30,9 +38,9 @@ vi.mock('../../src/utils', async (importOriginal) => {
   };
 });
 
-describe('generateUnsignedTx', () => {
+describe('generateLockTx', () => {
   /**
-   * @target generateUnsignedTx should generate lock transaction successfully
+   * @target generateLockTx should generate lock transaction successfully
    * @dependencies
    * - utils.getAddressUtxos
    * - utils.getFeeRatio
@@ -55,18 +63,18 @@ describe('generateUnsignedTx', () => {
     const data =
       '00000000007554fc820000000000962f582103f999da8e6e42660e4464d17d29e63bc006734a6710a24eb489b466323d3a9339';
 
-    const result = await generateUnsignedTx(getTokenMap)(
-      lockAddress,
-      fromAddress,
+    const result = await generateLockTx(getTokenMap)({
+      ...lockParams,
       amount,
-      data,
+      fromAddress,
+      lockAddress,
       /**
        * TODO: remove the inline Biome comment
        * local:ergo/rosen-bridge/ui#441
        */
       // biome-ignore lint/suspicious/noExplicitAny: Use a better type
-      {} as any,
-    );
+      token: {} as any,
+    });
 
     const psbt = Psbt.fromBase64(result.psbt.base64);
     expect(result.inputSize).toEqual(psbt.inputCount);
@@ -94,7 +102,7 @@ describe('generateUnsignedTx', () => {
   });
 
   /**
-   * @target generateUnsignedTx should generate lock transaction with multi decimals token map successfully
+   * @target generateLockTx should generate lock transaction with multi decimals token map successfully
    * @dependencies
    * - utils.getAddressUtxos
    * - utils.getFeeRatio
@@ -126,13 +134,13 @@ describe('generateUnsignedTx', () => {
 
     const token = tokenMap.search(chain, {})[0][chain];
 
-    const result = await generateUnsignedTx(() => Promise.resolve(tokenMap))(
-      lockAddress,
+    const result = await generateLockTx(() => Promise.resolve(tokenMap))({
+      ...lockParams,
+      amount: wrappedAmount,
       fromAddress,
-      wrappedAmount,
-      data,
+      lockAddress,
       token,
-    );
+    });
 
     const psbt = Psbt.fromBase64(result.psbt.base64);
     expect(result.inputSize).toEqual(psbt.inputCount);
@@ -160,7 +168,7 @@ describe('generateUnsignedTx', () => {
   });
 
   /**
-   * @target generateUnsignedTx should throw error when address utxos cannot cover required BTC
+   * @target generateLockTx should throw error when address utxos cannot cover required BTC
    * @dependencies
    * - utils.getAddressUtxos
    * - utils.getFeeRatio
@@ -173,22 +181,19 @@ describe('generateUnsignedTx', () => {
     const lockAddress = 'bc1qkgp89fjerymm5ltg0hygnumr0m2qa7n22gyw6h';
     const fromAddress = 'bc1qhuv3dhpnm0wktasd3v0kt6e4aqfqsd0uhfdu7d';
     const amount = 3500000000n;
-    const data =
-      '00000000007554fc820000000000962f582103f999da8e6e42660e4464d17d29e63bc006734a6710a24eb489b466323d3a9339';
-
     await expect(async () => {
-      await generateUnsignedTx(getTokenMap)(
-        lockAddress,
-        fromAddress,
+      await generateLockTx(getTokenMap)({
+        ...lockParams,
         amount,
-        data,
+        fromAddress,
+        lockAddress,
         /**
          * TODO: remove the inline Biome comment
          * local:ergo/rosen-bridge/ui#441
          */
         // biome-ignore lint/suspicious/noExplicitAny: Use a better type
-        {} as any,
-      );
+        token: {} as any,
+      });
     }).rejects.toThrow(Error);
   });
 });

@@ -1,5 +1,11 @@
 # @rosen-ui/public-status
 
+## 0.4.0
+
+### Minor Changes
+
+- Use `triggerTxId` instead of `eventTriggerId` in `EventStatusOverrideEntity` for event identification
+
 ## 0.3.0
 
 ### Minor Changes

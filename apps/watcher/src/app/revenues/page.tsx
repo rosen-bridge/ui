@@ -141,9 +141,8 @@ const Revenues = () => {
                     {getTokenIncome(item).map((token) => (
                       <Amount
                         key={token.tokenId}
-                        decimal={token.decimals}
                         loading={isLoading}
-                        value={token.amount}
+                        value={token}
                         unit={token.name}
                       />
                     ))}
@@ -170,9 +169,8 @@ const Revenues = () => {
                         {getTokenIncome(item).map((token) => (
                           <Amount
                             key={token.tokenId}
-                            decimal={token.decimals}
                             loading={isLoading}
-                            value={token.amount}
+                            value={token}
                             unit={token.name}
                           />
                         ))}

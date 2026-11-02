@@ -1,0 +1,139 @@
+import * as wasm from 'ergo-lib-wasm-nodejs';
+
+import { ErgoBoxSelection } from '@rosen-bridge/ergo-box-selection';
+import type { RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
+import { handleUncoveredAssets } from '@rosen-network/base';
+import { NETWORKS } from '@rosen-ui/constants';
+import type { Network, RosenAmountValue } from '@rosen-ui/types';
+
+import { fee, minBoxValue } from './constants';
+import type { AssetBalance, ErgoBoxProxy, UnsignedErgoTxProxy } from './types';
+import { unsignedTransactionToProxy } from './unsignedTransactionToProxy';
+import { createChangeBox, createLockBox, getHeight } from './utils';
+
+const selector = new ErgoBoxSelection();
+
+export type GenerateLockTxParams = {
+  amount: RosenAmountValue;
+  bridgeFee: RosenAmountValue;
+  fromAddress: string;
+  lockAddress: string;
+  networkFee: RosenAmountValue;
+  toAddress: string;
+  toChain: Network;
+  token: RosenChainToken;
+  walletUtxos: ErgoBoxProxy[];
+};
+
+/**
+ * generates an unsigned lock transaction on Ergo
+ * @param getTokenMap
+ * @returns
+ */
+export const generateLockTx =
+  (getTokenMap: () => Promise<TokenMap>) =>
+  async (params: GenerateLockTxParams): Promise<UnsignedErgoTxProxy> => {
+    const {
+      amount: wrappedAmount,
+      bridgeFee,
+      fromAddress: changeAddress,
+      lockAddress,
+      networkFee,
+      toAddress,
+      toChain,
+      token,
+      walletUtxos,
+    } = params;
+
+    const tokenMap = await getTokenMap();
+    const unwrappedAmount = tokenMap.unwrapAmount(
+      token.tokenId,
+      wrappedAmount,
+      NETWORKS.ergo.key,
+    ).amount;
+
+    const networkHeight = await getHeight();
+
+    /**
+     * Determine the transaction creation height according to EIP-0039:
+     * https://github.com/ergoplatform/eips/blob/master/eip-0039.md
+     */
+    const height = Math.max(
+      networkHeight,
+      ...walletUtxos.map((walletUtxo) => walletUtxo.creationHeight),
+    );
+
+    // generate lock box
+    const lockAssets: AssetBalance = {
+      nativeToken: minBoxValue,
+      tokens: [],
+    };
+    if (token.tokenId === 'erg') {
+      /**
+       * TODO: fix ergo native token name
+       * local:ergo/rosen-bridge/ui#100
+       */
+      lockAssets.nativeToken = unwrappedAmount;
+    } else {
+      // lock token
+      lockAssets.tokens.push({ id: token.tokenId, value: unwrappedAmount });
+    }
+    const lockBox = createLockBox(
+      lockAddress,
+      height,
+      token.tokenId,
+      unwrappedAmount,
+      toChain,
+      toAddress,
+      changeAddress,
+      bridgeFee,
+      networkFee,
+    );
+
+    const ergoBoxes = walletUtxos.map((walletUtxo) =>
+      wasm.ErgoBox.from_json(JSON.stringify(walletUtxo)),
+    );
+
+    // get input boxes
+    const inputs = await selector.getCoveringBoxes(
+      lockAssets,
+      [],
+      new Map(),
+      ergoBoxes.values(),
+      minBoxValue,
+      undefined,
+      () => fee,
+    );
+    if (!inputs.covered) {
+      handleUncoveredAssets(tokenMap, NETWORKS.ergo.key, inputs.uncoveredAssets);
+    }
+    // add input boxes to transaction
+    const unsignedInputs = new wasm.UnsignedInputs();
+    inputs.boxes.forEach((box) => {
+      unsignedInputs.add(wasm.UnsignedInput.from_box_id(box.box_id()));
+    });
+
+    const feeBox = wasm.ErgoBoxCandidate.new_miner_fee_box(
+      wasm.BoxValue.from_i64(wasm.I64.from_str(inputs.additionalAssets.fee.toString())),
+      height,
+    );
+
+    const txOutputs = new wasm.ErgoBoxCandidates(lockBox);
+
+    inputs.additionalAssets.list.forEach((item) => {
+      txOutputs.add(createChangeBox(changeAddress, height, item));
+    });
+
+    txOutputs.add(feeBox);
+
+    const unsignedTx = new wasm.UnsignedTransaction(
+      unsignedInputs,
+      new wasm.DataInputs(),
+      txOutputs,
+    );
+
+    return unsignedTransactionToProxy(
+      unsignedTx,
+      inputs.boxes.map((box) => box.to_js_eip12()),
+    );
+  };

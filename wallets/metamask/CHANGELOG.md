@@ -1,5 +1,17 @@
 # @rosen-ui/metamask-wallet
 
+## 2.2.6
+
+### Patch Changes
+
+- Fetch token balances through the MetaMask provider instead of `window.ethereum`, which may belong to another installed wallet
+- Build the lock transaction with a single call to `generateLockTx` of the network client
+- Update dependencies
+  - @rosen-network/binance@0.5.0
+  - @rosen-network/ethereum@0.5.0
+  - @rosen-network/evm@0.4.0
+  - @rosen-ui/wallet-api@3.2.3
+
 ## 2.2.5
 
 ### Patch Changes

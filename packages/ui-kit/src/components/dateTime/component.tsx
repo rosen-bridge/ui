@@ -1,5 +1,3 @@
-import { useMemo } from 'react';
-
 import { Typography } from '@/components';
 import { useConfig } from '@/hooks';
 import type { Color, ElementBaseProps, OverridableType } from '@/types';
@@ -40,7 +38,7 @@ export type DateTimeProps = OverridableType<DateTimeBaseProps, DateTimeOverrides
 export const DateTime = (props: DateTimeProps) => {
   const { loading, timestamp, ...rest } = useConfig('DateTime', props);
 
-  const parts = useMemo(() => formatDateTime(timestamp), [timestamp]);
+  const parts = formatDateTime(timestamp);
 
   return (
     <Typography

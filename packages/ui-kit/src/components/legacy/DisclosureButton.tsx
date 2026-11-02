@@ -2,7 +2,10 @@ import { IconButton } from '@mui/material';
 
 import type { useDisclosure } from '../../hooks/useDisclosure';
 import { Icon } from '../icon';
+import { Transition } from '../transition';
 import { CircularProgress } from './Mui';
+
+import './DisclosureButton.css';
 
 /**
  * Return type of the useDisclosure hook for type safety
@@ -46,17 +49,9 @@ export const DisclosureButton = ({
 }) => {
   return (
     <IconButton
+      className="RosenDisclosureButton"
       size={size}
       disabled={disclosure.state === 'loading' || disabled}
-      sx={{
-        color: disclosure.state === 'error' ? 'red' : undefined,
-        transform: `rotate(${disclosure.state === 'open' ? 180 : 0}deg)`,
-        transition: (theme) => {
-          return theme.transitions.create('transform', {
-            duration: theme.transitions.duration.shortest,
-          });
-        },
-      }}
       onClick={async () => {
         switch (disclosure.state) {
           case 'close':
@@ -71,11 +66,19 @@ export const DisclosureButton = ({
         }
       }}
     >
-      {disclosure.state === 'loading' ? (
-        <CircularProgress size={24} />
-      ) : (
-        <Icon name={disclosure.state === 'error' ? 'SyncExclamation' : 'AngleDown'} />
-      )}
+      <Transition>
+        {disclosure.state === 'loading' ? (
+          <CircularProgress key="loading" size={24} />
+        ) : disclosure.state === 'error' ? (
+          <Icon key="error" color="error" name="SyncExclamation" />
+        ) : (
+          <Icon
+            key="arrow"
+            name="AngleDown"
+            style={{ rotate: disclosure.state === 'open' ? '180deg' : undefined }}
+          />
+        )}
+      </Transition>
     </IconButton>
   );
 };

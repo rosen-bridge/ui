@@ -8,6 +8,20 @@
   --rosen-palette-secondary: var(--rosen-palette-secondary-main);
   --rosen-palette-success: var(--rosen-palette-success-main);
   --rosen-palette-warning: var(--rosen-palette-warning-main);
+  --rosen-motion-duration-short: 100ms;
+  --rosen-motion-duration-medium: 200ms;
+  --rosen-motion-duration-long: 300ms;
+  --rosen-motion-easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --rosen-motion-easing-enter: cubic-bezier(0, 0, 0.2, 1);
+  --rosen-motion-easing-exit: cubic-bezier(0.4, 0, 1, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --rosen-motion-duration-short: 0s;
+    --rosen-motion-duration-medium: 0s;
+    --rosen-motion-duration-long: 0s;
+  }
 }
 
 [data-surface='root'] {

@@ -1,0 +1,17 @@
+.RosenDisclosureButton > .RosenIcon,
+.RosenDisclosureButton > .MuiCircularProgress-root {
+  transition-property: opacity, rotate, scale;
+  transition-duration: var(--rosen-motion-duration-short);
+  transition-timing-function: var(--rosen-motion-easing-enter);
+
+  &[data-starting-style],
+  &[data-ending-style] {
+    opacity: 0;
+    rotate: -90deg;
+    scale: 0.5;
+  }
+
+  &[data-ending-style] {
+    transition-timing-function: var(--rosen-motion-easing-exit);
+  }
+}

@@ -1,0 +1,135 @@
+import { address, Psbt, payments } from 'bitcoinjs-lib';
+
+import { BitcoinBoxSelection, generateFeeEstimator } from '@rosen-bridge/bitcoin-utxo-selection';
+import type { RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
+import { handleUncoveredAssets } from '@rosen-network/base';
+import { NETWORKS } from '@rosen-ui/constants';
+import type { Network, RosenAmountValue } from '@rosen-ui/types';
+
+import { SEGWIT_INPUT_WEIGHT_UNIT, SEGWIT_OUTPUT_WEIGHT_UNIT } from './constants';
+import type { BitcoinUtxo, UnsignedPsbtData } from './types';
+import {
+  generateOpReturnData,
+  getAddressUtxos,
+  getFeeRatio,
+  getMinimumMeaningfulSatoshi,
+} from './utils';
+
+const selector = new BitcoinBoxSelection();
+
+export type GenerateLockTxParams = {
+  amount: RosenAmountValue;
+  bridgeFee: RosenAmountValue;
+  fromAddress: string;
+  lockAddress: string;
+  networkFee: RosenAmountValue;
+  toAddress: string;
+  toChain: Network;
+  token: RosenChainToken;
+};
+
+/**
+ * generates bitcoin lock tx
+ * @param getTokenMap
+ * @returns
+ */
+export const generateLockTx =
+  (getTokenMap: () => Promise<TokenMap>) =>
+  async (params: GenerateLockTxParams): Promise<UnsignedPsbtData> => {
+    const opReturnData = await generateOpReturnData(
+      params.toChain,
+      params.toAddress,
+      params.networkFee.toString(),
+      params.bridgeFee.toString(),
+    );
+
+    const { amount: wrappedAmount, fromAddress, lockAddress, token } = params;
+
+    const tokenMap = await getTokenMap();
+    const unwrappedAmount = tokenMap.unwrapAmount(
+      token.tokenId,
+      wrappedAmount,
+      NETWORKS.bitcoin.key,
+    ).amount;
+
+    // generate txBuilder
+    const psbt = new Psbt();
+
+    // generate OP_RETURN box
+    const opReturnPayment = payments.embed({
+      data: [Buffer.from(opReturnData, 'hex')],
+    });
+    psbt.addOutput({
+      script: opReturnPayment.output!,
+      value: 0,
+    });
+
+    // generate lock box
+    const lockPayment = payments.p2wpkh({
+      address: lockAddress,
+    });
+    psbt.addOutput({
+      script: lockPayment.output!,
+      value: Number(unwrappedAmount),
+    });
+
+    // fetch inputs
+    const utxos = await getAddressUtxos(fromAddress);
+    const feeRatio = await getFeeRatio();
+    const minSatoshi = getMinimumMeaningfulSatoshi(feeRatio);
+
+    // generate fee estimator
+    const estimateFee = generateFeeEstimator(
+      1,
+      42 + // all txs include 40W. P2WPKH txs need additional 2W
+        44 + // OP_RETURN output base weight
+        opReturnData.length * 2, // op_return data weight
+      SEGWIT_INPUT_WEIGHT_UNIT,
+      SEGWIT_OUTPUT_WEIGHT_UNIT,
+      feeRatio,
+      4, // the virtual size matters for fee estimation of native-segwit transactions
+    );
+
+    const coveredBoxes = await selector.getCoveringBoxes(
+      {
+        nativeToken: unwrappedAmount,
+        tokens: [],
+      },
+      [],
+      new Map<string, BitcoinUtxo | undefined>(),
+      utxos.values(),
+      minSatoshi,
+      undefined,
+      estimateFee,
+    );
+    if (!coveredBoxes.covered) {
+      handleUncoveredAssets(tokenMap, NETWORKS.bitcoin.key, coveredBoxes.uncoveredAssets);
+    }
+
+    // add inputs
+    const fromAddressScript = address.toOutputScript(fromAddress);
+    coveredBoxes.boxes.forEach((box) => {
+      psbt.addInput({
+        hash: box.txId,
+        index: box.index,
+        witnessUtxo: {
+          script: fromAddressScript,
+          value: Number(box.value),
+        },
+      });
+    });
+
+    // add change
+    psbt.addOutput({
+      script: fromAddressScript,
+      value: Number(coveredBoxes.additionalAssets.aggregated.nativeToken),
+    });
+
+    return {
+      psbt: {
+        base64: psbt.toBase64(),
+        hex: psbt.toHex(),
+      },
+      inputSize: psbt.inputCount,
+    };
+  };

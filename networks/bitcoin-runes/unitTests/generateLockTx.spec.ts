@@ -1,0 +1,341 @@
+import { beforeEach, describe, expect, it, type Mock, vi } from 'vitest';
+
+import { BitcoinRunesBoxSelection } from '@rosen-bridge/bitcoin-runes-utxo-selection';
+import type { TokenMap } from '@rosen-bridge/tokens';
+
+import { generateLockTx } from '../src';
+import { generateOpReturnData } from '../src/utils';
+import * as testData from './testData';
+
+vi.mock('../src/constants', async (importOriginal) => {
+  const ref = await importOriginal<typeof import('../src/constants')>();
+
+  return {
+    ...ref,
+    default: {
+      GET_BOX_API_LIMIT: 2,
+    },
+  };
+});
+
+vi.mock('../src/utils', async (importOriginal) => {
+  const ref = await importOriginal<typeof import('../src/utils')>();
+
+  return {
+    ...ref,
+    generateOpReturnData: vi.fn(async () => testData.lockData),
+    getFeeRatio: async () => 1,
+  };
+});
+
+vi.mock(import('@rosen-bridge/bitcoin-runes-utxo-selection'), () => {
+  const BitcoinRunesBoxSelection = vi.fn();
+  BitcoinRunesBoxSelection.prototype.getCoveringBoxes = vi.fn();
+  return { BitcoinRunesBoxSelection };
+});
+
+describe('generateLockTx', () => {
+  const getCoveringBoxesMock = BitcoinRunesBoxSelection.prototype.getCoveringBoxes as Mock;
+
+  beforeEach(() => {
+    getCoveringBoxesMock.mockClear();
+    (generateOpReturnData as Mock).mockClear();
+  });
+
+  /**
+   * @target generateLockTx should build the lock data from the given transfer params
+   * @dependencies
+   * - utils.generateOpReturnData
+   * - TokenMap
+   * - BitcoinRunesBoxSelection
+   * @scenario
+   * - stub getCoveringBoxes to resolve to a mock object that covers the required amount
+   * - stub tokenMap.unwrapAmount to return a mock value
+   * - call generateLockTx
+   * @expected
+   * - generateOpReturnData should have been called once with the target chain,
+   *   target address, network fee and bridge fee
+   */
+  it('should build the lock data from the given transfer params', async () => {
+    // arrange
+    getCoveringBoxesMock.mockResolvedValueOnce(testData.selection1[0]);
+
+    const getTokenMap = async () =>
+      ({
+        unwrapAmount: vi.fn().mockImplementation(() => ({ amount: 10n, decimals: 2 })),
+      }) as unknown as TokenMap;
+
+    // act
+    await generateLockTx(getTokenMap)({
+      ...testData.lockParams,
+      amount: 100n,
+      fromAddress: testData.fromAddress,
+      fromPaymentAddress: testData.fromPaymentAddress,
+      internalPubkey: testData.internalPubkey,
+      lockAddress: testData.lockAddress,
+      token: testData.transferToken,
+    });
+
+    // assert
+    expect(generateOpReturnData).toHaveBeenCalledTimes(1);
+    expect(generateOpReturnData).toHaveBeenCalledWith(
+      testData.lockParams.toChain,
+      testData.lockParams.toAddress,
+      testData.lockParams.networkFee.toString(),
+      testData.lockParams.bridgeFee.toString(),
+    );
+  });
+
+  /**
+   * @target generateLockTx should perform 1 selection step to get the required amounts
+   * @dependencies
+   * - TokenMap
+   * - BitcoinRunesBoxSelection
+   * @scenario
+   * - stub getCoveringBoxes to resolve to a mock object that covers the required amount
+   * - stub constants to return a mock value for GET_BOX_API_LIMIT
+   * - stub tokenMap.unwrapAmount to return a mock value
+   * - call generateLockTx
+   * - check the returned psbt
+   * @expected
+   * - returning inputSize should have been 1
+   * - getCoveringBoxesMock mock should have been called once
+   */
+  it('should perform 1 selection step to get the required amounts', async () => {
+    // arrange
+    getCoveringBoxesMock.mockResolvedValueOnce(testData.selection1[0]);
+
+    const getTokenMap = async () =>
+      ({
+        unwrapAmount: vi.fn().mockImplementation(() => ({ amount: 10n, decimals: 2 })),
+      }) as unknown as TokenMap;
+
+    // act
+    const result = await generateLockTx(getTokenMap)({
+      ...testData.lockParams,
+      amount: 100n,
+      fromAddress: testData.fromAddress,
+      fromPaymentAddress: testData.fromPaymentAddress,
+      internalPubkey: testData.internalPubkey,
+      lockAddress: testData.lockAddress,
+      token: testData.transferToken,
+    });
+
+    // assert
+    expect(result.signInputs[testData.fromAddress]).toEqual([0]);
+    expect(result.signInputs[testData.fromPaymentAddress]).toEqual([]);
+    expect(getCoveringBoxesMock).toHaveBeenCalledTimes(1);
+  });
+
+  /**
+   * @target generateLockTx should perform 2 selection step to get the required amounts
+   * @dependencies
+   * - TokenMap
+   * - BitcoinRunesBoxSelection
+   * @scenario
+   * - stub getCoveringBoxes to resolve to sequence of mock objects that covers the required
+   *  amount on the second call
+   * - stub constants to return a mock value for GET_BOX_API_LIMIT
+   * - stub tokenMap.unwrapAmount to return a mock value
+   * - call generateLockTx
+   * - check the returned psbt
+   * @expected
+   * - returning inputSize should have been 2
+   * - getCoveringBoxesMock mock should have been called 2 times
+   */
+  it('should perform 2 selection step to get the required amounts', async () => {
+    // arrange
+    getCoveringBoxesMock
+      .mockResolvedValueOnce(testData.selection2[0])
+      .mockResolvedValueOnce(testData.selection2[1]);
+
+    const getTokenMap = async () =>
+      ({
+        unwrapAmount: vi.fn().mockImplementation(() => ({ amount: 10n, decimals: 2 })),
+      }) as unknown as TokenMap;
+
+    // act
+    const result = await generateLockTx(getTokenMap)({
+      ...testData.lockParams,
+      amount: 100n,
+      fromAddress: testData.fromAddress,
+      fromPaymentAddress: testData.fromPaymentAddress,
+      internalPubkey: testData.internalPubkey,
+      lockAddress: testData.lockAddress,
+      token: testData.transferToken,
+    });
+
+    // assert
+    expect(result.signInputs[testData.fromAddress]).toEqual([0, 1]);
+    expect(result.signInputs[testData.fromPaymentAddress]).toEqual([]);
+    expect(getCoveringBoxesMock).toHaveBeenCalledTimes(2);
+  });
+
+  /**
+   * @target generateLockTx should perform 3 selection steps to get the required amounts
+   * @dependencies
+   * - TokenMap
+   * - BitcoinRunesBoxSelection
+   * @scenario
+   * - stub getCoveringBoxes to resolve to sequence of mock objects that covers the required
+   *  amount on the third call
+   * - stub constants to return a mock value for GET_BOX_API_LIMIT
+   * - stub tokenMap.unwrapAmount to return a mock value
+   * - call generateLockTx
+   * - check the returned psbt
+   * @expected
+   * - returning inputSize should have been 2
+   * - getCoveringBoxesMock mock should have been called 3 times
+   */
+  it('should perform 3 selection steps to get the required amounts', async () => {
+    // arrange
+    getCoveringBoxesMock
+      .mockResolvedValueOnce(testData.selection3[0])
+      .mockResolvedValueOnce(testData.selection3[1])
+      .mockResolvedValueOnce(testData.selection3[2]);
+
+    const getTokenMap = async () =>
+      ({
+        unwrapAmount: vi.fn().mockImplementation(() => ({ amount: 10n, decimals: 2 })),
+      }) as unknown as TokenMap;
+
+    // act
+    const result = await generateLockTx(getTokenMap)({
+      ...testData.lockParams,
+      amount: 100n,
+      fromAddress: testData.fromAddress,
+      fromPaymentAddress: testData.fromPaymentAddress,
+      internalPubkey: testData.internalPubkey,
+      lockAddress: testData.lockAddress,
+      token: testData.transferToken,
+    });
+
+    // assert
+    expect(result.signInputs[testData.fromAddress]).toEqual([0]);
+    expect(result.signInputs[testData.fromPaymentAddress]).toEqual([1]);
+    expect(getCoveringBoxesMock).toHaveBeenCalledTimes(3);
+  });
+
+  /**
+   * @target generateLockTx should perform 4 selection steps to get the required amounts
+   * @dependencies
+   * - TokenMap
+   * - BitcoinRunesBoxSelection
+   * @scenario
+   * - stub getCoveringBoxes to resolve to sequence of mock objects that covers the required
+   *  amount on the 4th call
+   * - stub constants to return a mock value for GET_BOX_API_LIMIT
+   * - stub tokenMap.unwrapAmount to return a mock value
+   * - call generateLockTx
+   * - check the returned psbt
+   * @expected
+   * - returning inputSize should have been 2
+   * - getCoveringBoxesMock mock should have been called 4 times
+   */
+  it('should perform 4 selection steps to get the required amounts', async () => {
+    // arrange
+    getCoveringBoxesMock
+      .mockResolvedValueOnce(testData.selection6[0])
+      .mockResolvedValueOnce(testData.selection6[1])
+      .mockResolvedValueOnce(testData.selection6[2])
+      .mockResolvedValueOnce(testData.selection6[3]);
+
+    const getTokenMap = async () =>
+      ({
+        unwrapAmount: vi.fn().mockImplementation(() => ({ amount: 10n, decimals: 2 })),
+      }) as unknown as TokenMap;
+
+    // act
+    const result = await generateLockTx(getTokenMap)({
+      ...testData.lockParams,
+      amount: 100n,
+      fromAddress: testData.fromAddress,
+      fromPaymentAddress: testData.fromPaymentAddress,
+      internalPubkey: testData.internalPubkey,
+      lockAddress: testData.lockAddress,
+      token: testData.transferToken,
+    });
+
+    // assert
+    expect(result.signInputs[testData.fromAddress]).toEqual([0, 1]);
+    expect(result.signInputs[testData.fromPaymentAddress]).toEqual([]);
+    expect(getCoveringBoxesMock).toHaveBeenCalledTimes(4);
+  });
+
+  /**
+   * @target generateLockTx should throw when user does not have enough runes for transfer
+   * @dependencies
+   * - TokenMap
+   * - BitcoinRunesBoxSelection
+   * @scenario
+   * - stub getCoveringBoxes to resolve to a mock object that does
+   *   not cover the required runes amount
+   * - stub constants to return a mock value for GET_BOX_API_LIMIT
+   * - stub tokenMap.unwrapAmount to return a mock value
+   * - call generateLockTx
+   * @expected
+   * - generateLockTx should throw
+   */
+  it('should throw when user does not have enough runes for transfer', async () => {
+    // arrange
+    getCoveringBoxesMock.mockResolvedValueOnce(testData.selection4[0]);
+
+    const getTokenMap = async () =>
+      ({
+        unwrapAmount: vi.fn().mockImplementation(() => ({ amount: 1000n, decimals: 2 })),
+      }) as unknown as TokenMap;
+
+    // act and assert
+    await expect(async () => {
+      await generateLockTx(getTokenMap)({
+        ...testData.lockParams,
+        amount: 1000n,
+        fromAddress: testData.fromAddress,
+        fromPaymentAddress: testData.fromPaymentAddress,
+        internalPubkey: testData.internalPubkey,
+        lockAddress: testData.lockAddress,
+        token: testData.transferToken,
+      });
+    }).rejects.toThrow();
+  });
+
+  /**
+   * @target generateLockTx should throw when user does not have enough btc for transfer
+   * @dependencies
+   * - TokenMap
+   * - BitcoinRunesBoxSelection
+   * @scenario
+   * - stub getCoveringBoxes to resolve to sequence of mock objects
+   *   that does not cover the required btc amount
+   * - stub constants to return a mock value for GET_BOX_API_LIMIT
+   * - stub tokenMap.unwrapAmount to return a mock value
+   * - call generateLockTx
+   * @expected
+   * - generateLockTx should throw
+   */
+  it('should throw when user does not have enough btc for transfer', async () => {
+    // arrange
+    getCoveringBoxesMock
+      .mockResolvedValueOnce(testData.selection5[0])
+      .mockResolvedValueOnce(testData.selection5[1])
+      .mockResolvedValueOnce(testData.selection5[2]);
+
+    const getTokenMap = async () =>
+      ({
+        unwrapAmount: vi.fn().mockImplementation(() => ({ amount: 10n, decimals: 2 })),
+      }) as unknown as TokenMap;
+
+    // act and assert
+    await expect(async () => {
+      await generateLockTx(getTokenMap)({
+        ...testData.lockParams,
+        amount: 10n,
+        fromAddress: testData.fromAddress,
+        fromPaymentAddress: testData.fromPaymentAddress,
+        internalPubkey: testData.internalPubkey,
+        lockAddress: testData.lockAddress,
+        token: testData.transferToken,
+      });
+    }).rejects.toThrow();
+  });
+});

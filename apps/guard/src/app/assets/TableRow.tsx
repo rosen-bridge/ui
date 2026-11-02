@@ -12,6 +12,12 @@ interface RowProps extends GuardTokenInfo {
   isLoading?: boolean;
 }
 
+const getColdAmount = (row: RowProps) => {
+  if (row.coldAmount === undefined) return;
+
+  return { amount: row.coldAmount, decimals: row.decimals };
+};
+
 export const mobileHeader = [
   {
     title: ' ',
@@ -91,13 +97,13 @@ export const MobileRow: FC<RowProps> = (props) => {
           <TableRow style={rowStyles}>
             <EnhancedTableCell>Amount (Hot)</EnhancedTableCell>
             <EnhancedTableCell>
-              <Amount value={row.amount} decimal={row.decimals} />
+              <Amount value={{ amount: row.amount, decimals: row.decimals }} />
             </EnhancedTableCell>
           </TableRow>
           <TableRow style={rowStyles}>
             <EnhancedTableCell>Amount (Cold)</EnhancedTableCell>
             <EnhancedTableCell>
-              <Amount value={row.coldAmount} decimal={row.decimals} />
+              <Amount value={getColdAmount(row)} />
             </EnhancedTableCell>
           </TableRow>
         </>
@@ -150,18 +156,12 @@ export const TabletRow: FC<RowProps> = (props) => {
       <EnhancedTableCell>
         <Amount
           href={hotUrl}
-          value={row.amount}
-          decimal={row.decimals}
+          value={{ amount: row.amount, decimals: row.decimals }}
           style={{ alignItems: 'center' }}
         />
       </EnhancedTableCell>
       <EnhancedTableCell>
-        <Amount
-          href={coldUrl}
-          value={row.coldAmount}
-          decimal={row.decimals}
-          style={{ alignItems: 'center' }}
-        />
+        <Amount href={coldUrl} value={getColdAmount(row)} style={{ alignItems: 'center' }} />
       </EnhancedTableCell>
     </TableRow>
   );

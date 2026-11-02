@@ -1,4 +1,4 @@
-import { type ReactNode, useCallback, useMemo } from 'react';
+import type { ReactNode } from 'react';
 
 import { Toast } from '@base-ui/react/toast';
 
@@ -11,22 +11,19 @@ export type ToastAddOptions = {
 };
 
 export const useToast = () => {
-  const toastManager = Toast.useToastManager();
+  const { add: addToast } = Toast.useToastManager();
 
-  const add = useCallback(
-    ({ type, description, dismissible, timeout, more }: ToastAddOptions) => {
-      return toastManager.add({
-        type,
-        description,
-        timeout,
-        data: {
-          dismissible,
-          more,
-        },
-      });
-    },
-    [toastManager.add],
-  );
+  const add = ({ type, description, dismissible, timeout, more }: ToastAddOptions) => {
+    return addToast({
+      type,
+      description,
+      timeout,
+      data: {
+        dismissible,
+        more,
+      },
+    });
+  };
 
-  return useMemo(() => ({ add }), [add]);
+  return { add };
 };

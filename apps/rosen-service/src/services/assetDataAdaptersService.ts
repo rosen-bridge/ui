@@ -1,0 +1,270 @@
+import type { AbstractLogger } from '@rosen-bridge/abstract-logger';
+import { type Dependency, ServiceAction, ServiceStatus } from '@rosen-bridge/service-manager';
+import ergoExplorerClientFactory from '@rosen-clients/ergo-explorer';
+import type { TotalSupply } from '@rosen-ui/asset-aggregator';
+import {
+  BinanceEvmRpcDataAdapter,
+  BitcoinEsploraDataAdapter,
+  BitcoinRunesDataAdapter,
+  CardanoKoiosDataAdapter,
+  type ChainsAdapters,
+  DogeBlockCypherDataAdapter,
+  ErgoExplorerDataAdapter,
+  EthereumEvmRpcDataAdapter,
+  FiroExplorerDataAdapter,
+  HandshakeExplorerDataAdapter,
+} from '@rosen-ui/asset-data-adapter';
+import { NETWORKS, NETWORKS_KEYS } from '@rosen-ui/constants';
+
+import { configs } from '../configs';
+import { TOTAL_SUPPLY_REDIS_KEY } from '../constants';
+import type { ChainChoices } from '../types';
+import { stringSerializer } from '../utils';
+import { AbstractAssetDataAdapterService, AbstractTokenMapService } from './abstracts';
+import { AbstractRedisService } from './abstracts/abstractRedisService';
+
+export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
+  static serviceName = AbstractAssetDataAdapterService.name;
+  protected explorerApi: ReturnType<typeof ergoExplorerClientFactory>;
+  protected dependencies: Dependency[] = [
+    {
+      serviceName: AbstractTokenMapService.name,
+      allowedStatuses: [ServiceStatus.running],
+      action: ServiceAction.start,
+    },
+    {
+      serviceName: AbstractRedisService.name,
+      allowedStatuses: [ServiceStatus.started, ServiceStatus.running],
+      action: ServiceAction.start,
+    },
+  ];
+
+  /**
+   * Assembles the service by initializing dependencies
+   * @async
+   * @returns {Promise<boolean>} Resolves to `true` when the assembly is successfully completed.
+   */
+  protected assemble = async (): Promise<boolean> => {
+    this.explorerApi = ergoExplorerClientFactory(
+      configs.chains.ergo.explorer.connections.at(0)!.url,
+    );
+    await this.createDataAdapters();
+    this.setStatus(ServiceStatus.dormant);
+    return true;
+  };
+
+  /**
+   * Protected constructor
+   * @param {AbstractLogger} [logger] - Optional logger instance for recording service operations.
+   */
+  protected constructor(logger?: AbstractLogger) {
+    super(logger);
+  }
+
+  /**
+   * Calculates total supply of the wrapped-tokens
+   *
+   * @returns { {[chain: string]: TotalSupply[]} }
+   */
+  getAssetsTotalSupply = async (): Promise<{
+    [chain: string]: TotalSupply[];
+  }> => {
+    const assets: { [chain: string]: TotalSupply[] } = {};
+    for (const chain of NETWORKS_KEYS) {
+      const adapter = this.adapters[chain];
+      if (adapter) {
+        try {
+          assets[chain] = await adapter.getAllTokensTotalSupply();
+        } catch (error) {
+          this.logger.error(`Failed to get total supply for ${chain}: ${error}`);
+          assets[chain] = [];
+        }
+      }
+    }
+
+    return assets;
+  };
+
+  /**
+   * Creates and returns a blockchain-specific data adapter instance.
+   *
+   * Supported chains:
+   * - Ergo
+   * - Cardano
+   * - Bitcoin
+   * - Bitcoin-Runs
+   * - Doge
+   * - Ethereum
+   * - Binance
+   * - Firo
+   * - Handshake
+   *
+   * @async
+   * @returns {Promise<void>}
+   */
+  protected createDataAdapters = async () => {
+    const tokenMap = AbstractTokenMapService.getInstance().getTokenMap();
+    (Object.keys(configs.chains) as ChainChoices[]).forEach((chain) => {
+      if (chain === NETWORKS.ergo.key || configs.chains[chain].active) {
+        const addresses: string[] = [
+          configs.contracts[chain].addresses.lock,
+          configs.contracts[chain].addresses.cold,
+          ...(configs.chains[chain].adapter?.extraAddresses ?? []),
+        ].filter(Boolean);
+        switch (chain) {
+          case NETWORKS.ergo.key:
+            this.adapters[NETWORKS[chain].key] = new ErgoExplorerDataAdapter(
+              addresses,
+              tokenMap,
+              {
+                explorerUrl: configs.chains.ergo.adapter.explorer.url,
+              },
+              this.logger.child(`ergoExplorerDataAdapter`),
+            );
+            break;
+          case NETWORKS.bitcoin.key:
+            this.adapters[NETWORKS[chain].key] = new BitcoinEsploraDataAdapter(
+              addresses,
+              tokenMap,
+              {
+                url: configs.chains.bitcoin.adapter.esplora.url,
+              },
+              this.logger.child('bitcoinEsploraDataAdapter'),
+            );
+            break;
+          case NETWORKS['bitcoin-runes'].key:
+            this.adapters[NETWORKS[chain].key] = new BitcoinRunesDataAdapter(
+              addresses,
+              tokenMap,
+              configs.chains['bitcoin-runes'].adapter.unisat.url,
+              configs.chains['bitcoin-runes'].adapter.unisat.apiKey,
+              this.logger.child('bitcoinRunesDataAdapter'),
+            );
+            break;
+          case NETWORKS.ethereum.key:
+            this.adapters[NETWORKS[chain].key] = new EthereumEvmRpcDataAdapter(
+              addresses,
+              tokenMap,
+              {
+                url: configs.chains.ethereum.adapter.rpc.connection.url!,
+                authToken: configs.chains.ethereum.adapter.rpc.connection.authToken,
+              },
+              configs.chains.ethereum.adapter.chunkSize || 1,
+              this.logger.child('ethereumEvmRpcDataAdapter'),
+            );
+            break;
+          case NETWORKS.binance.key:
+            this.adapters[NETWORKS[chain].key] = new BinanceEvmRpcDataAdapter(
+              addresses,
+              tokenMap,
+              {
+                url: configs.chains.binance.adapter.rpc.connection.url!,
+                authToken: configs.chains.binance.adapter.rpc.connection.authToken,
+              },
+              configs.chains.binance.adapter.chunkSize || 1,
+              this.logger.child('binanceEvmRpcDataAdapter'),
+            );
+            break;
+          case NETWORKS.cardano.key:
+            this.adapters[NETWORKS[chain].key] = new CardanoKoiosDataAdapter(
+              addresses,
+              tokenMap,
+              {
+                koiosUrl: configs.chains.cardano.adapter.koios.url,
+                authToken: configs.chains.cardano.adapter.koios.authToken,
+              },
+              this.logger.child('cardanoKoiosDataAdapter'),
+            );
+            break;
+          case NETWORKS.doge.key:
+            this.adapters[NETWORKS[chain].key] = new DogeBlockCypherDataAdapter(
+              addresses,
+              tokenMap,
+              {
+                blockCypherUrl: configs.chains.doge.adapter.blockCypher.url!,
+              },
+              this.logger.child('dogeBlockCypherDataAdapter'),
+            );
+            break;
+          case NETWORKS.firo.key:
+            this.adapters[NETWORKS[chain].key] = new FiroExplorerDataAdapter(
+              addresses,
+              tokenMap,
+              configs.chains.firo.adapter.explorer.url,
+              this.logger.child('firoExplorerDataAdapter'),
+            );
+            break;
+          case NETWORKS.handshake.key:
+            this.adapters[NETWORKS[chain].key] = new HandshakeExplorerDataAdapter(
+              addresses,
+              tokenMap,
+              configs.chains.handshake.adapter.explorer.url,
+              this.logger.child('handshakeExplorerDataAdapter'),
+            );
+            break;
+        }
+      }
+    });
+  };
+
+  /**
+   * Initializes the singleton instance of AssetDataAdapterService
+   *
+   * @static
+   * @param {AbstractLogger} [logger]
+   * @memberof AssetDataAdapterService
+   */
+  static readonly init = async (logger?: AbstractLogger) => {
+    if (AbstractAssetDataAdapterService.instance != undefined) {
+      return;
+    }
+    AbstractAssetDataAdapterService.instance = new AssetDataAdapterService(logger);
+  };
+
+  /**
+   * Writes assets total-supply to the redis
+   *
+   * @returns void
+   */
+  protected preStart = async () => {
+    const assets = await this.getAssetsTotalSupply();
+    await AbstractRedisService.getInstance().setToRedis(
+      TOTAL_SUPPLY_REDIS_KEY,
+      stringSerializer(assets),
+    );
+  };
+
+  /**
+   * Updates and merges chain data in Redis.
+   * @param {ChainChoices} adapter - The chain name of data adapter
+   * @protected
+   */
+  protected chainDataUpdated = async (adapter: ChainsAdapters): Promise<void> => {
+    const newData = await adapter.fetch();
+
+    await AbstractRedisService.getInstance().setToRedis(adapter.chain, stringSerializer(newData));
+  };
+
+  /**
+   * Builds a list of asynchronous tasks for active chains.
+   *
+   * @returns {Task[]}
+   */
+  protected getTasks = () => {
+    const tasks = [];
+    for (const adapter of Object.values(this.adapters)) {
+      tasks.push({
+        fn: () => this.chainDataUpdated(adapter),
+        interval: configs.dataAggregator.interval * 1000,
+      });
+    }
+    return tasks;
+  };
+
+  /**
+   * Performs necessary cleanup after stopping the service,
+   *
+   * @returns void
+   */
+  protected postStop = async () => {};
+}

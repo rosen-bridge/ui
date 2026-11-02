@@ -54,6 +54,7 @@ export const PopoverTrigger = <T extends ElementType = 'button'>(props: PopoverT
 
   return (
     <PopoverBaseUI.Trigger
+      delay={250}
       nativeButton={isNativeButton}
       handle={handle}
       openOnHover={openOnHover}

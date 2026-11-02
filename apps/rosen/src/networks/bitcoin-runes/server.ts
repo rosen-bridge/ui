@@ -3,8 +3,7 @@
 import { validateAddress as validateAddressCore } from '@rosen-network/base';
 import {
   calculateFee as calculateFeeCore,
-  generateOpReturnData as generateOpReturnDataCore,
-  generateUnsignedTx as generateUnsignedTxCore,
+  generateLockTx as generateLockTxCore,
   getMaxTransferCreator as getMaxTransferCore,
   getMinTransferCreator,
   submitTransaction as submitTransactionCore,
@@ -18,12 +17,8 @@ export const calculateFee = wrap(calculateFeeCore, {
   traceKey: 'bitcoin-runes:calculateFee',
 });
 
-export const generateOpReturnData = wrap(generateOpReturnDataCore, {
-  traceKey: 'bitcoin-runes:generateOpReturnData',
-});
-
-export const generateUnsignedTx = wrap(generateUnsignedTxCore(getTokenMap), {
-  traceKey: 'bitcoin-runes:generateUnsignedTx',
+export const generateLockTx = wrap(generateLockTxCore(getTokenMap), {
+  traceKey: 'bitcoin-runes:generateLockTx',
 });
 
 export const getMaxTransfer = wrap(getMaxTransferCore(), {

@@ -1,0 +1,53 @@
+.RosenAccordionHeader {
+  margin: 0;
+  border-radius: inherit;
+}
+
+.RosenAccordionHeader-trigger {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--rosen-spacing) * 1.5);
+  box-sizing: border-box;
+  width: 100%;
+  padding: calc(var(--rosen-spacing) * 2);
+  border: none;
+  border-radius: inherit;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 2px solid var(--rosen-palette-primary-main);
+    outline-offset: -2px;
+  }
+
+  &[data-disabled] {
+    color: var(--rosen-palette-text-disabled);
+    cursor: default;
+  }
+
+  & > .RosenTypography {
+    flex-grow: 1;
+    min-width: 0;
+  }
+
+  & > .RosenIcon {
+    flex-shrink: 0;
+    transition-property: opacity, rotate, scale;
+    transition-duration: var(--rosen-motion-duration-short);
+    transition-timing-function: var(--rosen-motion-easing-enter);
+
+    &[data-starting-style],
+    &[data-ending-style] {
+      opacity: 0;
+      rotate: -90deg;
+      scale: 0.5;
+    }
+
+    &[data-ending-style] {
+      transition-timing-function: var(--rosen-motion-easing-exit);
+    }
+  }
+}

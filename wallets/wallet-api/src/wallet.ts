@@ -18,7 +18,7 @@ export interface WalletTransferParams {
   amount: RosenAmountValue;
   fromChain: Network;
   toChain: Network;
-  address: string;
+  toAddress: string;
   bridgeFee: RosenAmountValue;
   networkFee: RosenAmountValue;
   lockAddress: string;

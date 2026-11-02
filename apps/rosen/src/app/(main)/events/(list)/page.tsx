@@ -141,11 +141,12 @@ const Page = () => {
             : items.map((item) => (
                 <EventCard
                   id={item.id.toString()}
-                  key={`${item.id}:${item.eventTriggerId}`}
+                  key={`${item.id}:${item.triggerTxId}`}
                   active={current === item}
                   value={{
-                    amount: item.amount,
-                    decimal: item.lockToken?.significantDecimal,
+                    amount: item.lockToken
+                      ? { amount: item.amount, decimals: item.lockToken.significantDecimal }
+                      : Number.NaN,
                     fromChain: item.fromChain,
                     href: `/events/${item.eventId}`,
                     id: item.eventId,

@@ -4,7 +4,7 @@ import { ArrayContains, In, Not } from '@rosen-bridge/extended-typeorm';
 import type { Filter, StringArrayFilterField } from '@rosen-bridge/query-params';
 import { TokenPriceAction } from '@rosen-bridge/token-price-entity';
 import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
-import { TokenEntity } from '@rosen-ui/asset-calculator';
+import { TokenEntity } from '@rosen-ui/asset-aggregator';
 import { NETWORKS } from '@rosen-ui/constants';
 import {
   AggregatedStatusChangedEntity,
@@ -12,12 +12,15 @@ import {
   AggregateEventStatus,
   AggregateTxStatus,
   EventStatusOverrideEntity,
+  EventStatus as GuardReportedStatus,
+  TxStatus as GuardReportedTxStatus,
   GuardStatusChangedEntity,
   GuardStatusEntity,
 } from '@rosen-ui/public-status';
 import type { Network } from '@rosen-ui/types';
 
-import { filtersToTypeorm } from '@/filters';
+import { filtersToTypeorm } from '@/backend/filtersToTypeorm';
+import { NotFoundError } from '@/errors';
 
 import { dataSource } from '../dataSource';
 import '../initialize-datasource-if-needed';
@@ -34,10 +37,11 @@ const guardStatusRepository = dataSource.getRepository(GuardStatusEntity);
 const guardStatusChangedRepository = dataSource.getRepository(GuardStatusChangedEntity);
 
 type EventListItem = Omit<ObservationEntity, 'requestId'> &
-  Pick<EventTriggerEntity, 'WIDsCount' | 'paymentTxId' | 'spendTxId'> & {
+  Pick<EventTriggerEntity, 'paymentTxId' | 'spendTxId'> & {
     eventId: string;
-    eventTriggerId: number;
+    triggerTxId: string | null;
     timestamp: number;
+    reports: number;
     flows: number;
     status: EventStatusValue;
     fromChain: Network;
@@ -56,7 +60,9 @@ type EventStatus =
   | 'FRAUD'
   | 'MULTIPLE_FLOWS'
   | 'PAID'
+  | 'PAYMENT_ABORTED'
   | 'PAYMENT_APPROVED'
+  | 'PAYMENT_PENDING'
   | 'PAYMENT_SENT'
   | 'PAYMENT_SIGNED'
   | 'PAYMENT_SIGNING'
@@ -64,7 +70,9 @@ type EventStatus =
   | 'REACHED_LIMIT'
   | 'REJECTED'
   | 'REWARDED'
+  | 'REWARD_ABORTED'
   | 'REWARD_APPROVED'
+  | 'REWARD_PENDING'
   | 'REWARD_SENT'
   | 'REWARD_SIGNED'
   | 'REWARD_SIGNING'
@@ -83,7 +91,6 @@ type EventStatusOverride = {
 type EventStatusValue = EventStatus | EventStatusOverride;
 
 export type EventDetailsType = EventListItem & {
-  txId: string;
   price?: number;
   totalFee: string;
   timestamps: EventStatusType['timestamps'];
@@ -115,6 +122,9 @@ const fromDatabaseStatus = (status: string): EventStatus => {
       return 'processing';
   }
 };
+
+const toDecimal = (value: string) =>
+  `CAST(${value} || 'e-' || COALESCE(te.significantDecimal, 0) AS NUMERIC)`;
 
 /**
  * get paginated list of events
@@ -155,7 +165,7 @@ export const getEvents = async (filters: Filter): Promise<EventListItemWithTotal
     const ergoSideTokenIds = ergoSideTokens.map((token) => token.id);
 
     const filter: StringArrayFilterField = {
-      key: 'sourceChainTokenId',
+      key: 'lockTokenId',
       type: 'stringArray',
       operator: field.operator === 'equal' ? 'includes' : 'excludes',
       values: ergoSideTokenIds,
@@ -173,7 +183,7 @@ export const getEvents = async (filters: Filter): Promise<EventListItemWithTotal
       case 'amount':
       case 'bridgeFee':
       case 'networkFee':
-        return `"${key}Normalized"`;
+        return `"${key}WithDecimal"`;
       default:
         return `"${key}"`;
     }
@@ -198,7 +208,7 @@ export const getEvents = async (filters: Filter): Promise<EventListItemWithTotal
     .leftJoin(
       EventStatusOverrideEntity,
       'esoe',
-      'esoe.eventId = oe.requestId AND (esoe.eventTriggerId IS NULL OR esoe.eventTriggerId = ete.id)',
+      'esoe.eventId = oe.requestId AND (esoe.triggerTxId IS NULL OR esoe.triggerTxId = ete.txId)',
     )
     .select([
       'oe.id AS "id"',
@@ -210,22 +220,20 @@ export const getEvents = async (filters: Filter): Promise<EventListItemWithTotal
       'oe.amount AS "amount"',
       'oe.networkFee AS "networkFee"',
       'oe.bridgeFee AS "bridgeFee"',
-      'oe.sourceChainTokenId AS "sourceChainTokenId"',
+      'oe.sourceChainTokenId AS "lockTokenId"',
       'oe.sourceTxId AS "sourceTxId"',
       'oe.requestId AS "eventId"',
       'be.timestamp AS "timestamp"',
-      'COALESCE(ete."WIDsCount", 0) AS "WIDsCount"',
+      'COALESCE(ete."WIDsCount", 0) AS "reports"',
       'ete.paymentTxId AS "paymentTxId"',
       'ete.spendTxId AS "spendTxId"',
-      'ete.id AS "eventTriggerId"',
+      'ete.txId AS "triggerTxId"',
       'to_jsonb(te) AS "lockToken"',
-      'esoe.status AS "statusOverrideStatus"',
-      'esoe.reason AS "statusOverrideReason"',
-      'esoe.severity AS "statusOverrideSeverity"',
+      `CASE WHEN esoe.id IS NULL THEN NULL ELSE JSONB_BUILD_OBJECT('status', esoe.status, 'reason', esoe.reason, 'severity', esoe.severity) END AS "statusOverride"`,
       'COALESCE(ete.result, \'processing\') AS "status"',
-      '(CAST(oe.amount AS DOUBLE PRECISION) / POWER(10, COALESCE(te.significantDecimal, 0))) AS "amountNormalized"',
-      '(CAST(oe.networkFee AS DOUBLE PRECISION) / POWER(10, COALESCE(te.significantDecimal, 0))) AS "networkFeeNormalized"',
-      '(CAST(oe.bridgeFee AS DOUBLE PRECISION) / POWER(10, COALESCE(te.significantDecimal, 0))) AS "bridgeFeeNormalized"',
+      `${toDecimal('oe.amount')} AS "amountWithDecimal"`,
+      `${toDecimal('oe.networkFee')} AS "networkFeeWithDecimal"`,
+      `${toDecimal('oe.bridgeFee')} AS "bridgeFeeWithDecimal"`,
       'COUNT(ete.id) OVER (PARTITION BY oe.id) AS "flows"',
       'ARRAY_AGG(COALESCE(ete.result, \'processing\')) OVER (PARTITION BY oe.id) AS "statuses"',
     ])
@@ -267,18 +275,17 @@ export const getEvents = async (filters: Filter): Promise<EventListItemWithTotal
 
   return {
     items: items.map(
-      ({ statusOverrideStatus, statusOverrideReason, statusOverrideSeverity, ...item }) => ({
+      ({
+        lockTokenId,
+        statusOverride,
+        amountWithDecimal,
+        bridgeFeeWithDecimal,
+        networkFeeWithDecimal,
+        ...item
+      }) => ({
         ...item,
         status:
-          item.flows > 1
-            ? 'MULTIPLE_FLOWS'
-            : statusOverrideStatus
-              ? {
-                  status: statusOverrideStatus,
-                  reason: statusOverrideReason,
-                  severity: statusOverrideSeverity,
-                }
-              : fromDatabaseStatus(item.status),
+          item.flows > 1 ? 'MULTIPLE_FLOWS' : statusOverride || fromDatabaseStatus(item.status),
       }),
     ),
     total: rawItems[0]?.total ?? 0,
@@ -295,7 +302,7 @@ export const getEvent = async (id: string): Promise<EventDetailsType[]> => {
     .leftJoin(
       EventStatusOverrideEntity,
       'esoe',
-      'esoe.eventId = oe.requestId AND (esoe.eventTriggerId IS NULL OR esoe.eventTriggerId = ete.id)',
+      'esoe.eventId = oe.requestId AND (esoe.triggerTxId IS NULL OR esoe.triggerTxId = ete.txId)',
     )
     .select([
       'oe.id AS "id"',
@@ -307,23 +314,21 @@ export const getEvent = async (id: string): Promise<EventDetailsType[]> => {
       'oe.amount AS "amount"',
       'oe.networkFee AS "networkFee"',
       'oe.bridgeFee AS "bridgeFee"',
-      'oe.sourceChainTokenId AS "sourceChainTokenId"',
+      'CAST(oe.bridgeFee AS NUMERIC) + CAST(oe.networkFee AS NUMERIC) AS "totalFee"',
       'oe.sourceTxId AS "sourceTxId"',
       'oe.requestId AS "eventId"',
       'be.timestamp AS "timestamp"',
-      'COALESCE(ete."WIDsCount", 0) AS "WIDsCount"',
+      'COALESCE(ete."WIDsCount", 0) AS "reports"',
       'ete.paymentTxId AS "paymentTxId"',
       'ete.spendTxId AS "spendTxId"',
-      'ete.txId AS "txId"',
+      'ete.txId AS "triggerTxId"',
       'to_jsonb(te) AS "lockToken"',
-      'esoe.status AS "statusOverrideStatus"',
-      'esoe.reason AS "statusOverrideReason"',
-      'esoe.severity AS "statusOverrideSeverity"',
+      `CASE WHEN esoe.id IS NULL THEN NULL ELSE JSONB_BUILD_OBJECT('status', esoe.status, 'reason', esoe.reason, 'severity', esoe.severity) END AS "statusOverride"`,
     ])
     .where('oe.requestId = :id', { id })
     .getRawMany();
 
-  if (!events.length) throw new Error(`Not found`);
+  if (!events.length) throw new NotFoundError(`Event with id [${id}] not found`);
 
   const ergoSideTokenIds = events.map((event) => event.lockToken?.ergoSideTokenId).filter(Boolean);
 
@@ -334,36 +339,30 @@ export const getEvent = async (id: string): Promise<EventDetailsType[]> => {
 
   const tokensByErgoSideTokenId = new Map(tokens.map((token) => [token.ergoSideTokenId, token]));
 
-  const result = events.map(
-    async ({ statusOverrideStatus, statusOverrideReason, statusOverrideSeverity, ...event }) => {
-      if (!event.lockToken) throw new Error(`Not found`);
+  const result = events.map(async ({ statusOverride, ...event }) => {
+    if (!event.lockToken) throw new Error(`Event [${event.eventId}] has no lock token`);
 
-      const token = tokensByErgoSideTokenId.get(event.lockToken.ergoSideTokenId);
+    const token = tokensByErgoSideTokenId.get(event.lockToken.ergoSideTokenId);
 
-      if (!token) throw new Error(`Not found`);
+    if (!token) {
+      throw new Error(`Lock token for event [${event.eventId}] not found in the token table`);
+    }
 
-      const price = await tokenPriceAction.getLatestTokenPrice(token.id, event.timestamp);
+    const price = await tokenPriceAction.getLatestTokenPrice(token.id, event.timestamp);
 
-      let status: EventDetailsType['status'];
-      let timestamps: EventDetailsType['timestamps'] = {};
+    let status: EventDetailsType['status'];
+    let timestamps: EventDetailsType['timestamps'] = {};
 
-      if (statusOverrideStatus) {
-        status = {
-          status: statusOverrideStatus,
-          reason: statusOverrideReason,
-          severity: statusOverrideSeverity,
-        };
-      } else {
-        const eventStatus = await getEventStatus(id, event.txId);
-        status = eventStatus.status;
-        timestamps = eventStatus.timestamps;
-      }
+    if (statusOverride) {
+      status = statusOverride;
+    } else {
+      const eventStatus = await getEventStatus(id, event.triggerTxId ?? undefined);
+      status = eventStatus.status;
+      timestamps = eventStatus.timestamps;
+    }
 
-      const totalFee = (+event.bridgeFee + +event.networkFee).toString();
-
-      return { ...event, price, status, timestamps, totalFee };
-    },
-  );
+    return { ...event, price, status, timestamps };
+  });
 
   return await Promise.all(result);
 };
@@ -374,7 +373,7 @@ export const getEventStatus = async (
   guardPublicKey?: string,
 ): Promise<EventStatusType> => {
   const result: EventStatusType = {
-    status: 'CREATED',
+    status: 'UNKNOWN',
     timestamps: {},
   };
 
@@ -383,7 +382,7 @@ export const getEventStatus = async (
   });
 
   if (!observations.length) {
-    throw new Error('Not found');
+    throw new NotFoundError(`Event with id [${eventId}] not found`);
   }
 
   if (observations.length > 1) {
@@ -397,7 +396,7 @@ export const getEventStatus = async (
     });
   }
 
-  const observation = observations[0];
+  const observation = observations.at(0) as ObservationEntity;
 
   const blocks = await blockRepository.findBy({
     hash: observation.sourceBlockId,
@@ -415,10 +414,8 @@ export const getEventStatus = async (
     });
   }
 
-  const block = blocks[0];
-
   result.status = 'CREATED';
-  result.timestamps.CREATED = block.timestamp;
+  result.timestamps.CREATED = blocks.at(0)?.timestamp;
 
   if (!triggerTxId) return result;
 
@@ -475,9 +472,9 @@ export const getEventStatus = async (
     });
   }
 
-  if (eventTrigger.result === null) {
-    let aggregatedStatus: AggregatedStatusEntity | GuardStatusEntity | null;
+  let aggregatedStatus: AggregatedStatusEntity | GuardStatusEntity | null;
 
+  if (!eventTrigger.result) {
     if (guardPublicKey) {
       aggregatedStatus = await guardStatusRepository.findOneBy({
         triggerTxId: triggerTxId,
@@ -489,98 +486,37 @@ export const getEventStatus = async (
       });
     }
 
-    switch (aggregatedStatus?.status) {
-      case null:
-      case undefined:
-      case AggregateEventStatus.pendingPayment:
-      case AggregateEventStatus.waitingForConfirmation:
-        result.status = 'TRIGGERED';
-        break;
+    if (
+      !aggregatedStatus?.status ||
+      aggregatedStatus.status === AggregateEventStatus.waitingForConfirmation
+    ) {
+      result.status = 'TRIGGERED';
+    }
 
-      case AggregateEventStatus.finished:
-        result.status = 'COMPLETED';
-        break;
-
-      case AggregateEventStatus.paymentWaiting:
-        result.status = 'PAYMENT_STALLED';
-        break;
-
-      case AggregateEventStatus.pendingReward:
-        result.status = 'PAID';
-        break;
-
-      case AggregateEventStatus.reachedLimit:
-        result.status = 'REACHED_LIMIT';
-        break;
-
-      case AggregateEventStatus.rejected:
-        result.status = 'REJECTED';
-        break;
-
-      case AggregateEventStatus.rewardWaiting:
-        result.status = 'REWARD_STALLED';
-        break;
-
-      case AggregateEventStatus.timeout:
-        result.status = 'TIMEOUT';
-        break;
-
-      case AggregateEventStatus.inPayment:
-        switch (aggregatedStatus.txStatus) {
-          case AggregateTxStatus.completed:
-            result.status = 'PAID';
-            break;
-
-          case AggregateTxStatus.inSign:
-            result.status = 'PAYMENT_SIGNING';
-            break;
-
-          case AggregateTxStatus.sent:
-            result.status = 'PAYMENT_SENT';
-            break;
-
-          case AggregateTxStatus.signed:
-            result.status = 'PAYMENT_SIGNED';
-            break;
-
-          default:
-            result.status = 'PAYMENT_APPROVED';
-            break;
-        }
-        break;
-
-      case AggregateEventStatus.inReward:
-        switch (aggregatedStatus.txStatus) {
-          case AggregateTxStatus.inSign:
-            result.status = 'REWARD_SIGNING';
-            break;
-
-          case AggregateTxStatus.sent:
-            result.status = 'REWARD_SENT';
-            break;
-
-          case AggregateTxStatus.signed:
-            result.status = 'REWARD_SIGNED';
-            break;
-
-          default:
-            result.status = 'REWARD_APPROVED';
-            break;
-        }
-        break;
+    if (aggregatedStatus?.status === AggregateEventStatus.finished) {
+      result.status = 'COMPLETED';
     }
   }
 
   const TIMESTAMP_EXTRACTION_MAP: {
     [key in EventStatus]?: [AggregateEventStatus, AggregateTxStatus | undefined];
   } = {
-    PAYMENT_APPROVED: [AggregateEventStatus.inPayment, AggregateTxStatus.inSign],
+    PAYMENT_APPROVED: [AggregateEventStatus.inPayment, undefined],
     PAYMENT_SIGNED: [AggregateEventStatus.inPayment, AggregateTxStatus.signed],
     PAYMENT_SENT: [AggregateEventStatus.inPayment, AggregateTxStatus.sent],
-    PAID: [AggregateEventStatus.inPayment, AggregateTxStatus.sent],
-    REWARD_APPROVED: [AggregateEventStatus.inReward, AggregateTxStatus.inSign],
+    PAID: [AggregateEventStatus.inPayment, AggregateTxStatus.completed],
+    PAYMENT_ABORTED: [AggregateEventStatus.inPayment, AggregateTxStatus.invalid],
+    PAYMENT_PENDING: [AggregateEventStatus.pendingPayment, undefined],
+    PAYMENT_SIGNING: [AggregateEventStatus.inPayment, AggregateTxStatus.inSign],
+    PAYMENT_STALLED: [AggregateEventStatus.paymentWaiting, undefined],
+    REWARD_APPROVED: [AggregateEventStatus.inReward, undefined],
     REWARD_SIGNED: [AggregateEventStatus.inReward, AggregateTxStatus.signed],
     REWARD_SENT: [AggregateEventStatus.inReward, AggregateTxStatus.sent],
+    REWARDED: [AggregateEventStatus.inReward, AggregateTxStatus.completed],
+    REWARD_ABORTED: [AggregateEventStatus.inReward, AggregateTxStatus.invalid],
+    REWARD_PENDING: [AggregateEventStatus.pendingReward, undefined],
+    REWARD_SIGNING: [AggregateEventStatus.inReward, AggregateTxStatus.inSign],
+    REWARD_STALLED: [AggregateEventStatus.rewardWaiting, undefined],
     REJECTED: [AggregateEventStatus.rejected, undefined],
     REACHED_LIMIT: [AggregateEventStatus.reachedLimit, undefined],
     TIMEOUT: [AggregateEventStatus.timeout, undefined],
@@ -594,6 +530,13 @@ export const getEventStatus = async (
     result.timestamps[key] = aggregatedStatusChangedItems.find(
       (item) => item.status === status && (txStatus ? item.txStatus === txStatus : true),
     )?.insertedAt;
+
+    if (
+      aggregatedStatus?.status === status &&
+      (txStatus ? aggregatedStatus?.txStatus === txStatus : true)
+    ) {
+      result.status = key;
+    }
   });
 
   if (eventTrigger.result === 'successful' && eventTrigger.spendBlock) {
@@ -613,9 +556,7 @@ export const getEventStatus = async (
       });
     }
 
-    const block = blocks[0];
-
-    result.timestamps.REWARDED = block?.timestamp;
+    result.timestamps.COMPLETED = blocks.at(0)?.timestamp;
   }
 
   if (observation.toChain === NETWORKS.ergo.key) {
@@ -645,4 +586,137 @@ export const getEventStatus = async (
   }
 
   return result;
+};
+
+export type EventGuardStatusType = {
+  guardPublicKey: string;
+  status:
+    | 'COMPLETED'
+    | 'PAID'
+    | 'PAYMENT_APPROVED'
+    | 'PAYMENT_PENDING'
+    | 'PAYMENT_SENT'
+    | 'PAYMENT_SIGN_FAILED'
+    | 'PAYMENT_SIGNED'
+    | 'PAYMENT_SIGNING'
+    | 'PAYMENT_STALLED'
+    | 'REACHED_LIMIT'
+    | 'REJECTED'
+    | 'REWARDED'
+    | 'REWARD_APPROVED'
+    | 'REWARD_PENDING'
+    | 'REWARD_SENT'
+    | 'REWARD_SIGN_FAILED'
+    | 'REWARD_SIGNED'
+    | 'REWARD_SIGNING'
+    | 'REWARD_STALLED'
+    | 'TIMEOUT'
+    | 'UNKNOWN'
+    | 'SPENT';
+};
+
+const guardStatusToEventStatus = (
+  status?: GuardReportedStatus,
+  txStatus?: GuardReportedTxStatus,
+): EventGuardStatusType['status'] => {
+  switch (status) {
+    case GuardReportedStatus.completed:
+      return 'COMPLETED';
+    case GuardReportedStatus.inPayment: {
+      switch (txStatus) {
+        case GuardReportedTxStatus.approved:
+          return 'PAYMENT_APPROVED';
+        case GuardReportedTxStatus.completed:
+          return 'PAID';
+        case GuardReportedTxStatus.inSign:
+          return 'PAYMENT_SIGNING';
+        case GuardReportedTxStatus.invalid:
+          return 'PAYMENT_SIGNING';
+        case GuardReportedTxStatus.sent:
+          return 'PAYMENT_SENT';
+        case GuardReportedTxStatus.signFailed:
+          return 'PAYMENT_SIGN_FAILED';
+        case GuardReportedTxStatus.signed:
+          return 'PAYMENT_SIGNED';
+        default:
+          return 'UNKNOWN';
+      }
+    }
+    case GuardReportedStatus.inReward: {
+      switch (txStatus) {
+        case GuardReportedTxStatus.approved:
+          return 'REWARD_APPROVED';
+        case GuardReportedTxStatus.completed:
+          return 'REWARDED';
+        case GuardReportedTxStatus.inSign:
+          return 'REWARD_SIGNING';
+        case GuardReportedTxStatus.invalid:
+          return 'REWARD_SIGNING';
+        case GuardReportedTxStatus.sent:
+          return 'REWARD_SENT';
+        case GuardReportedTxStatus.signFailed:
+          return 'REWARD_SIGNING';
+        case GuardReportedTxStatus.signed:
+          return 'REWARD_SIGNED';
+        default:
+          return 'UNKNOWN';
+      }
+    }
+    case GuardReportedStatus.paymentWaiting:
+      return 'PAYMENT_STALLED';
+    case GuardReportedStatus.pendingPayment:
+      return 'PAYMENT_PENDING';
+    case GuardReportedStatus.pendingReward:
+      return 'REWARD_PENDING';
+    case GuardReportedStatus.reachedLimit:
+      return 'REACHED_LIMIT';
+    case GuardReportedStatus.rejected:
+      return 'REJECTED';
+    case GuardReportedStatus.rewardWaiting:
+      return 'REWARD_STALLED';
+    case GuardReportedStatus.spent:
+      return 'SPENT';
+    case GuardReportedStatus.timeout:
+      return 'TIMEOUT';
+    default:
+      return 'UNKNOWN';
+  }
+};
+
+export const getEventGuardsStatus = async (
+  eventId: string,
+  triggerTxId: string,
+): Promise<EventGuardStatusType[]> => {
+  const rows = await dataSource.getRepository(GuardStatusEntity).findBy({
+    eventId,
+    triggerTxId,
+  });
+  return rows.map((row) => ({
+    guardPublicKey: row.guardPk,
+    status: guardStatusToEventStatus(row.status, row.txStatus || undefined),
+  }));
+};
+
+export type EventGuardTimestampsType = Partial<Record<EventGuardStatusType['status'], number>>;
+
+export const getEventGuardStatus = async (
+  triggerTxId: string,
+  guardPublicKey: string,
+): Promise<EventGuardTimestampsType> => {
+  const timestamps: EventGuardTimestampsType = {};
+
+  const changes = await guardStatusChangedRepository.find({
+    where: { triggerTxId, guardPk: guardPublicKey },
+    order: { insertedAt: 'ASC' },
+  });
+
+  for (const change of changes) {
+    const status = guardStatusToEventStatus(change.status, change.txStatus || undefined);
+
+    if (status === 'UNKNOWN') continue;
+
+    timestamps[status] ??= change.insertedAt;
+  }
+
+  return timestamps;
 };

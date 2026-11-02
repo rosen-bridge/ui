@@ -1,0 +1,134 @@
+import { address, Psbt, payments } from 'bitcoinjs-lib';
+
+import { BitcoinBoxSelection, generateFeeEstimator } from '@rosen-bridge/bitcoin-utxo-selection';
+import type { RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
+import { handleUncoveredAssets } from '@rosen-network/base';
+import { NETWORKS } from '@rosen-ui/constants';
+import type { Network, RosenAmountValue } from '@rosen-ui/types';
+
+import { DOGE_INPUT_SIZE, DOGE_NETWORK, DOGE_OUTPUT_SIZE, DOGE_TX_BASE_SIZE } from './constants';
+import type { DogeUtxo, UnsignedPsbtData } from './types';
+import {
+  generateOpReturnData,
+  getAddressUtxos,
+  getFeeRatio,
+  getMinimumMeaningfulDoge,
+  getTxHex,
+} from './utils';
+
+const selector = new BitcoinBoxSelection();
+
+export type GenerateLockTxParams = {
+  amount: RosenAmountValue;
+  bridgeFee: RosenAmountValue;
+  fromAddress: string;
+  lockAddress: string;
+  networkFee: RosenAmountValue;
+  toAddress: string;
+  toChain: Network;
+  token: RosenChainToken;
+};
+
+/**
+ * generates doge lock tx
+ * @param getTokenMap
+ * @returns
+ */
+export const generateLockTx =
+  (getTokenMap: () => Promise<TokenMap>) =>
+  async (params: GenerateLockTxParams): Promise<UnsignedPsbtData> => {
+    const opReturnData = await generateOpReturnData(
+      params.toChain,
+      params.toAddress,
+      params.networkFee.toString(),
+      params.bridgeFee.toString(),
+    );
+
+    const { amount: wrappedAmount, fromAddress, lockAddress, token } = params;
+
+    const tokenMap = await getTokenMap();
+    const unwrappedAmount = tokenMap.unwrapAmount(
+      token.tokenId,
+      wrappedAmount,
+      NETWORKS.doge.key,
+    ).amount;
+
+    // generate txBuilder
+    const psbt = new Psbt({ network: DOGE_NETWORK });
+
+    // generate OP_RETURN box
+    const opReturnPayment = payments.embed({
+      data: [Buffer.from(opReturnData, 'hex')],
+    });
+    psbt.addOutput({
+      script: opReturnPayment.output!,
+      value: 0,
+    });
+
+    // generate lock box
+    const lockScript = address.toOutputScript(lockAddress, DOGE_NETWORK);
+    psbt.addOutput({
+      script: lockScript,
+      value: Number(unwrappedAmount),
+    });
+
+    // fetch inputs
+    const utxos = await getAddressUtxos(fromAddress);
+    const feeRatio = await getFeeRatio();
+    const minDoge = getMinimumMeaningfulDoge(feeRatio);
+
+    // generate fee estimator
+    const estimateFee = generateFeeEstimator(
+      1,
+      DOGE_TX_BASE_SIZE,
+      DOGE_INPUT_SIZE,
+      DOGE_OUTPUT_SIZE,
+      feeRatio,
+      1, // Doge does not use segwit
+    );
+
+    const coveredBoxes = await selector.getCoveringBoxes(
+      {
+        nativeToken: unwrappedAmount,
+        tokens: [],
+      },
+      [],
+      new Map<string, DogeUtxo | undefined>(),
+      utxos.values(),
+      minDoge,
+      undefined,
+      estimateFee,
+    );
+    if (!coveredBoxes.covered) {
+      handleUncoveredAssets(tokenMap, NETWORKS.doge.key, coveredBoxes.uncoveredAssets);
+    }
+
+    // add inputs
+    const fromAddressScript = address.toOutputScript(fromAddress, DOGE_NETWORK);
+    const txToHex: Record<string, string> = {};
+    for (const box of coveredBoxes.boxes) {
+      if (!txToHex[box.txId]) {
+        const boxTxHex = await getTxHex(box.txId);
+        txToHex[box.txId] = boxTxHex;
+      }
+      psbt.addInput({
+        hash: box.txId,
+        index: box.index,
+        nonWitnessUtxo: Buffer.from(txToHex[box.txId], 'hex'),
+      });
+    }
+
+    // add change
+    psbt.addOutput({
+      script: fromAddressScript,
+      value: Number(coveredBoxes.additionalAssets.aggregated.nativeToken),
+    });
+
+    return {
+      psbt: {
+        base64: psbt.toBase64(),
+        hex: psbt.toHex(),
+      },
+      inputSize: psbt.inputCount,
+    };
+  };

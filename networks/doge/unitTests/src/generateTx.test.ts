@@ -4,10 +4,18 @@ import { describe, expect, it, vi } from 'vitest';
 import { type RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
 import type { Network } from '@rosen-ui/types';
 
-import { DOGE_NETWORK, generateUnsignedTx } from '../../src';
+import { DOGE_NETWORK, generateLockTx } from '../../src';
 import { multiDecimalTokenMap, testTokenMap } from '../test-data';
 
 const testData = await vi.hoisted(async () => await import('./testData'));
+
+// the OP_RETURN data used in these tests is generated from these params
+const lockParams = {
+  bridgeFee: 1968503938n,
+  networkFee: 9842520n,
+  toAddress: '9iMjQx8PzwBKXRvsFUJFJAPoy31znfEeBUGz8DRkcnJX4rJYjVd',
+  toChain: 'ergo' as Network,
+};
 
 const getTokenMap = async () => {
   const tokenMap = new TokenMap();
@@ -33,9 +41,9 @@ vi.mock('../../src/utils', async (importOriginal) => {
   };
 });
 
-describe('generateUnsignedTx', () => {
+describe('generateLockTx', () => {
   /**
-   * @target generateUnsignedTx should generate lock transaction successfully
+   * @target generateLockTx should generate lock transaction successfully
    * @dependencies
    * - utils.getAddressUtxos
    * - utils.getFeeRatio
@@ -67,13 +75,13 @@ describe('generateUnsignedTx', () => {
       extra: {},
     };
 
-    const result = await generateUnsignedTx(getTokenMap)(
-      lockAddress,
-      fromAddress,
+    const result = await generateLockTx(getTokenMap)({
+      ...lockParams,
       amount,
-      data,
-      rosenChainToken,
-    );
+      fromAddress,
+      lockAddress,
+      token: rosenChainToken,
+    });
 
     const psbt = Psbt.fromBase64(result.psbt.base64, { network: DOGE_NETWORK });
     expect(result.inputSize).toEqual(psbt.inputCount);
@@ -101,7 +109,7 @@ describe('generateUnsignedTx', () => {
   });
 
   /**
-   * @target generateUnsignedTx should generate lock transaction with multi decimals token map successfully
+   * @target generateLockTx should generate lock transaction with multi decimals token map successfully
    * @dependencies
    * - utils.getAddressUtxos
    * - utils.getFeeRatio
@@ -133,13 +141,13 @@ describe('generateUnsignedTx', () => {
 
     const token = tokenMap.search(chain, {})[0][chain];
 
-    const result = await generateUnsignedTx(() => Promise.resolve(tokenMap))(
-      lockAddress,
+    const result = await generateLockTx(() => Promise.resolve(tokenMap))({
+      ...lockParams,
+      amount: wrappedAmount,
       fromAddress,
-      wrappedAmount,
-      data,
+      lockAddress,
       token,
-    );
+    });
 
     const psbt = Psbt.fromBase64(result.psbt.base64, { network: DOGE_NETWORK });
     expect(result.inputSize).toEqual(psbt.inputCount);
@@ -167,7 +175,7 @@ describe('generateUnsignedTx', () => {
   });
 
   /**
-   * @target generateUnsignedTx should throw error when address utxos cannot cover required Doge
+   * @target generateLockTx should throw error when address utxos cannot cover required Doge
    * @dependencies
    * - utils.getAddressUtxos
    * - utils.getFeeRatio
@@ -180,8 +188,6 @@ describe('generateUnsignedTx', () => {
     const lockAddress = 'DHTom1rFwsgAn5raKU1nok8E5MdQ4GBkAN';
     const fromAddress = 'DMm8bk6atCBoVBX9c3zgiF16ggE31hLmQm';
     const amount = 350000000000n;
-    const data =
-      '00000000007554fc820000000000962f582103f999da8e6e42660e4464d17d29e63bc006734a6710a24eb489b466323d3a9339';
 
     const rosenChainToken: RosenChainToken = {
       tokenId: '',
@@ -192,13 +198,13 @@ describe('generateUnsignedTx', () => {
       extra: {},
     };
     await expect(async () => {
-      await generateUnsignedTx(getTokenMap)(
-        lockAddress,
-        fromAddress,
+      await generateLockTx(getTokenMap)({
+        ...lockParams,
         amount,
-        data,
-        rosenChainToken,
-      );
+        fromAddress,
+        lockAddress,
+        token: rosenChainToken,
+      });
     }).rejects.toThrow(Error);
   });
 });

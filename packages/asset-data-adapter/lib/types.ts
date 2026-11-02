@@ -7,6 +7,8 @@ import type { CardanoKoiosDataAdapter } from './cardanoKoiosDataAdapter';
 import type { DogeBlockCypherDataAdapter } from './dogeBlockCypherDataAdapter';
 import type { ErgoExplorerDataAdapter } from './ergoExplorerDataAdapter';
 import type { EthereumEvmRpcDataAdapter } from './ethereumEvmRpcDataAdapter';
+import type { FiroExplorerDataAdapter } from './firoExplorerDataAdapter';
+import type { HandshakeExplorerDataAdapter } from './handshakeExplorerDataAdapter';
 
 export type AssetBalance = { [assetId: string]: AddressBalance[] };
 
@@ -36,7 +38,9 @@ export type ChainsAdapters =
   | BinanceEvmRpcDataAdapter
   | BitcoinRunesDataAdapter
   | CardanoKoiosDataAdapter
-  | DogeBlockCypherDataAdapter;
+  | DogeBlockCypherDataAdapter
+  | FiroExplorerDataAdapter
+  | HandshakeExplorerDataAdapter;
 
 export interface ErgoExplorerDataAdapterAuthParams {
   explorerUrl: string;
@@ -107,3 +111,10 @@ type RuneInfoTerms = {
   offsetStart: number | null;
   offsetEnd: number | null;
 };
+
+export interface PartialHandshakeCoin {
+  value: number;
+  covenant: {
+    type: number;
+  };
+}

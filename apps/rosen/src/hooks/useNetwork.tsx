@@ -13,6 +13,7 @@ import type { Network } from '@rosen-network/base';
 import { NETWORKS } from '@rosen-ui/constants';
 import type { Network as NetworkKey } from '@rosen-ui/types';
 
+import { env } from '@/env';
 import * as networks from '@/networks';
 
 import { useBridgeForm } from './useBridgeForm';
@@ -60,8 +61,7 @@ export const NetworkProvider = ({ children }: { children: ReactNode }) => {
 
   const blacklist = useMemo(
     () =>
-      (process.env.NEXT_PUBLIC_BLOCKED_TOKENS || '')
-        .split(';')
+      env.NEXT_PUBLIC_BLOCKED_TOKENS.split(';')
         .map((raw) => raw.trim())
         .filter(Boolean)
         .map((raw) => {
@@ -173,5 +173,5 @@ export const NetworkProvider = ({ children }: { children: ReactNode }) => {
     availableTokens,
   };
 
-  return <NetworkContext.Provider value={state}>{children}</NetworkContext.Provider>;
+  return <NetworkContext value={state}>{children}</NetworkContext>;
 };

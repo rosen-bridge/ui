@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 
 import useSWR from 'swr';
 
@@ -9,12 +9,12 @@ import {
   type EventProcessesProps,
   formatDateTime,
   Typography,
+  useResponsive,
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 
 import type { EventDetailsType, EventStatusType } from '@/backend/events/repository';
 
-import { ProcessSelect } from './ProcessSelect';
 import { Section } from './Section';
 
 type Step = {
@@ -33,7 +33,7 @@ const steps: StepCandidates[] = [
   [
     {
       key: 'CREATED',
-      title: 'Creation',
+      title: 'Registration',
       subtitle: 'Created',
       status: 'done',
     },
@@ -80,6 +80,18 @@ const steps: StepCandidates[] = [
       title: 'Payment',
       subtitle: 'Pending',
       status: 'pending',
+    },
+    {
+      key: 'PAYMENT_PENDING',
+      title: 'Payment',
+      subtitle: 'Pending',
+      status: 'pending',
+    },
+    {
+      key: 'PAYMENT_ABORTED',
+      title: 'Payment',
+      subtitle: 'Aborted',
+      status: 'error',
     },
     {
       key: 'PAYMENT_STALLED',
@@ -168,6 +180,18 @@ const steps: StepCandidates[] = [
       status: 'pending',
     },
     {
+      key: 'REWARD_PENDING',
+      title: 'Reward',
+      subtitle: 'Pending',
+      status: 'pending',
+    },
+    {
+      key: 'REWARD_ABORTED',
+      title: 'Reward',
+      subtitle: 'Aborted',
+      status: 'error',
+    },
+    {
       key: 'REWARD_STALLED',
       title: 'Reward',
       subtitle: 'Stalled',
@@ -248,19 +272,19 @@ const steps: StepCandidates[] = [
   ],
   [
     {
-      title: 'Completion',
+      title: 'Outcome',
       subtitle: 'Pending',
       status: 'pending',
     },
     {
       key: 'COMPLETED',
-      title: 'Completion',
+      title: 'Outcome',
       subtitle: 'Completed',
       status: 'done',
     },
     {
       key: 'FRAUD',
-      title: 'Completion',
+      title: 'Outcome',
       subtitle: 'Fraud',
       status: 'error',
     },
@@ -347,32 +371,21 @@ const toItems = (
 };
 
 export const Process = ({ id, flowId }: { id: string; flowId: string | undefined }) => {
-  const [guardPublicKey, setGuardPublicKey] = useState<string | undefined>();
+  const orientation = useResponsive({
+    mobile: 'vertical',
+    laptop: 'horizontal',
+  } as const);
 
   const {
     data: events,
-    error: eventsError,
-    isLoading: eventsIsLoading,
-    mutate: eventMutate,
+    error,
+    isLoading,
+    mutate,
   } = useSWR<EventDetailsType[]>(`/v1/events/${id}`, fetcher);
 
-  const {
-    data: status,
-    error: statusError,
-    isLoading: statusIsLoading,
-    mutate: statusMutate,
-  } = useSWR<EventStatusType>(
-    flowId && guardPublicKey
-      ? `/v1/events/${id}/status?triggerTxId=${flowId}&guardPublicKey=${guardPublicKey}`
-      : null,
-    fetcher,
-  );
+  const data = events?.find((event) => !flowId || event.triggerTxId === flowId);
 
-  const error = eventsError || statusError;
-  const isLoading = eventsIsLoading || statusIsLoading || (!!events?.length && !flowId);
-  const mutate = eventsError ? eventMutate : statusMutate;
-
-  const data = guardPublicKey ? status : events?.find((event) => event.txId === flowId);
+  const loading = isLoading || !data;
 
   const isCustomStatus = typeof data?.status === 'object';
 
@@ -422,24 +435,14 @@ export const Process = ({ id, flowId }: { id: string; flowId: string | undefined
   }, [data]);
 
   return (
-    <Section
-      action={
-        !isCustomStatus && (
-          <ProcessSelect disabled={isLoading} value={guardPublicKey} onChange={setGuardPublicKey} />
-        )
-      }
-      error={error}
-      load={mutate}
-      badge="New"
-      title="Progress"
-    >
+    <Section error={error} load={mutate} badge="New" title="Progress">
       {isCustomStatus ? (
         <Typography>
           No progress chart is available because this event deviated from the standard lifecycle.
           The reason for this exception is noted above.
         </Typography>
       ) : (
-        <EventProcesses items={items} loading={isLoading} />
+        <EventProcesses items={items} loading={loading} orientation={orientation} />
       )}
     </Section>
   );

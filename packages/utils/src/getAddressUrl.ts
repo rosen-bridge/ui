@@ -10,6 +10,7 @@ const baseAddressURLs: { [key in Network]: string } = {
   [NETWORKS.ethereum.key]: 'https://etherscan.io/address',
   [NETWORKS.doge.key]: 'https://blockexplorer.one/dogecoin/mainnet/address',
   [NETWORKS.firo.key]: 'https://explorer.firo.org/address',
+  [NETWORKS.handshake.key]: 'https://e.hnsfans.com/address',
 };
 
 export const getAddressUrl = (network?: Network, address?: string): string | undefined => {

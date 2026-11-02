@@ -19,7 +19,6 @@ import {
   MenuTrigger,
   Network,
   Token,
-  Tooltip,
   Typography,
   useResponsive,
 } from '@rosen-bridge/ui-kit';
@@ -49,10 +48,10 @@ export const Overview = ({
   } = useSWR<EventDetailsType[]>(`/v1/events/${id}`, fetcher);
 
   useEffect(() => {
-    onFlowIdChange(events?.at(0)?.txId);
+    onFlowIdChange(events?.at(0)?.triggerTxId ?? undefined);
   }, [events, onFlowIdChange]);
 
-  const data = events?.find((event) => event.txId === flowId);
+  const data = events?.find((event) => !flowId || event.triggerTxId === flowId);
 
   const multipleFLow = events && events.length > 1;
 
@@ -72,8 +71,6 @@ export const Overview = ({
     mobile: 'reverse',
     tablet: 'both',
   } as const);
-
-  const reason = typeof data?.status === 'object' ? data.status.reason : undefined;
 
   return (
     <Section error={error} load={mutate} title="Overview">
@@ -97,17 +94,17 @@ export const Overview = ({
                       cursor: 'pointer',
                     }}
                   >
-                    <Identifier loading={isLoading} value={data?.txId} />
+                    <Identifier loading={isLoading} value={data?.triggerTxId ?? undefined} />
                     <Icon name="AngleDown" />
                   </MenuTrigger>
                   <MenuBody offset={[0, 4]} placement="bottom-end">
                     {events.map((event) => (
                       <MenuItem
-                        key={event.txId}
-                        selected={event.txId === data?.txId}
-                        onClick={() => onFlowIdChange(event.txId)}
+                        key={event.triggerTxId}
+                        selected={event.triggerTxId === data?.triggerTxId}
+                        onClick={() => onFlowIdChange(event.triggerTxId ?? undefined)}
                       >
-                        {event.txId}
+                        {event.triggerTxId}
                       </MenuItem>
                     ))}
                   </MenuBody>
@@ -124,8 +121,12 @@ export const Overview = ({
         <Label label="Amount" orientation={labelOrientation}>
           <Amount
             loading={isLoading}
-            value={data?.amount}
-            decimal={data?.lockToken?.significantDecimal}
+            value={
+              data?.lockToken && {
+                amount: data.amount,
+                decimals: data.lockToken.significantDecimal,
+              }
+            }
             orientation="horizontal"
             unit={data?.lockToken?.name}
             price={data?.price}
@@ -150,13 +151,7 @@ export const Overview = ({
           />
         </Label>
         <Label label="Status" orientation={labelOrientation}>
-          <Tooltip disabled={!reason} title={reason}>
-            <EventStatus
-              value={eventStatusParser(data?.status)}
-              loading={isLoading}
-              style={{ cursor: reason ? '' : 'auto' }}
-            />
-          </Tooltip>
+          <EventStatus value={eventStatusParser(data?.status)} loading={isLoading} />
         </Label>
         <Label label="Time" orientation={labelOrientation}>
           <DateTime loading={isLoading} timestamp={(data?.timestamp || 0) * 1000} />
@@ -164,8 +159,12 @@ export const Overview = ({
         <Label label="Fee Sum" orientation={labelOrientation}>
           <Amount
             loading={isLoading}
-            value={data?.totalFee}
-            decimal={data?.lockToken?.significantDecimal}
+            value={
+              data?.lockToken && {
+                amount: data.totalFee,
+                decimals: data.lockToken.significantDecimal,
+              }
+            }
             unit={data?.lockToken?.name}
             price={data?.price}
           />

@@ -66,7 +66,7 @@ export const ConfirmProvider = ({ children }: PropsWithChildren) => {
   };
 
   return (
-    <ConfirmContext.Provider value={{ confirm }}>
+    <ConfirmContext value={{ confirm }}>
       {children}
       {options && (
         <Dialog open unstick="tablet" width="small" onClose={handleCancel}>
@@ -90,7 +90,7 @@ export const ConfirmProvider = ({ children }: PropsWithChildren) => {
           </DialogFooter>
         </Dialog>
       )}
-    </ConfirmContext.Provider>
+    </ConfirmContext>
   );
 };
 

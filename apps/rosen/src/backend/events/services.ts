@@ -1,4 +1,10 @@
-import { getEvent, getEventStatus, getEvents } from './repository';
+import {
+  getEvent,
+  getEventGuardStatus as getEventGuardStatusBase,
+  getEventGuardsStatus as getEventGuardsStatusBase,
+  getEventStatus,
+  getEvents,
+} from './repository';
 
 /**
  * return events with full token data
@@ -17,3 +23,7 @@ export const getEventStatusByTriggerTxId = async (
 ) => {
   return await getEventStatus(eventId, triggerTxId, guardPublicKey);
 };
+
+export const getEventGuardsStatus = getEventGuardsStatusBase;
+
+export const getEventGuardStatus = getEventGuardStatusBase;

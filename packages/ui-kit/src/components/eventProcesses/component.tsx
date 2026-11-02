@@ -1,3 +1,5 @@
+import type { CSSProperties } from 'react';
+
 import {
   DateTime,
   Divider,
@@ -26,6 +28,7 @@ export type EventProcessesOwnProps = {
     subs?: EventProcessesOwnProps['items'];
   }[];
   loading?: boolean;
+  orientation?: 'horizontal' | 'vertical';
 };
 
 export type EventProcessesBaseProps = ElementBaseProps<'div', EventProcessesOwnProps>;
@@ -37,12 +40,22 @@ export type EventProcessesProps = OverridableType<
 >;
 
 export const EventProcesses = (props: EventProcessesProps) => {
-  const { items = [], loading, ...rest } = useConfig('EventProcesses', props);
+  const {
+    items = [],
+    loading,
+    orientation = 'horizontal',
+    style,
+    ...rest
+  } = useConfig('EventProcesses', props);
 
   if (loading) return <Skeleton variant="rounded" height="102px" />;
 
   return (
-    <div style={{ gridTemplateColumns: `repeat(${items.length}, 1fr)` }} {...rest}>
+    <div
+      data-orientation={orientation}
+      style={{ '--EventProcesses-item-count': items.length, ...style } as CSSProperties}
+      {...rest}
+    >
       {items.map((item) => {
         const hasDetails = Boolean(item.description || item.datetime || item.subs?.length);
 

@@ -1,7 +1,7 @@
 import { type BlockEntity, PROCEED } from '@rosen-bridge/abstract-scanner';
 import type { DeepPartial } from '@rosen-bridge/extended-typeorm';
 import type { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
-import type { TokenEntity } from '@rosen-ui/asset-calculator';
+import type { TokenEntity } from '@rosen-ui/asset-aggregator';
 
 import {
   type BridgedAmountEntity,
