@@ -6,6 +6,7 @@ import { WatcherCountMetricService } from 'services/watcherCountMetricService';
 
 import { DefaultLogger } from '@rosen-bridge/abstract-logger';
 import { ServiceManager } from '@rosen-bridge/service-manager';
+import { listenEventListViewRefresh } from '@rosen-ui/event-list-view';
 
 import dataSource from './dataSource';
 import { AssetAggregatorService } from './services/assetAggregatorService';
@@ -125,6 +126,11 @@ const startApp = async () => {
   for (const { service, active } of statisticMetrics) {
     if (active) await serviceManager.start(service.getInstance().getName());
   }
+
+  await listenEventListViewRefresh(dataSource, {
+    onError: (error) => logger.warn(`cannot refresh event list view due to error: ${error}`),
+  });
+  logger.info('event list view refresh listener started successfully');
 
   await Promise.resolve(() => {});
 };

@@ -34,7 +34,7 @@ import { eventStatusParser } from '../eventStatusParser';
 
 const Content = ({ value }: SidebarProps) => {
   const shouldLoad = useMemo(() => {
-    return !!value && !!value.eventId && value.status !== 'MULTIPLE_FLOWS';
+    return !!value && !!value.eventId && value.flows <= 1;
   }, [value]);
 
   const { data: events, isLoading } = useSWR<EventItem[]>(
@@ -46,23 +46,29 @@ const Content = ({ value }: SidebarProps) => {
 
   const eventData = useMemo(() => {
     const result: EventDetailsProps['value'] = {
-      amount: data?.lockToken && {
-        amount: data.amount,
-        decimals: data.lockToken.significantDecimal,
-      },
-      bridgeFee: data?.lockToken && {
-        amount: data.bridgeFee,
-        decimals: data.lockToken.significantDecimal,
-      },
+      amount: data?.lockToken
+        ? {
+            amount: data.amount,
+            decimals: data.lockToken.significantDecimal,
+          }
+        : undefined,
+      bridgeFee: data?.lockToken
+        ? {
+            amount: data.bridgeFee,
+            decimals: data.lockToken.significantDecimal,
+          }
+        : undefined,
       fromAddress: data?.fromAddress,
       fromAddressUrl: getAddressUrl(data?.fromChain, data?.fromAddress),
       fromChain: data?.fromChain,
       height: data?.height,
       id: data?.eventId,
-      networkFee: data?.lockToken && {
-        amount: data.networkFee,
-        decimals: data.lockToken.significantDecimal,
-      },
+      networkFee: data?.lockToken
+        ? {
+            amount: data.networkFee,
+            decimals: data.lockToken.significantDecimal,
+          }
+        : undefined,
       price: data?.price,
       reports: data?.reports,
       sourceTxId: data?.sourceTxId,
@@ -71,7 +77,7 @@ const Content = ({ value }: SidebarProps) => {
       toAddress: data?.toAddress,
       toAddressUrl: getAddressUrl(data?.toChain, data?.toAddress),
       toChain: data?.toChain,
-      timestamp: data?.timestamp,
+      timestamp: data?.timestamp ?? undefined,
       token: data?.lockToken?.id,
     };
 
@@ -85,7 +91,7 @@ const Content = ({ value }: SidebarProps) => {
     return result;
   }, [data]);
 
-  if (!value || value.status === 'MULTIPLE_FLOWS') {
+  if (!value || value.flows > 1) {
     return (
       <Center style={{ minHeight: 'calc(100vh - 304px)', textAlign: 'center' }}>
         <Typography variant="body1" color="text-secondary">

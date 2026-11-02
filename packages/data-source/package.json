@@ -25,6 +25,7 @@
     "@rosen-bridge/token-price-entity": "^0.2.2",
     "@rosen-bridge/watcher-data-extractor": "^16.1.0",
     "@rosen-ui/asset-aggregator": "^0.2.0",
+    "@rosen-ui/event-list-view": "^0.0.0",
     "@rosen-ui/public-status": "^0.4.0",
     "@rosen-ui/rosen-statistics-entity": "^0.5.0"
   },

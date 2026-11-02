@@ -13,7 +13,7 @@ import {
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 
-import type { EventDetailsType, EventStatusType } from '@/backend/events/repository';
+import type { EventDetailsType, EventTimestamps } from '@/backend/events/repository';
 
 import { Section } from './Section';
 
@@ -288,6 +288,12 @@ const steps: StepCandidates[] = [
       subtitle: 'Fraud',
       status: 'error',
     },
+    {
+      key: 'UNKNOWN',
+      title: 'Outcome',
+      subtitle: 'Unknown',
+      status: 'warning',
+    },
   ],
 ];
 
@@ -335,10 +341,7 @@ const pick = (items: StepCandidates[], path: number[] = [-1]): Step[] => {
   });
 };
 
-const toItems = (
-  steps: Step[],
-  timestamps: EventStatusType['timestamps'],
-): EventProcessesProps['items'] => {
+const toItems = (steps: Step[], timestamps: EventTimestamps): EventProcessesProps['items'] => {
   return steps.map((step) => {
     const subs = step.subs ? toItems(step.subs, timestamps) : undefined;
 
@@ -420,7 +423,7 @@ export const Process = ({ id, flowId }: { id: string; flowId: string | undefined
       }
     }
 
-    if (data.status === 'FRAUD') {
+    if (data.status === 'FRAUD' || data.status === 'UNKNOWN') {
       info.slice(2, 4).forEach((item) => {
         item.subtitle = 'Not Reached';
         item.description = undefined;
