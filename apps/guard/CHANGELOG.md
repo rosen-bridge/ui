@@ -4,6 +4,7 @@
 
 ### Patch Changes
 
+- Update Next.js to 16.4.4 and patch vulnerable dependencies to address the security vulnerabilities
 - Add strongly-typed, validated environment variables using `zod/v4-mini` and `@t3-oss/env-nextjs`
 - Update the usage of the `Amount` component to pass raw amounts along with their decimals as a single `{ amount, decimals }` value
 - Fix start script for static export builds
