@@ -43,7 +43,7 @@ const buildCardanoKoiosScannerWithExtractors = async (
   // Create Cardano scanner with Koios network settings
   const networkConnectorManager = new NetworkConnectorManager<KoiosTransaction>(
     new FailoverStrategy(),
-    logger.child('cardanoKoiosScannerLogger'),
+    logger.child('koiosNetworkConnectorManager'),
   );
   configs.chains.cardano.koios.connections.forEach((koios) => {
     if (koios.url && koios.timeout) {
@@ -58,7 +58,7 @@ const buildCardanoKoiosScannerWithExtractors = async (
     network: networkConnectorManager,
     blockRetrieveGap: configs.chains.cardano.blockRetrieveGap,
     blockCleanupConfig: { active: configs.chains.cardano.blockCleanupActive === true },
-    logger: logger.child('cardanoKoiosScannerLogger'),
+    logger: logger.child('cardanoKoiosScanner'),
   });
 
   try {
@@ -103,7 +103,7 @@ const buildCardanoBlockFrostScannerWithExtractors = async (
   // Create Cardano scanner with BlockFrost network settings
   const networkConnectorManager = new NetworkConnectorManager<BlockFrostTransaction>(
     new FailoverStrategy(),
-    logger.child('cardanoBlockFrostScannerLogger'),
+    logger.child('blockFrostNetworkConnectorManager'),
   );
   configs.chains.cardano.blockfrost.connections.forEach((blockfrost) => {
     if (blockfrost.projectId) {
@@ -118,7 +118,7 @@ const buildCardanoBlockFrostScannerWithExtractors = async (
     network: networkConnectorManager,
     blockRetrieveGap: configs.chains.cardano.blockRetrieveGap,
     blockCleanupConfig: { active: configs.chains.cardano.blockCleanupActive === true },
-    logger: logger.child('cardanoBlockFrostScannerLogger'),
+    logger: logger.child('cardanoBlockFrostScanner'),
   });
 
   try {
@@ -171,7 +171,7 @@ const buildCardanoOgmiosScannerWithExtractors = async (
       initialHash: configs.chains.cardano.ogmios.connection.initialHash || '',
       blockCleanupConfig: { active: configs.chains.cardano.blockCleanupActive === true },
     },
-    logger.child('cardanoOgmiosScannerLogger'),
+    logger.child('cardanoOgmiosScanner'),
   );
 
   try {
