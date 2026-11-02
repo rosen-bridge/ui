@@ -34,7 +34,7 @@ const buildDogeRpcScannerWithExtractors = async (dataSource: DataSource, tokenMa
   // Create Doge scanner with RPC network settings
   const networkConnectorManager = new NetworkConnectorManager<DogeRpcTransaction>(
     new RoundRobinStrategy(),
-    logger.child('dogeRpcObservationExtractor'),
+    logger.child('rpcNetworkConnectorManager'),
   );
   configs.chains.doge.rpc.connections.forEach((rpc) => {
     if (rpc.url && rpc.timeout) {
@@ -58,7 +58,7 @@ const buildDogeRpcScannerWithExtractors = async (dataSource: DataSource, tokenMa
     network: networkConnectorManager,
     blockRetrieveGap: configs.chains.doge.blockRetrieveGap,
     blockCleanupConfig: { active: configs.chains.doge.blockCleanupActive === true },
-    logger: logger.child('dogeRpcScannerLogger'),
+    logger: logger.child('dogeRpcScanner'),
   });
 
   try {
@@ -103,7 +103,7 @@ const buildDogeEsploraScannerWithExtractors = async (
   // Create Doge scanner with Esplora network settings
   const networkConnectorManager = new NetworkConnectorManager<BitcoinEsploraTransaction>(
     new RoundRobinStrategy(),
-    logger.child('dogeEsploraScannerLogger'),
+    logger.child('esploraNetworkConnectorManager'),
   );
   configs.chains.doge.esplora.connections.forEach((esplora) => {
     if (esplora.url && esplora.timeout) {
@@ -118,7 +118,7 @@ const buildDogeEsploraScannerWithExtractors = async (
     network: networkConnectorManager,
     blockRetrieveGap: configs.chains.doge.blockRetrieveGap,
     blockCleanupConfig: { active: configs.chains.doge.blockCleanupActive === true },
-    logger: logger.child('dogeEsploraScannerLogger'),
+    logger: logger.child('dogeEsploraScanner'),
   });
 
   try {

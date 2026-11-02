@@ -24,7 +24,7 @@ const logger = DefaultLogger.getInstance().child(import.meta.url);
 export const createFiroElectrumxNetworkConnectorManager = () => {
   const networkConnectorManager = new NetworkConnectorManager<FiroRpcTransaction>(
     new FailoverStrategy(),
-    logger.child('firoElectrumxNetworkConnector'),
+    logger.child('electrumxNetworkConnectorManager'),
   );
   const networkConfigs = configs.chains.firo.electrumx;
   if (networkConfigs.host && networkConfigs.port) {
@@ -33,7 +33,7 @@ export const createFiroElectrumxNetworkConnectorManager = () => {
       networkConfigs.port,
       networkConfigs.reconnectDelay,
       networkConfigs.timeout,
-      logger.child(`firoElectrumXNetwork`),
+      logger.child('firoElectrumXNetwork'),
     );
     network.setupSocket();
     networkConnectorManager.addConnector(network);
@@ -49,7 +49,7 @@ export const createFiroElectrumxNetworkConnectorManager = () => {
 export const createFiroRpcNetworkConnectorManager = () => {
   const networkConnectorManager = new NetworkConnectorManager<FiroRpcTransaction>(
     new FailoverStrategy(),
-    logger.child('firoRpcNetworkConnector'),
+    logger.child('rpcNetworkConnectorManager'),
   );
   configs.chains.firo.rpc.connections.forEach((rpc) => {
     if (rpc.url && rpc.timeout) {
@@ -90,7 +90,7 @@ const buildFiroElectrumxScannerWithExtractors = async (
     network: createFiroElectrumxNetworkConnectorManager(),
     blockRetrieveGap: configs.chains.firo.blockRetrieveGap,
     blockCleanupConfig: { active: configs.chains.firo.blockCleanupActive === true },
-    logger: logger.child('firoScannerLogger'),
+    logger: logger.child('firoElectrumXScanner'),
   });
   try {
     logger.debug('Creating Firo observation extractor...');
@@ -133,7 +133,7 @@ const buildFiroRpcScannerWithExtractors = async (dataSource: DataSource, tokenMa
     network: createFiroRpcNetworkConnectorManager(),
     blockRetrieveGap: configs.chains.firo.blockRetrieveGap,
     blockCleanupConfig: { active: configs.chains.firo.blockCleanupActive === true },
-    logger: logger.child('firoScannerLogger'),
+    logger: logger.child('firoRpcScanner'),
   });
   try {
     logger.debug('Creating Firo observation extractor...');

@@ -25,7 +25,7 @@ export const getBinanceScanner = async (dataSource: DataSource, tokenMap: TokenM
   // Create Binance scanner with RPC network settings
   const networkConnectorManager = new NetworkConnectorManager<TransactionResponse>(
     new FailoverStrategy(),
-    logger.child('binanceScannerLogger'),
+    logger.child('rpcNetworkConnectorManager'),
   );
   configs.chains.binance.rpc.connections.forEach((rpc) => {
     if (rpc.url && rpc.timeout) {
@@ -40,7 +40,7 @@ export const getBinanceScanner = async (dataSource: DataSource, tokenMap: TokenM
     network: networkConnectorManager,
     blockRetrieveGap: configs.chains.binance.blockRetrieveGap,
     blockCleanupConfig: { active: configs.chains.binance.blockCleanupActive === true },
-    logger: logger.child('binanceScannerLogger'),
+    logger: logger.child('binanceEvmRpcScanner'),
   });
 
   try {
@@ -49,7 +49,7 @@ export const getBinanceScanner = async (dataSource: DataSource, tokenMap: TokenM
       configs.contracts.binance.addresses.lock,
       dataSource,
       tokenMap,
-      logger.child('binanceObservationExtractor'),
+      logger.child('binanceRpcObservationExtractor'),
     );
 
     logger.debug('Registering observation extractor with scanner...');

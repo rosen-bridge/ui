@@ -24,7 +24,7 @@ export const getEthereumScanner = async (dataSource: DataSource, tokenMap: Token
   // Create Ethereum scanner with RPC network settings
   const networkConnectorManager = new NetworkConnectorManager<TransactionResponse>(
     new FailoverStrategy(),
-    logger.child('ethereumScannerLogger'),
+    logger.child('rpcNetworkConnectorManager'),
   );
   configs.chains.ethereum.rpc.connections.forEach((rpc) => {
     if (rpc.url && rpc.timeout) {
@@ -39,7 +39,7 @@ export const getEthereumScanner = async (dataSource: DataSource, tokenMap: Token
     network: networkConnectorManager,
     blockRetrieveGap: configs.chains.ethereum.blockRetrieveGap,
     blockCleanupConfig: { active: configs.chains.ethereum.blockCleanupActive === true },
-    logger: logger.child('ethereumScannerLogger'),
+    logger: logger.child('ethereumEvmRpcScanner'),
   });
 
   try {
@@ -48,7 +48,7 @@ export const getEthereumScanner = async (dataSource: DataSource, tokenMap: Token
       configs.contracts.ethereum.addresses.lock,
       dataSource,
       tokenMap,
-      logger.child('ethereumObservationExtractor'),
+      logger.child('ethereumRpcObservationExtractor'),
     );
 
     logger.debug('Registering observation extractor with scanner...');

@@ -21,7 +21,7 @@ const logger = DefaultLogger.getInstance().child(import.meta.url);
 export const createHandshakeNetworkConnectorManager = () => {
   const networkConnectorManager = new NetworkConnectorManager<HandshakeRpcTransaction>(
     new FailoverStrategy(),
-    logger.child('handshakeNetworkConnector'),
+    logger.child('rpcNetworkConnectorManager'),
   );
   configs.chains.handshake.rpc.connections.forEach((rpc) => {
     if (rpc.url && rpc.timeout) {
@@ -60,7 +60,7 @@ export const getHandshakeScanner = async (dataSource: DataSource, tokenMap: Toke
     network: createHandshakeNetworkConnectorManager(),
     blockRetrieveGap: configs.chains.handshake.blockRetrieveGap,
     blockCleanupConfig: { active: configs.chains.handshake.blockCleanupActive === true },
-    logger: logger.child('handshakeScannerLogger'),
+    logger: logger.child('handshakeRpcScanner'),
   });
 
   try {
@@ -69,7 +69,7 @@ export const getHandshakeScanner = async (dataSource: DataSource, tokenMap: Toke
       configs.contracts.handshake.addresses.lock,
       dataSource,
       tokenMap,
-      logger.child('handshakeObservationExtractor'),
+      logger.child('handshakeRpcObservationExtractor'),
     );
 
     logger.debug('Registering observation extractor with scanner...');
