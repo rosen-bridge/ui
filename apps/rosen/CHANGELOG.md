@@ -15,6 +15,7 @@
 
 ### Patch Changes
 
+- Update Next.js to 16.4.4 and patch vulnerable dependencies to address the security vulnerabilities
 - Add strongly-typed, validated environment variables using `zod/v4-mini` and `@t3-oss/env-nextjs`
 - Replace the current `Joi` validation implementation with the `Zod` npm package
 - Fix `Bridged` cell responsive behavior in `Assets page` in row view
