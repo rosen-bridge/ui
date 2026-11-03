@@ -77,7 +77,9 @@ export class TokenMapService extends AbstractTokenMapService {
       };
 
       [CallbackType.Insert, CallbackType.Update, CallbackType.Spend, CallbackType.Delete].forEach(
-        (type) => this.tokenMapBoxExtractor.hook(type, updateTokenMapWrapper),
+        (type) => {
+          this.tokenMapBoxExtractor.hook(type, updateTokenMapWrapper);
+        },
       );
 
       this.logger.debug('On-chain TokenMap hooks registered in tokenMapBoxExtractor');
@@ -102,10 +104,7 @@ export class TokenMapService extends AbstractTokenMapService {
    * @memberof TokenMapService
    */
   static init = (logger?: AbstractLogger) => {
-    if (AbstractTokenMapService.instance != undefined) {
-      return;
-    }
-    AbstractTokenMapService.instance = new TokenMapService(logger);
+    AbstractTokenMapService.instance ??= new TokenMapService(logger);
   };
 
   /**

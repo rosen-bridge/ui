@@ -133,7 +133,7 @@ export const History = forwardRef<HistoryRef, HistoryProps>(
         .map((current) => {
           const parsed = parseFilter(filter, current);
 
-          if (!parsed) return;
+          if (!parsed) return undefined;
 
           const sections = [parsed.flow.label, parsed.operator!.label];
 

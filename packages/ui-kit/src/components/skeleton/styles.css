@@ -11,6 +11,7 @@
   inset: 0;
 }
 
+/* biome-ignore-start lint/complexity/noImportantStyles: Must override the parent's own styles */
 *:has(> .RosenSkeleton[data-attached='true']) {
   position: relative !important;
   overflow: hidden !important;
@@ -22,6 +23,7 @@
     opacity: 0 !important;
   }
 }
+/* biome-ignore-end lint/complexity/noImportantStyles: Must override the parent's own styles */
 
 .RosenSkeleton[data-variant='circular'] {
   border-radius: 10000px;

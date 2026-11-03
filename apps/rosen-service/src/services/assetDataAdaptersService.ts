@@ -215,10 +215,7 @@ export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
    * @memberof AssetDataAdapterService
    */
   static readonly init = async (logger?: AbstractLogger) => {
-    if (AbstractAssetDataAdapterService.instance != undefined) {
-      return;
-    }
-    AbstractAssetDataAdapterService.instance = new AssetDataAdapterService(logger);
+    AbstractAssetDataAdapterService.instance ??= new AssetDataAdapterService(logger);
   };
 
   /**

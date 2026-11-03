@@ -255,7 +255,9 @@ export const getEvents = async (filters: Filter): Promise<EventListItemWithTotal
 
   queryBuilder = queryBuilder.distinct(true);
 
-  sorts?.forEach((sort) => queryBuilder.addOrderBy(sort.key, sort.order));
+  sorts?.forEach((sort) => {
+    queryBuilder.addOrderBy(sort.key, sort.order);
+  });
 
   if (pagination?.offset) {
     queryBuilder = queryBuilder.offset(pagination.offset);

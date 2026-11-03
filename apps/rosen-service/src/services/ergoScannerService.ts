@@ -93,10 +93,7 @@ export class ErgoScannerService extends AbstractErgoScannerService {
    * @param {AbstractLogger} [logger] Optional logger instance.
    */
   static init = async (logger?: AbstractLogger): Promise<void> => {
-    if (AbstractErgoScannerService.instance != undefined) {
-      return;
-    }
-    AbstractErgoScannerService.instance = new ErgoScannerService(logger);
+    AbstractErgoScannerService.instance ??= new ErgoScannerService(logger);
   };
 
   /**

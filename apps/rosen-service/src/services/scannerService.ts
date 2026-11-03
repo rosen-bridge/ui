@@ -169,10 +169,7 @@ export class ScannerService extends AbstractScannerService {
    * @memberof ScannerService
    */
   static readonly init = async (logger?: AbstractLogger) => {
-    if (AbstractScannerService.instance != undefined) {
-      return;
-    }
-    AbstractScannerService.instance = new ScannerService(logger);
+    AbstractScannerService.instance ??= new ScannerService(logger);
   };
 
   /**

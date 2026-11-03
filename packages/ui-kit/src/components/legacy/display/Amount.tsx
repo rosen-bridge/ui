@@ -135,7 +135,7 @@ const AmountBase = ({
     let value = normalizedValue;
 
     if (decimals !== undefined) {
-      value = getDecimalString(normalizedValue, decimals)!;
+      value = getDecimalString(normalizedValue, decimals);
     }
 
     return {
