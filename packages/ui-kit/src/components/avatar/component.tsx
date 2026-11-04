@@ -40,11 +40,11 @@ export const Avatar = (props: AvatarProps) => {
     backgroundColor: toCSSColor(background),
   };
 
-  if (loading) {
-    return <Skeleton style={style} width={size} height={size} variant="circular" />;
-  }
-
-  return <AvatarMUI style={style} sx={sx} {...rest} />;
+  return (
+    <Skeleton disabled={!loading} variant="inherit">
+      <AvatarMUI style={style} sx={sx} {...rest} />
+    </Skeleton>
+  );
 };
 
 Avatar.displayName = 'Avatar';

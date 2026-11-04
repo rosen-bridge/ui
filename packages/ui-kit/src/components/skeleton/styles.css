@@ -1,42 +1,45 @@
+/* biome-ignore-all lint/complexity/noImportantStyles: Must override the parent's own styles */
+
 .RosenSkeleton {
-  display: block;
-  background-color: var(--rosen-palette-Skeleton-bg);
-  transform-origin: 0 55%;
   animation: shimmer 2s ease-in-out 0.5s infinite;
-  border-radius: 4px;
-}
-
-.RosenSkeleton[data-attached='true'] {
-  position: absolute;
-  inset: 0;
-}
-
-/* biome-ignore-start lint/complexity/noImportantStyles: Must override the parent's own styles */
-*:has(> .RosenSkeleton[data-attached='true']) {
-  position: relative !important;
-  overflow: hidden !important;
+  background-color: var(--rosen-palette-Skeleton-bg) !important;
+  background-image: none !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
   color: transparent !important;
-  background-color: transparent !important;
-  min-width: 80px !important;
+  user-select: none;
 
-  *:not(.RosenSkeleton) {
-    opacity: 0 !important;
+  & > * {
+    visibility: hidden !important;
   }
-}
-/* biome-ignore-end lint/complexity/noImportantStyles: Must override the parent's own styles */
 
-.RosenSkeleton[data-variant='circular'] {
-  border-radius: 10000px;
-  flex-shrink: 0;
-}
+  &[data-standalone] {
+    display: block;
+    border-radius: 4px;
+  }
 
-.RosenSkeleton[data-variant='rounded'] {
-  border-radius: var(--rosen-shape-borderRadius);
-}
+  &[data-skeleton='circular'] {
+    border-radius: 10000px;
+    flex-shrink: 0;
+  }
 
-.RosenSkeleton[data-variant='text'] {
-  border-radius: 4px;
-  transform: scale(1, 0.6);
+  &[data-skeleton='rounded'] {
+    border-radius: var(--rosen-shape-borderRadius);
+  }
+
+  &[data-skeleton='text'] {
+    border-radius: 4px;
+    transform: scale(1, 0.6);
+    transform-origin: 0 55%;
+  }
+
+  &[data-skeleton='text']:not([data-standalone]) {
+    min-width: 4em !important;
+  }
+
+  &[data-skeleton='text']:empty::before {
+    content: '\00a0';
+  }
 }
 
 @keyframes shimmer {

@@ -83,11 +83,12 @@ const ChipBase = forwardRef<HTMLDivElement, ChipBaseProps>((props, ref) => {
     : 'Invalid';
 
   return (
-    <ChipWrapper color={color} ref={ref} {...rest}>
-      {RenderedIcon}
-      {content}
-      {loading && <Skeleton attached variant="circular" />}
-    </ChipWrapper>
+    <Skeleton disabled={!loading} variant="inherit">
+      <ChipWrapper color={color} ref={ref} {...rest}>
+        {RenderedIcon}
+        {content}
+      </ChipWrapper>
+    </Skeleton>
   );
 });
 

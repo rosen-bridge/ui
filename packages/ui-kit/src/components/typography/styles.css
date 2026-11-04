@@ -1,0 +1,3 @@
+.RosenTypography:empty::before {
+  content: '\200b';
+}
