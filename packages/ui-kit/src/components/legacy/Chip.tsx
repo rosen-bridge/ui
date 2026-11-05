@@ -50,6 +50,23 @@ const ChipWrapper = styled('div')<ChipBaseProps>(({ theme, color = 'primary' }) 
     '& p': {
       color: colors.dark,
     },
+    '&:is(button)': {
+      padding: theme.spacing(0.75, 1.5),
+      font: 'inherit',
+      cursor: 'pointer',
+      transition: theme.transitions.create(['background-color', 'color']),
+      ...(color !== 'neutral' && {
+        'backgroundColor': colors.main,
+        'color': colors.contrastText,
+        '& svg': {
+          fill: colors.contrastText,
+        },
+      }),
+    },
+    '&:focus-visible': {
+      outline: `2px solid ${palette.primary.main}`,
+      outlineOffset: '2px',
+    },
   };
 });
 
@@ -66,10 +83,13 @@ const ChipWrapper = styled('div')<ChipBaseProps>(({ theme, color = 'primary' }) 
  * ```tsx
  * <Chip label="Active" color="success" icon="Check" />
  * <Chip label="Pending" color="warning" loading />
+ * <Chip label="All" onClick={handleClick} />
  * ```
  */
 const ChipBase = forwardRef<HTMLDivElement, ChipBaseProps>((props, ref) => {
   const { label, icon, children, color = 'primary', loading, ...rest } = props;
+
+  const clickable = !!rest.onClick;
 
   const RenderedIcon = useMemo(() => {
     if (!icon) return null;
@@ -79,11 +99,21 @@ const ChipBase = forwardRef<HTMLDivElement, ChipBaseProps>((props, ref) => {
   const hasContent = !!children || !!label;
 
   const content = hasContent
-    ? (children ?? <Typography variant="body2">{label}</Typography>)
+    ? (children ?? (
+        <Typography
+          color={clickable ? 'inherit' : undefined}
+          component={clickable ? 'span' : 'p'}
+          variant="body2"
+        >
+          {label}
+        </Typography>
+      ))
     : 'Invalid';
 
+  const buttonProps = clickable ? { as: 'button' as const, type: 'button' } : {};
+
   return (
-    <ChipWrapper color={color} ref={ref} {...rest}>
+    <ChipWrapper color={color} ref={ref} {...buttonProps} {...rest}>
       {RenderedIcon}
       {content}
       {loading && <Skeleton attached variant="circular" />}
