@@ -32,6 +32,7 @@ export * from './closeButton';
 export * from './collapsible';
 export * from './columns';
 export * from './connector';
+export * from './container';
 export * from './copyButton';
 export * from './cubeNetBackground';
 export * from './dateTime';
