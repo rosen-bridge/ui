@@ -34,12 +34,12 @@ export class ErgoExplorerDataAdapter extends AbstractDataAdapter {
       assetId: NETWORKS.ergo.nativeToken,
       balance: apiResult.nanoErgs,
     });
-    apiResult.tokens?.forEach((asset) =>
+    apiResult.tokens?.forEach((asset) => {
       assets.push({
         assetId: asset.tokenId,
         balance: asset.amount,
-      }),
-    );
+      });
+    });
     return assets;
   };
 

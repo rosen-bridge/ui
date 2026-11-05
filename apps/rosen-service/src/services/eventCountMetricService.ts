@@ -53,10 +53,7 @@ export class EventCountMetricService extends AbstractEventCountMetricService {
    * @memberof EventCountMetricService
    */
   static init = (logger?: AbstractLogger) => {
-    if (AbstractEventCountMetricService.instance != undefined) {
-      return;
-    }
-    AbstractEventCountMetricService.instance = new EventCountMetricService(logger);
+    AbstractEventCountMetricService.instance ??= new EventCountMetricService(logger);
   };
 
   /**

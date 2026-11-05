@@ -97,19 +97,19 @@ export const SmartSearch = ({
       .map((current) => {
         const parsed = parseFilter(filtersInput, current);
 
-        if (!parsed) return;
+        if (!parsed) return undefined;
 
-        if (!parsed.flow) return;
+        if (!parsed.flow) return undefined;
 
-        if (!parsed.operator) return;
+        if (!parsed.operator) return undefined;
 
-        if (!parsed.value) return;
+        if (!parsed.value) return undefined;
 
         if (Array.isArray(parsed.value)) {
-          if (!Array.isArray(current.value)) return;
-          if (!current.value.length) return;
-          if (!parsed.value.length) return;
-          if (parsed.value.length !== current.value.length) return;
+          if (!Array.isArray(current.value)) return undefined;
+          if (!current.value.length) return undefined;
+          if (!parsed.value.length) return undefined;
+          if (parsed.value.length !== current.value.length) return undefined;
         }
 
         return current;

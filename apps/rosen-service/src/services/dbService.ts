@@ -71,10 +71,7 @@ export class DBService extends AbstractDBService {
    * @memberof DBService
    */
   static init = (dataSource: DataSource, logger?: AbstractLogger) => {
-    if (AbstractDBService.instance != undefined) {
-      return;
-    }
-    AbstractDBService.instance = new DBService(dataSource, logger);
+    AbstractDBService.instance ??= new DBService(dataSource, logger);
   };
 
   /**

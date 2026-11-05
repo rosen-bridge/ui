@@ -53,10 +53,7 @@ export class GeneralMetricsService extends AbstractGeneralMetricsService {
    * @memberof GeneralMetricsService
    */
   static init = (logger?: AbstractLogger) => {
-    if (AbstractGeneralMetricsService.instance != undefined) {
-      return;
-    }
-    AbstractGeneralMetricsService.instance = new GeneralMetricsService(logger);
+    AbstractGeneralMetricsService.instance ??= new GeneralMetricsService(logger);
   };
 
   /**

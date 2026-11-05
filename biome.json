@@ -23,7 +23,6 @@
         "noSvgWithoutTitle": "off"
       },
       "complexity": {
-        "noImportantStyles": "off",
         "noStaticOnlyClass": "off",
         "noUselessCatch": "error",
         "noUselessCatchBinding": "error",
@@ -33,7 +32,6 @@
         "noUselessSwitchCase": "error",
         "noUselessTernary": "error",
         "noUselessUndefinedInitialization": "error",
-        "useArrayFind": "off",
         "useArrowFunction": "error",
         "useOptionalChain": "error"
       },
@@ -62,7 +60,6 @@
         "useShorthandAssign": "error",
         "useShorthandFunctionType": "error",
         "useTemplate": "error",
-        "noDescendingSpecificity": "off",
         "noNonNullAssertion": "off"
       },
       "suspicious": {
@@ -72,8 +69,7 @@
         "noExplicitAny": "error",
         "noIrregularWhitespace": "error",
         "noVar": "error",
-        "useIsArray": "error",
-        "useIterableCallbackReturn": "off"
+        "useIsArray": "error"
       }
     }
   },
@@ -156,19 +152,11 @@
       }
     },
     {
-      "includes": [
-        "apps/rosen-service/**/*",
-        "packages/asset-aggregator/**/*",
-        "packages/asset-data-adapter/**/*"
-      ],
+      "includes": ["**/*.spec.ts", "**/*.test.ts"],
       "linter": {
         "rules": {
           "complexity": {
-            "useLiteralKeys": "off",
-            "useOptionalChain": "off"
-          },
-          "suspicious": {
-            "noDoubleEquals": "off"
+            "useLiteralKeys": "off"
           }
         }
       }
