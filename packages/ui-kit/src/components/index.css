@@ -55,6 +55,7 @@
 
   [data-surface='body'] {
     padding: var(--padding);
+    overflow-x: hidden;
     overflow-y: auto;
   }
 

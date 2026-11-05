@@ -5,7 +5,9 @@ import { getDecimalString } from '@rosen-ui/utils';
 import { Icon } from '../../icon';
 import { IconButton } from '../../iconButton';
 import { Stack } from '../../stack';
+import { Text } from '../../text';
 import { Tooltip } from '../../tooltip';
+import { Truncate } from '../../truncate';
 import { Typography } from '../../typography';
 
 export type AmountProps = HTMLAttributes<HTMLDivElement> & {
@@ -289,9 +291,13 @@ const AmountBase = ({
           )}
           {!error && !parts && !!fallback && rawValue === undefined && !loading && <>{fallback}</>}
           {unit && (
-            <Typography component="div" style={{ fontSize: '75%', opacity: 0.7 }}>
-              {unit}
-            </Typography>
+            <Text
+              as="div"
+              variant="inherit"
+              style={{ fontSize: '75%', fontWeight: 400, lineHeight: 1.5, opacity: 0.7 }}
+            >
+              <Truncate>{unit}</Truncate>
+            </Text>
           )}
           {formattedPrice && <Typography style={{ opacity: 0.5 }}>(${formattedPrice})</Typography>}
         </Stack>
