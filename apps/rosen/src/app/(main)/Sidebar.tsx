@@ -23,11 +23,8 @@ export const Sidebar = () => {
           <NavigationButton icon="BitcoinCircle" href="/assets">
             Assets
           </NavigationButton>
-          <NavigationButton disabled={true} icon="Headphones" href="/support">
-            Support
-          </NavigationButton>
-          <NavigationButton disabled={true} icon="Dashboard" href="/dashboard">
-            Dashboard
+          <NavigationButton icon="CommentAltExclamation" href="/faqs">
+            FAQs
           </NavigationButton>
         </Navigation>
       }
