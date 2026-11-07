@@ -113,11 +113,12 @@ const ChipBase = forwardRef<HTMLDivElement, ChipBaseProps>((props, ref) => {
   const buttonProps = clickable ? { as: 'button' as const, type: 'button' } : {};
 
   return (
-    <ChipWrapper color={color} ref={ref} {...buttonProps} {...rest}>
-      {RenderedIcon}
-      {content}
-      {loading && <Skeleton attached variant="circular" />}
-    </ChipWrapper>
+    <Skeleton disabled={!loading} variant="inherit">
+      <ChipWrapper color={color} ref={ref} {...buttonProps} {...rest}>
+        {RenderedIcon}
+        {content}
+      </ChipWrapper>
+    </Skeleton>
   );
 });
 

@@ -1,3 +1,5 @@
+import { cloneElement, type HTMLAttributes, isValidElement, type ReactElement } from 'react';
+
 import { useConfig } from '@/hooks';
 import type { ElementBaseProps, OverridableType } from '@/types';
 
@@ -5,10 +7,13 @@ import './styles.css';
 
 export interface SkeletonOverrides {}
 
+type SkeletonTargetProps = HTMLAttributes<HTMLElement> & Record<`data-${string}`, unknown>;
+
 export type SkeletonOwnProps = {
-  attached?: boolean;
+  children?: ReactElement<SkeletonTargetProps>;
+  disabled?: boolean;
   height?: (number & {}) | (string & {});
-  variant?: 'circular' | 'rounded' | 'text';
+  variant?: 'circular' | 'inherit' | 'rounded' | 'text';
   width?: (number & {}) | (string & {});
 };
 
@@ -16,9 +21,13 @@ export type SkeletonBaseProps = ElementBaseProps<'span', SkeletonOwnProps>;
 
 export type SkeletonProps = OverridableType<SkeletonBaseProps, SkeletonOverrides, never>;
 
+const toSize = (value?: number | string) => (typeof value === 'number' ? `${value}px` : value);
+
 export const Skeleton = (props: SkeletonProps) => {
   const {
-    attached,
+    children,
+    className,
+    disabled,
     height,
     style,
     variant = 'text',
@@ -26,19 +35,34 @@ export const Skeleton = (props: SkeletonProps) => {
     ...rest
   } = useConfig('Skeleton', props);
 
-  const styles = {
-    height: typeof height === 'number' ? `${height}px` : height,
-    width: typeof width === 'number' ? `${width}px` : width,
-    ...style,
-  };
+  if (disabled) return children;
+
+  if (isValidElement(children)) {
+    return cloneElement(children, {
+      'aria-busy': true,
+      className: [className, children.props.className].filter(Boolean).join(' '),
+      'data-skeleton': variant,
+      inert: true,
+      style: {
+        minHeight: toSize(height),
+        minWidth: toSize(width),
+        ...children.props.style,
+        ...style,
+      },
+    });
+  }
 
   return (
-    <>
-      <span data-attached={!!attached} data-variant={variant} style={styles} {...rest}>
-        &nbsp;
-      </span>
-      {attached && <>&nbsp;</>}
-    </>
+    <span
+      aria-hidden
+      className={className}
+      data-skeleton={variant}
+      data-standalone=""
+      style={{ height: toSize(height), width: toSize(width), ...style }}
+      {...rest}
+    >
+      &nbsp;
+    </span>
   );
 };
 

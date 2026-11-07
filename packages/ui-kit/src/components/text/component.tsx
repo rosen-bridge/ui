@@ -91,18 +91,19 @@ export const Text = <T extends ElementType = 'p'>(props: TextProps<T>) => {
   };
 
   return (
-    <Component
-      data-align={align}
-      data-transform={transform}
-      data-truncate={truncate ? '' : null}
-      data-variant={variant}
-      data-weight={weight}
-      style={styles}
-      {...rest}
-    >
-      {children}
-      {loading && <Skeleton attached />}
-    </Component>
+    <Skeleton disabled={!loading} variant="text">
+      <Component
+        data-align={align}
+        data-transform={transform}
+        data-truncate={truncate ? '' : null}
+        data-variant={variant}
+        data-weight={weight}
+        style={styles}
+        {...rest}
+      >
+        {children}
+      </Component>
+    </Skeleton>
   );
 };
 
