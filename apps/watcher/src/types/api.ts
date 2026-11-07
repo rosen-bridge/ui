@@ -36,6 +36,10 @@ export interface ApiInfoResponse {
 
 export type ApiAddressAssetsResponse = Paginated<TokenInfo>;
 
+export interface ApiAddressValidateResponse {
+  valid: boolean;
+}
+
 export type ApiRevenueChartResponse = TokenChartData[];
 
 export type ApiHealthStatusResponse = HealthParamInfo[];
