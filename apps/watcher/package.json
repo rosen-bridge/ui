@@ -15,6 +15,7 @@
     "lint": "biome check --write",
     "lint:check": "biome check",
     "start": "npx serve@latest out",
+    "test": "node --import tsx --test unitTests/fetchAllAddressAssets.test.mjs",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
