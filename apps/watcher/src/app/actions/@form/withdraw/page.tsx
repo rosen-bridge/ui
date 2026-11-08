@@ -140,7 +140,7 @@ const WithdrawForm = () => {
             <>
               Withdrawal is successful. Wait for tx [
               <Link target="_blank" href={getTxURL(NETWORKS.ergo.key, response.txId) ?? '/'}>
-                {response.txId}
+                <Identifier variant="legacy-middle" value={response.txId} />
               </Link>
               ] to be confirmed.
             </>
