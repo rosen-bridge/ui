@@ -1,5 +1,6 @@
 import * as Sentry from '@sentry/nextjs';
 
+import JsonBigInt from '@rosen-bridge/json-bigint';
 import { InsufficientAssetsError } from '@rosen-network/base/dist/handleUncoveredAssets';
 
 import { createSafeAction } from './safeServerAction';
@@ -20,7 +21,7 @@ export const { wrap, unwrap, unwrapFromObject } = createSafeAction({
 
       scope.setContext('safeAction', {
         traceKey,
-        args: args,
+        args: JsonBigInt.stringify(args),
       });
 
       scope.setLevel('error');
