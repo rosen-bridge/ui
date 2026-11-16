@@ -25,7 +25,8 @@ import type { AssetEntry, CardanoProtocolParams, Lovelace, PolicyId, Value } fro
  */
 export const getCardanoProtocolParams = async (): Promise<CardanoProtocolParams> => {
   const cardanoKoiosClient = cardanoKoiosClientFactory(
-    process.env.CARDANO_KOIOS_API!, // TODO
+    process.env.CARDANO_KOIOS_API!,
+    process.env.CARDANO_KOIOS_TOKEN!,
   );
   return await cardanoKoiosClient.epochParams().then((epochParams) => {
     const params = epochParams[0];
@@ -367,7 +368,10 @@ export function fromWasmValue(value: wasm.Value): Value {
 }
 
 export const getHeight = async (): Promise<number> => {
-  const cardanoKoiosClient = cardanoKoiosClientFactory(process.env.CARDANO_KOIOS_API!);
+  const cardanoKoiosClient = cardanoKoiosClientFactory(
+    process.env.CARDANO_KOIOS_API!,
+    process.env.CARDANO_KOIOS_TOKEN!,
+  );
 
   const height = (await cardanoKoiosClient.tip())[0].block_no!;
 
