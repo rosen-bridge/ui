@@ -1,5 +1,12 @@
 # @rosen-ui/types
 
+## 0.5.2
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-ui/constants@1.2.0
+
 ## 0.5.1
 
 ### Patch Changes

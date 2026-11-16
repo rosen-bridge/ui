@@ -1,5 +1,21 @@
 # @rosen-bridge/ui-kit
 
+## 6.3.0
+
+### Minor Changes
+
+- Render `Chip` as a button when it has `onClick`
+- Refactor `Skeleton` to apply its loading styles directly to the wrapped child instead of rendering a separate placeholder, keeping the child's structure and dimensions
+- Implement `Container` component
+
+### Patch Changes
+
+- Prevent `Card` and `Dialog` bodies from scrolling horizontally when their content overflows
+- Truncate long unbreakable words with an ellipsis in `Truncate` and in the unit of `Amount`
+- Update dependencies
+  - @rosen-bridge/icons@4.2.0
+  - @rosen-ui/utils@1.2.0
+
 ## 6.2.0
 
 ### Minor Changes

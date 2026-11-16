@@ -1,5 +1,15 @@
 # @rosen-network/doge
 
+## 0.5.1
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-bridge/icons@4.2.0
+  - @rosen-network/base@0.6.1
+  - @rosen-ui/constants@1.2.0
+  - @rosen-ui/types@0.5.2
+
 ## 0.5.0
 
 ### Minor Changes
