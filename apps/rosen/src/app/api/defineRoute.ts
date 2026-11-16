@@ -168,7 +168,7 @@ export const defineRoute =
       Sentry.withScope((scope) => {
         scope.setTag('layer', 'api-route');
         scope.setContext('request', { url: request.url, method: request.method });
-        scope.setContext('validation', { value: input });
+        scope.setContext('validation', input);
         Sentry.captureException(error);
       });
 

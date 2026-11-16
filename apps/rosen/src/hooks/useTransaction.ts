@@ -122,7 +122,7 @@ export const useTransaction = () => {
         scope.setTag('feature', 'transaction');
         scope.setTag('wallet', selectedWallet.name);
 
-        scope.setContext('transaction', { parameters: parameters });
+        scope.setContext('transaction', { ...parameters });
 
         Sentry.captureException(error);
       });
