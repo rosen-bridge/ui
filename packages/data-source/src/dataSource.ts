@@ -28,6 +28,10 @@ import {
   TokenEntity,
 } from '@rosen-ui/asset-aggregator';
 import {
+  EventListViewEntity,
+  migrations as eventListViewMigrations,
+} from '@rosen-ui/event-list-view';
+import {
   AggregatedStatusChangedEntity,
   AggregatedStatusEntity,
   EventStatusOverrideEntity,
@@ -80,6 +84,7 @@ export const getDataSource = (
       MetricEntity,
       UserEventEntity,
       WatcherCountEntity,
+      EventListViewEntity,
     ],
     migrations: [
       ...watcherDataMigrations.postgres,
@@ -90,6 +95,7 @@ export const getDataSource = (
       ...publicStatusMigrations.postgres,
       ...TokenPriceMigrations.postgres,
       ...statisticsMigrations.postgres,
+      ...eventListViewMigrations.postgres,
     ],
   });
 };

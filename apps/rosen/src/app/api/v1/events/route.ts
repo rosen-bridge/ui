@@ -1,5 +1,6 @@
 import { FilterParser } from '@rosen-bridge/query-params';
 import { NETWORKS_KEYS } from '@rosen-ui/constants';
+import { eventListViewStatuses } from '@rosen-ui/event-list-view';
 
 import { defineRoute } from '@/app/api/defineRoute';
 import { getEventsWithFullTokenData } from '@/backend/events';
@@ -59,7 +60,7 @@ const filterParser = new FilterParser({
         key: 'status',
         type: 'string',
         operators: ['equal', 'notEqual'],
-        values: ['FRAUD', 'processing', 'COMPLETED'],
+        values: eventListViewStatuses,
       },
       {
         key: 'sourceTxId',

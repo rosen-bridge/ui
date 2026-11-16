@@ -51,6 +51,7 @@
     "@rosen-ui/constants": "^1.2.0",
     "@rosen-ui/data-source": "^0.4.1",
     "@rosen-ui/eternl-wallet": "^3.1.13",
+    "@rosen-ui/event-list-view": "^0.0.0",
     "@rosen-ui/firo-wallet": "^0.1.5",
     "@rosen-ui/lace-wallet": "^3.1.13",
     "@rosen-ui/metamask-wallet": "^2.2.7",
