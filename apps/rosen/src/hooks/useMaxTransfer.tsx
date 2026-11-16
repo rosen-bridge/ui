@@ -36,6 +36,8 @@ export const useMaxTransfer = (): MaxTransferState => {
 
   const isLoading = balance.isLoading || isTransitionLoading;
 
+  const hasAddressError = !!transactionFormData.formState.errors?.walletAddress;
+
   const raw = useMemo(() => {
     if (!amount || !tokenMap || !transactionFormData.tokenValue) return '0';
     return getDecimalString(
@@ -56,7 +58,7 @@ export const useMaxTransfer = (): MaxTransferState => {
       !transactionFormData.targetValue ||
       !transactionFormData.tokenValue ||
       !wallet.selected ||
-      transactionFormData.formState.errors?.walletAddress
+      hasAddressError
     )
       return;
 
@@ -83,7 +85,7 @@ export const useMaxTransfer = (): MaxTransferState => {
     balance.isLoading,
     network.selectedSource,
     wallet.selected,
-    transactionFormData.formState.errors,
+    hasAddressError,
     transactionFormData.targetValue,
     transactionFormData.tokenValue,
     transactionFormData.walletAddressValue,
