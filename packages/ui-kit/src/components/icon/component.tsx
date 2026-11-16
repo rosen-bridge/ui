@@ -49,24 +49,16 @@ export const Icon = (props: IconProps) => {
     [color, size, style],
   );
 
-  if (loading) {
-    return (
-      <Skeleton
-        className="RosenIcon"
-        height={toCSSUnit('icon-size', size)}
-        width={toCSSUnit('icon-size', size)}
-        variant="circular"
-        style={style}
-      />
-    );
-  }
-
   if (!Icon) {
     console.error(`Icon '${name}' not found`);
     return null;
   }
 
-  return <Icon style={styles} {...rest} />;
+  return (
+    <Skeleton disabled={!loading} variant="circular">
+      <Icon style={styles} {...rest} />
+    </Skeleton>
+  );
 };
 
 Icon.displayName = 'Icon';

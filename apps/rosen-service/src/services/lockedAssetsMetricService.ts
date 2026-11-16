@@ -53,10 +53,7 @@ export class LockedAssetsMetricService extends AbstractLockedAssetsMetricService
    * @memberof LockedAssetsMetricService
    */
   static init = (logger?: AbstractLogger) => {
-    if (AbstractLockedAssetsMetricService.instance != undefined) {
-      return;
-    }
-    AbstractLockedAssetsMetricService.instance = new LockedAssetsMetricService(logger);
+    AbstractLockedAssetsMetricService.instance ??= new LockedAssetsMetricService(logger);
   };
 
   /**

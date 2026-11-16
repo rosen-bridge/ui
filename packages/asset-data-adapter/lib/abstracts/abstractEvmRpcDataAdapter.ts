@@ -123,7 +123,7 @@ export abstract class AbstractEvmRpcDataAdapter extends AbstractDataAdapter {
             this.provider,
           );
           const assetBalance = await contract.balanceOf(address);
-          if (assetBalance == undefined)
+          if (assetBalance === undefined || assetBalance === null)
             throw new Error(
               `Amount of a asset on the "${address}" address of ${this.chain} chain by "${chainTokenDetails.tokenId}" identity is invalid`,
             );

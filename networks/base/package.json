@@ -1,6 +1,6 @@
 {
   "name": "@rosen-network/base",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "private": true,
   "description": "This is a private package utilized within Rosen Bridge UI app",
   "repository": {
@@ -24,9 +24,9 @@
     "@rosen-bridge/extended-minimum-fee": "^0.1.1",
     "@rosen-bridge/selection-types": "^1.0.1",
     "@rosen-bridge/tokens": "^6.0.2",
-    "@rosen-ui/constants": "^1.1.0",
-    "@rosen-ui/types": "^0.5.1",
-    "@rosen-ui/utils": "^1.1.0"
+    "@rosen-ui/constants": "^1.2.0",
+    "@rosen-ui/types": "^0.5.2",
+    "@rosen-ui/utils": "^1.2.0"
   },
   "engines": {
     "node": ">=22.18.0",

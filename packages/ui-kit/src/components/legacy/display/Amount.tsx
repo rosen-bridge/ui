@@ -5,7 +5,9 @@ import { getDecimalString } from '@rosen-ui/utils';
 import { Icon } from '../../icon';
 import { IconButton } from '../../iconButton';
 import { Stack } from '../../stack';
+import { Text } from '../../text';
 import { Tooltip } from '../../tooltip';
+import { Truncate } from '../../truncate';
 import { Typography } from '../../typography';
 
 export type AmountProps = HTMLAttributes<HTMLDivElement> & {
@@ -63,20 +65,22 @@ export type AmountProps = HTMLAttributes<HTMLDivElement> & {
 /**
  * Displays an amount value along with its unit, if available
  */
-const AmountBase = ({
-  decimalMaxFractionDigits = 3,
-  decimalLeadingZeroThreshold = 3,
-  fallback,
-  href,
-  loading,
-  value,
-  variant,
-  reverse,
-  orientation = 'horizontal',
-  unit,
-  price,
-  ...props
-}: AmountProps) => {
+const AmountBase = (inputs: AmountProps) => {
+  const {
+    decimalMaxFractionDigits = 3,
+    decimalLeadingZeroThreshold = 3,
+    fallback,
+    href,
+    loading,
+    value,
+    variant,
+    reverse,
+    orientation = 'horizontal',
+    unit,
+    price,
+    ...props
+  } = inputs;
+
   const isRawValue = typeof value === 'object' && value !== null;
 
   const rawValue = isRawValue ? value.amount : value;
@@ -135,7 +139,7 @@ const AmountBase = ({
     let value = normalizedValue;
 
     if (decimals !== undefined) {
-      value = getDecimalString(normalizedValue, decimals)!;
+      value = getDecimalString(normalizedValue, decimals);
     }
 
     return {
@@ -277,7 +281,9 @@ const AmountBase = ({
                         style={{ opacity: !isIntegerDominant ? 0.7 : 1 }}
                       >
                         .{!!parts.zeros && '0'}
-                        {!!parts.zeros && <sub style={{ fontSize: '0.75em' }}>{parts.zeros}</sub>}
+                        {!!parts.zeros && (
+                          <sub style={{ fontSize: '0.75em', lineHeight: 0 }}>{parts.zeros}</sub>
+                        )}
                         {parts.fraction}
                       </Typography>
                     )}
@@ -288,10 +294,15 @@ const AmountBase = ({
             </Tooltip>
           )}
           {!error && !parts && !!fallback && rawValue === undefined && !loading && <>{fallback}</>}
-          {unit && (
-            <Typography component="div" style={{ fontSize: '75%', opacity: 0.7 }}>
-              {unit}
-            </Typography>
+          {(orientation === 'vertical' ? 'unit' in inputs : !!unit) && (
+            <Text
+              as="div"
+              variant="inherit"
+              loading={orientation === 'vertical' && loading}
+              style={{ fontSize: '75%', fontWeight: 400, lineHeight: 1.5, opacity: 0.7 }}
+            >
+              <Truncate>{unit}</Truncate>
+            </Text>
           )}
           {formattedPrice && <Typography style={{ opacity: 0.5 }}>(${formattedPrice})</Typography>}
         </Stack>

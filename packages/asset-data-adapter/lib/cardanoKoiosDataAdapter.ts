@@ -35,7 +35,7 @@ export class CardanoKoiosDataAdapter extends AbstractDataAdapter {
       _addresses: [address],
     });
     const accountNativeBalance = addressesInfo[0].balance;
-    if (accountNativeBalance == undefined)
+    if (accountNativeBalance === undefined || accountNativeBalance === null)
       throw new Error(`Balance of "${address}" Cardano address is undefined.`);
     return {
       assetId: NETWORKS.cardano.nativeToken,
@@ -58,7 +58,7 @@ export class CardanoKoiosDataAdapter extends AbstractDataAdapter {
     const assets = await this.koiosApi.addressAssets({ _addresses: [address] });
     assets.forEach((asset) => {
       const identity = `${asset.policy_id}.${asset.asset_name}`;
-      if (asset.quantity == undefined)
+      if (asset.quantity === undefined || asset.quantity === null)
         throw new Error(
           `Amount of a asset on the "${address}" address of Cardano chain by "${identity}" identity is invalid`,
         );

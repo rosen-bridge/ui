@@ -24,6 +24,7 @@ import type {
   CollapsibleProps,
   ColumnsProps,
   ConnectorProps,
+  ContainerProps,
   CopyButtonProps,
   DateTimeProps,
   DurationProps,
@@ -110,6 +111,7 @@ export type Components = {
   Collapsible: CollapsibleProps;
   Columns: ColumnsProps;
   Connector: ConnectorProps;
+  Container: ContainerProps;
   CopyButton: CopyButtonProps;
   DateTime: DateTimeProps;
   Duration: DurationProps;

@@ -142,60 +142,61 @@ export const Identifier = (props: IdentifierProps) => {
   }
 
   return (
-    <div {...rest}>
-      {loading && <Skeleton attached />}
-      <Tooltip disabled={loading} title={value} {...slots?.tooltip}>
-        <div className="RosenIdentifier-value">
-          <span className="RosenIdentifier-overlay" aria-hidden="true">
-            {value}
-          </span>
-          <Typography
-            className="RosenIdentifier-leading"
-            component="div"
-            noWrap
-            variant="inherit"
-            {...slots?.text}
-            {...slots?.leading}
-          >
-            {leading}
-          </Typography>
-          <Typography
-            className="RosenIdentifier-trailing"
-            component="div"
-            variant="inherit"
-            {...slots?.text}
-            {...slots?.trailing}
-          >
-            {trailing}
-          </Typography>
-        </div>
-      </Tooltip>
-      {hasActions && (
-        <div className="RosenIdentifier-actions">
-          {href && (
-            <IconButton disabled={disableActions} href={href} size="small" target="_blank">
-              <Icon name="ExternalLinkAlt" size="small" />
-            </IconButton>
-          )}
-          {copyable && (
-            <CopyButton
-              disabled={disableActions}
-              size="small"
-              value={value}
-              slots={{ icon: { size: 'small' } }}
-            />
-          )}
-          {qrcode && (
-            <>
-              <IconButton disabled={disableActions} size="small" onClick={() => setOpen(true)}>
-                <Icon name="Qrcode" size="small" />
+    <Skeleton disabled={!loading} variant="text">
+      <div {...rest}>
+        <Tooltip disabled={loading} title={value} {...slots?.tooltip}>
+          <div className="RosenIdentifier-value">
+            <span className="RosenIdentifier-overlay" aria-hidden="true">
+              {value}
+            </span>
+            <Typography
+              className="RosenIdentifier-leading"
+              component="div"
+              noWrap
+              variant="inherit"
+              {...slots?.text}
+              {...slots?.leading}
+            >
+              {leading}
+            </Typography>
+            <Typography
+              className="RosenIdentifier-trailing"
+              component="div"
+              variant="inherit"
+              {...slots?.text}
+              {...slots?.trailing}
+            >
+              {trailing}
+            </Typography>
+          </div>
+        </Tooltip>
+        {hasActions && (
+          <div className="RosenIdentifier-actions">
+            {href && (
+              <IconButton disabled={disableActions} href={href} size="small" target="_blank">
+                <Icon name="ExternalLinkAlt" size="small" />
               </IconButton>
-              <QrCodeDialog open={open} value={value} onClose={() => setOpen(false)} />
-            </>
-          )}
-        </div>
-      )}
-    </div>
+            )}
+            {copyable && (
+              <CopyButton
+                disabled={disableActions}
+                size="small"
+                value={value}
+                slots={{ icon: { size: 'small' } }}
+              />
+            )}
+            {qrcode && (
+              <>
+                <IconButton disabled={disableActions} size="small" onClick={() => setOpen(true)}>
+                  <Icon name="Qrcode" size="small" />
+                </IconButton>
+                <QrCodeDialog open={open} value={value} onClose={() => setOpen(false)} />
+              </>
+            )}
+          </div>
+        )}
+      </div>
+    </Skeleton>
   );
 };
 

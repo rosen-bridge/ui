@@ -52,7 +52,7 @@ const getInitialState = (search: string, options?: Options) => {
     .map(([key, value]) => {
       const operator = operators.find((operator) => key.endsWith(operator.symbol));
 
-      if (!operator) return;
+      if (!operator) return undefined;
 
       const name = operator.symbol.length ? key.slice(0, -operator.symbol.length) : key;
 
@@ -75,7 +75,7 @@ const getInitialState = (search: string, options?: Options) => {
           parsed = Number(value);
           break;
         default:
-          return;
+          return undefined;
       }
 
       return {

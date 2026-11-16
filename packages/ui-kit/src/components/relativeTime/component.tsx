@@ -36,40 +36,33 @@ export const RelativeTime = (props: RelativeTimeProps) => {
   const { prefix, number, unit, suffix, displayText } = calculateRelativeTime(value);
 
   return (
-    <div {...rest}>
-      {loading && <Skeleton attached />}
-      {displayText ? (
-        <Typography color="text-secondary" variant="body2">
-          {displayText}
-        </Typography>
-      ) : (
-        <>
-          {prefix && (
-            <Typography color="text-secondary" variant="body2">
-              {prefix}
-            </Typography>
-          )}
-          <Typography
-            color="text-primary"
-            sx={{
-              fontSize: '18px',
-            }}
-          >
-            {number}
+    <Skeleton disabled={!loading} variant="text">
+      <div {...rest}>
+        {prefix && (
+          <Typography color="text-secondary" variant="body2">
+            {prefix}
           </Typography>
-          {unit && (
-            <Typography color="text-secondary" variant="body2">
-              {unit}
-            </Typography>
-          )}
-          {suffix && (
-            <Typography color="text-secondary" variant="body2">
-              {suffix}
-            </Typography>
-          )}
-        </>
-      )}
-    </div>
+        )}
+        <Typography
+          color={displayText ? 'text-secondary' : 'text-primary'}
+          sx={{
+            fontSize: '18px',
+          }}
+        >
+          {displayText || number}
+        </Typography>
+        {unit && (
+          <Typography color="text-secondary" variant="body2">
+            {unit}
+          </Typography>
+        )}
+        {suffix && (
+          <Typography color="text-secondary" variant="body2">
+            {suffix}
+          </Typography>
+        )}
+      </div>
+    </Skeleton>
   );
 };
 

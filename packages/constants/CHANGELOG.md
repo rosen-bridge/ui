@@ -1,5 +1,11 @@
 # @rosen-ui/constants
 
+## 1.2.0
+
+### Minor Changes
+
+- Add Handshake network and Shake wallet support
+
 ## 1.1.0
 
 ### Minor Changes

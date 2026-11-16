@@ -35,10 +35,7 @@ export class RedisService extends AbstractRedisService {
    * @memberof RedisService
    */
   static init = (logger?: AbstractLogger) => {
-    if (AbstractRedisService.instance != undefined) {
-      return;
-    }
-    AbstractRedisService.instance = new RedisService(logger);
+    AbstractRedisService.instance ??= new RedisService(logger);
   };
 
   /**

@@ -118,7 +118,9 @@ export const getAllAssets = async (filters: Filter) => {
 
   queryBuilder = queryBuilder.where(where);
 
-  sorts?.forEach((sort) => queryBuilder.addOrderBy(sort.key, sort.order));
+  sorts?.forEach((sort) => {
+    queryBuilder.addOrderBy(sort.key, sort.order);
+  });
 
   if (pagination?.offset) {
     queryBuilder = queryBuilder.offset(pagination.offset);

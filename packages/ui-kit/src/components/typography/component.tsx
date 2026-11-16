@@ -8,6 +8,8 @@ import { useConfig } from '@/hooks';
 import type { Color, ElementBaseProps, OverridableType } from '@/types';
 import { toCSSColor } from '@/utils';
 
+import './styles.css';
+
 export interface TypographyOverrides {}
 
 export type TypographyOwnProps = TypographyPropsMUI & {
@@ -23,10 +25,11 @@ export const Typography = (props: TypographyProps) => {
   const { children, color, loading, style, ...rest } = useConfig('Typography', props);
 
   return (
-    <TypographyMUI style={{ color: toCSSColor(color), ...style }} {...rest}>
-      {children}
-      {loading && <Skeleton attached />}
-    </TypographyMUI>
+    <Skeleton disabled={!loading} variant="text">
+      <TypographyMUI style={{ color: toCSSColor(color), ...style }} {...rest}>
+        {children}
+      </TypographyMUI>
+    </Skeleton>
   );
 };
 

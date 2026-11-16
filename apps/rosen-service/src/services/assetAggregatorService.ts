@@ -73,10 +73,7 @@ export class AssetAggregatorService extends AbstractAssetAggregatorService {
    * @memberof AssetAggregatorService
    */
   static readonly init = async (logger?: AbstractLogger) => {
-    if (AbstractAssetAggregatorService.instance != undefined) {
-      return;
-    }
-    AbstractAssetAggregatorService.instance = new AssetAggregatorService(logger);
+    AbstractAssetAggregatorService.instance ??= new AssetAggregatorService(logger);
   };
 
   /**

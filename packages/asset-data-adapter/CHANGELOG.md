@@ -1,5 +1,17 @@
 # @rosen-ui/asset-data-adapter
 
+## 0.5.0
+
+### Minor Changes
+
+- Add HandshakeExplorerDataAdapter for collecting native Handshake balances from the Handshake explorer
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-ui/constants@1.2.0
+  - @rosen-ui/types@0.5.2
+
 ## 0.4.0
 
 ### Minor Changes

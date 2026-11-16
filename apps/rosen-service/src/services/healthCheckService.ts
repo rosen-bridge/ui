@@ -55,7 +55,10 @@ export class HealthService extends AbstractHealthService {
 
     let notify: ConstructorParameters<typeof HealthCheck>[0] | undefined;
     let notificationConfig: HealthCheckConfig | undefined;
-    if (configs.healthCheck.notification?.discordWebHookUrl != undefined) {
+    if (
+      configs.healthCheck.notification?.discordWebHookUrl !== undefined &&
+      configs.healthCheck.notification.discordWebHookUrl !== null
+    ) {
       const discordNotification = new DiscordNotification(
         configs.healthCheck.notification.discordWebHookUrl,
       );
@@ -117,10 +120,7 @@ export class HealthService extends AbstractHealthService {
    * @memberof HealthService
    */
   static readonly init = (logger?: AbstractLogger) => {
-    if (AbstractHealthService.instance != undefined) {
-      return;
-    }
-    AbstractHealthService.instance = new HealthService(logger);
+    AbstractHealthService.instance ??= new HealthService(logger);
   };
 
   /**

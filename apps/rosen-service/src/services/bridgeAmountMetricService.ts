@@ -59,10 +59,7 @@ export class BridgeAmountMetricService extends AbstractBridgeAmountMetricService
    * @memberof BridgeAmountMetricService
    */
   static init = (logger?: AbstractLogger) => {
-    if (AbstractBridgeAmountMetricService.instance != undefined) {
-      return;
-    }
-    AbstractBridgeAmountMetricService.instance = new BridgeAmountMetricService(logger);
+    AbstractBridgeAmountMetricService.instance ??= new BridgeAmountMetricService(logger);
   };
 
   /**

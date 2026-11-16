@@ -99,7 +99,7 @@ export class ErgoExtractorService extends AbstractErgoExtractorsService {
    * @returns {Promise<boolean>} True if the service stopped successfully.
    */
   protected stop = async (): Promise<boolean> => {
-    this.extractors.map((extractor) => {
+    this.extractors.forEach((extractor) => {
       this.ergoScanner.removeExtractor(extractor);
     });
     this.setStatus(ServiceStatus.dormant);
@@ -138,9 +138,6 @@ export class ErgoExtractorService extends AbstractErgoExtractorsService {
    * @memberof ErgoExtractorService
    */
   static init = async (logger?: AbstractLogger): Promise<void> => {
-    if (AbstractErgoExtractorsService.instance != undefined) {
-      return;
-    }
-    AbstractErgoExtractorsService.instance = new ErgoExtractorService(logger);
+    AbstractErgoExtractorsService.instance ??= new ErgoExtractorService(logger);
   };
 }

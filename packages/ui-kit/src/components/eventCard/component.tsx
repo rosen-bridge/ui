@@ -52,7 +52,7 @@ export const EventCard = (props: EventCardProps) => {
             loading={loading}
             value={value?.token}
             variant="logo"
-            style={{ fontSize: '20px' }}
+            style={{ fontSize: '22px' }}
           />
           <Amount
             loading={loading}

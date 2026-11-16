@@ -25,8 +25,7 @@ export abstract class AbstractDataAdapter {
       for (const asset of assets) {
         const tokenSet = this.tokenMap.getTokenSet(asset.assetId);
         if (
-          tokenSet != undefined &&
-          tokenSet[this.chain] &&
+          tokenSet?.[this.chain] &&
           tokenSet[this.chain].tokenId === asset.assetId &&
           asset.balance > 0n
         ) {

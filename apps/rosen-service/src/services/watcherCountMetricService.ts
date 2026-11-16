@@ -45,10 +45,7 @@ export class WatcherCountMetricService extends AbstractWatcherCountMetricService
    * @memberof WatcherCountMetricService
    */
   static init = (logger?: AbstractLogger) => {
-    if (AbstractWatcherCountMetricService.instance != undefined) {
-      return;
-    }
-    AbstractWatcherCountMetricService.instance = new WatcherCountMetricService(logger);
+    AbstractWatcherCountMetricService.instance ??= new WatcherCountMetricService(logger);
   };
 
   /**

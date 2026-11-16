@@ -21,9 +21,9 @@ const jsonEnv = <T extends z.ZodMiniType>(schema: T) =>
 
       const result = schema.safeParse(parsed);
       if (!result.success) {
-        result.error.issues.forEach(({ path, message }) =>
-          ctx.issues.push({ code: 'custom', path, message, input: undefined }),
-        );
+        result.error.issues.forEach(({ path, message }) => {
+          ctx.issues.push({ code: 'custom', path, message, input: undefined });
+        });
         return z.NEVER;
       }
 

@@ -1,5 +1,46 @@
 # @rosen-bridge/rosen-app
 
+## 5.9.0
+
+### Minor Changes
+
+- Add Handshake network and Shake wallet support
+- Add the FAQs page and remove the Support and Dashboard pages
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-bridge/ui-kit@6.3.0
+  - @rosen-bridge/icons@4.2.0
+  - @rosen-network/handshake@0.2.0
+  - @rosen-ui/constants@1.2.0
+  - @rosen-ui/shake-wallet@0.2.0
+  - @rosen-ui/utils@1.2.0
+  - @rosen-bridge/token-icons@0.2.0
+  - @rosen-network/binance@0.5.1
+  - @rosen-network/bitcoin@3.0.1
+  - @rosen-network/bitcoin-runes@2.0.1
+  - @rosen-network/cardano@3.0.1
+  - @rosen-network/doge@0.5.1
+  - @rosen-network/ergo@3.0.1
+  - @rosen-network/ethereum@0.5.1
+  - @rosen-network/firo@0.2.1
+  - @rosen-network/base@0.6.1
+  - @rosen-network/evm@0.4.1
+  - @rosen-ui/asset-aggregator@0.2.1
+  - @rosen-ui/types@0.5.2
+  - @rosen-ui/eternl-wallet@3.1.13
+  - @rosen-ui/firo-wallet@0.1.5
+  - @rosen-ui/lace-wallet@3.1.13
+  - @rosen-ui/metamask-wallet@2.2.7
+  - @rosen-ui/my-doge-wallet@1.1.15
+  - @rosen-ui/nautilus-wallet@3.1.13
+  - @rosen-ui/okx-wallet@2.2.8
+  - @rosen-ui/wallet-connect@0.3.6
+  - @rosen-ui/xverse-wallet@0.5.6
+  - @rosen-ui/wallet-api@3.2.4
+  - @rosen-ui/data-source@0.4.1
+
 ## 5.8.0
 
 ### Minor Changes

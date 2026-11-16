@@ -53,10 +53,7 @@ export class UserEventsMetricService extends AbstractUserEventsMetricService {
    * @memberof UserEventsMetricService
    */
   static init = (logger?: AbstractLogger) => {
-    if (AbstractUserEventsMetricService.instance != undefined) {
-      return;
-    }
-    AbstractUserEventsMetricService.instance = new UserEventsMetricService(logger);
+    AbstractUserEventsMetricService.instance ??= new UserEventsMetricService(logger);
   };
 
   /**
