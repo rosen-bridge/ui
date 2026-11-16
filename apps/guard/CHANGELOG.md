@@ -1,5 +1,15 @@
 # @rosen-bridge/guard-app
 
+## 4.5.4
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-bridge/icons@4.2.0
+  - @rosen-bridge/ui-kit@6.3.0
+  - @rosen-ui/constants@1.2.0
+  - @rosen-ui/utils@1.2.0
+
 ## 4.5.3
 
 ### Patch Changes

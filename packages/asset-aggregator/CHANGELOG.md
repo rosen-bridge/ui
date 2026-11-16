@@ -1,5 +1,13 @@
 # @rosen-ui/asset-aggregator
 
+## 0.2.1
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-ui/constants@1.2.0
+  - @rosen-ui/types@0.5.2
+
 ## 0.2.0
 
 ### Minor Changes

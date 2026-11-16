@@ -1,5 +1,17 @@
 # @rosen-ui/utils
 
+## 1.2.0
+
+### Minor Changes
+
+- Add Handshake network and Shake wallet support
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-ui/constants@1.2.0
+  - @rosen-ui/types@0.5.2
+
 ## 1.1.0
 
 ### Minor Changes

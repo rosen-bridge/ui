@@ -1,5 +1,20 @@
 # @rosen-bridge/rosen-service
 
+## 5.1.0
+
+### Minor Changes
+
+- Integrate Handshake into rosen-service
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-ui/asset-aggregator@0.2.1
+  - @rosen-ui/asset-data-adapter@0.5.0
+  - @rosen-ui/constants@1.2.0
+  - @rosen-ui/data-source@0.4.1
+  - @rosen-ui/rosen-statistics@0.1.1
+
 ## 5.0.0
 
 ### Major Changes

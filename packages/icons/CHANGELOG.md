@@ -1,5 +1,11 @@
 # @rosen-bridge/icons
 
+## 4.2.0
+
+### Minor Changes
+
+- Add Handshake network and Shake wallet support
+
 ## 4.1.0
 
 ### Minor Changes
