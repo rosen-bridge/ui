@@ -27,8 +27,9 @@ export const ViewGrid = ({ current, items, isLoading, setCurrent }: ViewGridProp
           id={item.id}
           key={item.id || index}
           active={!isLoading && !!item?.id && item?.id === current?.id}
-          clickable
+          clickable={!isLoading}
           onClick={() => {
+            if (isLoading || !item.id) return;
             setCurrent(item);
           }}
         >
