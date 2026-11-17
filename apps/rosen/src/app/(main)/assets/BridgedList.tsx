@@ -28,7 +28,7 @@ export const BridgedList = ({ value }: BridgedListProps) => {
   const toast = useToast();
 
   const { data, isLoading, error } = useSWR<ApiAssetResponse>(
-    `/v1/assets/detail/${value?.id.toLowerCase()}`,
+    value?.id ? `/v1/assets/detail/${value.id.toLowerCase()}` : null,
     fetcher,
     {
       keepPreviousData: true,
