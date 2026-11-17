@@ -18,10 +18,13 @@ export const { wrap, unwrap, unwrapFromObject } = createSafeAction({
 
       scope.setTag('action', traceKey);
 
-      scope.setContext('safeAction', {
-        traceKey,
-        args: args,
+      const context: Record<string, unknown> = { traceKey };
+
+      args?.forEach((arg, index) => {
+        context[`arg${index}`] = arg;
       });
+
+      scope.setContext('safeAction', context);
 
       scope.setLevel('error');
 
