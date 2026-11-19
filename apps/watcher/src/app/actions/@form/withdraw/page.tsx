@@ -32,6 +32,7 @@ import type {
   ApiWithdrawRequestBody,
   ApiWithdrawResponse,
 } from '@/types/api';
+import { validateErgoAddress } from '@/utils/validateErgoAddress';
 
 import {
   type TokenAmountCompatibleFormSchema,
@@ -91,9 +92,15 @@ const WithdrawForm = () => {
       amount: '',
     },
   });
-  const { handleSubmit, control, resetField, register, watch, formState } = formMethods;
+  const { handleSubmit, control, resetField, watch, formState } = formMethods;
 
   const formData = watch();
+
+  const { field: addressField, fieldState: addressState } = useController({
+    control,
+    name: 'address',
+    rules: { validate: validateErgoAddress },
+  });
 
   const { field: tokenIdField } = useController({
     control,
@@ -191,18 +198,17 @@ const WithdrawForm = () => {
       }}
       label="Address"
       disabled={disabled}
-      {...register('address', {
-        required: 'Address is required',
-      })}
-      error={!!formMethods.formState.errors.address}
+      {...addressField}
+      error={!!addressState.error}
       helperText={
         formMethods.formState.isValidating ? (
           <CircularProgress size={10} />
         ) : (
-          formMethods.formState.errors.address?.message
+          addressState.error?.message
         )
       }
       onBlur={(e) => {
+        addressField.onBlur();
         const trimmed = e.target.value.trim();
         formMethods.setValue('address', trimmed, {
           shouldDirty: true,
@@ -267,7 +273,10 @@ const WithdrawForm = () => {
             {renderTokenAmountTextField()}
           </Stack>
           <ApiKeyDialogProtectedAction>
-            <SubmitButton disabled={!formState.isValid || disabled} loading={isWithdrawPending}>
+            <SubmitButton
+              disabled={!formState.isValid || formState.isValidating || disabled}
+              loading={isWithdrawPending}
+            >
               Withdraw
             </SubmitButton>
           </ApiKeyDialogProtectedAction>
