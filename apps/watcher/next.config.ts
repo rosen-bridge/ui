@@ -8,9 +8,6 @@ const nextConfig: NextConfig = {
     unoptimized: true,
   },
   output: 'export',
-  typescript: {
-    ignoreBuildErrors: true,
-  },
   staticPageGenerationTimeout: 600,
   env: {
     API_BASE_URL: env.API_BASE_URL,
