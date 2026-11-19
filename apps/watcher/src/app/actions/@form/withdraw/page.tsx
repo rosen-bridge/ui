@@ -32,6 +32,7 @@ import type {
   ApiWithdrawRequestBody,
   ApiWithdrawResponse,
 } from '@/types/api';
+import { fetchAllAddressAssets } from '@/utils/fetchAllAddressAssets';
 
 import {
   type TokenAmountCompatibleFormSchema,
@@ -47,10 +48,12 @@ const WithdrawForm = () => {
   const { confirm } = useConfirm();
   const toast = useToast();
 
-  const { data, isLoading: isTokensListLoading } = useSWR<ApiAddressAssetsResponse>(
-    '/address/assets',
-    fetcher,
-    {},
+  const {
+    data,
+    error: tokensError,
+    isLoading: isTokensListLoading,
+  } = useSWR<ApiAddressAssetsResponse>(['/address/assets', { all: true }], () =>
+    fetchAllAddressAssets(fetcher),
   );
 
   const { token: ergToken, isLoading: isErgTokenLoading } = useToken('erg');
@@ -181,7 +184,7 @@ const WithdrawForm = () => {
     });
   };
 
-  const disabled = isTokensListLoading || isErgTokenLoading || !ergToken?.amount;
+  const disabled = isTokensListLoading || !!tokensError || isErgTokenLoading || !ergToken?.amount;
 
   const renderAddressTextField = () => (
     <TextField
@@ -228,6 +231,8 @@ const WithdrawForm = () => {
       }}
       {...tokenIdField}
       disabled={disabled}
+      error={!!tokensError}
+      helperText={tokensError ? 'Unable to load all tokens. Please try again.' : undefined}
     >
       {tokens?.map((token) => (
         <MenuItemMui value={token.tokenId} key={token.tokenId}>
