@@ -91,6 +91,7 @@ export const env = createEnv({
     IGNORE_TOKEN_ICONS: jsonEnv(z.array(z.string())),
 
     CARDANO_KOIOS_API: z.url(),
+    CARDANO_KOIOS_TOKEN: z.optional(z.string().check(z.minLength(1))),
     ERGO_EXPLORER_API: z.url(),
     BITCOIN_ESPLORA_API: z.url(),
     DOGE_BLOCKCYPHER_API: z.url(),
@@ -149,6 +150,7 @@ export const env = createEnv({
     IGNORE_TOKEN_ICONS: process.env.IGNORE_TOKEN_ICONS,
 
     CARDANO_KOIOS_API: process.env.CARDANO_KOIOS_API,
+    CARDANO_KOIOS_TOKEN: process.env.CARDANO_KOIOS_TOKEN,
     ERGO_EXPLORER_API: process.env.ERGO_EXPLORER_API,
     BITCOIN_ESPLORA_API: process.env.BITCOIN_ESPLORA_API,
     DOGE_BLOCKCYPHER_API: process.env.DOGE_BLOCKCYPHER_API,

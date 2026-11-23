@@ -25,7 +25,8 @@ import type { AssetEntry, CardanoProtocolParams, Lovelace, PolicyId, Value } fro
  */
 export const getCardanoProtocolParams = async (): Promise<CardanoProtocolParams> => {
   const cardanoKoiosClient = cardanoKoiosClientFactory(
-    process.env.CARDANO_KOIOS_API!, // TODO
+    process.env.CARDANO_KOIOS_API!,
+    process.env.CARDANO_KOIOS_TOKEN,
   );
   return await cardanoKoiosClient.epochParams().then((epochParams) => {
     const params = epochParams[0];
