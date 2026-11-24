@@ -281,3 +281,28 @@ export const WRAPPED_TOKEN_TOTAL_SUPPLY: { [chain: string]: TotalSupply[] } = {
     },
   ],
 };
+
+/**
+ * token map with one token set whose decimals is 0 on every chain,
+ * so its significant decimals is 0
+ */
+export const ZERO_DECIMAL_TOKEN_MAP: RosenTokens = [
+  {
+    'bitcoin-runes': {
+      tokenId: 'rune_zero',
+      name: 'ZERO•RUNE',
+      decimals: 0,
+      type: 'native',
+      residency: 'native',
+      extra: {},
+    },
+    ergo: {
+      tokenId: 'ergo_zero',
+      name: 'rpnZeroRune',
+      decimals: 0,
+      type: 'EIP-004',
+      residency: 'wrapped',
+      extra: {},
+    },
+  },
+];
