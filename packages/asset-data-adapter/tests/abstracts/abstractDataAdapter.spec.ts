@@ -19,6 +19,7 @@ describe('AbstractDataAdapter', () => {
      * - call fetch()
      * @expected
      * - result groups balances by assetId and ignore token0 and also ignore tokens by zero amount
+     * - tokens of the chain without balance have an empty list
      */
     it('should aggregate balances after unwrapping decimals and group by assetId', async () => {
       const tokenMap = new TokenMap();
@@ -40,6 +41,9 @@ describe('AbstractDataAdapter', () => {
           // and used ergo token-id for token2 in this results
           { address: 'addr1', balance: 200n },
         ],
+        // tokens of the chain without any balance map to an empty list
+        ergo_token3: [],
+        ergo_token4: [],
       });
     });
 
@@ -53,6 +57,7 @@ describe('AbstractDataAdapter', () => {
      * - call fetch()
      * @expected
      * - result must return empty balance for cardano_token3 since it is associated with another chain
+     * - the only key is the chain's own token (token3) with an empty list
      */
     it('should return empty balance for a token-id accidentally duplicated on another chain', async () => {
       const tokenMap = new TokenMap();
@@ -63,7 +68,86 @@ describe('AbstractDataAdapter', () => {
       // fetch tokens that exists on the tokenMap but on the another chain
       const result: AssetBalance = await adapter.fetch();
 
-      expect(result).toEqual({});
+      expect(result).toEqual({ token3: [] });
+    });
+
+    /**
+     * @target should map a zero-balance token to an empty list
+     * @dependencies
+     * - TestAdapter
+     * - TokenMap
+     * - getAddressAssets (mocked)
+     * @scenario
+     * - getAddressAssets returns token1 of the chain with balance 0n
+     * - call fetch()
+     * @expected
+     * - token1 key exists with an empty list
+     * - no zero-balance entry is produced
+     */
+    it('should map a zero-balance token to an empty list', async () => {
+      const tokenMap = new TokenMap();
+      await tokenMap.updateConfigByJson(sampleTokenMapConfig);
+      const adapter = new TestAdapter(['addr1'], tokenMap);
+      adapter.getAddressAssets = vi.fn().mockResolvedValue([{ assetId: 'token1', balance: 0n }]);
+
+      const result: AssetBalance = await adapter.fetch();
+
+      expect(result.token1).toEqual([]);
+    });
+
+    /**
+     * @target should map a token not returned by any address to an empty list
+     * @dependencies
+     * - TestAdapter
+     * - TokenMap
+     * - getAddressAssets (mocked)
+     * @scenario
+     * - getAddressAssets returns no assets
+     * - call fetch()
+     * @expected
+     * - every token of the chain in the token map has an empty list
+     */
+    it('should map a token not returned by any address to an empty list', async () => {
+      const tokenMap = new TokenMap();
+      await tokenMap.updateConfigByJson(sampleTokenMapConfig);
+      const adapter = new TestAdapter(['addr1'], tokenMap);
+      adapter.getAddressAssets = vi.fn().mockResolvedValue([]);
+
+      const result: AssetBalance = await adapter.fetch();
+
+      expect(result).toEqual({
+        token1: [],
+        ergo_token2: [],
+        ergo_token3: [],
+        ergo_token4: [],
+      });
+    });
+
+    /**
+     * @target should list only holding address when another has zero balance
+     * @dependencies
+     * - TestAdapter
+     * - TokenMap
+     * - getAddressAssets (mocked)
+     * @scenario
+     * - addr1 holds token1 (100n), addr2 holds token1 with balance 0n
+     * - call fetch()
+     * @expected
+     * - token1 has only the addr1 entry
+     */
+    it('should list only holding address when another has zero balance', async () => {
+      const tokenMap = new TokenMap();
+      await tokenMap.updateConfigByJson(sampleTokenMapConfig);
+      const adapter = new TestAdapter(['addr1', 'addr2'], tokenMap);
+      adapter.getAddressAssets = vi
+        .fn()
+        .mockImplementation(async (address: string) => [
+          { assetId: 'token1', balance: address === 'addr1' ? 100n : 0n },
+        ]);
+
+      const result: AssetBalance = await adapter.fetch();
+
+      expect(result.token1).toEqual([{ address: 'addr1', balance: 100n }]);
     });
   });
 

@@ -75,6 +75,34 @@ describe('TokensAnalyzer', () => {
       expect(analyzer['bridgedTokens'][0].amount).toBeTypeOf('bigint');
       expect(analyzer['bridgedTokens']).toEqual([SAMPLE_ANALYZER_BRIDGED_TOKEN[0]]);
     });
+
+    /**
+     * @target should bridge full total supply for empty balance list
+     * @dependencies
+     * - TokensAnalyzer
+     * - TokenMap
+     * - WRAPPED_TOKEN_TOTAL_SUPPLY
+     * @scenario
+     * - provide wrapped token with empty balance list, total supply 10000n
+     * - call analyze
+     * @expected
+     * - bridgedTokens should contain an entry with amount equal to total supply
+     */
+    it<AnalyzerTestContext>('should bridge full total supply for empty balance list', async ({
+      tokenMap,
+    }) => {
+      const wrappedId = '92f7cec6d682e8a0d965e6d93de66ec18933f72181c59a5d85802f0fe2afc900';
+      const analyzer = new TokensAnalyzer(
+        { ergo: { [wrappedId]: [] } },
+        WRAPPED_TOKEN_TOTAL_SUPPLY,
+        tokenMap,
+      );
+      await analyzer.analyze();
+
+      expect(analyzer['bridgedTokens']).toEqual([
+        { amount: 10000n, chain: 'ergo', tokenId: 'bnb', bridgedTokenId: wrappedId },
+      ]);
+    });
   });
 
   describe('handleWrappedToken', () => {

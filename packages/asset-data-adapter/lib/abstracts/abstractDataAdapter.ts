@@ -15,11 +15,16 @@ export abstract class AbstractDataAdapter {
 
   /**
    * Aggregates balances of all tracked addresses into a list of assets.
+   * Every token of the chain in the token map has a key in the result,
+   * with an empty list when no tracked address holds it.
    *
    * @returns {Promise<AssetBalance>} list of assets with address-specific balances
    */
   public fetch = async (): Promise<AssetBalance> => {
     const chainAssets: AssetBalance = {};
+    for (const token of this.tokenMap.getTokens(this.chain, this.chain)) {
+      chainAssets[token.tokenId] = [];
+    }
     for (const address of this.addresses) {
       const assets = await this.getAddressAssets(address);
       for (const asset of assets) {
@@ -29,7 +34,6 @@ export abstract class AbstractDataAdapter {
           tokenSet[this.chain].tokenId === asset.assetId &&
           asset.balance > 0n
         ) {
-          chainAssets[asset.assetId] = chainAssets[asset.assetId] ?? [];
           chainAssets[asset.assetId].push({
             address: address,
             balance: this.tokenMap.wrapAmount(asset.assetId, asset.balance, this.chain).amount,
