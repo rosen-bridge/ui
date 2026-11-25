@@ -11,10 +11,12 @@
     "bootstrap": "turbo build --filter=@rosen-bridge/watcher-app^...",
     "build": "next build",
     "build:vercel": "npm run bootstrap && npm run build",
+    "coverage": "npm run test -- --run --coverage",
     "dev": "next dev",
     "lint": "biome check --write",
     "lint:check": "biome check",
     "start": "npx serve@latest out",
+    "test": "NODE_OPTIONS='--import tsx' vitest",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
