@@ -1,21 +1,40 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-import * as glob from 'glob';
+const src = path.resolve(import.meta.dirname, 'src');
 
-const lines = [];
+const out = path.resolve(import.meta.dirname, 'dist');
 
-glob
-  .sync('*.{png,svg}', {
-    posix: true,
-    cwd: path.resolve(import.meta.dirname, 'src'),
-  })
-  .forEach((file) => {
-    const filename = path.basename(file, path.extname(file));
+fs.rmSync(out, { recursive: true, force: true });
 
-    lines.push(`export const Token_${filename} = new URL('${file}', import.meta.url).href;`);
-  });
+fs.mkdirSync(out, { recursive: true });
 
-const content = lines.join('\n');
+for (const file of fs.readdirSync(src)) {
+  const { name, ext } = path.parse(file);
 
-fs.writeFileSync(path.resolve(import.meta.dirname, 'src', 'index.ts'), content, 'utf8');
+  const input = path.join(src, file);
+
+  const output = path.join(out, `${name}.svg`);
+
+  switch (ext) {
+    case '.svg': {
+      fs.copyFileSync(input, output);
+      break;
+    }
+    case '.png': {
+      const png = fs.readFileSync(input);
+
+      // PNG IHDR chunk: width is big-endian uint32 at offsets 16
+      const width = png.readUInt32BE(16);
+
+      // PNG IHDR chunk: height is big-endian uint32 at offsets 20
+      const height = png.readUInt32BE(20);
+
+      fs.writeFileSync(
+        output,
+        `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}"><image href="data:image/png;base64,${png.toString('base64')}" width="${width}" height="${height}"/></svg>`,
+      );
+      break;
+    }
+  }
+}
