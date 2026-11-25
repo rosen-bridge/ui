@@ -2,7 +2,11 @@ import type { DataSource } from '@rosen-bridge/extended-typeorm';
 import { TokenMap } from '@rosen-bridge/tokens';
 
 import { AssetAggregator } from '../lib';
-import { SAMPLE_TOKEN_ENTITY_DATA, SAMPLE_TOKEN_MAP } from './assetAggregatorTestData';
+import {
+  SAMPLE_TOKEN_ENTITY_DATA,
+  SAMPLE_TOKEN_MAP,
+  ZERO_DECIMAL_TOKEN_MAP,
+} from './assetAggregatorTestData';
 
 interface BridgedAssetTestContext {
   assetAggregator: AssetAggregator;
@@ -22,6 +26,14 @@ vi.mock('../lib/tokensAnalyzer', () => {
   };
 });
 
+const mockedDataSource = () =>
+  ({
+    getRepository: vi.fn().mockReturnValue({
+      deleteAll: vi.fn(),
+      find: vi.fn(),
+    }),
+  }) as unknown as DataSource;
+
 describe('AssetAggregator', () => {
   beforeEach<BridgedAssetTestContext>(async (context) => {
     vi.clearAllMocks();
@@ -30,14 +42,7 @@ describe('AssetAggregator', () => {
     await tokenMap.updateConfigByJson(SAMPLE_TOKEN_MAP);
     tokenMap['tokensConfig'] = SAMPLE_TOKEN_MAP;
 
-    const mockedDataSource = {
-      getRepository: vi.fn().mockReturnValue({
-        deleteAll: vi.fn(),
-        find: vi.fn(),
-      }),
-    } as unknown as DataSource;
-
-    const aggregator = new AssetAggregator(tokenMap, mockedDataSource);
+    const aggregator = new AssetAggregator(tokenMap, mockedDataSource());
 
     // mock actions (no DB)
     aggregator.tokenAction.store = vi.fn();
@@ -170,6 +175,53 @@ describe('AssetAggregator', () => {
 
       // fetch list of tokenIds from database
       expect(assetAggregator.tokenAction.store).toBeCalledWith(SAMPLE_TOKEN_ENTITY_DATA);
+    });
+
+    /**
+     * @target should store a token whose significant decimals is 0
+     * @dependencies
+     * - assetAggregator
+     * - TokenMap
+     * @scenario
+     * - create a token map with one token set whose decimals is 0 on both chains
+     * - call updateTokens method
+     * @expected
+     * - tokenAction.store should be called with both tokens and significantDecimal 0
+     */
+    it('should store a token whose significant decimals is 0', async () => {
+      const tokenMap = new TokenMap();
+      await tokenMap.updateConfigByJson(ZERO_DECIMAL_TOKEN_MAP);
+      const aggregator = new AssetAggregator(tokenMap, mockedDataSource());
+      aggregator.tokenAction.store = vi.fn();
+
+      await aggregator.updateTokens();
+
+      expect(aggregator.tokenAction.store).toBeCalledWith(
+        expect.arrayContaining([
+          expect.objectContaining({ id: 'ergo_zero', decimal: 0, significantDecimal: 0 }),
+          expect.objectContaining({ id: 'rune_zero', decimal: 0, significantDecimal: 0 }),
+        ]),
+      );
+    });
+
+    /**
+     * @target should skip a token whose significant decimals is undefined
+     * @dependencies
+     * - assetAggregator
+     * @scenario
+     * - mock tokenMap.getSignificantDecimals to return undefined
+     * - call updateTokens method
+     * @expected
+     * - tokenAction.store should be called with an empty list
+     */
+    it<BridgedAssetTestContext>('should skip a token whose significant decimals is undefined', async ({
+      assetAggregator,
+    }) => {
+      assetAggregator['tokenMap'].getSignificantDecimals = vi.fn().mockReturnValue(undefined);
+
+      await assetAggregator.updateTokens();
+
+      expect(assetAggregator.tokenAction.store).toBeCalledWith([]);
     });
   });
 });

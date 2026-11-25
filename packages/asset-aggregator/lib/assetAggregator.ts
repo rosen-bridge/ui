@@ -34,7 +34,7 @@ export class AssetAggregator {
       const chainTokens = this.tokenMap.getTokens(chain, chain);
       for (const token of chainTokens) {
         const significantDecimal = this.tokenMap.getSignificantDecimals(token.tokenId);
-        if (!significantDecimal) {
+        if (significantDecimal === undefined) {
           this.logger.error(`Significant-decimal of token [${token.tokenId}] is undefined`);
           continue;
         }
