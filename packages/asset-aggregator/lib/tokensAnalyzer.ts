@@ -120,7 +120,7 @@ export class TokensAnalyzer {
       .at(0);
 
     if (!assetTotalSupply) {
-      this.logger.error(
+      this.logger.warn(
         `Total-supply of token [${token.tokenId}] not found in provided total supply data`,
       );
       return;
