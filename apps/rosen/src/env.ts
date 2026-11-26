@@ -85,6 +85,7 @@ export const env = createEnv({
     SENTRY_ORG: z.optional(z.string()),
     SENTRY_PROJECT: z.optional(z.string()),
     SENTRY_AUTH_TOKEN: z.optional(z.string()),
+    SENTRY_URL: z.optional(z.string()),
 
     DISCORD_NOTIFICATION_WEBHOOK_URL: z.optional(z.string()),
 
@@ -144,6 +145,7 @@ export const env = createEnv({
     SENTRY_ORG: process.env.SENTRY_ORG,
     SENTRY_PROJECT: process.env.SENTRY_PROJECT,
     SENTRY_AUTH_TOKEN: process.env.SENTRY_AUTH_TOKEN,
+    SENTRY_URL: process.env.SENTRY_URL,
 
     DISCORD_NOTIFICATION_WEBHOOK_URL: process.env.DISCORD_NOTIFICATION_WEBHOOK_URL,
 

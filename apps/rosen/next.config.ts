@@ -30,6 +30,7 @@ const sentryOptions: SentryBuildOptions = {
   org: env.SENTRY_ORG,
   project: env.SENTRY_PROJECT,
   authToken: env.SENTRY_AUTH_TOKEN,
+  sentryUrl: env.SENTRY_URL,
   silent: !process.env.CI,
   tunnelRoute: '/monitoring',
   debug: false,
