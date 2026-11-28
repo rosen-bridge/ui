@@ -1,5 +1,11 @@
 # @rosen-bridge/token-icons
 
+## 0.2.1
+
+### Patch Changes
+
+- Fix Handshake token icon
+
 ## 0.2.0
 
 ### Minor Changes
