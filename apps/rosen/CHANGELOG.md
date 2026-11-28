@@ -1,5 +1,12 @@
 # @rosen-bridge/rosen-app
 
+## 5.9.1
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-bridge/token-icons@0.2.1
+
 ## 5.9.0
 
 ### Minor Changes
