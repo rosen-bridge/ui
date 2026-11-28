@@ -4,7 +4,6 @@ import NextImage from 'next/image';
 import NextLink from 'next/link';
 
 import * as icons from '@rosen-bridge/icons';
-import * as tokenIcons from '@rosen-bridge/token-icons';
 import {
   type ConfigContextType,
   ConfigProvider,
@@ -46,8 +45,7 @@ const resolveToken: TokenProps['resolver'] = batch<string, TokenMeta>(async (ids
   for (const token of data) {
     result[token.id] = {
       label: token.name,
-      // biome-ignore lint/performance/noDynamicNamespaceImportAccess: Keep it
-      logo: tokenIcons[`Token_${token.ergoSideTokenId}` as keyof typeof tokenIcons],
+      logo: `/icons/tokens/${token.ergoSideTokenId}.svg`,
     };
   }
 

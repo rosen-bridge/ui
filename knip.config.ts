@@ -23,7 +23,7 @@ const config: KnipConfig = {
   },
   ignoreBinaries: ['typeorm'],
   ignore: ['**/node_modules/', '**/dist/', '**/.next/'],
-  ignoreDependencies: ['@types/moment', '@vitest/runner', 'pg'],
+  ignoreDependencies: ['@rosen-bridge/token-icons', '@types/moment', 'pg'],
 };
 
 export default config;
